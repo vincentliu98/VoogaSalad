@@ -11,12 +11,10 @@
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
 
-
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="570.0" prefWidth="973.0" xmlns="http://javafx.com/javafx/10.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainApp">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="593.0" prefWidth="927.0" xmlns="http://javafx.com/javafx/10.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mainWindow.MainAppController">
    <children>
-      <MenuBar prefHeight="29.0" prefWidth="973.0">
+      <MenuBar prefHeight="35.0" prefWidth="857.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
@@ -55,7 +53,7 @@
           </Menu>
         </menus>
       </MenuBar>
-      <Accordion layoutX="771.0" layoutY="51.0" prefHeight="371.0" prefWidth="202.0">
+      <Accordion layoutX="655.0" layoutY="35.0" prefHeight="371.0" prefWidth="202.0" AnchorPane.rightAnchor="0.0">
         <panes>
           <TitledPane animated="false" text="Sprite">
             <content>
@@ -78,7 +76,7 @@
           </TitledPane>
         </panes>
       </Accordion>
-      <TabPane layoutX="46.0" layoutY="29.0" prefHeight="442.0" prefWidth="673.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane layoutX="39.0" layoutY="40.0" prefHeight="437.0" prefWidth="591.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="Project 1">
                <content>
@@ -93,4 +91,4 @@
         </tabs>
       </TabPane>
    </children>
-</Pane>
+</AnchorPane>
