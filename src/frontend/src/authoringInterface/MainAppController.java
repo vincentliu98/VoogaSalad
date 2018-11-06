@@ -1,4 +1,4 @@
-package mainWindow;
+package authoringInterface;
 
 public class MainAppController {
 }
