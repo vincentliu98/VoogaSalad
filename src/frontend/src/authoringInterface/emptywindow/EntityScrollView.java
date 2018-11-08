@@ -18,11 +18,16 @@ public class EntityScrollView implements SubView {
 
     private ScrollPane constructScrollPane() {
         var entityScrollView = new ScrollPane();
-        final Rectangle rect = new Rectangle(200, 200, 800, 600);
-        rect.setFill(Color.RED);
-        entityScrollView.setContent(rect);
+//        entityScrollView.setFitToHeight(true);
+//        entityScrollView.setFitToWidth(true);
+//        final Rectangle rect = new Rectangle(200, 200, 800, 600);
+//        rect.setFill(Color.RED);
+//        entityScrollView.setContent(rect);
         return entityScrollView;
     }
+
+    private void handleZoom(){}
+    private void dragAndDrop(){}
 
     @Override
     public Node getView() {

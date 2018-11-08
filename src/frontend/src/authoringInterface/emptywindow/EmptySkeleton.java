@@ -31,6 +31,7 @@ public class EmptySkeleton implements SubView {
         AnchorPane.setLeftAnchor(tabView, 0.0);
         AnchorPane.setRightAnchor(tabView, 250.0);
         AnchorPane.setTopAnchor(tabView, 30.0);
+        AnchorPane.setBottomAnchor(tabView, 0.0);
         rootPane.getChildren().add(tabView);
 
     }
