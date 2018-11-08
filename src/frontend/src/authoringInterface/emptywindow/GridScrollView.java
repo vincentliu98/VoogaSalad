@@ -3,6 +3,7 @@ package authoringInterface.emptywindow;
 import api.SubView;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 
 /**
  * GridScrollView Class (ScrollPane)
@@ -17,8 +18,8 @@ public class GridScrollView implements SubView{
     public GridScrollView() {
         gridScrollView = new ScrollPane();
 
-        gridScrollView.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
-        gridScrollView.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        gridScrollView.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+        gridScrollView.setHbarPolicy(ScrollBarPolicy.ALWAYS);
     }
 
     private void handleZoom(){}
