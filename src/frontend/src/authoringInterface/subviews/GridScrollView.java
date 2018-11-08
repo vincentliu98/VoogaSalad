@@ -1,4 +1,4 @@
-package authoringInterface.emptywindow;
+package authoringInterface.subviews;
 
 import api.SubView;
 import javafx.scene.Node;

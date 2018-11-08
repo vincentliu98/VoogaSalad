@@ -1,13 +1,8 @@
 package authoringInterface;
 
-import authoringInterface.emptywindow.EmptySkeleton;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 public class MainAuthoringProgram extends Application {
@@ -30,7 +25,7 @@ public class MainAuthoringProgram extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("VoogaSalad!");
-        primaryStage.setScene(new Scene((Parent) new EmptySkeleton().getView(), 900, 700));
+        primaryStage.setScene(new Scene((Parent) new EmptySkeleton().getView(), 1200, 700));
         primaryStage.show();
     }
 
