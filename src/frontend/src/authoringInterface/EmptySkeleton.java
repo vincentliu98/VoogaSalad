@@ -1,6 +1,7 @@
 package authoringInterface;
 
 import api.SubView;
+import authoringInterface.subviews.EditView;
 import authoringInterface.subviews.MenuBarView;
 import authoringInterface.subviews.SideView;
 import javafx.scene.Node;
@@ -16,6 +17,7 @@ public class EmptySkeleton implements SubView {
     private AnchorPane rootPane;
     private MenuBarView menuBar;
     private SideView sideView;
+    private EditView editView;
 
 
     /**
@@ -31,6 +33,8 @@ public class EmptySkeleton implements SubView {
     private void initializeElements() {
         menuBar = new MenuBarView();
         sideView = new SideView();
+        editView = new EditView();
+
     }
 
     private void setElements() {
@@ -40,10 +44,14 @@ public class EmptySkeleton implements SubView {
         AnchorPane.setRightAnchor(sideView.getView(), 0.0);
         AnchorPane.setTopAnchor(sideView.getView(), 30.0);
         AnchorPane.setBottomAnchor(sideView.getView(), 0.0);
+        AnchorPane.setLeftAnchor(editView.getView(), 0.0);
+        AnchorPane.setRightAnchor(editView.getView(), 247.9);
+        AnchorPane.setTopAnchor(editView.getView(), 30.0);
+        AnchorPane.setBottomAnchor(editView.getView(), 0.0);
     }
 
     private void addElements() {
-        rootPane.getChildren().addAll(menuBar.getView(), sideView.getView());
+        rootPane.getChildren().addAll(menuBar.getView(), sideView.getView(), editView.getView());
     }
 
     /**
