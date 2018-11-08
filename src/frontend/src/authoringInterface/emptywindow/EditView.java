@@ -44,7 +44,6 @@ public class EditView implements SubView {
         gridTab.setContent(gridScrollView.getView());
 
         tabPane.getTabs().addAll(entityTab, gridTab);
-
     }
 
 

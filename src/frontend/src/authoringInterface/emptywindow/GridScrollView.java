@@ -14,10 +14,11 @@ import javafx.scene.control.ScrollPane;
 public class GridScrollView implements SubView{
     private ScrollPane gridScrollView;
 
-    private ScrollPane constructScrollPane(){
-        var gridScrollView = new ScrollPane();
+    public GridScrollView() {
+        gridScrollView = new ScrollPane();
 
-        return gridScrollView;
+        gridScrollView.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        gridScrollView.setHbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
     }
 
     private void handleZoom(){}

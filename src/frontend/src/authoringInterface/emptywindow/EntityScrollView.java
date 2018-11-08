@@ -3,8 +3,7 @@ package authoringInterface.emptywindow;
 import api.SubView;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 
 /**
  * EntityScrollView Class (ScrollPane)
@@ -16,14 +15,11 @@ import javafx.scene.shape.Rectangle;
 public class EntityScrollView implements SubView {
     private ScrollPane entityScrollView;
 
-    private ScrollPane constructScrollPane() {
-        var entityScrollView = new ScrollPane();
-//        entityScrollView.setFitToHeight(true);
-//        entityScrollView.setFitToWidth(true);
-//        final Rectangle rect = new Rectangle(200, 200, 800, 600);
-//        rect.setFill(Color.RED);
-//        entityScrollView.setContent(rect);
-        return entityScrollView;
+    public EntityScrollView() {
+        entityScrollView = new ScrollPane();
+
+        entityScrollView.setVbarPolicy(ScrollBarPolicy.ALWAYS);
+        entityScrollView.setHbarPolicy(ScrollBarPolicy.ALWAYS);
     }
 
     private void handleZoom(){}
