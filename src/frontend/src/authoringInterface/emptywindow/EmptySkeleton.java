@@ -1,14 +1,10 @@
 package authoringInterface.emptywindow;
 
 import api.SubView;
-import javafx.event.ActionEvent;
 import javafx.scene.Node;
-import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
 
 
@@ -30,6 +26,13 @@ public class EmptySkeleton implements SubView {
         AnchorPane.setRightAnchor(menuBar, 0.0);
         AnchorPane.setTopAnchor(menuBar, 0.0);
         rootPane.getChildren().add(menuBar);
+
+        TabPane tabView = (TabPane) new EditView().getView();
+        AnchorPane.setLeftAnchor(tabView, 0.0);
+        AnchorPane.setRightAnchor(tabView, 250.0);
+        AnchorPane.setTopAnchor(tabView, 30.0);
+        rootPane.getChildren().add(tabView);
+
     }
 
     /**
