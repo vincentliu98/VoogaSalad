@@ -4,6 +4,7 @@ import api.SubView;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
+import javafx.scene.layout.HBox;
 
 /**
  * GridScrollView Class (ScrollPane)
@@ -14,12 +15,16 @@ import javafx.scene.control.ScrollPane.ScrollBarPolicy;
  */
 public class GridScrollView implements SubView{
     private ScrollPane gridScrollView;
+    private HBox contentBox;
 
     public GridScrollView() {
         gridScrollView = new ScrollPane();
+        contentBox = new HBox();
 
-        gridScrollView.setVbarPolicy(ScrollBarPolicy.ALWAYS);
-        gridScrollView.setHbarPolicy(ScrollBarPolicy.ALWAYS);
+        gridScrollView.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
+        gridScrollView.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
+
+        gridScrollView.setContent(contentBox);
     }
 
     private void handleZoom(){}
