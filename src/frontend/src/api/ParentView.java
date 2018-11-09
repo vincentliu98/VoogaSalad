@@ -5,6 +5,7 @@ package api;
  *
  * @author Haotian Wang
  */
-public interface ParentItem {
+@FunctionalInterface
+public interface ParentView {
     void addChild(SubView view);
 }

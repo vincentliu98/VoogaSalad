@@ -1,4 +1,4 @@
-package authoringInterface.subviews;
+package authoringInterface.sidebar;
 
 import api.SubView;
 import javafx.scene.Node;

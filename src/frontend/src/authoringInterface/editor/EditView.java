@@ -1,6 +1,7 @@
-package authoringInterface.subviews;
+package authoringInterface.editor;
 
 import api.SubView;
+import authoringInterface.entityeditor.EntityScrollView;
 import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;

@@ -1,9 +1,8 @@
 package authoringInterface.editor;
 
+import api.ParentView;
 import api.SubView;
-import authoringInterface.subviews.EditView;
-import authoringInterface.subviews.MenuBarView;
-import authoringInterface.subviews.SideView;
+import authoringInterface.sidebar.SideView;
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
 
@@ -13,7 +12,7 @@ import javafx.scene.layout.AnchorPane;
  *
  * @author  Haotian Wang
  */
-public class EmptySkeleton implements SubView {
+public class EmptySkeleton implements SubView, ParentView {
     private AnchorPane rootPane;
     private MenuBarView menuBar;
     private SideView sideView;
@@ -62,5 +61,10 @@ public class EmptySkeleton implements SubView {
     @Override
     public Node getView() {
         return rootPane;
+    }
+
+    @Override
+    public void addChild(SubView view) {
+
     }
 }
