@@ -1,4 +1,4 @@
-package authoringInterface.entityeditor;
+package authoringInterface.editor;
 
 import api.SubView;
 import javafx.scene.Node;
