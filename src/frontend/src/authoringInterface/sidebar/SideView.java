@@ -1,6 +1,9 @@
 package authoringInterface.sidebar;
 
 import api.SubView;
+import authoringInterface.sidebar.subTreeViews.EntitySubTreeView;
+import authoringInterface.sidebar.subTreeViews.SoundSubTreeView;
+import authoringInterface.sidebar.subTreeViews.TilesetsSubTreeView;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -11,7 +14,7 @@ public class SideView implements SubView {
     private final TreeItem<String> rootTreeItem;
     private final TreeItem<String> entityTreeView;
     private final TreeItem<String> soundTreeView;
-    private final TreeItem<String> tilesetsTreeView;
+    private final TreeItem<String> tileSetsTreeView;
     private StackPane sideView;
 
     public SideView() {
@@ -20,8 +23,8 @@ public class SideView implements SubView {
         rootTreeItem.setExpanded(true);
         entityTreeView = new EntitySubTreeView().getRootItem();
         soundTreeView = new SoundSubTreeView().getRootItem();
-        tilesetsTreeView = new TilesetsSubTreeView().getRootItem();
-        rootTreeItem.getChildren().addAll(entityTreeView,soundTreeView,tilesetsTreeView);
+        tileSetsTreeView = new TilesetsSubTreeView().getRootItem();
+        rootTreeItem.getChildren().addAll(entityTreeView,soundTreeView,tileSetsTreeView);
         rootTreeView = new TreeView<>(rootTreeItem);
         sideView.getChildren().addAll(rootTreeView);
     }

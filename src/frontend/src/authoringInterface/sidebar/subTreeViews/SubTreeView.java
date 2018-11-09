@@ -1,4 +1,4 @@
-package authoringInterface.sidebar;
+package authoringInterface.sidebar.subTreeViews;
 
 import javafx.scene.control.TreeItem;
 
@@ -10,7 +10,7 @@ abstract class SubTreeView {
         rootItem.setExpanded(true);
     }
 
-    TreeItem<String> getRootItem(){
+    public TreeItem<String> getRootItem(){
         return rootItem;
     }
 }

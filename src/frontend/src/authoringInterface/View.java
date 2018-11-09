@@ -1,7 +1,8 @@
-package authoringInterface.editor;
+package authoringInterface;
 
 import api.ParentView;
 import api.SubView;
+import authoringInterface.editor.EditView;
 import authoringInterface.menu.MenuBarView;
 import authoringInterface.sidebar.SideView;
 import javafx.scene.Node;
@@ -13,7 +14,7 @@ import javafx.scene.layout.AnchorPane;
  *
  * @author  Haotian Wang
  */
-public class EmptySkeleton implements SubView, ParentView<SubView> {
+public class View implements SubView, ParentView<SubView> {
     private AnchorPane rootPane;
     private MenuBarView menuBar;
     private SideView sideView;
@@ -23,7 +24,7 @@ public class EmptySkeleton implements SubView, ParentView<SubView> {
     /**
      * Constructor for an empty window, with an AnchorPane as the root Node, and the AnchorPane constraints on top, left and right are 0.
      */
-    public EmptySkeleton() {
+    public View() {
         rootPane = new AnchorPane();
         initializeElements();
         setElements();

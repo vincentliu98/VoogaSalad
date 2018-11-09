@@ -1,6 +1,5 @@
 package authoringInterface;
 
-import authoringInterface.editor.EmptySkeleton;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -26,7 +25,7 @@ public class MainAuthoringProgram extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("VoogaSalad!");
-        primaryStage.setScene(new Scene((Parent) new EmptySkeleton().getView(), 1200, 700));
+        primaryStage.setScene(new Scene((Parent) new View().getView(), 1200, 700));
         primaryStage.show();
     }
 
