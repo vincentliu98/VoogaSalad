@@ -17,6 +17,7 @@ public class SideView implements SubView {
     public SideView() {
         sideView = new StackPane();
         rootTreeItem = new TreeItem<>("User Settings");
+        rootTreeItem.setExpanded(true);
         entityTreeView = new EntitySubTreeView().getRootItem();
         soundTreeView = new SoundSubTreeView().getRootItem();
         tilesetsTreeView = new TilesetsSubTreeView().getRootItem();
