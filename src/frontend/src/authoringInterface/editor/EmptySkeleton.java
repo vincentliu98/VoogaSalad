@@ -1,4 +1,4 @@
-package authoringInterface;
+package authoringInterface.editor;
 
 import api.SubView;
 import authoringInterface.subviews.EditView;
