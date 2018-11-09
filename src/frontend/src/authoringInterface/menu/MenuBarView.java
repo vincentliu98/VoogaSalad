@@ -1,5 +1,6 @@
-package authoringInterface.subviews;
+package authoringInterface.menu;
 
+import api.ParentView;
 import api.SubView;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
@@ -15,7 +16,7 @@ import javafx.scene.input.KeyCombination;
  *
  * @author Haotian Wang
  */
-public class MenuBarView implements SubView {
+public class MenuBarView implements SubView, ParentView<Menu> {
     private static final double DEFAULT_HEIGHT = 30;
     private MenuBar menuBar;
 
@@ -95,5 +96,15 @@ public class MenuBarView implements SubView {
     @Override
     public Node getView() {
         return menuBar;
+    }
+
+    /**
+     * Add the JavaFx Node representation of a subView into the parent View in a hierarchical manner.
+     *
+     * @param menu : A Menu object.
+     */
+    @Override
+    public void addChild(Menu menu) {
+        menuBar.getMenus().add(menu);
     }
 }

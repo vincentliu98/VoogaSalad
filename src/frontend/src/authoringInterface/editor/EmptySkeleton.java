@@ -1,19 +1,19 @@
-package authoringInterface;
+package authoringInterface.editor;
 
+import api.ParentView;
 import api.SubView;
-import authoringInterface.subviews.EditView;
-import authoringInterface.subviews.MenuBarView;
-import authoringInterface.subviews.SideView;
+import authoringInterface.menu.MenuBarView;
+import authoringInterface.sidebar.SideView;
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
 
 
 /**
- * This class provides an empty skeleton window with the basic menu items.
+ * This class provides an empty skeleton window with the basic menu items, and basic editing interfaces.
  *
  * @author  Haotian Wang
  */
-public class EmptySkeleton implements SubView {
+public class EmptySkeleton implements SubView, ParentView<SubView> {
     private AnchorPane rootPane;
     private MenuBarView menuBar;
     private SideView sideView;
@@ -62,5 +62,15 @@ public class EmptySkeleton implements SubView {
     @Override
     public Node getView() {
         return rootPane;
+    }
+
+    /**
+     * Add the JavaFx Node representation of a subView into the parent View in a hierarchical manner.
+     *
+     * @param view: A SubView object.
+     */
+    @Override
+    public void addChild(SubView view) {
+        rootPane.getChildren().add(view.getView());
     }
 }
