@@ -1,4 +1,4 @@
-package authoringInterface.menu.menuitems;
+package authoringInterface.menu;
 
 import api.SubView;
 import javafx.event.ActionEvent;
@@ -30,6 +30,12 @@ public class MenuItemWithAction {
         menuItem = new MenuItem(text);
         handleClick = click;
         handleShortCut = shortcut;
+    }
+
+    public MenuItemWithAction(String text, EventHandler<ActionEvent> click) {
+        menuItem = new MenuItem(text);
+        handleClick = click;
+        handleShortCut = click;
     }
 
     /**
