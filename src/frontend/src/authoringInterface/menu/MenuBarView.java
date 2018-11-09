@@ -1,5 +1,6 @@
-package authoringInterface.editor;
+package authoringInterface.menu;
 
+import api.ParentView;
 import api.SubView;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
@@ -15,7 +16,7 @@ import javafx.scene.input.KeyCombination;
  *
  * @author Haotian Wang
  */
-public class MenuBarView implements SubView {
+public class MenuBarView implements SubView, ParentView<MenuItemWithAction> {
     private static final double DEFAULT_HEIGHT = 30;
     private MenuBar menuBar;
 

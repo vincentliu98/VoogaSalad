@@ -6,6 +6,11 @@ package api;
  * @author Haotian Wang
  */
 @FunctionalInterface
-public interface ParentView {
-    void addChild(SubView view);
+public interface ParentView<T> {
+    /**
+     * Add the JavaFx Node representation of a subView into the parent View in a hierarchical manner.
+     *
+     * @param view: A T object.
+     */
+    void addChild(T view);
 }
