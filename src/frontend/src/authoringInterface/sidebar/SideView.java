@@ -3,7 +3,7 @@ package authoringInterface.sidebar;
 import api.SubView;
 import authoringInterface.sidebar.subTreeViews.EntitySubTreeView;
 import authoringInterface.sidebar.subTreeViews.SoundSubTreeView;
-import authoringInterface.sidebar.subTreeViews.TilesetsSubTreeView;
+import authoringInterface.sidebar.subTreeViews.TileSetsSubTreeView;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -23,7 +23,7 @@ public class SideView implements SubView {
         rootTreeItem.setExpanded(true);
         entityTreeView = new EntitySubTreeView().getRootItem();
         soundTreeView = new SoundSubTreeView().getRootItem();
-        tileSetsTreeView = new TilesetsSubTreeView().getRootItem();
+        tileSetsTreeView = new TileSetsSubTreeView().getRootItem();
         rootTreeItem.getChildren().addAll(entityTreeView,soundTreeView,tileSetsTreeView);
         rootTreeView = new TreeView<>(rootTreeItem);
         sideView.getChildren().addAll(rootTreeView);
