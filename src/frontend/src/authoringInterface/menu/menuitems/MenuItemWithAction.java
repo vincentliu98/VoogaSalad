@@ -1,4 +1,4 @@
-package authoringInterface.menu;
+package authoringInterface.menu.menuitems;
 
 import api.SubView;
 import javafx.event.ActionEvent;
@@ -10,7 +10,7 @@ import javafx.scene.control.MenuItem;
  *
  * @author Haotian Wang
  */
-public abstract class MenuItemWithAction {
+public class MenuItemWithAction {
     /**
      * The MenuItem JavaFx Node associated with this MenuItemAction object.
      */
@@ -25,6 +25,12 @@ public abstract class MenuItemWithAction {
      * The EventHandler that is used to handle when the user presses short cut to reach the menu item.
      */
     private EventHandler<ActionEvent> handleShortCut;
+
+    public MenuItemWithAction(String text, EventHandler<ActionEvent> click, EventHandler<ActionEvent> shortcut) {
+        menuItem = new MenuItem(text);
+        handleClick = click;
+        handleShortCut = shortcut;
+    }
 
     /**
      * @return The MenuItem JavaFx Node.
