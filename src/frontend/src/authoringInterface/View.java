@@ -7,6 +7,7 @@ import authoringInterface.menu.MenuBarView;
 import authoringInterface.sidebar.SideView;
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 
 /**
@@ -19,12 +20,13 @@ public class View implements SubView, ParentView<SubView> {
     private MenuBarView menuBar;
     private SideView sideView;
     private EditView editView;
-
+    private Stage primaryStage;
 
     /**
      * Constructor for an empty window, with an AnchorPane as the root Node, and the AnchorPane constraints on top, left and right are 0.
      */
-    public View() {
+    public View(Stage primaryStage) {
+        this.primaryStage = primaryStage;
         rootPane = new AnchorPane();
         initializeElements();
         setElements();
@@ -32,10 +34,9 @@ public class View implements SubView, ParentView<SubView> {
     }
 
     private void initializeElements() {
-        menuBar = new MenuBarView();
-        sideView = new SideView();
+        menuBar = new MenuBarView(primaryStage);
+        sideView = new SideView(primaryStage);
         editView = new EditView();
-
     }
 
     private void setElements() {
