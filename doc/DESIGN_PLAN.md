@@ -5,14 +5,10 @@
 For this project, our team will build an authoring environment and engine for team-based strategy games. Features of this game genre include sequential turns, the common manipulation of some shared space or model (whether it be a grid, like in checkers, or a layout in which you draw/play cards, like in Fluxx). 
 
 Our design will need to support the ability to dynamically change the turn sequence (such as by skipping players or reversing direction), define multiple objectives (such as winning via elimination or attrition), create sprites of different function (like the pieces in chess), and manipulate the shared model (like moving pieces across the board). 
-
- -the primary design goals of the project (i.e., where is it most flexible)
  
-We hope to design the game authoring environment and game engine in such a way to provide the author with the most flexibility in terms of the behavior and logic of the entities in a turn-based game.
+We hope to design the game authoring environment and game engine in such a way to provide the author with the most flexibility in terms of the behavior and logic of the entities in a turn-based game. For example, the author will be able to designate exactly what the win conditions are, what should happen in every combination of moves, the functionality of each sprite, etc. We will have pre-defined drag-and-drop Groovy code blocks for them, as well as give them the user the ability to write their own Groovy code to execute. 
 
- -the primary architecture of the design (i.e., what is closed and what is open)*
-
-The front-end elements in the game authoring engine will support modularized design that allows users as much as possible, to customize their workspaces. They will be allowed to add/toggle different editing panels at different layers of the authoring interface, very much like PhotoShop. The back-end of the game authoring environment will provide the game author with tiles and grid. They are both configurable in terms of appearance and logic that are triggered by user-inputs.
+The front-end elements in the game authoring engine will support modularized design that allows users as much as possible, to customize their workspaces. They will be allowed to add/toggle different editing panels at different layers of the authoring interface, very much like PhotoShop. The back-end of the game authoring environment will provide the game author with tiles and grid. They are both configurable in terms of appearance and logic that are triggered by user-inputs. The game engine's Turn class will be entirely public, and new Sprites can be able to instantiated via Groovy code. 
 
 ## Overview
 
@@ -175,6 +171,21 @@ Game data will be saved in the form of XML files. We will have a data folder wit
 
 ---
 ### Front-End 
+
+- Wireframe
+
+Main window for our program: It contains a menu bar, a side tree view, and a editor window in the middle
+
+![](editWindow.png)
+
+When the user clicks the "Run" button, a new window will appear like below
+
+![](gamePlayerUI.png)
+
+When the user is adding an entity to the storage, a new window will appear below to allow the user to add settings
+
+![](TreeviewPopUp.png)
+
 - **View**
     - APIs
         - External
@@ -262,9 +273,9 @@ Game data will be saved in the form of XML files. We will have a data folder wit
         - A map or a 2D array
     
 ## Example Games
-1. **Tic Tac Toe.** This 2-player involves each player making a mark on the grid of their designated symbol in turns. The one who gets 3 of their marks in a row first, wins. According to to our current design, the FCM in this case would have 2 nodes: requesting user input from player 1 and doing the same for player 2. At each node, the designated player would interact with the Grid via the manipulation class, which would rerender it before the current Token is popped. 
-2. **Uno.** This game involves players trying to get rid of all of their cards the fastest. Cards they may play are restricted to those in their hand, and these cards may make other players draw cards, skip turns, etc. The number of nodes within our FCM would be twice the number of players--this is because each player's turn is represented by a node, and these each have a node in between that represents drawing a card. This game, unlike Tic Tac Toe, demonstrates the benefit of using Tokens. Whenever a card is played (which, in our design, is translated as a card being placed on the Grid in a shared, designated space), either player data or the turn sequence (or both) will be manipulated. In the case of skipped turns, tokens will just be popped without execution, and in the case of added turns, tokens will be added.
-3. **Chess.** This 2-player game involves movement of pieces across the board to place the opposing player in a checkmate, or a position where their king piece cannot move safely. According to our design, the user will be able to define (in the authoring environment) validity checks for each piece, which essentially encapsulate its movement behavior. This check is performed by the Manipulator class in the game engine, and it may have different if-else conditions depending on the game's nature. For example, when pawns cross the board and retain the functionality of a queen, its validity check condition is switched to enable different movements. At every turn, the Turn class will query the Win class to ensure that the king is of any player is not in checkmate. 
+1. **Tic Tac Toe.** This 2-player involves each player making a mark on the grid of their designated symbol in turns. The one who gets 3 of their marks in a row first, wins. According to to our current design, there would be a single Phase that has only two Node: the startNode and terminalNode, which both ask the user for input, perform a validity check, and execute the placement of the Player's mark before the Turn class restarts the Phase with the second player. 
+2. **Uno.** This game involves players trying to get rid of all of their cards the fastest. Cards they may play are restricted to those in their hand, and these cards may make other players draw cards, skip turns, etc. This game, unlike Tic Tac Toe, demonstrates the alteration of the turn sequence. Whenever a card is played (which, in our design, is translated as a card being placed on the Grid in a shared, designated space), either player data or the turn sequence (or both) will be manipulated. In the case of skipped turns, the logic within the Phase's FSM would just use the Turn class's setPlayer method to set the current player to the next next player's ID. This logic (encoded in Groovy) would also be able to handle manipulating player or sprite data. 
+3. **Chess.** This 2-player game involves movement of pieces across the board to place the opposing player in a checkmate, or a position where their king piece cannot move safely. According to our design, the user will be able to define (in the authoring environment) validity checks for each piece, which essentially encapsulate its movement behavior. Logic can also be encoded for every Cell, which is useful in this game unlike in the others: for example, when pawns cross the board and retain the functionality of a queen, its validity check condition is switched to enable different movements. 
 
 ## Example code:
 
@@ -310,17 +321,150 @@ Pick at least 5 use cases and provide example “implementations” of them, usi
     ```
     - Note, in the fourth line, `gridScrollView.getView()` needs to be changed. Each time when a new tab is created, a Controller is created
 
-4. The user can attach 
+4. The user clicks on "Help"
+    - The user can take a look at the guide in which they learn how to use our program be clicking on the “Help” button.
+    ```java
+    public void displayHelp(){
+        Hyperlink webLink = new Hyperlink();
+        webLink.setText("http://example.com");
+        webLink.setOnAction(new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent e) {
+        System.out.println("This link is clicked");
+        }
+        });
+    }
+    ```
+
+5. The user clicks on "Close"
+    - The author can close his/her design and quit the program. The previous design will be auto-saved.
+    ```java
+        public void closeWindow(){
+            GameEngine.save();
+            primaryStage.close();
+        }
+    ```
 
 ## Example data:
 
-Write any number of data files needed to represent one, simple, game. The goal of these example files (such as property files, XML files, and other resource files like HTML pages, images, or sounds) is to help the team agree to standard locations and formats for your shared data. Note, your example does not need to include all the data fields that will be needed for all objects in the game, just to be representative of the file’s format.
+```xml=
+<Title>Tic Tac Toe</Title>
+<Player name="p1" id="1">
+	<Stat name="health"></Stat> <!-- relevant for players with other data (HP, points collected, score etc.) --> 
+</Player>
+<Player name="p2" id="2">
+	<Stat name="health"></Stat> 
+</Player>
+<Sprite id="1">
+	<Stat name="health"></Stat> <!-- relevant for sprites with data (not in this case) --> 
+	<belongsTo>p1</belongsTo> <!-- also could be null, if belongs to no one --> 
+	<img id="1"></img> <!-- id of image that is associated w/ sprite; ex. 1 = "X", 2 = "O"--> 
+	<location></location> <!-- id of cell that it is on top of --> 
+</Sprite>
+<Sprite id="2">
+	<Stat name="health"></Stat>
+	<belongsTo>p1</belongsTo> 
+	<img id="1"></img> 
+	<location></location> 
+</Sprite>
+<Sprite id="3">
+	<Stat name="health"></Stat> 
+	<belongsTo>p1</belongsTo> 
+	<img id="1"></img> 
+	<location></location> 
+</Sprite>
+<Sprite id="4">
+	<Stat name="health"></Stat> 
+	<belongsTo>p1</belongsTo>
+	<img id="1"></img> 
+	<location></location> 
+</Sprite>
+<Sprite id="5">
+	<Stat name="health"></Stat> 
+	<belongsTo>p1</belongsTo> 
+	<img id="1"></img> 
+	<location></location> 
+</Sprite>
+<Sprite id="6">
+	<Stat name="health"></Stat> 
+	<belongsTo>p2</belongsTo>  
+	<img id="2"></img> 
+	<location></location> 
+</Sprite>
+<Sprite id="7">
+	<Stat name="health"></Stat> 
+	<belongsTo>p2</belongsTo> 
+	<img id="2"></img> 
+	<location></location> 
+</Sprite>
+<Sprite id="8">
+	<Stat name="health"></Stat> 
+	<belongsTo>p2</belongsTo>
+	<img id="2"></img> 
+	<location></location> 
+</Sprite>
+<Sprite id="9">
+	<Stat name="health"></Stat> 
+	<belongsTo>p2</belongsTo> 
+	<img id="2"></img> 
+	<location></location> 
+</Sprite>
+<Sprite id="10">
+	<Stat name="health"></Stat> 
+	<belongsTo>p2</belongsTo>
+	<img id="2"></img> 
+	<location></location> 
+</Sprite>
+<Grid>
+	<Cell id="1">
+		<containsSprites></containsSprites> <!-- IDs of the sprites it contains --> 
+	</Cell>
+	<Cell id="2">
+		<containsSprites></containsSprites>	
+	</Cell>
+	<Cell id="3">
+		<containsSprites></containsSprites>	
+	</Cell>
+	<Cell id="4">
+		<containsSprites></containsSprites>	
+	</Cell>
+	<Cell id="5">
+		<containsSprites></containsSprites>	
+	</Cell>
+	<Cell id="6">
+		<containsSprites></containsSprites>	
+	</Cell>
+	<Cell id="7">
+		<containsSprites></containsSprites>	
+	</Cell>
+	<Cell id="8">
+		<containsSprites></containsSprites>	
+	</Cell>
+	<Cell id="9">
+		<containsSprites></containsSprites>	</Cell>
+	</Cell>
+</Grid>
+<Phase name="A">
+	<Node>
+		<isStart>true</isStart>
+		<isTerminal>false</isTerminal>
+		<action></action> <!-- Groovy code, sets the listener, validity check, execution, etc.--> 
+	</Node>
+	<Node>
+		<isStart>false</isStart>
+		<isTerminal>true</isTerminal>
+		<action></action> <!-- Groovy code that also includes starting the next Phase and changing the player in Turn--> 
+	</Node>
+</Phase>
+<currentPlayer>p1</currentPlayer> <!-- id of current player --> 
+<global></global> <!-- any global data --> 
+```
 
 ## Design Considerations
 
 ### Design Decision #1: Modular Design for Authoring Engine (front-end)
 
-**Pros:** The different editing panels are modularized as much as possible. At each "level" of the editing interface, the user can add in any editing panels that implement the SubView interface as long as that level of the panel implements ParentView<T> interface. It allows easy composition of the editing windows both for us developers and for the user in the future.
+**Pros:** The different editing panels are modularized as much as possible. At each "level" of the editing interface, the user can add in any editing panels that implement the SubView interface as long as that level of the panel implements ParentView\<T> interface. It allows easy composition of the editing windows both for us developers and for the user in the future.
 
 **Cons:** It's easy to implement these two interfaces, but it is hard to organize thse window panels in Parent window. After the user decides to add an Entity edit window into the panel, it is hard for the parent to automatically decide where to position that Entity endit panel.
 
@@ -334,4 +478,5 @@ Write any number of data files needed to represent one, simple, game. The goal o
 
 **Our Rationale** We decided to use phase-specific FSMs because it is more encapsulated than a game-wise FSM. As mentioned, it also allows for the easy addition of different levels, and it also separates the logic of turns into a separate class.
 
-### Design Decision #3: 
+### Design Decision #3: Separating Turn logic from Entities
+

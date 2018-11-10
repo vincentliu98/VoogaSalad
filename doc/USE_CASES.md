@@ -46,14 +46,25 @@
     Using the object editor pane, the author can select a photo and have the photo as part of the instance variable.
 22. **The author wants to add a win condition: Play three specific cards in a row, be able to cancel it in between**
     Within the user input handler pane, the author will set up a state diagram and assign the last arrow some operations the must be executed.
+```
 > O <-> O -> O -> O
 > \ \ <--------/
+```
 23. **The author wants to make the tiles/entities look different under some certain conditions**
     Within the specific tile/entities editor that pops up when one double clicks on the treeview, one would add more images (indexed incrementally) and write a script that returns an index based on the global/instance variable.
 24. **The author wants to attach a specific kind of logic to an entity**
     The EntityView editor panel will have more than options to change pictures, audio etc. It allows user to add/edit the specific logic diagrams between state machines just like the one in the main editor, specifically for this entity.
-25. **The author wants to write a three-player game that can flip the order of turns.**
-
+25. **The author wants to write a three-player card game that has a card that flips the order of turns.**
+   The Turn class would have a script that determines which player gets the turn, using values within the global data. The author can set the script so that the order is flipped when "flip" variable within the global data is set to true (the "flip" variable is set within the script that runs when a player plays that card)
+26. **The author wants to write a single player game with an AI playing against the player.** 
+   The author would include the ai code that makes a move within the edge
+```
+O ---Mouse Clicked (Let's say this ends the player's turn) ---> O
+```
+27. **The author wants to define different behaviors for each class of entities on a certain user input**
+    There's two ways that the author can implement this, either by making a arrow that contains if statements within the execution code to check for the classID, or he/she can setup multiple arrows that rejects all the other classes except for certain classID's within the guard, and execute certain operations specific to those classes. 
+28. **The author wants to preview the game**
+    The author can switch to the preview window. The user can preview few static views of the key ingredients of gameplay.
 ## Playing the Game
 
 1. **The player plays a card that skips the next person's turn.**
@@ -71,6 +82,16 @@
 7. **The player wants to load a previously save game.**
     The user clicks on the load button in the main splash screen and press load. Then the user enters the mode of selecting a bundle of previously saved game files. Then the game is supposed to resume with all the states, media files, scores and number of players.
 
-
+Jonathan:
+8. **The user wants to exit the game**
+   **********Insert use case*************
+9. **The user makes a move that wins the game**
+    ********
+10. **?**
+    ********
+11. **?**
+    ********
+12. **?**
+    ********
 
 
