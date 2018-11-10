@@ -70,51 +70,6 @@ This class indicates the current phase, the current Player (whose turn it is), a
 
 Based on the XML, this class initializes and displays the Cell, Sprites, Players, Phases (and their FSMs), and finally, the Turn class. This class then starts gameplay by calling startPhase() in the Turn class. 
 
----
-
-#### Game Engine Class
-
-The engine class controls the entire running of a game. It will have a complementary display that  renders the grid and player stats. 
-
-#### Turn Class
-
-The turn class is responsible for handling the execution of each sequential action that occurs in the game.
-
-#### Win Class
-
-The win class is queried by the Turn class and is responsible for checking whether the winning or losing conditions have been met. If so, the game is over. 
-
-#### FiniteChoiceMachine Class
-
-The finite choice machine class is used to control the sequential execution of actions and the next possible actions. This class accepts a Token and transverses a graph of choice nodes and directional edges. The class keeps track of the current node that the game is occupying. When a method is called on the class it receives a Token that corresponds to a value representing an edge. First, it gets the value stored in the current node and passes the value to a behavior class which handles the execution of the corresponding behavior. Then it receives a new set of tokens and polls the top value in the stack. The name of the token corresponds to one of the edges leading from the current node. The class follows the node to the linked node and the process repeats. 
-
-This design allows the game author to define all possible sequences of choices in the game and dynamically choose which to follow based on the 
-
-#### Token Class
-
-The token class is responsible for handling the manipulation and calling of tokens used to transverse the FCM.
-
-#### Behavior Class
-
-This Behavior class indicates both the action associated with a specific node in the FCM and the appropriate Token that should be appended afterwards. The behvior is specified through groovy script injections defined in the authoring environment. This behavior is encapsulated in the rules class. After determining the user's command it passes the information off to the manipulator class to handle the actual execution of the command. 
-
-#### Rules Class
-
-This rules class encapsulates the behavior related to getting and checking of user defined actions. It allows the engine to retreive the scripts that the author wrote in groovy relating to a particular key. Sets of behaviors can be defined by the user and if during the running of the game this rule set needs to be changed a different rule class can be instantiated. 
-
-#### Manipulator Class
-
-The manipulator class is the class that handles the interaction between user defined logic and the state of the game. It listens to user clicks and other events with the gui and feeds these inputs into the scripts written by the game author. In order to accomplish this is checks the validity of the inputs and controlls what pieces of data the scripts can interact with.
-
-#### Player Class
-
-The Player class is responsible for consuming the Token and manipulating the shared model (like the grid in checkers). This player could also have certain variables (such as health points, coins collected, etc.) as part of its stats that will be displayed dynamically on the screen during gameplay. 
-
-#### ModelSprite Class
-
-The sprites class 
-
----
 ### Game Authoring
 
 #### Grid Class
