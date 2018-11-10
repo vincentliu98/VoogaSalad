@@ -1,12 +1,15 @@
 package authoringInterface;
 
-import authoringInterface.editor.EmptySkeleton;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class MainAuthoringProgram extends Application {
+
+    public static final int SCREEN_WIDTH = 1200;
+    public static final int SCREEN_HEIGHT = 700;
+
     /**
      * The main entry point for all JavaFX applications.
      * The start method is called after the init method has returned,
@@ -24,9 +27,10 @@ public class MainAuthoringProgram extends Application {
      * @throws Exception if something goes wrong
      */
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         primaryStage.setTitle("VoogaSalad!");
-        primaryStage.setScene(new Scene((Parent) new EmptySkeleton().getView(), 1200, 700));
+        View myView = new View(primaryStage);
+        primaryStage.setScene(new Scene((Parent) myView.getView(), SCREEN_WIDTH, SCREEN_HEIGHT));
         primaryStage.show();
     }
 

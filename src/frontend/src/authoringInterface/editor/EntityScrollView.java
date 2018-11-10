@@ -12,6 +12,7 @@ import javafx.scene.control.ScrollPane.ScrollBarPolicy;
  *
  * @author Amy Kim
  */
+// not being used now
 public class EntityScrollView implements SubView {
     private ScrollPane entityScrollView;
 
