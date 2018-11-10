@@ -26,7 +26,7 @@ public class MainAuthoringProgram extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("VoogaSalad!");
-        primaryStage.setScene(new Scene((Parent) new EmptySkeleton().getView(), 1200, 700));
+        primaryStage.setScene(new Scene(new DefaultWindow().getView(), 1200, 700));
         primaryStage.show();
     }
 
