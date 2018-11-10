@@ -20,7 +20,7 @@ import javafx.scene.layout.HBox;
  *
  * @author Amy Kim
  */
-public class EditView implements SubView {
+public class EditView implements SubView<AnchorPane> {
     private AnchorPane anchorPane;
     private final TabPane tabPane = new TabPane();
     //TODO: ScrollViews can be more; need to decide
@@ -80,7 +80,7 @@ public class EditView implements SubView {
      * @return A "root" JavaFx Node representative of this object.
      */
     @Override
-    public Node getView() {
+    public AnchorPane getView() {
         return anchorPane;
     }
 }

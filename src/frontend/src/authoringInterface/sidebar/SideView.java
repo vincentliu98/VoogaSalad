@@ -6,7 +6,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.StackPane;
 
-public class SideView implements SubView {
+public class SideView implements SubView<StackPane> {
     private StackPane sideView;
     private TreeView<String> treeView;
 
@@ -24,7 +24,7 @@ public class SideView implements SubView {
 
 
     @Override
-    public Node getView() {
+    public StackPane getView() {
         return sideView;
     }
 }

@@ -13,7 +13,7 @@ import javafx.scene.layout.AnchorPane;
  *
  * @author  Haotian Wang
  */
-public class EmptySkeleton implements SubView, ParentView<SubView> {
+public class EmptySkeleton implements SubView<AnchorPane>, ParentView<SubView> {
     private AnchorPane rootPane;
     private MenuBarView menuBar;
     private SideView sideView;
@@ -60,7 +60,7 @@ public class EmptySkeleton implements SubView, ParentView<SubView> {
      * @return A "root" JavaFx Node representative of this object.
      */
     @Override
-    public Node getView() {
+    public AnchorPane getView() {
         return rootPane;
     }
 

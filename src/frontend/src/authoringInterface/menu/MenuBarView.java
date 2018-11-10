@@ -16,7 +16,7 @@ import javafx.scene.input.KeyCombination;
  *
  * @author Haotian Wang
  */
-public class MenuBarView implements SubView, ParentView<Menu> {
+public class MenuBarView implements SubView<MenuBar>, ParentView<Menu> {
     private static final double DEFAULT_HEIGHT = 30;
     private MenuBar menuBar;
 
@@ -94,7 +94,7 @@ public class MenuBarView implements SubView, ParentView<Menu> {
      * @return A "root" JavaFx Node representative of this object.
      */
     @Override
-    public Node getView() {
+    public MenuBar getView() {
         return menuBar;
     }
 
