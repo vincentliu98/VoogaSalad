@@ -55,3 +55,8 @@ We would also like to demo the creation of a game with sprites of different capa
     * **First Sprint:** For the first sprint, I will work on the game engine to accept grovvy code and link the code to the tiles and sprites.
     * **Second Sprint:** I will work on functionalities to allow game play over networks.
 
+* Jonathan Nakagawa (jyn2)
+    * **Primary Responsibility:** Game Engine (backend)
+    * **Secondary Responsibility:** Game Engine (backend)
+    * **First Sprint:** For the first sprint, I will work on the game engine to have grovvy code interface with the java backend.
+    * **Second Sprint:** I will work on implementing AI.
