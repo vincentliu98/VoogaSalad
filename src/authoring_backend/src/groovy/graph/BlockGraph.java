@@ -1,24 +1,53 @@
 package groovy.graph;
 
+import graph.SimpleEdge;
 import graph.SimpleGraph;
+import groovy.Try;
 import groovy.graph.blocks.GroovyBlock;
+import groovy.graph.blocks.RawGroovyBlock;
 
+import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 /**
- *  BlockGraph is a replicable,
+ *  BlockGraph represents a piece of groovy code with GroovyBlocks and BlockEdges
+ *  It provides a copy method that creates a deep copy of the given vertices and edges.
  */
 public class BlockGraph extends SimpleGraph<GroovyBlock, BlockEdge> {
-    public boolean addEdge(GroovyBlock from, int fromPort, GroovyBlock to, int toPort) {
-        var e = BlockEdge.gen(from, fromPort, to, toPort);
+    public boolean addEdge(GroovyBlock from, Ports fromPort, GroovyBlock to) {
+        var e = BlockEdge.gen(from, fromPort, to);
         e.forEach(this::addEdge);
         return e.isSuccess();
     }
 
     public static BlockGraph copy(Set<GroovyBlock> vertices, Set<BlockEdge> edges) {
         var graph = new BlockGraph();
-        for(var vertex: vertices) graph.addNode(vertex.replicate());
-        for(var edge: edges) graph.addEdge(edge.replicate());
+        var addedVertices = new HashSet<GroovyBlock>();
+        for(var edge: edges) {
+            graph.addEdge(edge.replicate());
+            addedVertices.add(edge.from());
+            addedVertices.add(edge.to());
+        }
+        vertices.stream()
+                .filter(p -> !addedVertices.contains(p))
+                .forEach(v -> graph.addNode(v.replicate()));
         return graph;
+    }
+
+    public Try<GroovyBlock> findTarget(GroovyBlock from, Ports fromPort, boolean canBeEmpty) {
+        var find = Try.apply(() -> get(from)
+                .stream()
+                .filter(e -> e.fromPort() == fromPort)
+                .findFirst()
+                .orElseThrow(Try.supplyThrow(new PortNotConnectedException(from, fromPort))));
+
+        if(find.isFailure() && canBeEmpty) { // handle can-be-empty s
+            return Try.success(new RawGroovyBlock("EOS_"+ UUID.randomUUID(), ""));
+        } else return find.map(SimpleEdge::to);
+    }
+
+    public Try<GroovyBlock> findTarget(GroovyBlock from, Ports fromPort) {
+        return findTarget(from, fromPort, fromPort == Ports.FLOW_OUT); // FLOW_OUT can be empty by default
     }
 }

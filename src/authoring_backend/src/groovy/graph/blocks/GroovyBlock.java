@@ -1,11 +1,11 @@
 package groovy.graph.blocks;
 
-import essentials.GameData;
 import essentials.Replicable;
 import graph.Node;
+import groovy.Try;
+import groovy.graph.BlockGraph;
 import groovy.graph.Ports;
 
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -31,23 +31,18 @@ import java.util.Set;
 
 public interface GroovyBlock<T extends GroovyBlock<T>> extends Node,Replicable<T> {
     /**
-     * Each GroovyBlock must be transformable into Groovy Code
+     * Each GroovyBlock must be transformable into Groovy Code, although
+     * it might fail...
+     *
      * @return Groovy code
      */
-    String toGroovy();
+    Try<String> toGroovy(BlockGraph graph);
 
     /**
      * Replicates this GroovyBlock
      * @return Deep copy of this GroovyBlock
      */
     T replicate();
-
-    /**
-     * Spits out list of possible values given the game data
-     * Didn't yet figure out what to spit out though...
-     * TODO
-     */
-    List<?> suggestions(GameData data);
 
     /**
      * @return Set of ports

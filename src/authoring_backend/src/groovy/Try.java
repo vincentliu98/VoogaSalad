@@ -2,10 +2,11 @@ package groovy;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
- *  Try Class encapsulates the result of an operation that may or may not isSuccess
- *  It provides some convenience methods to operate on it
+ *  Try Class encapsulates the result of an operation that may or may not succeed.
+ *  It provides some convenience methods to operate on it.
  *
  *  https://www.scala-lang.org/api/2.12.1/scala/util/Try.html
  */
@@ -17,6 +18,7 @@ public abstract class Try<T> {
     abstract public <U> Try<U> flatMap(Function<T, Try<U>> f);
     abstract public <U> Try<U> map(Function<T, U> f);
     abstract public void forEach(Consumer<T> op);
+    abstract public T getOrElse(T backup);
 
     public static <U> Try<U> apply(ThrowingSupplier<U> op ) {
         try { return Try.success(op.get()); }
@@ -25,6 +27,7 @@ public abstract class Try<T> {
 
     public static <U> Try<U> success(U val) { return new Success<>(val); }
     public static <U> Try<U> failure(Throwable t) { return new Failure<>(t); }
+    public static Supplier<Throwable> supplyThrow(Throwable t) { return () -> t; }
 
     private static class Success<R> extends Try<R> {
         private R val;
@@ -47,6 +50,9 @@ public abstract class Try<T> {
 
         @Override
         public void forEach(Consumer<R> op) { op.accept(val); }
+
+        @Override
+        public R getOrElse(R backup) { return val; }
     }
 
     private static class Failure<R> extends Try<R> {
@@ -71,6 +77,9 @@ public abstract class Try<T> {
 
         @Override
         public void forEach(Consumer<R> op) { }
+
+        @Override
+        public R getOrElse(R backup) { return backup; }
     }
 
 }
