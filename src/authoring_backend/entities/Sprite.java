@@ -1,4 +1,4 @@
-package authoring_backend.src.entities;
+package authoring_backend.entities;
 
 public interface Sprite extends Entity {
     boolean isMovable();

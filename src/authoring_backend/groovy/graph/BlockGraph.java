@@ -1,7 +1,7 @@
-package groovy.graph;
+package authoring_backend.groovy.graph;
 
-import graph.SimpleGraph;
-import groovy.graph.blocks.GroovyBlock;
+import authoring_backend.graph.SimpleGraph;
+import authoring_backend.groovy.graph.blocks.GroovyBlock;
 
 import java.util.Set;
 

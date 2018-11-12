@@ -1,4 +1,4 @@
-package groovy.graph;
+package authoring_backend.groovy.graph;
 
 public enum Ports {
     FLOW_IN,

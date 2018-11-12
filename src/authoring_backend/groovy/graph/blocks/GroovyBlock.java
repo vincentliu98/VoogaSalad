@@ -1,9 +1,9 @@
-package groovy.graph.blocks;
+package authoring_backend.groovy.graph.blocks;
 
-import essentials.GameData;
-import essentials.Replicable;
-import graph.Node;
-import groovy.graph.Ports;
+import authoring_backend.essentials.GameData;
+import authoring_backend.essentials.Replicable;
+import authoring_backend.graph.Node;
+import authoring_backend.groovy.graph.Ports;
 
 import java.util.List;
 import java.util.Set;

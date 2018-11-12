@@ -1,9 +1,11 @@
-package authoring_backend.src.entities;
+package authoring_backend.entities;
+
+import authoring_backend.essentials.Replicable;
 
 import java.awt.geom.Point2D;
 import java.util.Map;
 
-public interface Entity extends essentials.Replicable {
+public interface Entity extends Replicable {
     int getId();
     Point2D getPosition();
     void setImage(String path);

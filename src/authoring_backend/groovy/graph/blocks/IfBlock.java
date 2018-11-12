@@ -1,13 +1,13 @@
-package groovy.graph.blocks;
+package authoring_backend.groovy.graph.blocks;
 
-import essentials.GameData;
-import graph.SimpleNode;
-import groovy.graph.Ports;
+import authoring_backend.essentials.GameData;
+import authoring_backend.graph.SimpleNode;
+import authoring_backend.groovy.graph.Ports;
 
 import java.util.List;
 import java.util.Set;
 
-import static groovy.graph.Ports.*;
+import static authoring_backend.groovy.graph.Ports.*;
 
 public class IfBlock extends SimpleNode implements GroovyBlock<IfBlock> {
     public IfBlock(int id, String name) { super(id, name); }

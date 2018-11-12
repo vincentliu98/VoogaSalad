@@ -1,4 +1,4 @@
-package groovy;
+package authoring_backend.groovy;
 
 import java.util.function.Consumer;
 import java.util.function.Function;

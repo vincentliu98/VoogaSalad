@@ -1,13 +1,13 @@
-package groovy.graph.blocks;
+package authoring_backend.groovy.graph.blocks;
 
-import essentials.GameData;
-import graph.SimpleNode;
-import groovy.graph.Ports;
+import authoring_backend.essentials.GameData;
+import authoring_backend.graph.SimpleNode;
+import authoring_backend.groovy.graph.Ports;
 
 import java.util.List;
 import java.util.Set;
 
-import static groovy.graph.Ports.FLOW_OUT;
+import static authoring_backend.groovy.graph.Ports.FLOW_OUT;
 
 public class SourceBlock extends SimpleNode implements GroovyBlock<SourceBlock> {
     public SourceBlock(int id, String name) { super(id, name); }
