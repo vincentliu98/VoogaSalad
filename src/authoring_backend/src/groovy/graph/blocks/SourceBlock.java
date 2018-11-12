@@ -1,8 +1,8 @@
 package groovy.graph.blocks;
 
+import groovy.graph.BlockGraph;
 import graph.SimpleNode;
 import groovy.Try;
-import groovy.graph.BlockGraph;
 import groovy.graph.Ports;
 
 import java.util.Set;

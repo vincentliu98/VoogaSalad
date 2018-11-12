@@ -1,9 +1,9 @@
 package groovy.graph.blocks;
 
+import groovy.graph.BlockGraph;
 import essentials.Replicable;
 import graph.Node;
 import groovy.Try;
-import groovy.graph.BlockGraph;
 import groovy.graph.Ports;
 
 import java.util.Set;

@@ -1,4 +1,4 @@
-package authoring_backend.src.entities;
+package entities;
 
 public interface CRUDInterface {
     void createSprite();

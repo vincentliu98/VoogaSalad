@@ -1,10 +1,10 @@
 package groovy.graph.blocks.literal;
 
+import groovy.graph.BlockGraph;
+import groovy.graph.blocks.GroovyBlock;
 import graph.SimpleNode;
 import groovy.Try;
-import groovy.graph.BlockGraph;
 import groovy.graph.Ports;
-import groovy.graph.blocks.GroovyBlock;
 import javafx.beans.property.SimpleStringProperty;
 
 import java.util.Set;

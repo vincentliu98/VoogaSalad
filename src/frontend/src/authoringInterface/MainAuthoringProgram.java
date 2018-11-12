@@ -1,7 +1,6 @@
 package authoringInterface;
 
 import javafx.application.Application;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -30,7 +29,7 @@ public class MainAuthoringProgram extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("VoogaSalad!");
         View myView = new View(primaryStage);
-        primaryStage.setScene(new Scene((Parent) myView.getView(), SCREEN_WIDTH, SCREEN_HEIGHT));
+        primaryStage.setScene(new Scene(myView.getRootPane(), SCREEN_WIDTH, SCREEN_HEIGHT));
         primaryStage.show();
     }
 
