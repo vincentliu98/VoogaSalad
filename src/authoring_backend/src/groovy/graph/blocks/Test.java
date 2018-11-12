@@ -1,13 +1,13 @@
-package groovy.graph.blocks;
+package authoring_backend.src.groovy.graph.blocks;
 
-import essentials.GameData;
-import groovy.graph.BlockGraph;
-import groovy.graph.blocks.binary_ops.AddBlock;
-import groovy.graph.blocks.control.AssignBlock;
-import groovy.graph.blocks.control.ForBlock;
-import groovy.graph.blocks.literal.IntegerBlock;
+import authoring_backend.src.groovy.graph.BlockGraph;
+import authoring_backend.src.essentials.GameData;
+import authoring_backend.src.groovy.graph.blocks.binary_ops.AddBlock;
+import authoring_backend.src.groovy.graph.blocks.control.AssignBlock;
+import authoring_backend.src.groovy.graph.blocks.control.ForBlock;
+import authoring_backend.src.groovy.graph.blocks.literal.IntegerBlock;
 
-import static groovy.graph.Ports.*;
+import static authoring_backend.src.groovy.graph.Ports.*;
 
 public class Test {
     public static void main(String[] args) throws Throwable {

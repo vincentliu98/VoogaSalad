@@ -1,10 +1,10 @@
-package groovy.graph.blocks;
+package authoring_backend.src.groovy.graph.blocks;
 
-import essentials.Replicable;
-import graph.Node;
-import groovy.Try;
-import groovy.graph.BlockGraph;
-import groovy.graph.Ports;
+import authoring_backend.src.groovy.graph.BlockGraph;
+import authoring_backend.src.essentials.Replicable;
+import authoring_backend.src.graph.Node;
+import authoring_backend.src.groovy.Try;
+import authoring_backend.src.groovy.graph.Ports;
 
 import java.util.Set;
 

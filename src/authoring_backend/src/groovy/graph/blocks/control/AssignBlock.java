@@ -1,16 +1,16 @@
-package groovy.graph.blocks.control;
+package authoring_backend.src.groovy.graph.blocks.control;
 
-import essentials.GameData;
-import graph.SimpleNode;
-import groovy.Try;
-import groovy.graph.BlockGraph;
-import groovy.graph.Ports;
-import groovy.graph.blocks.GroovyBlock;
+import authoring_backend.src.groovy.graph.BlockGraph;
+import authoring_backend.src.groovy.graph.blocks.GroovyBlock;
+import authoring_backend.src.essentials.GameData;
+import authoring_backend.src.graph.SimpleNode;
+import authoring_backend.src.groovy.Try;
+import authoring_backend.src.groovy.graph.Ports;
 import javafx.beans.property.SimpleStringProperty;
 
 import java.util.Set;
 
-import static groovy.graph.Ports.*;
+import static authoring_backend.src.groovy.graph.Ports.*;
 
 public class AssignBlock extends SimpleNode implements GroovyBlock<AssignBlock> {
     private GameData gameData;

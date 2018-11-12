@@ -1,13 +1,13 @@
-package groovy.graph.blocks;
+package authoring_backend.src.groovy.graph.blocks;
 
-import graph.SimpleNode;
-import groovy.Try;
-import groovy.graph.BlockGraph;
-import groovy.graph.Ports;
+import authoring_backend.src.groovy.graph.BlockGraph;
+import authoring_backend.src.graph.SimpleNode;
+import authoring_backend.src.groovy.Try;
+import authoring_backend.src.groovy.graph.Ports;
 
 import java.util.Set;
 
-import static groovy.graph.Ports.FLOW_OUT;
+import static authoring_backend.src.groovy.graph.Ports.FLOW_OUT;
 
 public class SourceBlock extends SimpleNode implements GroovyBlock<SourceBlock> {
     public SourceBlock() { super(); }
