@@ -1,10 +1,10 @@
-package authoring_backend.src.groovy.graph;
+package groovy.graph;
 
-import authoring_backend.src.graph.SimpleEdge;
-import authoring_backend.src.graph.SimpleGraph;
-import authoring_backend.src.groovy.Try;
-import authoring_backend.src.groovy.graph.blocks.GroovyBlock;
-import authoring_backend.src.groovy.graph.blocks.RawGroovyBlock;
+import graph.SimpleEdge;
+import graph.SimpleGraph;
+import groovy.Try;
+import groovy.graph.blocks.GroovyBlock;
+import groovy.graph.blocks.RawGroovyBlock;
 
 import java.util.HashSet;
 import java.util.Set;

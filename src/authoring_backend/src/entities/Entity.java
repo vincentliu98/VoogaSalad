@@ -1,6 +1,6 @@
-package authoring_backend.src.entities;
+package entities;
 
-import authoring_backend.src.essentials.Replicable;
+import essentials.Replicable;
 
 import java.awt.geom.Point2D;
 import java.util.Map;

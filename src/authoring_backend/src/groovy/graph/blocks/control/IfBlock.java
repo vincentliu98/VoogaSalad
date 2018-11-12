@@ -1,14 +1,14 @@
-package authoring_backend.src.groovy.graph.blocks.control;
+package groovy.graph.blocks.control;
 
-import authoring_backend.src.groovy.graph.BlockGraph;
-import authoring_backend.src.groovy.graph.blocks.GroovyBlock;
-import authoring_backend.src.graph.SimpleNode;
-import authoring_backend.src.groovy.Try;
-import authoring_backend.src.groovy.graph.Ports;
+import groovy.graph.BlockGraph;
+import groovy.graph.blocks.GroovyBlock;
+import graph.SimpleNode;
+import groovy.Try;
+import groovy.graph.Ports;
 
 import java.util.Set;
 
-import static authoring_backend.src.groovy.graph.Ports.*;
+import static groovy.graph.Ports.*;
 
 public class IfBlock extends SimpleNode implements GroovyBlock<IfBlock> {
     @Override

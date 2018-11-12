@@ -1,4 +1,4 @@
-package authoring_backend.src.graph;
+package graph;
 
 /**
  *  Represents an Edge of within the graph.

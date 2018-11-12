@@ -1,9 +1,9 @@
-package authoring_backend.src.groovy.graph.blocks;
+package groovy.graph.blocks;
 
-import authoring_backend.src.groovy.graph.BlockGraph;
-import authoring_backend.src.graph.SimpleNode;
-import authoring_backend.src.groovy.Try;
-import authoring_backend.src.groovy.graph.Ports;
+import groovy.graph.BlockGraph;
+import graph.SimpleNode;
+import groovy.Try;
+import groovy.graph.Ports;
 
 import java.util.Set;
 

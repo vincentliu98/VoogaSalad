@@ -1,4 +1,4 @@
-package authoring_backend.src.essentials;
+package essentials;
 
 /**
  * Every Classes implementing Replicable interface should be able to replicate itself.

@@ -1,4 +1,4 @@
-package authoring_backend.src.entities;
+package entities;
 
 import java.util.Iterator;
 import java.util.Set;

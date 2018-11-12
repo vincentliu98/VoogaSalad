@@ -1,6 +1,6 @@
-package authoring_backend.src.groovy.graph;
+package groovy.graph;
 
-import authoring_backend.src.groovy.graph.blocks.GroovyBlock;
+import groovy.graph.blocks.GroovyBlock;
 
 public class PortAlreadyFilledException extends Exception {
     public PortAlreadyFilledException(GroovyBlock from, Ports port) {

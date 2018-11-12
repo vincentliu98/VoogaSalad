@@ -1,6 +1,6 @@
-package authoring_backend.src.groovy.graph;
+package groovy.graph;
 
-import authoring_backend.src.groovy.graph.blocks.GroovyBlock;
+import groovy.graph.blocks.GroovyBlock;
 
 public class PortNotConnectedException extends Exception {
     public PortNotConnectedException(GroovyBlock from, Ports port) {

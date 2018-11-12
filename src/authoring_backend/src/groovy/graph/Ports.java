@@ -1,12 +1,10 @@
-package authoring_backend.src.groovy.graph;
+package groovy.graph;
 
 public enum Ports {
     FLOW_OUT,
     IF_PREDICATE,
     IF_BODY,
-    FOR_INIT,
-    FOR_CHECK,
-    FOR_MUTATE,
+    FOREACH_LIST,
     FOR_BODY,
     ASSIGN_RHS,
     A,

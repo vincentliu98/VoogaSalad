@@ -1,4 +1,4 @@
-package authoring_backend.src.essentials;
+package essentials;
 
 public class GameData {
 }
