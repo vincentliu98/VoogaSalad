@@ -1,4 +1,4 @@
-package graph;
+package authoring_backend.src.graph;
 
 /**
  * Minimal implementation of an Edge, just to allow

@@ -1,4 +1,4 @@
-package graph;
+package authoring_backend.src.graph;
 
 import java.util.List;
 import java.util.Map;

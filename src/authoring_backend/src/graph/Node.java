@@ -1,4 +1,4 @@
-package graph;
+package authoring_backend.src.graph;
 
 import javafx.beans.property.SimpleStringProperty;
 

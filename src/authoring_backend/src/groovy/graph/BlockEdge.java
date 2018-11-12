@@ -1,9 +1,9 @@
-package groovy.graph;
+package authoring_backend.src.groovy.graph;
 
-import essentials.Replicable;
-import graph.SimpleEdge;
-import groovy.Try;
-import groovy.graph.blocks.GroovyBlock;
+import authoring_backend.src.essentials.Replicable;
+import authoring_backend.src.graph.SimpleEdge;
+import authoring_backend.src.groovy.Try;
+import authoring_backend.src.groovy.graph.blocks.GroovyBlock;
 
 /**
  *  BlockEdge class represents an edge that connects two GroovyBlocks;

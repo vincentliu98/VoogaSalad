@@ -1,6 +1,6 @@
-package groovy.graph;
+package authoring_backend.src.groovy.graph;
 
-import groovy.graph.blocks.GroovyBlock;
+import authoring_backend.src.groovy.graph.blocks.GroovyBlock;
 
 public class TypeCheckException extends Exception {
     public TypeCheckException(GroovyBlock from, Ports port, GroovyBlock to, String cause) {

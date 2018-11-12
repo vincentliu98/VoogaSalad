@@ -1,4 +1,4 @@
-package groovy;
+package authoring_backend.src.groovy;
 
 @FunctionalInterface
 public interface ThrowingSupplier<T> {
