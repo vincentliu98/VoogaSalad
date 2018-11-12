@@ -11,8 +11,6 @@ import java.util.Set;
 import static groovy.graph.Ports.*;
 
 public class IfBlock extends SimpleNode implements GroovyBlock<IfBlock> {
-    public IfBlock(String name) { super(name); }
-
     @Override
     public Set<Ports> ports() { return Set.of(FLOW_OUT, IF_PREDICATE, IF_BODY); }
 
@@ -31,5 +29,5 @@ public class IfBlock extends SimpleNode implements GroovyBlock<IfBlock> {
     }
 
     @Override
-    public IfBlock replicate() { return new IfBlock(name().get()); }
+    public IfBlock replicate() { return new IfBlock(); }
 }

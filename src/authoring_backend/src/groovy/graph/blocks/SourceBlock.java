@@ -10,7 +10,7 @@ import java.util.Set;
 import static groovy.graph.Ports.FLOW_OUT;
 
 public class SourceBlock extends SimpleNode implements GroovyBlock<SourceBlock> {
-    public SourceBlock(String name) { super(name); }
+    public SourceBlock() { super(); }
 
     @Override
     public Set<Ports> ports() { return Set.of(FLOW_OUT); }
@@ -21,5 +21,5 @@ public class SourceBlock extends SimpleNode implements GroovyBlock<SourceBlock> 
     }
 
     @Override
-    public SourceBlock replicate() { return new SourceBlock(name().get()); }
+    public SourceBlock replicate() { return new SourceBlock(); }
 }

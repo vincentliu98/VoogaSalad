@@ -12,23 +12,21 @@ import java.util.Set;
 public class IntegerBlock extends SimpleNode implements GroovyBlock<IntegerBlock> {
     private SimpleIntegerProperty value;
 
-    public IntegerBlock(String name) {
-        super(name);
+    public IntegerBlock() {
         value = new SimpleIntegerProperty(0);
     }
 
-    public IntegerBlock(String name, int value) {
-        super(name);
+    public IntegerBlock(int value) {
         this.value = new SimpleIntegerProperty(value);
     }
+
+    public SimpleIntegerProperty model() { return value; }
 
     @Override
     public Try<String> toGroovy(BlockGraph graph) { return Try.success(String.valueOf(value.get())); }
 
     @Override
-    public IntegerBlock replicate() {
-        return new IntegerBlock(name().get(), value.get());
-    }
+    public IntegerBlock replicate() { return new IntegerBlock(value.get()); }
 
     @Override
     public Set<Ports> ports() { return Set.of(); }

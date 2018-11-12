@@ -12,13 +12,11 @@ import java.util.Set;
 public class DoubleBlock extends SimpleNode implements GroovyBlock<DoubleBlock> {
     private SimpleDoubleProperty value;
 
-    public DoubleBlock(String name) {
-        super(name);
+    public DoubleBlock() {
         value = new SimpleDoubleProperty(0);
     }
 
-    public DoubleBlock(String name, double value) {
-        super(name);
+    public DoubleBlock(double value) {
         this.value = new SimpleDoubleProperty(value);
     }
 
@@ -28,7 +26,7 @@ public class DoubleBlock extends SimpleNode implements GroovyBlock<DoubleBlock> 
     public Try<String> toGroovy(BlockGraph graph) { return Try.success(String.valueOf(value.get())); }
 
     @Override
-    public DoubleBlock replicate() { return new DoubleBlock(name().get(), value.get()); }
+    public DoubleBlock replicate() { return new DoubleBlock(value.get()); }
 
     @Override
     public Set<Ports> ports() { return Set.of(); }

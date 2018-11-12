@@ -17,8 +17,7 @@ public class AssignBlock extends SimpleNode implements GroovyBlock<AssignBlock> 
     private SimpleStringProperty prefix;
     private SimpleStringProperty varName;
 
-    public AssignBlock(String name, GameData gameData) {
-        super(name);
+    public AssignBlock(GameData gameData) {
         this.gameData = gameData;
         prefix = new SimpleStringProperty("");
         varName = new SimpleStringProperty("");
@@ -45,7 +44,7 @@ public class AssignBlock extends SimpleNode implements GroovyBlock<AssignBlock> 
     }
 
     @Override
-    public AssignBlock replicate() { return new AssignBlock(name().get(), gameData); }
+    public AssignBlock replicate() { return new AssignBlock(gameData); }
 
     @Override
     public Set<Ports> ports() { return Set.of(FLOW_OUT, ASSIGN_RHS); }

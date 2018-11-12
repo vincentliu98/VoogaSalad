@@ -11,8 +11,6 @@ import java.util.Set;
 import static groovy.graph.Ports.*;
 
 public class ForBlock extends SimpleNode implements GroovyBlock<ForBlock> {
-    public ForBlock(String name) { super(name); }
-
     @Override
     public Try<String> toGroovy(BlockGraph graph) {
         var tryInit = graph.findTarget(this, FOR_INIT, true).flatMap(b -> b.toGroovy(graph));
@@ -35,9 +33,7 @@ public class ForBlock extends SimpleNode implements GroovyBlock<ForBlock> {
     }
 
     @Override
-    public ForBlock replicate() {
-        return new ForBlock(name().get());
-    }
+    public ForBlock replicate() { return new ForBlock(); }
 
     @Override
     public Set<Ports> ports() {

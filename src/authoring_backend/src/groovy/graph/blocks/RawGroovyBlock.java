@@ -9,8 +9,7 @@ import java.util.Set;
 
 public class RawGroovyBlock extends SimpleNode implements GroovyBlock<RawGroovyBlock> {
     private String src;
-    public RawGroovyBlock(String name, String src) {
-        super(name);
+    public RawGroovyBlock(String src) {
         this.src = src;
     }
 
@@ -18,9 +17,7 @@ public class RawGroovyBlock extends SimpleNode implements GroovyBlock<RawGroovyB
     public Try<String> toGroovy(BlockGraph graph) { return Try.success(src); }
 
     @Override
-    public RawGroovyBlock replicate() {
-        return new RawGroovyBlock(name().get(), src);
-    }
+    public RawGroovyBlock replicate() { return new RawGroovyBlock(src); }
 
     @Override
     public Set<Ports> ports() { return Set.of(); }

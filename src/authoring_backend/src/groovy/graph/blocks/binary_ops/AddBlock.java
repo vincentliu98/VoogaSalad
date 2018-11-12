@@ -11,10 +11,6 @@ import java.util.Set;
 import static groovy.graph.Ports.*;
 
 public class AddBlock extends SimpleNode implements GroovyBlock<AddBlock> {
-    public AddBlock(String name) {
-        super(name);
-    }
-
     @Override
     public Try<String> toGroovy(BlockGraph graph) {
         var tryA = graph.findTarget(this, A).flatMap(b -> b.toGroovy(graph));
@@ -28,7 +24,7 @@ public class AddBlock extends SimpleNode implements GroovyBlock<AddBlock> {
 
     @Override
     public AddBlock replicate() {
-        return new AddBlock(name().get());
+        return new AddBlock();
     }
 
     @Override
