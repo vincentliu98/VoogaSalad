@@ -5,13 +5,12 @@ import authoringInterface.sidebar.subTreeViews.EntitySubTreeView;
 import authoringInterface.sidebar.subTreeViews.SoundSubTreeView;
 import authoringInterface.sidebar.subTreeViews.TileSetsSubTreeView;
 import authoringInterface.spritechoosingwindow.EntityWindow;
-import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-public class SideView implements SubView {
+public class SideView implements SubView<StackPane> {
     private final TreeView<String> rootTreeView;
     private final TreeItem<String> rootTreeItem;
     private final TreeItem<String> entityTreeView;
@@ -34,7 +33,7 @@ public class SideView implements SubView {
     }
 
     @Override
-    public Node getView() {
+    public StackPane getView() {
         return sideView;
     }
 }

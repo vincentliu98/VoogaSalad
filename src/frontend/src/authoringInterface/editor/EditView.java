@@ -4,7 +4,6 @@ import api.SubView;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -19,7 +18,7 @@ import javafx.scene.layout.AnchorPane;
  *
  * @author Amy Kim
  */
-public class EditView implements SubView {
+public class EditView implements SubView<AnchorPane> {
     private AnchorPane anchorPane;
     private final TabPane tabPane = new TabPane();
     //TODO: ScrollViews can be more; need to decide
@@ -79,7 +78,7 @@ public class EditView implements SubView {
      * @return A "root" JavaFx Node representative of this object.
      */
     @Override
-    public Node getView() {
+    public AnchorPane getView() {
         return anchorPane;
     }
 }

@@ -13,7 +13,7 @@ import javafx.scene.layout.HBox;
  *
  * @author Amy Kim
  */
-public class GridScrollView implements SubView{
+public class GridScrollView implements SubView<ScrollPane> {
     private ScrollPane gridScrollView;
     private HBox contentBox;
 
@@ -31,7 +31,7 @@ public class GridScrollView implements SubView{
     private void dragAndDrop(){}
 
     @Override
-    public Node getView() {
+    public ScrollPane getView() {
         return gridScrollView;
     }
 }
