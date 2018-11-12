@@ -12,8 +12,8 @@ import javafx.scene.control.ScrollPane.ScrollBarPolicy;
  *
  * @author Amy Kim
  */
-// not being used now
-public class EntityScrollView implements SubView {
+
+public class EntityScrollView implements SubView<ScrollPane> {
     private ScrollPane entityScrollView;
 
     public EntityScrollView() {
@@ -27,7 +27,7 @@ public class EntityScrollView implements SubView {
     private void dragAndDrop(){}
 
     @Override
-    public Node getView() {
+    public ScrollPane getView() {
         return entityScrollView;
     }
 }

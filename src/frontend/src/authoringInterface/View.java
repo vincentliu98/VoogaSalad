@@ -3,24 +3,25 @@ package authoringInterface;
 import api.ParentView;
 import api.SubView;
 import authoringInterface.editor.EditView;
-import authoringInterface.menu.MenuBarView;
+import authoringInterface.editor.MenuBarView;
 import authoringInterface.sidebar.SideView;
-import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-
 
 /**
  * This class provides an empty skeleton window with the basic menu items, and basic editing interfaces.
  *
  * @author  Haotian Wang
  */
-public class View implements SubView, ParentView<SubView> {
+public class View implements ParentView<SubView> {
     private AnchorPane rootPane;
     private MenuBarView menuBar;
     private SideView sideView;
     private EditView editView;
     private Stage primaryStage;
+    public static final double MENU_BAR_HEIGHT = 30;
+    public static final double GAME_WIDTH = 700;
+    public static final double GAME_HEIGHT = 500;
 
     /**
      * Constructor for an empty window, with an AnchorPane as the root Node, and the AnchorPane constraints on top, left and right are 0.
@@ -34,7 +35,7 @@ public class View implements SubView, ParentView<SubView> {
     }
 
     private void initializeElements() {
-        menuBar = new MenuBarView(primaryStage);
+        menuBar = new MenuBarView();
         sideView = new SideView(primaryStage);
         editView = new EditView();
     }
@@ -57,16 +58,6 @@ public class View implements SubView, ParentView<SubView> {
     }
 
     /**
-     * This method returns the responsible JavaFx Node responsible to be added or deleted from other graphical elements.
-     *
-     * @return A "root" JavaFx Node representative of this object.
-     */
-    @Override
-    public Node getView() {
-        return rootPane;
-    }
-
-    /**
      * Add the JavaFx Node representation of a subView into the parent View in a hierarchical manner.
      *
      * @param view: A SubView object.
@@ -74,5 +65,9 @@ public class View implements SubView, ParentView<SubView> {
     @Override
     public void addChild(SubView view) {
         rootPane.getChildren().add(view.getView());
+    }
+
+    public AnchorPane getRootPane() {
+        return rootPane;
     }
 }
