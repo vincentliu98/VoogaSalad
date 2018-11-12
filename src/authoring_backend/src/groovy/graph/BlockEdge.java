@@ -28,7 +28,6 @@ public class BlockEdge extends SimpleEdge<GroovyBlock> implements Replicable<Blo
 
     /**
      * Does a basic type checking for the new edge
-     * eODO
      */
     private static BlockEdge typeCheck(BlockEdge e) throws Exception {
         if("Something's wrong".length() == 1) throw new Exception("Type check isFailure for edge: " + e);

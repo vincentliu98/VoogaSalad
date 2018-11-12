@@ -16,7 +16,7 @@ public class ForBlock extends SimpleNode implements GroovyBlock<ForBlock> {
         var tryInit = graph.findTarget(this, FOR_INIT, true).flatMap(b -> b.toGroovy(graph));
         var tryCheck = graph.findTarget(this, FOR_CHECK, true).flatMap(b -> b.toGroovy(graph));
         var tryMutate = graph.findTarget(this, FOR_MUTATE, true).flatMap(b -> b.toGroovy(graph));
-        var tryBody = graph.findTarget(this, FOR_MUTATE, true).flatMap(b -> b.toGroovy(graph));
+        var tryBody = graph.findTarget(this, FOR_BODY, true).flatMap(b -> b.toGroovy(graph));
         var tryOut = graph.findTarget(this, FLOW_OUT).flatMap(b -> b.toGroovy(graph));
 
         return tryInit.flatMap(init ->
@@ -24,7 +24,9 @@ public class ForBlock extends SimpleNode implements GroovyBlock<ForBlock> {
                     tryMutate.flatMap(mutate ->
                         tryBody.flatMap(body ->
                             tryOut.map(out ->
-                                String.format("for( %s ; %s ; %s ) {\n%s\n}\n%s"+init, check, mutate, body, out)
+                                String.format("for( %s ; %s ; %s ) {\n%s\n}\n%s",
+                                    init.toString().replaceAll(";", ""),
+                                    check, mutate, body, out)
                             )
                         )
                     )

@@ -38,7 +38,7 @@ public class AssignBlock extends SimpleNode implements GroovyBlock<AssignBlock> 
         var tryOut = graph.findTarget(this, FLOW_OUT).flatMap(b -> b.toGroovy(graph));
         return tryRHS.flatMap(rhs ->
             tryOut.map(out ->
-                prefix.get()+ " " + varName.get() + " = " + rhs
+                String.format("%s %s = %s;", prefix.get(), varName.get(), rhs)
             )
         );
     }

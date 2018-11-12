@@ -5,7 +5,6 @@ import graph.SimpleGraph;
 import groovy.Try;
 import groovy.graph.blocks.GroovyBlock;
 import groovy.graph.blocks.RawGroovyBlock;
-import groovy.graph.blocks.SourceBlock;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -15,19 +14,22 @@ import java.util.Set;
  *  It provides a copy method that creates a deep copy of the given vertices and edges.
  */
 public class BlockGraph extends SimpleGraph<GroovyBlock, BlockEdge> {
-    private SourceBlock source;
     public BlockGraph() {
         super();
-        source = new SourceBlock();
     }
 
-    public boolean addEdge(GroovyBlock from, Ports fromPort, GroovyBlock to) {
-        var res = BlockEdge.gen(from, fromPort, to).map(edge -> {
+    /**
+     *  When adding an edge, the graph will check
+     *  1. If the edge is syntactically correct
+     *  2. Whether there's already an edge from the port
+     *  It will throw an exception if it fails these checks
+     */
+    public void addEdge(GroovyBlock from, Ports fromPort, GroovyBlock to) throws Throwable {
+        BlockEdge.gen(from, fromPort, to).flatMap(edge -> {
             if(get(from).stream().noneMatch(p -> p.fromPort() == fromPort))
-                return addEdge(edge);
-            return false;
-        });
-        return res.getOrElse(false); // get the result, otherwise it already failed to generate so...
+                return Try.success(addEdge(edge));
+            else return Try.failure(new PortAlreadyFilledException(from, fromPort));
+        }).get();
     }
 
     public static BlockGraph copy(Set<GroovyBlock> vertices, Set<BlockEdge> edges) {
@@ -62,6 +64,4 @@ public class BlockGraph extends SimpleGraph<GroovyBlock, BlockEdge> {
     public Try<GroovyBlock> findTarget(GroovyBlock from, Ports fromPort) {
         return findTarget(from, fromPort, fromPort == Ports.FLOW_OUT); // FLOW_OUT can be empty by default
     }
-
-    public Try<String> toGroovy() { return source.toGroovy(this); }
 }
