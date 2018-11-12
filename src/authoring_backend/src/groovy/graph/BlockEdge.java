@@ -11,25 +11,23 @@ import groovy.graph.blocks.GroovyBlock;
  *  the port of each block that the edges are connected to.
  */
 public class BlockEdge extends SimpleEdge<GroovyBlock> implements Replicable<BlockEdge> {
-    private int fromPort, toPort;
+    private Ports fromPort;
 
-    private BlockEdge(GroovyBlock from, int fromPort, GroovyBlock to, int toPort) {
+    private BlockEdge(GroovyBlock from, Ports fromPort, GroovyBlock to) {
         super(from, to);
         this.fromPort = fromPort;
-        this.toPort = toPort;
     }
 
     /**
      * This is the only way for the outside world to create BlockEdge
      * @return A BlockEdge, that may have failed the Syntax Checking or not.
      */
-    public static Try<BlockEdge> gen(GroovyBlock from, int fromPort, GroovyBlock to, int toPort) {
-        return Try.apply(() -> typeCheck(new BlockEdge(from, fromPort, to, toPort)));
+    public static Try<BlockEdge> gen(GroovyBlock from, Ports fromPort, GroovyBlock to) {
+        return Try.apply(() -> typeCheck(new BlockEdge(from, fromPort, to)));
     }
 
     /**
      * Does a basic type checking for the new edge
-     * eODO
      */
     private static BlockEdge typeCheck(BlockEdge e) throws Exception {
         if("Something's wrong".length() == 1) throw new Exception("Type check isFailure for edge: " + e);
@@ -38,8 +36,7 @@ public class BlockEdge extends SimpleEdge<GroovyBlock> implements Replicable<Blo
 
 
     @Override
-    public BlockEdge replicate() { return new BlockEdge(from().replicate(), fromPort, to().replicate(), toPort); }
+    public BlockEdge replicate() { return new BlockEdge(from().replicate(), fromPort, to().replicate()); }
 
-    public int fromPort() { return fromPort; }
-    public int toPort() { return toPort; }
+    public Ports fromPort() { return fromPort; }
 }
