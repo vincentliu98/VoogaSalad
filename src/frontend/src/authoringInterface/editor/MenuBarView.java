@@ -4,7 +4,6 @@ import api.SubView;
 import authoringInterface.MainAuthoringProgram;
 import authoringInterface.View;
 import javafx.event.ActionEvent;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -13,10 +12,12 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
+import runningGame.GameWindow;
 
 public class MenuBarView implements SubView<MenuBar> {
 
     private MenuBar menuBar;
+    private GameWindow gameWindow;
 
     public MenuBarView() {
         menuBar = new MenuBar();
@@ -71,8 +72,8 @@ public class MenuBarView implements SubView<MenuBar> {
     void handleRunProject(ActionEvent event) {
         Stage newWindow = new Stage();
         newWindow.setTitle("Your Game");
-        Group group = new Group();
-        Scene newScene = new Scene(group, View.GAME_WIDTH, View.GAME_HEIGHT);
+        gameWindow = new GameWindow();
+        Scene newScene = new Scene(gameWindow, View.GAME_WIDTH, View.GAME_HEIGHT);
         newWindow.setScene(newScene);
         newWindow.setX(MainAuthoringProgram.SCREEN_WIDTH*0.5 - View.GAME_WIDTH*0.5);
         newWindow.setY(MainAuthoringProgram.SCREEN_HEIGHT*0.5 - View.GAME_HEIGHT*0.5);

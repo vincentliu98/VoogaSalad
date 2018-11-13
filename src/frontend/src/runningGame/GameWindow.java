@@ -1,5 +1,7 @@
 package runningGame;
 
+import javafx.scene.Group;
+
 /**
  * A new window for running the game.
  *
@@ -8,5 +10,9 @@ package runningGame;
  * @author jl729
  */
 
-public class GameWindow {
+public class GameWindow extends Group{
+
+    public GameWindow() {
+        super();
+    }
 }
