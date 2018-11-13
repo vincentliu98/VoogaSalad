@@ -1,15 +1,10 @@
 package groovy.graph;
 
-<<<<<<< HEAD:src/authoring_backend/groovy/graph/BlockGraph.java
-import authoring_backend.graph.SimpleGraph;
-import authoring_backend.groovy.graph.blocks.GroovyBlock;
-=======
 import graph.SimpleEdge;
 import graph.SimpleGraph;
 import groovy.Try;
 import groovy.graph.blocks.GroovyBlock;
-import groovy.graph.blocks.RawGroovyBlock;
->>>>>>> master:src/authoring_backend/src/groovy/graph/BlockGraph.java
+import groovy.graph.blocks.core.RawGroovyBlock;
 
 import java.util.HashSet;
 import java.util.Set;

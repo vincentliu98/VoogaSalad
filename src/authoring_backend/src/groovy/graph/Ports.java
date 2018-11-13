@@ -6,7 +6,9 @@ public enum Ports {
     IF_PREDICATE,
     IF_BODY,
     FOREACH_LIST,
-    FOR_BODY,
+    FOREACH_LOOPVAR,
+    FOREACH_BODY,
+    ASSIGN_LHS,
     ASSIGN_RHS,
     A,
     B

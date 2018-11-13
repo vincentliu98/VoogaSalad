@@ -9,9 +9,7 @@ import javafx.beans.property.SimpleStringProperty;
 public class SimpleNode implements Node {
     private SimpleStringProperty description;
 
-    public SimpleNode() {
-        this.description = new SimpleStringProperty("");
-    }
+    public SimpleNode() { this.description = new SimpleStringProperty(""); }
 
     @Override
     public SimpleStringProperty description() { return description; }

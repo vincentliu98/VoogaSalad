@@ -1,10 +1,10 @@
-package groovy.graph.blocks;
-
+package groovy.graph.blocks.core;
 
 import groovy.graph.Ports;
 import groovy.graph.BlockGraph;
 import graph.SimpleNode;
 import groovy.Try;
+import groovy.graph.blocks.GroovyBlock;
 
 import java.util.Set;
 
