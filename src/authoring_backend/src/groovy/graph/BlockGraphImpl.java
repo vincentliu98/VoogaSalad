@@ -19,6 +19,7 @@ public class BlockGraphImpl extends SimpleGraph<GroovyBlock, BlockEdge> implemen
     public BlockGraphImpl() {
         super();
         source = new SourceBlock();
+        try { addNode(source); } catch (Throwable ignored) {} // not. going. to. happen.
     }
 
     @Override

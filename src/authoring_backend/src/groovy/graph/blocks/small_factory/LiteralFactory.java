@@ -1,5 +1,6 @@
 package groovy.graph.blocks.small_factory;
 
+import essentials.GameData;
 import groovy.api.Try;
 import groovy.graph.blocks.core.LiteralBlock;
 
@@ -20,8 +21,8 @@ public class LiteralFactory {
                   .map(i -> new LiteralBlock(i.toString(), "Double"));
     }
 
-    public static Try<LiteralBlock> stringBlock(String value) {
-        return Try.success(new LiteralBlock(value, "String"));
+    public static LiteralBlock stringBlock(String value) {
+        return new LiteralBlock("\""+value+"\"", "String");
     }
 
 
@@ -36,6 +37,16 @@ public class LiteralFactory {
             return Arrays.asList(elms.trim().split("\\s*,\\s*")); // TODO: Make this less naive
         } else throw new ListParseException(lst);
     }
+
+    public static Try<LiteralBlock> refBlock(String value, GameData data) {
+        return Try.apply(() -> validateReference(value.trim(), data))
+                  .map(ref -> new LiteralBlock(ref, "Ref"));
+    }
+
+    private static String validateReference(String ref, GameData data) throws ReferenceParseException {
+        return ref; // TODO: need to validate!
+    }
+
 
     public static Try<LiteralBlock> mapBlock(String value) {
         return Try.apply(() -> checkMap(value.trim())).map(m -> new LiteralBlock(m, "Map"));

@@ -22,7 +22,7 @@ public class InfixBinaryBlock extends SimpleNode implements GroovyBlock<InfixBin
     @Override
     public Try<String> toGroovy(BlockGraph graph) {
         var tryA = graph.findTarget(this, A).flatMap(b -> b.toGroovy(graph));
-        var tryB = graph.findTarget(this, A).flatMap(b -> b.toGroovy(graph));
+        var tryB = graph.findTarget(this, B).flatMap(b -> b.toGroovy(graph));
         return tryA.flatMap ( a ->
             tryB.map( b ->
                 String.format("(%s %s %s)", a, op, b)
