@@ -3,7 +3,8 @@ package authoringInterface.sidebar;
 import java.util.ArrayList;
 
 /**
- * A utility class that manages all the items in the SideView
+ * A utility class that manages all the items in the SideView.
+ * These items only appear on UI but do not represent real objects
  *
  * @author jl729
  */
