@@ -4,7 +4,12 @@ import api.ParentView;
 import api.SubView;
 import authoringInterface.editor.EditView;
 import authoringInterface.editor.MenuBarView;
+import authoringInterface.sidebar.DraggableTreeItem;
 import authoringInterface.sidebar.SideView;
+import authoringInterface.sidebar.TreeItemType;
+import javafx.scene.Node;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
