@@ -12,6 +12,7 @@ import javafx.stage.Stage;
  * This class provides an empty skeleton window with the basic menu items, and basic editing interfaces.
  *
  * @author  Haotian Wang
+ * @author jl729
  */
 public class View implements ParentView<SubView> {
     private AnchorPane rootPane;

@@ -1,8 +1,6 @@
 package authoringInterface.editor;
 
 import api.SubView;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
@@ -17,6 +15,7 @@ import javafx.scene.layout.AnchorPane;
  *      - holding scroll views
  *
  * @author Amy Kim
+ * @author jl729
  */
 public class EditView implements SubView<AnchorPane> {
     private AnchorPane anchorPane;
@@ -55,12 +54,7 @@ public class EditView implements SubView<AnchorPane> {
         AnchorPane.setBottomAnchor(tabPane, 0.0);
         AnchorPane.setTopAnchor(addButton, 1.0);
         AnchorPane.setRightAnchor(addButton, 9.0);
-        addButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                addTab();
-            }
-        });
+        addButton.setOnAction(e -> addTab());
     }
 
     private void addTab(){
