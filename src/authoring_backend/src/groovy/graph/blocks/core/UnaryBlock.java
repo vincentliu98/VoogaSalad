@@ -28,4 +28,7 @@ public class UnaryBlock extends SimpleNode implements GroovyBlock<UnaryBlock> {
 
     @Override
     public Set<Ports> ports() { return Set.of(A); }
+
+    @Override
+    public SimpleStringProperty name() { return op; }
 }

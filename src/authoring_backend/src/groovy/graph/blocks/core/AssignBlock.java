@@ -4,13 +4,14 @@ import graph.SimpleNode;
 import groovy.api.BlockGraph;
 import groovy.api.Try;
 import groovy.api.Ports;
+import javafx.beans.property.SimpleStringProperty;
 
 import java.util.Set;
 
 import static groovy.api.Ports.*;
 
 public class AssignBlock extends SimpleNode implements GroovyBlock<AssignBlock> {
-    private AssignBlock() { super(); }
+    public AssignBlock() { super(); }
 
     @Override
     public Try<String> toGroovy(BlockGraph graph) {
@@ -29,4 +30,7 @@ public class AssignBlock extends SimpleNode implements GroovyBlock<AssignBlock> 
     public AssignBlock replicate() { return new AssignBlock(); }
     @Override
     public Set<Ports> ports() { return Set.of(FLOW_OUT, ASSIGN_LHS, ASSIGN_RHS); }
+
+    @Override
+    public SimpleStringProperty name() { return new SimpleStringProperty("="); }
 }

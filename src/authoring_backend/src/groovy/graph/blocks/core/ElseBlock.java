@@ -4,6 +4,7 @@ import graph.SimpleNode;
 import groovy.api.BlockGraph;
 import groovy.api.Try;
 import groovy.api.Ports;
+import javafx.beans.property.SimpleStringProperty;
 
 import java.util.Set;
 
@@ -30,4 +31,7 @@ public class ElseBlock extends SimpleNode implements GroovyBlock<ElseBlock> {
     public Set<Ports> ports() {
         return Set.of(IF_BODY, FLOW_OUT);
     }
+
+    @Override
+    public SimpleStringProperty name() { return new SimpleStringProperty("Else"); }
 }

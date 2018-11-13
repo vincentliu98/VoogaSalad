@@ -17,10 +17,13 @@ import java.util.Set;
  */
 public class LiteralBlock extends SimpleNode implements GroovyBlock<LiteralBlock> {
     private SimpleStringProperty model;
+    private SimpleStringProperty type;
 
     public LiteralBlock(String value) {
         super();
         model = new SimpleStringProperty(value);
+        model.addListener((e, o, n) -> type.setValue(LiteralTypeChecker.getType(n)));
+        type = new SimpleStringProperty();
     }
 
     @Override
@@ -31,4 +34,9 @@ public class LiteralBlock extends SimpleNode implements GroovyBlock<LiteralBlock
 
     @Override
     public Set<Ports> ports() { return Set.of(); }
+
+    @Override
+    public SimpleStringProperty name() { return new SimpleStringProperty(type.get()); }
+
+    public SimpleStringProperty model() { return model; }
 }

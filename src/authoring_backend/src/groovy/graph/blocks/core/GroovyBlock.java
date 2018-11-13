@@ -5,6 +5,7 @@ import graph.Node;
 import groovy.api.BlockGraph;
 import groovy.api.Ports;
 import groovy.api.Try;
+import javafx.beans.property.SimpleStringProperty;
 
 import java.util.Set;
 
@@ -36,4 +37,9 @@ public interface GroovyBlock<T extends GroovyBlock<T>> extends Node,Replicable<T
      * @return Set of ports
      */
     Set<Ports> ports();
+
+    /**
+     * @return Representative Name
+     */
+    SimpleStringProperty name();
 }

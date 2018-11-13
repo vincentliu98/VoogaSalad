@@ -4,6 +4,7 @@ import graph.SimpleNode;
 import groovy.api.BlockGraph;
 import groovy.api.Try;
 import groovy.api.Ports;
+import javafx.beans.property.SimpleStringProperty;
 
 import java.util.Set;
 
@@ -35,4 +36,7 @@ public class ForEachBlock extends SimpleNode implements GroovyBlock<ForEachBlock
 
     @Override
     public Set<Ports> ports() { return Set.of(FOREACH_LIST, FOREACH_LOOPVAR, FOREACH_BODY, FLOW_OUT); }
+
+    @Override
+    public SimpleStringProperty name() { return new SimpleStringProperty("ForEach"); }
 }

@@ -38,4 +38,7 @@ public class InfixBinaryBlock extends SimpleNode implements GroovyBlock<InfixBin
 
     @Override
     public Set<Ports> ports() { return Set.of(A, B); }
+
+    @Override
+    public SimpleStringProperty name() { return op; }
 }

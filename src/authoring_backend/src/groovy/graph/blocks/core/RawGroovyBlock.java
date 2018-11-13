@@ -16,6 +16,8 @@ public class RawGroovyBlock extends SimpleNode implements GroovyBlock<RawGroovyB
         this.src = new SimpleStringProperty(src);
     }
 
+    public SimpleStringProperty model() { return src; }
+
     @Override
     public Try<String> toGroovy(BlockGraph graph) { return Try.success(src.get()); }
 
@@ -24,4 +26,7 @@ public class RawGroovyBlock extends SimpleNode implements GroovyBlock<RawGroovyB
 
     @Override
     public Set<Ports> ports() { return Set.of(); }
+
+    @Override
+    public SimpleStringProperty name() { return new SimpleStringProperty("raw"); }
 }

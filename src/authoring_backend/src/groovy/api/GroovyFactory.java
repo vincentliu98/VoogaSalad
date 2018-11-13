@@ -1,9 +1,7 @@
 package groovy.api;
 
 import groovy.graph.BlockGraphImpl;
-import groovy.graph.blocks.core.GroovyBlock;
-import groovy.graph.blocks.core.LiteralBlock;
-import groovy.graph.blocks.factory.LiteralFactory;
+import groovy.graph.blocks.core.*;
 
 import java.util.Set;
 
@@ -25,13 +23,36 @@ public class GroovyFactory {
         return BlockGraphImpl.fromSubset(vertices, edges);
     }
 
+    /**
+     *  Control Blocks
+     */
+    public static IfBlock ifBlock() { return new IfBlock(true); }
+    public static IfBlock ifElseBlock() { return new IfBlock(false); }
+    public static ElseBlock elseBlock() { return new ElseBlock(); }
+    public static ForEachBlock forEachBlock() { return new ForEachBlock(); }
 
     /**
-     *  Literal Blocks
+     *  Assignment Blocks
      */
-    public static Try<LiteralBlock> integerBlock(String value) { return LiteralFactory.integerBlock(value); }
-    public static Try<LiteralBlock> doubleBlock(String value) { return LiteralFactory.doubleBlock(value); }
-    public static Try<LiteralBlock> stringBlock(String value) { return LiteralFactory.stringBlock(value); }
-    public static Try<LiteralBlock> listBlock(String value) { return LiteralFactory.listBlock(value); }
-    public static Try<LiteralBlock> mapBlock(String value) { return LiteralFactory.mapBlock(value); }
+    public static AssignBlock assignBlock() { return new AssignBlock(); }
+
+    /**
+     * Literal Blocks
+     */
+    public static LiteralBlock literalBlock() { return new LiteralBlock(""); }
+
+    /**
+     * Unary Blocks
+     */
+    public static UnaryBlock unaryBlock() { return new UnaryBlock(""); }
+
+    /**
+     * Binary Infix Blocks
+     */
+    public static InfixBinaryBlock binaryBlock() { return new InfixBinaryBlock(""); }
+
+    /**
+     * Binary Infix Blocks
+     */
+    public static RawGroovyBlock rawBlock() { return new RawGroovyBlock(""); }
 }
