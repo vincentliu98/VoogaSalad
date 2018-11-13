@@ -4,6 +4,12 @@ import authoringInterface.TreeViewSample;
 
 import java.util.ArrayList;
 
+/**
+ * A utility class that manages all the items in the SideView
+ *
+ * @author jl729
+ */
+
 public class ListObjectManager extends ArrayList<TreeViewSample.ListObject>{
 
     public ListObjectManager() {

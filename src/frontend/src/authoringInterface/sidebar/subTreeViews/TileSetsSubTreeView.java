@@ -3,6 +3,12 @@ package authoringInterface.sidebar.subTreeViews;
 import javafx.scene.control.TreeItem;
 import javafx.stage.Stage;
 
+/**
+ * A list of TreeItem representing TileSet
+ *
+ * @author jl729
+ */
+
 public class TileSetsSubTreeView extends SubTreeView {
 
     public TileSetsSubTreeView(Stage primaryStage) {

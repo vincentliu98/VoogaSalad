@@ -10,6 +10,14 @@ import javafx.scene.control.TreeView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+/**
+ * A sidebar that contains many TreeItems.
+ *
+ * All the user's settings will go here, and it supports drag and drop functionality
+ *
+ * @author jl729
+ */
+
 public class SideView implements SubView<StackPane> {
     private final TreeView<String> rootTreeView;
     private final TreeItem<String> rootTreeItem;
