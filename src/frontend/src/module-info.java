@@ -5,6 +5,4 @@ module frontend {
     requires javafx.media;
 
     exports authoringInterface;
-
-    requires authoring_backend;
 }
