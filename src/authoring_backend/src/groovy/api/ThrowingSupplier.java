@@ -1,4 +1,4 @@
-package groovy;
+package groovy.api;
 
 @FunctionalInterface
 public interface ThrowingSupplier<T> {

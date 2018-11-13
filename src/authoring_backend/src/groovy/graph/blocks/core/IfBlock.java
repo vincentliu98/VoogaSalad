@@ -1,14 +1,13 @@
-package groovy.graph.blocks.core.control;
+package groovy.graph.blocks.core;
 
-import groovy.graph.BlockGraph;
-import groovy.graph.blocks.GroovyBlock;
+import groovy.api.BlockGraph;
 import graph.SimpleNode;
-import groovy.Try;
-import groovy.graph.Ports;
+import groovy.api.Try;
+import groovy.api.Ports;
 
 import java.util.Set;
 
-import static groovy.graph.Ports.*;
+import static groovy.api.Ports.*;
 
 public class IfBlock extends SimpleNode implements GroovyBlock<IfBlock> {
     private boolean elseIf;
@@ -36,4 +35,7 @@ public class IfBlock extends SimpleNode implements GroovyBlock<IfBlock> {
 
     @Override
     public IfBlock replicate() { return new IfBlock(elseIf); }
+
+    @Override
+    public String name() { return elseIf ? "Else If" : "If"; }
 }

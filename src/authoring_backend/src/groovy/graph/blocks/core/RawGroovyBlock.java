@@ -1,28 +1,29 @@
 package groovy.graph.blocks.core;
 
-import groovy.graph.BlockGraph;
+import groovy.api.BlockGraph;
 import graph.SimpleNode;
-import groovy.Try;
-import groovy.graph.Ports;
-import groovy.graph.blocks.GroovyBlock;
-import javafx.beans.property.SimpleStringProperty;
+import groovy.api.Try;
+import groovy.api.Ports;
 
 import java.util.Set;
 
 public class RawGroovyBlock extends SimpleNode implements GroovyBlock<RawGroovyBlock> {
-    private SimpleStringProperty src;
+    private String src;
 
     public RawGroovyBlock(String src) {
         super();
-        this.src = new SimpleStringProperty(src);
+        this.src = src;
     }
 
     @Override
-    public Try<String> toGroovy(BlockGraph graph) { return Try.success(src.get()); }
+    public Try<String> toGroovy(BlockGraph graph) { return Try.success(src); }
 
     @Override
-    public RawGroovyBlock replicate() { return new RawGroovyBlock(src.get()); }
+    public RawGroovyBlock replicate() { return new RawGroovyBlock(src); }
 
     @Override
     public Set<Ports> ports() { return Set.of(); }
+
+    @Override
+    public String name() { return "raw"; }
 }

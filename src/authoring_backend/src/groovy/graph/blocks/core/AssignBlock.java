@@ -1,14 +1,13 @@
-package groovy.graph.blocks.core.control;
+package groovy.graph.blocks.core;
 
 import graph.SimpleNode;
-import groovy.Try;
-import groovy.graph.BlockGraph;
-import groovy.graph.Ports;
-import groovy.graph.blocks.GroovyBlock;
+import groovy.api.BlockGraph;
+import groovy.api.Try;
+import groovy.api.Ports;
 
 import java.util.Set;
 
-import static groovy.graph.Ports.*;
+import static groovy.api.Ports.*;
 
 public class AssignBlock extends SimpleNode implements GroovyBlock<AssignBlock> {
     public AssignBlock() { super(); }
@@ -21,7 +20,7 @@ public class AssignBlock extends SimpleNode implements GroovyBlock<AssignBlock> 
         return tryLHS.flatMap( lhs ->
             tryRHS.flatMap( rhs ->
                 tryOut.map( out ->
-                    String.format("%s = %s\n%s", tryLHS, tryRHS, out)
+                    String.format("%s = %s\n%s", lhs, rhs, out)
                 )
             )
         );
@@ -30,4 +29,7 @@ public class AssignBlock extends SimpleNode implements GroovyBlock<AssignBlock> 
     public AssignBlock replicate() { return new AssignBlock(); }
     @Override
     public Set<Ports> ports() { return Set.of(FLOW_OUT, ASSIGN_LHS, ASSIGN_RHS); }
+
+    @Override
+    public String name() { return "="; }
 }

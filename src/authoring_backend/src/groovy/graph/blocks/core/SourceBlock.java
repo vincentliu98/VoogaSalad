@@ -1,14 +1,13 @@
 package groovy.graph.blocks.core;
 
-import groovy.graph.Ports;
-import groovy.graph.BlockGraph;
+import groovy.api.BlockGraph;
+import groovy.api.Ports;
 import graph.SimpleNode;
-import groovy.Try;
-import groovy.graph.blocks.GroovyBlock;
+import groovy.api.Try;
 
 import java.util.Set;
 
-import static groovy.graph.Ports.FLOW_OUT;
+import static groovy.api.Ports.FLOW_OUT;
 
 public class SourceBlock extends SimpleNode implements GroovyBlock<SourceBlock> {
     public SourceBlock() { super(); }
@@ -23,4 +22,7 @@ public class SourceBlock extends SimpleNode implements GroovyBlock<SourceBlock> 
 
     @Override
     public SourceBlock replicate() { return new SourceBlock(); }
+
+    @Override
+    public String name() { return "source"; }
 }

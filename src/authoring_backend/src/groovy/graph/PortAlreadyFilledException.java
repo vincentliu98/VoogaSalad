@@ -1,6 +1,7 @@
 package groovy.graph;
 
-import groovy.graph.blocks.GroovyBlock;
+import groovy.graph.blocks.core.GroovyBlock;
+import groovy.api.Ports;
 
 public class PortAlreadyFilledException extends Exception {
     public PortAlreadyFilledException(GroovyBlock from, Ports port) {
