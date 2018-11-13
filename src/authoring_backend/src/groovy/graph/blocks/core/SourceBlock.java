@@ -1,10 +1,15 @@
 package groovy.graph.blocks.core;
 
+
+import groovy.graph.Ports;
 import groovy.graph.BlockGraph;
 import graph.SimpleNode;
 import groovy.Try;
+<<<<<<< HEAD:src/authoring_backend/src/groovy/graph/blocks/core/SourceBlock.java
 import groovy.graph.Ports;
 import groovy.graph.blocks.GroovyBlock;
+=======
+>>>>>>> eee9985cb2cb55cba247b1bd2c96ad7b448fdaf0:src/authoring_backend/src/groovy/graph/blocks/SourceBlock.java
 
 import java.util.Set;
 
