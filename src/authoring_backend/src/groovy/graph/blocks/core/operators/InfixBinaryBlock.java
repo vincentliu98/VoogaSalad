@@ -1,4 +1,4 @@
-package groovy.graph.blocks.impl.operators;
+package groovy.graph.blocks.core.operators;
 
 import graph.SimpleNode;
 import groovy.Try;
@@ -11,6 +11,9 @@ import java.util.Set;
 
 import static groovy.graph.Ports.*;
 
+/**
+ *  InfixBinaryBlocks represent binary operators that are placed in between the operands
+ */
 public class InfixBinaryBlock extends SimpleNode implements GroovyBlock<InfixBinaryBlock> {
     private SimpleStringProperty op;
     public InfixBinaryBlock(String op) {

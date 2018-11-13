@@ -1,4 +1,4 @@
-package groovy.graph.blocks.impl;
+package groovy.graph.blocks.core;
 
 import groovy.graph.BlockGraph;
 import graph.SimpleNode;

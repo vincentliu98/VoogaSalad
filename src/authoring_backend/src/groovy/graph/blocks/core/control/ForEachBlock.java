@@ -1,4 +1,4 @@
-package groovy.graph.blocks.impl.control;
+package groovy.graph.blocks.core.control;
 
 import graph.SimpleNode;
 import groovy.Try;
