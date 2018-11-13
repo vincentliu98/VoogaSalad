@@ -4,7 +4,6 @@ import graph.SimpleNode;
 import groovy.api.BlockGraph;
 import groovy.api.Try;
 import groovy.api.Ports;
-import javafx.beans.property.SimpleStringProperty;
 
 import java.util.Set;
 
@@ -14,10 +13,10 @@ import static groovy.api.Ports.*;
  *  InfixBinaryBlocks represent binary operators that are placed in between the operands
  */
 public class InfixBinaryBlock extends SimpleNode implements GroovyBlock<InfixBinaryBlock> {
-    private SimpleStringProperty op;
+    private String op;
     public InfixBinaryBlock(String op) {
         super();
-        this.op = new SimpleStringProperty(op);
+        this.op = op;
     }
 
     @Override
@@ -26,19 +25,17 @@ public class InfixBinaryBlock extends SimpleNode implements GroovyBlock<InfixBin
         var tryB = graph.findTarget(this, A).flatMap(b -> b.toGroovy(graph));
         return tryA.flatMap ( a ->
             tryB.map( b ->
-                String.format("(%s %s %s)", a, op.get(), b)
+                String.format("(%s %s %s)", a, op, b)
             )
         );
     }
 
     @Override
-    public InfixBinaryBlock replicate() {
-        return new InfixBinaryBlock(op.get());
-    }
+    public InfixBinaryBlock replicate() { return new InfixBinaryBlock(op); }
 
     @Override
     public Set<Ports> ports() { return Set.of(A, B); }
 
     @Override
-    public SimpleStringProperty name() { return op; }
+    public String name() { return op; }
 }

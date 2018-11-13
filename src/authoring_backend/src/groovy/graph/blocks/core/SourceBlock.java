@@ -4,7 +4,6 @@ import groovy.api.BlockGraph;
 import groovy.api.Ports;
 import graph.SimpleNode;
 import groovy.api.Try;
-import javafx.beans.property.SimpleStringProperty;
 
 import java.util.Set;
 
@@ -25,5 +24,5 @@ public class SourceBlock extends SimpleNode implements GroovyBlock<SourceBlock> 
     public SourceBlock replicate() { return new SourceBlock(); }
 
     @Override
-    public SimpleStringProperty name() { return new SimpleStringProperty("source"); }
+    public String name() { return "source"; }
 }

@@ -1,5 +1,8 @@
 package groovy.api;
 
+/**
+ *  Represents the set of possible ports from a GroovyBlock
+ */
 public enum Ports {
     FLOW_OUT,
 

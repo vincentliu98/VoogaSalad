@@ -4,7 +4,6 @@ import groovy.api.BlockGraph;
 import graph.SimpleNode;
 import groovy.api.Try;
 import groovy.api.Ports;
-import javafx.beans.property.SimpleStringProperty;
 
 import java.util.Set;
 
@@ -38,5 +37,5 @@ public class IfBlock extends SimpleNode implements GroovyBlock<IfBlock> {
     public IfBlock replicate() { return new IfBlock(elseIf); }
 
     @Override
-    public SimpleStringProperty name() { return new SimpleStringProperty(elseIf ? "Else If" : "If"); }
+    public String name() { return elseIf ? "Else If" : "If"; }
 }

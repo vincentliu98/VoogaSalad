@@ -2,9 +2,8 @@ package groovy.graph.blocks.core;
 
 import graph.SimpleNode;
 import groovy.api.BlockGraph;
-import groovy.api.Try;
 import groovy.api.Ports;
-import javafx.beans.property.SimpleStringProperty;
+import groovy.api.Try;
 
 import java.util.Set;
 
@@ -16,27 +15,22 @@ import java.util.Set;
  *  map             ex) [ 1:5, "from":5, "to":10 ]
  */
 public class LiteralBlock extends SimpleNode implements GroovyBlock<LiteralBlock> {
-    private SimpleStringProperty model;
-    private SimpleStringProperty type;
-
-    public LiteralBlock(String value) {
+    private String value, type;
+    public LiteralBlock(String value, String type) {
         super();
-        model = new SimpleStringProperty(value);
-        model.addListener((e, o, n) -> type.setValue(LiteralTypeChecker.getType(n)));
-        type = new SimpleStringProperty();
+        this.value = value;
+        this.type = type;
     }
 
     @Override
-    public Try<String> toGroovy(BlockGraph graph) { return Try.success(model.get()); }
+    public Try<String> toGroovy(BlockGraph graph) { return Try.success(value); }
 
     @Override
-    public LiteralBlock replicate() { return new LiteralBlock(model.get()); }
+    public LiteralBlock replicate() { return new LiteralBlock(value, type); }
 
     @Override
     public Set<Ports> ports() { return Set.of(); }
 
     @Override
-    public SimpleStringProperty name() { return new SimpleStringProperty(type.get()); }
-
-    public SimpleStringProperty model() { return model; }
+    public String name() { return type; }
 }

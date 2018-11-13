@@ -5,11 +5,6 @@ import groovy.api.BlockEdge;
 import groovy.api.Ports;
 import groovy.graph.blocks.core.GroovyBlock;
 
-/**
- *  BlockEdge class represents an edge that connects two GroovyBlocks;
- *  It has two additional parameters fromPort and toPort, which represents
- *  the port of each block that the edges are connected to.
- */
 public class BlockEdgeImpl extends SimpleEdge<GroovyBlock> implements BlockEdge {
     private Ports fromPort;
 

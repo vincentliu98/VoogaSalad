@@ -1,26 +1,26 @@
 package groovy.api;
 
+import groovy.graph.BlockEdgeImpl;
 import groovy.graph.BlockGraphImpl;
 import groovy.graph.blocks.core.*;
-
-import java.util.Set;
+import groovy.graph.blocks.small_factory.LiteralFactory;
 
 /**
- *  The GroovyFactory can generate Graphs and GroovyBlocks
+ *  A Factory that can generate everything that one needs from a
  */
 public class GroovyFactory {
     /**
-     *  Initializes an empty BlockGraph
+     *  Makes an empty BlockGraph with one source node
      */
     public BlockGraph emptyGraph() {
         return new BlockGraphImpl();
     }
 
     /**
-     *  Initializes the graph with the given vertices and edges (their deep copy);
+     *  Makes an edge
      */
-    public BlockGraph fromSubset(Set<GroovyBlock> vertices, Set<BlockEdge> edges) {
-        return BlockGraphImpl.fromSubset(vertices, edges);
+    public BlockEdge makeEdge(GroovyBlock from, Ports fromPort, GroovyBlock to) {
+        return new BlockEdgeImpl(from, fromPort, to);
     }
 
     /**
@@ -33,26 +33,31 @@ public class GroovyFactory {
 
     /**
      *  Assignment Blocks
+     *  TODO: Make utility function that helps when writing the lhs
      */
-    public static AssignBlock assignBlock() { return new AssignBlock(); }
+    public static AssignBlock assignBlock(String lhs) { return new AssignBlock(lhs); }
 
     /**
      * Literal Blocks
      */
-    public static LiteralBlock literalBlock() { return new LiteralBlock(""); }
+    public static Try<LiteralBlock> integerBlock(String value) { return LiteralFactory.integerBlock(value); }
+    public static Try<LiteralBlock> doubleBlock(String value) { return LiteralFactory.doubleBlock(value); }
+    public static Try<LiteralBlock> listBlock(String value) { return LiteralFactory.listBlock(value); }
+    public static Try<LiteralBlock> mapBlock(String value) { return LiteralFactory.mapBlock(value); }
+    public static Try<LiteralBlock> stringBlock(String value) { return LiteralFactory.stringBlock(value); }
 
     /**
      * Unary Blocks
      */
-    public static UnaryBlock unaryBlock() { return new UnaryBlock(""); }
+    public static UnaryBlock unaryBlock(String op) { return new UnaryBlock(op); }
 
     /**
      * Binary Infix Blocks
      */
-    public static InfixBinaryBlock binaryBlock() { return new InfixBinaryBlock(""); }
+    public static InfixBinaryBlock binaryBlock(String op) { return new InfixBinaryBlock(op); }
 
     /**
-     * Binary Infix Blocks
+     * Raw Groovy Blocks
      */
-    public static RawGroovyBlock rawBlock() { return new RawGroovyBlock(""); }
+    public static RawGroovyBlock rawBlock(String code) { return new RawGroovyBlock(code); }
 }

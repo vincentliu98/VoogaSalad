@@ -4,15 +4,12 @@ import graph.SimpleNode;
 import groovy.api.BlockGraph;
 import groovy.api.Try;
 import groovy.api.Ports;
-import javafx.beans.property.SimpleStringProperty;
 
 import java.util.Set;
 
 import static groovy.api.Ports.*;
 
 public class ForEachBlock extends SimpleNode implements GroovyBlock<ForEachBlock> {
-
-
     @Override
     public Try<String> toGroovy(BlockGraph graph) {
         var tryList = graph.findTarget(this, FOREACH_LIST).flatMap(b -> b.toGroovy(graph));
@@ -38,5 +35,5 @@ public class ForEachBlock extends SimpleNode implements GroovyBlock<ForEachBlock
     public Set<Ports> ports() { return Set.of(FOREACH_LIST, FOREACH_LOOPVAR, FOREACH_BODY, FLOW_OUT); }
 
     @Override
-    public SimpleStringProperty name() { return new SimpleStringProperty("ForEach"); }
+    public String name() { return "ForEach"; }
 }
