@@ -3,6 +3,12 @@ package authoringInterface.sidebar.subTreeViews;
 import javafx.scene.control.TreeItem;
 import javafx.stage.Stage;
 
+/**
+ * A list of TreeItem representing Sound
+ *
+ * @author jl729
+ */
+
 public class SoundSubTreeView extends SubTreeView {
 
     public SoundSubTreeView(Stage primaryStage) {

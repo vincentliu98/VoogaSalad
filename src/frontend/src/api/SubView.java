@@ -8,11 +8,11 @@ import javafx.scene.Node;
  * @author Haotian Wang
  */
 @FunctionalInterface
-public interface SubView {
+public interface SubView<T extends Node> {
     /**
      * This method returns the responsible JavaFx Node responsible to be added or deleted from other graphical elements.
      *
      * @return A "root" JavaFx Node representative of this object.
      */
-    Node getView();
+    T getView();
 }

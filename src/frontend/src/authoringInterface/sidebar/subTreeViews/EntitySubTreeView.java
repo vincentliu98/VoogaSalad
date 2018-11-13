@@ -3,6 +3,12 @@ package authoringInterface.sidebar.subTreeViews;
 import javafx.scene.control.TreeItem;
 import javafx.stage.Stage;
 
+/**
+ * A list of TreeItem representing Entity
+ *
+ * @author jl729
+ */
+
 public class EntitySubTreeView extends SubTreeView {
 
     public EntitySubTreeView(Stage primaryStage) {
