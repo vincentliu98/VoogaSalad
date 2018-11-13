@@ -80,6 +80,7 @@ public class EntityWindow {
             // TODO: 11/13/18 add Events to somewhere
             Entity myEntity = new Entity(mySprite, id, nameField.getText());
             objectManager.getEntityList().add(myEntity);
+            // add the entity to the TreeItem
             mySideView.addCell(myEntity, item);
             dialog.close();
         });
