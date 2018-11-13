@@ -1,4 +1,4 @@
-package groovy.graph.blocks.impl.literal;
+package groovy.graph.blocks.core.literal;
 
 import graph.SimpleNode;
 import groovy.Try;
@@ -18,7 +18,11 @@ import java.util.Set;
  */
 public class LiteralBlock extends SimpleNode implements GroovyBlock<LiteralBlock> {
     private SimpleStringProperty model;
-    public LiteralBlock(String value) { model = new SimpleStringProperty(value); }
+
+    public LiteralBlock(String value) {
+        super();
+        model = new SimpleStringProperty(value);
+    }
 
     @Override
     public Try<String> toGroovy(BlockGraph graph) { return Try.success(model.get()); }

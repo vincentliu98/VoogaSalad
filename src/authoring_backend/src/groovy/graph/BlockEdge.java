@@ -1,9 +1,9 @@
 package groovy.graph;
 
-import groovy.graph.blocks.GroovyBlock;
 import essentials.Replicable;
 import graph.SimpleEdge;
 import groovy.Try;
+import groovy.graph.blocks.GroovyBlock;
 
 /**
  *  BlockEdge class represents an edge that connects two GroovyBlocks;

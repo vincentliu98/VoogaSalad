@@ -1,12 +1,10 @@
 package groovy.graph;
 
-
 import graph.SimpleEdge;
 import graph.SimpleGraph;
 import groovy.Try;
 import groovy.graph.blocks.GroovyBlock;
-import groovy.graph.blocks.RawGroovyBlock;
-
+import groovy.graph.blocks.core.RawGroovyBlock;
 
 import java.util.HashSet;
 import java.util.Set;
