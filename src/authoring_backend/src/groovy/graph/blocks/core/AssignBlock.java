@@ -1,17 +1,16 @@
-package groovy.graph.blocks.core.control;
+package groovy.graph.blocks.core;
 
 import graph.SimpleNode;
-import groovy.Try;
-import groovy.graph.BlockGraph;
-import groovy.graph.Ports;
-import groovy.graph.blocks.GroovyBlock;
+import groovy.api.BlockGraph;
+import groovy.api.Try;
+import groovy.api.Ports;
 
 import java.util.Set;
 
-import static groovy.graph.Ports.*;
+import static groovy.api.Ports.*;
 
 public class AssignBlock extends SimpleNode implements GroovyBlock<AssignBlock> {
-    public AssignBlock() { super(); }
+    private AssignBlock() { super(); }
 
     @Override
     public Try<String> toGroovy(BlockGraph graph) {

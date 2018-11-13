@@ -1,7 +1,7 @@
 package groovy.graph.blocks.factory;
 
-import groovy.Try;
-import groovy.graph.blocks.core.literal.LiteralBlock;
+import groovy.api.Try;
+import groovy.graph.blocks.core.LiteralBlock;
 
 import java.util.Arrays;
 import java.util.List;

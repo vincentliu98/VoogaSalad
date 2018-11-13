@@ -1,15 +1,14 @@
-package groovy.graph.blocks.core.operators;
+package groovy.graph.blocks.core;
 
 import graph.SimpleNode;
-import groovy.Try;
-import groovy.graph.BlockGraph;
-import groovy.graph.Ports;
-import groovy.graph.blocks.GroovyBlock;
+import groovy.api.BlockGraph;
+import groovy.api.Try;
+import groovy.api.Ports;
 import javafx.beans.property.SimpleStringProperty;
 
 import java.util.Set;
 
-import static groovy.graph.Ports.*;
+import static groovy.api.Ports.*;
 
 /**
  *  InfixBinaryBlocks represent binary operators that are placed in between the operands

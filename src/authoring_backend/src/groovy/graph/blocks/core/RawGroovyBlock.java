@@ -1,10 +1,9 @@
 package groovy.graph.blocks.core;
 
-import groovy.graph.BlockGraph;
+import groovy.api.BlockGraph;
 import graph.SimpleNode;
-import groovy.Try;
-import groovy.graph.Ports;
-import groovy.graph.blocks.GroovyBlock;
+import groovy.api.Try;
+import groovy.api.Ports;
 import javafx.beans.property.SimpleStringProperty;
 
 import java.util.Set;
