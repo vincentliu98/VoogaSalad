@@ -7,6 +7,12 @@ import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+/**
+ * Pop-up window for the user to add settings for Entity
+ *
+ * @author jl729
+ */
+
 public class EntityWindow {
     private GridPane myPane;
 
