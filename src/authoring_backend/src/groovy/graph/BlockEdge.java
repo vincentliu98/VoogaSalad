@@ -1,8 +1,8 @@
 package groovy.graph;
 
-import authoring_backend.groovy.graph.blocks.GroovyBlock;
-import authoring_backend.essentials.Replicable;
-import authoring_backend.graph.SimpleEdge;
+import groovy.graph.blocks.GroovyBlock;
+import essentials.Replicable;
+import graph.SimpleEdge;
 import groovy.Try;
 
 /**
@@ -28,10 +28,7 @@ public class BlockEdge extends SimpleEdge<GroovyBlock> implements Replicable<Blo
 
     /**
      * Does a basic type checking for the new edge
-<<<<<<< HEAD:src/authoring_backend/groovy/graph/BlockEdge.java
      * TODO
-=======
->>>>>>> master:src/authoring_backend/src/groovy/graph/BlockEdge.java
      */
     private static BlockEdge typeCheck(BlockEdge e) throws Exception {
         if("Something's wrong".length() == 1) throw new Exception("Type check isFailure for edge: " + e);
