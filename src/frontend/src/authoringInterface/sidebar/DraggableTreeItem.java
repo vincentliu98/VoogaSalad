@@ -1,6 +1,6 @@
 package authoringInterface.sidebar;
 
-import authoringInterface.sidebar.TreeItemType;
+import api.SubView;
 import javafx.scene.Node;
 
 /**
@@ -8,7 +8,7 @@ import javafx.scene.Node;
  *
  * @author Haotian Wang
  */
-public interface Draggable<T extends Node, V extends TreeItemType> {
+public interface DraggableTreeItem<T extends Node, V extends TreeItemType> {
     /**
      * @return Return a preview of the elements being dragged.
      */
@@ -18,4 +18,9 @@ public interface Draggable<T extends Node, V extends TreeItemType> {
      * @return The type of the graphical element where the drag starts.
      */
     V getType();
+
+    /**
+     * Register with the parent "canvas" JavaFx node such that the preview can be shown there.
+     */
+    void notifyCanvas(Node canvas);
 }
