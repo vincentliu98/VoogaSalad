@@ -1,4 +1,4 @@
-package groovy.graph.blocks.control;
+package groovy.graph.blocks.impl.control;
 
 import groovy.graph.BlockGraph;
 import groovy.graph.blocks.GroovyBlock;
