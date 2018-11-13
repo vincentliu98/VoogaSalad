@@ -1,7 +1,5 @@
 package authoringInterface.sidebar;
 
-import authoringInterface.TreeViewSample;
-
 import java.util.ArrayList;
 
 /**
@@ -10,16 +8,16 @@ import java.util.ArrayList;
  * @author jl729
  */
 
-public class ListObjectManager extends ArrayList<TreeViewSample.ListObject>{
+public class ListObjectManager extends ArrayList<SideView.ListObject> {
 
     public ListObjectManager() {
-        add(new TreeViewSample.ListObject("O", "Entity", 0));
-        add(new TreeViewSample.ListObject("X", "Entity", 1));
-        add(new TreeViewSample.ListObject("Default Grid", "Tile", 0));
+        add(new SideView.ListObject("O", "Entity", 0));
+        add(new SideView.ListObject("X", "Entity", 1));
+        add(new SideView.ListObject("Default Grid", "Tile", 0));
     }
 
     @Override
-    public boolean add(TreeViewSample.ListObject listObject) {
+    public boolean add(SideView.ListObject listObject) {
         return super.add(listObject);
     }
 }
