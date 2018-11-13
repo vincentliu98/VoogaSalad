@@ -24,14 +24,16 @@ import javafx.scene.input.KeyCode;
 // TODO: 11/12/18 Make the string in the TreeCell represent the object itself
 
 public class SideView implements SubView<StackPane> {
-//    private final TreeView<String> rootTreeView;
+    private final ObjectManager objectManager;
+    private TextFieldTreeCellImpl newCell;
+    //    private final TreeView<String> rootTreeView;
 //    private final TreeItem<String> rootTreeItem;
 //    private final TreeItem<String> entityTreeItem;
 //    private final TreeItem<String> soundTreeItem;
 //    private final TreeItem<String> tileSetsTreeItem;
     private StackPane sideView;
     private TreeItem<String> rootNode = new TreeItem<>("User Settings");
-    private ListObjectManager objects = new ListObjectManager();
+    private ListObjectManager objects;
 //
 //    public SideView(Stage primaryStage) {
 //        sideView = new StackPane();
@@ -55,6 +57,8 @@ public class SideView implements SubView<StackPane> {
 
     public SideView(Stage primaryStage) {
         sideView = new StackPane();
+        objectManager = new ObjectManager();
+        objects = new ListObjectManager();
 
         rootNode.setExpanded(true);
         for (ListObject listObject : objects) {
@@ -78,30 +82,47 @@ public class SideView implements SubView<StackPane> {
         TreeView<String> treeView = new TreeView<>(rootNode);
         treeView.setEditable(true);
         // produce cells using TextFieldTreeCellImpl
-        treeView.setCellFactory(e -> new TextFieldTreeCellImpl(objects));
+        treeView.setCellFactory(e -> new TextFieldTreeCellImpl(this, primaryStage, objectManager));
 
         sideView.getChildren().add(treeView);
+    }
+
+    public void addCell(Entity entity, TreeItem<String> item){
+            TreeItem newObject = new TreeItem<>(entity.getName());
+            // add to ListObjectManager
+            var type = item.getValue();
+            var myObj = new ListObject(entity.getName(), type, entity.getId());
+            objects.add(myObj);
+
+            System.out.println("Type: " + type + "Cell: " + myObj);
+            item.getChildren().add(newObject);
     }
 
     private final class TextFieldTreeCellImpl extends TreeCell<String> {
 
         private TextField textField;
         private ContextMenu addMenu = new ContextMenu();
-        private ListObject myObj;
 
-        public TextFieldTreeCellImpl(ListObjectManager objects) {
-            MenuItem addMenuItem = new MenuItem("Add ListObject");
+        public TextFieldTreeCellImpl(SideView mySideView, Stage primaryStage, ObjectManager objectManager) {
+            MenuItem addMenuItem = new MenuItem("Add an Object");
             addMenu.getItems().add(addMenuItem);
             addMenuItem.setOnAction(e -> {
-                var popUp = new EntityWindow(new Stage());
-                var name = "New ListObject";
-                TreeItem newObject = new TreeItem<>(name);
-                var id = getTreeItem().getChildren().size();
+                // show the pop-up window
                 var type = getTreeItem().getValue();
-                myObj = new ListObject(name, type, id);
-                objects.add(myObj);
-                System.out.println(objects);
-                getTreeItem().getChildren().add(newObject);
+                var id = getTreeItem().getChildren().size();
+                var myItem = getTreeItem();
+                if (type.equals("Entity")){
+                    new EntityWindow(primaryStage, objectManager, mySideView, id, myItem);
+                }
+                else if (type.equals("Tile")){
+                    // Generate a TileWindow
+//                    new EntityWindow(primaryStage, objectManager);
+                }
+//                var name = "New ListObject";
+//                TreeItem newObject = new TreeItem<>(name);
+//                myObj = new ListObject(name, type, id);
+//                objects.add(myObj);
+//                getTreeItem().getChildren().add(newObject);
             });
         }
 
