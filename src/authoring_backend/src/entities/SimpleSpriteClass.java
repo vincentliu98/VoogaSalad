@@ -1,94 +1,120 @@
 package entities;
 
-import essentials.Replicable;
-
-import java.awt.geom.Point2D;
+import javafx.beans.property.*;
+import java.util.List;
 import java.util.Collections;
 import java.util.Map;
-import java.util.function.Supplier;
+import java.util.function.Consumer;
 
 public class SimpleSpriteClass implements SpriteClass {
-    Supplier<Integer> setIdFunction;
-    Map propertiesMap;
-    public SimpleSpriteClass() {
 
+    private String CONST_DEFAULTHEIGHT = "defaultHeight";
+    private String CONST_DEFAULTWIDTH = "defaultWidth";
+    private String CONST_ID = "id";
+    private String CONST_MOVABLE = "movable";
+    private String CONST_IMAGEPATHLIST = "imagePathList";
+    private String CONST_PROPERTIESMAP = "propertiesMap";
+    private String CONST_IMAGESELECTOR = "imageSelector";
+
+
+    private SimpleIntegerProperty id;
+    private SimpleIntegerProperty height;
+    private SimpleIntegerProperty width;
+    private SimpleBooleanProperty movable;
+    private SimpleListProperty<String> imagePathList;
+    private SimpleMapProperty<String, Integer> propertiesMap;
+    private SimpleStringProperty imageSelector;
+
+    private SimpleSpriteClass() {
+        id = new SimpleIntegerProperty(this, CONST_ID);
+        height = new SimpleIntegerProperty(this, CONST_DEFAULTHEIGHT);
+        width = new SimpleIntegerProperty(this, CONST_DEFAULTWIDTH);
+        movable = new SimpleBooleanProperty(this, CONST_MOVABLE);
+        imagePathList = new SimpleListProperty<>(this, CONST_IMAGEPATHLIST);
+        propertiesMap = new SimpleMapProperty<>(this, CONST_PROPERTIESMAP);
+        imageSelector = new SimpleStringProperty(this, CONST_IMAGESELECTOR, "");
     }
 
-    public SimpleSpriteClass(Map properties, Point2D position, Supplier<Integer> setIdFunc) {
-        propertiesMap = properties;
-        setIdFunction = setIdFunc;
-        // for now
-        propertiesMap.put("position", position);
-        properties.put("id", setIdFunction.get());
+    SimpleSpriteClass(Consumer<SimpleIntegerProperty> setFunc) {
+        super();
+        setClassId(setFunc);
+    }
 
+
+    @Override
+    public int getClassId() {
+        return id.getValue();
     }
 
     @Override
-    public int getId() {
-        return (int) propertiesMap.get("id");
-
-    }
-
-    @Override
-    public Point2D getPosition() {
-        return (Point2D) propertiesMap.get("position");
-    }
-
-    @Override
-    public void setImage(String path) {
-
-        if (propertiesMap.get("id") == null) {
-            throw new NoEntityClassException();
-        }
-        propertiesMap.put("imagePath", path);
-    }
-
-    @Override
-    public void updateImage(String path) {
-        if (propertiesMap.get("id") != null) {
-            throw new NoEntityClassException();
-        }
-        propertiesMap.put("imagePath", path);
+    public void setClassId(Consumer<SimpleIntegerProperty> setFunc) {
+        setFunc.accept(id);
     }
 
     @Override
     public Map getPropertiesMap() {
-        return Collections.unmodifiableMap(propertiesMap);
+        return Collections.unmodifiableMap(propertiesMap.get());
+    }
+
+    @Override
+    public boolean addProperty(String propertyName, int defaultValue) {
+        if (!propertiesMap.containsKey(propertyName)) {
+            propertiesMap.put(propertyName, defaultValue);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean removeProperty(String propertyName) {
+        return propertiesMap.remove(propertyName) != null;
+    }
+
+    @Override
+    public void setDefaultHeightWidth(int defaultHeight, int defaultWidth) {
+        height.setValue(defaultHeight);
+        width.setValue(defaultWidth);
+    }
+
+    @Override
+    public List getImagePathList() {
+        return Collections.unmodifiableList(imagePathList.get());
+    }
+
+    @Override
+    public void addImagePath(String path) {
+        imagePathList.add(path);
+    }
+
+
+    @Override
+    public boolean removeImagePath(int index) {
+        try {
+            imagePathList.remove(index);
+            return true;
+        }
+        catch (IndexOutOfBoundsException e) {
+            return false;
+        }
+    }
+
+    @Override
+    public void setImageSelector(String groovyCode) {
+        imageSelector.set(groovyCode);
+    }
+
+    @Override
+    public String getImageSelectorCode() {
+        return imageSelector.get();
     }
 
     @Override
     public boolean isMovable() {
-        if (propertiesMap.get("movable") == null) {
-            throw new NoEntityClassException();
-        }
-        return (boolean) propertiesMap.get("movable");
+        return movable.getValue();
     }
 
     @Override
-    public void setMovable(boolean movable) {
-        propertiesMap.put("movable", movable);
+    public void setMovable(boolean move) {
+        movable.setValue(move);
     }
-
-    protected void setPropertiesMap(Map properties) {
-        propertiesMap = properties;
-    }
-    @Override
-    public Replicable replicate() {
-        int replicaId = setIdFunction.get();
-        Map newMap;
-        SimpleSpriteClass newSprite;
-        try {
-            newMap = propertiesMap.getClass().newInstance();
-            newSprite = this.getClass().newInstance();
-
-        }
-        catch (Exception e) {
-            throw new NoEntityClassException();
-        }
-        newMap.putAll(propertiesMap);
-        newMap.put("id", replicaId);
-        newSprite.setPropertiesMap(newMap);
-        return newSprite;
-    }
-
 }

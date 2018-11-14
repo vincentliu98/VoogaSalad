@@ -1,17 +1,24 @@
 package entities;
 
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleMapProperty;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class SimpleEntitiesCRUD implements EntitiesCRUDInterface {
+    private String CONST_TILEMAP = "tileMap";
+    private String CONST_SPRITEMAP = "spriteMap";
+
+
+
     private SimpleMapProperty<String, TileClass> tileMap;
     private SimpleMapProperty<String, SpriteClass> spriteMap;
 
     public SimpleEntitiesCRUD() {
-        tileMap = new SimpleMapProperty<>(this, "tileMap");
-        spriteMap = new SimpleMapProperty<>(this, "spriteMap");
+        tileMap = new SimpleMapProperty<>(this, CONST_TILEMAP);
+        spriteMap = new SimpleMapProperty<>(this, CONST_SPRITEMAP);
     }
 
     public SimpleEntitiesCRUD(SimpleMapProperty tileClasses, SimpleMapProperty spriteClasses) {
@@ -22,7 +29,8 @@ public class SimpleEntitiesCRUD implements EntitiesCRUDInterface {
     @Override
     public boolean createTileClass(String name) {
         if (!tileMap.containsKey(name)) {
-            tileMap.put(name, new SimpleTileClass());
+            Consumer<SimpleIntegerProperty> setIdFunc = idManager.requestSetIdFunc();
+            tileMap.put(name, new SimpleTileClass(setIdFunc));
             return true;
         }
         return false;
@@ -38,14 +46,14 @@ public class SimpleEntitiesCRUD implements EntitiesCRUDInterface {
 
     @Override
     public boolean deleteTileClass(String name) {
-        // TODO
-        return false;
+        return tileMap.remove(name) != null;
     }
 
     @Override
     public boolean createSpriteClass(String name) {
         if (!spriteMap.containsKey(name)) {
-            spriteMap.put(name, new SimpleSpriteClass());
+            Consumer<SimpleIntegerProperty> setIdFunc = idManager.requestSetIdFunc();
+            spriteMap.put(name, new SimpleSpriteClass(setIdFunc));
             return true;
         }
         return false;
@@ -61,7 +69,6 @@ public class SimpleEntitiesCRUD implements EntitiesCRUDInterface {
 
     @Override
     public boolean deleteSpriteClass(String name) {
-        // TODO
-        return false;
+        return spriteMap.remove(name) != null;
     }
 }

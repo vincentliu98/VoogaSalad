@@ -33,8 +33,18 @@ public interface EntitiesCRUDInterface {
      */
     SpriteClass getSpriteClass(String name);
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     boolean deleteTileClass(String name);
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     boolean deleteSpriteClass(String name);
 
 
