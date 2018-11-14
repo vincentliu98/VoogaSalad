@@ -12,7 +12,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -23,8 +22,9 @@ import java.io.File;
  * @author jl729
  */
 
-public class EntityWindow {
-    private final Stage primaryStage;
+public class EntityWindow extends PopUpWindow{
+    public static final Double HEIGHT = 500.0;
+    public static final Double WIDTH = 600.0;
     private final ObjectManager objectManager;
     private final SideView mySideView;
     private final Integer id;
@@ -36,26 +36,35 @@ public class EntityWindow {
     private Image mySprite;
     private TextField nameField;
     private VBox imageBox;
-    private Stage dialog;
 
     public EntityWindow(Stage primaryStage, ObjectManager objectManager, SideView mySideView, Integer id, TreeItem item){
-        this.primaryStage = primaryStage;
+        super(primaryStage);
         this.objectManager = objectManager;
         this.mySideView = mySideView;
         this.item = item;
         this.id = id;
-        dialog = new Stage();
-        dialog.initModality(Modality.APPLICATION_MODAL);
-        dialog.initOwner(primaryStage);
-
         initializeGridPane();
         initializeElements();
         addElementsGridPane();
+    }
 
-        Scene dialogScene = new Scene(myPane, 600, 500);
+    @Override
+    protected void closeWindow() {
+        // TODO: 11/13/18 add Events to somewhere
+        Entity myEntity = new Entity(mySprite, id, nameField.getText());
+        objectManager.getEntityList().add(myEntity);
+        // add the entity to the TreeItem
+        mySideView.addCell(myEntity, item);
+        dialog.close();
+    }
+
+    @Override
+    public void showWindow() {
+        Scene dialogScene = new Scene(myPane, WIDTH, HEIGHT);
         dialog.setScene(dialogScene);
         dialog.show();
     }
+
 
     private void initializeElements() {
         nameField = new TextField();
@@ -76,17 +85,10 @@ public class EntityWindow {
         });
         
         applyBtn = new Button("Apply");
-        applyBtn.setOnMouseClicked(e -> {
-            // TODO: 11/13/18 add Events to somewhere
-            Entity myEntity = new Entity(mySprite, id, nameField.getText());
-            objectManager.getEntityList().add(myEntity);
-            // add the entity to the TreeItem
-            mySideView.addCell(myEntity, item);
-            dialog.close();
-        });
+        applyBtn.setOnMouseClicked(e -> closeWindow());
     }
 
-    private GridPane initializeGridPane() {
+    private void initializeGridPane() {
         myPane = new GridPane();
         var row1 = new RowConstraints();
         row1.setPercentHeight(10);
@@ -102,7 +104,6 @@ public class EntityWindow {
         col2.setPercentWidth(50);
         myPane.getColumnConstraints().addAll(col1, col2);
         myPane.getRowConstraints().addAll(row1, row2, row3, row4);
-        return myPane;
     }
 
     private void addElementsGridPane() {
