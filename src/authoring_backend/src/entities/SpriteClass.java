@@ -1,6 +1,6 @@
 package entities;
 
-public interface Sprite extends Entity {
+public interface SpriteClass extends EntityClass {
     boolean isMovable();
     void setMovable(boolean movable);
 }

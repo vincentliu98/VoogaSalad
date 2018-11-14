@@ -3,10 +3,10 @@ package entities;
 import java.util.Iterator;
 import java.util.Set;
 
-public interface Tile extends Entity {
+public interface TileClass extends EntityClass {
     Set getSprites();
 
-    Iterator<Sprite> sprites();
+    Iterator<SpriteClass> sprites();
 
     boolean isSpriteContainable();
 

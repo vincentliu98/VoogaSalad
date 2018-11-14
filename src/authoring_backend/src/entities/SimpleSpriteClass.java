@@ -7,11 +7,14 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class SimpleSprite implements Sprite {
+public class SimpleSpriteClass implements SpriteClass {
     Supplier<Integer> setIdFunction;
     Map propertiesMap;
+    public SimpleSpriteClass() {
 
-    public SimpleSprite(Map properties, Point2D position, Supplier<Integer> setIdFunc) {
+    }
+
+    public SimpleSpriteClass(Map properties, Point2D position, Supplier<Integer> setIdFunc) {
         propertiesMap = properties;
         setIdFunction = setIdFunc;
         // for now
@@ -35,7 +38,7 @@ public class SimpleSprite implements Sprite {
     public void setImage(String path) {
 
         if (propertiesMap.get("id") == null) {
-            throw new EntityPropertyException();
+            throw new NoEntityClassException();
         }
         propertiesMap.put("imagePath", path);
     }
@@ -43,7 +46,7 @@ public class SimpleSprite implements Sprite {
     @Override
     public void updateImage(String path) {
         if (propertiesMap.get("id") != null) {
-            throw new EntityPropertyException();
+            throw new NoEntityClassException();
         }
         propertiesMap.put("imagePath", path);
     }
@@ -56,7 +59,7 @@ public class SimpleSprite implements Sprite {
     @Override
     public boolean isMovable() {
         if (propertiesMap.get("movable") == null) {
-            throw new EntityPropertyException();
+            throw new NoEntityClassException();
         }
         return (boolean) propertiesMap.get("movable");
     }
@@ -73,14 +76,14 @@ public class SimpleSprite implements Sprite {
     public Replicable replicate() {
         int replicaId = setIdFunction.get();
         Map newMap;
-        SimpleSprite newSprite;
+        SimpleSpriteClass newSprite;
         try {
             newMap = propertiesMap.getClass().newInstance();
             newSprite = this.getClass().newInstance();
 
         }
         catch (Exception e) {
-            throw new EntityPropertyException();
+            throw new NoEntityClassException();
         }
         newMap.putAll(propertiesMap);
         newMap.put("id", replicaId);
