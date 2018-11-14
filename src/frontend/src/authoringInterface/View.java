@@ -24,6 +24,7 @@ public class View implements ParentView<SubView> {
     private MenuBarView menuBar;
     private SideView sideView;
     private EditView editView;
+    private Node tempPreview = null;
     private Stage primaryStage;
     public static final double MENU_BAR_HEIGHT = 30;
     public static final double GAME_WIDTH = 700;
@@ -35,9 +36,19 @@ public class View implements ParentView<SubView> {
     public View(Stage primaryStage) {
         this.primaryStage = primaryStage;
         rootPane = new AnchorPane();
+        rootPane.getChildren().add(tempPreview);
         initializeElements();
         setElements();
         addElements();
+    }
+
+    /**
+     * This method sets the the temporary dragging preview for the root pane.
+     *
+     * @param preview: A JavaFx node representing the translucent preview of the side bar item.
+     */
+    public void setTempPreview(Node preview) {
+        tempPreview = preview;
     }
 
     private void initializeElements() {

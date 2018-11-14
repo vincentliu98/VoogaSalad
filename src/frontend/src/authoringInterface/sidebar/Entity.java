@@ -2,6 +2,8 @@ package authoringInterface.sidebar;
 
 import javafx.scene.image.Image;
 
+import java.util.List;
+
 public class Entity {
     private Image sprite;
     private Integer id;
