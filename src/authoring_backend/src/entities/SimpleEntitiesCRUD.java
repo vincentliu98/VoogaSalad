@@ -21,7 +21,7 @@ public class SimpleEntitiesCRUD implements EntitiesCRUDInterface {
         spriteMap = new SimpleMapProperty<>(this, CONST_SPRITEMAP);
     }
 
-    public SimpleEntitiesCRUD(SimpleMapProperty tileClasses, SimpleMapProperty spriteClasses) {
+    public SimpleEntitiesCRUD(SimpleMapProperty<String, TileClass> tileClasses, SimpleMapProperty<String, SpriteClass> spriteClasses) {
         tileMap = tileClasses;
         spriteMap = spriteClasses;
     }
