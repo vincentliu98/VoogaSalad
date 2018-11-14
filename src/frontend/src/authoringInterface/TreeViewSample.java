@@ -16,7 +16,7 @@
 // * Example code to implement side bar. Functions include adding a cell and
 // * storing the cell in the ListObjectManager.
 // *
-// * Note that major categories of TreeItem can only be set during initialization of ListObjectManager, e.g. "Entity"
+// * Note that major categories of TreeItem can only be set during initialization of ListObjectManager, e.g. "EntityClass"
 // *
 // * @author jl729
 // */
@@ -41,7 +41,7 @@
 //            // create tree items to accommodate objects
 //            TreeItem<String> empLeaf = new TreeItem<>(employee.getName());
 //            boolean found = false;
-//            // loop through sub items e.g. "Entity" and "Grid"
+//            // loop through sub items e.g. "EntityClass" and "Grid"
 //            for (TreeItem<String> depNode : rootNode.getChildren()) {
 //                if (depNode.getValue().contentEquals(employee.getType())) {
 //                    depNode.getChildren().add(empLeaf);

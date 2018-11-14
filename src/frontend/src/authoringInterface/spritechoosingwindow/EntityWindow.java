@@ -17,7 +17,7 @@ import javafx.stage.Stage;
 import java.io.File;
 
 /**
- * Pop-up window for the user to add settings for Entity
+ * Pop-up window for the user to add settings for EntityClass
  *
  * @author jl729
  */
@@ -72,7 +72,7 @@ public class EntityWindow extends PopUpWindow{
         imageView = new ImageView();
         imageBox = new VBox(imageView);
 
-        imageBtn = new Button("Choose Sprite");
+        imageBtn = new Button("Choose SpriteClass");
         imageBtn.setOnMouseClicked(e -> {
             final FileChooser fileChooser = new FileChooser();
             File file = fileChooser.showOpenDialog(primaryStage);
