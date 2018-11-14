@@ -52,8 +52,6 @@ public class Test {
         var e5 = GroovyFactory.makeEdge(minus, B, attackRef);
         graph.addEdge(e5);
 
-        System.out.println(graph.transformToGroovy().get());
-
         // Now the author makes the second line
         // if($clicked.hp <= 0) $entities.$instances.remove($clicked)
 
@@ -84,9 +82,6 @@ public class Test {
         var e11 = GroovyFactory.makeEdge(assign, FLOW_OUT, ifBlock);
         graph.addEdge(e11);
 
-        System.out.println(graph.transformToGroovy().get());
-
-
         // $global.turn = 1 - $global.turn
 
         var assign2 = GroovyFactory.assignBlock();
@@ -109,8 +104,6 @@ public class Test {
 
         var e16 = GroovyFactory.makeEdge(ifBlock, FLOW_OUT, assign2);
         graph.addEdge(e16);
-
-        System.out.println(graph.transformToGroovy().get());
 
         // $goto("A")
 
