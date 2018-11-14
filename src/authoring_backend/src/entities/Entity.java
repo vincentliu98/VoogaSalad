@@ -11,3 +11,4 @@ public interface Entity extends Replicable {
     void updateImage(String path);
     Map getPropertiesMap();
 }
+
