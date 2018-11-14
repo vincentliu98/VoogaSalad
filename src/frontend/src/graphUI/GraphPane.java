@@ -1,25 +1,31 @@
 package graphUI;
 
 import authoringInterface.spritechoosingwindow.PopUpWindow;
+import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+
+/**
+ * Not used yet.
+ *
+ * @author jl729
+ */
 
 public class GraphPane extends PopUpWindow {
 
     public static final Double WIDTH = 700.0;
     public static final Double HEIGHT = 500.0;
-    private Pane myPane;
+    private Group root;
 
     public GraphPane(Stage primaryStage) {
         super(primaryStage);
-        myPane = new GridPane();
+        root = new Group();
+        showWindow();
     }
 
     @Override
     public void showWindow() {
-        Scene dialogScene = new Scene(myPane, WIDTH, HEIGHT);
+        Scene dialogScene = new Scene(root, WIDTH, HEIGHT);
         dialog.setScene(dialogScene);
         dialog.show();
     }

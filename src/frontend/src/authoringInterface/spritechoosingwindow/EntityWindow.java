@@ -46,6 +46,7 @@ public class EntityWindow extends PopUpWindow{
         initializeGridPane();
         initializeElements();
         addElementsGridPane();
+        showWindow();
     }
 
     @Override

@@ -10,6 +10,8 @@ import javafx.scene.shape.Line;
 import java.util.ArrayList;
 
 /**
+ * Draggable circle Nodes
+ *
  * Reference: https://stackoverflow.com/questions/46562957/define-object-position-at-runtime-with-javafx
  *
  * @author jl729
