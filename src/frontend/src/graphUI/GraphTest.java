@@ -15,6 +15,7 @@ import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Playground for testing graph function
@@ -35,30 +36,30 @@ public class GraphTest extends Application {
     private Scene myScene;
     private double newNodeX;
     private double newNodeY;
-    private GraphNode node3;
+    private List<GraphNode> nodeList = new ArrayList<>();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        GraphNode node1 = createNode("A", 100, 100, Color.RED);
-        GraphNode node2 = createNode("B", 300, 200, Color.GREEN);
-        node3 = createNode("C", 80, 300, Color.PURPLE);
+        nodeList.add(createNode("0", 100, 100, Color.DEEPSKYBLUE));
 
-        connectNodes(node1, node2, "C1");
-        connectNodes(node3, node1, "C2");
-        connectNodes(node3, node2, "C3");
+//        connectNodes(nodeList.get(0), nodeList.get(1), "C1");
+//        connectNodes(node3, node1, "C2");
+//        connectNodes(node3, node2, "C3");
 
-        initializeUI(node1, node2, node3);
+        initializeUI(nodeList);
 
         primaryStage.setScene(myScene);
         primaryStage.show();
     }
 
-    private void initializeUI(GraphNode node1, GraphNode node2, GraphNode node3) {
-        group.getChildren().addAll(node1, node2, node3);
+    private void initializeUI(List<GraphNode> nodeList) {
+        nodeList.forEach(e -> group.getChildren().add(e));
+
         graphBox.getChildren().add(group);
         initializeGridPane();
         initializeItemBox();
         root.add(itemBox, 0,0);
+        HBox.setHgrow(itemBox, Priority.ALWAYS);
         root.add(graphBox, 1, 0);
         myScene = new Scene(root, 700, 600);
     }
@@ -69,6 +70,7 @@ public class GraphTest extends Application {
         Line line = setUpLineDragAndDrop();
 
         itemBox.setSpacing(50);
+
         itemBox.getChildren().addAll(circle, line);
     }
 
@@ -78,21 +80,7 @@ public class GraphTest extends Application {
         // make the lines clickable and user-friendly
         line.setOnMouseEntered(e -> myScene.setCursor(Cursor.HAND));
         line.setOnMouseExited(e -> myScene.setCursor(Cursor.DEFAULT));
-        line.setOnDragDetected(event -> {
-                /* drag was detected, start drag-and-drop gesture*/
-                System.out.println("onDragDetected");
-
-                /* allow any transfer mode */
-                Dragboard db = line.startDragAndDrop(TransferMode.ANY);
-
-                /* put a string on dragboard */
-                ClipboardContent content = new ClipboardContent();
-                // TODO: 11/14/18 Add lines between nodes
-//                content.putString(line.getText());
-                db.setContent(content);
-
-                event.consume();
-            });
+        line.setOnMouseClicked(e -> new LineWindow(new Stage()));
         return line;
     }
 
@@ -143,8 +131,9 @@ public class GraphTest extends Application {
                 boolean success = false;
                 if (db.hasImage()) {
                     success = true;
-                    var newGraphNod = createNode("D", newNodeX, newNodeY, Color.DEEPSKYBLUE);
-                    connectNodes(node3, newGraphNod, "C4");
+                    var newGraphNod = createNode(String.valueOf(nodeList.size()), newNodeX, newNodeY, Color.DEEPSKYBLUE);
+                    nodeList.add(newGraphNod);
+                    connectNodes(nodeList.get(nodeList.size()-2), newGraphNod, "E" + (nodeList.size()-2));
                     group.getChildren().add(newGraphNod);
                 }
                 /* let the source know whether the string was successfully
