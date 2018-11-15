@@ -20,12 +20,11 @@ import javafx.stage.Stage;
  * @author  Haotian Wang
  * @author jl729
  */
-public class View implements ParentView<SubView>, DraggingCanvas {
+public class View implements ParentView<SubView> {
     private AnchorPane rootPane;
     private MenuBarView menuBar;
     private SideView sideView;
     private EditView editView;
-    private Node tempPreview = null;
     private Stage primaryStage;
     public static final double MENU_BAR_HEIGHT = 30;
     public static final double GAME_WIDTH = 700;
@@ -37,7 +36,6 @@ public class View implements ParentView<SubView>, DraggingCanvas {
     public View(Stage primaryStage) {
         this.primaryStage = primaryStage;
         rootPane = new AnchorPane();
-        rootPane.getChildren().add(tempPreview);
         initializeElements();
         setElements();
         addElements();
