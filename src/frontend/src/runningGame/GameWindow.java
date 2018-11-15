@@ -21,7 +21,18 @@ public class GameWindow implements SubView<AnchorPane> {
 
     public GameWindow() {
         rootPane = new AnchorPane();
-        menuBarView = new GameMenuBarView(30);
+        menuBarView = new GameMenuBarView(MEUNU_BAR_HEIGHT);
+        initializeAnchorPane();
+    }
+
+    /**
+     * Initialize the different positions of the components in a gaming window.
+     */
+    private void initializeAnchorPane() {
+        rootPane.getChildren().add(menuBarView.getView());
+        AnchorPane.setLeftAnchor(menuBarView.getView(), 0.0);
+        AnchorPane.setTopAnchor(menuBarView.getView(), 0.0);
+        AnchorPane.setRightAnchor(menuBarView.getView(), 0.0);
     }
 
     /**

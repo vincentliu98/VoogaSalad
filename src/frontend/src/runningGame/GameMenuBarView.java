@@ -17,8 +17,8 @@ public class GameMenuBarView implements SubView<MenuBar> {
     private MenuBar menuBar;
 
     public GameMenuBarView(double height) {
-        menuBar = constructMenuBar();
-        menuBar.setPrefHeight(height);
+        menuBar = constructMenuBar(height);
+
     }
 
     /**
@@ -26,7 +26,7 @@ public class GameMenuBarView implements SubView<MenuBar> {
      *
      * @return A MenuBar JavaFx item.
      */
-    private MenuBar constructMenuBar() {
+    private MenuBar constructMenuBar(double height) {
         MenuBar menuBar = new MenuBar();
 
         Menu file = new Menu("File");
@@ -46,6 +46,8 @@ public class GameMenuBarView implements SubView<MenuBar> {
         help.getItems().addAll(helpDoc, about);
 
         menuBar.getMenus().addAll(file, help);
+
+        menuBar.setPrefHeight(height);
 
         return menuBar;
     }
