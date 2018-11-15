@@ -1,6 +1,5 @@
 package authoringInterface;
 
-import api.DraggingCanvas;
 import api.ParentView;
 import api.SubView;
 import authoringInterface.editor.EditView;
@@ -39,15 +38,6 @@ public class View implements ParentView<SubView> {
         initializeElements();
         setElements();
         addElements();
-    }
-
-    /**
-     * This method sets the the temporary dragging preview for the root pane.
-     *
-     * @param preview: A JavaFx node representing the translucent preview of the side bar item.
-     */
-    public void setTempPreview(Node preview) {
-        tempPreview = preview;
     }
 
     private void initializeElements() {

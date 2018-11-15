@@ -23,5 +23,9 @@ public interface DraggableTreeItem<T extends Node> {
     /**
      * Handle the start of dragging action on a DraggableTreeItem.
      */
-    void handleDrag(Pane canvas);
+    void handlePressed(Pane canvas, double x, double y);
+
+    void handleDrag(Pane canvas, double x, double y);
+
+    void handleExit(Pane canvas, double x, double y);
 }
