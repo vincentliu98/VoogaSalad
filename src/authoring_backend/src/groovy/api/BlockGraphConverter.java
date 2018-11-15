@@ -10,8 +10,8 @@ import groovy.graph.BlockGraphImpl;
 public class BlockGraphConverter implements Converter{
     @Override
     public void marshal(Object o, HierarchicalStreamWriter writer, MarshallingContext ctx) {
-        writer.setValue(((BlockGraph) o).transformToGroovy().getOrElse(""));
-        // the failure should have been covered by the data storage
+        // the failure should have been covered by this time
+        writer.setValue(((BlockGraph) o).transformToGroovy().get(""));
     }
 
     @Override

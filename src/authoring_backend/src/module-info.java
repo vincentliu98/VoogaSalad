@@ -5,6 +5,8 @@ module authoring_backend {
 
     opens groovy.graph to xstream;
     opens groovy.api to xstream;
+    opens phase.api to xstream;
+    opens phase to xstream;
 
     requires org.codehaus.groovy;
     requires xstream;

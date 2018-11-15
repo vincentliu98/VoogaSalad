@@ -1,12 +1,10 @@
 package groovy.api;
 
-import essentials.GameData;
 import groovy.graph.BlockEdgeImpl;
 import groovy.graph.BlockGraphImpl;
 import groovy.graph.blocks.core.*;
 import groovy.graph.blocks.small_factory.LiteralFactory;
 
-import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -19,6 +17,25 @@ public class GroovyFactory {
      *  Makes an empty BlockGraph with one source node
      */
     public static BlockGraph emptyGraph() { return new BlockGraphImpl(); }
+
+    /**
+     *  Makes a default BlockGraph for guards, passing everything in.
+     */
+    public static BlockGraph emptyGuard() {
+        try {
+            var graph = new BlockGraphImpl();
+            var pass = assignBlock();
+            var guardRet = $guardRet();
+            var t = booleanBlock("true").get();
+            graph.addNode(pass);
+            graph.addNode(guardRet);
+            graph.addNode(t);
+            graph.addEdge(makeEdge(pass, Ports.ASSIGN_LHS, guardRet));
+            graph.addEdge(makeEdge(pass, Ports.ASSIGN_RHS, t));
+            graph.addEdge(makeEdge(graph.source(), Ports.FLOW_OUT, pass));
+            return graph;
+        } catch(Throwable ignored) { return emptyGraph(); } // but it's not gonna fail
+    }
 
     /**
      *  Makes an edge
@@ -43,14 +60,15 @@ public class GroovyFactory {
     public static Try<LiteralBlock> listBlock(String value) { return LiteralFactory.listBlock(value); }
     public static Try<LiteralBlock> mapBlock(String value) { return LiteralFactory.mapBlock(value); }
     public static LiteralBlock stringBlock(String value) { return LiteralFactory.stringBlock(value); }
-    public static Try<LiteralBlock> refBlock(String value, GameData data) {
-        return LiteralFactory.refBlock(value, data);
+    public static Try<LiteralBlock> refBlock(String value) {
+        return LiteralFactory.refBlock(value);
     }
 
     public static UnaryBlock unaryBlock(String op) { return new UnaryBlock(op); }
 
     public static InfixBinaryBlock binaryBlock(String op) { return new InfixBinaryBlock(op); }
 
+    // We'll eventually remove this
     public static RawGroovyBlock rawBlock(String code) { return new RawGroovyBlock(code); }
 
 
@@ -75,10 +93,12 @@ public class GroovyFactory {
                   .collect(Collectors.toList()).toString()
         );
     }
+    public static RawGroovyBlock $clicked() { return GroovyFactory.rawBlock("$clicked"); }
+    public static RawGroovyBlock $imageData() { return GroovyFactory.rawBlock("$imageData"); }
+    public static RawGroovyBlock $guardRet() { return GroovyFactory.rawBlock("$guardRet"); }
+
     public static UnaryBlock $goto() { return GroovyFactory.unaryBlock("$goto"); }
     public static UnaryBlock $remove() { return GroovyFactory.unaryBlock("$entities.$instances.remove"); }
-    public static Try<LiteralBlock> $clicked(GameData data) { return GroovyFactory.refBlock("$clicked", data); }
-    public static Try<LiteralBlock> $imageData(GameData data) { return GroovyFactory.refBlock("$imageData", data); }
 
 }
 
