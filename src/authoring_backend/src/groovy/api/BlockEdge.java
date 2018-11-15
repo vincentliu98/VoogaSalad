@@ -1,6 +1,6 @@
 package groovy.api;
 
-import essentials.Replicable;
+import utils.Replicable;
 import graph.Edge;
 import groovy.graph.blocks.core.GroovyBlock;
 

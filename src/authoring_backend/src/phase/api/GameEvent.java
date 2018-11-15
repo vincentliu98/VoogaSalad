@@ -7,9 +7,13 @@ public abstract class GameEvent {
         return this.getClass().getSimpleName();
     }
 
-    public class MouseClick extends GameEvent { }
-    public class MouseDrag extends GameEvent { }
-    public class KeyPress extends GameEvent {
+    public static MouseClick mouseClick() { return new MouseClick(); }
+    public static MouseDrag mouseDrag() { return new MouseDrag(); }
+    public static KeyPress keyPress(KeyCode code) { return new KeyPress(code); }
+
+    public static class MouseClick extends GameEvent { }
+    public static class MouseDrag extends GameEvent { }
+    public static class KeyPress extends GameEvent {
         private KeyCode code;
         public KeyPress(KeyCode code) { this.code = code; }
         @Override

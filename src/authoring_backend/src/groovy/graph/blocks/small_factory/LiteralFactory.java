@@ -1,7 +1,6 @@
 package groovy.graph.blocks.small_factory;
 
-import essentials.GameData;
-import groovy.api.Try;
+import utils.Try;
 import groovy.graph.blocks.core.LiteralBlock;
 
 import java.util.Arrays;
@@ -43,13 +42,13 @@ public class LiteralFactory {
         } else throw new ListParseException(lst);
     }
 
-    public static Try<LiteralBlock> refBlock(String value, GameData data) {
-        return Try.apply(() -> validateReference(value.trim(), data))
+    public static Try<LiteralBlock> refBlock(String value) {
+        return Try.apply(() -> validateReference(value.trim()))
                   .map(ref -> new LiteralBlock(ref, "Ref"));
     }
 
-    private static String validateReference(String ref, GameData data) throws ReferenceParseException {
-        return ref; // TODO: need to validate!
+    private static String validateReference(String ref) throws ReferenceParseException {
+        return ref; // TODO: need to validate... but what?
     }
 
 

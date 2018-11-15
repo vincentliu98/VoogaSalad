@@ -2,7 +2,7 @@ package groovy.graph.blocks.core;
 
 import groovy.api.BlockGraph;
 import graph.SimpleNode;
-import groovy.api.Try;
+import utils.Try;
 import groovy.api.Ports;
 
 import java.util.Set;
