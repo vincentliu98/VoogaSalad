@@ -3,6 +3,8 @@ package authoringInterface.editor;
 import api.SubView;
 import authoringInterface.MainAuthoringProgram;
 import authoringInterface.View;
+import graphUI.EdgeSettingWindow;
+import graphUI.GraphPane;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
@@ -39,6 +41,7 @@ public class MenuBarView implements SubView<MenuBar> {
         MenuItem runProject = new MenuItem("Run");
         MenuItem helpDoc = new MenuItem("Help");
         MenuItem about = new MenuItem("About");
+        MenuItem graph = new MenuItem("Graph");
 
         save.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
 
@@ -52,13 +55,18 @@ public class MenuBarView implements SubView<MenuBar> {
         runProject.setOnAction(this::handleRunProject);
         helpDoc.setOnAction(this::handleHelpDoc);
         about.setOnAction(this::handleAbout);
+        graph.setOnAction(this::handleGraph);
 
         file.getItems().addAll(newFile, open, save, saveAs, close);
-        edit.getItems().addAll(undo, redo);
+        edit.getItems().addAll(undo, redo, graph);
         run.getItems().addAll(runProject);
         help.getItems().addAll(helpDoc, about);
 
         menuBar.getMenus().addAll(file, edit, tools, run, help);
+    }
+
+    private void handleGraph(ActionEvent actionEvent) {
+        new GraphPane(new Stage());
     }
 
 

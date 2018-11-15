@@ -4,5 +4,8 @@ module frontend {
     requires javafx.controls;
     requires javafx.media;
 
+    requires authoring_backend;
+
     exports authoringInterface;
+    exports graphUI;
 }

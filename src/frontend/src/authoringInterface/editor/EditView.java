@@ -2,6 +2,7 @@ package authoringInterface.editor;
 
 import api.SubView;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;

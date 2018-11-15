@@ -35,17 +35,21 @@ public interface EntitiesCRUDInterface {
 
     /**
      *
-     * @param name
-     * @return
+     * @param name the name of the Tile Class to be deleted
+     * @return True if the Tile Class exists
      */
     boolean deleteTileClass(String name);
 
     /**
      *
-     * @param name
-     * @return
+     * @param name the name of the Tile Class to be deleted
+     * @return True if the Sprite Class exists
      */
     boolean deleteSpriteClass(String name);
 
-
+    /**
+     *
+     * @return Entity Data of the Game in XML format
+     */
+    String toXML();
 }

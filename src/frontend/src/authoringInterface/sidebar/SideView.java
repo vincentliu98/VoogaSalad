@@ -2,14 +2,18 @@ package authoringInterface.sidebar;
 
 import api.SubView;
 import authoringInterface.spritechoosingwindow.EntityWindow;
+import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
+
+import java.util.Stack;
 
 /**
  * A sidebar that contains many TreeItems. Functions include adding a cell and
@@ -112,8 +116,7 @@ public class SideView implements SubView<StackPane> {
                 var id = getTreeItem().getChildren().size();
                 var myItem = getTreeItem();
                 if (type.equals("Entity")){
-                    var window = new EntityWindow(primaryStage, objectManager, mySideView, id, myItem);
-                    window.showWindow();
+                    new EntityWindow(primaryStage, objectManager, mySideView, id, myItem);
                 }
                 else if (type.equals("TileClass")){
                     // Generate a TileWindow

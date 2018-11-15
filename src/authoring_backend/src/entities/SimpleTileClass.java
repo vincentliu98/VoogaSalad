@@ -1,5 +1,6 @@
 package entities;
 
+import groovy.api.BlockGraph;
 import javafx.beans.property.*;
 import java.util.List;
 import java.util.Collections;
@@ -14,25 +15,22 @@ public class SimpleTileClass implements TileClass {
     private String CONST_SPRITECONTAINABLE = "spriteContainable";
     private String CONST_IMAGEPATHLIST = "imagePathList";
     private String CONST_PROPERTIESMAP = "propertiesMap";
-    private String CONST_IMAGESELECTOR = "imageSelector";
 
-
-    private SimpleIntegerProperty id;
+    private ReadOnlyIntegerWrapper id;
     private SimpleIntegerProperty height;
     private SimpleIntegerProperty width;
     private SimpleBooleanProperty spriteContainable;
     private SimpleListProperty<String> imagePathList;
     private SimpleMapProperty<String, Integer> propertiesMap;
-    private SimpleStringProperty imageSelector;
+    private BlockGraph imageSelector;
 
     private SimpleTileClass() {
-        id = new SimpleIntegerProperty(this, CONST_ID);
+        id = new ReadOnlyIntegerWrapper(this, CONST_ID);
         height = new SimpleIntegerProperty(this, CONST_DEFAULTHEIGHT);
         width = new SimpleIntegerProperty(this, CONST_DEFAULTWIDTH);
         spriteContainable = new SimpleBooleanProperty(this, CONST_SPRITECONTAINABLE);
         imagePathList = new SimpleListProperty<>(this, CONST_IMAGEPATHLIST);
         propertiesMap = new SimpleMapProperty<>(this, CONST_PROPERTIESMAP);
-        imageSelector = new SimpleStringProperty(this, CONST_IMAGESELECTOR);
     }
 
     SimpleTileClass(Consumer<SimpleIntegerProperty> setFunc) {
@@ -40,10 +38,9 @@ public class SimpleTileClass implements TileClass {
         setClassId(setFunc);
     }
 
-
     @Override
-    public int getClassId() {
-        return id.getValue();
+    public ReadOnlyIntegerProperty getClassId() {
+        return id.getReadOnlyProperty();
     }
 
     @Override
@@ -52,8 +49,8 @@ public class SimpleTileClass implements TileClass {
     }
 
     @Override
-    public Map getPropertiesMap() {
-        return Collections.unmodifiableMap(propertiesMap.get());
+    public SimpleMapProperty getPropertiesMap() {
+        return propertiesMap;
     }
 
     @Override
@@ -70,7 +67,6 @@ public class SimpleTileClass implements TileClass {
         return propertiesMap.remove(propertyName) != null;
     }
 
-
     @Override
     public void setDefaultHeightWidth(int defaultHeight, int defaultWidth) {
         height.setValue(defaultHeight);
@@ -78,8 +74,8 @@ public class SimpleTileClass implements TileClass {
     }
 
     @Override
-    public List getImagePathList() {
-        return Collections.unmodifiableList(imagePathList.get());
+    public SimpleListProperty getImagePathList() {
+        return imagePathList;
     }
 
     @Override
@@ -100,24 +96,22 @@ public class SimpleTileClass implements TileClass {
     }
 
     @Override
-    public void setImageSelector(String groovyCode) {
-        imageSelector.set(groovyCode);
+    public void setImageSelector(BlockGraph blockCode) {
+        imageSelector = blockCode;
     }
 
     @Override
-    public String getImageSelectorCode() {
-        return imageSelector.get();
+    public BlockGraph getImageSelectorCode() {
+        return imageSelector;
     }
 
     @Override
-    public boolean isSpriteContainable() {
-        return spriteContainable.getValue();
+    public SimpleBooleanProperty isSpriteContainable() {
+        return spriteContainable;
     }
 
     @Override
     public void setSpriteContainable(boolean contains) {
         spriteContainable.setValue(contains);
     }
-
-
 }

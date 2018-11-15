@@ -1,5 +1,6 @@
 package entities;
 
+import groovy.api.BlockGraph;
 import javafx.beans.property.*;
 import java.util.List;
 import java.util.Collections;
@@ -14,25 +15,22 @@ public class SimpleSpriteClass implements SpriteClass {
     private String CONST_MOVABLE = "movable";
     private String CONST_IMAGEPATHLIST = "imagePathList";
     private String CONST_PROPERTIESMAP = "propertiesMap";
-    private String CONST_IMAGESELECTOR = "imageSelector";
 
-
-    private SimpleIntegerProperty id;
+    private ReadOnlyIntegerWrapper id;
     private SimpleIntegerProperty height;
     private SimpleIntegerProperty width;
     private SimpleBooleanProperty movable;
     private SimpleListProperty<String> imagePathList;
     private SimpleMapProperty<String, Integer> propertiesMap;
-    private SimpleStringProperty imageSelector;
+    private BlockGraph imageSelector;
 
     private SimpleSpriteClass() {
-        id = new SimpleIntegerProperty(this, CONST_ID);
+        id = new ReadOnlyIntegerWrapper(this, CONST_ID);
         height = new SimpleIntegerProperty(this, CONST_DEFAULTHEIGHT);
         width = new SimpleIntegerProperty(this, CONST_DEFAULTWIDTH);
         movable = new SimpleBooleanProperty(this, CONST_MOVABLE);
         imagePathList = new SimpleListProperty<>(this, CONST_IMAGEPATHLIST);
         propertiesMap = new SimpleMapProperty<>(this, CONST_PROPERTIESMAP);
-        imageSelector = new SimpleStringProperty(this, CONST_IMAGESELECTOR, "");
     }
 
     SimpleSpriteClass(Consumer<SimpleIntegerProperty> setFunc) {
@@ -42,8 +40,8 @@ public class SimpleSpriteClass implements SpriteClass {
 
 
     @Override
-    public int getClassId() {
-        return id.getValue();
+    public ReadOnlyIntegerProperty getClassId() {
+        return id.getReadOnlyProperty();
     }
 
     @Override
@@ -52,8 +50,8 @@ public class SimpleSpriteClass implements SpriteClass {
     }
 
     @Override
-    public Map getPropertiesMap() {
-        return Collections.unmodifiableMap(propertiesMap.get());
+    public SimpleMapProperty getPropertiesMap() {
+        return propertiesMap;
     }
 
     @Override
@@ -77,8 +75,8 @@ public class SimpleSpriteClass implements SpriteClass {
     }
 
     @Override
-    public List getImagePathList() {
-        return Collections.unmodifiableList(imagePathList.get());
+    public SimpleListProperty getImagePathList() {
+        return imagePathList;
     }
 
     @Override
@@ -99,18 +97,18 @@ public class SimpleSpriteClass implements SpriteClass {
     }
 
     @Override
-    public void setImageSelector(String groovyCode) {
-        imageSelector.set(groovyCode);
+    public void setImageSelector(BlockGraph blockCode) {
+        imageSelector = blockCode;
     }
 
     @Override
-    public String getImageSelectorCode() {
-        return imageSelector.get();
+    public BlockGraph getImageSelectorCode() {
+        return imageSelector;
     }
 
     @Override
-    public boolean isMovable() {
-        return movable.getValue();
+    public SimpleBooleanProperty isMovable() {
+        return movable;
     }
 
     @Override

@@ -2,25 +2,30 @@ package authoringInterface.sidebar;
 
 import api.SubView;
 import javafx.scene.Node;
+import javafx.scene.layout.Pane;
 
 /**
  * This interface abstracts the meaning of draggable components of the graphical interface. Dragable simply means the user can press down the mouse key on an element and drag the element along the program which displays a defined preview of the elements being dragged.
  *
  * @author Haotian Wang
  */
-public interface DraggableTreeItem<T extends Node, V extends TreeItemType> {
+public interface DraggableTreeItem<T extends Node> {
     /**
      * @return Return a preview of the elements being dragged.
      */
     T getPreview();
 
     /**
-     * @return The type of the graphical element where the drag starts.
+     * @return The type of the element being dragged.
      */
-    V getType();
+    TreeItemType getType();
 
     /**
-     * Register with the parent "canvas" JavaFx node such that the preview can be shown there.
+     * Handle the start of dragging action on a DraggableTreeItem.
      */
-    void notifyCanvas(Node canvas);
+    void handlePressed(Pane canvas, double x, double y);
+
+    void handleDrag(Pane canvas, double x, double y);
+
+    void handleExit(Pane canvas, double x, double y);
 }
