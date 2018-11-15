@@ -14,8 +14,15 @@ import javafx.scene.layout.AnchorPane;
  */
 
 public class GameWindow implements SubView<AnchorPane> {
+    private static final double MEUNU_BAR_HEIGHT = 30;
+
     private AnchorPane rootPane;
     private GameMenuBarView menuBarView;
+
+    public GameWindow() {
+        rootPane = new AnchorPane();
+        menuBarView = new GameMenuBarView(30);
+    }
 
     /**
      * This method returns the responsible JavaFx Node responsible to be added or deleted from other graphical elements.

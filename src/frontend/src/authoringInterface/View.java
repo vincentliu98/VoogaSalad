@@ -46,11 +46,11 @@ public class View implements ParentView<SubView> {
         AnchorPane.setRightAnchor(menuBar.getView(), 0.0);
         AnchorPane.setTopAnchor(menuBar.getView(), 0.0);
         AnchorPane.setRightAnchor(sideView.getView(), 0.0);
-        AnchorPane.setTopAnchor(sideView.getView(), 30.0);
+        AnchorPane.setTopAnchor(sideView.getView(), MENU_BAR_HEIGHT);
         AnchorPane.setBottomAnchor(sideView.getView(), 0.0);
         AnchorPane.setLeftAnchor(editView.getView(), 0.0);
         AnchorPane.setRightAnchor(editView.getView(), 247.9);
-        AnchorPane.setTopAnchor(editView.getView(), 30.0);
+        AnchorPane.setTopAnchor(editView.getView(), MENU_BAR_HEIGHT);
         AnchorPane.setBottomAnchor(editView.getView(), 0.0);
     }
 
