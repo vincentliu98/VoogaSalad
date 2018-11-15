@@ -19,7 +19,7 @@ public class GroovyBlockTest {
          */
 
         var gameData = new AuthoringTools();
-        var factory = gameData.groovyFactory();
+        var factory = gameData.factory();
 
         // System creates a graph for the author
         var graph = factory.createGraph();

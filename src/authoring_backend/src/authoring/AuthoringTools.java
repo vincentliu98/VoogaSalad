@@ -11,19 +11,19 @@ import phase.api.PhaseDB;
  *  This class contains all the tools to author a game;
  */
 public class AuthoringTools {
-    private GroovyFactory groovyFactory;
+    private GroovyFactory factory;
     private ObservableMap<String, Object> globalData;
     private EntitiesCRUDInterface entityDB;
     private PhaseDB phaseDB;
 
     public AuthoringTools() {
-        groovyFactory = new GroovyFactory();
+        factory = new GroovyFactory();
         globalData = FXCollections.observableHashMap();
         entityDB = new SimpleEntitiesCRUD();
-        phaseDB = new PhaseDB();
+        phaseDB = new PhaseDB(factory);
     }
 
-    public GroovyFactory groovyFactory() { return groovyFactory; }
+    public GroovyFactory factory() { return factory; }
     public ObservableMap globalData() { return globalData; }
     public EntitiesCRUDInterface entityDB() { return entityDB; }
     public PhaseDB phaseDB() { return phaseDB; }

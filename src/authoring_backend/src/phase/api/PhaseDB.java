@@ -1,5 +1,6 @@
 package phase.api;
 
+import groovy.api.GroovyFactory;
 import phase.NamespaceException;
 import phase.PhaseGraphImpl;
 import phase.TransitionImpl;
@@ -17,10 +18,12 @@ import java.util.Set;
 public class PhaseDB {
     private Set<String> namespace;
     private List<PhaseGraph> phases;
+    private GroovyFactory factory;
 
-    public PhaseDB() {
+    public PhaseDB(GroovyFactory factory) {
         this.namespace = new HashSet<>();
         phases = new ArrayList<>();
+        this.factory = factory;
     }
 
     public Try<PhaseGraph> createGraph(String name) {
@@ -39,6 +42,8 @@ public class PhaseDB {
     public Phase createPhase() { return new Phase(); }
 
     public Transition createTransition(Phase from, GameEvent trigger, Phase to) {
-        return new TransitionImpl(from, trigger, to);
+        return new TransitionImpl(from, trigger, to, factory.createGuard(), factory.createGraph());
     }
+
+    public List<PhaseGraph> phases() { return phases; }
 }

@@ -1,22 +1,20 @@
 package test;
 
-import authoring.Converters;
-import groovy.api.GroovyFactory;
+import authoring.AuthoringTools;
 import javafx.scene.input.KeyCode;
-import phase.TransitionImpl;
 import phase.api.GameEvent;
 import phase.api.Phase;
-import phase.api.PhaseDB;
 
 import static groovy.api.Ports.*;
 
 public class PhaseGraphTest {
     public static void main(String args[]) throws Throwable {
         // set up xstream
-        var xstream = Converters.serializerForEngine();
-        var manager = new PhaseDB();
+        var tools = new AuthoringTools();
+        var phaseDB = tools.phaseDB();
+        var factory = tools.factory();
 
-        var phaseGraph = manager.createGraph("A").get();
+        var phaseGraph = phaseDB.createGraph("A").get();
 
         var a = new Phase();
         var b = new Phase();
@@ -26,42 +24,42 @@ public class PhaseGraphTest {
         phaseGraph.addNode(b);
         phaseGraph.addNode(c);
 
-        var e = new TransitionImpl(a, GameEvent.mouseClick(), b);
+        var e = phaseDB.createTransition(a, GameEvent.mouseClick(), b);
         phaseGraph.addEdge(e);
-        phaseGraph.addEdge(new TransitionImpl(b, GameEvent.mouseDrag(), c));
-        phaseGraph.addEdge(new TransitionImpl(b, GameEvent.keyPress(KeyCode.ESCAPE), a));
+        phaseGraph.addEdge(phaseDB.createTransition(b, GameEvent.mouseDrag(), c));
+        phaseGraph.addEdge(phaseDB.createTransition(b, GameEvent.keyPress(KeyCode.ESCAPE), a));
 
         var graph = e.exec();
         // sum from 1 to 9
-        var s = GroovyFactory.refBlock("sum").get();
-        var init = GroovyFactory.assignBlock();
-        var zero2 = GroovyFactory.integerBlock("0").get();
+        var s = factory.refBlock("sum").get();
+        var init = factory.assignBlock();
+        var zero2 = factory.integerBlock("0").get();
         graph.addNode(s);
         graph.addNode(init);
         graph.addNode(zero2);
-        graph.addEdge(GroovyFactory.createEdge(init, ASSIGN_LHS, s));
-        graph.addEdge(GroovyFactory.createEdge(init, ASSIGN_RHS, zero2));
-        graph.addEdge(GroovyFactory.createEdge(graph.source(), FLOW_OUT, init));
+        graph.addEdge(factory.createEdge(init, ASSIGN_LHS, s));
+        graph.addEdge(factory.createEdge(init, ASSIGN_RHS, zero2));
+        graph.addEdge(factory.createEdge(graph.source(), FLOW_OUT, init));
 
-        var range = GroovyFactory.range(1, 10).get();
-        var foreach = GroovyFactory.forEachBlock("i");
+        var range = factory.range(1, 10).get();
+        var foreach = factory.forEachBlock("i");
         graph.addNode(range);
         graph.addNode(foreach);
-        graph.addEdge(GroovyFactory.createEdge(foreach, FOREACH_LIST, range));
-        graph.addEdge(GroovyFactory.createEdge(init, FLOW_OUT, foreach));
+        graph.addEdge(factory.createEdge(foreach, FOREACH_LIST, range));
+        graph.addEdge(factory.createEdge(init, FLOW_OUT, foreach));
 
-        var ass = GroovyFactory.assignBlock();
-        var add = GroovyFactory.add();
-        var i = GroovyFactory.refBlock("i").get();
+        var ass = factory.assignBlock();
+        var add = factory.add();
+        var i = factory.refBlock("i").get();
         graph.addNode(ass);
         graph.addNode(add);
         graph.addNode(i);
-        graph.addEdge(GroovyFactory.createEdge(foreach, FOREACH_BODY, ass));
-        graph.addEdge(GroovyFactory.createEdge(ass, ASSIGN_LHS, s));
-        graph.addEdge(GroovyFactory.createEdge(ass, ASSIGN_RHS, add));
-        graph.addEdge(GroovyFactory.createEdge(add, A, s));
-        graph.addEdge(GroovyFactory.createEdge(add, B, i));
+        graph.addEdge(factory.createEdge(foreach, FOREACH_BODY, ass));
+        graph.addEdge(factory.createEdge(ass, ASSIGN_LHS, s));
+        graph.addEdge(factory.createEdge(ass, ASSIGN_RHS, add));
+        graph.addEdge(factory.createEdge(add, A, s));
+        graph.addEdge(factory.createEdge(add, B, i));
 
-        System.out.println(xstream.toXML(phaseGraph));
+        System.out.println(tools.toEngineXML());
     }
 }
