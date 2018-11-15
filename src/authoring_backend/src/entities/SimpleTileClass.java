@@ -35,7 +35,8 @@ public class SimpleTileClass implements TileClass {
     }
 
     SimpleTileClass(Consumer<SimpleIntegerProperty> setFunc) {
-        super();
+        this();
+
         setClassId(setFunc);
     }
 
