@@ -10,6 +10,7 @@ import javafx.beans.property.SimpleMapProperty;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public interface EntityClass {
 
@@ -22,6 +23,8 @@ public interface EntityClass {
     ReadOnlyIntegerProperty getClassId();
 
     void setClassId(Consumer<SimpleIntegerProperty> setFunc);
+
+    Supplier<ReadOnlyIntegerProperty> returnClassId();
 
     SimpleMapProperty getPropertiesMap();
 
