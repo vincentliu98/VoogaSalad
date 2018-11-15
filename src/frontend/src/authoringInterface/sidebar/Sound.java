@@ -1,32 +1,36 @@
 package authoringInterface.sidebar;
 
-import javafx.scene.Parent;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
+import javafx.scene.media.Media;
+import javafx.scene.text.Text;
 
-import java.util.List;
-
-public class Entity implements DraggableTreeItem<ImageView> {
-    private Image sprite;
+/**
+ * The class that represents a sound file in the side bar.
+ *
+ * @author Haotian Wang
+ */
+public class Sound implements DraggableTreeItem<Text> {
+    private Media soundfile;
     private Integer id;
     private String name;
-    private ImageView preview;
-    private static final TreeItemType type = TreeItemType.ENTITY;
+    private Text preview;
+    private static final TreeItemType type = TreeItemType.SOUND;
 
-    public Entity(Image sprite, Integer id, String name) {
-        this.sprite = sprite;
+    public Sound(Media file, Integer id, String name) {
+        this.soundfile = file;
         this.id = id;
         this.name = name;
     }
 
-    public Image getSprite() {
-        return sprite;
+    public Media getSoundfile() {
+        return soundfile;
     }
 
-    public void setSprite(Image sprite) {
-        this.sprite = sprite;
+    public void setSprite(Media soundfile) {
+        this.soundfile = soundfile;
     }
 
     public Integer getId() {
@@ -49,10 +53,10 @@ public class Entity implements DraggableTreeItem<ImageView> {
      * @return Return a preview of the elements being dragged.
      */
     @Override
-    public ImageView getPreview() {
-        ImageView preview = new ImageView(sprite);
+    public Text getPreview() {
+        Text preview = new Text(name);
         preview.setOpacity(0.5);
-        return preview;
+        return new Text(name);
     }
 
     /**
@@ -60,13 +64,15 @@ public class Entity implements DraggableTreeItem<ImageView> {
      */
     @Override
     public TreeItemType getType() {
-        return type;
+        return TreeItemType.SOUND;
     }
 
     /**
      * Handle the start of dragging action on a DraggableTreeItem.
      *
      * @param canvas
+     * @param x
+     * @param y
      */
     @Override
     public void handlePressed(Pane canvas, double x, double y) {
@@ -76,9 +82,6 @@ public class Entity implements DraggableTreeItem<ImageView> {
         canvas.getChildren().add(preview);
     }
 
-    /**
-     * Handle the start of dragging action on a DraggableTreeItem.
-     */
     @Override
     public void handleDrag(Pane canvas, double x, double y) {
         preview.setX(x);

@@ -2,6 +2,7 @@ package authoringInterface.editor;
 
 import api.SubView;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -29,7 +30,7 @@ public class EditView implements SubView<AnchorPane> {
     /**
      * This method constructs the tabView.
      *
-     * @return A tabView Node to be displayed at the left side of the empty window.
+     * @return A tabView Node to be displayed at the left side of the createGraph window.
      */
     public EditView(){
 //        entityScrollView = new EntityScrollView();

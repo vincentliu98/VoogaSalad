@@ -5,10 +5,11 @@ import graph.SimpleGraph;
 import groovy.api.BlockEdge;
 import groovy.api.BlockGraph;
 import groovy.api.Ports;
-import groovy.api.Try;
+import utils.Try;
 import groovy.graph.blocks.core.GroovyBlock;
 import groovy.graph.blocks.core.RawGroovyBlock;
 import groovy.graph.blocks.core.SourceBlock;
+import groovy.graph.blocks.core.bumper.Bumper;
 import javafx.util.Pair;
 
 import java.util.HashSet;
@@ -33,19 +34,11 @@ public class BlockGraphImpl extends SimpleGraph<GroovyBlock, BlockEdge> implemen
      */
     @Override
     public void addEdge(BlockEdge edge) throws Throwable {
-        var typeCheck = Try.apply(() -> typeCheck(edge));
+        var typeCheck = Try.apply(() -> Bumper.typeCheck(edge, this));
         if(typeCheck.isSuccess()) {
             if(get(edge.from()).stream().noneMatch(p -> p.fromPort() == edge.fromPort())) super.addEdge(edge);
             else throw new PortAlreadyFilledException(edge.from(), edge.fromPort());
         } else typeCheck.get();
-    }
-
-    /**
-     * Does a basic type checking for the new edge
-     */
-    private static BlockEdge typeCheck(BlockEdge e) throws Exception {
-        if ("Something's wrong".length() == 1) throw new Exception("Type check isFailure for edge: " + e);
-        return e;
     }
 
     @Override
@@ -89,13 +82,13 @@ public class BlockGraphImpl extends SimpleGraph<GroovyBlock, BlockEdge> implemen
                 .findFirst()
                 .orElseThrow(Try.supplyThrow(new PortNotConnectedException(from, fromPort))));
 
-        if(find.isFailure() && canBeEmpty) { // handle can-be-empty s
+        if(find.isFailure() && canBeEmpty) { // handle can-be-createGraph s
             return Try.success(new RawGroovyBlock(""));
         } else return find.map(Edge::to);
     }
 
     @Override
     public Try<GroovyBlock> findTarget(GroovyBlock from, Ports fromPort) {
-        return findTarget(from, fromPort, fromPort == Ports.FLOW_OUT); // FLOW_OUT can be empty by default
+        return findTarget(from, fromPort, fromPort == Ports.FLOW_OUT); // FLOW_OUT can be createGraph by default
     }
 }

@@ -1,4 +1,4 @@
-package essentials;
+package utils;
 
 /**
  * Every Classes implementing Replicable interface should be able to replicate itself.
