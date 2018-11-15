@@ -32,6 +32,36 @@ public class GraphTest extends Application {
 
     private double orgSceneX, orgSceneY;
     private double orgTranslateX, orgTranslateY;
+    EventHandler<MouseEvent> circleOnMousePressedEventHandler = new EventHandler<>() {
+
+        @Override
+        public void handle(MouseEvent t) {
+            orgSceneX = t.getSceneX();
+            orgSceneY = t.getSceneY();
+
+            GraphNode node = (GraphNode) t.getSource();
+
+            orgTranslateX = node.getTranslateX();
+            orgTranslateY = node.getTranslateY();
+        }
+    };
+    EventHandler<MouseEvent> circleOnMouseDraggedEventHandler = new EventHandler<>() {
+
+        @Override
+        public void handle(MouseEvent t) {
+            double offsetX = t.getSceneX() - orgSceneX;
+            double offsetY = t.getSceneY() - orgSceneY;
+            double newTranslateX = orgTranslateX + offsetX;
+            double newTranslateY = orgTranslateY + offsetY;
+
+            GraphNode node = (GraphNode) t.getSource();
+
+            node.setTranslateX(newTranslateX);
+            node.setTranslateY(newTranslateY);
+
+            updateLocations(node);
+        }
+    };
     private GridPane root = new GridPane();
     private FlowPane graphBox = new FlowPane();
     private Group group = new Group();
@@ -40,6 +70,10 @@ public class GraphTest extends Application {
     private double newNodeX;
     private double newNodeY;
     private List<GraphNode> nodeList = new ArrayList<>();
+
+    public static void main(String[] args) {
+        launch(args);
+    }
 
     @Override
     public void start(Stage primaryStage) {
@@ -187,38 +221,6 @@ public class GraphTest extends Application {
         return node;
     }
 
-    EventHandler<MouseEvent> circleOnMousePressedEventHandler = new EventHandler<>() {
-
-        @Override
-        public void handle(MouseEvent t) {
-            orgSceneX = t.getSceneX();
-            orgSceneY = t.getSceneY();
-
-            GraphNode node = (GraphNode) t.getSource();
-
-            orgTranslateX = node.getTranslateX();
-            orgTranslateY = node.getTranslateY();
-        }
-    };
-
-    EventHandler<MouseEvent> circleOnMouseDraggedEventHandler = new EventHandler<>() {
-
-        @Override
-        public void handle(MouseEvent t) {
-            double offsetX = t.getSceneX() - orgSceneX;
-            double offsetY = t.getSceneY() - orgSceneY;
-            double newTranslateX = orgTranslateX + offsetX;
-            double newTranslateY = orgTranslateY + offsetY;
-
-            GraphNode node = (GraphNode) t.getSource();
-
-            node.setTranslateX(newTranslateX);
-            node.setTranslateY(newTranslateY);
-
-            updateLocations(node);
-        }
-    };
-
     // Helper method for updating the position when the GraphNode is dragged
     private void updateLocations(GraphNode node) {
 
@@ -239,10 +241,6 @@ public class GraphTest extends Application {
 
             l.setEndY(neighbor.getCenterY());
         }
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 
 }
