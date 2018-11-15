@@ -2,6 +2,7 @@ package groovy.test;
 
 import essentials.GameData;
 import groovy.api.GroovyFactory;
+import groovy.lang.GroovyShell;
 
 import static groovy.api.Ports.*;
 
@@ -120,5 +121,8 @@ public class Test {
         graph.addEdge(e18);
 
         System.out.println(graph.transformToGroovy().get());
+
+        GroovyShell gs = new GroovyShell();
+
     }
 }
