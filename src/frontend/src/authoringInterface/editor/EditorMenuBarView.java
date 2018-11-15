@@ -16,12 +16,12 @@ import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
 import runningGame.GameWindow;
 
-public class MenuBarView implements SubView<MenuBar> {
+public class EditorMenuBarView implements SubView<MenuBar> {
 
     private MenuBar menuBar;
     private GameWindow gameWindow;
 
-    public MenuBarView() {
+    public EditorMenuBarView() {
         menuBar = new MenuBar();
         menuBar.setPrefHeight(View.MENU_BAR_HEIGHT);
 
@@ -81,7 +81,7 @@ public class MenuBarView implements SubView<MenuBar> {
         Stage newWindow = new Stage();
         newWindow.setTitle("Your Game");
         gameWindow = new GameWindow();
-        Scene newScene = new Scene(gameWindow, View.GAME_WIDTH, View.GAME_HEIGHT);
+        Scene newScene = new Scene(gameWindow.getView(), View.GAME_WIDTH, View.GAME_HEIGHT);
         newWindow.setScene(newScene);
         newWindow.setX(MainAuthoringProgram.SCREEN_WIDTH*0.5 - View.GAME_WIDTH*0.5);
         newWindow.setY(MainAuthoringProgram.SCREEN_HEIGHT*0.5 - View.GAME_HEIGHT*0.5);
