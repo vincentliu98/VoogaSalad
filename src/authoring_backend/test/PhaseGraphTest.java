@@ -1,5 +1,3 @@
-package test;
-
 import authoring.AuthoringTools;
 import javafx.scene.input.KeyCode;
 import phase.api.GameEvent;
@@ -9,7 +7,6 @@ import static groovy.api.Ports.*;
 
 public class PhaseGraphTest {
     public static void main(String args[]) throws Throwable {
-        // set up xstream
         var tools = new AuthoringTools();
         var phaseDB = tools.phaseDB();
         var factory = tools.factory();
