@@ -33,7 +33,7 @@ public class GraphPane extends PopUpWindow {
     private double orgSceneX, orgSceneY;
     private double orgTranslateX, orgTranslateY;
     private GridPane root = new GridPane();
-    private FlowPane graphBox = new FlowPane();
+    private Pane graphBox = new Pane();
     private Group group = new Group();
     private VBox itemBox = new VBox();
     private Scene myScene;
@@ -147,7 +147,7 @@ public class GraphPane extends PopUpWindow {
             boolean success = false;
             if (db.hasImage()) {
                 success = true;
-                var newGraphNod = createNode(String.valueOf(nodeList.size()), newNodeX + 50, newNodeY + 50, Color.DEEPSKYBLUE);
+                var newGraphNod = createNode(String.valueOf(nodeList.size()), newNodeX - 50, newNodeY - 50, Color.DEEPSKYBLUE);
                 nodeList.add(newGraphNod);
 //                    connectNodes(nodeList.get(nodeList.size()-2), newGraphNod, "E" + (nodeList.size()-2));
                 group.getChildren().add(newGraphNod);
