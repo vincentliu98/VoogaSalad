@@ -1,27 +1,27 @@
-package test;
-
 import authoring.AuthoringTools;
-import groovy.api.BlockGraph;
+import groovy.api.GroovyFactory;
 import groovy.lang.GroovyShell;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static groovy.api.Ports.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GroovyBlockTest {
-    public static void main(String[] args) throws Throwable {
-        /**
-         *  The goal
-         *  ------------
-         *  $clicked.hp = $clicked.hp - selected.attackPower
-         * 	if($clicked.hp <= 0) $entities.$instances.remove($clicked)
-         * 	$global.turn = 1 - $global.turn
-         * 	$goto("A")
-         * 	------------
-         */
+    private AuthoringTools tools;
+    private GroovyFactory factory;
+    private GroovyShell shell;
 
-        var gameData = new AuthoringTools();
-        var factory = gameData.factory();
+    @BeforeEach
+    public void setupTestData() {
+        tools = new AuthoringTools();
+        factory = tools.factory();
+        shell = new GroovyShell();
+    }
 
-        // System creates a graph for the author
+    @Test
+    public void testBasicTransformation() throws Throwable {
         var graph = factory.createGraph();
         var source = graph.source();
 
@@ -119,12 +119,20 @@ public class GroovyBlockTest {
 
         var e18 = factory.createEdge(assign2, FLOW_OUT, go2);
         graph.addEdge(e18);
+        assertTrue(graph.transformToGroovy().isSuccess());
+    }
 
-//        System.out.println(graph.transformToGroovy().get());
+    @Test
+    public void testSingleLine() throws Throwable {
+        // Testing on the actual shell
+        var singleLineScript = factory.createGuard().transformToGroovy().get();
+        shell.evaluate(singleLineScript);
+        assertTrue((boolean) shell.getVariable("$guardRet"));
+    }
 
-
-        // foreach test
-        BlockGraph graph2 = factory.createGraph();
+    @Test
+    public void testMultiLine() throws Throwable {
+        var graph2 = factory.createGraph();
 
         var s = factory.refBlock("sum").get();
         var init = factory.assignBlock();
@@ -156,24 +164,9 @@ public class GroovyBlockTest {
         graph2.addEdge(factory.createEdge(add, A, s));
         graph2.addEdge(factory.createEdge(add, B, b));
 
-
-        // Testing on the actual shell
-        var shell = new GroovyShell();
-
-        var singleLineScript = factory.createGuard().transformToGroovy().get();
-        System.out.printf("----------- testing single-line evaluation ---------\n%s", singleLineScript);
-        shell.evaluate(singleLineScript);
-        if((boolean) shell.getVariable("$guardRet")) good();
-        else bad();
-
         // Multi-line code evaluation
         var multiLineScript = graph2.transformToGroovy().get();
-        System.out.printf("----------- testing multi-line evaluation ---------\n%s", multiLineScript);
         shell.evaluate(multiLineScript);
-        if((int) shell.getVariable("sum") == 45) good();
-        else bad();
+        assertEquals((int) shell.getVariable("sum"), 45);
     }
-
-    private static void good() { System.out.println("Result: Good"); }
-    private static void bad() { System.out.println("Result: Bad"); }
 }

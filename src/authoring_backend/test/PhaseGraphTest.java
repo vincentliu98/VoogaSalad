@@ -1,5 +1,3 @@
-package test;
-
 import authoring.AuthoringTools;
 import entities.EntitiesCRUDInterface;
 import entities.SimpleEntitiesCRUD;
@@ -12,7 +10,6 @@ import static groovy.api.Ports.*;
 
 public class PhaseGraphTest {
     public static void main(String args[]) throws Throwable {
-        // set up xstream
         var tools = new AuthoringTools();
         var phaseDB = tools.phaseDB();
         var factory = tools.factory();
