@@ -3,13 +3,8 @@ package authoringInterface;
 import api.ParentView;
 import api.SubView;
 import authoringInterface.editor.EditView;
-import authoringInterface.editor.MenuBarView;
-import authoringInterface.sidebar.DraggableTreeItem;
+import authoringInterface.editor.EditorMenuBarView;
 import authoringInterface.sidebar.SideView;
-import authoringInterface.sidebar.TreeItemType;
-import javafx.scene.Node;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -21,7 +16,7 @@ import javafx.stage.Stage;
  */
 public class View implements ParentView<SubView> {
     private AnchorPane rootPane;
-    private MenuBarView menuBar;
+    private EditorMenuBarView menuBar;
     private SideView sideView;
     private EditView editView;
     private Stage primaryStage;
@@ -41,7 +36,7 @@ public class View implements ParentView<SubView> {
     }
 
     private void initializeElements() {
-        menuBar = new MenuBarView();
+        menuBar = new EditorMenuBarView();
         sideView = new SideView(primaryStage);
         editView = new EditView();
     }
@@ -51,11 +46,11 @@ public class View implements ParentView<SubView> {
         AnchorPane.setRightAnchor(menuBar.getView(), 0.0);
         AnchorPane.setTopAnchor(menuBar.getView(), 0.0);
         AnchorPane.setRightAnchor(sideView.getView(), 0.0);
-        AnchorPane.setTopAnchor(sideView.getView(), 30.0);
+        AnchorPane.setTopAnchor(sideView.getView(), MENU_BAR_HEIGHT);
         AnchorPane.setBottomAnchor(sideView.getView(), 0.0);
         AnchorPane.setLeftAnchor(editView.getView(), 0.0);
         AnchorPane.setRightAnchor(editView.getView(), 247.9);
-        AnchorPane.setTopAnchor(editView.getView(), 30.0);
+        AnchorPane.setTopAnchor(editView.getView(), MENU_BAR_HEIGHT);
         AnchorPane.setBottomAnchor(editView.getView(), 0.0);
     }
 
