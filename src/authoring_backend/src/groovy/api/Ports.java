@@ -10,7 +10,6 @@ public enum Ports {
     IF_BODY,
 
     FOREACH_LIST,
-    FOREACH_LOOPVAR,
     FOREACH_BODY,
 
     ASSIGN_LHS,
