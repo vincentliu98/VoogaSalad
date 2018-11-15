@@ -5,7 +5,7 @@ import graph.SimpleGraph;
 import groovy.api.BlockEdge;
 import groovy.api.BlockGraph;
 import groovy.api.Ports;
-import groovy.api.Try;
+import utils.Try;
 import groovy.graph.blocks.core.GroovyBlock;
 import groovy.graph.blocks.core.RawGroovyBlock;
 import groovy.graph.blocks.core.SourceBlock;
@@ -14,8 +14,6 @@ import javafx.util.Pair;
 
 import java.util.HashSet;
 import java.util.Set;
-
-import static groovy.api.Ports.ASSIGN_LHS;
 
 public class BlockGraphImpl extends SimpleGraph<GroovyBlock, BlockEdge> implements BlockGraph {
     private SourceBlock source;
@@ -84,13 +82,13 @@ public class BlockGraphImpl extends SimpleGraph<GroovyBlock, BlockEdge> implemen
                 .findFirst()
                 .orElseThrow(Try.supplyThrow(new PortNotConnectedException(from, fromPort))));
 
-        if(find.isFailure() && canBeEmpty) { // handle can-be-empty s
+        if(find.isFailure() && canBeEmpty) { // handle can-be-createGraph s
             return Try.success(new RawGroovyBlock(""));
         } else return find.map(Edge::to);
     }
 
     @Override
     public Try<GroovyBlock> findTarget(GroovyBlock from, Ports fromPort) {
-        return findTarget(from, fromPort, fromPort == Ports.FLOW_OUT); // FLOW_OUT can be empty by default
+        return findTarget(from, fromPort, fromPort == Ports.FLOW_OUT); // FLOW_OUT can be createGraph by default
     }
 }

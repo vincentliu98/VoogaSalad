@@ -117,10 +117,10 @@
 //
 //        // update the texts in the item
 //        @Override
-//        public void updateItem(String item, boolean empty) {
-//            super.updateItem(item, empty);
+//        public void updateItem(String item, boolean createGraph) {
+//            super.updateItem(item, createGraph);
 //
-//            if (empty) {
+//            if (createGraph) {
 //                setText(null);
 //                setGraphic(null);
 //            } else {

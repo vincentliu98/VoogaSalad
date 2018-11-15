@@ -1,7 +1,6 @@
 package groovy.graph.blocks.small_factory;
 
-import essentials.GameData;
-import groovy.api.Try;
+import utils.Try;
 import groovy.graph.blocks.core.LiteralBlock;
 
 import java.util.Arrays;
