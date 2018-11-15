@@ -1,12 +1,8 @@
 package entities;
 
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleMapProperty;
+import javafx.collections.FXCollections;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 public class SimpleEntitiesCRUD implements EntitiesCRUDInterface {
     private String CONST_TILEMAP = "tileMap";
@@ -17,8 +13,8 @@ public class SimpleEntitiesCRUD implements EntitiesCRUDInterface {
     private IdManager myIdManager;
 
     public SimpleEntitiesCRUD() {
-        tileMap = new SimpleMapProperty<>(this, CONST_TILEMAP);
-        spriteMap = new SimpleMapProperty<>(this, CONST_SPRITEMAP);
+        tileMap = new SimpleMapProperty<>(this, CONST_TILEMAP, FXCollections.observableHashMap());
+        spriteMap = new SimpleMapProperty<>(this, CONST_SPRITEMAP, FXCollections.observableHashMap());
         myIdManager = new IdManagerClass();
     }
 
@@ -29,6 +25,7 @@ public class SimpleEntitiesCRUD implements EntitiesCRUDInterface {
 
     @Override
     public boolean createTileClass(String name) {
+        System.out.println(tileMap.get() == null);
         if (!tileMap.containsKey(name)) {
             tileMap.put(name, new SimpleTileClass(myIdManager.requestClassIdFunc()));
             return true;

@@ -35,7 +35,7 @@ public class SimpleSpriteClass implements SpriteClass {
     }
 
     SimpleSpriteClass(Consumer<SimpleIntegerProperty> setFunc) {
-        super();
+        this();
         setClassId(setFunc);
     }
 

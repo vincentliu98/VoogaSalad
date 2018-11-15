@@ -1,6 +1,9 @@
 package test;
 
 import authoring.AuthoringTools;
+import entities.EntitiesCRUDInterface;
+import entities.SimpleEntitiesCRUD;
+import entities.TileClass;
 import javafx.scene.input.KeyCode;
 import phase.api.GameEvent;
 import phase.api.Phase;
@@ -59,6 +62,21 @@ public class PhaseGraphTest {
         graph.addEdge(factory.createEdge(ass, ASSIGN_RHS, add));
         graph.addEdge(factory.createEdge(add, A, s));
         graph.addEdge(factory.createEdge(add, B, i));
+
+
+
+
+        // Testing TileClass CRUD Interface
+        EntitiesCRUDInterface eci = new SimpleEntitiesCRUD();
+        eci.createTileClass("demoClass");
+
+        TileClass demo = eci.getTileClass("demoClass");
+        demo.setDefaultHeightWidth(1, 1);
+        demo.addProperty("color", 14);
+
+
+
+
 
         System.out.println(tools.toEngineXML());
     }
