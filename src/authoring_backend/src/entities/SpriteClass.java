@@ -1,8 +1,10 @@
 package entities;
 
+import javafx.beans.property.SimpleBooleanProperty;
+
 public interface SpriteClass extends EntityClass {
 
-    boolean isMovable();
+    SimpleBooleanProperty isMovable();
 
     void setMovable(boolean move);
 }
