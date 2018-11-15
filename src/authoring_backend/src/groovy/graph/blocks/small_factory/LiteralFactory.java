@@ -11,6 +11,11 @@ import java.util.List;
  *  Name explains everything!
  */
 public class LiteralFactory {
+    public static Try<LiteralBlock> booleanBlock(String value) {
+        return Try.apply(() -> Boolean.parseBoolean(value.trim()))
+                  .map(i -> new LiteralBlock(i.toString(), "Boolean"));
+    }
+
     public static Try<LiteralBlock> integerBlock(String value) {
         return Try.apply(() -> Integer.parseInt(value.trim()))
                   .map(i -> new LiteralBlock(i.toString(), "Integer"));

@@ -20,7 +20,7 @@ import java.util.Stack;
  * storing the cell in the ListObjectManager. All the user's settings will go here,
  * and it supports drag and drop functionality
  *
- * Note that major categories of TreeItem can only be set during initialization of ListObjectManager, e.g. "Entity"
+ * Note that major categories of TreeItem can only be set during initialization of ListObjectManager, e.g. "EntityClass"
  *
  * @author jl729
  */
@@ -69,7 +69,7 @@ public class SideView implements SubView<StackPane> {
             // create tree items to accommodate objects
             TreeItem<String> empLeaf = new TreeItem<>(listObject.getName());
             boolean found = false;
-            // loop through sub items e.g. "Entity" and "Grid"
+            // loop through sub items e.g. "EntityClass" and "Grid"
             for (TreeItem<String> depNode : rootNode.getChildren()) {
                 if (depNode.getValue().contentEquals(listObject.getType())) {
                     depNode.getChildren().add(empLeaf);
@@ -116,9 +116,10 @@ public class SideView implements SubView<StackPane> {
                 var id = getTreeItem().getChildren().size();
                 var myItem = getTreeItem();
                 if (type.equals("Entity")){
-                    new EntityWindow(primaryStage, objectManager, mySideView, id, myItem);
+                    var window = new EntityWindow(primaryStage, objectManager, mySideView, id, myItem);
+                    window.showWindow();
                 }
-                else if (type.equals("Tile")){
+                else if (type.equals("TileClass")){
                     // Generate a TileWindow
 //                    new EntityWindow(primaryStage, objectManager);
                 }

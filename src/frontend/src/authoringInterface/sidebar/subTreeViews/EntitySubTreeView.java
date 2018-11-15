@@ -4,7 +4,7 @@ import javafx.scene.control.TreeItem;
 import javafx.stage.Stage;
 
 /**
- * A list of TreeItem representing Entity
+ * A list of TreeItem representing EntityClass
  *
  * @author jl729
  */
@@ -12,9 +12,9 @@ import javafx.stage.Stage;
 public class EntitySubTreeView extends SubTreeView {
 
     public EntitySubTreeView(Stage primaryStage) {
-        super("Entity", primaryStage);
+        super("EntityClass", primaryStage);
         for (int i = 1; i < 3; i++) {
-            TreeItem<String> item = new TreeItem<>("Entity" + i);
+            TreeItem<String> item = new TreeItem<>("EntityClass" + i);
             getRootItem().getChildren().add(item);
         }
     }
