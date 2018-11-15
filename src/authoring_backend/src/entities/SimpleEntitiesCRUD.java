@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleMapProperty;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class SimpleEntitiesCRUD implements EntitiesCRUDInterface {
     private String CONST_TILEMAP = "tileMap";
@@ -29,8 +30,7 @@ public class SimpleEntitiesCRUD implements EntitiesCRUDInterface {
     @Override
     public boolean createTileClass(String name) {
         if (!tileMap.containsKey(name)) {
-            Consumer<SimpleIntegerProperty> setIdFunc = myIdManager.requestSetIdFunc();
-            tileMap.put(name, new SimpleTileClass(setIdFunc));
+            tileMap.put(name, new SimpleTileClass(myIdManager.requestClassIdFunc()));
             return true;
         }
         return false;
@@ -46,14 +46,17 @@ public class SimpleEntitiesCRUD implements EntitiesCRUDInterface {
 
     @Override
     public boolean deleteTileClass(String name) {
+        if (!tileMap.containsKey(name)) {
+            return false;
+        }
+        myIdManager.returnClassIdFunc(tileMap.get(name).returnClassId());
         return tileMap.remove(name) != null;
     }
 
     @Override
     public boolean createSpriteClass(String name) {
         if (!spriteMap.containsKey(name)) {
-            Consumer<SimpleIntegerProperty> setIdFunc = myIdManager.requestSetIdFunc();
-            spriteMap.put(name, new SimpleSpriteClass(setIdFunc));
+            spriteMap.put(name, new SimpleSpriteClass(myIdManager.requestClassIdFunc()));
             return true;
         }
         return false;
@@ -69,9 +72,12 @@ public class SimpleEntitiesCRUD implements EntitiesCRUDInterface {
 
     @Override
     public boolean deleteSpriteClass(String name) {
+        if (!spriteMap.containsKey(name)) {
+            return false;
+        }
+        myIdManager.returnClassIdFunc(spriteMap.get(name).returnClassId());
         return spriteMap.remove(name) != null;
     }
-
     @Override
     public String toXML() {
         return null;

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Collections;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class SimpleSpriteClass implements SpriteClass {
 
@@ -50,6 +51,11 @@ public class SimpleSpriteClass implements SpriteClass {
     }
 
     @Override
+    public Supplier<ReadOnlyIntegerProperty> returnClassId() {
+        return this::getClassId;
+    }
+
+    @Override
     public SimpleMapProperty getPropertiesMap() {
         return propertiesMap;
     }
@@ -72,6 +78,16 @@ public class SimpleSpriteClass implements SpriteClass {
     public void setDefaultHeightWidth(int defaultHeight, int defaultWidth) {
         height.setValue(defaultHeight);
         width.setValue(defaultWidth);
+    }
+
+    @Override
+    public SimpleIntegerProperty getDefaultHeight() {
+        return height;
+    }
+
+    @Override
+    public SimpleIntegerProperty getDefaultWidth() {
+        return width;
     }
 
     @Override
@@ -104,6 +120,11 @@ public class SimpleSpriteClass implements SpriteClass {
     @Override
     public BlockGraph getImageSelectorCode() {
         return imageSelector;
+    }
+
+    @Override
+    public EntityInstance createInstance() {
+        return null;
     }
 
     @Override

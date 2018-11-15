@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Collections;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class SimpleTileClass implements TileClass {
 
@@ -49,6 +50,11 @@ public class SimpleTileClass implements TileClass {
     }
 
     @Override
+    public Supplier<ReadOnlyIntegerProperty> returnClassId() {
+        return this::getClassId;
+    }
+
+    @Override
     public SimpleMapProperty getPropertiesMap() {
         return propertiesMap;
     }
@@ -72,6 +78,17 @@ public class SimpleTileClass implements TileClass {
         height.setValue(defaultHeight);
         width.setValue(defaultWidth);
     }
+
+    @Override
+    public SimpleIntegerProperty getDefaultHeight() {
+        return height;
+    }
+
+    @Override
+    public SimpleIntegerProperty getDefaultWidth() {
+        return width;
+    }
+
 
     @Override
     public SimpleListProperty getImagePathList() {
@@ -103,6 +120,11 @@ public class SimpleTileClass implements TileClass {
     @Override
     public BlockGraph getImageSelectorCode() {
         return imageSelector;
+    }
+
+    @Override
+    public EntityInstance createInstance() {
+        return null;
     }
 
     @Override

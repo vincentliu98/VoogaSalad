@@ -7,14 +7,21 @@ import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleMapProperty;
 
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public interface EntityClass {
 
     void setDefaultHeightWidth(int defaultHeight, int defaultWidth);
 
+    SimpleIntegerProperty getDefaultHeight();
+
+    SimpleIntegerProperty getDefaultWidth();
+
     ReadOnlyIntegerProperty getClassId();
 
     void setClassId(Consumer<SimpleIntegerProperty> setFunc);
+
+    Supplier<ReadOnlyIntegerProperty> returnClassId();
 
     SimpleMapProperty getPropertiesMap();
 
@@ -32,4 +39,5 @@ public interface EntityClass {
 
     BlockGraph getImageSelectorCode();
 
+    EntityInstance createInstance();
 }
