@@ -15,7 +15,7 @@ public class SimpleSpriteClass implements SpriteClass {
     private String CONST_MOVABLE = "movable";
     private String CONST_IMAGEPATHLIST = "imagePathList";
     private String CONST_PROPERTIESMAP = "propertiesMap";
-    
+
     private ReadOnlyIntegerWrapper id;
     private SimpleIntegerProperty height;
     private SimpleIntegerProperty width;
