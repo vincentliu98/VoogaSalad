@@ -18,7 +18,7 @@ public class EdgeConnectWindow extends PopUpWindow {
 
     public static final Double WIDTH = 500.0;
     public static final Double HEIGHT = 60.0;
-//    private final GraphTest graphTest;
+    //    private final GraphTest graphTest;
     private final Button applyBtn;
     private final GraphPane graphPane;
     private TextField nodeOne = new TextField();

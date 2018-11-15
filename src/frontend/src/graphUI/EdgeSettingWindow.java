@@ -21,7 +21,7 @@ public class EdgeSettingWindow extends PopUpWindow {
 
     public EdgeSettingWindow(Stage primaryStage) {
         super(primaryStage);
-        dialog.setTitle("Entity Setting");
+        dialog.setTitle("Edge Setting");
 
         root = new HBox();
         applyBtn = new Button("Apply");

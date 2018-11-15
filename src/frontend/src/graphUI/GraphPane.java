@@ -30,10 +30,42 @@ import java.util.List;
 
 public class GraphPane extends PopUpWindow {
 
+    public static final Double WIDTH = 700.0;
+    public static final Double HEIGHT = 500.0;
     private double orgSceneX, orgSceneY;
     private double orgTranslateX, orgTranslateY;
+    EventHandler<MouseEvent> circleOnMousePressedEventHandler = new EventHandler<>() {
+
+        @Override
+        public void handle(MouseEvent t) {
+            orgSceneX = t.getSceneX();
+            orgSceneY = t.getSceneY();
+
+            GraphNode node = (GraphNode) t.getSource();
+
+            orgTranslateX = node.getTranslateX();
+            orgTranslateY = node.getTranslateY();
+        }
+    };
+    EventHandler<MouseEvent> circleOnMouseDraggedEventHandler = new EventHandler<>() {
+
+        @Override
+        public void handle(MouseEvent t) {
+            double offsetX = t.getSceneX() - orgSceneX;
+            double offsetY = t.getSceneY() - orgSceneY;
+            double newTranslateX = orgTranslateX + offsetX;
+            double newTranslateY = orgTranslateY + offsetY;
+
+            GraphNode node = (GraphNode) t.getSource();
+
+            node.setTranslateX(newTranslateX);
+            node.setTranslateY(newTranslateY);
+
+            updateLocations(node);
+        }
+    };
     private GridPane root = new GridPane();
-    private FlowPane graphBox = new FlowPane();
+    private Pane graphBox = new Pane();
     private Group group = new Group();
     private VBox itemBox = new VBox();
     private Scene myScene;
@@ -41,8 +73,6 @@ public class GraphPane extends PopUpWindow {
     private double newNodeY;
     private Integer edgeNum = 0;
     private List<GraphNode> nodeList = new ArrayList<>();
-    public static final Double WIDTH = 700.0;
-    public static final Double HEIGHT = 500.0;
 
     public GraphPane(Stage primaryStage) {
         super(primaryStage);
@@ -147,7 +177,7 @@ public class GraphPane extends PopUpWindow {
             boolean success = false;
             if (db.hasImage()) {
                 success = true;
-                var newGraphNod = createNode(String.valueOf(nodeList.size()), newNodeX + 50, newNodeY + 50, Color.DEEPSKYBLUE);
+                var newGraphNod = createNode(String.valueOf(nodeList.size()), newNodeX - 50, newNodeY - 50, Color.DEEPSKYBLUE);
                 nodeList.add(newGraphNod);
 //                    connectNodes(nodeList.get(nodeList.size()-2), newGraphNod, "E" + (nodeList.size()-2));
                 group.getChildren().add(newGraphNod);
@@ -202,38 +232,6 @@ public class GraphPane extends PopUpWindow {
         node.setOnMouseClicked(e -> new NodeSettingWindow(new Stage()));
         return node;
     }
-
-    EventHandler<MouseEvent> circleOnMousePressedEventHandler = new EventHandler<>() {
-
-        @Override
-        public void handle(MouseEvent t) {
-            orgSceneX = t.getSceneX();
-            orgSceneY = t.getSceneY();
-
-            GraphNode node = (GraphNode) t.getSource();
-
-            orgTranslateX = node.getTranslateX();
-            orgTranslateY = node.getTranslateY();
-        }
-    };
-
-    EventHandler<MouseEvent> circleOnMouseDraggedEventHandler = new EventHandler<>() {
-
-        @Override
-        public void handle(MouseEvent t) {
-            double offsetX = t.getSceneX() - orgSceneX;
-            double offsetY = t.getSceneY() - orgSceneY;
-            double newTranslateX = orgTranslateX + offsetX;
-            double newTranslateY = orgTranslateY + offsetY;
-
-            GraphNode node = (GraphNode) t.getSource();
-
-            node.setTranslateX(newTranslateX);
-            node.setTranslateY(newTranslateY);
-
-            updateLocations(node);
-        }
-    };
 
     // Helper method for updating the position when the GraphNode is dragged
     private void updateLocations(GraphNode node) {
