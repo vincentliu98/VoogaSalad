@@ -74,6 +74,17 @@ public class SimpleTileClass implements TileClass {
     }
 
     @Override
+    public SimpleIntegerProperty getDefaultHeight() {
+        return height;
+    }
+
+    @Override
+    public SimpleIntegerProperty getDefaultWidth() {
+        return width;
+    }
+
+
+    @Override
     public SimpleListProperty getImagePathList() {
         return imagePathList;
     }

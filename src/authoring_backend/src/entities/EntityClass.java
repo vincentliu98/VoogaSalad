@@ -15,6 +15,10 @@ public interface EntityClass {
 
     void setDefaultHeightWidth(int defaultHeight, int defaultWidth);
 
+    SimpleIntegerProperty getDefaultHeight();
+
+    SimpleIntegerProperty getDefaultWidth();
+
     ReadOnlyIntegerProperty getClassId();
 
     void setClassId(Consumer<SimpleIntegerProperty> setFunc);
@@ -35,4 +39,5 @@ public interface EntityClass {
 
     BlockGraph getImageSelectorCode();
 
+    EntityInstance createInstance();
 }
