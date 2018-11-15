@@ -30,7 +30,7 @@ public class EditView implements SubView<AnchorPane> {
     /**
      * This method constructs the tabView.
      *
-     * @return A tabView Node to be displayed at the left side of the empty window.
+     * @return A tabView Node to be displayed at the left side of the createGraph window.
      */
     public EditView(){
 //        entityScrollView = new EntityScrollView();

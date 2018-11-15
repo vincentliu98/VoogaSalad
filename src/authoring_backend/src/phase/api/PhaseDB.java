@@ -11,18 +11,19 @@ import java.util.List;
 import java.util.Set;
 
 /**
- *  PhaseManager manages all the list that's "out" there, and works as a factory for graph/phase/transition.
+ *  PhaseDB keeps track of all the PhaseGraphs that are "out" there,
+ *  and also works as a factory for graph/phase/createTransition.
  */
-public class PhaseManager {
+public class PhaseDB {
     private Set<String> namespace;
     private List<PhaseGraph> phases;
 
-    public PhaseManager() {
+    public PhaseDB() {
         this.namespace = new HashSet<>();
         phases = new ArrayList<>();
     }
 
-    public Try<PhaseGraph> empty(String name) {
+    public Try<PhaseGraph> createGraph(String name) {
         if(namespace.add(name)) {
             var graph = new PhaseGraphImpl(name, namespace::add);
             phases.add(graph);
@@ -35,9 +36,9 @@ public class PhaseManager {
         phases.remove(graph);
     }
 
-    public Phase phase() { return new Phase(); }
+    public Phase createPhase() { return new Phase(); }
 
-    public Transition transition(Phase from, GameEvent trigger, Phase to) {
+    public Transition createTransition(Phase from, GameEvent trigger, Phase to) {
         return new TransitionImpl(from, trigger, to);
     }
 }

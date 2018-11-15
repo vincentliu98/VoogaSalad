@@ -9,8 +9,8 @@ import phase.api.Transition;
 
 /**
  *  The implementation of Transition initializes
- *  guard -> empty guard that passes everything in
- *  exec -> empty graph with nothing to execute
+ *  guard -> createGraph guard that passes everything in
+ *  exec -> createGraph graph with nothing to execute
  */
 public class TransitionImpl extends SimpleEdge<Phase> implements Transition {
     private GameEvent trigger;
@@ -20,8 +20,8 @@ public class TransitionImpl extends SimpleEdge<Phase> implements Transition {
     public TransitionImpl(Phase from, GameEvent trigger, Phase to) {
         super(from, to);
         this.trigger = trigger;
-        this.guard = GroovyFactory.emptyGuard();
-        this.execution = GroovyFactory.emptyGraph();
+        this.guard = GroovyFactory.createGuard();
+        this.execution = GroovyFactory.createGraph();
     }
 
     @Override

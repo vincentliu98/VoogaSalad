@@ -30,7 +30,7 @@ public interface BlockGraph extends Graph<GroovyBlock, BlockEdge> {
 
     /**
      *  Finds the target block of an edge starting from specific port of a GroovyBlock.
-     *  if canBeEmpty is true, it returns an empty GroovyBlock.
+     *  if canBeEmpty is true, it returns an createGraph GroovyBlock.
      */
     Try<GroovyBlock> findTarget(GroovyBlock from, Ports fromPort, boolean canBeEmpty);
 

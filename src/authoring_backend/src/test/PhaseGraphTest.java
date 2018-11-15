@@ -1,31 +1,22 @@
 package test;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.DomDriver;
-import groovy.api.BlockGraphConverter;
+import authoring.Converters;
 import groovy.api.GroovyFactory;
-import groovy.graph.BlockGraphImpl;
 import javafx.scene.input.KeyCode;
-import phase.PhaseGraphImpl;
 import phase.TransitionImpl;
 import phase.api.GameEvent;
 import phase.api.Phase;
-import phase.api.PhaseGraphConverter;
-import phase.api.PhaseManager;
+import phase.api.PhaseDB;
 
 import static groovy.api.Ports.*;
 
 public class PhaseGraphTest {
     public static void main(String args[]) throws Throwable {
         // set up xstream
-        var xstream = new XStream(new DomDriver());
-        xstream.registerConverter(new BlockGraphConverter());
-        xstream.registerConverter(new PhaseGraphConverter());
-        xstream.alias("groovy", BlockGraphImpl.class);
-        xstream.alias("phase-graph", PhaseGraphImpl.class);
-        var manager = new PhaseManager();
+        var xstream = Converters.serializerForEngine();
+        var manager = new PhaseDB();
 
-        var phaseGraph = manager.empty("A").get();
+        var phaseGraph = manager.createGraph("A").get();
 
         var a = new Phase();
         var b = new Phase();
@@ -48,16 +39,16 @@ public class PhaseGraphTest {
         graph.addNode(s);
         graph.addNode(init);
         graph.addNode(zero2);
-        graph.addEdge(GroovyFactory.makeEdge(init, ASSIGN_LHS, s));
-        graph.addEdge(GroovyFactory.makeEdge(init, ASSIGN_RHS, zero2));
-        graph.addEdge(GroovyFactory.makeEdge(graph.source(), FLOW_OUT, init));
+        graph.addEdge(GroovyFactory.createEdge(init, ASSIGN_LHS, s));
+        graph.addEdge(GroovyFactory.createEdge(init, ASSIGN_RHS, zero2));
+        graph.addEdge(GroovyFactory.createEdge(graph.source(), FLOW_OUT, init));
 
         var range = GroovyFactory.range(1, 10).get();
         var foreach = GroovyFactory.forEachBlock("i");
         graph.addNode(range);
         graph.addNode(foreach);
-        graph.addEdge(GroovyFactory.makeEdge(foreach, FOREACH_LIST, range));
-        graph.addEdge(GroovyFactory.makeEdge(init, FLOW_OUT, foreach));
+        graph.addEdge(GroovyFactory.createEdge(foreach, FOREACH_LIST, range));
+        graph.addEdge(GroovyFactory.createEdge(init, FLOW_OUT, foreach));
 
         var ass = GroovyFactory.assignBlock();
         var add = GroovyFactory.add();
@@ -65,11 +56,11 @@ public class PhaseGraphTest {
         graph.addNode(ass);
         graph.addNode(add);
         graph.addNode(i);
-        graph.addEdge(GroovyFactory.makeEdge(foreach, FOREACH_BODY, ass));
-        graph.addEdge(GroovyFactory.makeEdge(ass, ASSIGN_LHS, s));
-        graph.addEdge(GroovyFactory.makeEdge(ass, ASSIGN_RHS, add));
-        graph.addEdge(GroovyFactory.makeEdge(add, A, s));
-        graph.addEdge(GroovyFactory.makeEdge(add, B, i));
+        graph.addEdge(GroovyFactory.createEdge(foreach, FOREACH_BODY, ass));
+        graph.addEdge(GroovyFactory.createEdge(ass, ASSIGN_LHS, s));
+        graph.addEdge(GroovyFactory.createEdge(ass, ASSIGN_RHS, add));
+        graph.addEdge(GroovyFactory.createEdge(add, A, s));
+        graph.addEdge(GroovyFactory.createEdge(add, B, i));
 
         System.out.println(xstream.toXML(phaseGraph));
     }
