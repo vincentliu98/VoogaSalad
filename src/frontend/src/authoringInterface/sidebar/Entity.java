@@ -8,6 +8,7 @@ public class Entity {
     private Image sprite;
     private Integer id;
     private String name;
+    private static final TreeItemType type = TreeItemType.ENTITY;
 
     public Entity(Image sprite, Integer id, String name) {
         this.sprite = sprite;

@@ -1,5 +1,6 @@
 package authoringInterface;
 
+import api.DraggingCanvas;
 import api.ParentView;
 import api.SubView;
 import authoringInterface.editor.EditView;
@@ -19,7 +20,7 @@ import javafx.stage.Stage;
  * @author  Haotian Wang
  * @author jl729
  */
-public class View implements ParentView<SubView> {
+public class View implements ParentView<SubView>, DraggingCanvas {
     private AnchorPane rootPane;
     private MenuBarView menuBar;
     private SideView sideView;
