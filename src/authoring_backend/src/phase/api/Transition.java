@@ -13,5 +13,5 @@ import groovy.api.BlockGraph;
 public interface Transition extends Edge<Phase> {
     GameEvent trigger();
     BlockGraph guard();
-    BlockGraph execution();
+    BlockGraph exec();
 }

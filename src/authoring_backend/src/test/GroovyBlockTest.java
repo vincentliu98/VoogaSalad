@@ -1,13 +1,14 @@
-package groovy.test;
+package test;
 
 import essentials.GameData;
 import groovy.api.BlockGraph;
 import groovy.api.GroovyFactory;
 import groovy.graph.BlockGraphImpl;
+import groovy.lang.GroovyShell;
 
 import static groovy.api.Ports.*;
 
-public class Test {
+public class GroovyBlockTest {
     public static void main(String[] args) throws Throwable {
         /**
          *  The goal
@@ -30,7 +31,7 @@ public class Test {
         graph.addNode(assign);
 
         // The author creates an ref block
-        var hpRef = GroovyFactory.refBlock("$clicked.hp", data).get();
+        var hpRef = GroovyFactory.refBlock("$clicked.hp").get();
         graph.addNode(hpRef);
 
         // The author connects these things
@@ -43,7 +44,7 @@ public class Test {
         // goes on to make - block and attackPower block
         var minus = GroovyFactory.binaryBlock("-");
         graph.addNode(minus);
-        var attackRef = GroovyFactory.refBlock("selected.attackPower", data).get();
+        var attackRef = GroovyFactory.refBlock("selected.attackPower").get();
         graph.addNode(attackRef);
 
         // Then he connects everything.
@@ -74,7 +75,7 @@ public class Test {
         // we should make this a separate thing for convenience
         var removeInstance = GroovyFactory.$remove();
         graph.addNode(removeInstance);
-        var clicked = GroovyFactory.$clicked(data).get();
+        var clicked = GroovyFactory.$clicked();
         graph.addNode(clicked);
         var e9 = GroovyFactory.makeEdge(removeInstance, A, clicked);
         graph.addEdge(e9);
@@ -87,7 +88,7 @@ public class Test {
 
         var assign2 = GroovyFactory.assignBlock();
         graph.addNode(assign2);
-        var turnRef = GroovyFactory.refBlock("$global.turn", data).get();
+        var turnRef = GroovyFactory.refBlock("$global.turn").get();
         graph.addNode(turnRef);
         var minus2 = GroovyFactory.minus();
         graph.addNode(minus2);
@@ -120,24 +121,60 @@ public class Test {
         var e18 = GroovyFactory.makeEdge(assign2, FLOW_OUT, go2);
         graph.addEdge(e18);
 
-        System.out.println(graph.transformToGroovy().get());
+//        System.out.println(graph.transformToGroovy().get());
 
 
         // foreach test
         BlockGraph graph2 = new BlockGraphImpl();
+
+        var s = GroovyFactory.refBlock("sum").get();
+        var init = GroovyFactory.assignBlock();
+        var zero2 = GroovyFactory.integerBlock("0").get();
+        graph2.addNode(s);
+        graph2.addNode(init);
+        graph2.addNode(zero2);
+        graph2.addEdge(GroovyFactory.makeEdge(init, ASSIGN_LHS, s));
+        graph2.addEdge(GroovyFactory.makeEdge(init, ASSIGN_RHS, zero2));
+        graph2.addEdge(GroovyFactory.makeEdge(graph2.source(), FLOW_OUT, init));
+
         var range = GroovyFactory.range(1, 10).get();
-        graph2.addNode(range);
         var foreach = GroovyFactory.forEachBlock("i");
+        graph2.addNode(range);
         graph2.addNode(foreach);
         graph2.addEdge(GroovyFactory.makeEdge(foreach, FOREACH_LIST, range));
-        graph2.addEdge(GroovyFactory.makeEdge(graph2.source(), FLOW_OUT, foreach));
+        graph2.addEdge(GroovyFactory.makeEdge(init, FLOW_OUT, foreach));
 
-        var m = GroovyFactory.$clicked(data).get();
+
         var ass = GroovyFactory.assignBlock();
-        var s = GroovyFactory.refBlock("selected.bar", data).get();
+        var add = GroovyFactory.add();
+        var b = GroovyFactory.refBlock("i").get();
+        graph2.addNode(ass);
+        graph2.addNode(add);
+        graph2.addNode(b);
         graph2.addEdge(GroovyFactory.makeEdge(foreach, FOREACH_BODY, ass));
-        graph2.addEdge(GroovyFactory.makeEdge(ass, ASSIGN_LHS, m));
-        graph2.addEdge(GroovyFactory.makeEdge(ass, ASSIGN_RHS, s));
-        System.out.println(graph2.transformToGroovy().get());
+        graph2.addEdge(GroovyFactory.makeEdge(ass, ASSIGN_LHS, s));
+        graph2.addEdge(GroovyFactory.makeEdge(ass, ASSIGN_RHS, add));
+        graph2.addEdge(GroovyFactory.makeEdge(add, A, s));
+        graph2.addEdge(GroovyFactory.makeEdge(add, B, b));
+
+
+        // Testing on the actual shell
+        var shell = new GroovyShell();
+
+        var singleLineScript = GroovyFactory.emptyGuard().transformToGroovy().get();
+        System.out.printf("----------- testing single-line evaluation ---------\n%s", singleLineScript);
+        shell.evaluate(singleLineScript);
+        if((boolean) shell.getVariable("$guardRet")) good();
+        else bad();
+
+        // Multi-line code evaluation
+        var multiLineScript = graph2.transformToGroovy().get();
+        System.out.printf("----------- testing multi-line evaluation ---------\n%s", multiLineScript);
+        shell.evaluate(multiLineScript);
+        if((int) shell.getVariable("sum") == 45) good();
+        else bad();
     }
+
+    private static void good() { System.out.println("Result: Good"); }
+    private static void bad() { System.out.println("Result: Bad"); }
 }

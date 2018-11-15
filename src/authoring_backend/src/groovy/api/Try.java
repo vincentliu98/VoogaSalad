@@ -18,7 +18,7 @@ public abstract class Try<T> {
     abstract public <U> Try<U> flatMap(Function<T, Try<U>> f);
     abstract public <U> Try<U> map(Function<T, U> f);
     abstract public void forEach(Consumer<T> op);
-    abstract public T getOrElse(T backup);
+    abstract public T get(T backup);
 
     public static <U> Try<U> apply(ThrowingSupplier<U> op ) {
         try { return Try.success(op.get()); }
@@ -52,7 +52,7 @@ public abstract class Try<T> {
         public void forEach(Consumer<R> op) { op.accept(val); }
 
         @Override
-        public R getOrElse(R backup) { return val; }
+        public R get(R backup) { return val; }
     }
 
     private static class Failure<R> extends Try<R> {
@@ -79,7 +79,7 @@ public abstract class Try<T> {
         public void forEach(Consumer<R> op) { }
 
         @Override
-        public R getOrElse(R backup) { return backup; }
+        public R get(R backup) { return backup; }
     }
 
 }
