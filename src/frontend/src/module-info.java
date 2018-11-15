@@ -7,4 +7,5 @@ module frontend {
     requires authoring_backend;
 
     exports authoringInterface;
+    exports graphUI;
 }

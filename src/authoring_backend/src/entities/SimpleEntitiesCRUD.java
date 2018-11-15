@@ -71,4 +71,9 @@ public class SimpleEntitiesCRUD implements EntitiesCRUDInterface {
     public boolean deleteSpriteClass(String name) {
         return spriteMap.remove(name) != null;
     }
+
+    @Override
+    public String toXML() {
+        return null;
+    }
 }

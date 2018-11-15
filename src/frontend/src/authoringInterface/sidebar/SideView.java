@@ -116,8 +116,7 @@ public class SideView implements SubView<StackPane> {
                 var id = getTreeItem().getChildren().size();
                 var myItem = getTreeItem();
                 if (type.equals("Entity")){
-                    var window = new EntityWindow(primaryStage, objectManager, mySideView, id, myItem);
-                    window.showWindow();
+                    new EntityWindow(primaryStage, objectManager, mySideView, id, myItem);
                 }
                 else if (type.equals("TileClass")){
                     // Generate a TileWindow
