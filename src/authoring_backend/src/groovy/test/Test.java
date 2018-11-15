@@ -1,7 +1,11 @@
 package groovy.test;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
+import com.thoughtworks.xstream.io.xml.XppDriver;
 import essentials.GameData;
 import groovy.api.BlockGraph;
+import groovy.api.BlockGraphConverter;
 import groovy.api.GroovyFactory;
 import groovy.graph.BlockGraphImpl;
 
@@ -120,7 +124,7 @@ public class Test {
         var e18 = GroovyFactory.makeEdge(assign2, FLOW_OUT, go2);
         graph.addEdge(e18);
 
-        System.out.println(graph.transformToGroovy().get());
+//        System.out.println(graph.transformToGroovy().get());
 
 
         // foreach test
@@ -138,6 +142,14 @@ public class Test {
         graph2.addEdge(GroovyFactory.makeEdge(foreach, FOREACH_BODY, ass));
         graph2.addEdge(GroovyFactory.makeEdge(ass, ASSIGN_LHS, m));
         graph2.addEdge(GroovyFactory.makeEdge(ass, ASSIGN_RHS, s));
-        System.out.println(graph2.transformToGroovy().get());
+//        System.out.println(graph2.transformToGroovy().get());
+
+//      xstream test
+        XStream xstream = new XStream(new DomDriver());
+        xstream.registerConverter(new BlockGraphConverter());
+        xstream.alias("groovy", BlockGraphImpl.class);
+        var res = xstream.toXML(graph);
+        System.out.println(res);
+        System.out.println(xstream.fromXML(res));
     }
 }

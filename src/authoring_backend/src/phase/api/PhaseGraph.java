@@ -1,7 +1,6 @@
 package phase.api;
 
 import graph.Graph;
-import groovy.api.Try;
 
 /**
  *   Turn-based games have discrete "phases" that the user can decide on their moves.
@@ -17,9 +16,4 @@ public interface PhaseGraph extends Graph<Phase, Transition> {
      *  The initial source Node
      */
     Phase source();
-
-    /**
-     *  The xml representation of the PhaseGraph
-     */
-    Try<String> toXML();
 }
