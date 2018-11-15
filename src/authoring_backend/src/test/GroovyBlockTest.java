@@ -1,6 +1,6 @@
 package test;
 
-import essentials.GameData;
+import authoring.GameData;
 import groovy.api.BlockGraph;
 import groovy.api.GroovyFactory;
 import groovy.graph.BlockGraphImpl;
@@ -125,7 +125,7 @@ public class GroovyBlockTest {
 
 
         // foreach test
-        BlockGraph graph2 = new BlockGraphImpl();
+        BlockGraph graph2 = GroovyFactory.emptyGraph();
 
         var s = GroovyFactory.refBlock("sum").get();
         var init = GroovyFactory.assignBlock();

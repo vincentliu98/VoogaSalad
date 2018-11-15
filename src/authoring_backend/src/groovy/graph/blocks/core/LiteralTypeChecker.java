@@ -1,6 +1,6 @@
 package groovy.graph.blocks.core;
 
-import groovy.api.Try;
+import utils.Try;
 
 /**
  *  Name explains everything!

@@ -5,7 +5,7 @@ import graph.SimpleGraph;
 import groovy.api.BlockEdge;
 import groovy.api.BlockGraph;
 import groovy.api.Ports;
-import groovy.api.Try;
+import utils.Try;
 import groovy.graph.blocks.core.GroovyBlock;
 import groovy.graph.blocks.core.RawGroovyBlock;
 import groovy.graph.blocks.core.SourceBlock;
@@ -14,8 +14,6 @@ import javafx.util.Pair;
 
 import java.util.HashSet;
 import java.util.Set;
-
-import static groovy.api.Ports.ASSIGN_LHS;
 
 public class BlockGraphImpl extends SimpleGraph<GroovyBlock, BlockEdge> implements BlockGraph {
     private SourceBlock source;

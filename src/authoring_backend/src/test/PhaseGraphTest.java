@@ -11,6 +11,7 @@ import phase.TransitionImpl;
 import phase.api.GameEvent;
 import phase.api.Phase;
 import phase.api.PhaseGraphConverter;
+import phase.api.PhaseManager;
 
 import static groovy.api.Ports.*;
 
@@ -22,8 +23,9 @@ public class PhaseGraphTest {
         xstream.registerConverter(new PhaseGraphConverter());
         xstream.alias("groovy", BlockGraphImpl.class);
         xstream.alias("phase-graph", PhaseGraphImpl.class);
+        var manager = new PhaseManager();
 
-        var phaseGraph = new PhaseGraphImpl();
+        var phaseGraph = manager.empty("A").get();
 
         var a = new Phase();
         var b = new Phase();

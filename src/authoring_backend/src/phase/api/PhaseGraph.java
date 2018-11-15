@@ -10,10 +10,11 @@ import graph.Graph;
  *   Edges (Transition) -> GameEvents that can happen at a certain phase, that moves the game to the next phase.
  *                         Each Transition is associated with a specific event (e.g. MouseClick, MouseDrag, KeyPress)
  *
- *   To allow it to be de-serialized and used on the engine side, it also has a Cursor, which holds information
- *   about the current phase.
  */
 public interface PhaseGraph extends Graph<Phase, Transition> {
+    String name();
+    boolean setName(String another);
+
     /**
      *  The initial source Node
      */
