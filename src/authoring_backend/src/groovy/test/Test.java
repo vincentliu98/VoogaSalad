@@ -1,8 +1,9 @@
 package groovy.test;
 
 import essentials.GameData;
+import groovy.api.BlockGraph;
 import groovy.api.GroovyFactory;
-import groovy.lang.GroovyShell;
+import groovy.graph.BlockGraphImpl;
 
 import static groovy.api.Ports.*;
 
@@ -60,7 +61,7 @@ public class Test {
         graph.addNode(ifBlock);
         var zero = GroovyFactory.integerBlock("0").get();
         graph.addNode(zero);
-        var leq = GroovyFactory.binaryBlock("<=");
+        var leq = GroovyFactory.leq();
         graph.addNode(leq);
 
         var e6 = GroovyFactory.makeEdge(ifBlock, IF_PREDICATE, leq);
@@ -71,10 +72,9 @@ public class Test {
         graph.addEdge(e8);
 
         // we should make this a separate thing for convenience
-        var removeInstance = GroovyFactory.unaryBlock("$entities.$instances.remove");
-
+        var removeInstance = GroovyFactory.$remove();
         graph.addNode(removeInstance);
-        var clicked = GroovyFactory.refBlock("$clicked", data).get();
+        var clicked = GroovyFactory.$clicked(data).get();
         graph.addNode(clicked);
         var e9 = GroovyFactory.makeEdge(removeInstance, A, clicked);
         graph.addEdge(e9);
@@ -89,7 +89,7 @@ public class Test {
         graph.addNode(assign2);
         var turnRef = GroovyFactory.refBlock("$global.turn", data).get();
         graph.addNode(turnRef);
-        var minus2 = GroovyFactory.binaryBlock("-");
+        var minus2 = GroovyFactory.minus();
         graph.addNode(minus2);
         var one = GroovyFactory.integerBlock("1").get();
         graph.addNode(one);
@@ -109,7 +109,7 @@ public class Test {
         // $goto("A")
 
         // should make this a separate thing as well
-        var go2 = GroovyFactory.unaryBlock("$goto");
+        var go2 = GroovyFactory.$goto();
         graph.addNode(go2);
         var to = GroovyFactory.stringBlock("A");
         graph.addNode(to);
@@ -122,7 +122,22 @@ public class Test {
 
         System.out.println(graph.transformToGroovy().get());
 
-        GroovyShell gs = new GroovyShell();
 
+        // foreach test
+        BlockGraph graph2 = new BlockGraphImpl();
+        var range = GroovyFactory.range(1, 10).get();
+        graph2.addNode(range);
+        var foreach = GroovyFactory.forEachBlock("i");
+        graph2.addNode(foreach);
+        graph2.addEdge(GroovyFactory.makeEdge(foreach, FOREACH_LIST, range));
+        graph2.addEdge(GroovyFactory.makeEdge(graph2.source(), FLOW_OUT, foreach));
+
+        var m = GroovyFactory.$clicked(data).get();
+        var ass = GroovyFactory.assignBlock();
+        var s = GroovyFactory.refBlock("selected.bar", data).get();
+        graph2.addEdge(GroovyFactory.makeEdge(foreach, FOREACH_BODY, ass));
+        graph2.addEdge(GroovyFactory.makeEdge(ass, ASSIGN_LHS, m));
+        graph2.addEdge(GroovyFactory.makeEdge(ass, ASSIGN_RHS, s));
+        System.out.println(graph2.transformToGroovy().get());
     }
 }

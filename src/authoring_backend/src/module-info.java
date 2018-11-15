@@ -4,4 +4,5 @@ module authoring_backend {
     requires javafx.controls;
 
     requires org.codehaus.groovy;
+    requires xstream;
 }
