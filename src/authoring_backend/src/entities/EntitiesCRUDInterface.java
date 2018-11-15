@@ -47,6 +47,9 @@ public interface EntitiesCRUDInterface {
      */
     boolean deleteSpriteClass(String name);
 
-
+    /**
+     *
+     * @return Entity Data of the Game in XML format
+     */
     String toXML();
 }
