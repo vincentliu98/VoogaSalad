@@ -10,7 +10,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -22,7 +25,7 @@ import java.io.File;
  * @author jl729
  */
 
-public class EntityWindow extends PopUpWindow{
+public class EntityWindow extends PopUpWindow {
     public static final Double HEIGHT = 500.0;
     public static final Double WIDTH = 600.0;
     private final ObjectManager objectManager;
@@ -37,8 +40,10 @@ public class EntityWindow extends PopUpWindow{
     private TextField nameField;
     private VBox imageBox;
 
-    public EntityWindow(Stage primaryStage, ObjectManager objectManager, SideView mySideView, Integer id, TreeItem item){
+    public EntityWindow(Stage primaryStage, ObjectManager objectManager, SideView mySideView, Integer id, TreeItem item) {
         super(primaryStage);
+        dialog.setTitle("Entity Setting");
+
         this.objectManager = objectManager;
         this.mySideView = mySideView;
         this.item = item;
@@ -51,7 +56,7 @@ public class EntityWindow extends PopUpWindow{
 
     @Override
     protected void closeWindow() {
-        // TODO: 11/13/18 add Events to somewhere
+        // TODO: 11/14/18 add Events to somewhere
         Entity myEntity = new Entity(mySprite, id, nameField.getText());
         objectManager.getEntityList().add(myEntity);
         // add the entity to the TreeItem
@@ -84,7 +89,7 @@ public class EntityWindow extends PopUpWindow{
                 imageView.setFitHeight(100);
             }
         });
-        
+
         applyBtn = new Button("Apply");
         applyBtn.setOnMouseClicked(e -> closeWindow());
     }

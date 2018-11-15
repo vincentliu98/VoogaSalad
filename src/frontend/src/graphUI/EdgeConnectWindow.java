@@ -14,21 +14,24 @@ import javafx.stage.Stage;
  * @author jl729
  */
 
-public class LineWindow extends PopUpWindow {
+public class EdgeConnectWindow extends PopUpWindow {
 
     public static final Double WIDTH = 500.0;
     public static final Double HEIGHT = 60.0;
-    private final GraphTest graphTest;
+//    private final GraphTest graphTest;
     private final Button applyBtn;
+    private final GraphPane graphPane;
     private TextField nodeOne = new TextField();
     private TextField nodeTwo = new TextField();
     private Label labelOne = new Label("Node 1: ");
     private Label labelTwo = new Label("Node 2: ");
     private HBox root;
 
-    public LineWindow(Stage primaryStage, GraphTest graphTest) {
+    public EdgeConnectWindow(Stage primaryStage, GraphPane graphPane) {
         super(primaryStage);
-        this.graphTest = graphTest;
+        dialog.setTitle("Edge Connection");
+//        this.graphTest = graphTest;
+        this.graphPane = graphPane;
         root = new HBox();
         applyBtn = new Button("Apply");
         applyBtn.setOnMouseClicked(e -> closeWindow());
@@ -47,7 +50,8 @@ public class LineWindow extends PopUpWindow {
     protected void closeWindow() {
         Integer intOne = Integer.valueOf(nodeOne.getText());
         Integer intTwo = Integer.valueOf(nodeTwo.getText());
-        graphTest.connectTwoNodes(intOne, intTwo);
+//        graphTest.connectTwoNodes(intOne, intTwo);
+        graphPane.connectTwoNodes(intOne, intTwo);
         dialog.close();
     }
 

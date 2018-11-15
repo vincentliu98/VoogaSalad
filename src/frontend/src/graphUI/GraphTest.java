@@ -7,7 +7,10 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.input.*;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -39,7 +42,7 @@ public class GraphTest extends Application {
     private List<GraphNode> nodeList = new ArrayList<>();
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         nodeList.add(createNode("0", 100, 100, Color.DEEPSKYBLUE));
         initializeUI(nodeList);
 
@@ -81,7 +84,7 @@ public class GraphTest extends Application {
         // make the lines clickable and user-friendly
         line.setOnMouseEntered(e -> myScene.setCursor(Cursor.HAND));
         line.setOnMouseExited(e -> myScene.setCursor(Cursor.DEFAULT));
-        line.setOnMouseClicked(e -> new LineWindow(new Stage(), this));
+//        line.setOnMouseClicked(e -> new EdgeConnectWindow(new Stage(), this));
         return line;
     }
 
@@ -105,41 +108,40 @@ public class GraphTest extends Application {
         });
 
         graphBox.setOnDragOver(event -> {
-                /* data is dragged over the target */
-                System.out.println("onDragOver");
+            /* data is dragged over the target */
+            System.out.println("onDragOver");
 
-                /* accept it only if it is  not dragged from the same node
-                 * and if it has a Image data */
-                if (event.getGestureSource() != graphBox &&
-                        event.getDragboard().hasImage()) {
-                    /* allow for both copying and moving, whatever user chooses */
-                    event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-                    newNodeX = event.getX();
-                    newNodeY = event.getY();
-                }
+            /* accept it only if it is  not dragged from the same node
+             * and if it has a Image data */
+            if (event.getGestureSource() != graphBox &&
+                    event.getDragboard().hasImage()) {
+                /* allow for both copying and moving, whatever user chooses */
+                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+                newNodeX = event.getX();
+                newNodeY = event.getY();
+            }
 
-                event.consume();
+            event.consume();
         });
 
-        // TODO: 11/14/18 The positions of the new nodes are slight off
         graphBox.setOnDragDropped(event -> {
-                /* data dropped */
-                System.out.println("onDragDropped");
-                /* if there is a string data on dragboard, read it and use it */
-                Dragboard db = event.getDragboard();
-                boolean success = false;
-                if (db.hasImage()) {
-                    success = true;
-                    var newGraphNod = createNode(String.valueOf(nodeList.size()), newNodeX + 50, newNodeY + 50, Color.DEEPSKYBLUE);
-                    nodeList.add(newGraphNod);
+            /* data dropped */
+            System.out.println("onDragDropped");
+            /* if there is a string data on dragboard, read it and use it */
+            Dragboard db = event.getDragboard();
+            boolean success = false;
+            if (db.hasImage()) {
+                success = true;
+                var newGraphNod = createNode(String.valueOf(nodeList.size()), newNodeX + 50, newNodeY + 50, Color.DEEPSKYBLUE);
+                nodeList.add(newGraphNod);
 //                    connectNodes(nodeList.get(nodeList.size()-2), newGraphNod, "E" + (nodeList.size()-2));
-                    group.getChildren().add(newGraphNod);
-                }
-                /* let the source know whether the string was successfully
-                 * transferred and used */
-                event.setDropCompleted(success);
+                group.getChildren().add(newGraphNod);
+            }
+            /* let the source know whether the string was successfully
+             * transferred and used */
+            event.setDropCompleted(success);
 
-                event.consume();
+            event.consume();
         });
         return circle;
     }
