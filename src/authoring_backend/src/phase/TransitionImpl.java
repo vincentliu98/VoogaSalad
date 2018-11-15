@@ -17,11 +17,11 @@ public class TransitionImpl extends SimpleEdge<Phase> implements Transition {
     private BlockGraph guard;
     private BlockGraph execution;
 
-    public TransitionImpl(Phase from, GameEvent trigger, Phase to) {
+    public TransitionImpl(Phase from, GameEvent trigger, Phase to, BlockGraph guard, BlockGraph exec) {
         super(from, to);
         this.trigger = trigger;
-        this.guard = GroovyFactory.createGuard();
-        this.execution = GroovyFactory.createGraph();
+        this.guard = guard;
+        this.execution = exec;
     }
 
     @Override
