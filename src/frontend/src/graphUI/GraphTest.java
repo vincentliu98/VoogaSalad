@@ -19,7 +19,7 @@ import java.util.List;
 
 /**
  * Playground for testing graph function
- *
+ * <p>
  * Reference: https://stackoverflow.com/questions/46562957/define-object-position-at-runtime-with-javafx
  *
  * @author jl729
@@ -30,7 +30,7 @@ public class GraphTest extends Application {
     private double orgSceneX, orgSceneY;
     private double orgTranslateX, orgTranslateY;
     private GridPane root = new GridPane();
-    private Pane graphBox = new FlowPane();
+    private FlowPane graphBox = new FlowPane();
     private Group group = new Group();
     private VBox itemBox = new VBox();
     private Scene myScene;
@@ -41,24 +41,24 @@ public class GraphTest extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         nodeList.add(createNode("0", 100, 100, Color.DEEPSKYBLUE));
-
-//        connectNodes(nodeList.get(0), nodeList.get(1), "C1");
-//        connectNodes(node3, node1, "C2");
-//        connectNodes(node3, node2, "C3");
-
         initializeUI(nodeList);
 
         primaryStage.setScene(myScene);
         primaryStage.show();
     }
 
+    public void connectTwoNodes(Integer nodeOneIndex, Integer nodeTwoIndex) {
+        connectNodes(nodeList.get(nodeOneIndex), nodeList.get(nodeTwoIndex), "E" + String.valueOf(nodeList.size() - 2));
+    }
+
     private void initializeUI(List<GraphNode> nodeList) {
         nodeList.forEach(e -> group.getChildren().add(e));
 
         graphBox.getChildren().add(group);
+        graphBox.setPrefSize(500, 500);
         initializeGridPane();
         initializeItemBox();
-        root.add(itemBox, 0,0);
+        root.add(itemBox, 0, 0);
         HBox.setHgrow(itemBox, Priority.ALWAYS);
         root.add(graphBox, 1, 0);
         myScene = new Scene(root, 700, 600);
@@ -66,12 +66,13 @@ public class GraphTest extends Application {
 
     private void initializeItemBox() {
         Circle circle = setUpCircleDragAndDrop();
-        
+        Label circleLabel = new Label("Drag node to the right");
+        Label lineLabel = new Label("Click line to connect nodes");
         Line line = setUpLineDragAndDrop();
 
         itemBox.setSpacing(50);
 
-        itemBox.getChildren().addAll(circle, line);
+        itemBox.getChildren().addAll(circleLabel, circle, lineLabel, line);
     }
 
     private Line setUpLineDragAndDrop() {
@@ -80,12 +81,13 @@ public class GraphTest extends Application {
         // make the lines clickable and user-friendly
         line.setOnMouseEntered(e -> myScene.setCursor(Cursor.HAND));
         line.setOnMouseExited(e -> myScene.setCursor(Cursor.DEFAULT));
-        line.setOnMouseClicked(e -> new LineWindow(new Stage()));
+        line.setOnMouseClicked(e -> new LineWindow(new Stage(), this));
         return line;
     }
 
     private Circle setUpCircleDragAndDrop() {
-        Circle circle = new Circle(50.0, 50.0, 50.0);
+        Circle circle = new Circle(0, 0, 50.0);
+        circle.setFill(Color.DEEPSKYBLUE);
         circle.setOnMouseEntered(e -> myScene.setCursor(Cursor.HAND));
         circle.setOnMouseExited(e -> myScene.setCursor(Cursor.DEFAULT));
         circle.setOnDragDetected(event -> {
@@ -102,8 +104,7 @@ public class GraphTest extends Application {
             event.consume();
         });
 
-        graphBox.setOnDragOver(new EventHandler<DragEvent>() {
-            public void handle(DragEvent event) {
+        graphBox.setOnDragOver(event -> {
                 /* data is dragged over the target */
                 System.out.println("onDragOver");
 
@@ -113,17 +114,15 @@ public class GraphTest extends Application {
                         event.getDragboard().hasImage()) {
                     /* allow for both copying and moving, whatever user chooses */
                     event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-                    newNodeX  = event.getX();
+                    newNodeX = event.getX();
                     newNodeY = event.getY();
                 }
 
                 event.consume();
-            }
         });
 
         // TODO: 11/14/18 The positions of the new nodes are slight off
-        graphBox.setOnDragDropped(new EventHandler <DragEvent>() {
-            public void handle(DragEvent event) {
+        graphBox.setOnDragDropped(event -> {
                 /* data dropped */
                 System.out.println("onDragDropped");
                 /* if there is a string data on dragboard, read it and use it */
@@ -131,9 +130,9 @@ public class GraphTest extends Application {
                 boolean success = false;
                 if (db.hasImage()) {
                     success = true;
-                    var newGraphNod = createNode(String.valueOf(nodeList.size()), newNodeX, newNodeY, Color.DEEPSKYBLUE);
+                    var newGraphNod = createNode(String.valueOf(nodeList.size()), newNodeX + 50, newNodeY + 50, Color.DEEPSKYBLUE);
                     nodeList.add(newGraphNod);
-                    connectNodes(nodeList.get(nodeList.size()-2), newGraphNod, "E" + (nodeList.size()-2));
+//                    connectNodes(nodeList.get(nodeList.size()-2), newGraphNod, "E" + (nodeList.size()-2));
                     group.getChildren().add(newGraphNod);
                 }
                 /* let the source know whether the string was successfully
@@ -141,17 +140,16 @@ public class GraphTest extends Application {
                 event.setDropCompleted(success);
 
                 event.consume();
-            }
         });
         return circle;
     }
 
     private void initializeGridPane() {
-            var col1 = new ColumnConstraints();
-            col1.setPercentWidth(20);
-            var col2 = new ColumnConstraints();
-            col2.setPercentWidth(80);
-            root.getColumnConstraints().addAll(col1, col2);
+        var col1 = new ColumnConstraints();
+        col1.setPercentWidth(20);
+        var col2 = new ColumnConstraints();
+        col2.setPercentWidth(80);
+        root.getColumnConstraints().addAll(col1, col2);
     }
 
     private void connectNodes(GraphNode node1, GraphNode node2, String edgeText) {

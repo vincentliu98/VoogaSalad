@@ -1,8 +1,8 @@
 package graphUI;
 
 import authoringInterface.spritechoosingwindow.PopUpWindow;
-import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -18,16 +18,21 @@ public class LineWindow extends PopUpWindow {
 
     public static final Double WIDTH = 500.0;
     public static final Double HEIGHT = 60.0;
+    private final GraphTest graphTest;
+    private final Button applyBtn;
     private TextField nodeOne = new TextField();
     private TextField nodeTwo = new TextField();
     private Label labelOne = new Label("Node 1: ");
     private Label labelTwo = new Label("Node 2: ");
     private HBox root;
 
-    public LineWindow(Stage primaryStage) {
+    public LineWindow(Stage primaryStage, GraphTest graphTest) {
         super(primaryStage);
+        this.graphTest = graphTest;
         root = new HBox();
-        root.getChildren().addAll(labelOne, nodeOne, labelTwo, nodeTwo);
+        applyBtn = new Button("Apply");
+        applyBtn.setOnMouseClicked(e -> closeWindow());
+        root.getChildren().addAll(labelOne, nodeOne, labelTwo, nodeTwo, applyBtn);
         showWindow();
     }
 
@@ -40,7 +45,9 @@ public class LineWindow extends PopUpWindow {
 
     @Override
     protected void closeWindow() {
-        // TODO: 11/13/18 do something with back end
+        Integer intOne = Integer.valueOf(nodeOne.getText());
+        Integer intTwo = Integer.valueOf(nodeTwo.getText());
+        graphTest.connectTwoNodes(intOne, intTwo);
         dialog.close();
     }
 
