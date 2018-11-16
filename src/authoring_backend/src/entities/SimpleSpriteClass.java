@@ -24,7 +24,7 @@ public class SimpleSpriteClass implements SpriteClass {
     private SimpleIntegerProperty width;
     private SimpleBooleanProperty movable;
     private ObservableList<String> imagePathList;
-    private ObservableMap<String, Integer> propertiesMap;
+    private ObservableMap<String, BlockGraph> propertiesMap;
     private BlockGraph imageSelector;
 
     private SimpleSpriteClass() {
@@ -63,7 +63,7 @@ public class SimpleSpriteClass implements SpriteClass {
     }
 
     @Override
-    public boolean addProperty(String propertyName, int defaultValue) {
+    public boolean addProperty(String propertyName, BlockGraph defaultValue) {
         if (!propertiesMap.containsKey(propertyName)) {
             propertiesMap.put(propertyName, defaultValue);
             return true;
@@ -126,7 +126,7 @@ public class SimpleSpriteClass implements SpriteClass {
 
     @Override
     public EntityInstance createInstance() {
-
+        return null;
     }
 
     @Override

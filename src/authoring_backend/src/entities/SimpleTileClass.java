@@ -24,7 +24,7 @@ public class SimpleTileClass implements TileClass {
     private SimpleIntegerProperty width;
     private SimpleBooleanProperty spriteContainable;
     private ObservableList<String> imagePathList;
-    private ObservableMap<String, Integer> propertiesMap;
+    private ObservableMap<String, BlockGraph> propertiesMap;
     private BlockGraph imageSelector;
 
     private SimpleTileClass() {
@@ -38,7 +38,6 @@ public class SimpleTileClass implements TileClass {
 
     SimpleTileClass(Consumer<SimpleIntegerProperty> setFunc) {
         this();
-
         setClassId(setFunc);
     }
 
@@ -58,12 +57,12 @@ public class SimpleTileClass implements TileClass {
     }
 
     @Override
-    public ObservableMap<String, Integer> getPropertiesMap() {
+    public ObservableMap getPropertiesMap() {
         return propertiesMap;
     }
 
     @Override
-    public boolean addProperty(String propertyName, int defaultValue) {
+    public boolean addProperty(String propertyName, BlockGraph defaultValue) {
         if (!propertiesMap.containsKey(propertyName)) {
             propertiesMap.put(propertyName, defaultValue);
             return true;
