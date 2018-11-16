@@ -34,4 +34,14 @@ public class Category implements EditTreeItem<Text> {
     public String getName() {
         return entryText;
     }
+
+    /**
+     * Set the name of this item entry.
+     *
+     * @param name : A new String name for this entry.
+     */
+    @Override
+    public void setName(String name) {
+        entryText = name;
+    }
 }

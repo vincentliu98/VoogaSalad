@@ -24,7 +24,7 @@ import java.util.List;
 public class NewSideView implements SubView<StackPane> {
     private StackPane sidePane;
 
-    public NewSideView(Stage stage) {
+    public NewSideView() {
         sidePane = new StackPane();
         TreeItem<EditTreeItem> rootNode = new TreeItem<>(new Category("User Objects"));
         rootNode.setExpanded(true);
@@ -73,13 +73,12 @@ public class NewSideView implements SubView<StackPane> {
         private TextField textField;
         private ContextMenu addMenu = null;
 
-        public CustomTreeCellImpl() {
+        private CustomTreeCellImpl() {
             if (getTreeItem().getValue().getType() == TreeItemType.CATEGORY) {
                 addMenu = new ContextMenu();
                 MenuItem addMenuItem = new MenuItem("Add an entry");
-                addMenu.getItems().add(addMenuItem);
                 addMenuItem.setOnAction(e -> {
-                    switch (getTreeItem().getValue().getName()) {
+                    switch (getItem().getName()) {
                         case "ENTITY":
                             break;
                         case "SOUND":
@@ -110,12 +109,12 @@ public class NewSideView implements SubView<StackPane> {
         public void cancelEdit() {
             super.cancelEdit();
 
-            setText((String) getItem());
+            setText(getItem().getName());
             setGraphic(getTreeItem().getGraphic());
         }
 
         @Override
-        public void updateItem(String item, boolean empty) {
+        public void updateItem(EditTreeItem item, boolean empty) {
             super.updateItem(item, empty);
 
             if (empty) {
@@ -142,23 +141,17 @@ public class NewSideView implements SubView<StackPane> {
 
         private void createTextField() {
             textField = new TextField(getString());
-            textField.setOnKeyReleased(new EventHandler<KeyEvent>() {
-
-                @Override
-                public void handle(KeyEvent t) {
-                    if (t.getCode() == KeyCode.ENTER) {
-                        commitEdit(textField.getText());
-                    } else if (t.getCode() == KeyCode.ESCAPE) {
-                        cancelEdit();
-                    }
+            textField.setOnKeyReleased(t -> {
+                if (t.getCode() == KeyCode.ENTER) {
+                    getItem().setName(textField.getText());
+                } else if (t.getCode() == KeyCode.ESCAPE) {
+                    cancelEdit();
                 }
             });
-
         }
 
         private String getString() {
-            return getItem() == null ? "" : getItem().toString();
+            return getItem() == null ? "" : getItem().getName();
         }
-    }
     }
 }
