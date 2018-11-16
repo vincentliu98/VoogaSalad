@@ -1,11 +1,24 @@
 package authoringInterface;
 
+import api.DraggingCanvas;
 import api.ParentView;
 import api.SubView;
 import authoringInterface.editor.EditView;
 import authoringInterface.editor.EditorMenuBarView;
+import authoringInterface.sidebar.DraggableTreeItem;
 import authoringInterface.sidebar.SideView;
+import javafx.scene.Node;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TreeCell;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.cell.TextFieldTreeCell;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseDragEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /**
@@ -14,12 +27,13 @@ import javafx.stage.Stage;
  * @author  Haotian Wang
  * @author jl729
  */
-public class View implements ParentView<SubView> {
+public class View implements ParentView<SubView>, DraggingCanvas {
     private AnchorPane rootPane;
     private EditorMenuBarView menuBar;
     private SideView sideView;
     private EditView editView;
     private Stage primaryStage;
+    private Node preview;
     public static final double MENU_BAR_HEIGHT = 30;
     public static final double GAME_WIDTH = 700;
     public static final double GAME_HEIGHT = 500;
@@ -33,6 +47,7 @@ public class View implements ParentView<SubView> {
         initializeElements();
         setElements();
         addElements();
+        setupDraggingCanvas();
     }
 
     private void initializeElements() {
@@ -70,5 +85,46 @@ public class View implements ParentView<SubView> {
 
     public AnchorPane getRootPane() {
         return rootPane;
+    }
+
+    /**
+     * Setup the dragging canvas event filters.
+     */
+    @Override
+    public void setupDraggingCanvas() {
+        rootPane.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
+            if (e.getTarget() instanceof TreeCell) {
+                TreeItem<String> item = (TreeItem<String>) ((TreeCell) e.getTarget()).getTreeItem();
+                if (item == null || item.getChildren().size() != 0) {
+                    return;
+                }
+                if (item.getGraphic() != null) {
+                    ImageView graphic = (ImageView) item.getGraphic();
+                    preview = new ImageView(graphic.getImage());
+                    preview.setOpacity(0.5);
+                    ((ImageView) preview).setX(e.getX());
+                    ((ImageView) preview).setY(e.getY());
+                } else {
+                    preview = new Text(item.getValue());
+                    ((Text) preview).setY(e.getX());
+                    ((Text) preview).setY(e.getY());
+                }
+                rootPane.getChildren().add(preview);
+            }
+        });
+        rootPane.addEventFilter(MouseEvent.MOUSE_DRAGGED, e -> {
+            if (preview != null) {
+                if (preview instanceof ImageView) {
+                    ((ImageView) preview).setX(e.getX());
+                    ((ImageView) preview).setY(e.getY());
+                } else if (preview instanceof Text) {
+                    ((Text) preview).setX(e.getX());
+                    ((Text) preview).setY(e.getY());
+                }
+            }
+        });
+        rootPane.addEventFilter(MouseEvent.MOUSE_RELEASED, e -> {
+            rootPane.getChildren().remove(preview);
+        });
     }
 }
