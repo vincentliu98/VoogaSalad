@@ -1,4 +1,4 @@
-package entities;
+package grids;
 
 public interface Grid {
 }

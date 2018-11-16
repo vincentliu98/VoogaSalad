@@ -6,9 +6,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 
-import java.util.List;
-import java.util.Collections;
-import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -19,7 +16,7 @@ public class SimpleSpriteClass implements SpriteClass {
     private String CONST_ID = "id";
     private String CONST_MOVABLE = "movable";
 
-    private ReadOnlyIntegerWrapper id;
+    private ReadOnlyIntegerWrapper classId;
     private IdManager myIdManager;
     private SimpleIntegerProperty height;
     private SimpleIntegerProperty width;
@@ -29,7 +26,7 @@ public class SimpleSpriteClass implements SpriteClass {
     private BlockGraph imageSelector;
 
     private SimpleSpriteClass() {
-        id = new ReadOnlyIntegerWrapper(this, CONST_ID);
+        classId = new ReadOnlyIntegerWrapper(this, CONST_ID);
         height = new SimpleIntegerProperty(this, CONST_DEFAULTHEIGHT);
         width = new SimpleIntegerProperty(this, CONST_DEFAULTWIDTH);
         movable = new SimpleBooleanProperty(this, CONST_MOVABLE);
@@ -46,12 +43,12 @@ public class SimpleSpriteClass implements SpriteClass {
 
     @Override
     public ReadOnlyIntegerProperty getClassId() {
-        return id.getReadOnlyProperty();
+        return classId.getReadOnlyProperty();
     }
 
     @Override
     public void setClassId(Consumer<SimpleIntegerProperty> setFunc) {
-        setFunc.accept(id);
+        setFunc.accept(classId);
     }
 
     @Override
@@ -128,7 +125,8 @@ public class SimpleSpriteClass implements SpriteClass {
 
     @Override
     public EntityInstance createInstance() {
-        return null;
+        EntityInstance spriteInstance = new SimpleSpriteInstance();
+
     }
 
     @Override
