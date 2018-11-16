@@ -5,7 +5,6 @@ import api.ParentView;
 import api.SubView;
 import authoringInterface.editor.EditView;
 import authoringInterface.editor.EditorMenuBarView;
-import authoringInterface.sidebar.DraggableTreeItem;
 import authoringInterface.sidebar.SideView;
 import javafx.scene.Node;
 import javafx.scene.control.TextArea;
@@ -106,10 +105,12 @@ public class View implements ParentView<SubView>, DraggingCanvas {
                     preview.setOpacity(0.5);
                     ((ImageView) preview).setX(e.getX());
                     ((ImageView) preview).setY(e.getY());
+                    preview.setMouseTransparent(true);
                 } else {
                     preview = new Text(item.getValue());
                     ((Text) preview).setX(e.getX());
                     ((Text) preview).setY(e.getY());
+                    preview.setMouseTransparent(true);
                 }
                 rootPane.getChildren().add(preview);
             }
@@ -126,7 +127,8 @@ public class View implements ParentView<SubView>, DraggingCanvas {
                 }
             }
         });
-        rootPane.addEventHandler(MouseDragEvent.MOUSE_DRAG_RELEASED, e -> {
+
+        rootPane.addEventFilter(MouseDragEvent.MOUSE_DRAG_RELEASED, e -> {
             preview.setMouseTransparent(true);
             rootPane.getChildren().remove(preview);
         });

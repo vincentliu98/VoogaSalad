@@ -29,8 +29,8 @@ public class GridScrollView implements SubView<Pane> {
         gridScrollView = new Pane();
         contentBox = new HBox();
         gridScrollView.addEventFilter(MouseDragEvent.MOUSE_DRAG_RELEASED, e -> {
-            if (e.getTarget() instanceof TreeCell) {
-                TreeItem<String> item = ((TreeCell) e.getTarget()).getTreeItem();
+            if (e.getGestureSource() instanceof TreeCell) {
+                TreeItem<String> item = ((TreeCell) e.getGestureSource()).getTreeItem();
                 if (item.getGraphic() != null) {
                     ImageView copy = new ImageView(((ImageView) item.getGraphic()).getImage());
                     copy.setX(e.getX());
