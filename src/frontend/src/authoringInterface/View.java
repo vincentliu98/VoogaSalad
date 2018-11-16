@@ -54,6 +54,7 @@ public class View implements ParentView<SubView>, DraggingCanvas {
         menuBar = new EditorMenuBarView();
         sideView = new SideView(primaryStage);
         editView = new EditView();
+
     }
 
     private void setElements() {
@@ -123,7 +124,7 @@ public class View implements ParentView<SubView>, DraggingCanvas {
                 }
             }
         });
-        rootPane.addEventFilter(MouseEvent.MOUSE_RELEASED, e -> {
+        rootPane.addEventHandler(MouseEvent.MOUSE_RELEASED, e -> {
             rootPane.getChildren().remove(preview);
         });
     }
