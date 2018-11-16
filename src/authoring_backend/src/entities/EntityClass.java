@@ -3,8 +3,8 @@ package entities;
 import groovy.api.BlockGraph;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleListProperty;
-import javafx.beans.property.SimpleMapProperty;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -23,13 +23,13 @@ public interface EntityClass {
 
     Supplier<ReadOnlyIntegerProperty> returnClassId();
 
-    SimpleMapProperty getPropertiesMap();
+    ObservableMap getPropertiesMap();
 
     boolean addProperty(String propertyName, int defaultValue);
 
     boolean removeProperty(String propertyName);
 
-    SimpleListProperty getImagePathList();
+    ObservableList getImagePathList();
 
     void addImagePath(String path);
 
