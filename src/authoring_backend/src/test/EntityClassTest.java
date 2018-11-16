@@ -1,18 +1,21 @@
 package test;
 
 import authoring.AuthoringTools;
+import entities.EntitiesCRUDInterface;
+import entities.SimpleEntitiesCRUD;
+import entities.TileClass;
 import javafx.scene.input.KeyCode;
 import phase.api.GameEvent;
 import phase.api.Phase;
 
 import static groovy.api.Ports.*;
 
-public class PhaseGraphTest {
-    public static void main(String args[]) throws Throwable {
-        // set up xstream
+public class EntityClassTest {
+    public static void main (String args[]) throws Throwable {
         var tools = new AuthoringTools();
         var phaseDB = tools.phaseDB();
         var factory = tools.factory();
+        var eci = tools.entityDB();
 
         var phaseGraph = phaseDB.createGraph("A").get();
 
@@ -59,6 +62,20 @@ public class PhaseGraphTest {
         graph.addEdge(factory.createEdge(ass, ASSIGN_RHS, add));
         graph.addEdge(factory.createEdge(add, A, s));
         graph.addEdge(factory.createEdge(add, B, i));
+
+
+
+
+        // Testing TileClass CRUD Interface
+        eci.createTileClass("demoClass");
+
+        TileClass demo = eci.getTileClass("demoClass");
+        demo.setDefaultHeightWidth(1, 1);
+        demo.addProperty("color", 14);
+        demo.addImagePath("hellotester");
+
+
+
 
         System.out.println(tools.toEngineXML());
     }

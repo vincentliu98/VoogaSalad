@@ -2,16 +2,19 @@ package authoringInterface.sidebar;
 
 import api.SubView;
 import authoringInterface.spritechoosingwindow.EntityWindow;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyCode;
 
 import java.util.Stack;
 
@@ -93,6 +96,7 @@ public class SideView implements SubView<StackPane> {
 
     public void addCell(Entity entity, TreeItem<String> item){
             TreeItem newObject = new TreeItem<>(entity.getName());
+            newObject.setGraphic(new ImageView(entity.getSprite()));
             // add to ListObjectManager
             var type = item.getValue();
             var myObj = new ListObject(entity.getName(), type, entity.getId());
@@ -115,7 +119,7 @@ public class SideView implements SubView<StackPane> {
                 var type = getTreeItem().getValue();
                 var id = getTreeItem().getChildren().size();
                 var myItem = getTreeItem();
-                if (type.equals("Entity")){
+                if (type.equals("EntityClass")){
                     new EntityWindow(primaryStage, objectManager, mySideView, id, myItem);
                 }
                 else if (type.equals("TileClass")){

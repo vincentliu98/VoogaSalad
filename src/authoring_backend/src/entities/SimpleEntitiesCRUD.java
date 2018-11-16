@@ -1,34 +1,32 @@
 package entities;
 
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleMapProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableMap;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 public class SimpleEntitiesCRUD implements EntitiesCRUDInterface {
     private String CONST_TILEMAP = "tileMap";
     private String CONST_SPRITEMAP = "spriteMap";
 
-    private SimpleMapProperty<String, TileClass> tileMap;
-    private SimpleMapProperty<String, SpriteClass> spriteMap;
+    private ObservableMap<String, TileClass> tileMap;
+    private ObservableMap<String, SpriteClass> spriteMap;
     private IdManager myIdManager;
 
     public SimpleEntitiesCRUD() {
-        tileMap = new SimpleMapProperty<>(this, CONST_TILEMAP);
-        spriteMap = new SimpleMapProperty<>(this, CONST_SPRITEMAP);
+        tileMap = FXCollections.observableHashMap();
+        spriteMap = FXCollections.observableHashMap();
         myIdManager = new IdManagerClass();
     }
 
-    public SimpleEntitiesCRUD(SimpleMapProperty<String, TileClass> tileClasses, SimpleMapProperty<String, SpriteClass> spriteClasses) {
+    public SimpleEntitiesCRUD(ObservableMap<String, TileClass> tileClasses, ObservableMap<String, SpriteClass> spriteClasses) {
         tileMap = tileClasses;
         spriteMap = spriteClasses;
     }
 
     @Override
     public boolean createTileClass(String name) {
+//        System.out.println( == null);
         if (!tileMap.containsKey(name)) {
             tileMap.put(name, new SimpleTileClass(myIdManager.requestClassIdFunc()));
             return true;

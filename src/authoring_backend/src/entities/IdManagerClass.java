@@ -33,6 +33,7 @@ public class IdManagerClass implements IdManager {
             id = classCount;
             classCount++;
         }
+
         return n -> n.setValue(id);
     }
 

@@ -2,6 +2,10 @@ package entities;
 
 import groovy.api.BlockGraph;
 import javafx.beans.property.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
+
 import java.util.List;
 import java.util.Collections;
 import java.util.Map;
@@ -14,15 +18,13 @@ public class SimpleSpriteClass implements SpriteClass {
     private String CONST_DEFAULTWIDTH = "defaultWidth";
     private String CONST_ID = "id";
     private String CONST_MOVABLE = "movable";
-    private String CONST_IMAGEPATHLIST = "imagePathList";
-    private String CONST_PROPERTIESMAP = "propertiesMap";
 
     private ReadOnlyIntegerWrapper id;
     private SimpleIntegerProperty height;
     private SimpleIntegerProperty width;
     private SimpleBooleanProperty movable;
-    private SimpleListProperty<String> imagePathList;
-    private SimpleMapProperty<String, Integer> propertiesMap;
+    private ObservableList<String> imagePathList;
+    private ObservableMap<String, Integer> propertiesMap;
     private BlockGraph imageSelector;
 
     private SimpleSpriteClass() {
@@ -30,12 +32,12 @@ public class SimpleSpriteClass implements SpriteClass {
         height = new SimpleIntegerProperty(this, CONST_DEFAULTHEIGHT);
         width = new SimpleIntegerProperty(this, CONST_DEFAULTWIDTH);
         movable = new SimpleBooleanProperty(this, CONST_MOVABLE);
-        imagePathList = new SimpleListProperty<>(this, CONST_IMAGEPATHLIST);
-        propertiesMap = new SimpleMapProperty<>(this, CONST_PROPERTIESMAP);
+        imagePathList = FXCollections.observableArrayList();
+        propertiesMap = FXCollections.observableHashMap();
     }
 
     SimpleSpriteClass(Consumer<SimpleIntegerProperty> setFunc) {
-        super();
+        this();
         setClassId(setFunc);
     }
 
@@ -56,7 +58,7 @@ public class SimpleSpriteClass implements SpriteClass {
     }
 
     @Override
-    public SimpleMapProperty getPropertiesMap() {
+    public ObservableMap getPropertiesMap() {
         return propertiesMap;
     }
 
@@ -91,7 +93,7 @@ public class SimpleSpriteClass implements SpriteClass {
     }
 
     @Override
-    public SimpleListProperty getImagePathList() {
+    public ObservableList getImagePathList() {
         return imagePathList;
     }
 

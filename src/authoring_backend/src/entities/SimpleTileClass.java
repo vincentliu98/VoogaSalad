@@ -2,6 +2,10 @@ package entities;
 
 import groovy.api.BlockGraph;
 import javafx.beans.property.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
+
 import java.util.List;
 import java.util.Collections;
 import java.util.Map;
@@ -14,15 +18,13 @@ public class SimpleTileClass implements TileClass {
     private String CONST_DEFAULTWIDTH = "defaultWidth";
     private String CONST_ID = "id";
     private String CONST_SPRITECONTAINABLE = "spriteContainable";
-    private String CONST_IMAGEPATHLIST = "imagePathList";
-    private String CONST_PROPERTIESMAP = "propertiesMap";
 
     private ReadOnlyIntegerWrapper id;
     private SimpleIntegerProperty height;
     private SimpleIntegerProperty width;
     private SimpleBooleanProperty spriteContainable;
-    private SimpleListProperty<String> imagePathList;
-    private SimpleMapProperty<String, Integer> propertiesMap;
+    private ObservableList<String> imagePathList;
+    private ObservableMap<String, Integer> propertiesMap;
     private BlockGraph imageSelector;
 
     private SimpleTileClass() {
@@ -30,12 +32,13 @@ public class SimpleTileClass implements TileClass {
         height = new SimpleIntegerProperty(this, CONST_DEFAULTHEIGHT);
         width = new SimpleIntegerProperty(this, CONST_DEFAULTWIDTH);
         spriteContainable = new SimpleBooleanProperty(this, CONST_SPRITECONTAINABLE);
-        imagePathList = new SimpleListProperty<>(this, CONST_IMAGEPATHLIST);
-        propertiesMap = new SimpleMapProperty<>(this, CONST_PROPERTIESMAP);
+        imagePathList = FXCollections.observableArrayList();
+        propertiesMap = FXCollections.observableHashMap();
     }
 
     SimpleTileClass(Consumer<SimpleIntegerProperty> setFunc) {
-        super();
+        this();
+
         setClassId(setFunc);
     }
 
@@ -55,7 +58,7 @@ public class SimpleTileClass implements TileClass {
     }
 
     @Override
-    public SimpleMapProperty getPropertiesMap() {
+    public ObservableMap<String, Integer> getPropertiesMap() {
         return propertiesMap;
     }
 
@@ -91,7 +94,7 @@ public class SimpleTileClass implements TileClass {
 
 
     @Override
-    public SimpleListProperty getImagePathList() {
+    public ObservableList getImagePathList() {
         return imagePathList;
     }
 
