@@ -1,26 +1,25 @@
 package authoringInterface.sidebar;
 
-import javafx.scene.Parent;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
 
-import java.util.List;
-
-public class Entity implements EditTreeItem<ImageView> {
+/**
+ * This class stores the information of a tile in the game authoring engine.
+ *
+ * @author Haotian Wang
+ */
+public class Tile implements EditTreeItem<ImageView> {
     private Image sprite;
     private Integer id;
     private String name;
-    private static final TreeItemType type = TreeItemType.ENTITY;
 
-    public Entity(Image sprite, Integer id, String name) {
+    public Tile(Image sprite, Integer id, String name) {
         this.sprite = sprite;
         this.id = id;
         this.name = name;
     }
 
-    public Entity(int id, String name) {
+    public Tile(int id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -64,6 +63,6 @@ public class Entity implements EditTreeItem<ImageView> {
      */
     @Override
     public TreeItemType getType() {
-        return type;
+        return TreeItemType.TILE;
     }
 }
