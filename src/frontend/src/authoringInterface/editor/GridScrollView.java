@@ -8,6 +8,8 @@ import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseDragEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
@@ -26,7 +28,7 @@ public class GridScrollView implements SubView<Pane> {
     public GridScrollView() {
         gridScrollView = new Pane();
         contentBox = new HBox();
-        gridScrollView.setOnDragDetected(e -> {
+        gridScrollView.addEventFilter(MouseDragEvent.MOUSE_DRAG_RELEASED, e -> {
             if (e.getTarget() instanceof TreeCell) {
                 TreeItem<String> item = ((TreeCell) e.getTarget()).getTreeItem();
                 if (item.getGraphic() != null) {

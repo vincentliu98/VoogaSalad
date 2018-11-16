@@ -20,6 +20,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import phase.api.GameEvent;
 
 /**
  * This class provides an createGraph skeleton window with the basic menu items, and basic editing interfaces.
@@ -107,13 +108,14 @@ public class View implements ParentView<SubView>, DraggingCanvas {
                     ((ImageView) preview).setY(e.getY());
                 } else {
                     preview = new Text(item.getValue());
-                    ((Text) preview).setY(e.getX());
+                    ((Text) preview).setX(e.getX());
                     ((Text) preview).setY(e.getY());
                 }
                 rootPane.getChildren().add(preview);
             }
         });
-        rootPane.addEventFilter(MouseEvent.MOUSE_DRAGGED, e -> {
+        rootPane.addEventFilter(MouseDragEvent.MOUSE_DRAG_OVER, e -> {
+            preview.setMouseTransparent(true);
             if (preview != null) {
                 if (preview instanceof ImageView) {
                     ((ImageView) preview).setX(e.getX());
@@ -124,7 +126,8 @@ public class View implements ParentView<SubView>, DraggingCanvas {
                 }
             }
         });
-        rootPane.addEventHandler(MouseEvent.MOUSE_RELEASED, e -> {
+        rootPane.addEventHandler(MouseDragEvent.MOUSE_DRAG_RELEASED, e -> {
+            preview.setMouseTransparent(true);
             rootPane.getChildren().remove(preview);
         });
     }

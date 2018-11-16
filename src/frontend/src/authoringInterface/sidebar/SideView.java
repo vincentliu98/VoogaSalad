@@ -132,6 +132,9 @@ public class SideView implements SubView<StackPane> {
 //                objects.add(myObj);
 //                getTreeItem().getChildren().add(newObject);
             });
+            setOnDragDetected(e -> {
+                startFullDrag();
+            });
         }
 
         // select all texts when first start
