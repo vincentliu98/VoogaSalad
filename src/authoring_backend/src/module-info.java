@@ -3,6 +3,7 @@ module authoring_backend {
     requires javafx.base;
     requires javafx.controls;
 
+
     opens groovy.graph to xstream;
     opens groovy.api to xstream;
     opens phase.api to xstream;
