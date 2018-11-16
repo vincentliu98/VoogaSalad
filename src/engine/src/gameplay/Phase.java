@@ -1,25 +1,31 @@
 package gameplay;
 
-public class Phase {
-    private Node myStartNode;
-    private Node myTerminalNode;
-    private Node myCurrentNode;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
-    public Phase(Node start, Node terminal){
+public class Phase {
+    private int myID;
+    private Node myStartNode;
+    private Node myCurrentNode;
+    private Map<Integer, Node> myNodes;
+
+    public Phase(int id, Node start, Set<Node> nodes){
+        this.myID = id;
         this.myStartNode = start;
-        this.myTerminalNode = terminal;
+        this.myNodes = new HashMap<>();
+        for (Node n : nodes){
+            myNodes.put(n.getID(), n);
+        }
     }
 
     public void step(Node node){
         myCurrentNode = node;
-        if (node.equals(myTerminalNode)){
-            // exit code here
-            return;
-        }
-        node.getOutgoingEdge().setListener();
+        myCurrentNode.execute();
     }
 
     public void startTraversal(){
         step(myStartNode);
     }
+
 }
