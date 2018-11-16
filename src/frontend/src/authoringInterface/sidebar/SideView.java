@@ -32,7 +32,6 @@ import java.util.Stack;
 
 public class SideView implements SubView<StackPane> {
     private final ObjectManager objectManager;
-    private TextFieldTreeCellImpl newCell;
     //    private final TreeView<String> rootTreeView;
 //    private final TreeItem<String> rootTreeItem;
 //    private final TreeItem<String> entityTreeItem;
@@ -131,6 +130,9 @@ public class SideView implements SubView<StackPane> {
 //                myObj = new ListObject(name, type, id);
 //                objects.add(myObj);
 //                getTreeItem().getChildren().add(newObject);
+            });
+            setOnDragDetected(e -> {
+                startFullDrag();
             });
         }
 

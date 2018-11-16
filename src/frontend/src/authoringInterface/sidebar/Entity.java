@@ -8,7 +8,7 @@ import javafx.scene.layout.Region;
 
 import java.util.List;
 
-public class Entity implements DraggableTreeItem<ImageView> {
+public class Entity implements EditTreeItem<ImageView> {
     private Image sprite;
     private Integer id;
     private String name;
@@ -61,32 +61,5 @@ public class Entity implements DraggableTreeItem<ImageView> {
     @Override
     public TreeItemType getType() {
         return type;
-    }
-
-    /**
-     * Handle the start of dragging action on a DraggableTreeItem.
-     *
-     * @param canvas
-     */
-    @Override
-    public void handlePressed(Pane canvas, double x, double y) {
-        preview = getPreview();
-        preview.setX(x);
-        preview.setY(y);
-        canvas.getChildren().add(preview);
-    }
-
-    /**
-     * Handle the start of dragging action on a DraggableTreeItem.
-     */
-    @Override
-    public void handleDrag(Pane canvas, double x, double y) {
-        preview.setX(x);
-        preview.setY(y);
-    }
-
-    @Override
-    public void handleExit(Pane canvas, double x, double y) {
-        canvas.getChildren().remove(preview);
     }
 }

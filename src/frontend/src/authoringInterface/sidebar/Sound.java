@@ -12,7 +12,7 @@ import javafx.scene.text.Text;
  *
  * @author Haotian Wang
  */
-public class Sound implements DraggableTreeItem<Text> {
+public class Sound implements EditTreeItem<Text> {
     private Media soundfile;
     private Integer id;
     private String name;
@@ -65,31 +65,5 @@ public class Sound implements DraggableTreeItem<Text> {
     @Override
     public TreeItemType getType() {
         return TreeItemType.SOUND;
-    }
-
-    /**
-     * Handle the start of dragging action on a DraggableTreeItem.
-     *
-     * @param canvas
-     * @param x
-     * @param y
-     */
-    @Override
-    public void handlePressed(Pane canvas, double x, double y) {
-        preview = getPreview();
-        preview.setX(x);
-        preview.setY(y);
-        canvas.getChildren().add(preview);
-    }
-
-    @Override
-    public void handleDrag(Pane canvas, double x, double y) {
-        preview.setX(x);
-        preview.setY(y);
-    }
-
-    @Override
-    public void handleExit(Pane canvas, double x, double y) {
-        canvas.getChildren().remove(preview);
     }
 }
