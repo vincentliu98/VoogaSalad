@@ -5,21 +5,18 @@ import api.ParentView;
 import api.SubView;
 import authoringInterface.editor.EditView;
 import authoringInterface.editor.EditorMenuBarView;
-import authoringInterface.sidebar.SideView;
+import authoringInterface.sidebar.newSideView.NewSideView;
+import authoringInterface.sidebar.old.SideView;
+import javafx.geometry.Side;
 import javafx.scene.Node;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
-import javafx.scene.control.cell.TextFieldTreeCell;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import phase.api.GameEvent;
 
 /**
  * This class provides an createGraph skeleton window with the basic menu items, and basic editing interfaces.

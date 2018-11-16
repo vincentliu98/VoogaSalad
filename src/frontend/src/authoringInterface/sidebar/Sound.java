@@ -16,7 +16,6 @@ public class Sound implements EditTreeItem<Text> {
     private Media soundfile;
     private Integer id;
     private String name;
-    private Text preview;
     private static final TreeItemType type = TreeItemType.SOUND;
 
     public Sound(Media file, Integer id, String name) {
