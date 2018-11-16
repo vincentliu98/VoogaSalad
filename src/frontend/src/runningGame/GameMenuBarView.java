@@ -1,6 +1,7 @@
 package runningGame;
 
 import api.SubView;
+import javafx.event.ActionEvent;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -40,6 +41,14 @@ public class GameMenuBarView implements SubView<MenuBar> {
         MenuItem helpDoc = new MenuItem("Help");
         MenuItem about = new MenuItem("About");
 
+        newFile.setOnAction(this::handleNewFile);
+        open.setOnAction(this::handleOpen);
+        save.setOnAction(this::handleSave);
+        saveAs.setOnAction(this::handleSaveAs);
+        close.setOnAction(this::handleClose);
+        helpDoc.setOnAction(this::handleClose);
+        about.setOnAction(this::handleAbout);
+
         save.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
 
         file.getItems().addAll(newFile, open, save, saveAs, close);
@@ -51,6 +60,20 @@ public class GameMenuBarView implements SubView<MenuBar> {
 
         return menuBar;
     }
+
+    private void handleNewFile(ActionEvent event) {}
+
+    private void handleOpen(ActionEvent event) {}
+
+    private void handleSave(ActionEvent event) {}
+
+    private void handleSaveAs(ActionEvent event) {}
+
+    private void handleClose(ActionEvent event) {}
+
+    private void handleHelp(ActionEvent event) {}
+
+    private void handleAbout(ActionEvent event) {}
 
     /**
      * This method returns the responsible JavaFx Node responsible to be added or deleted from other graphical elements.
