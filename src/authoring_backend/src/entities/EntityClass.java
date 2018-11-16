@@ -25,8 +25,19 @@ public interface EntityClass {
 
     ObservableMap getPropertiesMap();
 
-    boolean addProperty(String propertyName, int defaultValue);
+    /**
+     * This method adds the property to the Entity Class and to all instances of the class.
+     * @param propertyName
+     * @param defaultValue
+     * @return
+     */
+    boolean addProperty(String propertyName, BlockGraph defaultValue);
 
+    /**
+     * This method removes the property from the Entity Class and from all instances of the class.
+     * @param propertyName
+     * @return
+     */
     boolean removeProperty(String propertyName);
 
     ObservableList getImagePathList();
@@ -40,4 +51,6 @@ public interface EntityClass {
     BlockGraph getImageSelectorCode();
 
     EntityInstance createInstance();
+
+
 }
