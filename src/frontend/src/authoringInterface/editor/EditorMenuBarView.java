@@ -13,8 +13,11 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import runningGame.GameWindow;
+
+import java.io.File;
 
 public class EditorMenuBarView implements SubView<MenuBar> {
 
@@ -70,7 +73,15 @@ public class EditorMenuBarView implements SubView<MenuBar> {
     }
 
 
-    void handleNewFile(ActionEvent event) {}
+    void handleNewFile(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open project files");
+        File file = fileChooser.showOpenDialog(new Stage());
+        // TODO: keyboard warrior, backend do the rest.
+        if (file != null) {
+            // if (file.isLegitimate) {
+        }
+    }
     void handleOpen(ActionEvent event) {}
     void handleSave(ActionEvent event) {}
     void handeSaveAs(ActionEvent event) {}
