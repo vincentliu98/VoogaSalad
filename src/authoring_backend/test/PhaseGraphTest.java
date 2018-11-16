@@ -69,7 +69,6 @@ public class PhaseGraphTest {
 
         TileClass demo = eci.getTileClass("demoClass");
         demo.setDefaultHeightWidth(1, 1);
-        demo.addProperty("color", 14);
 
 
 

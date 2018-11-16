@@ -9,7 +9,6 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class IdManagerClass implements IdManager {
-    private Supplier<SimpleIntegerProperty> s;
     private List<Integer> returnedClassIds;
     private List<Integer> returnedInstanceIds;
 

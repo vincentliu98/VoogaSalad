@@ -20,6 +20,7 @@ public class SimpleSpriteClass implements SpriteClass {
     private String CONST_MOVABLE = "movable";
 
     private ReadOnlyIntegerWrapper id;
+    private IdManager myIdManager;
     private SimpleIntegerProperty height;
     private SimpleIntegerProperty width;
     private SimpleBooleanProperty movable;
@@ -34,6 +35,7 @@ public class SimpleSpriteClass implements SpriteClass {
         movable = new SimpleBooleanProperty(this, CONST_MOVABLE);
         imagePathList = FXCollections.observableArrayList();
         propertiesMap = FXCollections.observableHashMap();
+        myIdManager = new IdManagerClass();
     }
 
     SimpleSpriteClass(Consumer<SimpleIntegerProperty> setFunc) {
