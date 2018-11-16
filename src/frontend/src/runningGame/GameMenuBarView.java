@@ -83,7 +83,14 @@ public class GameMenuBarView implements SubView<MenuBar> {
         fileChooser.setTitle("Choosing a saved game file to play");
         File file = fileChooser.showOpenDialog(new Stage());
         if (file != null) {
-
+            try {
+                gameLoader.loadGame(file);
+                // TODO
+            } catch (IllegalSavedGameException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Something went wrong...");
+                alert.setContentText("The game loader is trying to load a broken/unsupported game file");
+            }
         }
     }
 
