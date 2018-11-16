@@ -7,6 +7,7 @@ import authoringInterface.editor.EditView;
 import authoringInterface.editor.EditorMenuBarView;
 import authoringInterface.sidebar.newSideView.NewSideView;
 import authoringInterface.sidebar.old.SideView;
+import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
@@ -26,7 +27,7 @@ import javafx.stage.Stage;
 public class View implements ParentView<SubView>, DraggingCanvas {
     private AnchorPane rootPane;
     private EditorMenuBarView menuBar;
-    private NewSideView sideView;
+    private SideView sideView;
     private EditView editView;
     private Stage primaryStage;
     private Node preview;
@@ -48,7 +49,7 @@ public class View implements ParentView<SubView>, DraggingCanvas {
 
     private void initializeElements() {
         menuBar = new EditorMenuBarView();
-        sideView = new NewSideView();
+        sideView = new SideView(primaryStage);
         editView = new EditView();
 
     }

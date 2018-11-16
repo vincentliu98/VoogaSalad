@@ -74,7 +74,10 @@ public class NewSideView implements SubView<StackPane> {
         private ContextMenu addMenu = null;
 
         private CustomTreeCellImpl() {
-            if (getTreeItem().getValue().getType() == TreeItemType.CATEGORY) {
+            if (this.getItem() == null) {
+                return;
+            }
+            if (getItem().getType() == TreeItemType.CATEGORY) {
                 addMenu = new ContextMenu();
                 MenuItem addMenuItem = new MenuItem("Add an entry");
                 addMenuItem.setOnAction(e -> {
@@ -87,6 +90,7 @@ public class NewSideView implements SubView<StackPane> {
                             break;
                     }
                 });
+                addMenu.getItems().add(addMenuItem);
             }
             setOnDragDetected(e -> {
                 startFullDrag();
@@ -116,7 +120,6 @@ public class NewSideView implements SubView<StackPane> {
         @Override
         public void updateItem(EditTreeItem item, boolean empty) {
             super.updateItem(item, empty);
-
             if (empty) {
                 setText(null);
                 setGraphic(null);
@@ -143,7 +146,9 @@ public class NewSideView implements SubView<StackPane> {
             textField = new TextField(getString());
             textField.setOnKeyReleased(t -> {
                 if (t.getCode() == KeyCode.ENTER) {
+                    if (! isEditing()) return;
                     getItem().setName(textField.getText());
+                    cancelEdit();
                 } else if (t.getCode() == KeyCode.ESCAPE) {
                     cancelEdit();
                 }
