@@ -42,8 +42,17 @@ public interface EntityClass {
 
     ObservableList getImagePathList();
 
+    /**
+     * This method adds the image path to the Entity Class and to all instances of the class.
+     * @param path
+     */
     void addImagePath(String path);
 
+    /**
+     * This method removes the image path from the Entity Class and from all instances of the class.
+     * @param index
+     * @return
+     */
     boolean removeImagePath(int index);
 
     void setImageSelector(BlockGraph blockCode);
