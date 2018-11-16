@@ -126,7 +126,7 @@ public class SimpleSpriteClass implements SpriteClass {
 
     @Override
     public EntityInstance createInstance() {
-        return null;
+
     }
 
     @Override
