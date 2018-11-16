@@ -1,19 +1,23 @@
 package gameplay;
 
-import java.util.Set;
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
-public class Engine {
-    Set<Phase> myPhases;
-    Set<Player> myPlayers;
-    // also contains global data
-    Turn myTurn;
+public class Engine extends Application {
 
-    public Engine(Set<Phase> phases, Set<Player> players, GlobalData globalData){
-        this.myPhases = phases;
-        this.myPlayers = players;
+    public static final int SCREEN_WIDTH = 1200;
+    public static final int SCREEN_HEIGHT = 700;
+
+    @Override
+    public void start(Stage primaryStage) {
+        primaryStage.setTitle("VoogaSalad!");
+        /*View myView = new View(primaryStage);
+        primaryStage.setScene(new Scene(myView.getRootPane(), SCREEN_WIDTH, SCREEN_HEIGHT));
+        primaryStage.show();*/ // TODO: Consult with front-end!
     }
 
-    public void play(Phase currentPhase, Player currentPlayer){
-        // initialize Turn class here
+    public static void main(String[] args) {
+        launch(args);
     }
 }

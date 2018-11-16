@@ -97,4 +97,11 @@ public class XMLParser {
         }
         return myEdges;
     }
+
+    public Turn getTurn(){
+        NodeList turns = myDocTree.getElementsByTagName("turn").item(0).getChildNodes();
+        String currentTurn = turns.item(0).toString(); // only one Turn per game
+        Turn turn = (Turn) mySerializer.fromXML(currentTurn);
+        return turn;
+    }
 }

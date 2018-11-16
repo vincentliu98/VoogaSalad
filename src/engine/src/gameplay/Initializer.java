@@ -1,19 +1,23 @@
 package gameplay;
 
 import java.io.File;
-import java.util.Set;
 
 public class Initializer {
     XMLParser myXMLParser;
 
     public Initializer(File file){
         myXMLParser = new XMLParser();
-        initGame(file);
+        initGameData(file);
     }
 
-    private void initGame(File file){
+    private void initGameData(File file){
         myXMLParser.loadFile(file);
-        // Then, call getGlobalData(), getEntities(), etc.
+        GameData.setGameData(myXMLParser.getPlayers(), myXMLParser.getEntities(), myXMLParser.getTiles(),
+                myXMLParser.getPhases(), myXMLParser.getNodes(), myXMLParser.getEdges());
+    }
+
+    public Turn getTurn(){
+        return myXMLParser.getTurn();
     }
 
 }
