@@ -1,22 +1,17 @@
-package authoringInterface.sidebar;
+package authoringInterface.sidebar.old;
 
 import api.SubView;
+import authoringInterface.sidebar.Entity;
 import authoringInterface.spritechoosingwindow.EntityWindow;
-import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.*;
-
-import java.util.Stack;
 
 /**
  * A sidebar that contains many TreeItems. Functions include adding a cell and

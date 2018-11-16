@@ -1,4 +1,4 @@
-package authoringInterface.sidebar;
+package authoringInterface.sidebar.old;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,6 @@
-package authoringInterface.sidebar;
+package authoringInterface.sidebar.old;
+
+import authoringInterface.sidebar.EditTreeItem;
 
 import java.util.ArrayList;
 import java.util.List;
