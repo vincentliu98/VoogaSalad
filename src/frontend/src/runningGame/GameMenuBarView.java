@@ -2,12 +2,12 @@ package runningGame;
 
 import api.SubView;
 import javafx.event.ActionEvent;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+
+import java.util.Optional;
 
 /**
  * This is the menu bar for the running game window.
@@ -61,7 +61,16 @@ public class GameMenuBarView implements SubView<MenuBar> {
         return menuBar;
     }
 
-    private void handleNewFile(ActionEvent event) {}
+    private void handleNewFile(ActionEvent event) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Opening a new game");
+        alert.setHeaderText("You are about to open a new game player");
+        alert.setContentText("All current unsaved progress will be lost. Do you want to proceed?");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            menuBar.getScene().setRoot(new GameWindow().getView());
+        }
+    }
 
     private void handleOpen(ActionEvent event) {}
 
