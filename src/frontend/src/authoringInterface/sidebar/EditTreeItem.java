@@ -19,4 +19,9 @@ public interface EditTreeItem<T extends Node> {
      * @return The type of the element being dragged.
      */
     TreeItemType getType();
+
+    /**
+     * @return The String name of this edit item entry.
+     */
+    String getName();
 }

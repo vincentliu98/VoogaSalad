@@ -1,10 +1,7 @@
 package authoringInterface.sidebar.newSideView;
 
 import api.SubView;
-import authoringInterface.sidebar.Category;
-import authoringInterface.sidebar.EditTreeItem;
-import authoringInterface.sidebar.Entity;
-import authoringInterface.sidebar.Tile;
+import authoringInterface.sidebar.*;
 import authoringInterface.sidebar.old.SideView;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -31,30 +28,25 @@ public class NewSideView implements SubView<StackPane> {
                 new Entity(1, "X"),
                 new Tile(0, "Default Grid")
         ));
-        for (ListObject listObject : objects) {
-            // create tree items to accommodate objects
-            TreeItem<String> empLeaf = new TreeItem<>(listObject.getName());
+        for (EditTreeItem item : defaultList) {
+            TreeItem<EditTreeItem> objectLeaf = new TreeItem<>(item);
             boolean found = false;
-            // loop through sub items e.g. "EntityClass" and "Grid"
-            for (TreeItem<String> depNode : rootNode.getChildren()) {
-                if (depNode.getValue().contentEquals(listObject.getType())) {
-                    depNode.getChildren().add(empLeaf);
+            for (TreeItem<EditTreeItem> categoryNode : rootNode.getChildren()) {
+                if (TreeItemType.valueOf(categoryNode.getValue().getName()) == item.getType()) {
+                    categoryNode.getChildren().add(objectLeaf);
                     found = true;
                     break;
                 }
             }
             if (!found) {
-                TreeItem<String> depNode = new TreeItem(listObject.getType());
-                rootNode.getChildren().add(depNode);
-                depNode.getChildren().add(empLeaf);
+                TreeItem<EditTreeItem> categoryNode = new TreeItem(new Category(item.getType().toString()));
+                rootNode.getChildren().add(categoryNode);
+                categoryNode.getChildren().add(objectLeaf);
             }
         }
-        TreeView<String> treeView = new TreeView<>(rootNode);
+        TreeView<EditTreeItem> treeView = new TreeView<>(rootNode);
         treeView.setEditable(true);
-        // produce cells using TextFieldTreeCellImpl
-        treeView.setCellFactory(e -> new TextFieldTreeCellImpl(this, primaryStage, objectManager));
-
-        sideView.getChildren().add(treeView);
+        sidePane.getChildren().add(treeView);
     }
     /**
      * This method returns the responsible JavaFx Node responsible to be added or deleted from other graphical elements.

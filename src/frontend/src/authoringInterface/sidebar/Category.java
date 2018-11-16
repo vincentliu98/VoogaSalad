@@ -26,4 +26,12 @@ public class Category implements EditTreeItem<Text> {
     public TreeItemType getType() {
         return TreeItemType.CATEGORY;
     }
+
+    /**
+     * @return The String name of this edit item entry.
+     */
+    @Override
+    public String getName() {
+        return entryText;
+    }
 }
