@@ -20,4 +20,8 @@ public class Entity {
     public void addStat(String key, Double value){
         myStats.put(key, value);
     }
+
+    public int getID(){
+        return myID;
+    }
 }

@@ -23,4 +23,8 @@ public class Phase {
         step(myStartNodeID);
     }
 
+    public int getID(){
+        return myID;
+    }
+
 }

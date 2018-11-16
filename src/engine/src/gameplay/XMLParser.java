@@ -32,42 +32,69 @@ public class XMLParser {
         catch (Exception e){ }
     }
 
-    public Set<Tile> getTiles(){
-        NodeList tiles = myDocTree.getElementsByTagName("tiles").item(0).getChildNodes();
-        Set<Tile> myTiles = new HashSet<>();
-        for (int i = 0; i < tiles.getLength(); i++){
-            String currentTile = tiles.item(i).toString();
-            Tile tile = (Tile) mySerializer.fromXML(currentTile);
-            myTiles.add(tile);
+    public Map<Integer, Player> getPlayers(){
+        NodeList players = myDocTree.getElementsByTagName("players").item(0).getChildNodes();
+        Map<Integer, Player> myPlayers = new HashMap<>();
+        for (int i = 0; i < players.getLength(); i++){
+            String currentPlayer = players.item(i).toString();
+            Player player = (Player) mySerializer.fromXML(currentPlayer);
+            myPlayers.put(player.getID(), player);
         }
-        return myTiles;
+        return myPlayers;
     }
 
-    public Set<Entity> getEntities(){
+    public Map<Integer, Entity> getEntities(){
         NodeList entities = myDocTree.getElementsByTagName("entities").item(0).getChildNodes();
-        Set<Entity> myEntities = new HashSet<>();
+        Map<Integer, Entity> myEntities = new HashMap<>();
         for (int i = 0; i < entities.getLength(); i++){
             String currentEntity = entities.item(i).toString();
             Entity entity = (Entity) mySerializer.fromXML(currentEntity);
-            myEntities.add(entity);
+            myEntities.put(entity.getID(), entity);
         }
         return myEntities;
     }
 
-    public Set<GlobalData> getGlobalData(){
-        NodeList globalData = myDocTree.getElementsByTagName("global").item(0).getChildNodes();
-        Set<GlobalData> myGlobalData = new HashSet<>();
-        for (int i = 0; i < globalData.getLength(); i++){
-            //Element currentGlobalData = (Element) globalData.item(i);
-            String currentGlobalData = globalData.item(i).toString();
-            GlobalData globalDatum = (GlobalData) mySerializer.fromXML(currentGlobalData);
-            myGlobalData.add(globalDatum);
+    public Map<Integer, Tile> getTiles(){
+        NodeList tiles = myDocTree.getElementsByTagName("tiles").item(0).getChildNodes();
+        Map<Integer, Tile> myTiles = new HashMap<>();
+        for (int i = 0; i < tiles.getLength(); i++){
+            String currentTile = tiles.item(i).toString();
+            Tile tile = (Tile) mySerializer.fromXML(currentTile);
+            myTiles.put(tile.getID(), tile);
         }
-        return myGlobalData;
-
+        return myTiles;
     }
 
-    public void getPhases(){
-        // etc. same process
+    public Map<Integer, Phase> getPhases(){
+        NodeList phases = myDocTree.getElementsByTagName("phases").item(0).getChildNodes();
+        Map<Integer, Phase> myPhases = new HashMap<>();
+        for (int i = 0; i < phases.getLength(); i++){
+            String currentPhase = phases.item(i).toString();
+            Phase phase = (Phase) mySerializer.fromXML(currentPhase);
+            myPhases.put(phase.getID(), phase);
+        }
+        return myPhases;
+    }
+
+    public Map<Integer, Node> getNodes(){
+        NodeList nodes = myDocTree.getElementsByTagName("nodes").item(0).getChildNodes();
+        Map<Integer, Node> myNodes = new HashMap<>();
+        for (int i = 0; i < nodes.getLength(); i++){
+            String currentNode = nodes.item(i).toString();
+            Node node = (Node) mySerializer.fromXML(currentNode);
+            myNodes.put(node.getID(), node);
+        }
+        return myNodes;
+    }
+
+    public Map<Integer, Edge> getEdges(){
+        NodeList edges = myDocTree.getElementsByTagName("edges").item(0).getChildNodes();
+        Map<Integer, Edge> myEdges = new HashMap<>();
+        for (int i = 0; i < edges.getLength(); i++){
+            String currentEdge = edges.item(i).toString();
+            Edge edge = (Edge) mySerializer.fromXML(currentEdge);
+            myEdges.put(edge.getID(), edge);
+        }
+        return myEdges;
     }
 }

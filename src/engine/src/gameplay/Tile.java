@@ -6,14 +6,26 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Tile {
-
-    // PLACEHOLDER CLASS
-
+    private int myID;
     private int myWidth;
     private int myHeight;
     private Set<Image> myImages;
     private String myImageSelector; // Groovy code
 
+    public Tile(int id, int width, int height){
+        this.myID = id;
+        this.myWidth = width;
+        this.myHeight = height;
+        this.myImages = new HashSet<>();
+        this.myImageSelector = "";
+    }
+
+    public int getID(){
+        return myID;
+    }
+
+    /*
+    // IF WE WANT TO USE THE BUILDER PATTERN
     public static class Builder {
         private int width = 0;
         private int height = 0;
@@ -45,5 +57,5 @@ public class Tile {
         myHeight = builder.height;
         myImages = builder.images;
         myImageSelector = builder.imageSelector;
-    }
+    }*/
 }

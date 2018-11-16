@@ -32,4 +32,8 @@ public class Player {
         return myStats.get(key);
     }
 
+    public int getID(){
+        return myID;
+    }
+
 }
