@@ -2,6 +2,7 @@ package authoringInterface;
 
 import api.ParentView;
 import api.SubView;
+import authoring.AuthoringTools;
 import authoringInterface.editor.EditView;
 import authoringInterface.editor.EditorMenuBarView;
 import authoringInterface.sidebar.SideView;
@@ -20,9 +21,13 @@ public class View implements ParentView<SubView> {
     private SideView sideView;
     private EditView editView;
     private Stage primaryStage;
+
+    private AuthoringTools tools;
+
     public static final double MENU_BAR_HEIGHT = 30;
     public static final double GAME_WIDTH = 700;
     public static final double GAME_HEIGHT = 500;
+
 
     /**
      * Constructor for an createGraph window, with an AnchorPane as the root Node, and the AnchorPane constraints on top, left and right are 0.
@@ -30,6 +35,8 @@ public class View implements ParentView<SubView> {
     public View(Stage primaryStage) {
         this.primaryStage = primaryStage;
         rootPane = new AnchorPane();
+        tools = new AuthoringTools();
+
         initializeElements();
         setElements();
         addElements();

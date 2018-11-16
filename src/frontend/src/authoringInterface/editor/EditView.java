@@ -38,7 +38,7 @@ public class EditView implements SubView<AnchorPane> {
         initializeAnchorPane();
         addTab();
         tabPane.setTabDragPolicy(TabDragPolicy.REORDER);
-        tabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
+//        tabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
         anchorPane.getChildren().addAll(tabPane, addButton);
     }
 
@@ -59,7 +59,8 @@ public class EditView implements SubView<AnchorPane> {
     }
 
     private void addTab(){
-        Tab tempTab = new Tab("Tab" + index);
+        Tab tempTab = new Tab();
+        tempTab.setText("TAB" + index);
         tempTab.setClosable(true);
         // need to be changed to make the content different
         tempTab.setContent(gridScrollView.getView());

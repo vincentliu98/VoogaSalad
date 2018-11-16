@@ -1,4 +1,4 @@
-package graphUI;
+package graphUI.groovy;
 
 import authoringInterface.spritechoosingwindow.PopUpWindow;
 import javafx.event.EventHandler;
@@ -29,13 +29,11 @@ import java.util.List;
  */
 
 public class GraphPane extends PopUpWindow {
-
-    public static final Double WIDTH = 700.0;
-    public static final Double HEIGHT = 500.0;
+    public static final Double WIDTH = 1200.0;
+    public static final Double HEIGHT = 800.0;
     private double orgSceneX, orgSceneY;
     private double orgTranslateX, orgTranslateY;
     EventHandler<MouseEvent> circleOnMousePressedEventHandler = new EventHandler<>() {
-
         @Override
         public void handle(MouseEvent t) {
             orgSceneX = t.getSceneX();
@@ -48,7 +46,6 @@ public class GraphPane extends PopUpWindow {
         }
     };
     EventHandler<MouseEvent> circleOnMouseDraggedEventHandler = new EventHandler<>() {
-
         @Override
         public void handle(MouseEvent t) {
             double offsetX = t.getSceneX() - orgSceneX;
