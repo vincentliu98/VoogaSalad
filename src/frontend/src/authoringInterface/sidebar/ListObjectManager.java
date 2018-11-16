@@ -12,9 +12,9 @@ import java.util.ArrayList;
 public class ListObjectManager extends ArrayList<SideView.ListObject> {
 
     public ListObjectManager() {
-        add(new SideView.ListObject("O", "EntityClass", 0));
-        add(new SideView.ListObject("X", "EntityClass", 1));
-        add(new SideView.ListObject("Default Grid", "TileClass", 0));
+        add(new SideView.ListObject("O", "Entity", 0));
+        add(new SideView.ListObject("X", "Entity", 1));
+        add(new SideView.ListObject("Default Grid", "Tile", 0));
     }
 
     @Override

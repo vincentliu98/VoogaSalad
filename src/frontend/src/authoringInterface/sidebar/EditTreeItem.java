@@ -9,7 +9,7 @@ import javafx.scene.layout.Pane;
  *
  * @author Haotian Wang
  */
-public interface DraggableTreeItem<T extends Node> {
+public interface EditTreeItem<T extends Node> {
     /**
      * @return Return a preview of the elements being dragged.
      */
@@ -19,13 +19,4 @@ public interface DraggableTreeItem<T extends Node> {
      * @return The type of the element being dragged.
      */
     TreeItemType getType();
-
-    /**
-     * Handle the start of dragging action on a DraggableTreeItem.
-     */
-    void handlePressed(Pane canvas, double x, double y);
-
-    void handleDrag(Pane canvas, double x, double y);
-
-    void handleExit(Pane canvas, double x, double y);
 }

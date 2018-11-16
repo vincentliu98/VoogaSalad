@@ -32,7 +32,6 @@ import java.util.Stack;
 
 public class SideView implements SubView<StackPane> {
     private final ObjectManager objectManager;
-    private TextFieldTreeCellImpl newCell;
     //    private final TreeView<String> rootTreeView;
 //    private final TreeItem<String> rootTreeItem;
 //    private final TreeItem<String> entityTreeItem;
@@ -119,18 +118,24 @@ public class SideView implements SubView<StackPane> {
                 var type = getTreeItem().getValue();
                 var id = getTreeItem().getChildren().size();
                 var myItem = getTreeItem();
-                if (type.equals("EntityClass")){
+                if (type.equals("Entity")){
                     new EntityWindow(primaryStage, objectManager, mySideView, id, myItem);
                 }
-                else if (type.equals("TileClass")){
+                else if (type.equals("Tile")){
                     // Generate a TileWindow
 //                    new EntityWindow(primaryStage, objectManager);
+                }
+                else if (type.equals("Sound")) {
+
                 }
 //                var name = "New ListObject";
 //                TreeItem newObject = new TreeItem<>(name);
 //                myObj = new ListObject(name, type, id);
 //                objects.add(myObj);
 //                getTreeItem().getChildren().add(newObject);
+            });
+            setOnDragDetected(e -> {
+                startFullDrag();
             });
         }
 
