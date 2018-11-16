@@ -1,12 +1,17 @@
 package runningGame;
 
+import api.ParentView;
 import api.SubView;
 import javafx.event.ActionEvent;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
+import java.io.File;
 import java.util.Optional;
 
 /**
@@ -16,10 +21,11 @@ import java.util.Optional;
  */
 public class GameMenuBarView implements SubView<MenuBar> {
     private MenuBar menuBar;
+    private GameLoader gameLoader;
 
     public GameMenuBarView(double height) {
         menuBar = constructMenuBar(height);
-
+        gameLoader = new GameLoader();
     }
 
     /**
@@ -72,7 +78,14 @@ public class GameMenuBarView implements SubView<MenuBar> {
         }
     }
 
-    private void handleOpen(ActionEvent event) {}
+    private void handleOpen(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choosing a saved game file to play");
+        File file = fileChooser.showOpenDialog(new Stage());
+        if (file != null) {
+
+        }
+    }
 
     private void handleSave(ActionEvent event) {}
 
