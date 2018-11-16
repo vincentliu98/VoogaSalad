@@ -3,9 +3,14 @@ package authoringInterface.sidebar.newSideView;
 import api.SubView;
 import authoringInterface.sidebar.*;
 import authoringInterface.sidebar.old.SideView;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import authoringInterface.spritechoosingwindow.EntityWindow;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,7 +24,7 @@ import java.util.List;
 public class NewSideView implements SubView<StackPane> {
     private StackPane sidePane;
 
-    public NewSideView() {
+    public NewSideView(Stage stage) {
         sidePane = new StackPane();
         TreeItem<EditTreeItem> rootNode = new TreeItem<>(new Category("User Objects"));
         rootNode.setExpanded(true);
@@ -46,6 +51,7 @@ public class NewSideView implements SubView<StackPane> {
         }
         TreeView<EditTreeItem> treeView = new TreeView<>(rootNode);
         treeView.setEditable(true);
+        treeView.setCellFactory(e -> new CustomTreeCellImpl());
         sidePane.getChildren().add(treeView);
     }
     /**
@@ -56,5 +62,103 @@ public class NewSideView implements SubView<StackPane> {
     @Override
     public StackPane getView() {
         return sidePane;
+    }
+
+    /**
+     * This inner class organizes the cell factory call back methods into a nicer format.
+     *
+     * @author Haotian Wang
+     */
+    private final class CustomTreeCellImpl extends TreeCell<EditTreeItem> {
+        private TextField textField;
+        private ContextMenu addMenu = null;
+
+        public CustomTreeCellImpl() {
+            if (getTreeItem().getValue().getType() == TreeItemType.CATEGORY) {
+                addMenu = new ContextMenu();
+                MenuItem addMenuItem = new MenuItem("Add an entry");
+                addMenu.getItems().add(addMenuItem);
+                addMenuItem.setOnAction(e -> {
+                    switch (getTreeItem().getValue().getName()) {
+                        case "ENTITY":
+                            break;
+                        case "SOUND":
+                            break;
+                        case "TILE":
+                            break;
+                    }
+                });
+            }
+            setOnDragDetected(e -> {
+                startFullDrag();
+            });
+        }
+
+        @Override
+        public void startEdit() {
+            super.startEdit();
+
+            if (textField == null) {
+                createTextField();
+            }
+            setText(null);
+            setGraphic(textField);
+            textField.selectAll();
+        }
+
+        @Override
+        public void cancelEdit() {
+            super.cancelEdit();
+
+            setText((String) getItem());
+            setGraphic(getTreeItem().getGraphic());
+        }
+
+        @Override
+        public void updateItem(String item, boolean empty) {
+            super.updateItem(item, empty);
+
+            if (empty) {
+                setText(null);
+                setGraphic(null);
+            } else {
+                if (isEditing()) {
+                    if (textField != null) {
+                        textField.setText(getString());
+                    }
+                    setText(null);
+                    setGraphic(textField);
+                } else {
+                    setText(getString());
+                    setGraphic(getTreeItem().getGraphic());
+                    if (
+                            !getTreeItem().isLeaf()&&getTreeItem().getParent()!= null
+                    ){
+                        setContextMenu(addMenu);
+                    }
+                }
+            }
+        }
+
+        private void createTextField() {
+            textField = new TextField(getString());
+            textField.setOnKeyReleased(new EventHandler<KeyEvent>() {
+
+                @Override
+                public void handle(KeyEvent t) {
+                    if (t.getCode() == KeyCode.ENTER) {
+                        commitEdit(textField.getText());
+                    } else if (t.getCode() == KeyCode.ESCAPE) {
+                        cancelEdit();
+                    }
+                }
+            });
+
+        }
+
+        private String getString() {
+            return getItem() == null ? "" : getItem().toString();
+        }
+    }
     }
 }
