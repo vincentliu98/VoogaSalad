@@ -5,7 +5,6 @@ import api.ParentView;
 import api.SubView;
 import authoringInterface.editor.EditView;
 import authoringInterface.editor.EditorMenuBarView;
-import authoringInterface.sidebar.DraggableTreeItem;
 import authoringInterface.sidebar.SideView;
 import javafx.scene.Node;
 import javafx.scene.control.TextArea;
@@ -20,6 +19,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import phase.api.GameEvent;
 
 /**
  * This class provides an createGraph skeleton window with the basic menu items, and basic editing interfaces.
@@ -54,6 +54,7 @@ public class View implements ParentView<SubView>, DraggingCanvas {
         menuBar = new EditorMenuBarView();
         sideView = new SideView(primaryStage);
         editView = new EditView();
+
     }
 
     private void setElements() {
@@ -104,15 +105,18 @@ public class View implements ParentView<SubView>, DraggingCanvas {
                     preview.setOpacity(0.5);
                     ((ImageView) preview).setX(e.getX());
                     ((ImageView) preview).setY(e.getY());
+                    preview.setMouseTransparent(true);
                 } else {
                     preview = new Text(item.getValue());
-                    ((Text) preview).setY(e.getX());
+                    ((Text) preview).setX(e.getX());
                     ((Text) preview).setY(e.getY());
+                    preview.setMouseTransparent(true);
                 }
                 rootPane.getChildren().add(preview);
             }
         });
-        rootPane.addEventFilter(MouseEvent.MOUSE_DRAGGED, e -> {
+        rootPane.addEventFilter(MouseDragEvent.MOUSE_DRAG_OVER, e -> {
+            preview.setMouseTransparent(true);
             if (preview != null) {
                 if (preview instanceof ImageView) {
                     ((ImageView) preview).setX(e.getX());
@@ -123,7 +127,9 @@ public class View implements ParentView<SubView>, DraggingCanvas {
                 }
             }
         });
-        rootPane.addEventFilter(MouseEvent.MOUSE_RELEASED, e -> {
+
+        rootPane.addEventFilter(MouseDragEvent.MOUSE_DRAG_RELEASED, e -> {
+            preview.setMouseTransparent(true);
             rootPane.getChildren().remove(preview);
         });
     }
