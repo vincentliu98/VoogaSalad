@@ -62,7 +62,7 @@ public class EntityEditor implements ObjectEditor<Entity>, SubView<AnchorPane> {
             ((Stage) rootPane.getScene().getWindow()).close();
         });
         setupLayout();
-        rootPane.getChildren().addAll(inputText, nameField, imageText, chooseImage, imageBox);
+        rootPane.getChildren().addAll(inputText, nameField, imageText, chooseImage, imageBox, confirm, cancel);
     }
 
     private void setupLayout() {
