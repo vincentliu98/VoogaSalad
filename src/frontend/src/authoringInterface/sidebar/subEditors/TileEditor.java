@@ -1,9 +1,11 @@
 package authoringInterface.sidebar.subEditors;
 
+import api.SubView;
 import authoringInterface.sidebar.treeItemEntries.EditTreeItem;
+import authoringInterface.sidebar.treeItemEntries.Tile;
 import javafx.scene.layout.AnchorPane;
 
-public class TileEditor implements ObjectEditor<AnchorPane> {
+public class TileEditor implements ObjectEditor<Tile>, SubView<AnchorPane> {
     /**
      * This method brings up an editor that contains the data of an existing object that is already created.
      *
@@ -21,6 +23,26 @@ public class TileEditor implements ObjectEditor<AnchorPane> {
      */
     @Override
     public AnchorPane getView() {
+        return null;
+    }
+
+    /**
+     * This method brings up an editor that contains the data of an existing object that is already created.
+     *
+     * @param userObject
+     */
+    @Override
+    public void readObject(Tile userObject) {
+
+    }
+
+    /**
+     * Return the object after edits in this ObjectEditor.
+     *
+     * @return A specific user object.
+     */
+    @Override
+    public Tile getObject() {
         return null;
     }
 }

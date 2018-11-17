@@ -111,6 +111,9 @@ public class View implements ParentView<SubView>, DraggingCanvas {
             }
         });
         rootPane.addEventFilter(MouseDragEvent.MOUSE_DRAG_OVER, e -> {
+            if (preview == null) {
+                return;
+            }
             if (!rootPane.getChildren().contains(preview)) {
                 rootPane.getChildren().add(preview);
             }
@@ -127,8 +130,11 @@ public class View implements ParentView<SubView>, DraggingCanvas {
         });
 
         rootPane.addEventFilter(MouseDragEvent.MOUSE_DRAG_RELEASED, e -> {
-            preview.setMouseTransparent(true);
+            if (preview == null) {
+                return;
+            }
             rootPane.getChildren().remove(preview);
+            preview.setMouseTransparent(true);
         });
     }
 }

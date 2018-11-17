@@ -2,6 +2,7 @@ package authoringInterface.sidebar;
 
 import authoringInterface.sidebar.subEditors.EntityEditor;
 import authoringInterface.sidebar.treeItemEntries.EditTreeItem;
+import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
@@ -23,16 +24,21 @@ public class CustomTreeCellImpl extends TreeCell<String> {
 
     public CustomTreeCellImpl(Map<String, EditTreeItem> map) {
         objectMap = map;
+        int id = getTreeItem().getChildren().size();
         MenuItem addMenuItem = new MenuItem("Add an entry");
         addMenuItem.setOnAction(e -> {
             switch (getItem()) {
                 case "ENTITY":
-                    Stage stage = new Stage();
+                    Stage dialogStage = new Stage();
                     EntityEditor editor = new EntityEditor();
+                    dialogStage.setScene(new Scene(editor.getView(), 500, 500));
+                    dialogStage.show();
                     break;
                 case "SOUND":
                     break;
                 case "TILE":
+                    break;
+                case "User Settings":
                     break;
             }
         });
@@ -77,7 +83,7 @@ public class CustomTreeCellImpl extends TreeCell<String> {
                 setText(getString());
                 setGraphic(getTreeItem().getGraphic());
                 if (
-                        !getTreeItem().isLeaf()&&getTreeItem().getParent()!= null
+                        !getTreeItem().isLeaf()
                 ){
                     setContextMenu(addMenu);
                 }

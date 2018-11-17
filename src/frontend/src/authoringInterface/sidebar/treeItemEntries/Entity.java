@@ -5,11 +5,11 @@ import javafx.scene.image.ImageView;
 
 public class Entity implements EditTreeItem<ImageView> {
     private Image sprite;
-    private Integer id;
+    private int id;
     private String name;
     private static final TreeItemType type = TreeItemType.ENTITY;
 
-    public Entity(Image sprite, Integer id, String name) {
+    public Entity(Image sprite, int id, String name) {
         this.sprite = sprite;
         this.id = id;
         this.name = name;
@@ -28,11 +28,11 @@ public class Entity implements EditTreeItem<ImageView> {
         this.sprite = sprite;
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 

@@ -27,9 +27,10 @@ public class SideView implements SubView<StackPane>, SideViewInterface {
         objectMap.put(ROOT_NAME, new Category(ROOT_NAME));
         rootNode.setExpanded(true);
         List<EditTreeItem> defaultList = new ArrayList<>(Arrays.asList(
-                new Entity(0, "0"),
+                new Entity(0, "O"),
                 new Entity(1, "X"),
-                new Tile(0, "Default Grid")
+                new Tile(0, "Default Grid"),
+                new Sound(0, "Sound file")
         ));
         for (EditTreeItem item : defaultList) {
             objectMap.put(item.getName(), item);

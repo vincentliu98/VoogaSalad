@@ -1,19 +1,11 @@
 package authoringInterface.sidebar.subEditors;
 
+import api.SubView;
 import authoringInterface.sidebar.treeItemEntries.EditTreeItem;
+import authoringInterface.sidebar.treeItemEntries.Sound;
 import javafx.scene.layout.AnchorPane;
 
-public class SoundEditor implements ObjectEditor<AnchorPane> {
-    /**
-     * This method brings up an editor that contains the data of an existing object that is already created.
-     *
-     * @param userObject
-     */
-    @Override
-    public void readObject(EditTreeItem userObject) {
-
-    }
-
+public class SoundEditor implements ObjectEditor<Sound>, SubView<AnchorPane> {
     /**
      * This method returns the responsible JavaFx Node responsible to be added or deleted from other graphical elements.
      *
@@ -21,6 +13,26 @@ public class SoundEditor implements ObjectEditor<AnchorPane> {
      */
     @Override
     public AnchorPane getView() {
+        return null;
+    }
+
+    /**
+     * This method brings up an editor that contains the data of an existing object that is already created.
+     *
+     * @param userObject
+     */
+    @Override
+    public void readObject(Sound userObject) {
+
+    }
+
+    /**
+     * Return the object after edits in this ObjectEditor.
+     *
+     * @return A specific user object.
+     */
+    @Override
+    public Sound getObject() {
         return null;
     }
 }

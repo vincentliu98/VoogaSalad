@@ -10,11 +10,18 @@ import javafx.scene.layout.AnchorPane;
  *
  * @author Haotian Wang
  */
-public interface ObjectEditor<T extends Node> extends SubView<T> {
+public interface ObjectEditor<T extends EditTreeItem> {
     /**
      * This method brings up an editor that contains the data of an existing object that is already created.
      *
      * @param userObject
      */
-    void readObject(EditTreeItem userObject);
+    void readObject(T userObject);
+
+    /**
+     * Return the object after edits in this ObjectEditor.
+     *
+     * @return A specific user object.
+     */
+    T getObject();
 }
