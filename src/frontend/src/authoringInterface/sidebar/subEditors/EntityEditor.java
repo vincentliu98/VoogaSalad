@@ -52,7 +52,7 @@ public class EntityEditor extends AbstractObjectEditor implements ObjectEditor<E
             ((Stage) rootPane.getScene().getWindow()).close();
         });
         setupLayout();
-        rootPane.getChildren().addAll(inputText, nameField, imageText, chooseImage, imageBox, confirm, cancel);
+        rootPane.getChildren().addAll(imageText, chooseImage, imageBox);
     }
 
     private void setupLayout() {

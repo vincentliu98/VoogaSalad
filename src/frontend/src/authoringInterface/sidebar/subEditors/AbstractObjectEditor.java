@@ -27,6 +27,7 @@ public abstract class AbstractObjectEditor implements SubView<AnchorPane> {
         nameField = new TextField();
         confirm = new Button("Apply");
         cancel = new Button("Cancel");
+        rootPane.getChildren().addAll(inputText, nameField, confirm, cancel);
         setupBasicLayout();
     }
 
