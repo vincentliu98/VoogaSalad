@@ -51,10 +51,11 @@ public class EntityEditor extends AbstractObjectEditor implements ObjectEditor<E
                 alert.setTitle("Empty Name");
                 alert.setContentText("You must give your entity a non-empty name");
                 alert.showAndWait();
+            } else {
+                entity.setName(nameField.getText().trim());
+                isApplied = true;
+                ((Stage) rootPane.getScene().getWindow()).close();
             }
-            entity.setName(nameField.getText().trim());
-            isApplied = true;
-            ((Stage) rootPane.getScene().getWindow()).close();
         });
         setupLayout();
         rootPane.getChildren().addAll(imageText, chooseImage, imageBox);

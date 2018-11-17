@@ -1,6 +1,7 @@
 package authoringInterface.editor.editView;
 
 import api.SubView;
+import authoringInterface.sidebar.SideViewInterface;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
@@ -22,13 +23,15 @@ public class EditView implements SubView<TabPane> {
     private final TabPane tabPane = new TabPane();
     private boolean isMyFirstTab;
     private int index = 1;
+    private SideViewInterface sideView;
 
     /**
      * This method constructs the tabView.
      *
      * @return A tabView Node to be displayed at the left side of the createGraph window.
      */
-    public EditView(){
+    public EditView(SideViewInterface sideView){
+        this.sideView = sideView;
         isMyFirstTab = true;
         initializeTab();
         locateTab();
@@ -54,7 +57,7 @@ public class EditView implements SubView<TabPane> {
     private void constructTab(){
         try {
             Tab tempTab = new Tab("Tab" + index);
-            tempTab.setContent(new EditScrollView().getView());
+            tempTab.setContent(new EditScrollView(sideView).getView());
             if (isMyFirstTab) {
                 tempTab.setClosable(false);
                 isMyFirstTab = false;

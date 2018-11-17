@@ -1,7 +1,10 @@
+/*
 package authoringInterface.editor;
 
 import api.SubView;
 import authoringInterface.editor.editView.EditScrollView;
+import authoringInterface.sidebar.SideView;
+import authoringInterface.sidebar.SideViewInterface;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
@@ -10,13 +13,15 @@ import javafx.scene.control.TabPane.TabDragPolicy;
 import javafx.scene.layout.AnchorPane;
 
 
+*/
 /**
  * EditView Class (TabPane > ScrollPane)
  *      - holding scroll views
  *
  * @author Amy Kim
  * @author jl729
- */
+ *//*
+
 public class EditView implements SubView<AnchorPane> {
     private AnchorPane anchorPane;
     private final TabPane tabPane = new TabPane();
@@ -24,12 +29,14 @@ public class EditView implements SubView<AnchorPane> {
     private Button addButton;
     private int index = 1;
 
-    /**
+    */
+/**
      * This method constructs the tabView.
      *
      * @return A tabView Node to be displayed at the left side of the createGraph window.
-     */
-    public EditView(){
+     *//*
+
+    public EditView() {
         gridScrollView = new EditScrollView();
         initializeAnchorPane();
         addTab();
@@ -37,9 +44,11 @@ public class EditView implements SubView<AnchorPane> {
         anchorPane.getChildren().addAll(tabPane, addButton);
     }
 
-    /**
+    */
+/**
      * Set up the anchorPane that will contain the AddButton and TabPane
-     */
+     *//*
+
     private void initializeAnchorPane() {
         anchorPane = new AnchorPane();
         addButton = new Button("+");
@@ -63,13 +72,16 @@ public class EditView implements SubView<AnchorPane> {
         index++;
     }
 
-    /**
+    */
+/**
      * This method returns the responsible JavaFx Node responsible to be added or deleted from other graphical elements.
      *
      * @return A "root" JavaFx Node representative of this object.
-     */
+     *//*
+
     @Override
     public AnchorPane getView() {
         return anchorPane;
     }
 }
+*/

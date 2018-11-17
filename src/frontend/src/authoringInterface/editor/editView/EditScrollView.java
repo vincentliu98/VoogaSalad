@@ -2,6 +2,9 @@ package authoringInterface.editor.editView;
 
 import api.DraggingCanvas;
 import api.SubView;
+import authoringInterface.sidebar.SideView;
+import authoringInterface.sidebar.SideViewInterface;
+import authoringInterface.sidebar.treeItemEntries.EditTreeItem;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
@@ -15,6 +18,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * EditScrollView Class (ScrollPane)
  *      - Representation of the game's grid setting
@@ -25,14 +31,18 @@ import javafx.scene.text.Text;
 public class EditScrollView implements SubView<Pane>, DraggingCanvas {
     private Pane gridScrollView;
     private HBox contentBox;
+    private SideViewInterface sideView;
+    private Map<Node, TreeItem<String>> nodeToTreeItemMap;
 
-    public EditScrollView() {
+    public EditScrollView(SideViewInterface sideView) {
+        this.sideView = sideView;
+        nodeToTreeItemMap = new HashMap<>();
         gridScrollView = new Pane();
         contentBox = new HBox();
         gridScrollView.addEventFilter(MouseDragEvent.MOUSE_DRAG_RELEASED, e -> {
             if (e.getGestureSource() instanceof TreeCell) {
-                TreeItem<String> item = ((TreeCell) e.getGestureSource()).getTreeItem();
-                if (item.getChildren().size() != 0) {
+                TreeItem<String> item = ((TreeCell<String>) e.getGestureSource()).getTreeItem();
+                if (!item.isLeaf()) {
                     return;
                 }
                 if (item.getGraphic() != null) {
@@ -40,11 +50,13 @@ public class EditScrollView implements SubView<Pane>, DraggingCanvas {
                     copy.setX(e.getX());
                     copy.setY(e.getY());
                     gridScrollView.getChildren().add(copy);
+                    nodeToTreeItemMap.put(copy, item);
                 } else {
                     Text target = new Text(item.getValue());
                     target.setX(e.getX());
                     target.setY(e.getY());
                     gridScrollView.getChildren().add(target);
+                    nodeToTreeItemMap.put(target, item);
                 }
             }
         });
