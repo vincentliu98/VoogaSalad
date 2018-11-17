@@ -1,0 +1,34 @@
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-background-color: #F0ECEC;
+    -fx-border-width: 0 0 1.5 0;
+    -fx-border-color: transparent transparent #F0ECEC transparent;
+}
+
+.tab-pane .tab {
+    -fx-background-color: #A59F9F;
+
+}
+
+.tab-pane .tab:selected {
+    -fx-background-color: #837A7A;
+}
+
+.tab .tab-label {
+    -fx-alignment: CENTER;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.tab:selected .tab-label {
+    -fx-alignment: CENTER;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.tab-pane:focused > .tab-header-area > .headers-region > .tab:selected .focus-indicator {
+    -fx-border-color: transparent;
+}
+
+.addBtn {
+    -fx-background-color: transparent;
+}

@@ -1,4 +1,4 @@
-package authoringInterface.editor;
+package authoringInterface.editor.editView;
 
 import api.SubView;
 import javafx.scene.Node;
@@ -7,17 +7,17 @@ import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.HBox;
 
 /**
- * GridScrollView Class (ScrollPane)
+ * EditScrollView Class (ScrollPane)
  *      - Representation of the game's grid setting
  *      - It should support Zoom in and zoom out
  *
  * @author Amy Kim
  */
-public class GridScrollView implements SubView<ScrollPane> {
+public class EditScrollView implements SubView<ScrollPane> {
     private ScrollPane gridScrollView;
     private HBox contentBox;
 
-    public GridScrollView() {
+    public EditScrollView() {
         gridScrollView = new ScrollPane();
         contentBox = new HBox();
 

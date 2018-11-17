@@ -1,9 +1,9 @@
-package authoringInterface.editor;
+package authoringInterface.editor.menuBarView;
 
 import api.SubView;
 import authoringInterface.MainAuthoringProgram;
 import authoringInterface.View;
-import graphUI.EdgeSettingWindow;
+import authoringInterface.editor.menuBarView.subMenuBarView.LoadFileView;
 import graphUI.GraphPane;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
@@ -20,6 +20,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
 
     private MenuBar menuBar;
     private GameWindow gameWindow;
+    private LoadFileView newFile;
 
     public EditorMenuBarView() {
         menuBar = new MenuBar();
@@ -48,7 +49,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         newFile.setOnAction(this::handleNewFile);
         open.setOnAction(this::handleOpen);
         save.setOnAction(this::handleSave);
-        saveAs.setOnAction(this::handeSaveAs);
+        saveAs.setOnAction(this::handleSaveAs);
         close.setOnAction(this::handleClose);
         undo.setOnAction(this::handleUndo);
         redo.setOnAction(this::handleRedo);
@@ -65,15 +66,17 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         menuBar.getMenus().addAll(file, edit, tools, run, help);
     }
 
-    private void handleGraph(ActionEvent actionEvent) {
+    private void handleGraph(ActionEvent e) {
         new GraphPane(new Stage());
     }
 
 
     void handleNewFile(ActionEvent event) {}
-    void handleOpen(ActionEvent event) {}
+    void handleOpen(ActionEvent event) {
+        newFile = new LoadFileView();
+    }
     void handleSave(ActionEvent event) {}
-    void handeSaveAs(ActionEvent event) {}
+    void handleSaveAs(ActionEvent event) {}
     void handleClose(ActionEvent event) {}
     void handleUndo(ActionEvent event) {}
     void handleRedo(ActionEvent event) {}

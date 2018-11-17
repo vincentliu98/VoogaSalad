@@ -8,6 +8,7 @@ public class MainAuthoringProgram extends Application {
 
     public static final int SCREEN_WIDTH = 1200;
     public static final int SCREEN_HEIGHT = 700;
+    public static final String STYLESHEET = "style.css";
 
     /**
      * The main entry point for all JavaFX applications.
@@ -29,7 +30,9 @@ public class MainAuthoringProgram extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("VoogaSalad!");
         View myView = new View(primaryStage);
-        primaryStage.setScene(new Scene(myView.getRootPane(), SCREEN_WIDTH, SCREEN_HEIGHT));
+        var myScene = new Scene(myView.getRootPane(), SCREEN_WIDTH, SCREEN_HEIGHT);
+        myScene.getStylesheets().add(STYLESHEET);
+        primaryStage.setScene(myScene);
         primaryStage.show();
     }
 

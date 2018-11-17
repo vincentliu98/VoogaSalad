@@ -2,8 +2,8 @@ package authoringInterface;
 
 import api.ParentView;
 import api.SubView;
-import authoringInterface.editor.EditView;
-import authoringInterface.editor.EditorMenuBarView;
+import authoringInterface.editor.editView.EditView;
+import authoringInterface.editor.menuBarView.EditorMenuBarView;
 import authoringInterface.sidebar.SideView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
