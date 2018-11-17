@@ -1,5 +1,6 @@
 package authoringInterface.editor.editView;
 
+import api.DraggingCanvas;
 import api.SubView;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
@@ -21,7 +22,7 @@ import javafx.scene.text.Text;
  *
  * @author Amy Kim, Haotian Wang
  */
-public class EditScrollView implements SubView<Pane> {
+public class EditScrollView implements SubView<Pane>, DraggingCanvas {
     private Pane gridScrollView;
     private HBox contentBox;
 
@@ -52,5 +53,13 @@ public class EditScrollView implements SubView<Pane> {
     @Override
     public Pane getView() {
         return gridScrollView;
+    }
+
+    /**
+     * Setup the dragging canvas event filters.
+     */
+    @Override
+    public void setupDraggingCanvas() {
+
     }
 }
