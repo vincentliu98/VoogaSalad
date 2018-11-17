@@ -2,7 +2,9 @@ package gameplay;
 
 import javafx.event.Event;
 
-public class Edge {
+import java.util.List;
+
+public class Edge implements ArgumentListener {
     private int myID;
     private int myPhaseID;
     private int myStartNodeID;
@@ -19,21 +21,30 @@ public class Edge {
         this.myGuard = guard;
     }
 
-    public void setListener(){
-        // set listener based on myTrigger that calls validity and execution
-        if (checkValidity()){
-            //TODO: TURN OFF LISTENER
-        } else {
-            setListener(); // start over again
-        }
-    }
-
-    private boolean checkValidity(){
+    private boolean checkValidity(List<Tag> arguments){
         // execute Groovy guard, returns true if valid
+        // include check for size, type, etc.
+        /* PERFORM SOMETHING LIKE THIS:
+            if (tag.getType().equals(Entity.class)){
+                return GameData.getEntity(tag.getID());
+            } else { // Tile.class
+                return GameData.getEntity(tag.getID());
+            }
+         */
         return true;
     }
 
     public int getID(){
         return myID;
+    }
+
+    @Override
+    public void hasChanged(List<Tag> arguments) {
+        if (checkValidity(arguments)){
+            GameData.removeArgumentListener(this);
+            GameData.getNode(myEndNodeID).execute();
+        } else {
+            GameData.clearArguments();
+        }
     }
 }

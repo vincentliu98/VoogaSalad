@@ -27,7 +27,7 @@ public class Node {
         int edgeID = 1; // TODO: Erase this from being a default val; should be in myOutgoingEdgeIDs
         // execute Groovy execution that defines which edge to execute (which ID)
         // also must remember to shut off listener
-        GameData.getEdge(edgeID).setListener();
+        GameData.addArgumentListener(GameData.getEdge(edgeID));
     }
 
 }

@@ -1,11 +1,13 @@
 package gameplay;
 
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class Tile {
+public class Tile implements EventHandler {
     private int myID;
     private int myWidth;
     private int myHeight;
@@ -22,6 +24,11 @@ public class Tile {
 
     public int getID(){
         return myID;
+    }
+
+    @Override
+    public void handle(Event event) {
+        GameData.addArgument(new Tag(Tile.class, myID));
     }
 
     /*
