@@ -12,6 +12,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.util.Map;
+
 /**
  * This abstract class provides a boiler plate for different editors because they are pretty similar.
  *
@@ -25,6 +27,7 @@ public abstract class AbstractObjectEditor<T extends EditTreeItem> implements Ob
     protected Button cancel;
     protected boolean isApplied;
     protected TreeItem<String> treeItem;
+    protected Map<String, EditTreeItem> objectMap;
 
     public AbstractObjectEditor() {
         rootPane = new AnchorPane();
@@ -83,5 +86,15 @@ public abstract class AbstractObjectEditor<T extends EditTreeItem> implements Ob
     @Override
     public void registerTreeItem(TreeItem<String> treeItem) {
         this.treeItem = treeItem;
+    }
+
+    /**
+     * Register the object map.
+     *
+     * @param map
+     */
+    @Override
+    public void registerObjectMap(Map<String, EditTreeItem> map) {
+        objectMap = map;
     }
 }

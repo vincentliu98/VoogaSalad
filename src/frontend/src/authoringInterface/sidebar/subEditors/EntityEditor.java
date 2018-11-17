@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TreeItem;
 import javafx.scene.control.cell.TextFieldTreeCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -55,6 +56,17 @@ public class EntityEditor extends AbstractObjectEditor<Entity> {
                 entity.setName(nameField.getText().trim());
                 isApplied = true;
                 ((Stage) rootPane.getScene().getWindow()).close();
+                if (treeItem != null && !treeItem.isLeaf()) {
+                    int id = treeItem.getChildren().size();
+                    TreeItem<String> newItem = new TreeItem<>(entity.getName());
+                    ImageView preview = new ImageView(entity.getSprite());
+                    preview.setFitWidth(50);
+                    preview.setFitHeight(50);
+                    newItem.setGraphic(preview);
+                    entity.setId(id);
+                    objectMap.put(newItem.getValue(), entity);
+                    treeItem.getChildren().add(newItem);
+                }
             }
         });
         setupLayout();

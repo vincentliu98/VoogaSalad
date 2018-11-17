@@ -31,18 +31,8 @@ public class CustomTreeCellImpl extends TreeCell<String> {
                     EntityEditor editor = new EntityEditor();
                     dialogStage.setScene(new Scene(editor.getView(), 500, 500));
                     dialogStage.show();
-                    dialogStage.setOnHidden(closeEvent -> {
-                        if (editor.applied()) {
-                            editor.getObject().setId(id);
-                            TreeItem<String> childItem = new TreeItem<>(editor.getObject().getName());
-                            ImageView icon = new ImageView(editor.getObject().getSprite());
-                            icon.setFitHeight(50);
-                            icon.setFitWidth(50);
-                            childItem.setGraphic(icon);
-                            getTreeItem().getChildren().add(childItem);
-                            objectMap.put(editor.getObject().getName(), editor.getObject());
-                        }
-                    });
+                    editor.registerTreeItem(getTreeItem());
+                    editor.registerObjectMap(objectMap);
                     break;
                 case "SOUND":
                     break;
