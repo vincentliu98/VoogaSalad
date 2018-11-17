@@ -5,6 +5,7 @@ import api.SubView;
 import authoringInterface.sidebar.SideView;
 import authoringInterface.sidebar.SideViewInterface;
 import authoringInterface.sidebar.treeItemEntries.EditTreeItem;
+import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
@@ -60,6 +61,10 @@ public class EditScrollView implements SubView<Pane>, DraggingCanvas {
                 }
             }
         });
+    }
+
+    public void handleDoubleClick(ActionEvent event) {
+
     }
 
     @Override
