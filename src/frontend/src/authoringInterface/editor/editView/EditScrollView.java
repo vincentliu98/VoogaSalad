@@ -1,4 +1,4 @@
-package authoringInterface.editor;
+package authoringInterface.editor.editView;
 
 import api.SubView;
 import javafx.scene.Node;
@@ -15,17 +15,17 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 
 /**
- * GridScrollView Class (ScrollPane)
+ * EditScrollView Class (ScrollPane)
  *      - Representation of the game's grid setting
  *      - It should support Zoom in and zoom out
  *
  * @author Amy Kim, Haotian Wang
  */
-public class GridScrollView implements SubView<Pane> {
+public class EditScrollView implements SubView<Pane> {
     private Pane gridScrollView;
     private HBox contentBox;
 
-    public GridScrollView() {
+    public EditScrollView() {
         gridScrollView = new Pane();
         contentBox = new HBox();
         gridScrollView.addEventFilter(MouseDragEvent.MOUSE_DRAG_RELEASED, e -> {
@@ -44,14 +44,7 @@ public class GridScrollView implements SubView<Pane> {
                 }
             }
         });
-//        gridScrollView.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
-//        gridScrollView.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
-//
-//        gridScrollView.setContent(contentBox);
     }
-
-    private void handleZoom(){}
-    private void dragAndDrop(){}
 
     @Override
     public Pane getView() {

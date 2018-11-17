@@ -1,7 +1,6 @@
-package graphUI;
+package graphUI.phase;
 
-import graphUI.phase.GraphNode;
-import javafx.application.Application;
+import authoringInterface.spritechoosingwindow.PopUpWindow;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
@@ -29,8 +28,10 @@ import java.util.List;
  * @author jl729
  */
 
-public class GraphTest extends Application {
+public class GraphPane extends PopUpWindow {
 
+    public static final Double WIDTH = 700.0;
+    public static final Double HEIGHT = 500.0;
     private double orgSceneX, orgSceneY;
     private double orgTranslateX, orgTranslateY;
     EventHandler<MouseEvent> circleOnMousePressedEventHandler = new EventHandler<>() {
@@ -64,29 +65,38 @@ public class GraphTest extends Application {
         }
     };
     private GridPane root = new GridPane();
-    private FlowPane graphBox = new FlowPane();
+    private Pane graphBox = new Pane();
     private Group group = new Group();
     private VBox itemBox = new VBox();
     private Scene myScene;
     private double newNodeX;
     private double newNodeY;
+    private Integer edgeNum = 0;
     private List<GraphNode> nodeList = new ArrayList<>();
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+    public GraphPane(Stage primaryStage) {
+        super(primaryStage);
+        dialog.setTitle("Graph Setting");
 
-    @Override
-    public void start(Stage primaryStage) {
         nodeList.add(createNode("0", 100, 100, Color.DEEPSKYBLUE));
         initializeUI(nodeList);
 
-        primaryStage.setScene(myScene);
-        primaryStage.show();
+        showWindow();
+    }
+
+    @Override
+    public void showWindow() {
+        dialog.setScene(myScene);
+        dialog.show();
+    }
+
+    @Override
+    protected void closeWindow() {
+        dialog.close();
     }
 
     public void connectTwoNodes(Integer nodeOneIndex, Integer nodeTwoIndex) {
-        connectNodes(nodeList.get(nodeOneIndex), nodeList.get(nodeTwoIndex), "E" + String.valueOf(nodeList.size() - 2));
+        connectNodes(nodeList.get(nodeOneIndex), nodeList.get(nodeTwoIndex), "E" + edgeNum++);
     }
 
     private void initializeUI(List<GraphNode> nodeList) {
@@ -99,7 +109,7 @@ public class GraphTest extends Application {
         root.add(itemBox, 0, 0);
         HBox.setHgrow(itemBox, Priority.ALWAYS);
         root.add(graphBox, 1, 0);
-        myScene = new Scene(root, 700, 600);
+        myScene = new Scene(root, WIDTH, HEIGHT);
     }
 
     private void initializeItemBox() {
@@ -119,7 +129,7 @@ public class GraphTest extends Application {
         // make the lines clickable and user-friendly
         line.setOnMouseEntered(e -> myScene.setCursor(Cursor.HAND));
         line.setOnMouseExited(e -> myScene.setCursor(Cursor.DEFAULT));
-//        line.setOnMouseClicked(e -> new EdgeConnectWindow(new Stage(), this));
+        line.setOnMouseClicked(e -> new EdgeConnectWindow(new Stage(), this));
         return line;
     }
 
@@ -167,7 +177,7 @@ public class GraphTest extends Application {
             boolean success = false;
             if (db.hasImage()) {
                 success = true;
-                var newGraphNod = createNode(String.valueOf(nodeList.size()), newNodeX + 50, newNodeY + 50, Color.DEEPSKYBLUE);
+                var newGraphNod = createNode(String.valueOf(nodeList.size()), newNodeX - 50, newNodeY - 50, Color.DEEPSKYBLUE);
                 nodeList.add(newGraphNod);
 //                    connectNodes(nodeList.get(nodeList.size()-2), newGraphNod, "E" + (nodeList.size()-2));
                 group.getChildren().add(newGraphNod);
@@ -198,7 +208,8 @@ public class GraphTest extends Application {
         edgeLine.setOnMouseEntered(e -> myScene.setCursor(Cursor.HAND));
         edgeLine.setOnMouseExited(e -> myScene.setCursor(Cursor.DEFAULT));
         // TODO: 11/14/18 Pop-up window to add things to the Edge
-        edgeLine.setOnMouseClicked(e -> System.out.println("The Line is clicked"));
+//        edgeLine.setOnMouseClicked(e -> System.out.println("The Line is clicked"));
+        edgeLine.setOnMouseClicked(e -> new EdgeSettingWindow(new Stage()));
 
         // add to the GraphNode's storage
         node1.addNeighbor(node2);
@@ -217,8 +228,8 @@ public class GraphTest extends Application {
         node.setOnMouseEntered(e -> myScene.setCursor(Cursor.HAND));
         node.setOnMouseExited(e -> myScene.setCursor(Cursor.DEFAULT));
         // TODO: 11/14/18 Pop-up window to add things to the Node
-        node.setOnMouseClicked(e -> System.out.println("The GraphNode is clicked"));
-
+//        node.setOnMouseClicked(e -> System.out.println("The GraphNode is clicked"));
+        node.setOnMouseClicked(e -> new NodeSettingWindow(new Stage()));
         return node;
     }
 
@@ -243,7 +254,6 @@ public class GraphTest extends Application {
             l.setEndY(neighbor.getCenterY());
         }
     }
-
 }
 
 
