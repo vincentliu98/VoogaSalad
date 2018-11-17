@@ -1,13 +1,12 @@
 package authoringInterface.editor;
 
 import api.SubView;
+import authoringInterface.editor.editView.EditScrollView;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabDragPolicy;
-import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.layout.AnchorPane;
 
 
@@ -21,9 +20,7 @@ import javafx.scene.layout.AnchorPane;
 public class EditView implements SubView<AnchorPane> {
     private AnchorPane anchorPane;
     private final TabPane tabPane = new TabPane();
-    //TODO: ScrollViews can be more; need to decide
-//    private EntityScrollView entityScrollView;
-    private GridScrollView gridScrollView;
+    private EditScrollView gridScrollView;
     private Button addButton;
     private int index = 1;
 
@@ -33,12 +30,10 @@ public class EditView implements SubView<AnchorPane> {
      * @return A tabView Node to be displayed at the left side of the createGraph window.
      */
     public EditView(){
-//        entityScrollView = new EntityScrollView();
-        gridScrollView = new GridScrollView();
+        gridScrollView = new EditScrollView();
         initializeAnchorPane();
         addTab();
         tabPane.setTabDragPolicy(TabDragPolicy.REORDER);
-//        tabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
         anchorPane.getChildren().addAll(tabPane, addButton);
     }
 

@@ -1,7 +1,6 @@
 package runningGame;
 
 import api.SubView;
-import authoringInterface.editor.EditorMenuBarView;
 import javafx.scene.layout.AnchorPane;
 
 /**

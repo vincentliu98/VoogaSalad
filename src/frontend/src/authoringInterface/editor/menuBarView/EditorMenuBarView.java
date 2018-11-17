@@ -1,9 +1,10 @@
-package authoringInterface.editor;
+package authoringInterface.editor.menuBarView;
 
 import api.SubView;
 import authoring.AuthoringTools;
 import authoringInterface.MainAuthoringProgram;
 import authoringInterface.View;
+import authoringInterface.editor.menuBarView.subMenuBarView.LoadFileView;
 import graphUI.groovy.GroovyPane;
 import graphUI.phase.GraphPane;
 import javafx.event.ActionEvent;
@@ -24,6 +25,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
 
     private MenuBar menuBar;
     private GameWindow gameWindow;
+    private LoadFileView newFile;
     private AuthoringTools authTools;
 
     public EditorMenuBarView(AuthoringTools authTools) {
@@ -56,7 +58,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         newFile.setOnAction(this::handleNewFile);
         open.setOnAction(this::handleOpen);
         save.setOnAction(this::handleSave);
-        saveAs.setOnAction(this::handeSaveAs);
+        saveAs.setOnAction(this::handleSaveAs);
         close.setOnAction(this::handleClose);
         undo.setOnAction(this::handleUndo);
         redo.setOnAction(this::handleRedo);
@@ -77,23 +79,17 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         new GroovyPane(new Stage(), authTools.factory());
     }
 
-    private void handleGraph(ActionEvent actionEvent) {
+    private void handleGraph(ActionEvent e) {
         new GraphPane(new Stage());
     }
 
 
-    void handleNewFile(ActionEvent event) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open project files");
-        File file = fileChooser.showOpenDialog(new Stage());
-        // TODO: keyboard warrior, backend do the rest.
-        if (file != null) {
-            // if (file.isLegitimate) {
-        }
+    void handleOpen(ActionEvent event) {
+        newFile = new LoadFileView();
     }
-    void handleOpen(ActionEvent event) {}
+    void handleNewFile(ActionEvent event) {}
     void handleSave(ActionEvent event) {}
-    void handeSaveAs(ActionEvent event) {}
+    void handleSaveAs(ActionEvent event) {}
     void handleClose(ActionEvent event) {}
     void handleUndo(ActionEvent event) {}
     void handleRedo(ActionEvent event) {}
