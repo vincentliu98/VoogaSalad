@@ -139,7 +139,7 @@ public class View implements ParentView<SubView>, DraggingCanvas {
                 return;
             }
             rootPane.getChildren().remove(preview);
-            preview.setMouseTransparent(true);
+            preview = null;
         });
     }
 }

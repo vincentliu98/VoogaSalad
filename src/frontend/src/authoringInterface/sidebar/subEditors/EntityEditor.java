@@ -22,24 +22,16 @@ import java.io.File;
  *
  * @author Haotian Wang
  */
-public class EntityEditor implements ObjectEditor<Entity>, SubView<AnchorPane> {
-    private static final double WIDTH = 500;
-    private static final double HEIGHT = 500;
-    private AnchorPane rootPane;
-    private Text inputText;
-    private TextField nameField;
+public class EntityEditor extends AbstractObjectEditor implements ObjectEditor<Entity>, SubView<AnchorPane> {
     private Text imageText;
     private Button chooseImage;
     private VBox imageBox;
-    private Button confirm;
-    private Button cancel;
     private Entity entity;
 
     public EntityEditor() {
+        super();
         entity = new Entity();
-        rootPane = new AnchorPane();
-        inputText = new Text("Your entity name:");
-        nameField = new TextField();
+        inputText.setText("Your entity name:");
         imageText = new Text("Choose an image for your entity");
         chooseImage = new Button("Choose sprite");
         chooseImage.setOnAction(e -> {
@@ -52,27 +44,15 @@ public class EntityEditor implements ObjectEditor<Entity>, SubView<AnchorPane> {
             }
         });
         imageBox = new VBox();
-        confirm = new Button("Apply");
         confirm.setOnAction(e -> {
             entity.setName(nameField.getText());
             ((Stage) rootPane.getScene().getWindow()).close();
         });
-        cancel = new Button("Cancel");
-        cancel.setOnAction(e -> {
-            ((Stage) rootPane.getScene().getWindow()).close();
-        });
         setupLayout();
-        rootPane.getChildren().addAll(inputText, nameField, imageText, chooseImage, imageBox);
+        rootPane.getChildren().addAll(imageText, chooseImage, imageBox);
     }
 
     private void setupLayout() {
-        rootPane.setPrefSize(WIDTH, HEIGHT);
-        AnchorPane.setLeftAnchor(inputText, 50.0);
-        AnchorPane.setTopAnchor(inputText, 50.0);
-        inputText.setLayoutX(14);
-        inputText.setLayoutY(27);
-        nameField.setLayoutX(208);
-        nameField.setLayoutY(37);
         imageText.setLayoutX(36);
         imageText.setLayoutY(176);
         chooseImage.setLayoutX(261);
@@ -80,10 +60,6 @@ public class EntityEditor implements ObjectEditor<Entity>, SubView<AnchorPane> {
         imageBox.setPrefSize(164, 171);
         imageBox.setLayoutX(37);
         imageBox.setLayoutY(206);
-        confirm.setLayoutX(296);
-        confirm.setLayoutY(436);
-        cancel.setLayoutX(391);
-        cancel.setLayoutY(436);
     }
 
     /**
@@ -93,7 +69,9 @@ public class EntityEditor implements ObjectEditor<Entity>, SubView<AnchorPane> {
      */
     @Override
     public void readObject(Entity userObject) {
-
+        entity = userObject;
+        nameField.setText(entity.getName());
+        imageBox.getChildren().set(0, new ImageView(entity.getSprite()));
     }
 
     /**
