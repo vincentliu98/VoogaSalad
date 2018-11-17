@@ -5,7 +5,7 @@ import authoringInterface.sidebar.treeItemEntries.EditTreeItem;
 import authoringInterface.sidebar.treeItemEntries.Sound;
 import javafx.scene.layout.AnchorPane;
 
-public class SoundEditor implements ObjectEditor<Sound>, SubView<AnchorPane> {
+public class SoundEditor extends AbstractObjectEditor implements ObjectEditor<Sound>, SubView<AnchorPane> {
     /**
      * This method returns the responsible JavaFx Node responsible to be added or deleted from other graphical elements.
      *
@@ -34,5 +34,15 @@ public class SoundEditor implements ObjectEditor<Sound>, SubView<AnchorPane> {
     @Override
     public Sound getObject() {
         return null;
+    }
+
+    /**
+     * Return a boolean indicating whether the changes are successfully applied.
+     *
+     * @return
+     */
+    @Override
+    public boolean applied() {
+        return isApplied;
     }
 }

@@ -5,7 +5,7 @@ import authoringInterface.sidebar.treeItemEntries.EditTreeItem;
 import authoringInterface.sidebar.treeItemEntries.Tile;
 import javafx.scene.layout.AnchorPane;
 
-public class TileEditor implements ObjectEditor<Tile>, SubView<AnchorPane> {
+public class TileEditor extends AbstractObjectEditor implements ObjectEditor<Tile>, SubView<AnchorPane> {
     /**
      * This method returns the responsible JavaFx Node responsible to be added or deleted from other graphical elements.
      *
@@ -34,5 +34,15 @@ public class TileEditor implements ObjectEditor<Tile>, SubView<AnchorPane> {
     @Override
     public Tile getObject() {
         return null;
+    }
+
+    /**
+     * Return a boolean indicating whether the changes are successfully applied.
+     *
+     * @return
+     */
+    @Override
+    public boolean applied() {
+        return isApplied;
     }
 }

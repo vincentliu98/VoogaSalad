@@ -1,6 +1,7 @@
 package authoringInterface.sidebar.old;
 
 import api.SubView;
+import authoringInterface.sidebar.treeItemEntries.EditTreeItem;
 import authoringInterface.sidebar.treeItemEntries.Entity;
 import authoringInterface.sidebar.SideViewInterface;
 import authoringInterface.spritechoosingwindow.EntityWindow;
@@ -99,6 +100,11 @@ public class OldSideView implements SubView<StackPane>, SideViewInterface {
 
             System.out.println("Type: " + type + "Cell: " + myObj);
             item.getChildren().add(newObject);
+    }
+
+    @Override
+    public EditTreeItem getObject(String name) {
+        return null;
     }
 
     private final class TextFieldTreeCellImpl extends TreeCell<String> {
