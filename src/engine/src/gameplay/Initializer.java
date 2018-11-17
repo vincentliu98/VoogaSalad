@@ -16,8 +16,12 @@ public class Initializer {
                 myXMLParser.getPhases(), myXMLParser.getNodes(), myXMLParser.getEdges());
     }
 
-    public Turn getTurn(){
-        return myXMLParser.getTurn();
+    public void startGame(){
+        myXMLParser.getTurn().startPhase();
+    }
+
+    public void saveGame(){
+        String xmlString = GameData.saveGameData() + myXMLParser.getTurn().serializeTurn();
     }
 
 }

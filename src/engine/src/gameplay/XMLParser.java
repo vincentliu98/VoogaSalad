@@ -104,4 +104,5 @@ public class XMLParser {
         Turn turn = (Turn) mySerializer.fromXML(currentTurn);
         return turn;
     }
+
 }

@@ -1,5 +1,8 @@
 package gameplay;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
+
 public class Turn {
     private int myCurrentPhaseID;
     private int myCurrentPlayerID;
@@ -23,5 +26,10 @@ public class Turn {
 
     public void endGame(){
         // end the game
+    }
+
+    public String serializeTurn(){
+        XStream xStream = new XStream(new DomDriver());
+        return xStream.toXML(this);
     }
 }

@@ -1,5 +1,8 @@
 package gameplay;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -70,5 +73,24 @@ public class GameData {
         for (ArgumentListener argumentListener : myArgumentListeners){
             argumentListener.hasChanged(myArguments);
         }
+    }
+
+    public static String saveGameData(){
+        String xmlString = "";
+        XStream serializer = new XStream(new DomDriver());
+        serializeData(serializer, xmlString, PLAYERS);
+        serializeData(serializer, xmlString, ENTITIES);
+        serializeData(serializer, xmlString, TILES);
+        serializeData(serializer, xmlString, PHASES);
+        serializeData(serializer, xmlString, NODES);
+        serializeData(serializer, xmlString, EDGES);
+        return xmlString;
+    }
+
+    public static String serializeData(XStream serializer, String xmlString, Map<Integer, ?> dataMap){
+        for (Map.Entry<Integer, ?> entry : dataMap.entrySet()){
+            xmlString = serializer.toXML(entry.getValue()) + "\n";
+        }
+        return xmlString;
     }
 }
