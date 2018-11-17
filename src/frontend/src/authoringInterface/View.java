@@ -96,7 +96,7 @@ public class View implements ParentView<SubView>, DraggingCanvas {
         rootPane.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
             if (e.getTarget() instanceof TreeCell) {
                 TreeItem<String> item = (TreeItem<String>) ((TreeCell) e.getTarget()).getTreeItem();
-                if (item == null || item.getChildren().size() != 0) {
+                if (item == null || !item.isLeaf()) {
                     return;
                 }
                 if (item.getGraphic() != null) {

@@ -15,7 +15,7 @@ import javafx.stage.Stage;
  *
  * @author Haotian Wang
  */
-public abstract class AbstractObjectEditor implements SubView<AnchorPane> {
+public abstract class AbstractObjectEditor<T extends EditTreeItem> implements ObjectEditor<T>, SubView<AnchorPane> {
     protected AnchorPane rootPane;
     protected Text inputText;
     protected TextField nameField;
@@ -60,5 +60,14 @@ public abstract class AbstractObjectEditor implements SubView<AnchorPane> {
     @Override
     public AnchorPane getView() {
         return rootPane;
+    }
+
+    /**
+     * Return a boolean indicating whether the changes are successfully applied.
+     *
+     * @return
+     */
+    public boolean applied() {
+        return isApplied;
     }
 }

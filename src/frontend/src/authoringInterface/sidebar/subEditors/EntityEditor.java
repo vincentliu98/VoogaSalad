@@ -23,7 +23,7 @@ import java.io.File;
  *
  * @author Haotian Wang
  */
-public class EntityEditor extends AbstractObjectEditor implements ObjectEditor<Entity>, SubView<AnchorPane> {
+public class EntityEditor extends AbstractObjectEditor<Entity> {
     private Text imageText;
     private Button chooseImage;
     private VBox imageBox;
@@ -91,16 +91,6 @@ public class EntityEditor extends AbstractObjectEditor implements ObjectEditor<E
     @Override
     public Entity getObject() {
         return entity;
-    }
-
-    /**
-     * Return a boolean indicating whether the changes are successfully applied.
-     *
-     * @return
-     */
-    @Override
-    public boolean applied() {
-        return isApplied;
     }
 
     /**
