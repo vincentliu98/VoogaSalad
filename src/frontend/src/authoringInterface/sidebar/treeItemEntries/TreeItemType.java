@@ -1,4 +1,4 @@
-package authoringInterface.sidebar;
+package authoringInterface.sidebar.treeItemEntries;
 
 /**
  * This enum class lists all possible types of items that can appear in the sidebar.
@@ -6,5 +6,5 @@ package authoringInterface.sidebar;
  * @author Haotian Wang
  */
 public enum TreeItemType {
-    SOUND, ENTITY, TILESETS;
+    SOUND, ENTITY, TILE, CATEGORY;
 }

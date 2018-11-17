@@ -1,9 +1,9 @@
 package authoringInterface.sidebar;
 
 import api.SubView;
-import authoringInterface.sidebar.subTreeViews.EntitySubTreeView;
-import authoringInterface.sidebar.subTreeViews.SoundSubTreeView;
-import authoringInterface.sidebar.subTreeViews.TileSetsSubTreeView;
+import authoringInterface.sidebar.old.subTreeViews.EntitySubTreeView;
+import authoringInterface.sidebar.old.subTreeViews.SoundSubTreeView;
+import authoringInterface.sidebar.old.subTreeViews.TileSetsSubTreeView;
 import authoringInterface.spritechoosingwindow.EntityWindow;
 import javafx.scene.Node;
 import javafx.scene.control.TreeItem;

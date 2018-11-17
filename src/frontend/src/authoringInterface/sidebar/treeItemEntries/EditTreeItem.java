@@ -1,15 +1,13 @@
-package authoringInterface.sidebar;
+package authoringInterface.sidebar.treeItemEntries;
 
-import api.SubView;
 import javafx.scene.Node;
-import javafx.scene.layout.Pane;
 
 /**
  * This interface abstracts the meaning of draggable components of the graphical interface. Dragable simply means the user can press down the mouse key on an element and drag the element along the program which displays a defined preview of the elements being dragged.
  *
  * @author Haotian Wang
  */
-public interface DraggableTreeItem<T extends Node> {
+public interface EditTreeItem<T extends Node> {
     /**
      * @return Return a preview of the elements being dragged.
      */
@@ -21,11 +19,14 @@ public interface DraggableTreeItem<T extends Node> {
     TreeItemType getType();
 
     /**
-     * Handle the start of dragging action on a DraggableTreeItem.
+     * @return The String name of this edit item entry.
      */
-    void handlePressed(Pane canvas, double x, double y);
+    String getName();
 
-    void handleDrag(Pane canvas, double x, double y);
-
-    void handleExit(Pane canvas, double x, double y);
+    /**
+     * Set the name of this item entry.
+     *
+     * @param name: A new String name for this entry.
+     */
+    void setName(String name);
 }

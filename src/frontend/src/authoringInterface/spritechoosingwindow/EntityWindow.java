@@ -1,8 +1,8 @@
 package authoringInterface.spritechoosingwindow;
 
-import authoringInterface.sidebar.Entity;
-import authoringInterface.sidebar.ObjectManager;
-import authoringInterface.sidebar.SideView;
+import authoringInterface.sidebar.treeItemEntries.Entity;
+import authoringInterface.sidebar.old.ObjectManager;
+import authoringInterface.sidebar.old.SideView;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;

@@ -1,19 +1,18 @@
-package authoringInterface.sidebar;
+package authoringInterface.sidebar.old;
 
 import api.SubView;
+import authoringInterface.sidebar.treeItemEntries.Entity;
+import authoringInterface.sidebar.SideViewInterface;
 import authoringInterface.spritechoosingwindow.EntityWindow;
-import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import javafx.scene.layout.Pane;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.*;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyCode;
-
-import java.util.Stack;
 
 /**
  * A sidebar that contains many TreeItems. Functions include adding a cell and
@@ -27,9 +26,8 @@ import java.util.Stack;
 
 // TODO: 11/12/18 Make the string in the TreeCell represent the object itself
 
-public class SideView implements SubView<StackPane> {
+public class SideView implements SubView<StackPane>, SideViewInterface {
     private final ObjectManager objectManager;
-    private TextFieldTreeCellImpl newCell;
     //    private final TreeView<String> rootTreeView;
 //    private final TreeItem<String> rootTreeItem;
 //    private final TreeItem<String> entityTreeItem;
@@ -93,6 +91,7 @@ public class SideView implements SubView<StackPane> {
 
     public void addCell(Entity entity, TreeItem<String> item){
             TreeItem newObject = new TreeItem<>(entity.getName());
+            newObject.setGraphic(new ImageView(entity.getSprite()));
             // add to ListObjectManager
             var type = item.getValue();
             var myObj = new ListObject(entity.getName(), type, entity.getId());
@@ -118,15 +117,21 @@ public class SideView implements SubView<StackPane> {
                 if (type.equals("Entity")){
                     new EntityWindow(primaryStage, objectManager, mySideView, id, myItem);
                 }
-                else if (type.equals("TileClass")){
+                else if (type.equals("Tile")){
                     // Generate a TileWindow
 //                    new EntityWindow(primaryStage, objectManager);
+                }
+                else if (type.equals("Sound")) {
+
                 }
 //                var name = "New ListObject";
 //                TreeItem newObject = new TreeItem<>(name);
 //                myObj = new ListObject(name, type, id);
 //                objects.add(myObj);
 //                getTreeItem().getChildren().add(newObject);
+            });
+            setOnDragDetected(e -> {
+                startFullDrag();
             });
         }
 
