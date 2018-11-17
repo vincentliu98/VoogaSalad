@@ -1,4 +1,4 @@
-package authoringInterface.sidebar.subTreeViews;
+package authoringInterface.sidebar.old.subTreeViews;
 
 import javafx.scene.control.TreeItem;
 import javafx.stage.Stage;

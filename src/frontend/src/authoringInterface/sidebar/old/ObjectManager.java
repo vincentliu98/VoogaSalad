@@ -1,6 +1,6 @@
 package authoringInterface.sidebar.old;
 
-import authoringInterface.sidebar.EditTreeItem;
+import authoringInterface.sidebar.treeItemEntries.EditTreeItem;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -5,9 +5,9 @@ import api.ParentView;
 import api.SubView;
 import authoringInterface.editor.EditView;
 import authoringInterface.editor.EditorMenuBarView;
-import authoringInterface.sidebar.newSideView.NewSideView;
+import authoringInterface.sidebar.NewSideView;
+import authoringInterface.sidebar.SideViewInterface;
 import authoringInterface.sidebar.old.SideView;
-import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
@@ -27,7 +27,7 @@ import javafx.stage.Stage;
 public class View implements ParentView<SubView>, DraggingCanvas {
     private AnchorPane rootPane;
     private EditorMenuBarView menuBar;
-    private SideView sideView;
+    private SideViewInterface sideView;
     private EditView editView;
     private Stage primaryStage;
     private Node preview;
@@ -109,10 +109,12 @@ public class View implements ParentView<SubView>, DraggingCanvas {
                     ((Text) preview).setY(e.getY());
                     preview.setMouseTransparent(true);
                 }
-                rootPane.getChildren().add(preview);
             }
         });
         rootPane.addEventFilter(MouseDragEvent.MOUSE_DRAG_OVER, e -> {
+            if (!rootPane.getChildren().contains(preview)) {
+                rootPane.getChildren().add(preview);
+            }
             preview.setMouseTransparent(true);
             if (preview != null) {
                 if (preview instanceof ImageView) {

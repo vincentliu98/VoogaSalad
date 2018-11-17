@@ -1,4 +1,4 @@
-package authoringInterface.sidebar;
+package authoringInterface.sidebar.treeItemEntries;
 
 import javafx.scene.text.Text;
 

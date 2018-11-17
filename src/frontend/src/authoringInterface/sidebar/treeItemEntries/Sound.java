@@ -1,9 +1,5 @@
-package authoringInterface.sidebar;
+package authoringInterface.sidebar.treeItemEntries;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.text.Text;
 
