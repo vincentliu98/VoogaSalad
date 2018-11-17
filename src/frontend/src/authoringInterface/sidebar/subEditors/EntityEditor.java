@@ -4,6 +4,7 @@ import api.SubView;
 import authoringInterface.sidebar.treeItemEntries.EditTreeItem;
 import authoringInterface.sidebar.treeItemEntries.Entity;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldTreeCell;
@@ -45,8 +46,16 @@ public class EntityEditor extends AbstractObjectEditor implements ObjectEditor<E
         });
         imageBox = new VBox();
         confirm.setOnAction(e -> {
-            entity.setName(nameField.getText());
-            ((Stage) rootPane.getScene().getWindow()).close();
+            if (nameField.getText().trim().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Empty Name");
+                alert.setContentText("You must give your entity a non-empty name");
+                alert.showAndWait();
+            } else {
+                entity.setName(nameField.getText().trim());
+                isApplied = true;
+                ((Stage) rootPane.getScene().getWindow()).close();
+            }
         });
         setupLayout();
         rootPane.getChildren().addAll(imageText, chooseImage, imageBox);
@@ -82,6 +91,16 @@ public class EntityEditor extends AbstractObjectEditor implements ObjectEditor<E
     @Override
     public Entity getObject() {
         return entity;
+    }
+
+    /**
+     * Return a boolean indicating whether the changes are successfully applied.
+     *
+     * @return
+     */
+    @Override
+    public boolean applied() {
+        return isApplied;
     }
 
     /**

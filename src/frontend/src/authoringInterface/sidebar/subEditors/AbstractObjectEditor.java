@@ -21,6 +21,7 @@ public abstract class AbstractObjectEditor implements SubView<AnchorPane> {
     protected TextField nameField;
     protected Button confirm;
     protected Button cancel;
+    protected boolean isApplied;
 
     public AbstractObjectEditor() {
         rootPane = new AnchorPane();

@@ -3,10 +3,8 @@ package authoringInterface.sidebar;
 import authoringInterface.sidebar.subEditors.EntityEditor;
 import authoringInterface.sidebar.treeItemEntries.EditTreeItem;
 import javafx.scene.Scene;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TreeCell;
+import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
@@ -33,6 +31,18 @@ public class CustomTreeCellImpl extends TreeCell<String> {
                     EntityEditor editor = new EntityEditor();
                     dialogStage.setScene(new Scene(editor.getView(), 500, 500));
                     dialogStage.show();
+                    dialogStage.setOnHidden(closeEvent -> {
+                        if (editor.applied()) {
+                            editor.getObject().setId(id);
+                            TreeItem<String> childItem = new TreeItem<>(editor.getObject().getName());
+                            ImageView icon = new ImageView(editor.getObject().getSprite());
+                            icon.setFitHeight(50);
+                            icon.setFitWidth(50);
+                            childItem.setGraphic(icon);
+                            getTreeItem().getChildren().add(childItem);
+                            objectMap.put(editor.getObject().getName(), editor.getObject());
+                        }
+                    });
                     break;
                 case "SOUND":
                     break;
@@ -42,6 +52,7 @@ public class CustomTreeCellImpl extends TreeCell<String> {
                     break;
             }
         });
+        addMenu.getItems().add(addMenuItem);
         setOnDragDetected(e -> startFullDrag());
     }
 

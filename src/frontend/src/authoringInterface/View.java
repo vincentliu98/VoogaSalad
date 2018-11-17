@@ -54,8 +54,7 @@ public class View implements ParentView<SubView>, DraggingCanvas {
     private void initializeElements() {
         menuBar = new EditorMenuBarView(tools);
         sideView = new SideView();
-        editView = new EditView();
-
+        editView = new EditView(sideView);
     }
 
     private void setElements() {

@@ -61,6 +61,7 @@ public class SideView implements SubView<StackPane>, SideViewInterface {
      * @param name: The name of the object to be queried.
      * @return The EditTreeItem object having the name.
      */
+    @Override
     public EditTreeItem getObject(String name) {
         return objectMap.get(name);
     }
