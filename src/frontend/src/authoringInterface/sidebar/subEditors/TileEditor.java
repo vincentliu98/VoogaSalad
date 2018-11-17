@@ -7,16 +7,6 @@ import javafx.scene.layout.AnchorPane;
 
 public class TileEditor implements ObjectEditor<Tile>, SubView<AnchorPane> {
     /**
-     * This method brings up an editor that contains the data of an existing object that is already created.
-     *
-     * @param userObject
-     */
-    @Override
-    public void readObject(EditTreeItem userObject) {
-
-    }
-
-    /**
      * This method returns the responsible JavaFx Node responsible to be added or deleted from other graphical elements.
      *
      * @return A "root" JavaFx Node representative of this object.
