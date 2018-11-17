@@ -1,7 +1,8 @@
 package authoringInterface.sidebar.old;
 
 import api.SubView;
-import authoringInterface.sidebar.Entity;
+import authoringInterface.sidebar.treeItemEntries.Entity;
+import authoringInterface.sidebar.SideViewInterface;
 import authoringInterface.spritechoosingwindow.EntityWindow;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -25,7 +26,7 @@ import javafx.scene.control.*;
 
 // TODO: 11/12/18 Make the string in the TreeCell represent the object itself
 
-public class SideView implements SubView<StackPane> {
+public class SideView implements SubView<StackPane>, SideViewInterface {
     private final ObjectManager objectManager;
     //    private final TreeView<String> rootTreeView;
 //    private final TreeItem<String> rootTreeItem;

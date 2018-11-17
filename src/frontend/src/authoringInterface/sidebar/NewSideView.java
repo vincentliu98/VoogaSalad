@@ -1,14 +1,10 @@
-package authoringInterface.sidebar.newSideView;
+package authoringInterface.sidebar;
 
 import api.SubView;
-import authoringInterface.sidebar.*;
-import authoringInterface.sidebar.old.SideView;
-import authoringInterface.spritechoosingwindow.EntityWindow;
-import javafx.event.Event;
-import javafx.event.EventHandler;
+import authoringInterface.sidebar.subEditors.EntityEditor;
+import authoringInterface.sidebar.treeItemEntries.*;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
@@ -19,7 +15,7 @@ import java.util.*;
  *
  * @author Haotian Wang
  */
-public class NewSideView implements SubView<StackPane> {
+public class NewSideView implements SubView<StackPane>, SideViewInterface {
     private StackPane sidePane;
     private Map<String, EditTreeItem> objectMap;
     private static final String ROOT_NAME = "User Objects";
@@ -92,6 +88,8 @@ public class NewSideView implements SubView<StackPane> {
             addMenuItem.setOnAction(e -> {
                 switch (getItem()) {
                     case "ENTITY":
+                        Stage stage = new Stage();
+                        EntityEditor editor = new EntityEditor();
                         break;
                     case "SOUND":
                         break;
