@@ -3,6 +3,7 @@ package phase.api;
 import groovy.api.GroovyFactory;
 import phase.NamespaceException;
 import phase.PhaseGraphImpl;
+import phase.PhaseImpl;
 import phase.TransitionImpl;
 import utils.Try;
 
@@ -28,7 +29,7 @@ public class PhaseDB {
 
     public Try<PhaseGraph> createGraph(String name) {
         if(namespace.add(name)) {
-            var graph = new PhaseGraphImpl(name, namespace::add);
+            var graph = new PhaseGraphImpl(name, createPhase(), namespace::add);
             phases.add(graph);
             return Try.success(graph);
         } else return Try.failure(new NamespaceException(name));
@@ -39,10 +40,10 @@ public class PhaseDB {
         phases.remove(graph);
     }
 
-    public Phase createPhase() { return new Phase(); }
+    public Phase createPhase() { return new PhaseImpl(factory.createGraph()); }
 
     public Transition createTransition(Phase from, GameEvent trigger, Phase to) {
-        return new TransitionImpl(from, trigger, to, factory.createGuard(), factory.createGraph());
+        return new TransitionImpl(from, trigger, to, factory.createGuard());
     }
 
     public List<PhaseGraph> phases() { return phases; }

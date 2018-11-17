@@ -40,7 +40,12 @@ public class SerializerForEngine {
             writer.startNode("phases");
             nodes.forEach(n -> {
                 writer.startNode("phase");
+                writer.startNode("id");
                 writer.setValue(n.id().toString());
+                writer.endNode();
+                writer.startNode("exec");
+                writer.setValue(n.exec().transformToGroovy().get(""));
+                writer.endNode();
                 writer.endNode();
             });
             writer.endNode();
@@ -66,11 +71,6 @@ public class SerializerForEngine {
                 writer.setValue(e.guard().transformToGroovy().get(""));
                 writer.endNode();
 
-                writer.startNode("exec");
-                // the failure should have been checked by this time
-                writer.setValue(e.exec().transformToGroovy().get(""));
-                writer.endNode();
-
                 writer.endNode();
             });
             writer.endNode();
@@ -86,7 +86,7 @@ public class SerializerForEngine {
         public boolean canConvert(Class aClass) { return aClass.equals(PhaseGraphImpl.class); }
     }
 
-    private static class BlockGraphConverter implements Converter{
+    private static class BlockGraphConverter implements Converter {
         @Override
         public void marshal(Object o, HierarchicalStreamWriter writer, MarshallingContext ctx) {
             // the failure should have been checked by this time
