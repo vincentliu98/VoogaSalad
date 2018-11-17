@@ -8,6 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 /**
  * This abstract class provides a boiler plate for different editors because they are pretty similar.
@@ -27,6 +28,9 @@ public abstract class AbstractObjectEditor implements SubView<AnchorPane> {
         nameField = new TextField();
         confirm = new Button("Apply");
         cancel = new Button("Cancel");
+        cancel.setOnAction(e -> {
+            ((Stage) rootPane.getScene().getWindow()).close();
+        });
         rootPane.getChildren().addAll(inputText, nameField, confirm, cancel);
         setupBasicLayout();
     }

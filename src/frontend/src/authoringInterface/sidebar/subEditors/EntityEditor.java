@@ -48,9 +48,6 @@ public class EntityEditor extends AbstractObjectEditor implements ObjectEditor<E
             entity.setName(nameField.getText());
             ((Stage) rootPane.getScene().getWindow()).close();
         });
-        cancel.setOnAction(e -> {
-            ((Stage) rootPane.getScene().getWindow()).close();
-        });
         setupLayout();
         rootPane.getChildren().addAll(imageText, chooseImage, imageBox);
     }

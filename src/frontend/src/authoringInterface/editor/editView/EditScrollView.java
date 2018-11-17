@@ -31,6 +31,9 @@ public class EditScrollView implements SubView<Pane> {
         gridScrollView.addEventFilter(MouseDragEvent.MOUSE_DRAG_RELEASED, e -> {
             if (e.getGestureSource() instanceof TreeCell) {
                 TreeItem<String> item = ((TreeCell) e.getGestureSource()).getTreeItem();
+                if (item.getChildren().size() != 0) {
+                    return;
+                }
                 if (item.getGraphic() != null) {
                     ImageView copy = new ImageView(((ImageView) item.getGraphic()).getImage());
                     copy.setX(e.getX());
