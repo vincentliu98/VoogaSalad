@@ -3,8 +3,10 @@ package authoringInterface.sidebar.subEditors;
 import api.SubView;
 import authoringInterface.sidebar.treeItemEntries.EditTreeItem;
 import authoringInterface.sidebar.treeItemEntries.Entity;
+import authoringInterface.sidebar.treeItemEntries.TreeItemType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TreeItem;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -22,6 +24,7 @@ public abstract class AbstractObjectEditor<T extends EditTreeItem> implements Ob
     protected Button confirm;
     protected Button cancel;
     protected boolean isApplied;
+    protected TreeItem<String> treeItem;
 
     public AbstractObjectEditor() {
         rootPane = new AnchorPane();
@@ -67,7 +70,18 @@ public abstract class AbstractObjectEditor<T extends EditTreeItem> implements Ob
      *
      * @return
      */
+    @Override
     public boolean applied() {
         return isApplied;
+    }
+
+    /**
+     * Register the editor with an existing TreeItem in order to update or edit existing entries.
+     *
+     * @param treeItem: An existing TreeItem.
+     */
+    @Override
+    public void registerTreeItem(TreeItem<String> treeItem) {
+        this.treeItem = treeItem;
     }
 }

@@ -90,12 +90,7 @@ public class EditScrollView implements SubView<Pane>, DraggingCanvas {
                 dialogStage.show();
                 dialogStage.setOnHidden(event1 -> {
                     if (editor.applied()) {
-                        TreeItem<String> childItem = new TreeItem<>(editor.getObject().getName());
-                        ImageView icon = new ImageView(editor.getObject().getSprite());
-                        icon.setFitHeight(50);
-                        icon.setFitWidth(50);
-                        childItem.setGraphic(icon);
-                        
+
                     }
                 });
             } else if (type == TreeItemType.SOUND) {

@@ -15,6 +15,8 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.*;
 
+import java.util.Map;
+
 /**
  * A sidebar that contains many TreeItems. Functions include adding a cell and
  * storing the cell in the ListObjectManager. All the user's settings will go here,
@@ -104,6 +106,14 @@ public class OldSideView implements SubView<StackPane>, SideViewInterface {
 
     @Override
     public EditTreeItem getObject(String name) {
+        return null;
+    }
+
+    /**
+     * @return The internal object map.
+     */
+    @Override
+    public Map<String, EditTreeItem> getObjectMap() {
         return null;
     }
 

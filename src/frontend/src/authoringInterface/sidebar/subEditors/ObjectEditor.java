@@ -32,4 +32,11 @@ public interface ObjectEditor<T extends EditTreeItem> {
      * @return
      */
     boolean applied();
+
+    /**
+     * Register the editor with an existing TreeItem in order to update or edit existing entries.
+     *
+     * @param treeItem: An existing TreeItem.
+     */
+    void registerTreeItem(TreeItem<String> treeItem);
 }
