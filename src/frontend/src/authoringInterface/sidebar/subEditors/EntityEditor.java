@@ -72,7 +72,9 @@ public class EntityEditor extends AbstractObjectEditor implements ObjectEditor<E
      */
     @Override
     public void readObject(Entity userObject) {
-
+        entity = userObject;
+        nameField.setText(entity.getName());
+        imageBox.getChildren().set(0, new ImageView(entity.getSprite()));
     }
 
     /**
