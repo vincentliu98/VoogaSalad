@@ -15,6 +15,8 @@ public class Entity implements EditTreeItem<ImageView> {
         this.name = name;
     }
 
+    public Entity() {}
+
     public Entity(int id, String name) {
         this.id = id;
         this.name = name;

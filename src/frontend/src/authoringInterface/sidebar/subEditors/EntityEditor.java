@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldTreeCell;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -22,6 +23,8 @@ import java.io.File;
  * @author Haotian Wang
  */
 public class EntityEditor implements ObjectEditor<Entity>, SubView<AnchorPane> {
+    private static final double WIDTH = 500;
+    private static final double HEIGHT = 500;
     private AnchorPane rootPane;
     private Text inputText;
     private TextField nameField;
@@ -30,8 +33,10 @@ public class EntityEditor implements ObjectEditor<Entity>, SubView<AnchorPane> {
     private VBox imageBox;
     private Button confirm;
     private Button cancel;
+    private Entity entity;
 
     public EntityEditor() {
+        entity = new Entity();
         rootPane = new AnchorPane();
         inputText = new Text("Your entity name:");
         nameField = new TextField();
@@ -41,24 +46,44 @@ public class EntityEditor implements ObjectEditor<Entity>, SubView<AnchorPane> {
             FileChooser fileChooser = new FileChooser();
             File file = fileChooser.showOpenDialog(new Stage());
             if (file != null) {
-                ImageView preview = new ImageView();
+                Image sprite = new Image(file.toURI().toString());
+                entity.setSprite(sprite);
+                imageBox.getChildren().add(new ImageView(sprite));
             }
         });
         imageBox = new VBox();
         confirm = new Button("Apply");
+        confirm.setOnAction(e -> {
+            entity.setName(nameField.getText());
+            ((Stage) rootPane.getScene().getWindow()).close();
+        });
         cancel = new Button("Cancel");
+        cancel.setOnAction(e -> {
+            ((Stage) rootPane.getScene().getWindow()).close();
+        });
         setupLayout();
         rootPane.getChildren().addAll(inputText, nameField, imageText, chooseImage, imageBox);
     }
 
     private void setupLayout() {
+        rootPane.setPrefSize(WIDTH, HEIGHT);
         AnchorPane.setLeftAnchor(inputText, 50.0);
         AnchorPane.setTopAnchor(inputText, 50.0);
-        imageBox.setPrefSize(100, 100);
-        AnchorPane.setBottomAnchor(confirm, 50.0);
-        AnchorPane.setRightAnchor(confirm, 50.0);
-        AnchorPane.setBottomAnchor(cancel, 50.0);
-        AnchorPane.setRightAnchor(cancel, 10.0);
+        inputText.setLayoutX(14);
+        inputText.setLayoutY(27);
+        nameField.setLayoutX(208);
+        nameField.setLayoutY(37);
+        imageText.setLayoutX(36);
+        imageText.setLayoutY(176);
+        chooseImage.setLayoutX(261);
+        chooseImage.setLayoutY(158);
+        imageBox.setPrefSize(164, 171);
+        imageBox.setLayoutX(37);
+        imageBox.setLayoutY(206);
+        confirm.setLayoutX(296);
+        confirm.setLayoutY(436);
+        cancel.setLayoutX(391);
+        cancel.setLayoutY(436);
     }
 
     /**
@@ -78,7 +103,7 @@ public class EntityEditor implements ObjectEditor<Entity>, SubView<AnchorPane> {
      */
     @Override
     public Entity getObject() {
-        return null;
+        return entity;
     }
 
     /**
