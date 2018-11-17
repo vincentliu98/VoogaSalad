@@ -26,6 +26,7 @@ public class Tile {
 
     /*
     // IF WE WANT TO USE THE BUILDER PATTERN
+
     public static class Builder {
         private int width = 0;
         private int height = 0;

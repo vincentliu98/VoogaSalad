@@ -29,4 +29,5 @@ public class Node {
         // also must remember to shut off listener
         GameData.getEdge(edgeID).setListener();
     }
+
 }

@@ -23,8 +23,6 @@ public class Edge {
         // set listener based on myTrigger that calls validity and execution
         if (checkValidity()){
             //TODO: TURN OFF LISTENER
-            GameData.getPhase(myPhaseID).step(myEndNodeID);
-
         } else {
             setListener(); // start over again
         }

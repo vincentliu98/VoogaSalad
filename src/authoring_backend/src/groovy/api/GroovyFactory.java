@@ -26,14 +26,7 @@ public class GroovyFactory {
     public BlockGraph createGuard() {
         try {
             var graph = new BlockGraphImpl();
-            var pass = assignBlock();
-            var guardRet = $guardRet();
-            var t = booleanBlock("true").get();
-            graph.addNode(pass);
-            graph.addNode(guardRet);
-            graph.addNode(t);
-            graph.addEdge(createEdge(pass, Ports.ASSIGN_LHS, guardRet));
-            graph.addEdge(createEdge(pass, Ports.ASSIGN_RHS, t));
+            var pass = rawBlock("$guardRet = true");
             graph.addEdge(createEdge(graph.source(), Ports.FLOW_OUT, pass));
             return graph;
         } catch(Throwable ignored) { return createGraph(); } // but it's not gonna fail
@@ -72,35 +65,5 @@ public class GroovyFactory {
 
     // We'll eventually remove this
     public RawGroovyBlock rawBlock(String code) { return new RawGroovyBlock(code); }
-
-
-    /**
-     * Convenience Blocks
-     */
-    public InfixBinaryBlock add() { return new InfixBinaryBlock("+"); }
-    public InfixBinaryBlock minus() { return new InfixBinaryBlock("-"); }
-    public InfixBinaryBlock multiply() { return new InfixBinaryBlock("*"); }
-    public InfixBinaryBlock divide() { return new InfixBinaryBlock("/"); }
-    public InfixBinaryBlock eq() { return new InfixBinaryBlock("=="); }
-    public InfixBinaryBlock neq() { return new InfixBinaryBlock("!="); }
-    public InfixBinaryBlock leq() { return new InfixBinaryBlock("<="); }
-    public InfixBinaryBlock lt() { return new InfixBinaryBlock("<"); }
-    public InfixBinaryBlock geq() { return new InfixBinaryBlock(">="); }
-    public InfixBinaryBlock gt() { return new InfixBinaryBlock(">"); }
-    public InfixBinaryBlock and() { return new InfixBinaryBlock("&&"); }
-    public InfixBinaryBlock or() { return new InfixBinaryBlock("||"); }
-    public Try<LiteralBlock> range(int from, int to) {
-        return listBlock(
-            Stream.iterate(from, v -> v < to, v -> v + 1)
-                  .collect(Collectors.toList()).toString()
-        );
-    }
-    public RawGroovyBlock $clicked() { return rawBlock("$clicked"); }
-    public RawGroovyBlock $imageData() { return rawBlock("$imageData"); }
-    public RawGroovyBlock $guardRet() { return rawBlock("$guardRet"); }
-
-    public UnaryBlock $goto() { return unaryBlock("$goto"); }
-    public UnaryBlock $remove() { return unaryBlock("$entities.$instances.remove"); }
-
 }
 

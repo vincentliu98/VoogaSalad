@@ -1,5 +1,6 @@
 package graphUI;
 
+import graphUI.phase.GraphNode;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;

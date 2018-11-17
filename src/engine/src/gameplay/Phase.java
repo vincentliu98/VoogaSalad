@@ -26,5 +26,4 @@ public class Phase {
     public int getID(){
         return myID;
     }
-
 }

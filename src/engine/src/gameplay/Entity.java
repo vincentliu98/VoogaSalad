@@ -24,4 +24,5 @@ public class Entity {
     public int getID(){
         return myID;
     }
+
 }

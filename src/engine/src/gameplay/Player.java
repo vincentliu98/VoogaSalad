@@ -35,5 +35,4 @@ public class Player {
     public int getID(){
         return myID;
     }
-
 }

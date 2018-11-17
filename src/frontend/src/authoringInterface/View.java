@@ -3,17 +3,14 @@ package authoringInterface;
 import api.DraggingCanvas;
 import api.ParentView;
 import api.SubView;
-import authoringInterface.editor.EditView;
-import authoringInterface.editor.EditorMenuBarView;
-import authoringInterface.sidebar.DraggableTreeItem;
+import authoring.AuthoringTools;
+import authoringInterface.editor.editView.EditView;
+import authoringInterface.editor.menuBarView.EditorMenuBarView;
 import authoringInterface.sidebar.SideView;
+import authoringInterface.sidebar.SideViewInterface;
 import javafx.scene.Node;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
-import javafx.scene.control.cell.TextFieldTreeCell;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
@@ -24,19 +21,21 @@ import javafx.stage.Stage;
 /**
  * This class provides an createGraph skeleton window with the basic menu items, and basic editing interfaces.
  *
- * @author  Haotian Wang
+ * @author Haotian Wang
  * @author jl729
  */
 public class View implements ParentView<SubView>, DraggingCanvas {
     private AnchorPane rootPane;
     private EditorMenuBarView menuBar;
-    private SideView sideView;
+    private SideViewInterface sideView;
     private EditView editView;
     private Stage primaryStage;
+    private AuthoringTools tools;
     private Node preview;
     public static final double MENU_BAR_HEIGHT = 30;
     public static final double GAME_WIDTH = 700;
     public static final double GAME_HEIGHT = 500;
+
 
     /**
      * Constructor for an createGraph window, with an AnchorPane as the root Node, and the AnchorPane constraints on top, left and right are 0.
@@ -44,6 +43,8 @@ public class View implements ParentView<SubView>, DraggingCanvas {
     public View(Stage primaryStage) {
         this.primaryStage = primaryStage;
         rootPane = new AnchorPane();
+        tools = new AuthoringTools();
+
         initializeElements();
         setElements();
         addElements();
@@ -51,9 +52,10 @@ public class View implements ParentView<SubView>, DraggingCanvas {
     }
 
     private void initializeElements() {
-        menuBar = new EditorMenuBarView();
-        sideView = new SideView(primaryStage);
+        menuBar = new EditorMenuBarView(tools);
+        sideView = new SideView();
         editView = new EditView();
+
     }
 
     private void setElements() {
@@ -104,15 +106,23 @@ public class View implements ParentView<SubView>, DraggingCanvas {
                     preview.setOpacity(0.5);
                     ((ImageView) preview).setX(e.getX());
                     ((ImageView) preview).setY(e.getY());
+                    preview.setMouseTransparent(true);
                 } else {
                     preview = new Text(item.getValue());
-                    ((Text) preview).setY(e.getX());
+                    ((Text) preview).setX(e.getX());
                     ((Text) preview).setY(e.getY());
+                    preview.setMouseTransparent(true);
                 }
-                rootPane.getChildren().add(preview);
             }
         });
-        rootPane.addEventFilter(MouseEvent.MOUSE_DRAGGED, e -> {
+        rootPane.addEventFilter(MouseDragEvent.MOUSE_DRAG_OVER, e -> {
+            if (preview == null) {
+                return;
+            }
+            if (!rootPane.getChildren().contains(preview)) {
+                rootPane.getChildren().add(preview);
+            }
+            preview.setMouseTransparent(true);
             if (preview != null) {
                 if (preview instanceof ImageView) {
                     ((ImageView) preview).setX(e.getX());
@@ -123,8 +133,13 @@ public class View implements ParentView<SubView>, DraggingCanvas {
                 }
             }
         });
-        rootPane.addEventFilter(MouseEvent.MOUSE_RELEASED, e -> {
+
+        rootPane.addEventFilter(MouseDragEvent.MOUSE_DRAG_RELEASED, e -> {
+            if (preview == null) {
+                return;
+            }
             rootPane.getChildren().remove(preview);
+            preview = null;
         });
     }
 }

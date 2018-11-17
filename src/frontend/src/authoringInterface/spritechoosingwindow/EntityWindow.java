@@ -1,8 +1,8 @@
 package authoringInterface.spritechoosingwindow;
 
-import authoringInterface.sidebar.Entity;
-import authoringInterface.sidebar.ObjectManager;
-import authoringInterface.sidebar.SideView;
+import authoringInterface.sidebar.treeItemEntries.Entity;
+import authoringInterface.sidebar.old.ObjectManager;
+import authoringInterface.sidebar.old.OldSideView;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -29,7 +29,7 @@ public class EntityWindow extends PopUpWindow {
     public static final Double HEIGHT = 500.0;
     public static final Double WIDTH = 600.0;
     private final ObjectManager objectManager;
-    private final SideView mySideView;
+    private final OldSideView mySideView;
     private final Integer id;
     private final TreeItem item;
     private GridPane myPane;
@@ -40,7 +40,7 @@ public class EntityWindow extends PopUpWindow {
     private TextField nameField;
     private VBox imageBox;
 
-    public EntityWindow(Stage primaryStage, ObjectManager objectManager, SideView mySideView, Integer id, TreeItem item) {
+    public EntityWindow(Stage primaryStage, ObjectManager objectManager, OldSideView mySideView, Integer id, TreeItem item) {
         super(primaryStage);
         dialog.setTitle("Entity Setting");
 
