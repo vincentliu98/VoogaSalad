@@ -42,6 +42,7 @@ public class CustomTreeCellImpl extends TreeCell<String> {
                     break;
             }
         });
+        addMenu.getItems().add(addMenuItem);
         setOnDragDetected(e -> startFullDrag());
     }
 
