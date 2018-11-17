@@ -16,9 +16,9 @@ public class PhaseGraphTest {
 
         var phaseGraph = phaseDB.createGraph("A").get();
 
-        var a = new Phase();
-        var b = new Phase();
-        var c = new Phase();
+        var a = phaseDB.createPhase();
+        var b = phaseDB.createPhase();
+        var c = phaseDB.createPhase();
 
         phaseGraph.addNode(a);
         phaseGraph.addNode(b);
@@ -29,7 +29,7 @@ public class PhaseGraphTest {
         phaseGraph.addEdge(phaseDB.createTransition(b, GameEvent.mouseDrag(), c));
         phaseGraph.addEdge(phaseDB.createTransition(b, GameEvent.keyPress(KeyCode.ESCAPE), a));
 
-        var graph = e.exec();
+        var graph = b.exec();
         // sum from 1 to 9
         var s = factory.refBlock("sum").get();
         var init = factory.assignBlock();

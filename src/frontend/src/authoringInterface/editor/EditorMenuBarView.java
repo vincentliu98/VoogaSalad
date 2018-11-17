@@ -1,10 +1,11 @@
 package authoringInterface.editor;
 
 import api.SubView;
+import authoring.AuthoringTools;
 import authoringInterface.MainAuthoringProgram;
 import authoringInterface.View;
-import graphUI.EdgeSettingWindow;
-import graphUI.GraphPane;
+import graphUI.groovy.GroovyPane;
+import graphUI.phase.GraphPane;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
@@ -23,8 +24,11 @@ public class EditorMenuBarView implements SubView<MenuBar> {
 
     private MenuBar menuBar;
     private GameWindow gameWindow;
+    private AuthoringTools authTools;
 
-    public EditorMenuBarView() {
+    public EditorMenuBarView(AuthoringTools authTools) {
+        this.authTools = authTools;
+
         menuBar = new MenuBar();
         menuBar.setPrefHeight(View.MENU_BAR_HEIGHT);
 
@@ -45,6 +49,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         MenuItem helpDoc = new MenuItem("Help");
         MenuItem about = new MenuItem("About");
         MenuItem graph = new MenuItem("Graph");
+        MenuItem groovyGraph = new MenuItem("GroovyGraph");
 
         save.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
 
@@ -59,13 +64,17 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         helpDoc.setOnAction(this::handleHelpDoc);
         about.setOnAction(this::handleAbout);
         graph.setOnAction(this::handleGraph);
+        groovyGraph.setOnAction(this::handleGroovyGraph);
 
         file.getItems().addAll(newFile, open, save, saveAs, close);
-        edit.getItems().addAll(undo, redo, graph);
+        edit.getItems().addAll(undo, redo, graph, groovyGraph);
         run.getItems().addAll(runProject);
         help.getItems().addAll(helpDoc, about);
 
         menuBar.getMenus().addAll(file, edit, tools, run, help);
+    }
+    private void handleGroovyGraph(ActionEvent actionEvent) {
+        new GroovyPane(new Stage(), authTools.factory());
     }
 
     private void handleGraph(ActionEvent actionEvent) {

@@ -1,4 +1,4 @@
-package graphUI;
+package graphUI.groovy;
 
 import graphUI.phase.GraphNode;
 import javafx.application.Application;

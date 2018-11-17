@@ -1,4 +1,4 @@
-package graphUI;
+package graphUI.phase;
 
 import javafx.beans.binding.DoubleBinding;
 import javafx.scene.control.Label;

@@ -3,6 +3,7 @@ package authoringInterface;
 import api.DraggingCanvas;
 import api.ParentView;
 import api.SubView;
+import authoring.AuthoringTools;
 import authoringInterface.editor.EditView;
 import authoringInterface.editor.EditorMenuBarView;
 import authoringInterface.sidebar.NewSideView;
@@ -30,10 +31,12 @@ public class View implements ParentView<SubView>, DraggingCanvas {
     private SideViewInterface sideView;
     private EditView editView;
     private Stage primaryStage;
+    private AuthoringTools tools;
     private Node preview;
     public static final double MENU_BAR_HEIGHT = 30;
     public static final double GAME_WIDTH = 700;
     public static final double GAME_HEIGHT = 500;
+
 
     /**
      * Constructor for an createGraph window, with an AnchorPane as the root Node, and the AnchorPane constraints on top, left and right are 0.
@@ -41,6 +44,8 @@ public class View implements ParentView<SubView>, DraggingCanvas {
     public View(Stage primaryStage) {
         this.primaryStage = primaryStage;
         rootPane = new AnchorPane();
+        tools = new AuthoringTools();
+
         initializeElements();
         setElements();
         addElements();
@@ -48,7 +53,7 @@ public class View implements ParentView<SubView>, DraggingCanvas {
     }
 
     private void initializeElements() {
-        menuBar = new EditorMenuBarView();
+        menuBar = new EditorMenuBarView(tools);
         sideView = new SideView(primaryStage);
         editView = new EditView();
 
