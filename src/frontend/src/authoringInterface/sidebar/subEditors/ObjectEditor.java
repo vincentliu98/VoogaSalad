@@ -3,6 +3,7 @@ package authoringInterface.sidebar.subEditors;
 import api.SubView;
 import authoringInterface.sidebar.treeItemEntries.EditTreeItem;
 import javafx.scene.Node;
+import javafx.scene.control.TreeItem;
 import javafx.scene.layout.AnchorPane;
 
 /**
@@ -24,4 +25,11 @@ public interface ObjectEditor<T extends EditTreeItem> {
      * @return A specific user object.
      */
     T getObject();
+
+    /**
+     * Return a boolean indicating whether the changes are successfully applied.
+     *
+     * @return
+     */
+    boolean applied();
 }
