@@ -1,6 +1,11 @@
 package graphUI.groovy;
 
 import authoringInterface.spritechoosingwindow.PopUpWindow;
+import graphUI.groovy.factory.GroovyNode;
+import graphUI.groovy.factory.GroovyNodeFactory;
+import groovy.api.BlockGraph;
+import groovy.api.GroovyFactory;
+import groovy.api.Ports;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
@@ -16,9 +21,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Playground for testing graph function
@@ -28,7 +35,7 @@ import java.util.List;
  * @author jl729
  */
 
-public class GraphPane extends PopUpWindow {
+public class GroovyPane extends PopUpWindow {
     public static final Double WIDTH = 1200.0;
     public static final Double HEIGHT = 800.0;
     private double orgSceneX, orgSceneY;
@@ -39,7 +46,7 @@ public class GraphPane extends PopUpWindow {
             orgSceneX = t.getSceneX();
             orgSceneY = t.getSceneY();
 
-            GraphNode node = (GraphNode) t.getSource();
+            GroovyNode node = (GroovyNode) t.getSource();
 
             orgTranslateX = node.getTranslateX();
             orgTranslateY = node.getTranslateY();
@@ -53,7 +60,7 @@ public class GraphPane extends PopUpWindow {
             double newTranslateX = orgTranslateX + offsetX;
             double newTranslateY = orgTranslateY + offsetY;
 
-            GraphNode node = (GraphNode) t.getSource();
+            GroovyNode node = (GroovyNode) t.getSource();
 
             node.setTranslateX(newTranslateX);
             node.setTranslateY(newTranslateY);
@@ -69,13 +76,19 @@ public class GraphPane extends PopUpWindow {
     private double newNodeX;
     private double newNodeY;
     private Integer edgeNum = 0;
-    private List<GraphNode> nodeList = new ArrayList<>();
+    private List<GroovyNode> nodeList = new ArrayList<>();
+    private GroovyNodeFactory nodeFactory;
+    private GroovyFactory factory;
+    private BlockGraph graph;
 
-    public GraphPane(Stage primaryStage) {
+    public GroovyPane(Stage primaryStage, GroovyFactory factory) {
         super(primaryStage);
         dialog.setTitle("Graph Setting");
+        this.nodeFactory = new GroovyNodeFactory(factory);
+        this.factory = factory;
+        graph = factory.createGraph();
 
-        nodeList.add(createNode("0", 100, 100, Color.DEEPSKYBLUE));
+        nodeList.add(createNode(100, 100));
         initializeUI(nodeList);
 
         showWindow();
@@ -92,11 +105,11 @@ public class GraphPane extends PopUpWindow {
         dialog.close();
     }
 
-    public void connectTwoNodes(Integer nodeOneIndex, Integer nodeTwoIndex) {
-        connectNodes(nodeList.get(nodeOneIndex), nodeList.get(nodeTwoIndex), "E" + edgeNum++);
+    public void connectTwoNodes(Integer nodeOneIndex, Ports port, Integer nodeTwoIndex) {
+        connectNodes(nodeList.get(nodeOneIndex), port, nodeList.get(nodeTwoIndex), "E" + edgeNum++);
     }
 
-    private void initializeUI(List<GraphNode> nodeList) {
+    private void initializeUI(List<GroovyNode> nodeList) {
         nodeList.forEach(e -> group.getChildren().add(e));
 
         graphBox.getChildren().add(group);
@@ -174,7 +187,7 @@ public class GraphPane extends PopUpWindow {
             boolean success = false;
             if (db.hasImage()) {
                 success = true;
-                var newGraphNod = createNode(String.valueOf(nodeList.size()), newNodeX - 50, newNodeY - 50, Color.DEEPSKYBLUE);
+                var newGraphNod = createNode(newNodeX - 50, newNodeY - 50);
                 nodeList.add(newGraphNod);
 //                    connectNodes(nodeList.get(nodeList.size()-2), newGraphNod, "E" + (nodeList.size()-2));
                 group.getChildren().add(newGraphNod);
@@ -196,7 +209,7 @@ public class GraphPane extends PopUpWindow {
         root.getColumnConstraints().addAll(col1, col2);
     }
 
-    private void connectNodes(GraphNode node1, GraphNode node2, String edgeText) {
+    private void connectNodes(GroovyNode node1, Ports port, GroovyNode node2, String edgeText) {
         Line edgeLine = new Line(node1.getCenterX(), node1.getCenterY(), node2.getCenterX(), node2.getCenterY());
         edgeLine.setStrokeWidth(3);
         Label edgeLabel = new Label(edgeText);
@@ -208,39 +221,48 @@ public class GraphPane extends PopUpWindow {
 //        edgeLine.setOnMouseClicked(e -> System.out.println("The Line is clicked"));
         edgeLine.setOnMouseClicked(e -> new EdgeSettingWindow(new Stage()));
 
-        // add to the GraphNode's storage
-        node1.addNeighbor(node2);
-        node2.addNeighbor(node1);
-        node1.addEdge(edgeLine, edgeLabel);
-        node2.addEdge(edgeLine, edgeLabel);
+        // add to the GroovyNode's storage
+        node1.addNeighbor(port, node2, edgeLine);
+
+        try {
+            graph.addEdge(factory.createEdge(node1.model(), port, node2.model())); // connect also within the model
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
 
         group.getChildren().addAll(edgeLine, edgeLabel);
     }
 
-    private GraphNode createNode(String nodeName, double xPos, double yPos, Color color) {
-        GraphNode node = new GraphNode(nodeName, xPos, yPos, color);
-        // Add mouseEvent to the GraphNode to update position
+    private GroovyNode createNode(double xPos, double yPos) {
+        var node = nodeFactory.forEach(xPos, yPos); // view
+
+
+
+        try {
+            graph.addNode(node.model());
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
+
+        // Add mouseEvent to the GroovyNode to update position
         node.setOnMousePressed(circleOnMousePressedEventHandler);
         node.setOnMouseDragged(circleOnMouseDraggedEventHandler);
         node.setOnMouseEntered(e -> myScene.setCursor(Cursor.HAND));
         node.setOnMouseExited(e -> myScene.setCursor(Cursor.DEFAULT));
         // TODO: 11/14/18 Pop-up window to add things to the Node
-//        node.setOnMouseClicked(e -> System.out.println("The GraphNode is clicked"));
+//        node.setOnMouseClicked(e -> System.out.println("The GroovyNode is clicked"));
         node.setOnMouseClicked(e -> new NodeSettingWindow(new Stage()));
         return node;
     }
 
-    // Helper method for updating the position when the GraphNode is dragged
-    private void updateLocations(GraphNode node) {
+    // Helper method for updating the position when the GroovyNode is dragged
+    private void updateLocations(GroovyNode node) {
 
-        ArrayList<GraphNode> connectedNodes = node.getConnectedNodes();
+        Map<Ports, Pair<GroovyNode, Line>> connectedNodes = node.getConnectedNodes();
 
-        ArrayList<Line> edgesList = node.getEdges();
-
-        for (int i = 0; i < connectedNodes.size(); i++) {
-
-            GraphNode neighbor = connectedNodes.get(i);
-            Line l = edgesList.get(i);
+        for(var port : connectedNodes.keySet()) {
+            Line l = connectedNodes.get(port).getValue();
+            GroovyNode neighbor = connectedNodes.get(port).getKey();
 
             l.setStartX(node.getCenterX());
 

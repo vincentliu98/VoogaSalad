@@ -43,7 +43,7 @@ public class View implements ParentView<SubView> {
     }
 
     private void initializeElements() {
-        menuBar = new EditorMenuBarView();
+        menuBar = new EditorMenuBarView(tools);
         sideView = new SideView(primaryStage);
         editView = new EditView();
     }
