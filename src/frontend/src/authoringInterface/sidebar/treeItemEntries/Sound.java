@@ -20,6 +20,11 @@ public class Sound implements EditTreeItem<Text> {
         this.name = name;
     }
 
+    public Sound(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public Media getSoundfile() {
         return soundfile;
     }

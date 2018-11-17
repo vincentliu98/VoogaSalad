@@ -1,11 +1,15 @@
 package authoringInterface.sidebar.subEditors;
 
 import api.SubView;
-import authoringInterface.sidebar.treeItemEntries.EditTreeItem;
-import authoringInterface.sidebar.treeItemEntries.Sound;
+import authoringInterface.sidebar.treeItemEntries.Category;
 import javafx.scene.layout.AnchorPane;
 
-public class SoundEditor extends AbstractObjectEditor implements ObjectEditor<Sound>, SubView<AnchorPane> {
+/**
+ * This class handles the addition and editing of category entries.
+ *
+ * @author Haotian Wang
+ */
+public class CategoryEditor extends AbstractObjectEditor implements ObjectEditor<Category>, SubView<AnchorPane> {
     /**
      * This method returns the responsible JavaFx Node responsible to be added or deleted from other graphical elements.
      *
@@ -22,7 +26,7 @@ public class SoundEditor extends AbstractObjectEditor implements ObjectEditor<So
      * @param userObject
      */
     @Override
-    public void readObject(Sound userObject) {
+    public void readObject(Category userObject) {
 
     }
 
@@ -32,7 +36,7 @@ public class SoundEditor extends AbstractObjectEditor implements ObjectEditor<So
      * @return A specific user object.
      */
     @Override
-    public Sound getObject() {
+    public Category getObject() {
         return null;
     }
 

@@ -1,6 +1,7 @@
 package authoringInterface.sidebar.old;
 
 import api.SubView;
+import authoringInterface.sidebar.treeItemEntries.EditTreeItem;
 import authoringInterface.sidebar.treeItemEntries.Entity;
 import authoringInterface.sidebar.SideViewInterface;
 import authoringInterface.spritechoosingwindow.EntityWindow;
@@ -26,7 +27,7 @@ import javafx.scene.control.*;
 
 // TODO: 11/12/18 Make the string in the TreeCell represent the object itself
 
-public class SideView implements SubView<StackPane>, SideViewInterface {
+public class OldSideView implements SubView<StackPane>, SideViewInterface {
     private final ObjectManager objectManager;
     //    private final TreeView<String> rootTreeView;
 //    private final TreeItem<String> rootTreeItem;
@@ -57,7 +58,7 @@ public class SideView implements SubView<StackPane>, SideViewInterface {
 //        System.out.println(newValue);
 //    }
 
-    public SideView(Stage primaryStage) {
+    public OldSideView(Stage primaryStage) {
         sideView = new StackPane();
         objectManager = new ObjectManager();
         objects = new ListObjectManager();
@@ -101,12 +102,17 @@ public class SideView implements SubView<StackPane>, SideViewInterface {
             item.getChildren().add(newObject);
     }
 
+    @Override
+    public EditTreeItem getObject(String name) {
+        return null;
+    }
+
     private final class TextFieldTreeCellImpl extends TreeCell<String> {
 
         private TextField textField;
         private ContextMenu addMenu = new ContextMenu();
 
-        public TextFieldTreeCellImpl(SideView mySideView, Stage primaryStage, ObjectManager objectManager) {
+        public TextFieldTreeCellImpl(OldSideView mySideView, Stage primaryStage, ObjectManager objectManager) {
             MenuItem addMenuItem = new MenuItem("Add an Object");
             addMenu.getItems().add(addMenuItem);
             addMenuItem.setOnAction(e -> {
