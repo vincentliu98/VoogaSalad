@@ -41,7 +41,7 @@ public class PhaseGraphTest {
         graph.addEdge(factory.createEdge(init, ASSIGN_RHS, zero2));
         graph.addEdge(factory.createEdge(graph.source(), FLOW_OUT, init));
 
-        var range = factory.range(1, 10).get();
+        var range = factory.rawBlock("1 .. 10");
         var foreach = factory.forEachBlock("i");
         graph.addNode(range);
         graph.addNode(foreach);
@@ -49,7 +49,7 @@ public class PhaseGraphTest {
         graph.addEdge(factory.createEdge(init, FLOW_OUT, foreach));
 
         var ass = factory.assignBlock();
-        var add = factory.add();
+        var add = factory.binaryBlock("+");
         var i = factory.refBlock("i").get();
         graph.addNode(ass);
         graph.addNode(add);
