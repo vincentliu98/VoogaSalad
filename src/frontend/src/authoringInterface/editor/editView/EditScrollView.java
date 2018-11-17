@@ -19,7 +19,7 @@ import javafx.scene.text.Text;
  *      - Representation of the game's grid setting
  *      - It should support Zoom in and zoom out
  *
- * @author Amy Kim
+ * @author Amy Kim, Haotian Wang
  */
 public class EditScrollView implements SubView<Pane> {
     private Pane gridScrollView;

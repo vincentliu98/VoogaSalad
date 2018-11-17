@@ -3,17 +3,17 @@ package gameplay;
 import java.util.Set;
 
 public class Engine {
-    Set<Phase> myPhases;
-    Set<Player> myPlayers;
+    Set<gameplay.Phase> myPhases;
+    Set<gameplay.Player> myPlayers;
     // also contains global data
-    Turn myTurn;
+    gameplay.Turn myTurn;
 
-    public Engine(Set<Phase> phases, Set<Player> players, GlobalData globalData){
+    public Engine(Set<gameplay.Phase> phases, Set<gameplay.Player> players, gameplay.GlobalData globalData){
         this.myPhases = phases;
         this.myPlayers = players;
     }
 
-    public void play(Phase currentPhase, Player currentPlayer){
+    public void play(gameplay.Phase currentPhase, gameplay.Player currentPlayer){
         // initialize Turn class here
     }
 }

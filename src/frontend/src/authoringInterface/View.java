@@ -3,11 +3,11 @@ package authoringInterface;
 import api.DraggingCanvas;
 import api.ParentView;
 import api.SubView;
+import authoring.AuthoringTools;
 import authoringInterface.editor.editView.EditView;
 import authoringInterface.editor.menuBarView.EditorMenuBarView;
-import authoring.AuthoringTools;
+import authoringInterface.sidebar.SideView;
 import authoringInterface.sidebar.SideViewInterface;
-import authoringInterface.sidebar.old.SideView;
 import javafx.scene.Node;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
@@ -21,7 +21,7 @@ import javafx.stage.Stage;
 /**
  * This class provides an createGraph skeleton window with the basic menu items, and basic editing interfaces.
  *
- * @author  Haotian Wang
+ * @author Haotian Wang
  * @author jl729
  */
 public class View implements ParentView<SubView>, DraggingCanvas {
@@ -53,7 +53,7 @@ public class View implements ParentView<SubView>, DraggingCanvas {
 
     private void initializeElements() {
         menuBar = new EditorMenuBarView(tools);
-        sideView = new SideView(primaryStage);
+        sideView = new SideView();
         editView = new EditView();
 
     }
@@ -116,6 +116,9 @@ public class View implements ParentView<SubView>, DraggingCanvas {
             }
         });
         rootPane.addEventFilter(MouseDragEvent.MOUSE_DRAG_OVER, e -> {
+            if (preview == null) {
+                return;
+            }
             if (!rootPane.getChildren().contains(preview)) {
                 rootPane.getChildren().add(preview);
             }
@@ -132,8 +135,11 @@ public class View implements ParentView<SubView>, DraggingCanvas {
         });
 
         rootPane.addEventFilter(MouseDragEvent.MOUSE_DRAG_RELEASED, e -> {
-            preview.setMouseTransparent(true);
+            if (preview == null) {
+                return;
+            }
             rootPane.getChildren().remove(preview);
+            preview.setMouseTransparent(true);
         });
     }
 }
