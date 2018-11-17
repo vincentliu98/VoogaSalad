@@ -24,9 +24,9 @@ public class CustomTreeCellImpl extends TreeCell<String> {
 
     public CustomTreeCellImpl(Map<String, EditTreeItem> map) {
         objectMap = map;
-        int id = getTreeItem().getChildren().size();
         MenuItem addMenuItem = new MenuItem("Add an entry");
         addMenuItem.setOnAction(e -> {
+            int id = getTreeItem().getChildren().size();
             switch (getItem()) {
                 case "ENTITY":
                     Stage dialogStage = new Stage();
@@ -82,9 +82,7 @@ public class CustomTreeCellImpl extends TreeCell<String> {
             } else {
                 setText(getString());
                 setGraphic(getTreeItem().getGraphic());
-                if (
-                        !getTreeItem().isLeaf()
-                ){
+                if (!getTreeItem().isLeaf()) {
                     setContextMenu(addMenu);
                 }
             }
