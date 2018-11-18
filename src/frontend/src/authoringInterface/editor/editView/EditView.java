@@ -19,7 +19,6 @@ import javafx.scene.control.TabPane.TabDragPolicy;
 
 public class EditView implements SubView<TabPane> {
     private final TabPane tabPane = new TabPane();
-    private boolean isMyFirstTab;
     private int index = 1;
     private SideViewInterface sideView;
 
@@ -30,15 +29,15 @@ public class EditView implements SubView<TabPane> {
      * @param sideView
      */
     public EditView(SideViewInterface sideView){
-        isMyFirstTab = true;
         this.sideView = sideView;
         initializeTab();
-        locateTab();
         tabPane.setTabDragPolicy(TabDragPolicy.REORDER);
     }
 
     private void initializeTab(){
         Tab addTab = new Tab("");
+        addTab.getStyleClass().add("addTab");
+        addTab.setContent(new AddTabView().getView());
         Button addBtn = new Button("+");
         addBtn.getStyleClass().add("addBtn");
         addTab.setGraphic(addBtn);
@@ -56,30 +55,8 @@ public class EditView implements SubView<TabPane> {
         try {
             Tab tempTab = new Tab("Tab" + index);
             tempTab.setContent(new EditScrollView(sideView).getView());
-            if (isMyFirstTab) {
-                tempTab.setClosable(false);
-                isMyFirstTab = false;
-            }
             tabPane.getTabs().add(tempTab);
         } catch (Exception e) {} //Stay the page if no additional pages
-    }
-
-    /**
-     * This function is for only letting the user only access to tabs, not add button Tab.
-     * We need this function because currently adding button is as a tab.
-     * The user cannot access to it, can only locate withing tabs.
-     */
-    private void locateTab(){
-        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
-        tabPane.getTabs().addListener((ListChangeListener<Tab>) c -> {
-            while(c.next()) {
-                if(c.wasRemoved()) {
-                    if (c.getList().size() == 0) {
-                        constructTab();
-                    }
-                }
-            }
-        });
     }
 
     private void addTabHandler() {
