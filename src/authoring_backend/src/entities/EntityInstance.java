@@ -16,6 +16,6 @@ public interface EntityInstance {
 
     ReadOnlyStringProperty getClassName();
 
-
+    Consumer<EntityInstance> getReturnInstanceIdFunc();
 
 }

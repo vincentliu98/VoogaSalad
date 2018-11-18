@@ -41,4 +41,8 @@ public class SimpleTileInstance implements TileInstance {
     public ReadOnlyStringProperty getClassName() {
         return className.getReadOnlyProperty();
     }
+
+    public Consumer<EntityInstance> getReturnInstanceIdFunc() {
+        return returnInstanceIdFunc;
+    }
 }

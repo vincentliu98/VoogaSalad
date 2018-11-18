@@ -37,4 +37,8 @@ public class SimpleSpriteInstance implements SpriteInstance {
     public ReadOnlyStringProperty getClassName() {
         return className.getReadOnlyProperty();
     }
+
+    public Consumer<EntityInstance> getReturnInstanceIdFunc() {
+        return returnInstanceIdFunc;
+    }
 }
