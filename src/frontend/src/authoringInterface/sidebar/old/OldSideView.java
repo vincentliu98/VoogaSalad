@@ -4,7 +4,7 @@ import api.SubView;
 import authoringInterface.sidebar.treeItemEntries.EditTreeItem;
 import authoringInterface.sidebar.treeItemEntries.Entity;
 import authoringInterface.sidebar.SideViewInterface;
-import authoringInterface.spritechoosingwindow.EntityWindow;
+//import authoringInterface.spritechoosingwindow.EntityWindow;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
@@ -131,7 +131,7 @@ public class OldSideView implements SubView<StackPane>, SideViewInterface {
                 var id = getTreeItem().getChildren().size();
                 var myItem = getTreeItem();
                 if (type.equals("Entity")){
-                    new EntityWindow(primaryStage, objectManager, mySideView, id, myItem);
+//                    new EntityWindow(primaryStage, objectManager, mySideView, id, myItem);
                 }
                 else if (type.equals("Tile")){
                     // Generate a TileWindow

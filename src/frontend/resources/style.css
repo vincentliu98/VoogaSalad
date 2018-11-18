@@ -21,8 +21,8 @@
 
 .tab:selected .tab-label {
     -fx-alignment: CENTER;
-    -fx-text-fill: #607d8b;
     -fx-font-weight: bold;
+    -fx-text-fill: #80cbc4;
 }
 
 .tab-pane:focused > .tab-header-area > .headers-region > .tab:selected .focus-indicator {
@@ -52,3 +52,16 @@
 .addBtn {
     -fx-text-fill: #607d8b;
 }
+.myTree .tree-cell {
+    -fx-background-color: #1d2529;
+    -fx-text-fill: #607d8b;
+}
+
+.myTree .tree-cell:selected {
+    -fx-text-fill: #80cbc4;
+}
+
+.mySide {
+    -fx-focus-color: transparent;
+}
+
