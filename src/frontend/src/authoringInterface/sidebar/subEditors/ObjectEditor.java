@@ -6,6 +6,8 @@ import javafx.scene.Node;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.AnchorPane;
 
+import java.util.Map;
+
 /**
  * This interface represents the common characteristics shared across editors for different user-defined objects such as Entity, Sound and Tile.
  *
@@ -27,9 +29,26 @@ public interface ObjectEditor<T extends EditTreeItem> {
     T getObject();
 
     /**
-     * Return a boolean indicating whether the changes are successfully applied.
+     * Register the editor with an existing TreeItem in order to update or edit existing entries.
      *
-     * @return
+     * @param treeItem: An existing TreeItem.
+     * @param map: The map from String name to Entity.
      */
-    boolean applied();
+    void editTreeItem(TreeItem<String> treeItem, Map<String, EditTreeItem> map);
+
+    /**
+     * Register the object map.
+     *
+     * @param treeItem: An existing TreeItem.
+     * @param map: The map from String name to Entity.
+     */
+    void addTreeItem(TreeItem<String> treeItem, Map<String, EditTreeItem> map);
+
+    /**
+     * Register the node to Object map.
+     *
+     * @param node: The node that is to be altered.
+     * @param map: The node to user object map.
+     */
+    void editNode(Node node, Map<Node, EditTreeItem> map);
 }
