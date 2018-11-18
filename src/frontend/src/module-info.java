@@ -4,6 +4,7 @@ module frontend {
     requires javafx.controls;
     requires javafx.media;
     requires java.desktop;
+    requires java.scripting;
 
     requires authoring_backend;
 
