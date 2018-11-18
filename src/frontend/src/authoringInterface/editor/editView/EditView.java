@@ -3,16 +3,14 @@ package authoringInterface.editor.editView;
 import api.SubView;
 import authoringInterface.sidebar.SideViewInterface;
 import javafx.collections.ListChangeListener;
-import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabDragPolicy;
-import javafx.scene.control.TabPane.TabClosingPolicy;
 
 
 /**
- * EditView Class (TabPane > ScrollPane)
+ * EditView Class (TabPane > Pane)
  *      - holding scroll views
  *
  * @author Amy Kim
@@ -21,7 +19,6 @@ import javafx.scene.control.TabPane.TabClosingPolicy;
 
 public class EditView implements SubView<TabPane> {
     private final TabPane tabPane = new TabPane();
-    private boolean isMyFirstTab;
     private int index = 1;
     private SideViewInterface sideView;
 
@@ -29,17 +26,18 @@ public class EditView implements SubView<TabPane> {
      * This method constructs the tabView.
      *
      * @return A tabView Node to be displayed at the left side of the createGraph window.
+     * @param sideView
      */
     public EditView(SideViewInterface sideView){
         this.sideView = sideView;
-        isMyFirstTab = true;
         initializeTab();
-        locateTab();
         tabPane.setTabDragPolicy(TabDragPolicy.REORDER);
     }
 
     private void initializeTab(){
         Tab addTab = new Tab("");
+        addTab.getStyleClass().add("addTab");
+        addTab.setContent(new AddTabView().getView());
         Button addBtn = new Button("+");
         addBtn.getStyleClass().add("addBtn");
         addTab.setGraphic(addBtn);
@@ -50,7 +48,6 @@ public class EditView implements SubView<TabPane> {
         });
         tabPane.getTabs().add(addTab);
         addTabHandler();
-        index++;
     }
 
 
@@ -58,34 +55,13 @@ public class EditView implements SubView<TabPane> {
         try {
             Tab tempTab = new Tab("Tab" + index);
             tempTab.setContent(new EditScrollView(sideView).getView());
-            if (isMyFirstTab) {
-                tempTab.setClosable(false);
-                isMyFirstTab = false;
-            }
             tabPane.getTabs().add(tempTab);
         } catch (Exception e) {} //Stay the page if no additional pages
     }
 
-    /**
-     * This function is for only letting the user only access to tabs, not add button Tab.
-     * We need this function because currently adding button is as a tab.
-     * The user cannot access to it, can only locate withing tabs.
-     */
-    private void locateTab(){
-        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.ALL_TABS);
-        tabPane.getTabs().addListener((ListChangeListener<Tab>) c -> {
-            while(c.next()) {
-                if(c.wasRemoved()) {
-                    if (c.getList().size() == 0) {
-                        constructTab();
-                    }
-                }
-            }
-        });
-    }
-
     private void addTabHandler() {
         constructTab();
+        index++;
         tabPane.getSelectionModel().select(tabPane.getTabs().size()-1);
     }
 

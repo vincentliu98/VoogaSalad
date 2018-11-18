@@ -1,28 +1,28 @@
 .tab-pane .tab-header-area .tab-header-background {
-    -fx-background-color: #F0ECEC;
+    -fx-background-color: #212c31;
     -fx-border-width: 0 0 1.5 0;
-    -fx-border-color: transparent transparent #F0ECEC transparent;
+    -fx-border-color: transparent transparent #212c31 transparent;
 }
 
 .tab-pane .tab {
-    -fx-background-color: #A59F9F;
+    -fx-background-color: #1d2529;
 
 }
 
 .tab-pane .tab:selected {
-    -fx-background-color: #837A7A;
+    -fx-background-color: black;
 }
 
 .tab .tab-label {
     -fx-alignment: CENTER;
     -fx-font-weight: bold;
-    -fx-text-fill: white;
+    -fx-text-fill: #607d8b;
 }
 
 .tab:selected .tab-label {
     -fx-alignment: CENTER;
-    -fx-text-fill: white;
     -fx-font-weight: bold;
+    -fx-text-fill: #80cbc4;
 }
 
 .tab-pane:focused > .tab-header-area > .headers-region > .tab:selected .focus-indicator {
@@ -32,3 +32,37 @@
 .addBtn {
     -fx-background-color: transparent;
 }
+
+.addPane {
+    -fx-background-color: #fff;
+}
+
+.menu-bar{
+    -fx-background-color: #1d2529;
+    -fx-selection-bar: #2b383f;
+}
+
+.menu-bar .label {
+    -fx-text-fill: #607d8b;
+}
+
+.sideView {
+    -fx-background-color: #607d8b;
+}
+
+.addBtn {
+    -fx-text-fill: #607d8b;
+}
+.myTree .tree-cell {
+    -fx-background-color: #212c31;
+    -fx-text-fill: #607d8b;
+}
+
+.myTree .tree-cell:selected {
+    -fx-text-fill: #80cbc4;
+}
+
+.mySide {
+    -fx-focus-color: transparent;
+}
+

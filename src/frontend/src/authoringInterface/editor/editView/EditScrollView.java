@@ -5,6 +5,7 @@ import api.SubView;
 import authoringInterface.sidebar.SideView;
 import authoringInterface.sidebar.SideViewInterface;
 import authoringInterface.sidebar.subEditors.AbstractObjectEditor;
+import authoringInterface.sidebar.subEditors.EditingMode;
 import authoringInterface.sidebar.subEditors.EntityEditor;
 import authoringInterface.sidebar.subEditors.ObjectEditor;
 import authoringInterface.sidebar.treeItemEntries.EditTreeItem;
@@ -14,6 +15,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.TreeCell;
@@ -23,8 +25,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -38,40 +39,53 @@ import java.util.Map;
  *
  * @author Amy Kim, Haotian Wang
  */
-public class EditScrollView implements SubView<Pane>, DraggingCanvas {
-    private Pane gridScrollView;
-    private HBox contentBox;
+public class EditScrollView implements SubView<ScrollPane>, DraggingCanvas {
+    private GridPane gridScrollView;
+    private ScrollPane scrollPane;
     private SideViewInterface sideView;
     private Map<Node, EditTreeItem> nodeToObjectMap;
 
     public EditScrollView(SideViewInterface sideView) {
         this.sideView = sideView;
+        scrollPane = new ScrollPane();
         nodeToObjectMap = new HashMap<>();
-        gridScrollView = new Pane();
-        contentBox = new HBox();
+        gridScrollView = new GridPane();
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                StackPane cell = new StackPane();
+                cell.setPrefWidth(100);
+                cell.setPrefHeight(100);
+                gridScrollView.add(cell, i, j);
+            }
+        }
+        gridScrollView.setGridLinesVisible(true);
         gridScrollView.addEventFilter(MouseDragEvent.MOUSE_DRAG_RELEASED, e -> {
             if (e.getGestureSource() instanceof TreeCell) {
                 TreeItem<String> item = ((TreeCell<String>) e.getGestureSource()).getTreeItem();
                 if (!item.isLeaf()) {
                     return;
                 }
-                if (item.getGraphic() != null) {
-                    ImageView copy = new ImageView(((ImageView) item.getGraphic()).getImage());
-                    copy.setX(e.getX());
-                    copy.setY(e.getY());
-                    gridScrollView.getChildren().add(copy);
-                    nodeToObjectMap.put(copy, sideView.getObject(item.getValue()));
-                    copy.setOnMouseClicked(event -> handleDoubleClick(event, copy));
-                } else {
-                    Text target = new Text(item.getValue());
-                    target.setX(e.getX());
-                    target.setY(e.getY());
-                    gridScrollView.getChildren().add(target);
-                    nodeToObjectMap.put(target, sideView.getObject(item.getValue()));
-                    target.setOnMouseClicked(ee -> handleDoubleClick(ee, target));
+                StackPane intersected = (StackPane) e.getTarget();
+                EditTreeItem object = sideView.getObject(item.getValue());
+                TreeItemType type = object.getType();
+                switch (type) {
+                    case ENTITY:
+                        if (((Entity) object).getSprite() == null) {
+                            Text deploy = new Text(object.getName());
+                            deploy.setOnMouseClicked(e1 -> handleDoubleClick(e1, deploy));
+                            intersected.getChildren().add(deploy);
+                            nodeToObjectMap.put(deploy, object);
+                        } else {
+                            ImageView deploy = new ImageView(((Entity) object).getSprite());
+                            deploy.setOnMouseClicked(e1 -> handleDoubleClick(e1, deploy));
+                            intersected.getChildren().add(deploy);
+                            nodeToObjectMap.put(deploy, object);
+                        }
+                        break;
                 }
             }
         });
+        scrollPane = new ScrollPane(gridScrollView);
     }
 
     /**
@@ -104,8 +118,8 @@ public class EditScrollView implements SubView<Pane>, DraggingCanvas {
     }
 
     @Override
-    public Pane getView() {
-        return gridScrollView;
+    public ScrollPane getView() {
+        return scrollPane;
     }
 
     /**

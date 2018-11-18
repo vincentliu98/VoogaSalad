@@ -13,7 +13,6 @@ import javafx.stage.Stage;
  */
 
 public class EdgeSettingWindow extends PopUpWindow {
-
     public static final Double WIDTH = 500.0;
     public static final Double HEIGHT = 60.0;
     private final Button applyBtn;

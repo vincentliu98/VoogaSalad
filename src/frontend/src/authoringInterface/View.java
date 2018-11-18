@@ -52,7 +52,7 @@ public class View implements ParentView<SubView>, DraggingCanvas {
     }
 
     private void initializeElements() {
-        menuBar = new EditorMenuBarView(tools);
+        menuBar = new EditorMenuBarView(tools, primaryStage::close);
         sideView = new SideView();
         editView = new EditView(sideView);
     }

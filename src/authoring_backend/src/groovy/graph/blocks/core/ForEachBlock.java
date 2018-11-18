@@ -37,5 +37,5 @@ public class ForEachBlock extends SimpleNode implements GroovyBlock<ForEachBlock
     public Set<Ports> ports() { return Set.of(FOREACH_LIST, FOREACH_BODY, FLOW_OUT); }
 
     @Override
-    public String name() { return "ForEach"; }
+    public String name() { return "ForEach: "+loopvar; }
 }
