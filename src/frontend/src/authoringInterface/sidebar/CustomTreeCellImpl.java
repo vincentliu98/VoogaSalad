@@ -4,7 +4,6 @@ import authoringInterface.sidebar.subEditors.EntityEditor;
 import authoringInterface.sidebar.treeItemEntries.EditTreeItem;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
@@ -48,7 +47,6 @@ public class CustomTreeCellImpl extends TreeCell<String> {
     @Override
     public void startEdit() {
         super.startEdit();
-
         if (textField == null) {
             createTextField();
         }
@@ -60,7 +58,6 @@ public class CustomTreeCellImpl extends TreeCell<String> {
     @Override
     public void cancelEdit() {
         super.cancelEdit();
-
         setText(getItem());
         setGraphic(getTreeItem().getGraphic());
     }

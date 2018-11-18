@@ -2,6 +2,7 @@ package authoringInterface.sidebar.treeItemEntries;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.text.Text;
 
 public class Entity implements EditTreeItem<ImageView> {
     private Image sprite;
@@ -54,6 +55,14 @@ public class Entity implements EditTreeItem<ImageView> {
         ImageView preview = new ImageView(sprite);
         preview.setOpacity(0.5);
         return preview;
+    }
+
+    /**
+     * @return A Text object containing the name of this entity. This is returned when the sprite variable of the entity is not present.
+     */
+    public Text getBackupPreview() {
+        Text backupPreview = new Text(name);
+        return backupPreview;
     }
 
     /**

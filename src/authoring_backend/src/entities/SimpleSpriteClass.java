@@ -6,55 +6,71 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 
-import java.util.List;
-import java.util.Collections;
-import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 public class SimpleSpriteClass implements SpriteClass {
 
-    private String CONST_DEFAULTHEIGHT = "defaultHeight";
-    private String CONST_DEFAULTWIDTH = "defaultWidth";
+    private String CONST_CLASSNAME = "className";
     private String CONST_ID = "id";
     private String CONST_MOVABLE = "movable";
 
-    private ReadOnlyIntegerWrapper id;
-    private SimpleIntegerProperty height;
-    private SimpleIntegerProperty width;
+    private ReadOnlyStringWrapper className;
+    private ReadOnlyIntegerWrapper classId;
     private SimpleBooleanProperty movable;
     private ObservableList<String> imagePathList;
-    private ObservableMap<String, Integer> propertiesMap;
+    private ObservableMap<String, BlockGraph> propertiesMap;
     private BlockGraph imageSelector;
 
+    private Function<Integer, Boolean> verifyTileInstanceIdFunc;
+
+    private Function<String, Set<EntityInstance>> getSpriteInstancesFunc;
+    private Consumer<EntityInstance> setInstanceIdFunc;
+    private Consumer<EntityInstance> returnInstanceIdFunc;
+    private Consumer<SpriteInstance> addSpriteInstanceToMapFunc;
+
     private SimpleSpriteClass() {
-        id = new ReadOnlyIntegerWrapper(this, CONST_ID);
-        height = new SimpleIntegerProperty(this, CONST_DEFAULTHEIGHT);
-        width = new SimpleIntegerProperty(this, CONST_DEFAULTWIDTH);
+        className = new ReadOnlyStringWrapper(this, CONST_CLASSNAME);
+        classId = new ReadOnlyIntegerWrapper(this, CONST_ID);
         movable = new SimpleBooleanProperty(this, CONST_MOVABLE);
         imagePathList = FXCollections.observableArrayList();
         propertiesMap = FXCollections.observableHashMap();
+
     }
 
-    SimpleSpriteClass(Consumer<SimpleIntegerProperty> setFunc) {
+    SimpleSpriteClass(Function<Integer, Boolean> verifyTileInstanceIdFunction,
+                      Consumer<EntityInstance> setInstanceIdFunc,
+                      Consumer<EntityInstance> returnInstanceIdFunc,
+                      Consumer<SpriteInstance> addSpriteInstanceToMapFunc,
+                      Function<String, Set<EntityInstance>> getSpriteInstancesFunc) {
         this();
-        setClassId(setFunc);
+        this.verifyTileInstanceIdFunc = verifyTileInstanceIdFunction;
+        this.setInstanceIdFunc = setInstanceIdFunc;
+        this.returnInstanceIdFunc = returnInstanceIdFunc;
+        this.addSpriteInstanceToMapFunc = addSpriteInstanceToMapFunc;
+        this.getSpriteInstancesFunc = getSpriteInstancesFunc;
     }
 
 
     @Override
     public ReadOnlyIntegerProperty getClassId() {
-        return id.getReadOnlyProperty();
+        return classId.getReadOnlyProperty();
     }
 
     @Override
     public void setClassId(Consumer<SimpleIntegerProperty> setFunc) {
-        setFunc.accept(id);
+        setFunc.accept(classId);
     }
 
     @Override
-    public Supplier<ReadOnlyIntegerProperty> returnClassId() {
-        return this::getClassId;
+    public ReadOnlyStringProperty getClassName() {
+        return className.getReadOnlyProperty();
+    }
+
+    @Override
+    public void setClassName(Consumer<SimpleStringProperty> setFunc) {
+        setFunc.accept(className);
     }
 
     @Override
@@ -63,7 +79,7 @@ public class SimpleSpriteClass implements SpriteClass {
     }
 
     @Override
-    public boolean addProperty(String propertyName, int defaultValue) {
+    public boolean addProperty(String propertyName, BlockGraph defaultValue) {
         if (!propertiesMap.containsKey(propertyName)) {
             propertiesMap.put(propertyName, defaultValue);
             return true;
@@ -74,22 +90,6 @@ public class SimpleSpriteClass implements SpriteClass {
     @Override
     public boolean removeProperty(String propertyName) {
         return propertiesMap.remove(propertyName) != null;
-    }
-
-    @Override
-    public void setDefaultHeightWidth(int defaultHeight, int defaultWidth) {
-        height.setValue(defaultHeight);
-        width.setValue(defaultWidth);
-    }
-
-    @Override
-    public SimpleIntegerProperty getDefaultHeight() {
-        return height;
-    }
-
-    @Override
-    public SimpleIntegerProperty getDefaultWidth() {
-        return width;
     }
 
     @Override
@@ -125,8 +125,21 @@ public class SimpleSpriteClass implements SpriteClass {
     }
 
     @Override
-    public EntityInstance createInstance() {
-        return null;
+    public EntityInstance createInstance(int tileId) {
+        if (!verifyTileInstanceIdFunc.apply(tileId)) {
+            throw new InvalidIdException();
+        }
+        ObservableMap propertiesMapCopy = FXCollections.observableHashMap();
+        propertiesMapCopy.putAll(propertiesMap);
+        SpriteInstance spriteInstance = new SimpleSpriteInstance(className.getName(), tileId, propertiesMapCopy, returnInstanceIdFunc);
+        setInstanceIdFunc.accept(spriteInstance);
+        addSpriteInstanceToMapFunc.accept(spriteInstance);
+        return spriteInstance;
+    }
+
+    @Override
+    public Set<EntityInstance> getInstances() {
+        return getSpriteInstancesFunc.apply(getClassName().get());
     }
 
     @Override

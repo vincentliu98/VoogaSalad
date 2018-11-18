@@ -4,6 +4,8 @@ import authoring.AuthoringTools;
 import entities.EntitiesCRUDInterface;
 import entities.SimpleEntitiesCRUD;
 import entities.TileClass;
+import grids.Point;
+import grids.PointImpl;
 import javafx.scene.input.KeyCode;
 import phase.api.GameEvent;
 import phase.api.Phase;
@@ -70,12 +72,12 @@ public class EntityClassTest {
         eci.createTileClass("demoClass");
 
         TileClass demo = eci.getTileClass("demoClass");
-        demo.setDefaultHeightWidth(1, 1);
-        demo.addProperty("color", 14);
+//        demo.setDefaultHeightWidth(1, 1);
         demo.addImagePath("hellotester");
 
 
 
+        Point p = new PointImpl(1, 2);
 
         System.out.println(tools.toEngineXML());
     }

@@ -47,7 +47,7 @@ public class LiteralFactory {
                   .map(ref -> new LiteralBlock(ref, "Ref"));
     }
 
-    private static String validateReference(String ref) throws ReferenceParseException {
+    private static String validateReference(String ref) {
         return ref; // TODO: need to validate... but what?
     }
 
