@@ -32,7 +32,7 @@ public class CloseFileView {
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("Close the Window");
         alert.setHeaderText("Do you want to save the changes made to the program?");
-        alert.setContentText("Your changes will be lost if you don?t save them.");
+        alert.setContentText("Your changes will be lost if you do not save them.");
         alert.getButtonTypes().setAll(save, ButtonType.CANCEL, notSave);
         return alert;
     }
