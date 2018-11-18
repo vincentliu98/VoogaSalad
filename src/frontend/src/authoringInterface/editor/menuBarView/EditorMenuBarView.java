@@ -4,10 +4,11 @@ import api.SubView;
 import authoring.AuthoringTools;
 import authoringInterface.MainAuthoringProgram;
 import authoringInterface.View;
+import authoringInterface.editor.menuBarView.subMenuBarView.CloseFileView;
 import authoringInterface.editor.memento.Editor;
 import authoringInterface.editor.memento.EditorCaretaker;
-import authoringInterface.editor.memento.EditorMemento;
 import authoringInterface.editor.menuBarView.subMenuBarView.LoadFileView;
+import authoringInterface.editor.menuBarView.subMenuBarView.NewWindowView;
 import graphUI.groovy.GroovyPane;
 import graphUI.phase.GraphPane;
 import javafx.beans.Observable;
@@ -20,17 +21,12 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import runningGame.GameWindow;
-
-import java.io.File;
-
 public class EditorMenuBarView implements SubView<MenuBar> {
 
     private MenuBar menuBar;
     private GameWindow gameWindow;
-    private LoadFileView newFile;
     private AuthoringTools authTools;
 
     private final EditorCaretaker editorCaretaker = new EditorCaretaker();
@@ -64,6 +60,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         MenuItem groovyGraph = new MenuItem("GroovyGraph");
 
         save.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
+        newFile.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN));
 
         newFile.setOnAction(this::handleNewFile);
         open.setOnAction(this::handleOpen);
@@ -96,9 +93,10 @@ public class EditorMenuBarView implements SubView<MenuBar> {
 
 
     void handleOpen(ActionEvent event) {
-        newFile = new LoadFileView();
+        new LoadFileView();
     }
-    void handleNewFile(ActionEvent event) {}
+    void handleNewFile(ActionEvent event) { new NewWindowView(); }
+    void handleClose(ActionEvent event) { new CloseFileView(); }
     void handleSave(ActionEvent event) {
         editorCaretaker.addMemento(editor.save());
         editor.setState(editorCaretaker.getMemento(currentMemento++).getSavedState());
@@ -107,7 +105,6 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         handleSave(event);
         // TODO: 11/17/18 add a fileChooser and allow user to save
     }
-    void handleClose(ActionEvent event) {}
     void handleUndo(ActionEvent event) {
         editor.restoreToState(editorCaretaker.getMemento(--currentMemento));
         // TODO: 11/17/18 Redisplay content
