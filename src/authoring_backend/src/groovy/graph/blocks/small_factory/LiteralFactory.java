@@ -20,6 +20,11 @@ public class LiteralFactory {
                   .map(i -> new LiteralBlock(i.toString(), "Integer"));
     }
 
+    public static Try<LiteralBlock> keyBlock(String value) {
+        return Try.apply(() -> Integer.parseInt(value.trim()))
+                  .map(i -> new LiteralBlock(Character.toString((char) i.intValue()), "Key"));
+    }
+
     public static Try<LiteralBlock> doubleBlock(String value) {
         return Try.apply(() -> Double.parseDouble(value.trim()))
                   .map(i -> new LiteralBlock(i.toString(), "Double"));

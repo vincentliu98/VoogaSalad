@@ -67,6 +67,8 @@ public class GroovyPane extends PopUpWindow {
     private Pair<GroovyNode, Ports> edgeFrom;
     private Line tmpLine;
 
+    private TextArea codePane = new TextArea();
+
     private SimpleObjectProperty<Pair<GroovyNode, Ports>> selectedEdge;
     private SimpleObjectProperty<GroovyNode> selectedNode;
 
@@ -76,6 +78,8 @@ public class GroovyPane extends PopUpWindow {
         this.nodeFactory = new GroovyNodeFactory(factory);
         this.factory = factory;
         graph = factory.createGraph();
+
+        codePane.setEditable(false);
 
         lines = new HashMap<>();
         nodes = new HashSet<>();
@@ -123,7 +127,7 @@ public class GroovyPane extends PopUpWindow {
     }
 
     /**
-     *  We do not close the window; instead, we just hide it and unhide it when a button is clicked
+     *  We do not close the window; instead, we just hide it and show it when a button is clicked
      */
     @Override
     protected void closeWindow() { dialog.hide(); }
@@ -137,6 +141,8 @@ public class GroovyPane extends PopUpWindow {
         root.add(itemBox, 0, 0);
         HBox.setHgrow(itemBox, Priority.ALWAYS);
         root.add(graphBox, 1, 0);
+        root.add(codePane, 2, 0);
+
         myScene = new Scene(root, WIDTH, HEIGHT);
     }
 
@@ -199,6 +205,7 @@ public class GroovyPane extends PopUpWindow {
             group.getChildren().remove(selectedNode.get());
             graph.removeNode(selectedNode.get().model());
         }
+        updateCodePane();
     }
 
     private void initializeItemBox() {
@@ -212,6 +219,9 @@ public class GroovyPane extends PopUpWindow {
         );
         vbox.getChildren().addAll(
             IconLoader.loadLiterals(img -> type -> fetchArg -> draggableGroovyIcon(img, type, fetchArg))
+        );
+        vbox.getChildren().addAll(
+            IconLoader.loadUnaries(img -> type -> fetchArg -> draggableGroovyIcon(img, type, fetchArg))
         );
 
         vbox.setSpacing(10);
@@ -243,8 +253,10 @@ public class GroovyPane extends PopUpWindow {
         var col1 = new ColumnConstraints();
         col1.setPercentWidth(15);
         var col2 = new ColumnConstraints();
-        col2.setPercentWidth(85);
-        root.getColumnConstraints().addAll(col1, col2);
+        col2.setPercentWidth(60);
+        var col3 = new ColumnConstraints();
+        col3.setPercentWidth(25);
+        root.getColumnConstraints().addAll(col1, col2, col3);
     }
 
     private void connectNodes(GroovyNode node1, Ports port, GroovyNode node2) {
@@ -262,6 +274,7 @@ public class GroovyPane extends PopUpWindow {
 
             group.getChildren().addAll(edgeLine);
             edgeLine.toBack();
+            updateCodePane();
         } catch (Throwable t) { displayError(t.toString());}
     }
 
@@ -280,6 +293,7 @@ public class GroovyPane extends PopUpWindow {
                 else if(e.getClickCount() >= 2) new NodeSettingWindow(new Stage());
             });
             group.getChildren().add(node);
+            updateCodePane();
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
@@ -343,7 +357,7 @@ public class GroovyPane extends PopUpWindow {
 
     private void displayError(String msg) {
         var alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error Dialog");
+        alert.setTitle("Error");
         alert.setHeaderText("Something's wrong");
         alert.setContentText(msg);
         alert.showAndWait();
@@ -369,6 +383,10 @@ public class GroovyPane extends PopUpWindow {
                 }
             }
         }
+    }
+
+    private void updateCodePane() {
+        codePane.setText(graph.transformToGroovy().get("error!"));
     }
 }
 
