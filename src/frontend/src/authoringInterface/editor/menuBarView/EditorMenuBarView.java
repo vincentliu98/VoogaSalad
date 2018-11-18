@@ -6,6 +6,7 @@ import authoringInterface.MainAuthoringProgram;
 import authoringInterface.View;
 import authoringInterface.editor.menuBarView.subMenuBarView.CloseFileView;
 import authoringInterface.editor.menuBarView.subMenuBarView.LoadFileView;
+import authoringInterface.editor.menuBarView.subMenuBarView.NewWindowView;
 import graphUI.groovy.GroovyPane;
 import graphUI.phase.GraphPane;
 import javafx.event.ActionEvent;
@@ -50,6 +51,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         MenuItem groovyGraph = new MenuItem("GroovyGraph");
 
         save.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
+        newFile.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN));
 
         newFile.setOnAction(this::handleNewFile);
         open.setOnAction(this::handleOpen);
@@ -83,7 +85,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
     void handleOpen(ActionEvent event) {
         new LoadFileView();
     }
-    void handleNewFile(ActionEvent event) { }
+    void handleNewFile(ActionEvent event) { new NewWindowView(); }
     void handleSave(ActionEvent event) {}
     void handleSaveAs(ActionEvent event) {}
     void handleClose(ActionEvent event) { new CloseFileView(); }
