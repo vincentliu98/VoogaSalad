@@ -10,7 +10,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-// TODO: 11/17/18 Finish TileEditor 
+// TODO: 11/17/18 Finish TileEditor
 public class TileEditor extends AbstractObjectEditor<Tile> {
     private Tile tile;
     private Double height;
