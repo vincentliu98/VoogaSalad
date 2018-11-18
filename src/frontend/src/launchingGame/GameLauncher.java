@@ -3,6 +3,7 @@ package launchingGame;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class GameLauncher extends Application {
 
@@ -13,9 +14,16 @@ public class GameLauncher extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+       String style = getClass().getResource("/stylesheets/testing.css").toExternalForm();
+
         primaryStage.setTitle(STAGE_TITLE);
+        //primaryStage.initStyle(StageStyle.UNDECORATED);
+
         LauncherWindow myWindow = new LauncherWindow();
         Scene myScene = new Scene(myWindow.getView(), SCREEN_WIDTH, SCREEN_HEIGHT);
+
+        myScene.getStylesheets().add(style);
+
         primaryStage.setScene(myScene);
         primaryStage.show();
     }
