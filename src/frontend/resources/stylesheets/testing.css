@@ -1,0 +1,29 @@
+
+
+.launcher-top-bar {
+    -fx-background-color: rgb(43,45,56);
+}
+
+.search-bar {
+    -fx-background-color: rgb(60,64,75);
+}
+
+.launcher-side-bar {
+    -fx-background-color: rgb(21,24,29);
+}
+
+.closebutton {
+    -fx-background-color: transparent;
+}
+
+.text-option {
+    -fx-font-family: "Arial Black";
+    -fx-font-size: 18 pt;
+
+}
+
+.text-option-holder {
+    -fx-border-color: rgb(101, 213, 187);
+    -fx-border-width: 0 0 2 0;
+    -fx-border-insets: 20;
+}
