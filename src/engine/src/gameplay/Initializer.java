@@ -1,18 +1,15 @@
 package gameplay;
-
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.DomDriver;
-import javafx.scene.Group;
+import playing.Communicator;
 
 import java.io.File;
 
 public class Initializer {
     XMLParser myXMLParser;
-    Group myRoot;
+    Communicator myCommunicator;
 
-    public Initializer(File file){
+    public Initializer(File file, Communicator communicator){
         myXMLParser = new XMLParser();
-        myRoot = new Group();
+        myCommunicator = communicator;
         initGameData(file);
     }
 
@@ -21,18 +18,12 @@ public class Initializer {
         GameData.setGameData(myXMLParser.getPlayers(), myXMLParser.getEntities(), myXMLParser.getTiles(),
                 myXMLParser.getPhases(), myXMLParser.getNodes(), myXMLParser.getEdges(), myXMLParser.getTurn());
         for (Tile tile : myXMLParser.getTiles().values()){
-            tile.setImageView();
-            myRoot.getChildren().add(tile.getImageView());
+            myCommunicator.addNewEntity(new Tag(Tile.class, tile.getID()));
         }
         for (Entity entity : myXMLParser.getEntities().values()){
-            entity.setImageView();
-            myRoot.getChildren().add(entity.getImageView());
+            myCommunicator.addNewEntity(new Tag(Entity.class, entity.getID()));
         }
         startGame();
-    }
-
-    public Group getRoot(){
-        return myRoot;
     }
 
     public void startGame(){

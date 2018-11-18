@@ -8,6 +8,7 @@ module engine {
     requires java.scripting;
     requires xstream;
     requires org.codehaus.groovy;
+    requires frontend;
 
     opens gameplay to xstream, org.codehaus.groovy;
     exports gameplay;
