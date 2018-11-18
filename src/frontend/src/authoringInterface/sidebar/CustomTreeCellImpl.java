@@ -1,6 +1,7 @@
 package authoringInterface.sidebar;
 
 import authoringInterface.sidebar.subEditors.EntityEditor;
+import authoringInterface.sidebar.subEditors.TileEditor;
 import authoringInterface.sidebar.treeItemEntries.EditTreeItem;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -36,6 +37,11 @@ public class CustomTreeCellImpl extends TreeCell<String> {
                 case "SOUND":
                     break;
                 case "TILE":
+                    Stage tileDialogStage = new Stage();
+                    TileEditor tileEditor = new TileEditor();
+                    tileDialogStage.setScene(new Scene(tileEditor.getView(), 500, 500));
+                    tileDialogStage.show();
+                    tileEditor.addTreeItem(getTreeItem(), objectMap);
                     break;
                 case "User Settings":
                     break;
