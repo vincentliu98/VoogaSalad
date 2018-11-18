@@ -31,8 +31,7 @@ public class CustomTreeCellImpl extends TreeCell<String> {
                     EntityEditor editor = new EntityEditor();
                     dialogStage.setScene(new Scene(editor.getView(), 500, 500));
                     dialogStage.show();
-                    editor.registerTreeItem(getTreeItem());
-                    editor.registerObjectMap(objectMap);
+                    editor.addTreeItem(getTreeItem(), objectMap);
                     break;
                 case "SOUND":
                     break;

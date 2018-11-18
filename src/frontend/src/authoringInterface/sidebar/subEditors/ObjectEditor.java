@@ -34,7 +34,7 @@ public interface ObjectEditor<T extends EditTreeItem> {
      * @param treeItem: An existing TreeItem.
      * @param map: The map from String name to Entity.
      */
-    void editTreeItem(TreeItem<String> treeItem, Map<String, T> map);
+    void editTreeItem(TreeItem<String> treeItem, Map<String, EditTreeItem> map);
 
     /**
      * Register the object map.
@@ -42,12 +42,13 @@ public interface ObjectEditor<T extends EditTreeItem> {
      * @param treeItem: An existing TreeItem.
      * @param map: The map from String name to Entity.
      */
-    void addTreeItem(TreeItem<String> treeItem, Map<String, T> map);
+    void addTreeItem(TreeItem<String> treeItem, Map<String, EditTreeItem> map);
 
     /**
      * Register the node to Object map.
      *
-     * @param map
+     * @param node: The node that is to be altered.
+     * @param map: The node to user object map.
      */
-    void editNode(Map<Node, T> map);
+    void editNode(Node node, Map<Node, EditTreeItem> map);
 }

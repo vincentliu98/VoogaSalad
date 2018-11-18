@@ -27,9 +27,10 @@ public abstract class AbstractObjectEditor<T extends EditTreeItem> implements Ob
     protected Button confirm;
     protected Button cancel;
     protected TreeItem<String> treeItem;
-    protected Map<String, T> objectMap;
-    protected Map<Node, T> nodeToObjectMap;
+    protected Map<String, EditTreeItem> objectMap;
+    protected Map<Node, EditTreeItem> nodeToObjectMap;
     protected EditingMode editingMode;
+    protected Node nodeEdited;
 
     public AbstractObjectEditor() {
         editingMode = EditingMode.NONE;
@@ -78,7 +79,7 @@ public abstract class AbstractObjectEditor<T extends EditTreeItem> implements Ob
      * @param map: The map from String name to Entity.
      */
     @Override
-    public void editTreeItem(TreeItem<String> treeItem, Map<String, T> map) {
+    public void editTreeItem(TreeItem<String> treeItem, Map<String, EditTreeItem> map) {
         this.treeItem = treeItem;
         this.objectMap = map;
         editingMode = EditingMode.EDIT_TREEITEM;
@@ -91,7 +92,7 @@ public abstract class AbstractObjectEditor<T extends EditTreeItem> implements Ob
      * @param map: The map from String name to Entity.
      */
     @Override
-    public void addTreeItem(TreeItem<String> treeItem, Map<String, T> map) {
+    public void addTreeItem(TreeItem<String> treeItem, Map<String, EditTreeItem> map) {
         this.treeItem = treeItem;
         this.objectMap = map;
         editingMode = EditingMode.ADD_TREEITEM;
@@ -100,11 +101,13 @@ public abstract class AbstractObjectEditor<T extends EditTreeItem> implements Ob
     /**
      * Register the node to Object map.
      *
-     * @param map
+     * @param node: The node that is to be altered.
+     * @param map: The node to user object map.
      */
     @Override
-    public void editNode(Map<Node, T> map) {
+    public void editNode(Node node, Map<Node, EditTreeItem> map) {
         this.nodeToObjectMap = map;
+        this.nodeEdited = node;
         editingMode = EditingMode.EDIT_NODE;
     }
 }

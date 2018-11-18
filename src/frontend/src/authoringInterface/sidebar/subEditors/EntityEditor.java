@@ -57,17 +57,29 @@ public class EntityEditor extends AbstractObjectEditor<Entity> {
             } else {
                 entity.setName(nameField.getText().trim());
                 ((Stage) rootPane.getScene().getWindow()).close();
-                if (treeItem != null && !treeItem.isLeaf()) {
-                    int id = treeItem.getChildren().size();
-                    TreeItem<String> newItem = new TreeItem<>(entity.getName());
-                    ImageView preview = new ImageView(entity.getSprite());
-                    preview.setFitWidth(50);
-                    preview.setFitHeight(50);
-                    newItem.setGraphic(preview);
-                    entity.setId(id);
-                    objectMap.put(newItem.getValue(), entity);
-                    treeItem.getChildren().add(newItem);
-                } else if (nodeToObjectMap != null) {
+                switch (editingMode) {
+                    case ADD_TREEITEM:
+                        int id = treeItem.getChildren().size();
+                        TreeItem<String> newItem = new TreeItem<>(entity.getName());
+                        ImageView preview = new ImageView(entity.getSprite());
+                        preview.setFitWidth(50);
+                        preview.setFitHeight(50);
+                        newItem.setGraphic(preview);
+                        entity.setId(id);
+                        objectMap.put(newItem.getValue(), entity);
+                        treeItem.getChildren().add(newItem);
+                        break;
+                    case NONE:
+                        return;
+                    case EDIT_NODE:
+                        if (nodeEdited instanceof ImageView) {
+                            ((ImageView) nodeEdited).setImage(entity.getSprite());
+                        } else if (nodeEdited instanceof Text) {
+                            ((Text) nodeEdited).setText(nameField.getText());
+                        }
+                        break;
+                    case EDIT_TREEITEM:
+                        break;
                 }
             }
         });

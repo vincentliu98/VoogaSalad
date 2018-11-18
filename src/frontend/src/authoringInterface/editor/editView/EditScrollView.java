@@ -61,12 +61,14 @@ public class EditScrollView implements SubView<Pane>, DraggingCanvas {
                     copy.setY(e.getY());
                     gridScrollView.getChildren().add(copy);
                     nodeToObjectMap.put(copy, sideView.getObject(item.getValue()));
+                    copy.setOnMouseClicked(event -> handleDoubleClick(event, copy));
                 } else {
                     Text target = new Text(item.getValue());
                     target.setX(e.getX());
                     target.setY(e.getY());
                     gridScrollView.getChildren().add(target);
                     nodeToObjectMap.put(target, sideView.getObject(item.getValue()));
+                    target.setOnMouseClicked(ee -> handleDoubleClick(ee, target));
                 }
             }
         });
@@ -84,19 +86,20 @@ public class EditScrollView implements SubView<Pane>, DraggingCanvas {
             TreeItemType type = userObject.getType();
             Stage dialogStage = new Stage();
             AbstractObjectEditor editor = null;
-            if (type == TreeItemType.ENTITY) {
-                editor = new EntityEditor();
-                editor.readObject(userObject);
-            } else if (type == TreeItemType.SOUND) {
-
-            } else if (type == TreeItemType.CATEGORY) {
-
-            } else if (type == TreeItemType.TILE) {
-
+            switch (type) {
+                case ENTITY:
+                    editor = new EntityEditor();
+                    editor.readObject(userObject);
+                case SOUND:
+                    break;
+                case TILE:
+                    break;
+                case CATEGORY:
+                    break;
             }
+            editor.editNode(targetNode, nodeToObjectMap);
             dialogStage.setScene(new Scene(editor.getView(), 500, 500));
             dialogStage.show();
-            editor.registerNodeToObjectMap(nodeToObjectMap);
         }
     }
 
