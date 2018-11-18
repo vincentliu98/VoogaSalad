@@ -3,12 +3,10 @@ package authoringInterface.editor.editView;
 import api.SubView;
 import authoringInterface.sidebar.SideViewInterface;
 import javafx.collections.ListChangeListener;
-import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabDragPolicy;
-import javafx.scene.control.TabPane.TabClosingPolicy;
 
 
 /**
@@ -29,10 +27,11 @@ public class EditView implements SubView<TabPane> {
      * This method constructs the tabView.
      *
      * @return A tabView Node to be displayed at the left side of the createGraph window.
+     * @param sideView
      */
     public EditView(SideViewInterface sideView){
-        this.sideView = sideView;
         isMyFirstTab = true;
+        this.sideView = sideView;
         initializeTab();
         locateTab();
         tabPane.setTabDragPolicy(TabDragPolicy.REORDER);
@@ -85,7 +84,7 @@ public class EditView implements SubView<TabPane> {
 
     private void addTabHandler() {
         constructTab();
-        index ++;
+        index++;
         tabPane.getSelectionModel().select(tabPane.getTabs().size()-1);
     }
 
