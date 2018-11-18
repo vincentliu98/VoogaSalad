@@ -9,9 +9,10 @@ public interface EntitiesCRUDInterface {
 
     /**
      * @param name the name of the Tile Class to be created
-     * @return True if there is no name collision and the method is successful
+     * @return the Tile Class if there is no name collision and the method is successful
+     * @throws DuplicateClassException if a class with the same name exists
      */
-    boolean createTileClass(String name);
+    TileClass createTileClass(String name);
 
     /**
      * @param name the name of the Tile Class to be retrieved
@@ -21,10 +22,18 @@ public interface EntitiesCRUDInterface {
     TileClass getTileClass(String name);
 
     /**
-     * @param name the name of the Sprite Class to be created
-     * @return True if there is no name collision and the method is successful
+     *
+     * @param name the name of the Tile Class to be deleted
+     * @return True if the Tile Class exists
      */
-    boolean createSpriteClass(String name);
+    boolean deleteTileClass(String name);
+
+    /**
+     * @param name the name of the Sprite Class to be created
+     * @return the Sprite Class if there is no name collision and the method is successful
+     * @throws DuplicateClassException if a class with the same name exists
+     */
+    SpriteClass createSpriteClass(String name);
 
     /**
      * @param name the name of the Sprite Class to be retrieved
@@ -32,13 +41,6 @@ public interface EntitiesCRUDInterface {
      * @throws NoSpriteClassException if there is no such Sprite Class
      */
     SpriteClass getSpriteClass(String name);
-
-    /**
-     *
-     * @param name the name of the Tile Class to be deleted
-     * @return True if the Tile Class exists
-     */
-    boolean deleteTileClass(String name);
 
     /**
      *
