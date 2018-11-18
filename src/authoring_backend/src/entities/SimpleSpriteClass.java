@@ -22,7 +22,11 @@ public class SimpleSpriteClass implements SpriteClass {
     private ObservableMap<String, BlockGraph> propertiesMap;
     private BlockGraph imageSelector;
 
-    Function<Integer, Boolean> verifyTileIdFunc;
+    private Function<Integer, Boolean> verifyTileInstanceIdFunc;
+    private Consumer<EntityInstance> setInstanceIdFunc;
+    private Consumer<EntityInstance> returnInstanceIdFunc;
+    private Consumer<SpriteInstance> addSpriteInstanceToMapFunc;
+    private Consumer<SpriteInstance> removeSpriteInstanceFromMapFunc;
 
     private SimpleSpriteClass() {
         classId = new ReadOnlyIntegerWrapper(this, CONST_ID);
@@ -38,7 +42,11 @@ public class SimpleSpriteClass implements SpriteClass {
                       Consumer<SpriteInstance> addSpriteInstanceToMapFunc,
                       Consumer<SpriteInstance> removeSpriteInstanceFromMapFunc) {
         this();
-        verifyTileIdFunc = verifyTileInstanceIdFunction;
+        this.verifyTileInstanceIdFunc = verifyTileInstanceIdFunction;
+        this.setInstanceIdFunc = setInstanceIdFunc;
+        this.returnInstanceIdFunc = returnInstanceIdFunc;
+        this.addSpriteInstanceToMapFunc = addSpriteInstanceToMapFunc;
+        this.removeSpriteInstanceFromMapFunc = removeSpriteInstanceFromMapFunc;
     }
 
 
@@ -105,11 +113,12 @@ public class SimpleSpriteClass implements SpriteClass {
 
     @Override
     public EntityInstance createInstance(int tileId) {
-        if (!verifyTileIdFunc.apply(tileId)) {
+        if (!verifyTileInstanceIdFunc.apply(tileId)) {
             throw new InvalidIdException();
         }
-        EntityInstance spriteInstance = new SimpleSpriteInstance(tileId);
-
+        EntityInstance spriteInstance = new SimpleSpriteInstance(this.getClass()., tileId);
+        setInstanceIdFunc.accept(spriteInstance);
+        return spriteInstance;
     }
 
     @Override

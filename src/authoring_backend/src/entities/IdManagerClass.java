@@ -83,8 +83,8 @@ public class IdManagerClass implements IdManager {
 
     @Override
     public Consumer<EntityInstance> returnTileInstanceIdFunc() {
-        return (entityInstance) -> {
-            int returnedId = entityInstance.getInstanceId().getValue();
+        return (tileInstance) -> {
+            int returnedId = tileInstance.getInstanceId().getValue();
             if (tileInstanceCount < returnedId || returnedTileInstanceIds.contains(returnedId)) {
                 throw new DuplicateIdException();
             }
@@ -94,8 +94,8 @@ public class IdManagerClass implements IdManager {
 
     @Override
     public Consumer<EntityInstance> returnSpriteInstanceIdFunc() {
-        return (entityInstance) -> {
-            int returnedId = entityInstance.getInstanceId().getValue();
+        return (spriteInstance) -> {
+            int returnedId = spriteInstance.getInstanceId().getValue();
             if (spriteInstanceCount < returnedId || returnedSpriteInstanceIds.contains(returnedId)) {
                 throw new DuplicateIdException();
             }
