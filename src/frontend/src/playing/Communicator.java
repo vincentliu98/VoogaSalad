@@ -1,11 +1,19 @@
 package playing;
 
-import java.beans.*;
+import javax.script.ScriptEngine;
 
-public class Communicator {
+public class Communicator implements Communicable{
+    ScriptEngine myEngine;
+    DisplayData myDisplayData;
 
-    public Communicator(){
+    public Communicator(ScriptEngine engine, DisplayData displayData){
+        myEngine = engine;
+        myDisplayData = displayData;
 
+    }
 
+    @Override
+    public void addNewEntity(int id) {
+        //EntityView newEntity = new EntityView()
     }
 }

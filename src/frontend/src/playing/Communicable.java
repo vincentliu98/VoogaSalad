@@ -1,17 +1,11 @@
 package playing;
 
-import java.util.function.Consumer;
-
 public interface Communicable {
 
     /**
+     * Adds a new entity to the front and back ends
      *
-     * @return
+     * @param id The id of the new entity
      */
-    void addNewEntity();
-
-    /**
-     *
-     */
-    void removeEntity();
+    void addNewEntity(int id);
 }
