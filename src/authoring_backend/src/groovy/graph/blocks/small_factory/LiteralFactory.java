@@ -22,7 +22,7 @@ public class LiteralFactory {
 
     public static Try<LiteralBlock> keyBlock(String value) {
         return Try.apply(() -> Integer.parseInt(value.trim()))
-                  .map(i -> new LiteralBlock(Character.toString((char) i.intValue()), "Key"));
+                  .map(i -> new LiteralBlock(i.toString(), "KeyCode"));
     }
 
     public static Try<LiteralBlock> doubleBlock(String value) {

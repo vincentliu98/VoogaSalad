@@ -51,7 +51,7 @@ public class GroovyNode extends StackPane {
 
         text = new Label(block.name());
         text.setFont(new Font(labelSize));
-        text.setTextFill(Color.BLACK);
+        text.setTextFill(Color.WHITE);
 
         setLayoutX(xPos);
         setLayoutY(yPos);

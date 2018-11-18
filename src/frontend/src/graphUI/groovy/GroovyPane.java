@@ -74,12 +74,12 @@ public class GroovyPane extends PopUpWindow {
 
     public GroovyPane(Stage primaryStage, GroovyFactory factory) {
         super(primaryStage);
-        dialog.setTitle("Graph Setting");
         this.nodeFactory = new GroovyNodeFactory(factory);
         this.factory = factory;
         graph = factory.createGraph();
 
         codePane.setEditable(false);
+        codePane.setWrapText(true);
 
         lines = new HashMap<>();
         nodes = new HashSet<>();
@@ -133,17 +133,44 @@ public class GroovyPane extends PopUpWindow {
     protected void closeWindow() { dialog.hide(); }
 
     private void initializeUI() {
+        root.setPrefWidth(WIDTH);
+        root.setPrefHeight(HEIGHT);
         graphBox.getChildren().add(group);
-        graphBox.setPrefSize(500, 500);
+        graphBox.setPrefSize(2*WIDTH, 3*HEIGHT);
         setupGraphbox();
         initializeGridPane();
         initializeItemBox();
         root.add(itemBox, 0, 0);
         HBox.setHgrow(itemBox, Priority.ALWAYS);
-        root.add(graphBox, 1, 0);
+        var graphBoxWrapper = new ScrollPane();
+        graphBoxWrapper.setContent(graphBox);
+        root.add(graphBoxWrapper, 1, 0);
         root.add(codePane, 2, 0);
 
         myScene = new Scene(root, WIDTH, HEIGHT);
+    }
+
+    private void initializeItemBox() {
+        var vbox = new VBox();
+
+        vbox.getChildren().addAll(
+            IconLoader.loadControls(img -> type -> fetchArg -> draggableGroovyIcon(img, type, fetchArg))
+        );
+        vbox.getChildren().addAll(
+            IconLoader.loadBinaries(img -> type -> fetchArg -> draggableGroovyIcon(img, type, fetchArg))
+        );
+        vbox.getChildren().addAll(
+            IconLoader.loadLiterals(img -> type -> fetchArg -> draggableGroovyIcon(img, type, fetchArg))
+        );
+        vbox.getChildren().addAll(
+            IconLoader.loadUnaries(img -> type -> fetchArg -> draggableGroovyIcon(img, type, fetchArg))
+        );
+
+        vbox.setSpacing(10);
+        vbox.getChildren().forEach(c -> { if(c instanceof HBox) ((HBox) c).setSpacing(5); });
+
+        itemBox.setContent(vbox);
+        itemBox.setMinHeight(HEIGHT);
     }
 
     private void setupGraphbox() {
@@ -208,27 +235,6 @@ public class GroovyPane extends PopUpWindow {
         updateCodePane();
     }
 
-    private void initializeItemBox() {
-        var vbox = new VBox();
-
-        vbox.getChildren().addAll(
-            IconLoader.loadControls(img -> type -> fetchArg -> draggableGroovyIcon(img, type, fetchArg))
-        );
-        vbox.getChildren().addAll(
-            IconLoader.loadBinaries(img -> type -> fetchArg -> draggableGroovyIcon(img, type, fetchArg))
-        );
-        vbox.getChildren().addAll(
-            IconLoader.loadLiterals(img -> type -> fetchArg -> draggableGroovyIcon(img, type, fetchArg))
-        );
-        vbox.getChildren().addAll(
-            IconLoader.loadUnaries(img -> type -> fetchArg -> draggableGroovyIcon(img, type, fetchArg))
-        );
-
-        vbox.setSpacing(10);
-        vbox.getChildren().forEach(c -> { if(c instanceof HBox) ((HBox) c).setSpacing(5); });
-
-        itemBox.setContent(vbox);
-    }
 
     private ImageView draggableGroovyIcon(Image icon, String blockType, boolean fetchArg) {
         var view = new ImageView(icon);
@@ -386,7 +392,12 @@ public class GroovyPane extends PopUpWindow {
     }
 
     private void updateCodePane() {
-        codePane.setText(graph.transformToGroovy().get("error!"));
+        try {
+            codePane.setText(graph.transformToGroovy().get());
+        } catch(Throwable t) {
+            codePane.setText(t.toString());
+        }
+
     }
 }
 
