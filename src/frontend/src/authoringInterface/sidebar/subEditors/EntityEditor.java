@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TreeItem;
 import javafx.scene.control.cell.TextFieldTreeCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -23,10 +24,10 @@ import java.io.File;
  *
  * @author Haotian Wang
  */
-public class EntityEditor extends AbstractObjectEditor implements ObjectEditor<Entity>, SubView<AnchorPane> {
+public class EntityEditor extends AbstractObjectEditor<Entity> {
     private Text imageText;
     private Button chooseImage;
-    private VBox imageBox;
+    private ImageView preview;
     private Entity entity;
 
     public EntityEditor() {
@@ -35,16 +36,18 @@ public class EntityEditor extends AbstractObjectEditor implements ObjectEditor<E
         inputText.setText("Your entity name:");
         imageText = new Text("Choose an image for your entity");
         chooseImage = new Button("Choose sprite");
+        preview = new ImageView();
         chooseImage.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
             File file = fileChooser.showOpenDialog(new Stage());
             if (file != null) {
                 Image sprite = new Image(file.toURI().toString());
                 entity.setSprite(sprite);
-                imageBox.getChildren().add(new ImageView(sprite));
+                preview.setImage(sprite);
+                preview.setFitHeight(50);
+                preview.setFitWidth(50);
             }
         });
-        imageBox = new VBox();
         confirm.setOnAction(e -> {
             if (nameField.getText().trim().isEmpty()) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -53,12 +56,35 @@ public class EntityEditor extends AbstractObjectEditor implements ObjectEditor<E
                 alert.showAndWait();
             } else {
                 entity.setName(nameField.getText().trim());
-                isApplied = true;
                 ((Stage) rootPane.getScene().getWindow()).close();
+                switch (editingMode) {
+                    case ADD_TREEITEM:
+                        int id = treeItem.getChildren().size();
+                        TreeItem<String> newItem = new TreeItem<>(entity.getName());
+                        ImageView preview = new ImageView(entity.getSprite());
+                        preview.setFitWidth(50);
+                        preview.setFitHeight(50);
+                        newItem.setGraphic(preview);
+                        entity.setId(id);
+                        objectMap.put(newItem.getValue(), entity);
+                        treeItem.getChildren().add(newItem);
+                        break;
+                    case NONE:
+                        return;
+                    case EDIT_NODE:
+                        if (nodeEdited instanceof ImageView) {
+                            ((ImageView) nodeEdited).setImage(entity.getSprite());
+                        } else if (nodeEdited instanceof Text) {
+                            ((Text) nodeEdited).setText(nameField.getText());
+                        }
+                        break;
+                    case EDIT_TREEITEM:
+                        break;
+                }
             }
         });
         setupLayout();
-        rootPane.getChildren().addAll(imageText, chooseImage, imageBox);
+        rootPane.getChildren().addAll(imageText, chooseImage, preview);
     }
 
     private void setupLayout() {
@@ -66,9 +92,8 @@ public class EntityEditor extends AbstractObjectEditor implements ObjectEditor<E
         imageText.setLayoutY(176);
         chooseImage.setLayoutX(261);
         chooseImage.setLayoutY(158);
-        imageBox.setPrefSize(164, 171);
-        imageBox.setLayoutX(37);
-        imageBox.setLayoutY(206);
+        preview.setLayoutX(37);
+        preview.setLayoutY(206);
     }
 
     /**
@@ -80,7 +105,7 @@ public class EntityEditor extends AbstractObjectEditor implements ObjectEditor<E
     public void readObject(Entity userObject) {
         entity = userObject;
         nameField.setText(entity.getName());
-        imageBox.getChildren().set(0, new ImageView(entity.getSprite()));
+        preview.setImage(entity.getSprite());
     }
 
     /**
@@ -91,16 +116,6 @@ public class EntityEditor extends AbstractObjectEditor implements ObjectEditor<E
     @Override
     public Entity getObject() {
         return entity;
-    }
-
-    /**
-     * Return a boolean indicating whether the changes are successfully applied.
-     *
-     * @return
-     */
-    @Override
-    public boolean applied() {
-        return isApplied;
     }
 
     /**

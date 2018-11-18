@@ -67,6 +67,14 @@ public class SideView implements SubView<StackPane>, SideViewInterface {
     }
 
     /**
+     * @return The internal object map.
+     */
+    @Override
+    public Map<String, EditTreeItem> getObjectMap() {
+        return objectMap;
+    }
+
+    /**
      * This method returns the responsible JavaFx Node responsible to be added or deleted from other graphical elements.
      *
      * @return A "root" JavaFx Node representative of this object.
