@@ -51,6 +51,7 @@ public class GroovyFactory {
 
     public Try<LiteralBlock> booleanBlock(String value) { return LiteralFactory.booleanBlock(value); }
     public Try<LiteralBlock> integerBlock(String value) { return LiteralFactory.integerBlock(value); }
+    public Try<LiteralBlock> keyBlock(String value) { return LiteralFactory.keyBlock(value); }
     public Try<LiteralBlock> doubleBlock(String value) { return LiteralFactory.doubleBlock(value); }
     public Try<LiteralBlock> listBlock(String value) { return LiteralFactory.listBlock(value); }
     public Try<LiteralBlock> mapBlock(String value) { return LiteralFactory.mapBlock(value); }
