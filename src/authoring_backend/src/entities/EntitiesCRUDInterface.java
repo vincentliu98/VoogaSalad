@@ -29,6 +29,13 @@ public interface EntitiesCRUDInterface {
     boolean deleteTileClass(String name);
 
     /**
+     *
+     * @param instanceId
+     * @return
+     */
+    boolean deleteTileInstance(int instanceId);
+
+    /**
      * @param name the name of the Sprite Class to be created
      * @return the Sprite Class if there is no name collision and the method is successful
      * @throws DuplicateClassException if a class with the same name exists
@@ -48,6 +55,13 @@ public interface EntitiesCRUDInterface {
      * @return True if the Sprite Class exists
      */
     boolean deleteSpriteClass(String name);
+
+    /**
+     *
+     * @param instanceId
+     * @return
+     */
+    boolean deleteSpriteInstance(int instanceId);
 
     /**
      *

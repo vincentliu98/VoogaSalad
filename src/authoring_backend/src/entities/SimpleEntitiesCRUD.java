@@ -77,6 +77,16 @@ public class SimpleEntitiesCRUD implements EntitiesCRUDInterface {
     }
 
     @Override
+    public boolean deleteTileInstance(int instanceId) {
+        if (!tileInstanceMap.containsKey(instanceId)) {
+            return false;
+        }
+        TileInstance tileInstance = tileInstanceMap.remove(instanceId);
+        tileInstance.getReturnInstanceIdFunc().accept(tileInstance);
+        return true;
+    }
+
+    @Override
     public SpriteClass createSpriteClass(String name) {
         if (spriteClassMap.containsKey(name)) {
             throw new DuplicateClassException();
@@ -111,11 +121,14 @@ public class SimpleEntitiesCRUD implements EntitiesCRUDInterface {
         return true;
     }
 
-
-
     @Override
-    public String toXML() {
-        return null;
+    public boolean deleteSpriteInstance(int instanceId) {
+        if (!spriteInstanceMap.containsKey(instanceId)) {
+            return false;
+        }
+        SpriteInstance spriteInstance = spriteInstanceMap.remove(instanceId);
+        spriteInstance.getReturnInstanceIdFunc().accept(spriteInstance);
+        return true;
     }
 
     private Consumer<TileInstance> addTileInstanceToMapFunc() {
@@ -148,6 +161,11 @@ public class SimpleEntitiesCRUD implements EntitiesCRUDInterface {
             }
             return instancesSet;
         };
+    }
+
+    @Override
+    public String toXML() {
+        return null;
     }
 
 }
