@@ -1,10 +1,16 @@
 package entities;
 
 import grids.Grid;
+import grids.GridImpl;
+import grids.GridShape;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 
 public class SimpleEntitiesCRUD implements EntitiesCRUDInterface {
@@ -18,7 +24,7 @@ public class SimpleEntitiesCRUD implements EntitiesCRUDInterface {
     private Consumer<EntityClass> returnClassId;
     private IdManager myIdManager;
 
-    public SimpleEntitiesCRUD() {
+    private SimpleEntitiesCRUD() {
         tileClassMap = FXCollections.observableHashMap();
         spriteClassMap = FXCollections.observableHashMap();
         myIdManager = new IdManagerClass();
@@ -42,7 +48,12 @@ public class SimpleEntitiesCRUD implements EntitiesCRUDInterface {
         if (tileClassMap.containsKey(name)) {
             throw new DuplicateClassException();
         }
-        TileClass newTileClass = new SimpleTileClass(myIdManager.requestTileInstanceIdFunc());
+        TileClass newTileClass = new SimpleTileClass(
+                grid.verifyPointsFunc(),
+                myIdManager.requestTileInstanceIdFunc(),
+                myIdManager.returnTileInstanceIdFunc(),
+                addTileInstanceToMapFunc(),
+                getTileInstancesFunc());
         myIdManager.requestClassIdFunc().accept(newTileClass);
         tileClassMap.put(name, newTileClass);
         return newTileClass;
@@ -76,7 +87,7 @@ public class SimpleEntitiesCRUD implements EntitiesCRUDInterface {
                 myIdManager.requestSpriteInstanceIdFunc(),
                 myIdManager.returnSpriteInstanceIdFunc(),
                 addSpriteInstanceToMapFunc(),
-                removeSpriteInstanceFromMapFunc());
+                getSpriteInstancesFunc());
 
         myIdManager.requestClassIdFunc().accept(newSpriteClass);
         spriteClassMap.put(name, newSpriteClass);
@@ -99,19 +110,44 @@ public class SimpleEntitiesCRUD implements EntitiesCRUDInterface {
         returnClassId.accept(spriteClassMap.remove(name));
         return true;
     }
+
+
+
     @Override
     public String toXML() {
         return null;
     }
 
-
+    private Consumer<TileInstance> addTileInstanceToMapFunc() {
+        return tileInstance -> tileInstanceMap.put(tileInstance.getInstanceId().getValue(), tileInstance);
+    }
 
     private Consumer<SpriteInstance> addSpriteInstanceToMapFunc() {
         return spriteInstance -> spriteInstanceMap.put(spriteInstance.getInstanceId().getValue(), spriteInstance);
     }
 
-    private Consumer<SpriteInstance> removeSpriteInstanceFromMapFunc() {
-        return spriteInstance -> spriteInstanceMap.remove(spriteInstance.getInstanceId().getValue(), spriteInstance);
+    private Function<String, Set<EntityInstance>> getTileInstancesFunc() {
+        return name -> {
+            Set<EntityInstance> instancesSet = new HashSet<>();
+            for (Map.Entry<Integer, TileInstance> entry : tileInstanceMap.entrySet()) {
+                if (entry.getValue().getClassName().getName().equals(name)) {
+                    instancesSet.add(entry.getValue());
+                }
+            }
+            return instancesSet;
+        };
+    }
+
+    private Function<String, Set<EntityInstance>> getSpriteInstancesFunc() {
+        return name -> {
+            Set<EntityInstance> instancesSet = new HashSet<>();
+            for (Map.Entry<Integer, SpriteInstance> entry : spriteInstanceMap.entrySet()) {
+                if (entry.getValue().getClassName().getName().equals(name)) {
+                    instancesSet.add(entry.getValue());
+                }
+            }
+            return instancesSet;
+        };
     }
 
 }

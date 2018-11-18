@@ -6,16 +6,17 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class SimpleSpriteClass implements SpriteClass {
 
-    private String CONST_DEFAULTHEIGHT = "defaultHeight";
-    private String CONST_DEFAULTWIDTH = "defaultWidth";
+    private String CONST_CLASSNAME = "className";
     private String CONST_ID = "id";
     private String CONST_MOVABLE = "movable";
 
+    private ReadOnlyStringWrapper className;
     private ReadOnlyIntegerWrapper classId;
     private SimpleBooleanProperty movable;
     private ObservableList<String> imagePathList;
@@ -23,12 +24,14 @@ public class SimpleSpriteClass implements SpriteClass {
     private BlockGraph imageSelector;
 
     private Function<Integer, Boolean> verifyTileInstanceIdFunc;
+
+    private Function<String, Set<EntityInstance>> getSpriteInstancesFunc;
     private Consumer<EntityInstance> setInstanceIdFunc;
     private Consumer<EntityInstance> returnInstanceIdFunc;
     private Consumer<SpriteInstance> addSpriteInstanceToMapFunc;
-    private Consumer<SpriteInstance> removeSpriteInstanceFromMapFunc;
 
     private SimpleSpriteClass() {
+        className = new ReadOnlyStringWrapper(this, CONST_CLASSNAME);
         classId = new ReadOnlyIntegerWrapper(this, CONST_ID);
         movable = new SimpleBooleanProperty(this, CONST_MOVABLE);
         imagePathList = FXCollections.observableArrayList();
@@ -40,13 +43,13 @@ public class SimpleSpriteClass implements SpriteClass {
                       Consumer<EntityInstance> setInstanceIdFunc,
                       Consumer<EntityInstance> returnInstanceIdFunc,
                       Consumer<SpriteInstance> addSpriteInstanceToMapFunc,
-                      Consumer<SpriteInstance> removeSpriteInstanceFromMapFunc) {
+                      Function<String, Set<EntityInstance>> getSpriteInstancesFunc) {
         this();
         this.verifyTileInstanceIdFunc = verifyTileInstanceIdFunction;
         this.setInstanceIdFunc = setInstanceIdFunc;
         this.returnInstanceIdFunc = returnInstanceIdFunc;
         this.addSpriteInstanceToMapFunc = addSpriteInstanceToMapFunc;
-        this.removeSpriteInstanceFromMapFunc = removeSpriteInstanceFromMapFunc;
+        this.getSpriteInstancesFunc = getSpriteInstancesFunc;
     }
 
 
@@ -58,6 +61,16 @@ public class SimpleSpriteClass implements SpriteClass {
     @Override
     public void setClassId(Consumer<SimpleIntegerProperty> setFunc) {
         setFunc.accept(classId);
+    }
+
+    @Override
+    public ReadOnlyStringProperty getClassName() {
+        return className.getReadOnlyProperty();
+    }
+
+    @Override
+    public void setClassName(Consumer<SimpleStringProperty> setFunc) {
+        setFunc.accept(className);
     }
 
     @Override
@@ -116,9 +129,17 @@ public class SimpleSpriteClass implements SpriteClass {
         if (!verifyTileInstanceIdFunc.apply(tileId)) {
             throw new InvalidIdException();
         }
-        EntityInstance spriteInstance = new SimpleSpriteInstance(this.getClass()., tileId);
+        ObservableMap propertiesMapCopy = FXCollections.observableHashMap();
+        propertiesMapCopy.putAll(propertiesMap);
+        SpriteInstance spriteInstance = new SimpleSpriteInstance(className.getName(), tileId, propertiesMapCopy, returnInstanceIdFunc);
         setInstanceIdFunc.accept(spriteInstance);
+        addSpriteInstanceToMapFunc.accept(spriteInstance);
         return spriteInstance;
+    }
+
+    @Override
+    public Set<EntityInstance> getInstances() {
+        return getSpriteInstancesFunc.apply(getClassName().get());
     }
 
     @Override

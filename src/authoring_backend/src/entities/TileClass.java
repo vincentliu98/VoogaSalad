@@ -9,13 +9,6 @@ import java.util.Set;
 
 public interface TileClass extends EntityClass {
 
-
-    void setDefaultHeightWidth(int defaultHeight, int defaultWidth);
-
-    SimpleIntegerProperty getDefaultHeight();
-
-    SimpleIntegerProperty getDefaultWidth();
-
     SimpleBooleanProperty isSpriteContainable();
 
     void setSpriteContainable(boolean contains);

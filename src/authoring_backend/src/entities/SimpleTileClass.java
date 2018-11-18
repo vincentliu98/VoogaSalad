@@ -7,50 +7,69 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 
-import java.util.List;
-import java.util.Collections;
-import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 public class SimpleTileClass implements TileClass {
 
-    private String CONST_DEFAULTHEIGHT = "defaultHeight";
-    private String CONST_DEFAULTWIDTH = "defaultWidth";
+    private String CONST_CLASSNAME = "className";
     private String CONST_ID = "id";
     private String CONST_SPRITECONTAINABLE = "spriteContainable";
 
-    private ReadOnlyIntegerWrapper id;
-    private SimpleIntegerProperty height;
-    private SimpleIntegerProperty width;
+    private ReadOnlyStringWrapper className;
+    private ReadOnlyIntegerWrapper classId;
     private SimpleBooleanProperty spriteContainable;
     private ObservableList<String> imagePathList;
     private ObservableMap<String, BlockGraph> propertiesMap;
     private BlockGraph imageSelector;
 
+    private Function<Set<Point>, Boolean> verifyPointsFunc;
+
+    private Function<String, Set<EntityInstance>> getTileInstancesFunc;
+    private Consumer<EntityInstance> setInstanceIdFunc;
+    private Consumer<EntityInstance> returnInstanceIdFunc;
+    private Consumer<TileInstance> addTileInstanceToMapFunc;
+
     private SimpleTileClass() {
-        id = new ReadOnlyIntegerWrapper(this, CONST_ID);
-        height = new SimpleIntegerProperty(this, CONST_DEFAULTHEIGHT);
-        width = new SimpleIntegerProperty(this, CONST_DEFAULTWIDTH);
+        className = new ReadOnlyStringWrapper(this, CONST_CLASSNAME);
+        classId = new ReadOnlyIntegerWrapper(this, CONST_ID);
         spriteContainable = new SimpleBooleanProperty(this, CONST_SPRITECONTAINABLE);
         imagePathList = FXCollections.observableArrayList();
         propertiesMap = FXCollections.observableHashMap();
     }
 
-    SimpleTileClass(Consumer<SimpleIntegerProperty> setFunc) {
+    SimpleTileClass(Function<Set<Point>, Boolean> verifyPointsFunc,
+                    Consumer<EntityInstance> setInstanceIdFunc,
+                    Consumer<EntityInstance> returnInstanceIdFunc,
+                    Consumer<TileInstance> addTileInstanceToMapFunc,
+                    Function<String, Set<EntityInstance>> getTileInstancesFunc) {
         this();
-        setClassId(setFunc);
+        this.verifyPointsFunc = verifyPointsFunc;
+        this.setInstanceIdFunc = setInstanceIdFunc;
+        this.returnInstanceIdFunc = returnInstanceIdFunc;
+        this.addTileInstanceToMapFunc = addTileInstanceToMapFunc;
+        this.getTileInstancesFunc = getTileInstancesFunc;
     }
 
     @Override
     public ReadOnlyIntegerProperty getClassId() {
-        return id.getReadOnlyProperty();
+        return classId.getReadOnlyProperty();
     }
 
     @Override
     public void setClassId(Consumer<SimpleIntegerProperty> setFunc) {
-        setFunc.accept(id);
+        setFunc.accept(classId);
+    }
+
+    @Override
+    public ReadOnlyStringProperty getClassName() {
+        return className.getReadOnlyProperty();
+    }
+
+    @Override
+    public void setClassName(Consumer<SimpleStringProperty> setFunc) {
+        setFunc.accept(className);
     }
 
     @Override
@@ -70,22 +89,6 @@ public class SimpleTileClass implements TileClass {
     @Override
     public boolean removeProperty(String propertyName) {
         return propertiesMap.remove(propertyName) != null;
-    }
-
-    @Override
-    public void setDefaultHeightWidth(int defaultHeight, int defaultWidth) {
-        height.setValue(defaultHeight);
-        width.setValue(defaultWidth);
-    }
-
-    @Override
-    public SimpleIntegerProperty getDefaultHeight() {
-        return height;
-    }
-
-    @Override
-    public SimpleIntegerProperty getDefaultWidth() {
-        return width;
     }
 
 
@@ -122,13 +125,21 @@ public class SimpleTileClass implements TileClass {
     }
 
     @Override
-    public EntityInstance createInstance() {
+    public Set<EntityInstance> getInstances() {
         return null;
     }
 
     @Override
     public EntityInstance createInstance(Set<Point> points) {
-        SpriteInstance sprite = new SimpleTileInstance();
+        if (!verifyPointsFunc.apply(points)) {
+            throw new InvalidPointsException();
+        }
+        ObservableMap propertiesMapCopy = FXCollections.observableHashMap();
+        propertiesMapCopy.putAll(propertiesMap);
+        TileInstance tileInstance = new SimpleTileInstance(className.getName(), points, propertiesMapCopy, returnInstanceIdFunc);
+        setInstanceIdFunc.accept(tileInstance);
+        addTileInstanceToMapFunc.accept(tileInstance);
+        return tileInstance;
 
     }
 

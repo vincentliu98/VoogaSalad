@@ -2,10 +2,13 @@ package entities;
 
 import groovy.api.BlockGraph;
 import javafx.beans.property.ReadOnlyIntegerProperty;
+import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -14,6 +17,10 @@ public interface EntityClass {
     ReadOnlyIntegerProperty getClassId();
 
     void setClassId(Consumer<SimpleIntegerProperty> setFunc);
+
+    ReadOnlyStringProperty getClassName();
+
+    void setClassName(Consumer<SimpleStringProperty> setFunc);
 
     ObservableMap getPropertiesMap();
 
@@ -51,6 +58,6 @@ public interface EntityClass {
 
     BlockGraph getImageSelectorCode();
 
-
+    Set<EntityInstance> getInstances();
 
 }

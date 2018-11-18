@@ -72,7 +72,7 @@ public class EntityClassTest {
         eci.createTileClass("demoClass");
 
         TileClass demo = eci.getTileClass("demoClass");
-        demo.setDefaultHeightWidth(1, 1);
+//        demo.setDefaultHeightWidth(1, 1);
         demo.addImagePath("hellotester");
 
 

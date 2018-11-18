@@ -64,11 +64,11 @@ public class PhaseGraphTest {
 
 
         // Testing TileClass CRUD Interface
-        EntitiesCRUDInterface eci = new SimpleEntitiesCRUD();
-        eci.createTileClass("demoClass");
+//        EntitiesCRUDInterface eci = new SimpleEntitiesCRUD();
+//        eci.createTileClass("demoClass");
 
-        TileClass demo = eci.getTileClass("demoClass");
-        demo.setDefaultHeightWidth(1, 1);
+//        TileClass demo = eci.getTileClass("demoClass");
+//        demo.setDefaultHeightWidth(1, 1);
 
 
 
