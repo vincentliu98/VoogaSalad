@@ -12,7 +12,7 @@ import javafx.scene.control.TabPane.TabClosingPolicy;
 
 
 /**
- * EditView Class (TabPane > ScrollPane)
+ * EditView Class (TabPane > Pane)
  *      - holding scroll views
  *
  * @author Amy Kim
@@ -50,7 +50,6 @@ public class EditView implements SubView<TabPane> {
         });
         tabPane.getTabs().add(addTab);
         addTabHandler();
-        index++;
     }
 
 
@@ -86,6 +85,7 @@ public class EditView implements SubView<TabPane> {
 
     private void addTabHandler() {
         constructTab();
+        index ++;
         tabPane.getSelectionModel().select(tabPane.getTabs().size()-1);
     }
 

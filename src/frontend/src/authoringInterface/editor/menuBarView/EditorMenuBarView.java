@@ -4,6 +4,7 @@ import api.SubView;
 import authoring.AuthoringTools;
 import authoringInterface.MainAuthoringProgram;
 import authoringInterface.View;
+import authoringInterface.editor.menuBarView.subMenuBarView.CloseFileView;
 import authoringInterface.editor.menuBarView.subMenuBarView.LoadFileView;
 import graphUI.groovy.GroovyPane;
 import graphUI.phase.GraphPane;
@@ -21,7 +22,6 @@ public class EditorMenuBarView implements SubView<MenuBar> {
 
     private MenuBar menuBar;
     private GameWindow gameWindow;
-    private LoadFileView newFile;
     private AuthoringTools authTools;
 
     public EditorMenuBarView(AuthoringTools authTools) {
@@ -81,12 +81,12 @@ public class EditorMenuBarView implements SubView<MenuBar> {
 
 
     void handleOpen(ActionEvent event) {
-        newFile = new LoadFileView();
+        new LoadFileView();
     }
     void handleNewFile(ActionEvent event) { }
     void handleSave(ActionEvent event) {}
     void handleSaveAs(ActionEvent event) {}
-    void handleClose(ActionEvent event) {}
+    void handleClose(ActionEvent event) { new CloseFileView(); }
     void handleUndo(ActionEvent event) {}
     void handleRedo(ActionEvent event) {}
     void handleRunProject(ActionEvent event) {
