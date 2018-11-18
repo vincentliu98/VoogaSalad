@@ -1,3 +1,4 @@
+/*
 package authoringInterface.spritechoosingwindow;
 
 import authoringInterface.sidebar.treeItemEntries.Entity;
@@ -19,11 +20,13 @@ import javafx.stage.Stage;
 
 import java.io.File;
 
+*/
 /**
  * Pop-up window for the user to add settings for EntityClass
  *
  * @author jl729
- */
+ *//*
+
 
 public class EntityWindow extends PopUpWindow {
     public static final Double HEIGHT = 500.0;
@@ -121,3 +124,4 @@ public class EntityWindow extends PopUpWindow {
         myPane.add(applyBtn, 1, 3);
     }
 }
+*/
