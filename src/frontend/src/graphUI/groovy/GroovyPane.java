@@ -3,6 +3,7 @@ package graphUI.groovy;
 import authoringInterface.spritechoosingwindow.PopUpWindow;
 import graphUI.groovy.factory.GroovyNode;
 import graphUI.groovy.factory.GroovyNodeFactory;
+import graphUI.groovy.factory.IconLoader;
 import groovy.api.BlockGraph;
 import groovy.api.GroovyFactory;
 import groovy.api.Ports;
@@ -10,10 +11,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
@@ -98,12 +96,20 @@ public class GroovyPane extends PopUpWindow {
             if(o != null) o.setBorder(new Border(new BorderStroke(null, null, null, null)));
             if(n != null) {
                 if(selectedEdge.get() != null) selectedEdge.set(null);
-                n.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, null, null)));
+                n.setBorder(
+                    new Border(
+                        new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, null, new BorderWidths(3))
+                    )
+                );
             }
         });
 
         dialog.addEventFilter(KeyEvent.KEY_RELEASED, e -> {
             if(e.getCode() == KeyCode.DELETE) deleteSelected();
+            if(e.getCode() == KeyCode.ESCAPE) {
+                selectedNode.set(null);
+                selectedEdge.set(null);
+            }
         });
 
         initializeUI();
@@ -135,43 +141,40 @@ public class GroovyPane extends PopUpWindow {
     }
 
     private void setupGraphbox() {
-        graphBox.setOnDragOver(event -> {
-            if (event.getGestureSource() != graphBox && event.getDragboard().hasImage()) {
-                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-                newNodeX = event.getX();
-                newNodeY = event.getY();
-            }
-            event.consume();
-        });
-
-        graphBox.setOnDragDropped(event -> {
-            Dragboard db = event.getDragboard();
-            boolean success = false;
-            if (db.hasImage()) {
-                success = true;
-                try {
-                    AtomicReference<String> arg = new AtomicReference<>("");
-                    if(currentFetchArg) {
-                        var dialog = new TextInputDialog();
-                        dialog.setHeaderText("Type the value of the " + currentDragType);
-                        Optional<String> result = dialog.showAndWait();
-                        result.ifPresent(arg::set);
-                    }
-                    createNode(nodeFactory.fromType(currentDragType, newNodeX, newNodeY, arg.get()).get());
-                } catch (Throwable t) {
-                    var alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error Dialog");
-                    alert.setHeaderText("Something's wrong");
-                    alert.setContentText(t.toString());
-                    alert.showAndWait();
-                }
-            }
-            event.setDropCompleted(success);
-            event.consume();
-        });
+        graphBox.setOnDragOver(this::graphBoxDragOverHandler);
+        graphBox.setOnDragDropped(this::graphBoxDragDropHandler);
     }
 
-    public void deleteSelected() {
+    private void graphBoxDragOverHandler(DragEvent event) {
+        if (event.getGestureSource() != graphBox && event.getDragboard().hasImage()) {
+            event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+            newNodeX = event.getX();
+            newNodeY = event.getY();
+        }
+        event.consume();
+    }
+
+    private void graphBoxDragDropHandler(DragEvent event) {
+        Dragboard db = event.getDragboard();
+        boolean success = false;
+        if (db.hasImage()) {
+            success = true;
+            try {
+                AtomicReference<String> arg = new AtomicReference<>("");
+                if(currentFetchArg) {
+                    var dialog = new TextInputDialog();
+                    dialog.setHeaderText("Type the parameter to initialize " + currentDragType);
+                    Optional<String> result = dialog.showAndWait();
+                    result.ifPresent(arg::set);
+                }
+                createNode(nodeFactory.toModel(currentDragType, newNodeX, newNodeY, arg.get()).get());
+            } catch (Throwable t) { displayError(t.toString()); }
+        }
+        event.setDropCompleted(success);
+        event.consume();
+    }
+
+    private void deleteSelected() {
         if(selectedEdge.get() != null) {
             var line = lines.get(selectedEdge.get()).getValue();
             group.getChildren().remove(line);
@@ -202,26 +205,17 @@ public class GroovyPane extends PopUpWindow {
         var vbox = new VBox();
 
         vbox.getChildren().addAll(
-            new Label("Drag node to the right"),
-            draggableGroovyIcon(new Image(
-                getClass().getClassLoader().getResourceAsStream("ForEachIcon.png")), "ForEach", true),
-            draggableGroovyIcon(new Image(
-                getClass().getClassLoader().getResourceAsStream("IfIcon.png")), "If", false),
-            draggableGroovyIcon(new Image(
-                getClass().getClassLoader().getResourceAsStream("IfElseIcon.png")), "IfElse", false),
-            draggableGroovyIcon(new Image(
-                getClass().getClassLoader().getResourceAsStream("ElseIcon.png")), "ForEach", false),
-            draggableGroovyIcon(new Image(
-                getClass().getClassLoader().getResourceAsStream("AssignIcon.png")), "Assign", false),
-            draggableGroovyIcon(new Image(
-                getClass().getClassLoader().getResourceAsStream("AddIcon.png")), "Binary", true),
-            draggableGroovyIcon(new Image(
-                getClass().getClassLoader().getResourceAsStream("AddIcon.png")), "Unary", true),
-            draggableGroovyIcon(new Image(
-                getClass().getClassLoader().getResourceAsStream("IntegerIcon.png")), "Integer", true)
+            IconLoader.loadControls(img -> type -> fetchArg -> draggableGroovyIcon(img, type, fetchArg))
+        );
+        vbox.getChildren().addAll(
+            IconLoader.loadBinaries(img -> type -> fetchArg -> draggableGroovyIcon(img, type, fetchArg))
+        );
+        vbox.getChildren().addAll(
+            IconLoader.loadLiterals(img -> type -> fetchArg -> draggableGroovyIcon(img, type, fetchArg))
         );
 
-        vbox.setSpacing(20);
+        vbox.setSpacing(10);
+        vbox.getChildren().forEach(c -> { if(c instanceof HBox) ((HBox) c).setSpacing(5); });
 
         itemBox.setContent(vbox);
     }
@@ -247,9 +241,9 @@ public class GroovyPane extends PopUpWindow {
 
     private void initializeGridPane() {
         var col1 = new ColumnConstraints();
-        col1.setPercentWidth(20);
+        col1.setPercentWidth(15);
         var col2 = new ColumnConstraints();
-        col2.setPercentWidth(80);
+        col2.setPercentWidth(85);
         root.getColumnConstraints().addAll(col1, col2);
     }
 
@@ -356,7 +350,7 @@ public class GroovyPane extends PopUpWindow {
     }
 
 
-    public void updateLocations(GroovyNode n) {
+    private void updateLocations(GroovyNode n) {
         for(var p : lines.keySet()) {
             var from = p.getKey();
             var port = p.getValue();
