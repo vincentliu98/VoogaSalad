@@ -7,30 +7,32 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class Tile implements EventHandler {
     private int myID;
     private int myWidth;
     private int myHeight;
+    private double myXCoord; // TODO: Only temporary; delete later
+    private double myYCoord;
     private String myImagePath;
-    private Set<Image> myImages;
-    private String myImageSelector; // Groovy code
     private List<Integer> myEntities;
+    private String myImageSelector; // Groovy code
+    private List<String> myImages;
     @XStreamOmitField
-    private ImageView myImageView;
+    private transient ImageView myImageView;
 
-    public Tile(int id, int width, int height){
+    public Tile(int id, int width, int height, double xCoord, double yCoord){
         this.myID = id;
         this.myWidth = width;
         this.myHeight = height;
+        this.myXCoord = xCoord;
+        this.myYCoord = yCoord;
         this.myImagePath = "";
-        this.myImages = new HashSet<>();
         this.myImageSelector = "";
+        this.myImages = new ArrayList<>();
         this.myEntities = new ArrayList<>();
-        this.myImageView = new ImageView();
+        this.myImageView = null;
     }
 
     public void addEntity(int entityID){
@@ -40,13 +42,21 @@ public class Tile implements EventHandler {
 
     public void setImagePath(String imagePath) {
         this.myImagePath = imagePath;
-        setImageView();
     }
 
     public void setImageView(){
         if (!myImagePath.isEmpty()){
+            myImageView = new ImageView();
             myImageView.setImage(new Image(myImagePath));
+            myImageView.setPreserveRatio(true);
+            myImageView.setFitWidth(100); // TODO: delete later
+            myImageView.setX(myXCoord);
+            myImageView.setY(myYCoord);
         }
+    }
+
+    public ImageView getImageView(){
+        return myImageView;
     }
 
     public void removeEntity(int entityID){

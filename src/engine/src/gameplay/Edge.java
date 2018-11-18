@@ -2,20 +2,10 @@ package gameplay;
 
 import javafx.event.Event;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.DomDriver;
-import com.thoughtworks.xstream.security.NoTypePermission;
-import com.thoughtworks.xstream.security.NullPermission;
-import com.thoughtworks.xstream.security.PrimitiveTypePermission;
+import java.util.List;
 
 
 public class Edge implements ArgumentListener {
@@ -23,15 +13,14 @@ public class Edge implements ArgumentListener {
     private int myPhaseID;
     private int myStartNodeID;
     private int myEndNodeID;
-    private Event myTrigger;
+    //private Event myTrigger;
     private String myGuard; // Groovy code
 
-    public Edge(int phaseID, int id, int startNodeID, int endNodeID, Event trigger, String guard) {
+    public Edge(int phaseID, int id, int startNodeID, int endNodeID, String guard) {
         this.myPhaseID = phaseID;
         this.myID = id;
         this.myStartNodeID = startNodeID;
         this.myEndNodeID = endNodeID;
-        this.myTrigger = trigger;
         this.myGuard = guard;
     }
 

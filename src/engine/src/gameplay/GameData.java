@@ -85,7 +85,7 @@ public class GameData {
 
     private static void notifyArgumentListeners(){
         for (ArgumentListener argumentListener : myArgumentListeners){
-            argumentListener.hasChanged(myArguments);
+            argumentListener.hasChanged();
         }
     }
 
