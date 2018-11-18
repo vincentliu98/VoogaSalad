@@ -11,6 +11,9 @@ import utils.Try;
 import java.util.List;
 
 public class GroovyNodeFactory {
+    private static final int FONT_BIG = 18;
+    private static final int FONT_NORMAL = 12;
+
     private static List<Pair<Pos, Ports>> SOURCE_PORT = List.of(
         new Pair<>(Pos.BOTTOM_CENTER, Ports.FLOW_OUT)
     );
@@ -44,15 +47,15 @@ public class GroovyNodeFactory {
     );
 
     private static List<Pair<Pos, Ports>> BINARY_PORT = List.of(
-        new Pair<>(Pos.CENTER_RIGHT, Ports.A),
-        new Pair<>(Pos.BOTTOM_CENTER, Ports.B)
+        new Pair<>(Pos.TOP_RIGHT, Ports.A),
+        new Pair<>(Pos.BOTTOM_RIGHT, Ports.B)
     );
 
     private GroovyFactory factory;
     public GroovyNodeFactory(GroovyFactory factory) { this.factory = factory; }
 
     public GroovyNode source(GroovyBlock sourceBlock, double xPos, double yPos) {
-        return new GroovyNode(sourceBlock, xPos, yPos, 50, 50, Color.MAGENTA, SOURCE_PORT);
+        return new GroovyNode(sourceBlock, xPos, yPos, 50, 50, FONT_NORMAL, Color.MAGENTA, SOURCE_PORT);
     }
 
     public Try<GroovyNode> fromType(String type, double xPos, double yPos, String arg) {
@@ -75,71 +78,71 @@ public class GroovyNodeFactory {
 
     public GroovyNode forEachBlock(double xPos, double yPos, String loopvar) {
         var block = factory.forEachBlock(loopvar);
-        return new GroovyNode(block, xPos, yPos, 100, 50, Color.LIGHTBLUE, FOREACH_PORT);
+        return new GroovyNode(block, xPos, yPos, 100, 50, FONT_BIG, Color.LIGHTBLUE, FOREACH_PORT);
     }
 
     public GroovyNode ifBlock(double xPos, double yPos) {
         var block = factory.ifBlock();
-        return new GroovyNode(block, xPos, yPos, 100, 50, Color.YELLOW, IF_PORT);
+        return new GroovyNode(block, xPos, yPos, 100, 50, FONT_BIG, Color.YELLOW, IF_PORT);
     }
 
     public GroovyNode ifElseBlock(double xPos, double yPos) {
         var block = factory.ifElseBlock();
-        return new GroovyNode(block, xPos, yPos, 100, 50, Color.YELLOW, IF_PORT);
+        return new GroovyNode(block, xPos, yPos, 100, 50, FONT_BIG, Color.YELLOW, IF_PORT);
     }
 
     public GroovyNode elseBlock(double xPos, double yPos) {
         var block = factory.elseBlock();
-        return new GroovyNode(block, xPos, yPos, 100, 50, Color.YELLOW, ELSE_PORT);
+        return new GroovyNode(block, xPos, yPos, 100, 50, FONT_BIG, Color.YELLOW, ELSE_PORT);
     }
 
     public GroovyNode assignBlock(double xPos, double yPos) {
         var block = factory.assignBlock();
-        return new GroovyNode(block, xPos, yPos, 100, 50, Color.LIGHTPINK, ASSIGN_PORT);
+        return new GroovyNode(block, xPos, yPos, 100, 50, FONT_BIG, Color.LIGHTPINK, ASSIGN_PORT);
     }
 
     public Try<GroovyNode> booleanBlock(double xPos, double yPos, String value) {
         var block = factory.booleanBlock(value);
-        return block.map(e -> new GroovyNode(e, xPos, yPos, 100, 50, Color.GREEN, List.of()));
+        return block.map(e -> new GroovyNode(e, xPos, yPos, 100, 50, FONT_NORMAL, Color.GREEN, List.of()));
     }
 
     public Try<GroovyNode> integerBlock(double xPos, double yPos, String value) {
         var block = factory.integerBlock(value);
-        return block.map(e -> new GroovyNode(e, xPos, yPos, 100, 50, Color.GREEN, List.of()));
+        return block.map(e -> new GroovyNode(e, xPos, yPos, 100, 50, FONT_NORMAL, Color.GREEN, List.of()));
     }
 
     public Try<GroovyNode> doubleBlock(double xPos, double yPos, String value) {
         var block = factory.doubleBlock(value);
-        return block.map(e -> new GroovyNode(e, xPos, yPos, 100, 50, Color.GREEN, List.of()));
+        return block.map(e -> new GroovyNode(e, xPos, yPos, 100, 50, FONT_NORMAL, Color.GREEN, List.of()));
     }
 
     public GroovyNode stringBlock(double xPos, double yPos, String value) {
         var block = factory.stringBlock(value);
-        return new GroovyNode(block, xPos, yPos, 100, 50, Color.GREEN, List.of());
+        return new GroovyNode(block, xPos, yPos, 100, 50, FONT_NORMAL, Color.GREEN, List.of());
     }
 
     public Try<GroovyNode> listBlock(double xPos, double yPos, String value) {
         var block = factory.listBlock(value);
-        return block.map(e -> new GroovyNode(e, xPos, yPos, 100, 50, Color.GREEN, List.of()));
+        return block.map(e -> new GroovyNode(e, xPos, yPos, 100, 50, FONT_NORMAL, Color.GREEN, List.of()));
     }
 
     public Try<GroovyNode> mapBlock(double xPos, double yPos, String value) {
         var block = factory.mapBlock(value);
-        return block.map(e -> new GroovyNode(e, xPos, yPos, 100, 50, Color.GREEN, List.of()));
+        return block.map(e -> new GroovyNode(e, xPos, yPos, 100, 50, FONT_NORMAL, Color.GREEN, List.of()));
     }
 
     public Try<GroovyNode> refBlock(double xPos, double yPos, String value) {
         var block = factory.refBlock(value);
-        return block.map(e -> new GroovyNode(e, xPos, yPos, 100, 50, Color.GREEN, List.of()));
+        return block.map(e -> new GroovyNode(e, xPos, yPos, 100, 50, FONT_NORMAL, Color.GREEN, List.of()));
     }
 
     public GroovyNode unaryBlock(double xPos, double yPos, String op) {
         var block = factory.unaryBlock(op);
-        return new GroovyNode(block, xPos, yPos, 100, 50, Color.MAGENTA, UNARY_PORT);
+        return new GroovyNode(block, xPos, yPos, 100, 50, FONT_BIG, Color.MAGENTA, UNARY_PORT);
     }
 
     public GroovyNode binaryBlock(double xPos, double yPos, String op) {
         var block = factory.binaryBlock(op);
-        return new GroovyNode(block, xPos, yPos, 100, 50, Color.MAGENTA, BINARY_PORT);
+        return new GroovyNode(block, xPos, yPos, 100, 50, FONT_BIG, Color.MAGENTA, BINARY_PORT);
     }
 }

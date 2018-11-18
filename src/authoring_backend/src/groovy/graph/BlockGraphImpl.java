@@ -41,6 +41,14 @@ public class BlockGraphImpl extends SimpleGraph<GroovyBlock, BlockEdge> implemen
         } else typeCheck.get();
     }
 
+    /**
+     *  Testing the "fromPort" is enough.
+     */
+    @Override
+    public void removeEdge(BlockEdge edge) {
+        get(edge.from()).removeIf(t -> t.fromPort() == edge.fromPort());
+    }
+
     @Override
     public Try<String> transformToGroovy() { return source.toGroovy(this); }
 

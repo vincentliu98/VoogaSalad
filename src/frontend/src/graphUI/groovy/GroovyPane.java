@@ -6,7 +6,7 @@ import graphUI.groovy.factory.GroovyNodeFactory;
 import groovy.api.BlockGraph;
 import groovy.api.GroovyFactory;
 import groovy.api.Ports;
-import javafx.event.EventHandler;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -16,17 +16,14 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -43,36 +40,16 @@ public class GroovyPane extends PopUpWindow {
     public static final Double ICON_WIDTH = 30.;
     public static final Double ICON_HEIGHT = 30.;
 
+    private enum DRAG_PURPOSE {
+        NOTHING,
+        CHANGE_POS,
+        CONNECT_LINE
+    }
+
+    private DRAG_PURPOSE draggingPurpose;
     private double orgSceneX, orgSceneY;
     private double orgTranslateX, orgTranslateY;
-    EventHandler<MouseEvent> circleOnMousePressedEventHandler = new EventHandler<>() {
-        @Override
-        public void handle(MouseEvent t) {
-            orgSceneX = t.getSceneX();
-            orgSceneY = t.getSceneY();
 
-            GroovyNode node = (GroovyNode) t.getSource();
-
-            orgTranslateX = node.getTranslateX();
-            orgTranslateY = node.getTranslateY();
-        }
-    };
-    EventHandler<MouseEvent> circleOnMouseDraggedEventHandler = new EventHandler<>() {
-        @Override
-        public void handle(MouseEvent t) {
-            double offsetX = t.getSceneX() - orgSceneX;
-            double offsetY = t.getSceneY() - orgSceneY;
-            double newTranslateX = orgTranslateX + offsetX;
-            double newTranslateY = orgTranslateY + offsetY;
-
-            GroovyNode node = (GroovyNode) t.getSource();
-
-            node.setTranslateX(newTranslateX);
-            node.setTranslateY(newTranslateY);
-
-            node.updateLocations();
-        }
-    };
     private GridPane root = new GridPane();
     private Pane graphBox = new Pane();
     private Group group = new Group();
@@ -80,13 +57,20 @@ public class GroovyPane extends PopUpWindow {
     private Scene myScene;
     private double newNodeX;
     private double newNodeY;
-    private Integer edgeNum = 0;
-    private List<GroovyNode> nodeList = new ArrayList<>();
     private GroovyNodeFactory nodeFactory;
     private GroovyFactory factory;
+
+    private Map<Pair<GroovyNode, Ports>, Pair<GroovyNode, Line>> lines;
+    private Set<GroovyNode> nodes;
+
     private BlockGraph graph;
     private String currentDragType;
     private boolean currentFetchArg;
+    private Pair<GroovyNode, Ports> edgeFrom;
+    private Line tmpLine;
+
+    private SimpleObjectProperty<Pair<GroovyNode, Ports>> selectedEdge;
+    private SimpleObjectProperty<GroovyNode> selectedNode;
 
     public GroovyPane(Stage primaryStage, GroovyFactory factory) {
         super(primaryStage);
@@ -95,10 +79,34 @@ public class GroovyPane extends PopUpWindow {
         this.factory = factory;
         graph = factory.createGraph();
 
+        lines = new HashMap<>();
+        nodes = new HashSet<>();
         createNode(nodeFactory.source(graph.source(), 100, 50));
 
-        initializeUI(nodeList);
+        selectedEdge = new SimpleObjectProperty<>();
+        selectedNode = new SimpleObjectProperty<>();
 
+        selectedEdge.addListener((e, o, n) -> {
+            if(o != null && lines.get(o) != null) lines.get(o).getValue().setStroke(Color.BLACK);
+            if(n != null) {
+                if(selectedNode.get() != null) selectedNode.set(null);
+                lines.get(n).getValue().setStroke(Color.RED);
+            }
+        });
+
+        selectedNode.addListener((e, o, n) -> {
+            if(o != null) o.setBorder(new Border(new BorderStroke(null, null, null, null)));
+            if(n != null) {
+                if(selectedEdge.get() != null) selectedEdge.set(null);
+                n.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, null, null)));
+            }
+        });
+
+        dialog.addEventFilter(KeyEvent.KEY_RELEASED, e -> {
+            if(e.getCode() == KeyCode.DELETE) deleteSelected();
+        });
+
+        initializeUI();
         showWindow();
     }
 
@@ -108,18 +116,16 @@ public class GroovyPane extends PopUpWindow {
         dialog.show();
     }
 
+    /**
+     *  We do not close the window; instead, we just hide it and unhide it when a button is clicked
+     */
     @Override
-    protected void closeWindow() {
-        dialog.close();
-    }
+    protected void closeWindow() { dialog.hide(); }
 
-    public void connectTwoNodes(Integer nodeOneIndex, Ports port, Integer nodeTwoIndex) {
-        connectNodes(nodeList.get(nodeOneIndex), port, nodeList.get(nodeTwoIndex), "E" + edgeNum++);
-    }
-
-    private void initializeUI(List<GroovyNode> nodeList) {
+    private void initializeUI() {
         graphBox.getChildren().add(group);
         graphBox.setPrefSize(500, 500);
+        setupGraphbox();
         initializeGridPane();
         initializeItemBox();
         root.add(itemBox, 0, 0);
@@ -128,62 +134,7 @@ public class GroovyPane extends PopUpWindow {
         myScene = new Scene(root, WIDTH, HEIGHT);
     }
 
-    private void initializeItemBox() {
-        var vbox = new VBox();
-
-        vbox.getChildren().addAll(
-            new Label("Drag node to the right"),
-            draggableGroovyIcon(new Image(
-                getClass().getClassLoader().getResourceAsStream("ForEachIcon.png")), "ForEach", true),
-            draggableGroovyIcon(new Image(
-                getClass().getClassLoader().getResourceAsStream("IfIcon.png")), "If", false),
-            draggableGroovyIcon(new Image(
-                getClass().getClassLoader().getResourceAsStream("IfElseIcon.png")), "IfElse", false),
-            draggableGroovyIcon(new Image(
-                getClass().getClassLoader().getResourceAsStream("ElseIcon.png")), "ForEach", false),
-            draggableGroovyIcon(new Image(
-                getClass().getClassLoader().getResourceAsStream("AssignIcon.png")), "Assign", false),
-            draggableGroovyIcon(new Image(
-                getClass().getClassLoader().getResourceAsStream("AddIcon.png")), "Binary", true),
-            draggableGroovyIcon(new Image(
-                getClass().getClassLoader().getResourceAsStream("AddIcon.png")), "Unary", true),
-            draggableGroovyIcon(new Image(
-                getClass().getClassLoader().getResourceAsStream("IntegerIcon.png")), "Integer", true),
-            setUpLineDragAndDrop(),
-            new Label("Click line to connect nodes")
-        );
-
-        vbox.setSpacing(20);
-
-        itemBox.setContent(vbox);
-    }
-
-    private Line setUpLineDragAndDrop() {
-        Line line = new Line(0.0, 250.0, 100.0, 250.0);
-        line.setStrokeWidth(10);
-        // make the lines clickable and user-friendly
-        line.setOnMouseEntered(e -> myScene.setCursor(Cursor.HAND));
-        line.setOnMouseExited(e -> myScene.setCursor(Cursor.DEFAULT));
-        line.setOnMouseClicked(e -> new EdgeConnectWindow(new Stage(), this));
-        return line;
-    }
-
-    private ImageView draggableGroovyIcon(Image icon, String blockType, boolean fetchArg) {
-        var view = new ImageView(icon);
-        view.setFitWidth(ICON_WIDTH);
-        view.setFitHeight(ICON_HEIGHT);
-        view.setOnMouseEntered(e -> myScene.setCursor(Cursor.HAND));
-        view.setOnMouseExited(e -> myScene.setCursor(Cursor.DEFAULT));
-        view.setOnDragDetected(event -> {
-            Dragboard db = view.startDragAndDrop(TransferMode.ANY);
-            ClipboardContent content = new ClipboardContent();
-            content.putImage(icon);
-            db.setContent(content);
-            currentDragType = blockType;
-            currentFetchArg = fetchArg;
-            event.consume();
-        });
-
+    private void setupGraphbox() {
         graphBox.setOnDragOver(event -> {
             if (event.getGestureSource() != graphBox && event.getDragboard().hasImage()) {
                 event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
@@ -218,6 +169,79 @@ public class GroovyPane extends PopUpWindow {
             event.setDropCompleted(success);
             event.consume();
         });
+    }
+
+    public void deleteSelected() {
+        if(selectedEdge.get() != null) {
+            var line = lines.get(selectedEdge.get()).getValue();
+            group.getChildren().remove(line);
+            lines.remove(selectedEdge.get());
+            graph.removeEdge(factory.createEdge(
+                selectedEdge.get().getKey().model(), selectedEdge.get().getValue(), null
+            ));
+        }
+        if(selectedNode.get() != null && selectedNode.get().model() != graph.source()) {
+            nodes.remove(selectedNode.get());
+            var toRemove = new HashSet<Pair<GroovyNode, Ports>>();
+            for(var p : lines.keySet()) {
+                var line = lines.get(p).getValue();
+                var target = lines.get(p).getKey();
+                if(p.getKey() == selectedNode.get() || target == selectedNode.get()) {
+                    toRemove.add(p);
+                    group.getChildren().remove(line);
+                }
+            } // remove lines connected from or to that node
+            lines.keySet().removeAll(toRemove);
+
+            group.getChildren().remove(selectedNode.get());
+            graph.removeNode(selectedNode.get().model());
+        }
+    }
+
+    private void initializeItemBox() {
+        var vbox = new VBox();
+
+        vbox.getChildren().addAll(
+            new Label("Drag node to the right"),
+            draggableGroovyIcon(new Image(
+                getClass().getClassLoader().getResourceAsStream("ForEachIcon.png")), "ForEach", true),
+            draggableGroovyIcon(new Image(
+                getClass().getClassLoader().getResourceAsStream("IfIcon.png")), "If", false),
+            draggableGroovyIcon(new Image(
+                getClass().getClassLoader().getResourceAsStream("IfElseIcon.png")), "IfElse", false),
+            draggableGroovyIcon(new Image(
+                getClass().getClassLoader().getResourceAsStream("ElseIcon.png")), "ForEach", false),
+            draggableGroovyIcon(new Image(
+                getClass().getClassLoader().getResourceAsStream("AssignIcon.png")), "Assign", false),
+            draggableGroovyIcon(new Image(
+                getClass().getClassLoader().getResourceAsStream("AddIcon.png")), "Binary", true),
+            draggableGroovyIcon(new Image(
+                getClass().getClassLoader().getResourceAsStream("AddIcon.png")), "Unary", true),
+            draggableGroovyIcon(new Image(
+                getClass().getClassLoader().getResourceAsStream("IntegerIcon.png")), "Integer", true)
+        );
+
+        vbox.setSpacing(20);
+
+        itemBox.setContent(vbox);
+    }
+
+    private ImageView draggableGroovyIcon(Image icon, String blockType, boolean fetchArg) {
+        var view = new ImageView(icon);
+        view.setFitWidth(ICON_WIDTH);
+        view.setFitHeight(ICON_HEIGHT);
+        view.setOnMouseEntered(e -> myScene.setCursor(Cursor.HAND));
+        view.setOnMouseExited(e -> myScene.setCursor(Cursor.DEFAULT));
+        view.setOnDragDetected(event -> {
+            Dragboard db = view.startDragAndDrop(TransferMode.ANY);
+            ClipboardContent content = new ClipboardContent();
+            content.putImage(icon);
+            db.setContent(content);
+            currentDragType = blockType;
+            currentFetchArg = fetchArg;
+            event.consume();
+        });
+
         return view;
     }
 
@@ -229,50 +253,128 @@ public class GroovyPane extends PopUpWindow {
         root.getColumnConstraints().addAll(col1, col2);
     }
 
-    private void connectNodes(GroovyNode node1, Ports port, GroovyNode node2, String edgeText) {
-        var p = node1.portXY(port);
-        Line edgeLine = new Line(p.getKey(), p.getValue(), node2.getCenterX(), node2.getCenterY());
-        edgeLine.setStrokeWidth(3);
-        Label edgeLabel = new Label(edgeText);
-
-        // make the lines clickable and user-friendly
-        edgeLine.setOnMouseEntered(e -> myScene.setCursor(Cursor.HAND));
-        edgeLine.setOnMouseExited(e -> myScene.setCursor(Cursor.DEFAULT));
-        // TODO: 11/14/18 Pop-up window to add things to the Edge
-//        edgeLine.setOnMouseClicked(e -> System.out.println("The Line is clicked"));
-        edgeLine.setOnMouseClicked(e -> new EdgeSettingWindow(new Stage()));
-
-        // add to the GroovyNode's storage
-        node1.addNeighbor(port, node2, edgeLine);
-
+    private void connectNodes(GroovyNode node1, Ports port, GroovyNode node2) {
+        if(node1 == node2) return;
         try {
-            graph.addEdge(factory.createEdge(node1.model(), port, node2.model())); // connect also within the model
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-        }
+            var p = node1.portXY(port);
+            Line edgeLine = new Line(p.getKey(), p.getValue(), node2.getCenterX(), node2.getCenterY());
+            edgeLine.setStrokeWidth(3);
+            edgeLine.setOnMouseEntered(e -> myScene.setCursor(Cursor.HAND));
+            edgeLine.setOnMouseExited(e -> myScene.setCursor(Cursor.DEFAULT));
+            edgeLine.setOnMouseClicked(e -> selectedEdge.set(new Pair<>(node1, port)));
 
-        group.getChildren().addAll(edgeLine, edgeLabel);
+            graph.addEdge(factory.createEdge(node1.model(), port, node2.model()));
+            lines.put(new Pair<>(node1, port), new Pair<>(node2, edgeLine));
+
+            group.getChildren().addAll(edgeLine);
+            edgeLine.toBack();
+        } catch (Throwable t) { displayError(t.toString());}
     }
 
     private void createNode(GroovyNode node) {
-        nodeList.add(node);
-
         try {
             graph.addNode(node.model());
+            nodes.add(node);
+            // Add mouseEvent to the GroovyNode to update position
+            node.setOnMousePressed(this::nodeMousePressedHandler);
+            node.setOnMouseDragged(this::nodeMouseDraggedHandler);
+            node.setOnMouseReleased(this::nodeMouseReleasedHandler);
+            node.inner().setOnMouseEntered(e -> myScene.setCursor(Cursor.MOVE));
+            node.inner().setOnMouseExited(e -> myScene.setCursor(Cursor.DEFAULT));
+            node.setOnMouseClicked(e -> {
+                if(e.getClickCount() == 1) selectedNode.set(node);
+                else if(e.getClickCount() >= 2) new NodeSettingWindow(new Stage());
+            });
+            group.getChildren().add(node);
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
+    }
 
-        // Add mouseEvent to the GroovyNode to update position
-        node.setOnMousePressed(circleOnMousePressedEventHandler);
-        node.setOnMouseDragged(circleOnMouseDraggedEventHandler);
-        node.setOnMouseEntered(e -> myScene.setCursor(Cursor.HAND));
-        node.setOnMouseExited(e -> myScene.setCursor(Cursor.DEFAULT));
-        // TODO: 11/14/18 Pop-up window to add things to the Node
-//        node.setOnMouseClicked(e -> System.out.println("The GroovyNode is clicked"));
-        node.setOnMouseClicked(e -> new NodeSettingWindow(new Stage()));
+    private void nodeMousePressedHandler(MouseEvent t) {
+        GroovyNode node = (GroovyNode) t.getSource();
 
-        group.getChildren().add(node);
+        orgSceneX = t.getSceneX();
+        orgSceneY = t.getSceneY();
+        if(node.inner().contains(t.getX(), t.getY())) {
+            draggingPurpose = DRAG_PURPOSE.CHANGE_POS;
+            orgTranslateX = node.getTranslateX();
+            orgTranslateY = node.getTranslateY();
+        } else if(node.contains(t.getX(), t.getY())) {
+            var p = node.findPortNear(t.getX(), t.getY());
+            if(p != null) {
+                draggingPurpose = DRAG_PURPOSE.CONNECT_LINE;
+                edgeFrom = new Pair<>(node, p);
+                var xy = node.portXY(p);
+                tmpLine = new Line(xy.getKey(), xy.getValue(), xy.getKey(), xy.getValue());
+                tmpLine.setStrokeWidth(3);
+                tmpLine.getStrokeDashArray().addAll(20d, 20d);
+                group.getChildren().add(tmpLine);
+            }
+        }
+    }
+
+    private void nodeMouseReleasedHandler(MouseEvent t) {
+        if(draggingPurpose == DRAG_PURPOSE.CONNECT_LINE) {
+            for (var n : nodes) {
+                if(n.localToScreen(n.getBoundsInLocal()).contains(t.getScreenX(), t.getScreenY())) {
+                    connectNodes(edgeFrom.getKey(), edgeFrom.getValue(), n);
+                    break;
+                }
+            } group.getChildren().remove(tmpLine);
+        }
+        draggingPurpose = DRAG_PURPOSE.NOTHING;
+    }
+
+    private void nodeMouseDraggedHandler(MouseEvent t) {
+        double offsetX = t.getSceneX() - orgSceneX;
+        double offsetY = t.getSceneY() - orgSceneY;
+
+        if(draggingPurpose == DRAG_PURPOSE.CHANGE_POS) {
+            double newTranslateX = orgTranslateX + offsetX;
+            double newTranslateY = orgTranslateY + offsetY;
+
+            GroovyNode node = (GroovyNode) t.getSource();
+
+            node.setTranslateX(newTranslateX);
+            node.setTranslateY(newTranslateY);
+
+            updateLocations(node);
+        } else if(draggingPurpose == DRAG_PURPOSE.CONNECT_LINE) {
+            var xy = edgeFrom.getKey().portXY(edgeFrom.getValue());
+            tmpLine.setEndX(xy.getKey()+offsetX);
+            tmpLine.setEndY(xy.getValue()+offsetY);
+        }
+    }
+
+    private void displayError(String msg) {
+        var alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error Dialog");
+        alert.setHeaderText("Something's wrong");
+        alert.setContentText(msg);
+        alert.showAndWait();
+    }
+
+
+    public void updateLocations(GroovyNode n) {
+        for(var p : lines.keySet()) {
+            var from = p.getKey();
+            var port = p.getValue();
+            var tmp = lines.get(p);
+            if(tmp != null) {
+                var to = tmp.getKey();
+                var line = tmp.getValue();
+
+                if (to == n || from == n) {
+                    var portXY = from.portXY(port);
+                    line.setStartX(portXY.getKey());
+                    line.setStartY(portXY.getValue());
+
+                    line.setEndX(to.getCenterX());
+                    line.setEndY(to.getCenterY());
+                }
+            }
+        }
     }
 }
 

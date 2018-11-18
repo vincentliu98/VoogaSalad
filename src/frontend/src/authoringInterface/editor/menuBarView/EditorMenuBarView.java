@@ -78,11 +78,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
     private void handleGroovyGraph(ActionEvent actionEvent) {
         new GroovyPane(new Stage(), authTools.factory());
     }
-
-    private void handleGraph(ActionEvent e) {
-        new GraphPane(new Stage());
-    }
-
+    private void handleGraph(ActionEvent e) { new GraphPane(new Stage()); }
 
     void handleOpen(ActionEvent event) {
         newFile = new LoadFileView();
