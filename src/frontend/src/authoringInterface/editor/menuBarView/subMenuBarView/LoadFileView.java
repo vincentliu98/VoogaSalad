@@ -5,6 +5,10 @@ import javafx.stage.Stage;
 
 import java.io.File;
 
+/**
+ * LoadFileView opens Filechooser to select the file to load
+ * @author Amy Kim
+ */
 
 public class LoadFileView {
 

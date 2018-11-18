@@ -3,27 +3,37 @@ package authoringInterface.sidebar.subEditors;
 import api.SubView;
 import authoringInterface.sidebar.treeItemEntries.EditTreeItem;
 import authoringInterface.sidebar.treeItemEntries.Entity;
+import authoringInterface.sidebar.treeItemEntries.TreeItemType;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TreeItem;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import java.util.Map;
 
 /**
  * This abstract class provides a boiler plate for different editors because they are pretty similar.
  *
  * @author Haotian Wang
  */
-public abstract class AbstractObjectEditor implements SubView<AnchorPane> {
+public abstract class AbstractObjectEditor<T extends EditTreeItem> implements ObjectEditor<T>, SubView<AnchorPane> {
     protected AnchorPane rootPane;
     protected Text inputText;
     protected TextField nameField;
     protected Button confirm;
     protected Button cancel;
-    protected boolean isApplied;
+    protected TreeItem<String> treeItem;
+    protected Map<String, EditTreeItem> objectMap;
+    protected Map<Node, EditTreeItem> nodeToObjectMap;
+    protected EditingMode editingMode;
+    protected Node nodeEdited;
 
     public AbstractObjectEditor() {
+        editingMode = EditingMode.NONE;
         rootPane = new AnchorPane();
         inputText = new Text();
         nameField = new TextField();
@@ -60,5 +70,44 @@ public abstract class AbstractObjectEditor implements SubView<AnchorPane> {
     @Override
     public AnchorPane getView() {
         return rootPane;
+    }
+
+    /**
+     * Register the editor with an existing TreeItem in order to update or edit existing entries.
+     *
+     * @param treeItem: An existing TreeItem.
+     * @param map: The map from String name to Entity.
+     */
+    @Override
+    public void editTreeItem(TreeItem<String> treeItem, Map<String, EditTreeItem> map) {
+        this.treeItem = treeItem;
+        this.objectMap = map;
+        editingMode = EditingMode.EDIT_TREEITEM;
+    }
+
+    /**
+     * Register the object map.
+     *
+     * @param treeItem: An existing TreeItem.
+     * @param map: The map from String name to Entity.
+     */
+    @Override
+    public void addTreeItem(TreeItem<String> treeItem, Map<String, EditTreeItem> map) {
+        this.treeItem = treeItem;
+        this.objectMap = map;
+        editingMode = EditingMode.ADD_TREEITEM;
+    }
+
+    /**
+     * Register the node to Object map.
+     *
+     * @param node: The node that is to be altered.
+     * @param map: The node to user object map.
+     */
+    @Override
+    public void editNode(Node node, Map<Node, EditTreeItem> map) {
+        this.nodeToObjectMap = map;
+        this.nodeEdited = node;
+        editingMode = EditingMode.EDIT_NODE;
     }
 }

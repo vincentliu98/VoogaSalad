@@ -53,6 +53,8 @@ public class SideView implements SubView<StackPane>, SideViewInterface {
         treeView.setEditable(true);
         treeView.setCellFactory(e -> new CustomTreeCellImpl(objectMap));
         sidePane.getChildren().add(treeView);
+        treeView.getStyleClass().add("myTree");
+        sidePane.getStyleClass().add("mySide");
     }
 
     /**
@@ -64,6 +66,14 @@ public class SideView implements SubView<StackPane>, SideViewInterface {
     @Override
     public EditTreeItem getObject(String name) {
         return objectMap.get(name);
+    }
+
+    /**
+     * @return The internal object map.
+     */
+    @Override
+    public Map<String, EditTreeItem> getObjectMap() {
+        return objectMap;
     }
 
     /**

@@ -9,7 +9,7 @@ import javafx.scene.layout.AnchorPane;
  *
  * @author Haotian Wang
  */
-public class CategoryEditor extends AbstractObjectEditor implements ObjectEditor<Category>, SubView<AnchorPane> {
+public class CategoryEditor extends AbstractObjectEditor<Category> {
     /**
      * This method returns the responsible JavaFx Node responsible to be added or deleted from other graphical elements.
      *
@@ -38,15 +38,5 @@ public class CategoryEditor extends AbstractObjectEditor implements ObjectEditor
     @Override
     public Category getObject() {
         return null;
-    }
-
-    /**
-     * Return a boolean indicating whether the changes are successfully applied.
-     *
-     * @return
-     */
-    @Override
-    public boolean applied() {
-        return isApplied;
     }
 }

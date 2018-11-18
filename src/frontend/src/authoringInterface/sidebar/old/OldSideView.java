@@ -4,7 +4,7 @@ import api.SubView;
 import authoringInterface.sidebar.treeItemEntries.EditTreeItem;
 import authoringInterface.sidebar.treeItemEntries.Entity;
 import authoringInterface.sidebar.SideViewInterface;
-import authoringInterface.spritechoosingwindow.EntityWindow;
+//import authoringInterface.spritechoosingwindow.EntityWindow;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
@@ -14,6 +14,8 @@ import javafx.stage.Stage;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.*;
+
+import java.util.Map;
 
 /**
  * A sidebar that contains many TreeItems. Functions include adding a cell and
@@ -107,6 +109,14 @@ public class OldSideView implements SubView<StackPane>, SideViewInterface {
         return null;
     }
 
+    /**
+     * @return The internal object map.
+     */
+    @Override
+    public Map<String, EditTreeItem> getObjectMap() {
+        return null;
+    }
+
     private final class TextFieldTreeCellImpl extends TreeCell<String> {
 
         private TextField textField;
@@ -121,7 +131,7 @@ public class OldSideView implements SubView<StackPane>, SideViewInterface {
                 var id = getTreeItem().getChildren().size();
                 var myItem = getTreeItem();
                 if (type.equals("Entity")){
-                    new EntityWindow(primaryStage, objectManager, mySideView, id, myItem);
+//                    new EntityWindow(primaryStage, objectManager, mySideView, id, myItem);
                 }
                 else if (type.equals("Tile")){
                     // Generate a TileWindow
