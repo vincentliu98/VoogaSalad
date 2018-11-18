@@ -89,6 +89,21 @@ public class GroovyNodeFactory {
         if(type.equals("map")) return mapBlock(xPos, yPos, arg);
         if(type.equals("str")) return Try.success(stringBlock(xPos, yPos, arg));
         if(type.equals("ref")) return refBlock(xPos, yPos, arg);
+        if(type.equals("$clicked")) return Try.success(stringBlock(xPos, yPos, "$clicked"));
+        if(type.equals("$pressed")) return Try.success(stringBlock(xPos, yPos, "$pressed"));
+        if(type.equals("A")) return keyBlock(xPos, yPos, "65");
+        if(type.equals("S")) return keyBlock(xPos, yPos, "83");
+        if(type.equals("D")) return keyBlock(xPos, yPos, "68");
+        if(type.equals("W")) return keyBlock(xPos, yPos, "87");
+        if(type.equals("key1")) return keyBlock(xPos, yPos, "49");
+        if(type.equals("key2")) return keyBlock(xPos, yPos, "50");
+        if(type.equals("key3")) return keyBlock(xPos, yPos, "51");
+        if(type.equals("enter")) return keyBlock(xPos, yPos, "10");
+        if(type.equals("ESC")) return keyBlock(xPos, yPos, "27");
+        if(type.equals("space")) return keyBlock(xPos, yPos, "32");
+
+        if(type.equals("del")) return Try.success(unaryBlock(xPos, yPos, "$remove"));
+        if(type.equals("unary")) return Try.success(unaryBlock(xPos, yPos, arg));
         return Try.failure(new Exception("There is no such type;")); // it can't happen from the user side
     }
 
@@ -124,6 +139,11 @@ public class GroovyNodeFactory {
 
     public Try<GroovyNode> integerBlock(double xPos, double yPos, String value) {
         var block = factory.integerBlock(value);
+        return block.map(e -> new GroovyNode(e, xPos, yPos, 100, 50, FONT_NORMAL, Color.DARKGREEN, List.of()));
+    }
+
+    public Try<GroovyNode> keyBlock(double xPos, double yPos, String value) {
+        var block = factory.keyBlock(value);
         return block.map(e -> new GroovyNode(e, xPos, yPos, 100, 50, FONT_NORMAL, Color.DARKGREEN, List.of()));
     }
 

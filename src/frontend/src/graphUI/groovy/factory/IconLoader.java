@@ -32,7 +32,6 @@ public class IconLoader {
                 if(lst.size() < ICONS_IN_ROW) {
                     var key = it.nextElement().toString();
                     var val = Boolean.parseBoolean(props.get(key).toString());
-                    System.out.println(key);
                     lst.add(draggableIcon.apply(new Image(
                         IconLoader.class.getClassLoader().getResourceAsStream(key + ".png"))).apply(key).apply(val));
                 } else {
@@ -71,5 +70,11 @@ public class IconLoader {
         Function<Image, Function<String, Function<Boolean, ImageView>>> draggableIcon
     ) {
         return loadIcons("literal", draggableIcon);
+    }
+
+    public static List<Node> loadUnaries(
+        Function<Image, Function<String, Function<Boolean, ImageView>>> draggableIcon
+    ) {
+        return loadIcons("unary", draggableIcon);
     }
 }

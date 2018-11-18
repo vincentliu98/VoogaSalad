@@ -123,7 +123,7 @@ public class GroovyPane extends PopUpWindow {
     }
 
     /**
-     *  We do not close the window; instead, we just hide it and unhide it when a button is clicked
+     *  We do not close the window; instead, we just hide it and show it when a button is clicked
      */
     @Override
     protected void closeWindow() { dialog.hide(); }
@@ -212,6 +212,9 @@ public class GroovyPane extends PopUpWindow {
         );
         vbox.getChildren().addAll(
             IconLoader.loadLiterals(img -> type -> fetchArg -> draggableGroovyIcon(img, type, fetchArg))
+        );
+        vbox.getChildren().addAll(
+            IconLoader.loadUnaries(img -> type -> fetchArg -> draggableGroovyIcon(img, type, fetchArg))
         );
 
         vbox.setSpacing(10);
@@ -343,7 +346,7 @@ public class GroovyPane extends PopUpWindow {
 
     private void displayError(String msg) {
         var alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error Dialog");
+        alert.setTitle("Error");
         alert.setHeaderText("Something's wrong");
         alert.setContentText(msg);
         alert.showAndWait();
