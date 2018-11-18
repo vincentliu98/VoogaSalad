@@ -61,7 +61,7 @@ public class GroovyBlockTest {
         graph.addNode(ifBlock);
         var zero = factory.integerBlock("0").get();
         graph.addNode(zero);
-        var leq = factory.leq();
+        var leq = factory.binaryBlock("<=");
         graph.addNode(leq);
 
         var e6 = factory.createEdge(ifBlock, IF_PREDICATE, leq);
@@ -72,9 +72,9 @@ public class GroovyBlockTest {
         graph.addEdge(e8);
 
         // we should make this a separate thing for convenience
-        var removeInstance = factory.$remove();
+        var removeInstance = factory.unaryBlock("remove");
         graph.addNode(removeInstance);
-        var clicked = factory.$clicked();
+        var clicked = factory.rawBlock("$clicked");
         graph.addNode(clicked);
         var e9 = factory.createEdge(removeInstance, A, clicked);
         graph.addEdge(e9);
@@ -89,7 +89,7 @@ public class GroovyBlockTest {
         graph.addNode(assign2);
         var turnRef = factory.refBlock("$global.turn").get();
         graph.addNode(turnRef);
-        var minus2 = factory.minus();
+        var minus2 = factory.binaryBlock("-");
         graph.addNode(minus2);
         var one = factory.integerBlock("1").get();
         graph.addNode(one);
@@ -109,7 +109,7 @@ public class GroovyBlockTest {
         // $goto("A")
 
         // should make this a separate thing as well
-        var go2 = factory.$goto();
+        var go2 = factory.unaryBlock("$goto");
         graph.addNode(go2);
         var to = factory.stringBlock("A");
         graph.addNode(to);
@@ -144,7 +144,7 @@ public class GroovyBlockTest {
         graph2.addEdge(factory.createEdge(init, ASSIGN_RHS, zero2));
         graph2.addEdge(factory.createEdge(graph2.source(), FLOW_OUT, init));
 
-        var range = factory.range(1, 10).get();
+        var range = factory.rawBlock("1 .. 10");
         var foreach = factory.forEachBlock("i");
         graph2.addNode(range);
         graph2.addNode(foreach);
@@ -153,7 +153,7 @@ public class GroovyBlockTest {
 
 
         var ass = factory.assignBlock();
-        var add = factory.add();
+        var add = factory.binaryBlock("+");
         var b = factory.refBlock("i").get();
         graph2.addNode(ass);
         graph2.addNode(add);

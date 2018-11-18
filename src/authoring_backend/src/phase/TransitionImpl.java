@@ -15,19 +15,15 @@ import phase.api.Transition;
 public class TransitionImpl extends SimpleEdge<Phase> implements Transition {
     private GameEvent trigger;
     private BlockGraph guard;
-    private BlockGraph execution;
 
-    public TransitionImpl(Phase from, GameEvent trigger, Phase to, BlockGraph guard, BlockGraph exec) {
+    public TransitionImpl(Phase from, GameEvent trigger, Phase to, BlockGraph guard) {
         super(from, to);
         this.trigger = trigger;
         this.guard = guard;
-        this.execution = exec;
     }
 
     @Override
     public GameEvent trigger() { return trigger; }
     @Override
     public BlockGraph guard() { return guard; }
-    @Override
-    public BlockGraph exec() { return execution; }
 }

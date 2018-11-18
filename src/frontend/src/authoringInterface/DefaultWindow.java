@@ -3,7 +3,7 @@
 //import api.ParentView;
 //import api.SubView;
 //
-//import authoringInterface.editor.EditView;
+//import authoringInterface.editor.editView.EditView;
 //import authoringInterface.sidebar.SideView;
 //import javafx.event.ActionEvent;
 //import javafx.scene.Group;

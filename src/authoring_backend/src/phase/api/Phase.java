@@ -1,14 +1,14 @@
 package phase.api;
 
-import graph.SimpleNode;
+import graph.Node;
+import groovy.api.BlockGraph;
 
 import java.util.UUID;
 
-public class Phase extends SimpleNode {
-    private UUID uuid;
-    public Phase() {
-        super();
-        uuid = UUID.randomUUID();
-    }
-    public UUID id() { return uuid; }
+/**
+ *  Each Phase contains a Groovy script that gets executed whenever the user enters it;
+ */
+public interface Phase extends Node {
+    UUID id();
+    BlockGraph exec();
 }

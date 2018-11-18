@@ -9,16 +9,16 @@ import java.util.ArrayList;
  * @author jl729
  */
 
-public class ListObjectManager extends ArrayList<SideView.ListObject> {
+public class ListObjectManager extends ArrayList<OldSideView.ListObject> {
 
     public ListObjectManager() {
-        add(new SideView.ListObject("O", "Entity", 0));
-        add(new SideView.ListObject("X", "Entity", 1));
-        add(new SideView.ListObject("Default Grid", "Tile", 0));
+        add(new OldSideView.ListObject("O", "Entity", 0));
+        add(new OldSideView.ListObject("X", "Entity", 1));
+        add(new OldSideView.ListObject("Default Grid", "Tile", 0));
     }
 
     @Override
-    public boolean add(SideView.ListObject listObject) {
+    public boolean add(OldSideView.ListObject listObject) {
         return super.add(listObject);
     }
 }

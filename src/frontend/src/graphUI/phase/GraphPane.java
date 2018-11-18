@@ -1,4 +1,4 @@
-package graphUI;
+package graphUI.phase;
 
 import authoringInterface.spritechoosingwindow.PopUpWindow;
 import javafx.event.EventHandler;

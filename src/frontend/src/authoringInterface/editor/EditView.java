@@ -1,50 +1,54 @@
+/*
 package authoringInterface.editor;
 
 import api.SubView;
+import authoringInterface.editor.editView.EditScrollView;
+import authoringInterface.sidebar.SideView;
+import authoringInterface.sidebar.SideViewInterface;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabDragPolicy;
-import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.layout.AnchorPane;
 
 
+*/
 /**
  * EditView Class (TabPane > ScrollPane)
  *      - holding scroll views
  *
  * @author Amy Kim
  * @author jl729
- */
+ *//*
+
 public class EditView implements SubView<AnchorPane> {
     private AnchorPane anchorPane;
     private final TabPane tabPane = new TabPane();
-    //TODO: ScrollViews can be more; need to decide
-//    private EntityScrollView entityScrollView;
-    private GridScrollView gridScrollView;
+    private EditScrollView gridScrollView;
     private Button addButton;
     private int index = 1;
 
-    /**
+    */
+/**
      * This method constructs the tabView.
      *
      * @return A tabView Node to be displayed at the left side of the createGraph window.
-     */
-    public EditView(){
-//        entityScrollView = new EntityScrollView();
-        gridScrollView = new GridScrollView();
+     *//*
+
+    public EditView() {
+        gridScrollView = new EditScrollView();
         initializeAnchorPane();
         addTab();
         tabPane.setTabDragPolicy(TabDragPolicy.REORDER);
-        tabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
         anchorPane.getChildren().addAll(tabPane, addButton);
     }
 
-    /**
+    */
+/**
      * Set up the anchorPane that will contain the AddButton and TabPane
-     */
+     *//*
+
     private void initializeAnchorPane() {
         anchorPane = new AnchorPane();
         addButton = new Button("+");
@@ -59,7 +63,8 @@ public class EditView implements SubView<AnchorPane> {
     }
 
     private void addTab(){
-        Tab tempTab = new Tab("Tab" + index);
+        Tab tempTab = new Tab();
+        tempTab.setText("TAB" + index);
         tempTab.setClosable(true);
         // need to be changed to make the content different
         tempTab.setContent(gridScrollView.getView());
@@ -67,13 +72,16 @@ public class EditView implements SubView<AnchorPane> {
         index++;
     }
 
-    /**
+    */
+/**
      * This method returns the responsible JavaFx Node responsible to be added or deleted from other graphical elements.
      *
      * @return A "root" JavaFx Node representative of this object.
-     */
+     *//*
+
     @Override
     public AnchorPane getView() {
         return anchorPane;
     }
 }
+*/

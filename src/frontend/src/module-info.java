@@ -7,6 +7,7 @@ module frontend {
     requires java.scripting;
 
     requires authoring_backend;
+    requires engine;
 
     exports authoringInterface;
     exports graphUI;
