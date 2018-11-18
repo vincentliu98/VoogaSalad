@@ -4,6 +4,8 @@ import api.SubView;
 import authoringInterface.sidebar.treeItemEntries.EditTreeItem;
 import javafx.scene.layout.StackPane;
 
+import java.util.Map;
+
 /**
  * This is an interface shared by different implementations of the side view.
  *
@@ -17,4 +19,9 @@ public interface SideViewInterface extends SubView<StackPane> {
      * @return The EditTreeItem object having the name.
      */
     EditTreeItem getObject(String name);
+
+    /**
+     * @return The internal object map.
+     */
+    Map<String, EditTreeItem> getObjectMap();
 }
