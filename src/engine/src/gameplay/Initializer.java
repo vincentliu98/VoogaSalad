@@ -13,7 +13,7 @@ public class Initializer {
     private void initGameData(File file){
         myXMLParser.loadFile(file);
         GameData.setGameData(myXMLParser.getPlayers(), myXMLParser.getEntities(), myXMLParser.getTiles(),
-                myXMLParser.getPhases(), myXMLParser.getNodes(), myXMLParser.getEdges());
+                myXMLParser.getPhases(), myXMLParser.getNodes(), myXMLParser.getEdges(), myXMLParser.getTurn());
     }
 
     public void startGame(){
@@ -21,7 +21,7 @@ public class Initializer {
     }
 
     public void saveGame(){
-        String xmlString = GameData.saveGameData() + myXMLParser.getTurn().serializeTurn();
+        String xmlString = GameData.saveGameData();
     }
 
 }

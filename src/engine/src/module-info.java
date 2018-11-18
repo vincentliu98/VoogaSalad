@@ -5,4 +5,5 @@ module engine {
     requires javafx.media;
     requires xstream;
     requires java.xml;
+    requires java.scripting;
 }

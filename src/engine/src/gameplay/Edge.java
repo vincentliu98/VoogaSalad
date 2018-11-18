@@ -2,7 +2,21 @@ package gameplay;
 
 import javafx.event.Event;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
+import com.thoughtworks.xstream.security.NoTypePermission;
+import com.thoughtworks.xstream.security.NullPermission;
+import com.thoughtworks.xstream.security.PrimitiveTypePermission;
+
 
 public class Edge implements ArgumentListener {
     private int myID;
@@ -22,6 +36,16 @@ public class Edge implements ArgumentListener {
     }
 
     private boolean checkValidity(List<Tag> arguments){
+        ScriptEngine engine = new ScriptEngineManager().getEngineByName("groovy");
+        engine.put("arguments", arguments);
+        engine.put("GameData", new GameData());
+        try{
+            engine.eval(myGuard);
+            return (boolean) engine.get("answer");
+        } catch (ScriptException e){
+            System.out.println("Script exception in Edge");
+        }
+        return false;
         // execute Groovy guard, returns true if valid
         // include check for size, type, etc.
         /* PERFORM SOMETHING LIKE THIS:
@@ -31,7 +55,6 @@ public class Edge implements ArgumentListener {
                 return GameData.getEntity(tag.getID());
             }
          */
-        return true;
     }
 
     public int getID(){
@@ -39,8 +62,8 @@ public class Edge implements ArgumentListener {
     }
 
     @Override
-    public void hasChanged(List<Tag> arguments) {
-        if (checkValidity(arguments)){
+    public void hasChanged() {
+        if (checkValidity(GameData.getArguments())){
             GameData.removeArgumentListener(this);
             GameData.getNode(myEndNodeID).execute();
         } else {

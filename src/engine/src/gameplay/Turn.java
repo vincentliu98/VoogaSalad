@@ -12,6 +12,10 @@ public class Turn {
         myCurrentPlayerID = playerID;
     }
 
+    public int getCurrentPlayerID(){
+        return myCurrentPlayerID;
+    }
+
     public void setPhase(int phaseID){
         myCurrentPhaseID = phaseID;
     }
