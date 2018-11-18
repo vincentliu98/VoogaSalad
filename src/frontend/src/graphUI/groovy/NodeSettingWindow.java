@@ -14,8 +14,8 @@ import javafx.stage.Stage;
 
 public class NodeSettingWindow extends PopUpWindow {
 
-    public static final Double WIDTH = 500.0;
-    public static final Double HEIGHT = 60.0;
+    public static final Double WIDTH = 400.0;
+    public static final Double HEIGHT = 400.0;
     private final Button applyBtn;
     private HBox root;
 
