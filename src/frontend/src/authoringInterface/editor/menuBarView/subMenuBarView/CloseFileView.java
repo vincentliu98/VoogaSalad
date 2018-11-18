@@ -11,8 +11,9 @@ import java.util.Optional;
  */
 
 public class CloseFileView {
-
-    public CloseFileView(){
+    private Runnable closeWindow;
+    public CloseFileView(Runnable closeWindow){
+        this.closeWindow = closeWindow;
         alertMsg();
     }
 
@@ -24,7 +25,7 @@ public class CloseFileView {
             //TODO: Saving function
         }
        else if (result.get() == notSave) {
-            System.exit(0);
+            closeWindow.run();
         }
     }
 

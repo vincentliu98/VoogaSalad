@@ -32,10 +32,13 @@ public class EditorMenuBarView implements SubView<MenuBar> {
     private final EditorCaretaker editorCaretaker = new EditorCaretaker();
     private final Editor editor = new Editor();
     private Integer currentMemento = 0;
+    private Runnable closeWindow;
 
-    public EditorMenuBarView(AuthoringTools authTools) {
+    public EditorMenuBarView(AuthoringTools authTools, Runnable closeWindow) {
         this.authTools = authTools;
         editor.setState(authTools.globalData());
+
+        this.closeWindow = closeWindow;
 
         menuBar = new MenuBar();
         menuBar.setPrefHeight(View.MENU_BAR_HEIGHT);
@@ -96,7 +99,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         new LoadFileView();
     }
     void handleNewFile(ActionEvent event) { new NewWindowView(); }
-    void handleClose(ActionEvent event) { new CloseFileView(); }
+    void handleClose(ActionEvent event) { new CloseFileView(closeWindow); }
     void handleSave(ActionEvent event) {
         editorCaretaker.addMemento(editor.save());
         editor.setState(editorCaretaker.getMemento(currentMemento++).getSavedState());

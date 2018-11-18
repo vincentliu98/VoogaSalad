@@ -1,8 +1,10 @@
 package authoringInterface.editor.menuBarView.subMenuBarView;
 
+import authoringInterface.View;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import javafx.stage.Stage;
 
 import java.util.Optional;
 
@@ -12,49 +14,36 @@ import java.util.Optional;
  */
 
 public class NewWindowView {
+    public static final String STYLESHEET = "style.css";
+    public static final int SCREEN_WIDTH = 1200;
+    public static final int SCREEN_HEIGHT = 700;
+
     public NewWindowView(){
-        ButtonType current = new ButtonType("This window");
         ButtonType new_window = new ButtonType("New window");
-        Optional<ButtonType> result = customizeMsg(current, new_window).showAndWait();
-        if (result.get() == current) {
-            askSave();
-        }
-        else if (result.get() == new_window) {
+        Optional<ButtonType> result = customizeMsg(new_window).showAndWait();
+        if (result.get() == new_window) {
+            popUpWindow();
         }
     }
 
-    private Alert customizeMsg(ButtonType current, ButtonType new_window) {
+    private Alert customizeMsg(ButtonType new_window) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Open Project");
-        alert.setHeaderText("How would you like to open the project");
-        alert.setContentText("New projects can either be opened in a new window or replace the project in the existing window.\n");
-        alert.getButtonTypes().setAll(current, ButtonType.CANCEL, new_window);
+        alert.setTitle("New Project");
+        alert.setHeaderText("How would you like to start new project");
+        alert.setContentText("New projects can either be opened in a new window or replace the project in the existing window.");
+        alert.getButtonTypes().setAll(ButtonType.CANCEL, new_window);
         return alert;
     }
 
-    private void askSave(){
-        Optional<ButtonType> result = secondMsg().showAndWait();
-        if (result.get() == ButtonType.YES) {
-            //TODO: saving
-            refreshWindow();
-        }
-        else if (result.get() == ButtonType.NO) {
-            refreshWindow();
-        }
-    }
+    private void popUpWindow(){
+        Stage newWindow = new Stage();
+        newWindow.setTitle("VoogaSalad!");
+        View myView = new View(newWindow);
+        Scene newScene = new Scene(myView.getRootPane(), SCREEN_WIDTH, SCREEN_HEIGHT);
+        newScene.getStylesheets().add(STYLESHEET);
+        newWindow.setScene(newScene);
 
-    private Alert secondMsg(){
-        Alert alert = new Alert(AlertType.CONFIRMATION);
-        alert.setTitle("Save Project");
-        alert.setHeaderText("Do you want to save the changes before open new project?");
-        alert.setContentText("Your changes will be lost if you do not save them.");
-        alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
-        return alert;
-    }
-
-
-    private void refreshWindow(){
-
+        newWindow.show();
     }
 
 }
