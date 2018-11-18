@@ -100,6 +100,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
     }
     void handleNewFile(ActionEvent event) {}
     void handleSave(ActionEvent event) {
+        // TODO: 11/17/18 Enable and Disable the undo and redo button
         editorCaretaker.addMemento(editor.save());
         editor.setState(editorCaretaker.getMemento(currentMemento++).getSavedState());
     }
@@ -109,6 +110,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
     }
     void handleClose(ActionEvent event) {}
     void handleUndo(ActionEvent event) {
+        if (currentMemento < 2) return;
         editor.restoreToState(editorCaretaker.getMemento(--currentMemento));
         // TODO: 11/17/18 Redisplay content
         // need to scan through the map and find out which ones need update

@@ -12,9 +12,8 @@ public class EditorCaretaker {
 
     // get the state from a certain point
     public EditorMemento getMemento(Integer index) {
-        if (index < mementos.size()) {
+        if (0 <= index && index < mementos.size()) {
             return mementos.get(index);
-        }
-        return mementos.get(mementos.size()-1);
+        } else return mementos.get(mementos.size()-1);
     }
 }
