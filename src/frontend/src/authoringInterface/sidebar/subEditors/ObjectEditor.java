@@ -39,22 +39,22 @@ public interface ObjectEditor<T extends EditTreeItem> {
      * Register the editor with an existing TreeItem in order to update or edit existing entries.
      *
      * @param treeItem: An existing TreeItem.
+     * @param map: The map from String name to Entity.
      */
-    void registerTreeItem(TreeItem<String> treeItem);
+    void editTreeItem(TreeItem<String> treeItem, Map<String, T> map);
 
     /**
      * Register the object map.
      *
-     * @param map
+     * @param treeItem: An existing TreeItem.
+     * @param map: The map from String name to Entity.
      */
-    void registerObjectMap(Map<String, EditTreeItem> map);
+    void addTreeItem(TreeItem<String> treeItem, Map<String, T> map);
 
     /**
      * Register the node to Object map.
      *
      * @param map
      */
-    void registerNodeToObjectMap(Map<Node, EditTreeItem> map);
-
-
+    void editNode(Map<Node, T> map);
 }

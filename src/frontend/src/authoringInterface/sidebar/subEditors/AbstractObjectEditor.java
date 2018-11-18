@@ -28,10 +28,12 @@ public abstract class AbstractObjectEditor<T extends EditTreeItem> implements Ob
     protected Button cancel;
     protected boolean isApplied;
     protected TreeItem<String> treeItem;
-    protected Map<String, EditTreeItem> objectMap;
-    protected Map<Node, EditTreeItem> nodeToObjectMap;
+    protected Map<String, T> objectMap;
+    protected Map<Node, T> nodeToObjectMap;
+    protected EditingMode editingMode;
 
     public AbstractObjectEditor() {
+        editingMode = EditingMode.NONE;
         rootPane = new AnchorPane();
         inputText = new Text();
         nameField = new TextField();
@@ -84,20 +86,26 @@ public abstract class AbstractObjectEditor<T extends EditTreeItem> implements Ob
      * Register the editor with an existing TreeItem in order to update or edit existing entries.
      *
      * @param treeItem: An existing TreeItem.
+     * @param map: The map from String name to Entity.
      */
     @Override
-    public void registerTreeItem(TreeItem<String> treeItem) {
+    public void editTreeItem(TreeItem<String> treeItem, Map<String, T> map) {
         this.treeItem = treeItem;
+        this.objectMap = map;
+        editingMode = EditingMode.EDIT_TREEITEM;
     }
 
     /**
      * Register the object map.
      *
-     * @param map
+     * @param treeItem: An existing TreeItem.
+     * @param map: The map from String name to Entity.
      */
     @Override
-    public void registerObjectMap(Map<String, EditTreeItem> map) {
-        objectMap = map;
+    public void addTreeItem(TreeItem<String> treeItem, Map<String, T> map) {
+        this.treeItem = treeItem;
+        this.objectMap = map;
+        editingMode = EditingMode.ADD_TREEITEM;
     }
 
     /**
@@ -105,7 +113,9 @@ public abstract class AbstractObjectEditor<T extends EditTreeItem> implements Ob
      *
      * @param map
      */
-    public void registerNodeToObjectMap(Map<Node, EditTreeItem> map) {
-        nodeToObjectMap = map;
+    @Override
+    public void editNode(Map<Node, T> map) {
+        this.nodeToObjectMap = map;
+        editingMode = EditingMode.EDIT_NODE;
     }
 }
