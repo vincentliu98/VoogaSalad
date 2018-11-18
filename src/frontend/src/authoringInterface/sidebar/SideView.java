@@ -53,6 +53,8 @@ public class SideView implements SubView<StackPane>, SideViewInterface {
         treeView.setEditable(true);
         treeView.setCellFactory(e -> new CustomTreeCellImpl(objectMap));
         sidePane.getChildren().add(treeView);
+        treeView.getStyleClass().add("myTree");
+        sidePane.getStyleClass().add("mySide");
     }
 
     /**

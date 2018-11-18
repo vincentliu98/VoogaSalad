@@ -11,7 +11,6 @@ import authoringInterface.sidebar.subEditors.ObjectEditor;
 import authoringInterface.sidebar.treeItemEntries.EditTreeItem;
 import authoringInterface.sidebar.treeItemEntries.Entity;
 import authoringInterface.sidebar.treeItemEntries.TreeItemType;
-import entities.Grid;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.Parent;
