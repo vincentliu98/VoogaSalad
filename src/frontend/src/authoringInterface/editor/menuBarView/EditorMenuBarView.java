@@ -5,10 +5,14 @@ import authoring.AuthoringTools;
 import authoringInterface.MainAuthoringProgram;
 import authoringInterface.View;
 import authoringInterface.editor.menuBarView.subMenuBarView.CloseFileView;
+import authoringInterface.editor.memento.Editor;
+import authoringInterface.editor.memento.EditorCaretaker;
 import authoringInterface.editor.menuBarView.subMenuBarView.LoadFileView;
 import authoringInterface.editor.menuBarView.subMenuBarView.NewWindowView;
 import graphUI.groovy.GroovyPane;
 import graphUI.phase.GraphPane;
+import javafx.beans.Observable;
+import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
@@ -25,8 +29,13 @@ public class EditorMenuBarView implements SubView<MenuBar> {
     private GameWindow gameWindow;
     private AuthoringTools authTools;
 
+    private final EditorCaretaker editorCaretaker = new EditorCaretaker();
+    private final Editor editor = new Editor();
+    private Integer currentMemento = 0;
+
     public EditorMenuBarView(AuthoringTools authTools) {
         this.authTools = authTools;
+        editor.setState(authTools.globalData());
 
         menuBar = new MenuBar();
         menuBar.setPrefHeight(View.MENU_BAR_HEIGHT);
@@ -73,6 +82,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
 
         menuBar.getMenus().addAll(file, edit, tools, run, help);
     }
+
     private void handleGroovyGraph(ActionEvent actionEvent) {
         new GroovyPane(new Stage(), authTools.factory());
     }
@@ -86,11 +96,25 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         new LoadFileView();
     }
     void handleNewFile(ActionEvent event) { new NewWindowView(); }
-    void handleSave(ActionEvent event) {}
-    void handleSaveAs(ActionEvent event) {}
     void handleClose(ActionEvent event) { new CloseFileView(); }
-    void handleUndo(ActionEvent event) {}
-    void handleRedo(ActionEvent event) {}
+    void handleSave(ActionEvent event) {
+        editorCaretaker.addMemento(editor.save());
+        editor.setState(editorCaretaker.getMemento(currentMemento++).getSavedState());
+    }
+    void handleSaveAs(ActionEvent event) {
+        handleSave(event);
+        // TODO: 11/17/18 add a fileChooser and allow user to save
+    }
+    void handleUndo(ActionEvent event) {
+        editor.restoreToState(editorCaretaker.getMemento(--currentMemento));
+        // TODO: 11/17/18 Redisplay content
+        // need to scan through the map and find out which ones need update
+    }
+    void handleRedo(ActionEvent event) {
+        editor.restoreToState(editorCaretaker.getMemento(++currentMemento));
+        // TODO: 11/17/18 Redisplay content
+        // need to scan through the map and find out which ones need update
+    }
     void handleRunProject(ActionEvent event) {
         Stage newWindow = new Stage();
         newWindow.setTitle("Your Game");
