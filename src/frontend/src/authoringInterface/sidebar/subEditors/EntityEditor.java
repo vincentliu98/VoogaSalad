@@ -56,7 +56,6 @@ public class EntityEditor extends AbstractObjectEditor<Entity> {
                 alert.showAndWait();
             } else {
                 entity.setName(nameField.getText().trim());
-                isApplied = true;
                 ((Stage) rootPane.getScene().getWindow()).close();
                 if (treeItem != null && !treeItem.isLeaf()) {
                     int id = treeItem.getChildren().size();

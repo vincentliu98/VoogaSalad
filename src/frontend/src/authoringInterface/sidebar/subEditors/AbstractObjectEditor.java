@@ -26,7 +26,6 @@ public abstract class AbstractObjectEditor<T extends EditTreeItem> implements Ob
     protected TextField nameField;
     protected Button confirm;
     protected Button cancel;
-    protected boolean isApplied;
     protected TreeItem<String> treeItem;
     protected Map<String, T> objectMap;
     protected Map<Node, T> nodeToObjectMap;
@@ -70,16 +69,6 @@ public abstract class AbstractObjectEditor<T extends EditTreeItem> implements Ob
     @Override
     public AnchorPane getView() {
         return rootPane;
-    }
-
-    /**
-     * Return a boolean indicating whether the changes are successfully applied.
-     *
-     * @return
-     */
-    @Override
-    public boolean applied() {
-        return isApplied;
     }
 
     /**
