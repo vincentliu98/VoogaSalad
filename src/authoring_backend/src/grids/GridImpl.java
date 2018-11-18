@@ -4,9 +4,8 @@ import grids.Point;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
+import java.util.function.Predicate;
 
 
 /**
@@ -18,38 +17,35 @@ import java.util.Random;
 
 
 public abstract class GridImpl {
-    protected ObservableMap<Point, Integer> matrix;
-    protected int numRows;
-    protected int numColumns;
-    protected Directions.NoOfNeighbors gridConfig;
-
-    protected Random random;
+    private ObservableMap<Point, Integer> matrix;
+    private int numRows;
+    private int numColumns;
+    private GridShape gridConfig;
 
 
     /**
      * @param numRows    number of rows
      * @param numColumns number of columns
      */
-    protected GridImpl(int numRows, int numColumns, Directions.NoOfNeighbors gridConfig) {
+    protected GridImpl(int numRows, int numColumns, GridShape gridConfig) {
         this.matrix = FXCollections.observableHashMap();
         this.numRows = numRows;
         this.numColumns = numColumns;
         this.gridConfig = gridConfig;
-        this.random = new Random();
     }
 
     /**
      * @return matrix
      */
-    protected ObservableMap getMatrix() {
+    public ObservableMap getMatrix() {
         return matrix;
     }
 
-    protected int getNumRows() {
+    public int getNumRows() {
         return numRows;
     }
 
-    protected int getNumColumns() {
+    public int getNumColumns() {
         return numColumns;
     }
 
@@ -61,29 +57,47 @@ public abstract class GridImpl {
     /**
      * @return true if x, y is out of bounds
      */
-    protected boolean outOfXBounds(int x) {
+    public boolean outOfXBounds(int x) {
         return x < 0 || x >= numColumns;
     }
 
-    protected boolean outOfYBounds(int y) {
+    public boolean outOfYBounds(int y) {
         return y < 0 || y >= numRows;
     }
 
-    protected boolean outOfBounds(Point position) {
-        return outOfXBounds(position.getX()) && outOfYBounds(position.getY());
+    public boolean outOfBounds(Point position) {
+        return outOfXBounds(position.getX()) || outOfYBounds(position.getY());
     }
 
-    /**
-     * get Tile Id with coordinate
-     *
-     * @param x x-coordinate
-     * @param y y-coordinate
-     */
-    protected Point getPosition(int x, int y) {
-        return new Point(gridColumnWrap(x), gridRowWrap(y));
+
+    public Set<Point> getNeighborsOfPoints(Set<Point> points) {
+
+        Set<Point> neighbors = new HashSet<>();
+        for (Point p : points) {
+            Set<Point> neighborsOfAPoint = getNeighborsOfAPoint(p);
+            for (Point tentativeP : neighborsOfAPoint) {
+                if (!points.contains(tentativeP)) {
+                    neighbors.add(tentativeP);
+                }
+            }
+        }
+        return neighbors;
     }
 
-    protected Point getPosition(Point position) {
-        return getPosition(position.getX(), position.getY());
+
+    private Set<Point> getNeighborsOfAPoint(Point p) {
+        Set<Point> neighbors = new HashSet<>();
+        switch (gridConfig) {
+            case Square:
+                for (Directions.EightDirections d : Directions.EightDirections.values()) {
+                    neighbors.add(p.add(d.getDirection()));
+                }
+            case Hexagon:
+                for (Directions.SixDirections d : Directions.SixDirections.values()) {
+                    neighbors.add(p.add(d.getDirection()));
+                }
+        }
+        return neighbors;
     }
+
 }

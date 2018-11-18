@@ -1,83 +1,117 @@
 package entities;
 
-import javafx.beans.property.SimpleMapProperty;
+import grids.Grid;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 
+import java.util.function.Consumer;
+
 
 public class SimpleEntitiesCRUD implements EntitiesCRUDInterface {
-    private String CONST_TILEMAP = "tileMap";
-    private String CONST_SPRITEMAP = "spriteMap";
 
-    private ObservableMap<String, TileClass> tileMap;
-    private ObservableMap<String, SpriteClass> spriteMap;
+    private ObservableMap<String, TileClass> tileClassMap;
+    private ObservableMap<String, SpriteClass> spriteClassMap;
+    private ObservableMap<Integer, TileInstance> tileInstanceMap;
+    private ObservableMap<Integer, SpriteInstance> spriteInstanceMap;
+
+    private Grid grid;
+    private Consumer<EntityClass> returnClassId;
     private IdManager myIdManager;
 
     public SimpleEntitiesCRUD() {
-        tileMap = FXCollections.observableHashMap();
-        spriteMap = FXCollections.observableHashMap();
+        tileClassMap = FXCollections.observableHashMap();
+        spriteClassMap = FXCollections.observableHashMap();
         myIdManager = new IdManagerClass();
+        returnClassId = myIdManager.returnClassIdFunc();
     }
 
-    public SimpleEntitiesCRUD(ObservableMap<String, TileClass> tileClasses, ObservableMap<String, SpriteClass> spriteClasses) {
-        tileMap = tileClasses;
-        spriteMap = spriteClasses;
+    public SimpleEntitiesCRUD(Grid g) {
+        this();
+        grid = g;
+    }
+
+    public SimpleEntitiesCRUD(ObservableMap<String, TileClass> tileClasses, ObservableMap<String, SpriteClass> spriteClasses, Grid g) {
+        this();
+        tileClassMap = tileClasses;
+        spriteClassMap = spriteClasses;
+        grid = g;
     }
 
     @Override
-    public boolean createTileClass(String name) {
-//        System.out.println( == null);
-        if (!tileMap.containsKey(name)) {
-            tileMap.put(name, new SimpleTileClass(myIdManager.requestClassIdFunc()));
-            return true;
+    public TileClass createTileClass(String name) {
+        if (tileClassMap.containsKey(name)) {
+            throw new DuplicateClassException();
         }
-        return false;
+        TileClass newTileClass = new SimpleTileClass(myIdManager.requestTileInstanceIdFunc());
+        myIdManager.requestClassIdFunc().accept(newTileClass);
+        tileClassMap.put(name, newTileClass);
+        return newTileClass;
     }
 
     @Override
     public TileClass getTileClass(String name) {
-        if (!tileMap.containsKey(name)) {
+        if (!tileClassMap.containsKey(name)) {
             throw new NoTileClassException();
         }
-        return tileMap.get(name);
+        return tileClassMap.get(name);
     }
 
     @Override
     public boolean deleteTileClass(String name) {
-        if (!tileMap.containsKey(name)) {
+        if (!tileClassMap.containsKey(name)) {
             return false;
         }
-        myIdManager.returnClassIdFunc(tileMap.get(name).returnClassId());
-        return tileMap.remove(name) != null;
+        returnClassId.accept(tileClassMap.remove(name));
+        return true;
     }
 
     @Override
-    public boolean createSpriteClass(String name) {
-        if (!spriteMap.containsKey(name)) {
-            spriteMap.put(name, new SimpleSpriteClass(myIdManager.requestClassIdFunc()));
-            return true;
+    public SpriteClass createSpriteClass(String name) {
+        if (spriteClassMap.containsKey(name)) {
+            throw new DuplicateClassException();
         }
-        return false;
+
+        SpriteClass newSpriteClass = new SimpleSpriteClass(
+                myIdManager.verifyTileInstanceIdFunc(),
+                myIdManager.requestSpriteInstanceIdFunc(),
+                myIdManager.returnSpriteInstanceIdFunc(),
+                addSpriteInstanceToMapFunc(),
+                removeSpriteInstanceFromMapFunc());
+
+        myIdManager.requestClassIdFunc().accept(newSpriteClass);
+        spriteClassMap.put(name, newSpriteClass);
+        return newSpriteClass;
     }
 
     @Override
     public SpriteClass getSpriteClass(String name) {
-        if (!spriteMap.containsKey(name)) {
+        if (!spriteClassMap.containsKey(name)) {
             throw new NoSpriteClassException();
         }
-        return spriteMap.get(name);
+        return spriteClassMap.get(name);
     }
 
     @Override
     public boolean deleteSpriteClass(String name) {
-        if (!spriteMap.containsKey(name)) {
+        if (!spriteClassMap.containsKey(name)) {
             return false;
         }
-        myIdManager.returnClassIdFunc(spriteMap.get(name).returnClassId());
-        return spriteMap.remove(name) != null;
+        returnClassId.accept(spriteClassMap.remove(name));
+        return true;
     }
     @Override
     public String toXML() {
         return null;
     }
+
+
+
+    private Consumer<SpriteInstance> addSpriteInstanceToMapFunc() {
+        return spriteInstance -> spriteInstanceMap.put(spriteInstance.getInstanceId().getValue(), spriteInstance);
+    }
+
+    private Consumer<SpriteInstance> removeSpriteInstanceFromMapFunc() {
+        return spriteInstance -> spriteInstanceMap.remove(spriteInstance.getInstanceId().getValue(), spriteInstance);
+    }
+
 }

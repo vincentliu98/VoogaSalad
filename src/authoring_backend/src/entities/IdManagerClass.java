@@ -1,64 +1,120 @@
 package entities;
 
-import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
+import java.util.function.Function;
+
+/**
+ * This Class implements the IdManager Interface.
+ * This Class assigns an id to every Entity Class and Tile or Sprite Instance.
+ * It maintains lists of returned ids for classes, tile instances and sprite instances.
+ * @author Jason Zhou
+ */
+
 
 public class IdManagerClass implements IdManager {
     private List<Integer> returnedClassIds;
-    private List<Integer> returnedInstanceIds;
+    private List<Integer> returnedTileInstanceIds;
+    private List<Integer> returnedSpriteInstanceIds;
 
     private int classCount;
-    private int instanceCount;
+    private int tileInstanceCount;
+    private int spriteInstanceCount;
 
     IdManagerClass() {
         classCount = 0;
-        instanceCount = 0;
+        tileInstanceCount = 0;
+        spriteInstanceCount = 0;
         returnedClassIds = new ArrayList<>();
-        returnedInstanceIds = new ArrayList<>();
+        returnedTileInstanceIds = new ArrayList<>();
+        returnedSpriteInstanceIds = new ArrayList<>();
     }
 
     @Override
-    public Consumer<SimpleIntegerProperty> requestClassIdFunc() {
+    public Consumer<EntityClass> requestClassIdFunc() {
         int id;
         if (!returnedClassIds.isEmpty()) {
             id = returnedClassIds.remove(0);
-        }
-        else {
+        } else {
             id = classCount;
             classCount++;
         }
-
-        return n -> n.setValue(id);
+        return entityClass -> entityClass.setClassId(simpleIntegerProperty -> simpleIntegerProperty.setValue(id));
     }
 
     @Override
-    public Consumer<SimpleIntegerProperty> requestInstanceIdFunc() {
+    public Consumer<EntityInstance> requestTileInstanceIdFunc() {
         int id;
-        if (!returnedInstanceIds.isEmpty()) {
-            id = returnedInstanceIds.remove(0);
+        if (!returnedTileInstanceIds.isEmpty()) {
+            id = returnedTileInstanceIds.remove(0);
+        } else {
+            id = tileInstanceCount;
+            tileInstanceCount++;
         }
-        else {
-            id = instanceCount;
-            instanceCount++;
-        }
-        return n -> n.setValue(id);
-        }
-
-    @Override
-    public void returnClassIdFunc(Supplier<ReadOnlyIntegerProperty> s) {
-        int returnedId = s.get().getValue();
-        returnedClassIds.add(returnedId);
+        return tileInstance -> tileInstance.setInstanceId(simpleIntegerProperty -> simpleIntegerProperty.setValue(id));
     }
 
     @Override
-    public void returnInstanceIdFunc(Supplier<ReadOnlyIntegerProperty> s) {
-        int returnedId = s.get().getValue();
-        returnedInstanceIds.add(returnedId);
+    public Consumer<EntityInstance> requestSpriteInstanceIdFunc() {
+        int id;
+        if (!returnedSpriteInstanceIds.isEmpty()) {
+            id = returnedSpriteInstanceIds.remove(0);
+        } else {
+            id = spriteInstanceCount;
+            spriteInstanceCount++;
+        }
+        return spriteInstance -> spriteInstance.setInstanceId(simpleIntegerProperty -> simpleIntegerProperty.setValue(id));
     }
 
+    @Override
+    public Consumer<EntityClass> returnClassIdFunc() {
+
+        return (entityClass) -> {
+            int returnedId = entityClass.getClassId().getValue();
+            if (classCount < returnedId || returnedClassIds.contains(returnedId)) {
+                throw new DuplicateIdException();
+            }
+            returnedClassIds.add(returnedId);
+        };
+    }
+
+    @Override
+    public Consumer<EntityInstance> returnTileInstanceIdFunc() {
+        return (entityInstance) -> {
+            int returnedId = entityInstance.getInstanceId().getValue();
+            if (tileInstanceCount < returnedId || returnedTileInstanceIds.contains(returnedId)) {
+                throw new DuplicateIdException();
+            }
+            returnedTileInstanceIds.add(returnedId);
+        };
+    }
+
+    @Override
+    public Consumer<EntityInstance> returnSpriteInstanceIdFunc() {
+        return (entityInstance) -> {
+            int returnedId = entityInstance.getInstanceId().getValue();
+            if (spriteInstanceCount < returnedId || returnedSpriteInstanceIds.contains(returnedId)) {
+                throw new DuplicateIdException();
+            }
+            returnedSpriteInstanceIds.add(returnedId);
+        };
+    }
+
+    @Override
+    public Function<Integer, Boolean> verifyClassIdFunc() {
+        return (i) -> classCount >= i && !returnedClassIds.contains(i);
+    }
+
+    @Override
+    public Function<Integer, Boolean> verifyTileInstanceIdFunc() {
+        return (i) -> tileInstanceCount >= i && !returnedTileInstanceIds.contains(i);
+    }
+
+    @Override
+    public Function<Integer, Boolean> verifySpriteInstanceIdFunc() {
+        return (i) -> spriteInstanceCount >= i && !returnedSpriteInstanceIds.contains(i);
+    }
 }

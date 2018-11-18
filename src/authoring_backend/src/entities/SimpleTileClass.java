@@ -1,5 +1,6 @@
 package entities;
 
+import grids.Point;
 import groovy.api.BlockGraph;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
@@ -9,6 +10,7 @@ import javafx.collections.ObservableMap;
 import java.util.List;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -49,11 +51,6 @@ public class SimpleTileClass implements TileClass {
     @Override
     public void setClassId(Consumer<SimpleIntegerProperty> setFunc) {
         setFunc.accept(id);
-    }
-
-    @Override
-    public Supplier<ReadOnlyIntegerProperty> returnClassId() {
-        return this::getClassId;
     }
 
     @Override
@@ -127,6 +124,12 @@ public class SimpleTileClass implements TileClass {
     @Override
     public EntityInstance createInstance() {
         return null;
+    }
+
+    @Override
+    public EntityInstance createInstance(Set<Point> points) {
+        SpriteInstance sprite = new SimpleTileInstance();
+
     }
 
     @Override
