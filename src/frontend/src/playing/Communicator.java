@@ -1,19 +1,27 @@
 package playing;
 
-import javax.script.ScriptEngine;
+import gameplay.Entity;
+import gameplay.GameData;
+import gameplay.Tag;
+import gameplay.Tile;
 
 public class Communicator implements Communicable{
-    ScriptEngine myEngine;
     DisplayData myDisplayData;
 
-    public Communicator(ScriptEngine engine, DisplayData displayData){
-        myEngine = engine;
+    public Communicator(DisplayData displayData){
         myDisplayData = displayData;
 
     }
 
     @Override
-    public void addNewEntity(int id) {
+    public void addNewEntity(Tag tag) {
+        if(tag.getType().equals(Tile.class)){
+            Tile curTile = GameData.getTile(tag.getID());
+        }
+        else {
+            Entity curEntity = GameData.getEntity(tag.getID());
+        }
         //EntityView newEntity = new EntityView()
+
     }
 }

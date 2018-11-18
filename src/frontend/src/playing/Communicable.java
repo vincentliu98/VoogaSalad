@@ -1,5 +1,7 @@
 package playing;
 
+import gameplay.Tag;
+
 public interface Communicable {
 
     /**
@@ -7,5 +9,5 @@ public interface Communicable {
      *
      * @param id The id of the new entity
      */
-    void addNewEntity(int id);
+    void addNewEntity(Tag id);
 }
