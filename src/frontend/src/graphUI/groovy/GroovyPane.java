@@ -134,7 +134,7 @@ public class GroovyPane extends PopUpWindow {
         vbox.getChildren().addAll(
             new Label("Drag node to the right"),
             draggableGroovyIcon(new Image(
-                getClass().getClassLoader().getResourceAsStream("ForEachIcon.png")), "ForEach", false),
+                getClass().getClassLoader().getResourceAsStream("ForEachIcon.png")), "ForEach", true),
             draggableGroovyIcon(new Image(
                 getClass().getClassLoader().getResourceAsStream("IfIcon.png")), "If", false),
             draggableGroovyIcon(new Image(

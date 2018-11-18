@@ -2,9 +2,9 @@ package graphUI.groovy.factory;
 
 import groovy.api.Ports;
 import groovy.graph.blocks.core.GroovyBlock;
-import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -33,13 +33,14 @@ public class GroovyNode extends StackPane {
     private List<Pair<Pos, Ports>> portPositions;
     private List<GroovyNode> incomingNodes = new ArrayList<>();
 
-    private static final int PORT_RADIUS = 10;
+    private static final int PORT_RADIUS = 4;
 
-    public GroovyNode(GroovyBlock block,
-                      double xPos, double yPos,
-                      double width, double height,
-                      Color color,
-                      List<Pair<Pos, Ports>> portPositions
+    public GroovyNode(
+        GroovyBlock block,
+        double xPos, double yPos,
+        double width, double height,
+        Color color,
+        List<Pair<Pos, Ports>> portPositions
     ) {
         model = block;
         rectangle = new Rectangle(xPos, yPos, width, height);
@@ -56,9 +57,8 @@ public class GroovyNode extends StackPane {
         portPositions.forEach(p -> {
                         var c = new Circle(PORT_RADIUS);
                         setAlignment(c, p.getKey());
-                        var label = new Label(p.getValue().name());
-                        setAlignment(label, p.getKey());
-                        getChildren().addAll(c, label);
+                        Tooltip.install(c, new Tooltip(p.getValue().name()));
+                        getChildren().addAll(c);
         });
 
         layout();
@@ -73,18 +73,24 @@ public class GroovyNode extends StackPane {
 
     public Pair<Double, Double> portXY(Ports port) {
         Pos pos = null;
-        for(var p: portPositions) {
-            if(p.getValue() == port) pos = p.getKey();
-        }
+        for(var p: portPositions) if(p.getValue() == port) pos = p.getKey();
 
         double x = getCenterX();
         double y = getCenterY();
 
         switch(pos) {
-            case TOP_CENTER: y = getCenterY(); break;
-            case BOTTOM_CENTER: y = getCenterY()+rectangle.getHeight()/2; break;
-            case CENTER_LEFT: x = getCenterX(); break;
-            case CENTER_RIGHT: x = getCenterX()+rectangle.getWidth()/2;
+            case TOP_CENTER:
+                y = getCenterY()-rectangle.getHeight()/2;
+                break;
+            case BOTTOM_CENTER:
+                y = getCenterY()+rectangle.getHeight()/2;
+                break;
+            case CENTER_LEFT:
+                x = getCenterX()-rectangle.getWidth()/2;
+                break;
+            case CENTER_RIGHT:
+                x = getCenterX()+rectangle.getWidth()/2;
+                break;
             case TOP_RIGHT:
                 x = getCenterX()+rectangle.getWidth()/2;
                 y = getCenterY()-rectangle.getHeight()/2;
@@ -92,17 +98,13 @@ public class GroovyNode extends StackPane {
             case BOTTOM_RIGHT:
                 x = getCenterX()+rectangle.getWidth()/2;
                 y = getCenterY()+rectangle.getHeight()/2;
-                break;
         }
         return new Pair<>(x, y);
     }
 
-    public double getX() { return getLayoutX() + getTranslateX(); }
-    public double getY() { return getLayoutY() + getTranslateY(); }
-    public double getCenterX() { return getX() + rectangle.getWidth()/2; }
-    public double getCenterY() { return getY() + rectangle.getHeight()/2; }
+    public double getCenterX() { return getLayoutX() + getTranslateX() + rectangle.getWidth()/2; }
+    public double getCenterY() { return getLayoutY() + getTranslateY() + rectangle.getHeight()/2; }
 
-    // Helper method for updating the position when the GroovyNode is dragged
     public void updateLocations() {
         for(var port : connectedNodes.keySet()) {
             Line l = connectedNodes.get(port).getValue();
