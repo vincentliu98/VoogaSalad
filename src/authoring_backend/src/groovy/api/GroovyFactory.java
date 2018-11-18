@@ -60,9 +60,7 @@ public class GroovyFactory {
     }
 
     public UnaryBlock unaryBlock(String op) { return new UnaryBlock(op); }
-
     public InfixBinaryBlock binaryBlock(String op) { return new InfixBinaryBlock(op); }
-
     // We'll eventually remove this
     public RawGroovyBlock rawBlock(String code) { return new RawGroovyBlock(code); }
 }

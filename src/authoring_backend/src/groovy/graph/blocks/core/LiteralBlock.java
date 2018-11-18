@@ -34,5 +34,5 @@ public class LiteralBlock extends SimpleNode implements GroovyBlock<LiteralBlock
     public Set<Ports> ports() { return Set.of(); }
 
     @Override
-    public String name() { return type; }
+    public String name() { return type + ": " + value; }
 }
