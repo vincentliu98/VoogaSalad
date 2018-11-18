@@ -4,6 +4,7 @@ import api.SubView;
 import authoringInterface.sidebar.treeItemEntries.EditTreeItem;
 import authoringInterface.sidebar.treeItemEntries.Entity;
 import authoringInterface.sidebar.treeItemEntries.TreeItemType;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
@@ -28,6 +29,7 @@ public abstract class AbstractObjectEditor<T extends EditTreeItem> implements Ob
     protected boolean isApplied;
     protected TreeItem<String> treeItem;
     protected Map<String, EditTreeItem> objectMap;
+    protected Map<Node, EditTreeItem> nodeToObjectMap;
 
     public AbstractObjectEditor() {
         rootPane = new AnchorPane();
@@ -96,5 +98,14 @@ public abstract class AbstractObjectEditor<T extends EditTreeItem> implements Ob
     @Override
     public void registerObjectMap(Map<String, EditTreeItem> map) {
         objectMap = map;
+    }
+
+    /**
+     * Register the node to Object map.
+     *
+     * @param map
+     */
+    public void registerNodeToObjectMap(Map<Node, EditTreeItem> map) {
+        nodeToObjectMap = map;
     }
 }

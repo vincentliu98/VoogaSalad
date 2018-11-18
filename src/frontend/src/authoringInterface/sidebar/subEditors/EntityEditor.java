@@ -27,7 +27,7 @@ import java.io.File;
 public class EntityEditor extends AbstractObjectEditor<Entity> {
     private Text imageText;
     private Button chooseImage;
-    private VBox imageBox;
+    private ImageView preview;
     private Entity entity;
 
     public EntityEditor() {
@@ -36,16 +36,18 @@ public class EntityEditor extends AbstractObjectEditor<Entity> {
         inputText.setText("Your entity name:");
         imageText = new Text("Choose an image for your entity");
         chooseImage = new Button("Choose sprite");
+        preview = new ImageView();
         chooseImage.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
             File file = fileChooser.showOpenDialog(new Stage());
             if (file != null) {
                 Image sprite = new Image(file.toURI().toString());
                 entity.setSprite(sprite);
-                imageBox.getChildren().add(new ImageView(sprite));
+                preview.setImage(sprite);
+                preview.setFitHeight(50);
+                preview.setFitWidth(50);
             }
         });
-        imageBox = new VBox();
         confirm.setOnAction(e -> {
             if (nameField.getText().trim().isEmpty()) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -66,11 +68,12 @@ public class EntityEditor extends AbstractObjectEditor<Entity> {
                     entity.setId(id);
                     objectMap.put(newItem.getValue(), entity);
                     treeItem.getChildren().add(newItem);
+                } else if (nodeToObjectMap != null) {
                 }
             }
         });
         setupLayout();
-        rootPane.getChildren().addAll(imageText, chooseImage, imageBox);
+        rootPane.getChildren().addAll(imageText, chooseImage, preview);
     }
 
     private void setupLayout() {
@@ -78,9 +81,8 @@ public class EntityEditor extends AbstractObjectEditor<Entity> {
         imageText.setLayoutY(176);
         chooseImage.setLayoutX(261);
         chooseImage.setLayoutY(158);
-        imageBox.setPrefSize(164, 171);
-        imageBox.setLayoutX(37);
-        imageBox.setLayoutY(206);
+        preview.setLayoutX(37);
+        preview.setLayoutY(206);
     }
 
     /**
@@ -92,7 +94,7 @@ public class EntityEditor extends AbstractObjectEditor<Entity> {
     public void readObject(Entity userObject) {
         entity = userObject;
         nameField.setText(entity.getName());
-        imageBox.getChildren().set(0, new ImageView(entity.getSprite()));
+        preview.setImage(entity.getSprite());
     }
 
     /**

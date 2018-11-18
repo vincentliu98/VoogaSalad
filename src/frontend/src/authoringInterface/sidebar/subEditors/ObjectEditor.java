@@ -48,4 +48,13 @@ public interface ObjectEditor<T extends EditTreeItem> {
      * @param map
      */
     void registerObjectMap(Map<String, EditTreeItem> map);
+
+    /**
+     * Register the node to Object map.
+     *
+     * @param map
+     */
+    void registerNodeToObjectMap(Map<Node, EditTreeItem> map);
+
+
 }
