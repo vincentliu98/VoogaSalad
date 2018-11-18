@@ -4,14 +4,22 @@ import api.SubView;
 import javafx.scene.layout.BorderPane;
 
 public class LauncherWindow implements SubView<BorderPane> {
-    BorderPane myPane;
+    public static final double TOP_HEIGHT = 65;
+    public static final double SIDE_WIDTH = 50;
+
+    private BorderPane myPane;
 
     public LauncherWindow(){
         myPane = new BorderPane();
 
-        LauncherMenuBarView myBar = new LauncherMenuBarView(30);
+        //LauncherMenuBarView myBar = new LauncherMenuBarView(50);
+
+        LauncherTopBarView myBar = new LauncherTopBarView(TOP_HEIGHT);
+
+        LauncherSideBarView mySide = new LauncherSideBarView(SIDE_WIDTH);
 
         myPane.setTop(myBar.getView());
+        myPane.setLeft(mySide.getView());
     }
 
 
