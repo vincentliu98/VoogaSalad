@@ -38,7 +38,7 @@ public class NodeSettingWindow extends PopUpWindow {
     }
 
     @Override
-    protected void closeWindow() {
+    public void closeWindow() {
         dialog.close();
     }
 

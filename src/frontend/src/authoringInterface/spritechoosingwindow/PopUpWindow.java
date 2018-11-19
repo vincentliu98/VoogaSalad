@@ -22,5 +22,5 @@ public abstract class PopUpWindow {
 
     abstract public void showWindow();
 
-    abstract protected void closeWindow();
+    abstract public void closeWindow();
 }

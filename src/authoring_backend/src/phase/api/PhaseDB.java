@@ -50,7 +50,7 @@ public class PhaseDB {
     }
 
     public Transition createTransition(Phase from, GameEvent trigger, Phase to) {
-        return new TransitionImpl(from, trigger, to, factory.createGuard());
+        return new TransitionImpl(from, trigger, to, factory.createGraph());
     }
 
     public List<PhaseGraph> phases() { return phaseGraphs; }

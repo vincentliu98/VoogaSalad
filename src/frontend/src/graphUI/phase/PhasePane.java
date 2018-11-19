@@ -2,6 +2,8 @@ package graphUI.phase;
 
 import authoringInterface.spritechoosingwindow.PopUpWindow;
 import graphUI.phase.PhaseNodeFactory.PhaseNode;
+import graphUI.phase.TransitionLineFactory.TransitionLine;
+import groovy.api.GroovyFactory;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
@@ -22,6 +24,8 @@ import phase.api.PhaseGraph;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Playground for testing graph function
@@ -34,8 +38,8 @@ import java.util.Set;
 public class PhasePane extends PopUpWindow {
     public static final Double WIDTH = 1200.0;
     public static final Double HEIGHT = 800.0;
-    public static final Double ICON_WIDTH = 30.;
-    public static final Double ICON_HEIGHT = 30.;
+    public static final Double ICON_WIDTH = 100.0;
+    public static final Double ICON_HEIGHT = 100.0;
 
     private enum DRAG_PURPOSE {
         NOTHING,
@@ -56,6 +60,7 @@ public class PhasePane extends PopUpWindow {
     private double newNodeY;
     private PhaseDB phaseDB;
     private PhaseNodeFactory factory;
+    private TransitionLineFactory trFactory;
 
     private Set<TransitionLine> lines;
     private Set<PhaseNode> nodes;
@@ -67,10 +72,13 @@ public class PhasePane extends PopUpWindow {
     private PhaseNode edgeFrom;
     private Line tmpLine;
 
-    public PhasePane(Stage primaryStage, PhaseDB phaseDB) {
+    public PhasePane(Stage primaryStage, PhaseDB phaseDB, GroovyFactory groovyFactory) {
         super(primaryStage);
         this.phaseDB = phaseDB;
-        factory = new PhaseNodeFactory(phaseDB);
+        factory = new PhaseNodeFactory(primaryStage, phaseDB, groovyFactory);
+        trFactory = new TransitionLineFactory(
+            primaryStage, groovyFactory, group.getChildren()::add, group.getChildren()::remove
+        );
 
         while(name.equals("")) {
             TextInputDialog dialog = new TextInputDialog("");
@@ -94,10 +102,10 @@ public class PhasePane extends PopUpWindow {
         selectedNode = new SimpleObjectProperty<>();
 
         selectedEdge.addListener((e, o, n) -> {
-            if(o != null && lines.contains(o)) o.setStroke(Color.BLACK);
+            if(o != null && lines.contains(o)) o.setColor(Color.BLACK);
             if(n != null) {
                 if(selectedNode.get() != null) selectedNode.set(null);
-                n.setStroke(Color.RED);
+                n.setColor(Color.RED);
             }
         });
 
@@ -135,7 +143,7 @@ public class PhasePane extends PopUpWindow {
      *  We do not close the window; instead, we just hide it and show it when a button is clicked
      */
     @Override
-    protected void closeWindow() { dialog.hide(); }
+    public void closeWindow() { dialog.hide(); }
 
     private void initializeUI() {
         root.setPrefWidth(WIDTH);
@@ -157,9 +165,11 @@ public class PhasePane extends PopUpWindow {
         var vbox = new VBox();
 
         vbox.setSpacing(10);
-        vbox.getChildren().add(draggableGroovyIcon(
-            new Image(this.getClass().getClassLoader().getResourceAsStream("phaseNode.png"))
-        ));
+        var nodeImg = new Image(
+            this.getClass().getClassLoader().getResourceAsStream("phaseNode.png"),
+            ICON_WIDTH, ICON_HEIGHT, true, true
+        );
+        vbox.getChildren().add(draggableGroovyIcon(nodeImg));
 
         itemBox.setContent(vbox);
         itemBox.setMinHeight(HEIGHT);
@@ -167,8 +177,6 @@ public class PhasePane extends PopUpWindow {
 
     private ImageView draggableGroovyIcon(Image icon) {
         var view = new ImageView(icon);
-        view.setFitWidth(ICON_WIDTH);
-        view.setFitHeight(ICON_HEIGHT);
         view.setOnMouseEntered(e -> myScene.setCursor(Cursor.HAND));
         view.setOnMouseExited(e -> myScene.setCursor(Cursor.DEFAULT));
         view.setOnDragDetected(event -> {
@@ -214,7 +222,7 @@ public class PhasePane extends PopUpWindow {
 
     private void deleteSelected() {
         if(selectedEdge.get() != null) {
-            group.getChildren().remove(selectedEdge.get());
+            selectedEdge.get().removeFromScreen();
             lines.remove(selectedEdge.get());
             graph.removeEdge(phaseDB.createTransition(
                 selectedEdge.get().start().model(), selectedEdge.get().trigger(), null
@@ -226,7 +234,7 @@ public class PhasePane extends PopUpWindow {
             for(var l : lines) {
                 if(l.start() == selectedNode.get() || l.end() == selectedNode.get()) {
                     toRemove.add(l);
-                    group.getChildren().remove(l);
+                    l.removeFromScreen();
                 }
             } // remove lines connected from or to that node
             lines.removeAll(toRemove);
@@ -241,28 +249,38 @@ public class PhasePane extends PopUpWindow {
         var col1 = new ColumnConstraints();
         col1.setPercentWidth(15);
         var col2 = new ColumnConstraints();
-        col2.setPercentWidth(60);
-        var col3 = new ColumnConstraints();
-        col3.setPercentWidth(25);
-        root.getColumnConstraints().addAll(col1, col2, col3);
+        col2.setPercentWidth(85);
+        root.getColumnConstraints().addAll(col1, col2);
     }
 
     private void connectNodes(PhaseNode node1, GameEvent event, PhaseNode node2) {
-        if(node1 == node2) return;
         try {
-            var edgeLine = new TransitionLine(
+            var cnts = lines.stream()
+                 .filter(p -> p.start() == node1 && p.end() == node2)
+                 .map(TransitionLine::cnt)
+                 .collect(Collectors.toSet());
+
+            var edgeLine = trFactory.gen(
                 node1.getCenterX(), node1.getCenterY(), node2.getCenterX(), node2.getCenterY(),
-                node1, event, node2, group.getChildren()::add
+                Stream.iterate(0, x -> x+1).dropWhile(cnts::contains).findFirst().get(),
+                node1, event, node2
             );
             edgeLine.setStrokeWidth(3);
             edgeLine.setOnMouseEntered(e -> myScene.setCursor(Cursor.HAND));
             edgeLine.setOnMouseExited(e -> myScene.setCursor(Cursor.DEFAULT));
-            edgeLine.setOnMouseClicked(e -> selectedEdge.set(edgeLine));
+            edgeLine.setOnMouseClicked(e -> {
+                if(e.getClickCount() == 1) selectedEdge.set(edgeLine);
+                else selectedEdge.get().showGraph();
+            });
+            edgeLine.label().setOnMouseEntered(e -> myScene.setCursor(Cursor.HAND));
+            edgeLine.label().setOnMouseExited(e -> myScene.setCursor(Cursor.DEFAULT));
+            edgeLine.label().setOnMouseClicked(e -> {
+                if(e.getClickCount() == 1) selectedEdge.set(edgeLine);
+                else selectedEdge.get().showGraph();
+            });
 
             graph.addEdge(phaseDB.createTransition(node1.model(), event, node2.model()));
             lines.add(edgeLine);
-
-            group.getChildren().addAll(edgeLine);
             edgeLine.toBack();
         } catch (Throwable t) { displayError(t.toString());}
     }
@@ -277,7 +295,10 @@ public class PhasePane extends PopUpWindow {
             node.setOnMouseReleased(this::nodeMouseReleasedHandler);
             node.inner().setOnMouseEntered(e -> myScene.setCursor(Cursor.MOVE));
             node.inner().setOnMouseExited(e -> myScene.setCursor(Cursor.DEFAULT));
-            node.setOnMouseClicked(e -> selectedNode.set(node));
+            node.setOnMouseClicked(e -> {
+                if(e.getClickCount() == 1) selectedNode.set(node);
+                else node.showGraph();
+            });
             group.getChildren().add(node);
         } catch (Throwable throwable) {
             throwable.printStackTrace();
@@ -296,7 +317,7 @@ public class PhasePane extends PopUpWindow {
         } else if(node.contains(t.getX(), t.getY())) {
             draggingPurpose = DRAG_PURPOSE.CONNECT_LINE;
             edgeFrom = node;
-            tmpLine = new Line(node.getCenterX(), node.getCenterY(), node.getCenterX(), node.getCenterY());
+            tmpLine = new Line(node.getX()+t.getX(), node.getY()+t.getY(), node.getX()+t.getX(), node.getY()+t.getY());
             tmpLine.setStrokeWidth(3);
             tmpLine.getStrokeDashArray().addAll(20d, 20d);
             group.getChildren().add(tmpLine);
@@ -307,7 +328,9 @@ public class PhasePane extends PopUpWindow {
         if(draggingPurpose == DRAG_PURPOSE.CONNECT_LINE) {
             for (var n : nodes) {
                 if(n.localToScreen(n.getBoundsInLocal()).contains(t.getScreenX(), t.getScreenY())) {
-                    connectNodes(edgeFrom, GameEvent.mouseClick(), n); // TODO
+                    if(edgeFrom == n) continue;
+                    var res = new EventTriggerDialog().showAndWait();
+                    res.ifPresent(gameEvent -> connectNodes(edgeFrom, gameEvent, n));
                     break;
                 }
             } group.getChildren().remove(tmpLine);
@@ -330,8 +353,8 @@ public class PhasePane extends PopUpWindow {
 
             updateLocations(node);
         } else if(draggingPurpose == DRAG_PURPOSE.CONNECT_LINE) {
-            tmpLine.setEndX(edgeFrom.getCenterX()+offsetX);
-            tmpLine.setEndY(edgeFrom.getCenterY()+offsetY);
+            tmpLine.setEndX(tmpLine.getStartX()+offsetX);
+            tmpLine.setEndY(tmpLine.getStartY()+offsetY);
         }
     }
 

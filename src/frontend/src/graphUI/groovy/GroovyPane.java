@@ -130,7 +130,7 @@ public class GroovyPane extends PopUpWindow {
      *  We do not close the window; instead, we just hide it and show it when a button is clicked
      */
     @Override
-    protected void closeWindow() { dialog.hide(); }
+    public void closeWindow() { dialog.hide(); }
 
     private void initializeUI() {
         root.setPrefWidth(WIDTH);
