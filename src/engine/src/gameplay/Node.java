@@ -1,6 +1,8 @@
 package gameplay;
 
 import groovy.lang.GroovyShell;
+import javafx.scene.Group;
+
 import java.util.*;
 
 public class Node {
@@ -37,9 +39,9 @@ public class Node {
             groovyShell.setVariable("tagClass", Tag.class);
             groovyShell.setVariable("tileClass", Tile.class);
             groovyShell.setVariable("turnClass", Turn.class);
+            groovyShell.setVariable("groupClass", Group.class);
             groovyShell.evaluate(myExecution);
         } catch (Exception e){
-            System.out.println("this broke, node ID " + myID);
             e.printStackTrace();
         }
     }

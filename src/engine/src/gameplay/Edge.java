@@ -1,6 +1,8 @@
 package gameplay;
 
 import groovy.lang.GroovyShell;
+import javafx.scene.Group;
+
 import java.util.List;
 
 public class Edge implements ArgumentListener {
@@ -33,10 +35,11 @@ public class Edge implements ArgumentListener {
             groovyShell.setVariable("tagClass", Tag.class);
             groovyShell.setVariable("tileClass", Tile.class);
             groovyShell.setVariable("turnClass", Turn.class);
+            groovyShell.setVariable("groupClass", Group.class);
             groovyShell.evaluate(myGuard);
             return (boolean) groovyShell.getVariable("answer");
         } catch (Exception e){
-            System.out.println("Script exception in Edge");
+            e.printStackTrace();
         }
         return false;
     }

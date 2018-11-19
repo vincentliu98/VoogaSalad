@@ -2,6 +2,7 @@ package gameplay;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import javafx.scene.Group;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,12 +16,13 @@ public class GameData {
     private static Map<Integer, Node> NODES;
     private static Map<Integer, Edge> EDGES;
     private static Turn TURN;
+    private static Group ROOT;
     private static List<Tag> myArguments;
     private static List<ArgumentListener> myArgumentListeners;
 
     public static void setGameData(Map<Integer, Player> players, Map<Integer, Entity> entities,
                                    Map<Integer, Tile> tiles, Map<Integer, Phase> phases, Map<Integer, Node> nodes,
-                                   Map<Integer, Edge> edges, Turn turn){
+                                   Map<Integer, Edge> edges, Turn turn, Group root){
         PLAYERS = players;
         ENTITIES = entities;
         TILES = tiles;
@@ -28,6 +30,7 @@ public class GameData {
         NODES = nodes;
         EDGES = edges;
         TURN = turn;
+        ROOT = root;
         myArguments = new ArrayList<>();
         myArgumentListeners = new ArrayList<>();
     }
@@ -66,9 +69,15 @@ public class GameData {
 
     public static Turn getTurn(){ return TURN; }
 
+    public static Group getRoot() { return ROOT; }
+
     public static void addArgument(Tag tag){
         myArguments.add(tag);
         notifyArgumentListeners();
+    }
+
+    public static int getNextEntityID(){
+        return ENTITIES.size() + 1;
     }
 
     public static void clearArguments(){

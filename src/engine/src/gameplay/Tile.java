@@ -3,6 +3,7 @@ package gameplay;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -36,9 +37,10 @@ public class Tile {
         this.myImageView = null;
     }
 
-    public void addEntity(int entityID){
+    public void addEntity(int entityID, Group root){
         myEntities.add(entityID);
-        GameData.getEntity(entityID).setLocation(myImageView.getX(), myImageView.getY());
+        GameData.getEntity(entityID).setLocation(myXCoord, myYCoord);
+        root.getChildren().add(GameData.getEntity(entityID).getImageView());
     }
 
     public void setImagePath(String imagePath) {
@@ -54,10 +56,8 @@ public class Tile {
             myImageView.setX(myXCoord);
             myImageView.setY(myYCoord);
             myImageView.setOnMouseClicked(event -> {
-                System.out.println("handle called by Entity of id " + myID);
                 GameData.addArgument(new Tag(Tile.class, myID));
             });
-            System.out.println("added handler for id " + myID);
         }
     }
 

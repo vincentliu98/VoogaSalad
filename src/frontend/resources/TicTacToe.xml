@@ -135,17 +135,18 @@
         <myExecution>
             Object turn = turnClass.cast(gameDataClass.getMethod(&quot;getTurn&quot;, null).invoke(null, null));
             String filepath = (turnClass.cast(turn)).getCurrentPlayerID() == 1 ? &quot;x.png&quot; :&quot;circle.png&quot;;
-            Object entity = entityClass.getConstructor(int.class).newInstance((Collections.max(((Map&lt;Integer, entityClass&gt;) gameDataClass.getMethod(&quot;getEntities&quot;, null).invoke(null, null)).keySet()) + 1));
+            Object entity = entityClass.getConstructor(int.class).newInstance(Integer.class.cast(gameDataClass.getMethod("getNextEntityID", null).invoke(null, null)));
             entityClass.cast(entity).setImagePath(filepath);
             entityClass.cast(entity).setPlayer(turnClass.cast(turn).getCurrentPlayerID());
-            (playerClass.cast(gameDataClass.getMethod(&quot;getPlayer&quot;, int.class)).invoke(null, (turnClass.cast(turn)).getCurrentPlayerID())).addEntity(entity.getID());
+            playerClass.cast(gameDataClass.getMethod(&quot;getPlayer&quot;, int.class).invoke(null, (turnClass.cast(turn)).getCurrentPlayerID())).addEntity(entity.getID());
             gameDataClass.getMethod(&quot;addEntity&quot;, entityClass).invoke(null, entity);
-            Object tile = tileClass.cast(gameDataClass.getMethod(&quot;getTile&quot;, int.class).invoke(null, tagClass.cast(gameDataClass.getMethod(&quot;getArguments&quot;, null).invoke(null, null)).get(0)).getID());
-            (tileClass.cast(tile)).addEntity(entity.getID());
+            Object tile = tileClass.cast(gameDataClass.getMethod(&quot;getTile&quot;, int.class).invoke(null, tagClass.cast(gameDataClass.getMethod(&quot;getArguments&quot;, null).invoke(null, null).get(0)).getID()));
+            tileClass.cast(tile).addEntity(entity.getID(), groupClass.cast(gameDataClass.getMethod(&quot;getRoot&quot;, null).invoke(null, null)));
             int nextPlayerID = (turnClass.cast(turn)).getCurrentPlayerID() == 1 ? 2 : 1;
             (turnClass.cast(turn)).setPlayer(nextPlayerID);
             gameDataClass.getMethod(&quot;clearArguments&quot;, null).invoke(null, null);
-            (turnClass.cast(turn)).startPhase();</myExecution>
+            (turnClass.cast(turn)).startPhase();
+        </myExecution>
         <myOutgoingEdgeIDs/>
     </gameplay.Node>
     <gameplay.Edge>
