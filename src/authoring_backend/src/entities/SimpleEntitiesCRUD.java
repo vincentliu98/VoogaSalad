@@ -54,6 +54,7 @@ public class SimpleEntitiesCRUD implements EntitiesCRUDInterface {
                 myIdManager.returnTileInstanceIdFunc(),
                 addTileInstanceToMapFunc(),
                 getTileInstancesFunc());
+
         myIdManager.requestClassIdFunc().accept(newTileClass);
         tileClassMap.put(name, newTileClass);
         return newTileClass;
@@ -165,6 +166,8 @@ public class SimpleEntitiesCRUD implements EntitiesCRUDInterface {
 
     @Override
     public String toXML() {
+
+        // TODO??
         return null;
     }
 
