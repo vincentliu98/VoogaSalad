@@ -18,33 +18,40 @@ import java.util.Set;
  */
 public class PhaseDB {
     private Set<String> namespace;
-    private List<PhaseGraph> phases;
+    private Set<String> phaseNamespace;
+    private List<PhaseGraph> phaseGraphs;
     private GroovyFactory factory;
 
     public PhaseDB(GroovyFactory factory) {
         this.namespace = new HashSet<>();
-        phases = new ArrayList<>();
+        this.phaseNamespace = new HashSet<>();
+        phaseGraphs = new ArrayList<>();
         this.factory = factory;
     }
 
     public Try<PhaseGraph> createGraph(String name) {
+        var trySource = createPhase(name);
         if(namespace.add(name)) {
-            var graph = new PhaseGraphImpl(name, createPhase(), namespace::add);
-            phases.add(graph);
-            return Try.success(graph);
+            Try<PhaseGraph> graph = trySource.map(s -> new PhaseGraphImpl(name, s, namespace::add));
+            graph.forEach(phaseGraphs::add);
+            return graph;
         } else return Try.failure(new NamespaceException(name));
     }
 
     public void removeGraph(PhaseGraph graph) {
         namespace.remove(graph.name());
-        phases.remove(graph);
+        phaseGraphs.remove(graph);
     }
 
-    public Phase createPhase() { return new PhaseImpl(factory.createGraph()); }
+    public Try<Phase> createPhase(String name) {
+        if (phaseNamespace.add(name)) {
+            return Try.success(new PhaseImpl(factory.createGraph(), name));
+        } else return Try.failure(new NamespaceException(name));
+    }
 
     public Transition createTransition(Phase from, GameEvent trigger, Phase to) {
         return new TransitionImpl(from, trigger, to, factory.createGuard());
     }
 
-    public List<PhaseGraph> phases() { return phases; }
+    public List<PhaseGraph> phases() { return phaseGraphs; }
 }

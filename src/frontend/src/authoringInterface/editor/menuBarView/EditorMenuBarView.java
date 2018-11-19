@@ -10,9 +10,6 @@ import authoringInterface.editor.memento.EditorCaretaker;
 import authoringInterface.editor.menuBarView.subMenuBarView.LoadFileView;
 import authoringInterface.editor.menuBarView.subMenuBarView.NewWindowView;
 import graphUI.groovy.GroovyPane;
-import graphUI.phase.GraphPane;
-import javafx.beans.Observable;
-import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
@@ -75,7 +72,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         runProject.setOnAction(this::handleRunProject);
         helpDoc.setOnAction(this::handleHelpDoc);
         about.setOnAction(this::handleAbout);
-        graph.setOnAction(this::handleGraph);
+//        graph.setOnAction(this::handleGraph);
         groovyGraph.setOnAction(this::handleGroovyGraph);
 
         file.getItems().addAll(newFile, open, save, saveAs, close);
@@ -89,7 +86,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
     private void handleGroovyGraph(ActionEvent actionEvent) {
         new GroovyPane(new Stage(), authTools.factory());
     }
-    private void handleGraph(ActionEvent e) { new GraphPane(new Stage()); }
+//    private void handleGraph(ActionEvent e) { new PhasePane(new Stage()); }
 
     void handleOpen(ActionEvent event) {
         new LoadFileView();
