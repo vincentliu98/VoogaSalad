@@ -1,9 +1,6 @@
 package graphUI.groovy;
 
 import authoringInterface.spritechoosingwindow.PopUpWindow;
-import graphUI.groovy.factory.GroovyNode;
-import graphUI.groovy.factory.GroovyNodeFactory;
-import graphUI.groovy.factory.IconLoader;
 import groovy.api.BlockGraph;
 import groovy.api.GroovyFactory;
 import groovy.api.Ports;

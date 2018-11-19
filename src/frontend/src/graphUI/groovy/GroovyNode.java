@@ -1,4 +1,4 @@
-package graphUI.groovy.factory;
+package graphUI.groovy;
 
 import groovy.api.Ports;
 import groovy.graph.blocks.core.GroovyBlock;
