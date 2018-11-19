@@ -40,8 +40,8 @@ public class SerializerForEngine {
             writer.startNode("phases");
             nodes.forEach(n -> {
                 writer.startNode("phase");
-                writer.startNode("id");
-                writer.setValue(n.id().toString());
+                writer.startNode("name");
+                writer.setValue(n.name());
                 writer.endNode();
                 writer.startNode("exec");
                 writer.setValue(n.exec().transformToGroovy().get(""));
@@ -55,11 +55,11 @@ public class SerializerForEngine {
                 writer.startNode("createTransition");
 
                 writer.startNode("from");
-                writer.setValue(e.from().id().toString());
+                writer.setValue(e.from().name());
                 writer.endNode();
 
                 writer.startNode("to");
-                writer.setValue(e.to().id().toString());
+                writer.setValue(e.to().name());
                 writer.endNode();
 
                 writer.startNode("trigger");

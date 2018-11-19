@@ -1,17 +1,16 @@
-package graphUI.groovy;
+package graphUI.phase;
 
 import authoringInterface.spritechoosingwindow.PopUpWindow;
-import graphUI.groovy.factory.GroovyNode;
-import graphUI.groovy.factory.GroovyNodeFactory;
-import graphUI.groovy.factory.IconLoader;
-import groovy.api.BlockGraph;
+import graphUI.phase.PhaseNodeFactory.PhaseNode;
+import graphUI.phase.TransitionLineFactory.TransitionLine;
 import groovy.api.GroovyFactory;
-import groovy.api.Ports;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
@@ -19,10 +18,14 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
-import javafx.util.Pair;
+import phase.api.GameEvent;
+import phase.api.PhaseDB;
+import phase.api.PhaseGraph;
 
-import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Playground for testing graph function
@@ -32,11 +35,11 @@ import java.util.concurrent.atomic.AtomicReference;
  * @author jl729
  */
 
-public class GroovyPane extends PopUpWindow {
+public class PhasePane extends PopUpWindow {
     public static final Double WIDTH = 1200.0;
     public static final Double HEIGHT = 800.0;
-    public static final Double ICON_WIDTH = 30.;
-    public static final Double ICON_HEIGHT = 30.;
+    public static final Double ICON_WIDTH = 100.0;
+    public static final Double ICON_HEIGHT = 100.0;
 
     private enum DRAG_PURPOSE {
         NOTHING,
@@ -55,44 +58,54 @@ public class GroovyPane extends PopUpWindow {
     private Scene myScene;
     private double newNodeX;
     private double newNodeY;
-    private GroovyNodeFactory nodeFactory;
-    private GroovyFactory factory;
+    private PhaseDB phaseDB;
+    private PhaseNodeFactory factory;
+    private TransitionLineFactory trFactory;
 
-    private Map<Pair<GroovyNode, Ports>, Pair<GroovyNode, Line>> lines;
-    private Set<GroovyNode> nodes;
+    private Set<TransitionLine> lines;
+    private Set<PhaseNode> nodes;
+    private SimpleObjectProperty<TransitionLine> selectedEdge;
+    private SimpleObjectProperty<PhaseNode> selectedNode;
 
-    private BlockGraph graph;
-    private String currentDragType;
-    private boolean currentFetchArg;
-    private Pair<GroovyNode, Ports> edgeFrom;
+    private String name = "";
+    private PhaseGraph graph;
+    private PhaseNode edgeFrom;
     private Line tmpLine;
 
-    private TextArea codePane = new TextArea();
-
-    private SimpleObjectProperty<Pair<GroovyNode, Ports>> selectedEdge;
-    private SimpleObjectProperty<GroovyNode> selectedNode;
-
-    public GroovyPane(Stage primaryStage, GroovyFactory factory) {
+    public PhasePane(Stage primaryStage, PhaseDB phaseDB, GroovyFactory groovyFactory) {
         super(primaryStage);
-        this.nodeFactory = new GroovyNodeFactory(factory);
-        this.factory = factory;
-        graph = factory.createGraph();
+        this.phaseDB = phaseDB;
+        factory = new PhaseNodeFactory(primaryStage, phaseDB, groovyFactory);
+        trFactory = new TransitionLineFactory(
+            primaryStage, groovyFactory, group.getChildren()::add, group.getChildren()::remove
+        );
 
-        codePane.setEditable(false);
-        codePane.setWrapText(true);
+        while(name.equals("")) {
+            TextInputDialog dialog = new TextInputDialog("");
+            dialog.setContentText("Please enter the name of this phase graph:");
+            dialog.showAndWait().ifPresent(name -> {
+                var tryGraph = phaseDB.createGraph(name);
+                if(tryGraph.isSuccess()) {
+                    try {
+                        graph = tryGraph.get();
+                        this.name = name;
+                    } catch (Throwable ignored) { }
+                }
+            });
+        }
 
-        lines = new HashMap<>();
+        lines = new HashSet<>();
         nodes = new HashSet<>();
-        createNode(nodeFactory.source(graph.source(), 100, 50));
+        createNode(factory.source(graph.source(), 100, 50));
 
         selectedEdge = new SimpleObjectProperty<>();
         selectedNode = new SimpleObjectProperty<>();
 
         selectedEdge.addListener((e, o, n) -> {
-            if(o != null && lines.get(o) != null) lines.get(o).getValue().setStroke(Color.BLACK);
+            if(o != null && lines.contains(o)) o.setColor(Color.BLACK);
             if(n != null) {
                 if(selectedNode.get() != null) selectedNode.set(null);
-                lines.get(n).getValue().setStroke(Color.RED);
+                n.setColor(Color.RED);
             }
         });
 
@@ -145,32 +158,36 @@ public class GroovyPane extends PopUpWindow {
         var graphBoxWrapper = new ScrollPane();
         graphBoxWrapper.setContent(graphBox);
         root.add(graphBoxWrapper, 1, 0);
-        root.add(codePane, 2, 0);
-
         myScene = new Scene(root, WIDTH, HEIGHT);
     }
 
     private void initializeItemBox() {
         var vbox = new VBox();
 
-        vbox.getChildren().addAll(
-            IconLoader.loadControls(img -> type -> fetchArg -> draggableGroovyIcon(img, type, fetchArg))
-        );
-        vbox.getChildren().addAll(
-            IconLoader.loadBinaries(img -> type -> fetchArg -> draggableGroovyIcon(img, type, fetchArg))
-        );
-        vbox.getChildren().addAll(
-            IconLoader.loadLiterals(img -> type -> fetchArg -> draggableGroovyIcon(img, type, fetchArg))
-        );
-        vbox.getChildren().addAll(
-            IconLoader.loadUnaries(img -> type -> fetchArg -> draggableGroovyIcon(img, type, fetchArg))
-        );
-
         vbox.setSpacing(10);
-        vbox.getChildren().forEach(c -> { if(c instanceof HBox) ((HBox) c).setSpacing(5); });
+        var nodeImg = new Image(
+            this.getClass().getClassLoader().getResourceAsStream("phaseNode.png"),
+            ICON_WIDTH, ICON_HEIGHT, true, true
+        );
+        vbox.getChildren().add(draggableGroovyIcon(nodeImg));
 
         itemBox.setContent(vbox);
         itemBox.setMinHeight(HEIGHT);
+    }
+
+    private ImageView draggableGroovyIcon(Image icon) {
+        var view = new ImageView(icon);
+        view.setOnMouseEntered(e -> myScene.setCursor(Cursor.HAND));
+        view.setOnMouseExited(e -> myScene.setCursor(Cursor.DEFAULT));
+        view.setOnDragDetected(event -> {
+            Dragboard db = view.startDragAndDrop(TransferMode.ANY);
+            ClipboardContent content = new ClipboardContent();
+            content.putImage(icon);
+            db.setContent(content);
+            event.consume();
+        });
+
+        return view;
     }
 
     private void setupGraphbox() {
@@ -193,13 +210,10 @@ public class GroovyPane extends PopUpWindow {
         if (db.hasImage()) {
             success = true;
             try {
-                String arg = "";
-                if(currentFetchArg) {
-                    var dialog = new TextInputDialog();
-                    dialog.setHeaderText("Type the parameter to initialize " + currentDragType);
-                    arg = dialog.showAndWait().get();
-                }
-                createNode(nodeFactory.toModel(currentDragType, newNodeX, newNodeY, arg).get());
+                var dialog = new TextInputDialog();
+                dialog.setHeaderText("Name of the phase");
+                String name = dialog.showAndWait().get();
+                createNode(factory.gen(newNodeX, newNodeY, name).get());
             } catch (Throwable t) { displayError(t.toString()); }
         }
         event.setDropCompleted(success);
@@ -208,82 +222,70 @@ public class GroovyPane extends PopUpWindow {
 
     private void deleteSelected() {
         if(selectedEdge.get() != null) {
-            var line = lines.get(selectedEdge.get()).getValue();
-            group.getChildren().remove(line);
+            selectedEdge.get().removeFromScreen();
             lines.remove(selectedEdge.get());
-            graph.removeEdge(factory.createEdge(
-                selectedEdge.get().getKey().model(), selectedEdge.get().getValue(), null
+            graph.removeEdge(phaseDB.createTransition(
+                selectedEdge.get().start().model(), selectedEdge.get().trigger(), null
             ));
         }
         if(selectedNode.get() != null && selectedNode.get().model() != graph.source()) {
             nodes.remove(selectedNode.get());
-            var toRemove = new HashSet<Pair<GroovyNode, Ports>>();
-            for(var p : lines.keySet()) {
-                var line = lines.get(p).getValue();
-                var target = lines.get(p).getKey();
-                if(p.getKey() == selectedNode.get() || target == selectedNode.get()) {
-                    toRemove.add(p);
-                    group.getChildren().remove(line);
+            var toRemove = new HashSet<TransitionLine>();
+            for(var l : lines) {
+                if(l.start() == selectedNode.get() || l.end() == selectedNode.get()) {
+                    toRemove.add(l);
+                    l.removeFromScreen();
                 }
             } // remove lines connected from or to that node
-            lines.keySet().removeAll(toRemove);
+            lines.removeAll(toRemove);
 
             group.getChildren().remove(selectedNode.get());
             graph.removeNode(selectedNode.get().model());
         }
-        updateCodePane();
     }
 
-
-    private ImageView draggableGroovyIcon(Image icon, String blockType, boolean fetchArg) {
-        var view = new ImageView(icon);
-        view.setFitWidth(ICON_WIDTH);
-        view.setFitHeight(ICON_HEIGHT);
-        view.setOnMouseEntered(e -> myScene.setCursor(Cursor.HAND));
-        view.setOnMouseExited(e -> myScene.setCursor(Cursor.DEFAULT));
-        view.setOnDragDetected(event -> {
-            Dragboard db = view.startDragAndDrop(TransferMode.ANY);
-            ClipboardContent content = new ClipboardContent();
-            content.putImage(icon);
-            db.setContent(content);
-            currentDragType = blockType;
-            currentFetchArg = fetchArg;
-            event.consume();
-        });
-
-        return view;
-    }
 
     private void initializeGridPane() {
         var col1 = new ColumnConstraints();
         col1.setPercentWidth(15);
         var col2 = new ColumnConstraints();
-        col2.setPercentWidth(60);
-        var col3 = new ColumnConstraints();
-        col3.setPercentWidth(25);
-        root.getColumnConstraints().addAll(col1, col2, col3);
+        col2.setPercentWidth(85);
+        root.getColumnConstraints().addAll(col1, col2);
     }
 
-    private void connectNodes(GroovyNode node1, Ports port, GroovyNode node2) {
-        if(node1 == node2) return;
+    private void connectNodes(PhaseNode node1, GameEvent event, PhaseNode node2) {
         try {
-            var p = node1.portXY(port);
-            Line edgeLine = new Line(p.getKey(), p.getValue(), node2.getCenterX(), node2.getCenterY());
+            var cnts = lines.stream()
+                 .filter(p -> p.start() == node1 && p.end() == node2)
+                 .map(TransitionLine::cnt)
+                 .collect(Collectors.toSet());
+
+            var edgeLine = trFactory.gen(
+                node1.getCenterX(), node1.getCenterY(), node2.getCenterX(), node2.getCenterY(),
+                Stream.iterate(0, x -> x+1).dropWhile(cnts::contains).findFirst().get(),
+                node1, event, node2
+            );
             edgeLine.setStrokeWidth(3);
             edgeLine.setOnMouseEntered(e -> myScene.setCursor(Cursor.HAND));
             edgeLine.setOnMouseExited(e -> myScene.setCursor(Cursor.DEFAULT));
-            edgeLine.setOnMouseClicked(e -> selectedEdge.set(new Pair<>(node1, port)));
+            edgeLine.setOnMouseClicked(e -> {
+                if(e.getClickCount() == 1) selectedEdge.set(edgeLine);
+                else selectedEdge.get().showGraph();
+            });
+            edgeLine.label().setOnMouseEntered(e -> myScene.setCursor(Cursor.HAND));
+            edgeLine.label().setOnMouseExited(e -> myScene.setCursor(Cursor.DEFAULT));
+            edgeLine.label().setOnMouseClicked(e -> {
+                if(e.getClickCount() == 1) selectedEdge.set(edgeLine);
+                else selectedEdge.get().showGraph();
+            });
 
-            graph.addEdge(factory.createEdge(node1.model(), port, node2.model()));
-            lines.put(new Pair<>(node1, port), new Pair<>(node2, edgeLine));
-
-            group.getChildren().addAll(edgeLine);
+            graph.addEdge(phaseDB.createTransition(node1.model(), event, node2.model()));
+            lines.add(edgeLine);
             edgeLine.toBack();
-            updateCodePane();
         } catch (Throwable t) { displayError(t.toString());}
     }
 
-    private void createNode(GroovyNode node) {
+    private void createNode(PhaseNode node) {
         try {
             graph.addNode(node.model());
             nodes.add(node);
@@ -295,17 +297,16 @@ public class GroovyPane extends PopUpWindow {
             node.inner().setOnMouseExited(e -> myScene.setCursor(Cursor.DEFAULT));
             node.setOnMouseClicked(e -> {
                 if(e.getClickCount() == 1) selectedNode.set(node);
-                else if(e.getClickCount() >= 2) new NodeSettingWindow(new Stage());
+                else node.showGraph();
             });
             group.getChildren().add(node);
-            updateCodePane();
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
     }
 
     private void nodeMousePressedHandler(MouseEvent t) {
-        GroovyNode node = (GroovyNode) t.getSource();
+        PhaseNode node = (PhaseNode) t.getSource();
 
         orgSceneX = t.getSceneX();
         orgSceneY = t.getSceneY();
@@ -314,16 +315,12 @@ public class GroovyPane extends PopUpWindow {
             orgTranslateX = node.getTranslateX();
             orgTranslateY = node.getTranslateY();
         } else if(node.contains(t.getX(), t.getY())) {
-            var p = node.findPortNear(t.getX(), t.getY());
-            if(p != null) {
-                draggingPurpose = DRAG_PURPOSE.CONNECT_LINE;
-                edgeFrom = new Pair<>(node, p);
-                var xy = node.portXY(p);
-                tmpLine = new Line(xy.getKey(), xy.getValue(), xy.getKey(), xy.getValue());
-                tmpLine.setStrokeWidth(3);
-                tmpLine.getStrokeDashArray().addAll(20d, 20d);
-                group.getChildren().add(tmpLine);
-            }
+            draggingPurpose = DRAG_PURPOSE.CONNECT_LINE;
+            edgeFrom = node;
+            tmpLine = new Line(node.getX()+t.getX(), node.getY()+t.getY(), node.getX()+t.getX(), node.getY()+t.getY());
+            tmpLine.setStrokeWidth(3);
+            tmpLine.getStrokeDashArray().addAll(20d, 20d);
+            group.getChildren().add(tmpLine);
         }
     }
 
@@ -331,7 +328,9 @@ public class GroovyPane extends PopUpWindow {
         if(draggingPurpose == DRAG_PURPOSE.CONNECT_LINE) {
             for (var n : nodes) {
                 if(n.localToScreen(n.getBoundsInLocal()).contains(t.getScreenX(), t.getScreenY())) {
-                    connectNodes(edgeFrom.getKey(), edgeFrom.getValue(), n);
+                    if(edgeFrom == n) continue;
+                    var res = new EventTriggerDialog().showAndWait();
+                    res.ifPresent(gameEvent -> connectNodes(edgeFrom, gameEvent, n));
                     break;
                 }
             } group.getChildren().remove(tmpLine);
@@ -347,16 +346,15 @@ public class GroovyPane extends PopUpWindow {
             double newTranslateX = orgTranslateX + offsetX;
             double newTranslateY = orgTranslateY + offsetY;
 
-            GroovyNode node = (GroovyNode) t.getSource();
+            PhaseNode node = (PhaseNode) t.getSource();
 
             node.setTranslateX(newTranslateX);
             node.setTranslateY(newTranslateY);
 
             updateLocations(node);
         } else if(draggingPurpose == DRAG_PURPOSE.CONNECT_LINE) {
-            var xy = edgeFrom.getKey().portXY(edgeFrom.getValue());
-            tmpLine.setEndX(xy.getKey()+offsetX);
-            tmpLine.setEndY(xy.getValue()+offsetY);
+            tmpLine.setEndX(tmpLine.getStartX()+offsetX);
+            tmpLine.setEndY(tmpLine.getStartY()+offsetY);
         }
     }
 
@@ -369,34 +367,17 @@ public class GroovyPane extends PopUpWindow {
     }
 
 
-    private void updateLocations(GroovyNode n) {
-        for(var p : lines.keySet()) {
-            var from = p.getKey();
-            var port = p.getValue();
-            var tmp = lines.get(p);
-            if(tmp != null) {
-                var to = tmp.getKey();
-                var line = tmp.getValue();
-
-                if (to == n || from == n) {
-                    var portXY = from.portXY(port);
-                    line.setStartX(portXY.getKey());
-                    line.setStartY(portXY.getValue());
-
-                    line.setEndX(to.getCenterX());
-                    line.setEndY(to.getCenterY());
-                }
+    private void updateLocations(PhaseNode n) {
+        for(var l : lines) {
+            if (l.start() == n) {
+                l.setStartX(n.getCenterX());
+                l.setStartY(n.getCenterY());
+            }
+            if(l.end() == n) {
+                l.setEndX(n.getCenterX());
+                l.setEndY(n.getCenterY());
             }
         }
-    }
-
-    private void updateCodePane() {
-        try {
-            codePane.setText(graph.transformToGroovy().get());
-        } catch(Throwable t) {
-            codePane.setText(t.toString());
-        }
-
     }
 }
 
