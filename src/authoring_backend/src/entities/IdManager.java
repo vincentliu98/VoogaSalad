@@ -3,15 +3,26 @@ package entities;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public interface IdManager {
 
-    Consumer<SimpleIntegerProperty> requestClassIdFunc();
+    Consumer<EntityClass> requestClassIdFunc();
 
-    Consumer<SimpleIntegerProperty> requestInstanceIdFunc();
+    Consumer<EntityInstance> requestTileInstanceIdFunc();
 
-    void returnClassIdFunc(Supplier<ReadOnlyIntegerProperty> s);
+    Consumer<EntityInstance> requestSpriteInstanceIdFunc();
 
-    void returnInstanceIdFunc(Supplier<ReadOnlyIntegerProperty> s);
+    Consumer<EntityClass> returnClassIdFunc();
+
+    Consumer<EntityInstance> returnTileInstanceIdFunc();
+
+    Consumer<EntityInstance> returnSpriteInstanceIdFunc();
+
+    Function<Integer, Boolean> verifyClassIdFunc();
+
+    Function<Integer, Boolean> verifyTileInstanceIdFunc();
+
+    Function<Integer, Boolean> verifySpriteInstanceIdFunc();
 }

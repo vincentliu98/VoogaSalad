@@ -21,6 +21,11 @@ public class PhaseGraphImpl extends SimpleGraph<Phase, Transition> implements Ph
     }
 
     @Override
+    public void removeEdge(Transition e) {
+        get(e.from()).removeIf(t -> t.trigger() == e.trigger());
+    }
+
+    @Override
     public String name() { return name; }
 
     @Override

@@ -8,5 +8,5 @@ module frontend {
     requires engine;
 
     exports authoringInterface;
-    exports graphUI;
+//    exports graphUI;
 }

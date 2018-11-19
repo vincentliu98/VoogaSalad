@@ -8,6 +8,7 @@ import authoringInterface.editor.editView.EditView;
 import authoringInterface.editor.menuBarView.EditorMenuBarView;
 import authoringInterface.sidebar.SideView;
 import authoringInterface.sidebar.SideViewInterface;
+import graphUI.groovy.GroovyPaneFactory;
 import javafx.scene.Node;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
@@ -28,6 +29,7 @@ public class View implements ParentView<SubView>, DraggingCanvas {
     private AnchorPane rootPane;
     private EditorMenuBarView menuBar;
     private SideViewInterface sideView;
+    private GroovyPaneFactory groovyPaneFactory;
     private EditView editView;
     private Stage primaryStage;
     private AuthoringTools tools;
@@ -36,7 +38,6 @@ public class View implements ParentView<SubView>, DraggingCanvas {
     public static final double GAME_WIDTH = 700;
     public static final double GAME_HEIGHT = 500;
 
-
     /**
      * Constructor for an createGraph window, with an AnchorPane as the root Node, and the AnchorPane constraints on top, left and right are 0.
      */
@@ -44,6 +45,7 @@ public class View implements ParentView<SubView>, DraggingCanvas {
         this.primaryStage = primaryStage;
         rootPane = new AnchorPane();
         tools = new AuthoringTools();
+        groovyPaneFactory = new GroovyPaneFactory(primaryStage, tools.factory());
 
         initializeElements();
         setElements();
@@ -52,7 +54,7 @@ public class View implements ParentView<SubView>, DraggingCanvas {
     }
 
     private void initializeElements() {
-        menuBar = new EditorMenuBarView(tools);
+        menuBar = new EditorMenuBarView(tools, groovyPaneFactory, primaryStage::close);
         sideView = new SideView();
         editView = new EditView(sideView);
     }

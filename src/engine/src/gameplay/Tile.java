@@ -19,7 +19,7 @@ public class Tile {
     private double myYCoord;
     private String myImagePath;
     private List<Integer> myEntities;
-    private String myImageSelector; // Groovy code
+    private String myImageSelector; // Groovy codee
     private List<String> myImages;
     @XStreamOmitField
     private transient ImageView myImageView;

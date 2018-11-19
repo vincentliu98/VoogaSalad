@@ -9,7 +9,7 @@ import groovy.graph.blocks.core.GroovyBlock;
  *
  */
 public class Bumper {
-    public static BlockEdge typeCheck(BlockEdge e, BlockGraph graph) throws Exception {
+    public static BlockEdge typeCheck(BlockEdge e, BlockGraph graph) {
         return e; // TODO but what are obviously not valid?
     }
 
