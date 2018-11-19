@@ -1,26 +1,24 @@
 package graphUI.phase;
 
-import graphUI.groovy.GroovyPane;
-import groovy.api.GroovyFactory;
+import graphUI.groovy.GroovyPaneFactory.GroovyPane;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
-import javafx.stage.Stage;
 import phase.api.Phase;
 import phase.api.PhaseDB;
 import utils.Try;
 
+import java.util.function.Supplier;
+
 public class PhaseNodeFactory {
     private PhaseDB db;
-    private GroovyFactory factory;
-    private Stage primaryStage;
+    private Supplier<GroovyPane> genGroovyPane;
 
-    public PhaseNodeFactory(Stage primaryStage, PhaseDB db, GroovyFactory factory) {
-        this.primaryStage = primaryStage;
+    public PhaseNodeFactory(PhaseDB db, Supplier<GroovyPane> genGroovyPane) {
         this.db = db;
-        this.factory = factory;
+        this.genGroovyPane = genGroovyPane;
     }
 
     public PhaseNode source(Phase phase, double xPos, double yPos) { return new PhaseNode(xPos, yPos, phase, true); }
@@ -57,7 +55,7 @@ public class PhaseNodeFactory {
             inner.toFront();
             text.toFront();
             text.setMouseTransparent(true);
-            groovyPane = new GroovyPane(primaryStage, factory);
+            groovyPane = genGroovyPane.get();
             groovyPane.closeWindow();
 
             layout();

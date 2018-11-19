@@ -1,31 +1,28 @@
 package graphUI.phase;
 
-import graphUI.groovy.GroovyPane;
-import groovy.api.GroovyFactory;
+import graphUI.groovy.GroovyPaneFactory;
+import graphUI.groovy.GroovyPaneFactory.GroovyPane;
+import graphUI.phase.PhaseNodeFactory.PhaseNode;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import phase.api.GameEvent;
-import graphUI.phase.PhaseNodeFactory.PhaseNode;
 
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class TransitionLineFactory {
-    private Stage primaryStage;
-    private GroovyFactory factory;
+    private Supplier<GroovyPane> genGroovyPane;
     private Consumer<Node> removeFromScreen;
     private Consumer<Node> addToScreen;
 
     public TransitionLineFactory(
-        Stage primaryStage,
-        GroovyFactory factory,
+        Supplier<GroovyPane> genGroovyPane,
         Consumer<Node> addToScreen,
         Consumer<Node> removeFromScreen
     ) {
-        this.primaryStage = primaryStage;
-        this.factory = factory;
+        this.genGroovyPane = genGroovyPane;
         this.removeFromScreen = removeFromScreen;
         this.addToScreen = addToScreen;
     }
@@ -71,7 +68,7 @@ public class TransitionLineFactory {
             repositionLabel();
             repositionArrow();
 
-            groovyPane = new GroovyPane(primaryStage, factory);
+            groovyPane = genGroovyPane.get();
             groovyPane.closeWindow();
 
             startXProperty().addListener((e, o, n) -> update());

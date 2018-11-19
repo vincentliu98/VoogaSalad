@@ -9,7 +9,8 @@ import authoringInterface.editor.memento.Editor;
 import authoringInterface.editor.memento.EditorCaretaker;
 import authoringInterface.editor.menuBarView.subMenuBarView.LoadFileView;
 import authoringInterface.editor.menuBarView.subMenuBarView.NewWindowView;
-import graphUI.groovy.GroovyPane;
+import graphUI.groovy.GroovyPaneFactory;
+import graphUI.groovy.GroovyPaneFactory.GroovyPane;
 import graphUI.phase.PhasePane;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
@@ -21,19 +22,22 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
 import runningGame.GameWindow;
+
 public class EditorMenuBarView implements SubView<MenuBar> {
 
     private MenuBar menuBar;
     private GameWindow gameWindow;
     private AuthoringTools authTools;
+    private GroovyPaneFactory groovyPaneFactory; // hmm it's probably temporary
 
     private final EditorCaretaker editorCaretaker = new EditorCaretaker();
     private final Editor editor = new Editor();
     private Integer currentMemento = 0;
     private Runnable closeWindow;
 
-    public EditorMenuBarView(AuthoringTools authTools, Runnable closeWindow) {
+    public EditorMenuBarView(AuthoringTools authTools, GroovyPaneFactory groovyPaneFactory, Runnable closeWindow) {
         this.authTools = authTools;
+        this.groovyPaneFactory = groovyPaneFactory;
         editor.setState(authTools.globalData());
 
         this.closeWindow = closeWindow;
@@ -81,7 +85,14 @@ public class EditorMenuBarView implements SubView<MenuBar> {
 
         menuBar.getMenus().addAll(file, edit, tools, run, help);
     }
-    private void handleGraph(ActionEvent e) { new PhasePane(new Stage(), authTools.phaseDB(), authTools.factory()); }
+    private void handleGraph(ActionEvent e) {
+        var newStage = new Stage();
+        new PhasePane(
+            newStage,
+            authTools.phaseDB(),
+            groovyPaneFactory.withStage(newStage)::gen
+        );
+    }
 
     void handleOpen(ActionEvent event) {
         new LoadFileView();

@@ -1,9 +1,9 @@
 package graphUI.phase;
 
 import authoringInterface.spritechoosingwindow.PopUpWindow;
+import graphUI.groovy.GroovyPaneFactory.GroovyPane;
 import graphUI.phase.PhaseNodeFactory.PhaseNode;
 import graphUI.phase.TransitionLineFactory.TransitionLine;
-import groovy.api.GroovyFactory;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
@@ -24,6 +24,7 @@ import phase.api.PhaseGraph;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -72,13 +73,11 @@ public class PhasePane extends PopUpWindow {
     private PhaseNode edgeFrom;
     private Line tmpLine;
 
-    public PhasePane(Stage primaryStage, PhaseDB phaseDB, GroovyFactory groovyFactory) {
+    public PhasePane(Stage primaryStage, PhaseDB phaseDB, Supplier<GroovyPane> genGroovyPane) {
         super(primaryStage);
         this.phaseDB = phaseDB;
-        factory = new PhaseNodeFactory(primaryStage, phaseDB, groovyFactory);
-        trFactory = new TransitionLineFactory(
-            primaryStage, groovyFactory, group.getChildren()::add, group.getChildren()::remove
-        );
+        factory = new PhaseNodeFactory(phaseDB, genGroovyPane);
+        trFactory = new TransitionLineFactory(genGroovyPane, group.getChildren()::add, group.getChildren()::remove);
 
         while(name.equals("")) {
             TextInputDialog dialog = new TextInputDialog("");
