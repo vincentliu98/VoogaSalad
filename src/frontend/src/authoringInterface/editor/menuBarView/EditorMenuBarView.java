@@ -9,6 +9,7 @@ import authoringInterface.editor.memento.Editor;
 import authoringInterface.editor.memento.EditorCaretaker;
 import authoringInterface.editor.menuBarView.subMenuBarView.LoadFileView;
 import authoringInterface.editor.menuBarView.subMenuBarView.NewWindowView;
+import authoringInterface.editor.menuBarView.subMenuBarView.SaveFileView;
 import graphUI.groovy.GroovyPane;
 import graphUI.phase.GraphPane;
 import javafx.beans.Observable;
@@ -101,6 +102,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         editor.setState(editorCaretaker.getMemento(currentMemento++).getSavedState());
     }
     void handleSaveAs(ActionEvent event) {
+        new SaveFileView();
         handleSave(event);
         // TODO: 11/17/18 add a fileChooser and allow user to save
     }
