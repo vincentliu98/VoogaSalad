@@ -96,7 +96,6 @@ public class EditorMenuBarView implements SubView<MenuBar> {
     void handleSaveAs(ActionEvent event) {
         new SaveFileView();
         handleSave(event);
-        // TODO: 11/17/18 add a fileChooser and allow user to save
     }
     void handleUndo(ActionEvent event) {
         editor.restoreToState(editorCaretaker.getMemento(--currentMemento));
