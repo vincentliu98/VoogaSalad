@@ -68,6 +68,7 @@ public class Entity implements EventHandler {
 
     @Override
     public void handle(Event event) {
+        System.out.println("handle called by Entity of id " + myID);
         GameData.addArgument(new Tag(Entity.class, myID));
     }
 }

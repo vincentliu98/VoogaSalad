@@ -1,12 +1,7 @@
 package gameplay;
 
-import javafx.event.Event;
-
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
+import groovy.lang.GroovyShell;
 import java.util.List;
-
 
 public class Edge implements ArgumentListener {
     private int myID;
@@ -25,25 +20,25 @@ public class Edge implements ArgumentListener {
     }
 
     private boolean checkValidity(List<Tag> arguments){
-        ScriptEngine engine = new ScriptEngineManager().getEngineByName("groovy");
-        engine.put("arguments", arguments);
-        engine.put("GameData", new GameData());
         try{
-            engine.eval(myGuard);
-            return (boolean) engine.get("answer");
-        } catch (ScriptException e){
+            GroovyShell groovyShell = new GroovyShell();
+            groovyShell.setVariable("arguments", arguments);
+            groovyShell.setVariable("gameDataClass", GameData.class);
+            groovyShell.setVariable("edgeClass", Edge.class);
+            groovyShell.setVariable("argListenerClass", ArgumentListener.class);
+            groovyShell.setVariable("entityClass", Entity.class);
+            groovyShell.setVariable("nodeClass", Node.class);
+            groovyShell.setVariable("phaseClass", Phase.class);
+            groovyShell.setVariable("playerClass", Player.class);
+            groovyShell.setVariable("tagClass", Tag.class);
+            groovyShell.setVariable("tileClass", Tile.class);
+            groovyShell.setVariable("turnClass", Turn.class);
+            groovyShell.evaluate(myGuard);
+            return (boolean) groovyShell.getVariable("answer");
+        } catch (Exception e){
             System.out.println("Script exception in Edge");
         }
         return false;
-        // execute Groovy guard, returns true if valid
-        // include check for size, type, etc.
-        /* PERFORM SOMETHING LIKE THIS:
-            if (tag.getType().equals(Entity.class)){
-                return GameData.getEntity(tag.getID());
-            } else { // Tile.class
-                return GameData.getEntity(tag.getID());
-            }
-         */
     }
 
     public int getID(){

@@ -5,11 +5,12 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Tile implements EventHandler {
+public class Tile {
     private int myID;
     private int myWidth;
     private int myHeight;
@@ -52,6 +53,11 @@ public class Tile implements EventHandler {
             myImageView.setFitWidth(100); // TODO: delete later
             myImageView.setX(myXCoord);
             myImageView.setY(myYCoord);
+            myImageView.setOnMouseClicked(event -> {
+                System.out.println("handle called by Entity of id " + myID);
+                GameData.addArgument(new Tag(Tile.class, myID));
+            });
+            System.out.println("added handler for id " + myID);
         }
     }
 
@@ -69,11 +75,6 @@ public class Tile implements EventHandler {
 
     public int getID(){
         return myID;
-    }
-
-    @Override
-    public void handle(Event event) {
-        GameData.addArgument(new Tag(Tile.class, myID));
     }
 
     /*
