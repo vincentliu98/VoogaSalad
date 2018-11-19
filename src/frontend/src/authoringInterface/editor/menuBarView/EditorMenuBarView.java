@@ -11,9 +11,7 @@ import authoringInterface.editor.menuBarView.subMenuBarView.LoadFileView;
 import authoringInterface.editor.menuBarView.subMenuBarView.NewWindowView;
 import authoringInterface.editor.menuBarView.subMenuBarView.SaveFileView;
 import graphUI.groovy.GroovyPane;
-import graphUI.phase.GraphPane;
-import javafx.beans.Observable;
-import javafx.collections.ObservableMap;
+import graphUI.phase.PhasePane;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
@@ -61,7 +59,6 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         MenuItem helpDoc = new MenuItem("Help");
         MenuItem about = new MenuItem("About");
         MenuItem graph = new MenuItem("Graph");
-        MenuItem groovyGraph = new MenuItem("GroovyGraph");
 
         save.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
         newFile.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN));
@@ -77,20 +74,15 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         helpDoc.setOnAction(this::handleHelpDoc);
         about.setOnAction(this::handleAbout);
         graph.setOnAction(this::handleGraph);
-        groovyGraph.setOnAction(this::handleGroovyGraph);
 
         file.getItems().addAll(newFile, open, save, saveAs, close);
-        edit.getItems().addAll(undo, redo, graph, groovyGraph);
+        edit.getItems().addAll(undo, redo, graph);
         run.getItems().addAll(runProject);
         help.getItems().addAll(helpDoc, about);
 
         menuBar.getMenus().addAll(file, edit, tools, run, help);
     }
-
-    private void handleGroovyGraph(ActionEvent actionEvent) {
-        new GroovyPane(new Stage(), authTools.factory());
-    }
-    private void handleGraph(ActionEvent e) { new GraphPane(new Stage()); }
+    private void handleGraph(ActionEvent e) { new PhasePane(new Stage(), authTools.phaseDB(), authTools.factory()); }
 
     void handleOpen(ActionEvent event) {
         new LoadFileView();

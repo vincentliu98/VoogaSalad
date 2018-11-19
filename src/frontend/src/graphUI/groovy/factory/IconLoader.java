@@ -7,11 +7,15 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Properties;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class IconLoader {
     private static final int ICONS_IN_ROW = 5;
@@ -20,38 +24,41 @@ public class IconLoader {
         String category,
         Function<Image, Function<String, Function<Boolean, ImageView>>> draggableIcon
     ) {
-        try {
-            var ret = new ArrayList<Node>();
-            ret.add(new Text(category));
-            ret.add(new Separator());
-            var props = new Properties();
-            props.load(IconLoader.class.getClassLoader().getResourceAsStream(category+".properties"));
-            var it = props.keys();
-            var lst = new ArrayList<Node>();
-            while(it.hasMoreElements()) {
-                if(lst.size() < ICONS_IN_ROW) {
-                    var key = it.nextElement().toString();
-                    var val = Boolean.parseBoolean(props.get(key).toString());
-                    lst.add(draggableIcon.apply(new Image(
-                        IconLoader.class.getClassLoader().getResourceAsStream(key + ".png"))).apply(key).apply(val));
-                } else {
-                    var hbox = new HBox();
-                    lst.forEach(n -> hbox.getChildren().add(n));
-                    ret.add(hbox);
-                    lst.clear();
-                }
+        var ret = new ArrayList<Node>();
+        ret.add(new Text(category));
+        ret.add(new Separator());
+        var reader = new BufferedReader(
+            new InputStreamReader(
+                IconLoader.class.getClassLoader().getResourceAsStream(category + ".properties")
+            )
+        );
+        var map = new LinkedHashMap<String, String>();
+        for (var line : reader.lines().collect(Collectors.toList())) {
+            if (line.contains("=")) {
+                var s = line.split("=");
+                map.put(s[0], s[1]);
             }
-            if(lst.size() > 0) {
+        }
+
+        var lst = new ArrayList<Node>();
+        for (var key : map.keySet()) {
+            if (lst.size() == ICONS_IN_ROW) {
                 var hbox = new HBox();
                 lst.forEach(n -> hbox.getChildren().add(n));
                 ret.add(hbox);
                 lst.clear();
             }
-            return ret;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return List.of();
+            var val = Boolean.parseBoolean(map.get(key));
+            lst.add(draggableIcon.apply(new Image(
+                IconLoader.class.getClassLoader().getResourceAsStream(key + ".png"))).apply(key).apply(val));
         }
+        if (lst.size() > 0) {
+            var hbox = new HBox();
+            lst.forEach(n -> hbox.getChildren().add(n));
+            ret.add(hbox);
+            lst.clear();
+        }
+        return ret;
     }
 
     public static List<Node> loadControls(
