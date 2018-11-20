@@ -33,19 +33,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * EditScrollView Class (ScrollPane)
+ * EditGridView Class (ScrollPane)
  *      - Representation of the game's grid setting
  *      - It should support Zoom in and zoom out
  *
  * @author Amy Kim, Haotian Wang
  */
-public class EditScrollView implements SubView<ScrollPane>, DraggingCanvas {
+public class EditGridView implements SubView<ScrollPane>, DraggingCanvas {
     private GridPane gridScrollView;
     private ScrollPane scrollPane;
     private SideViewInterface sideView;
     private Map<Node, EditTreeItem> nodeToObjectMap;
 
-    public EditScrollView(SideViewInterface sideView) {
+    public EditGridView(SideViewInterface sideView) {
         this.sideView = sideView;
         scrollPane = new ScrollPane();
         nodeToObjectMap = new HashMap<>();
