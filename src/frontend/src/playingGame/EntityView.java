@@ -65,7 +65,10 @@ public class EntityView implements Viewable, PropertyChangeListener {
 
     @Override
     public void changeImage(String path) {
-        myImage.setImage(new Image(path));
+        //System.out.println("Imagepath is " + path);
+        //Image image = new Image(getClass().getResourceAsStream("/Users/jonathannakagawa/Desktop/Stuff/CompSci308/voogasalad_printstacktrace/src/frontend/resources/square.png"));
+        Image image = new Image("square.png");
+        myImage.setImage(image);
     }
 
     @Override

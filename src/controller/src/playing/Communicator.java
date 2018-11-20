@@ -21,13 +21,13 @@ public class Communicator implements Communicable {
         EntityView nwEntity = new EntityView();
         if(tag.getType().equals(Tile.class)){
             Tile curTile = GameData.getTile(tag.getID());
-//            nwEntity.changeImage();
-//            nwEntity.changeCoordinates();
+            nwEntity.changeImage(curTile.getImagePath());
+            nwEntity.changeCoordinates(curTile.getXCoord(), curTile.getYCoord());
         }
         else {
             Entity curEntity = GameData.getEntity(tag.getID());
-//            nwEntity.changeImage();
-//            nwEntity.changeCoordinates();
+            nwEntity.changeImage(curEntity.getImagePath());
+            nwEntity.changeCoordinates(curEntity.getXCoord(), curEntity.getYCoord());
         }
         myDisplayData.addNewEntity(nwEntity);
     }
