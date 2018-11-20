@@ -1,25 +1,25 @@
 package gameplay;
 
-import java.util.Map;
-import java.util.Set;
+import groovy.lang.GroovyShell;
+import javafx.scene.Group;
+
+import java.util.*;
 
 public class Node {
-    private Phase myPhase;
+    private int myPhaseID;
     private int myID;
     private String myExecution; // Groovy code
-    private Map<Integer, Edge> myOutgoingEdges;
+    private Set<Integer> myOutgoingEdgeIDs;
 
-    public Node(Phase phase, int id, String execution){
-        this.myPhase = phase;
+    public Node(int phaseID, int id, String execution){
+        this.myPhaseID = phaseID;
         this.myID = id;
         this.myExecution = execution;
-        myOutgoingEdges = null;
+        myOutgoingEdgeIDs = new HashSet<>();
     }
 
-    public void setOutgoingEdges(Set<Edge> edges){
-        for (Edge e : edges){
-            myOutgoingEdges.put(e.getID(), e);
-        }
+    public void setOutgoingEdges(Set<Integer> edgeIDs){
+        myOutgoingEdgeIDs = edgeIDs;
     }
 
     public int getID(){
@@ -27,10 +27,22 @@ public class Node {
     }
 
     public void execute(){
-        int edgeID = 1; // TODO: Erase this from being a default val
-        // execute Groovy execution that defines which edge to execute (which ID)
-        // also must remember to shut off listener
-        myOutgoingEdges.get(edgeID).setListener();
+        try{
+            GroovyShell groovyShell = new GroovyShell();
+            groovyShell.setVariable("gameDataClass", GameData.class);
+            groovyShell.setVariable("edgeClass", Edge.class);
+            groovyShell.setVariable("argListenerClass", ArgumentListener.class);
+            groovyShell.setVariable("entityClass", Entity.class);
+            groovyShell.setVariable("nodeClass", Node.class);
+            groovyShell.setVariable("phaseClass", Phase.class);
+            groovyShell.setVariable("playerClass", Player.class);
+            groovyShell.setVariable("tagClass", Tag.class);
+            groovyShell.setVariable("tileClass", Tile.class);
+            groovyShell.setVariable("turnClass", Turn.class);
+            groovyShell.setVariable("groupClass", Group.class);
+            groovyShell.evaluate(myExecution);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
-
 }

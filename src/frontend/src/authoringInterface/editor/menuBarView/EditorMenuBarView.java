@@ -8,10 +8,10 @@ import authoringInterface.editor.menuBarView.subMenuBarView.CloseFileView;
 import authoringInterface.editor.memento.Editor;
 import authoringInterface.editor.memento.EditorCaretaker;
 import authoringInterface.editor.menuBarView.subMenuBarView.LoadFileView;
+import gameplay.Initializer;
 import authoringInterface.editor.menuBarView.subMenuBarView.NewWindowView;
 import authoringInterface.editor.menuBarView.subMenuBarView.SaveFileView;
 import graphUI.groovy.GroovyPaneFactory;
-import graphUI.groovy.GroovyPaneFactory.GroovyPane;
 import graphUI.phase.PhasePane;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
@@ -23,6 +23,7 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
 import runningGame.GameWindow;
+import java.io.File;
 
 public class EditorMenuBarView implements SubView<MenuBar> {
 
@@ -117,11 +118,18 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         Stage newWindow = new Stage();
         newWindow.setTitle("Your Game");
         gameWindow = new GameWindow();
-        Scene newScene = new Scene(gameWindow.getView(), View.GAME_WIDTH, View.GAME_HEIGHT);
-        newWindow.setScene(newScene);
-        newWindow.setX(MainAuthoringProgram.SCREEN_WIDTH*0.5 - View.GAME_WIDTH*0.5);
-        newWindow.setY(MainAuthoringProgram.SCREEN_HEIGHT*0.5 - View.GAME_HEIGHT*0.5);
-        newWindow.show();
+        try{
+            Initializer initializer = new Initializer(new File(getClass().getClassLoader().getResource("TicTacToe.xml").getFile()));
+            Scene newScene = new Scene(initializer.getRoot(), View.GAME_WIDTH, View.GAME_HEIGHT);
+            newWindow.setScene(newScene);
+            newWindow.setX(MainAuthoringProgram.SCREEN_WIDTH*0.5 - View.GAME_WIDTH*0.5);
+            newWindow.setY(MainAuthoringProgram.SCREEN_HEIGHT*0.5 - View.GAME_HEIGHT*0.5);
+            newWindow.show();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        //Scene newScene = new Scene(gameWindow.getView(), View.GAME_WIDTH, View.GAME_HEIGHT);
+
     }
     void handleHelpDoc(ActionEvent event) {}
     void handleAbout(ActionEvent event) {}

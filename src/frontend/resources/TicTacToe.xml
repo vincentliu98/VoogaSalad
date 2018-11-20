@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<game>
+    <gameplay.Player>
+        <myID>1</myID>
+        <myStats/>
+        <myEntityIDs/>
+    </gameplay.Player>
+    <gameplay.Player>
+        <myID>2</myID>
+        <myStats/>
+        <myEntityIDs/>
+    </gameplay.Player>
+    <gameplay.Tile>
+        <myID>1</myID>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myXCoord>0.0</myXCoord>
+        <myYCoord>0.0</myYCoord>
+        <myImagePath>square.png</myImagePath>
+        <myEntities/>
+        <myImageSelector></myImageSelector>
+        <myImages/>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>2</myID>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myXCoord>100.0</myXCoord>
+        <myYCoord>0.0</myYCoord>
+        <myImagePath>square.png</myImagePath>
+        <myEntities/>
+        <myImageSelector></myImageSelector>
+        <myImages/>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>3</myID>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myXCoord>200.0</myXCoord>
+        <myYCoord>0.0</myYCoord>
+        <myImagePath>square.png</myImagePath>
+        <myEntities/>
+        <myImageSelector></myImageSelector>
+        <myImages/>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>4</myID>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myXCoord>0.0</myXCoord>
+        <myYCoord>100.0</myYCoord>
+        <myImagePath>square.png</myImagePath>
+        <myEntities/>
+        <myImageSelector></myImageSelector>
+        <myImages/>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>5</myID>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myXCoord>100.0</myXCoord>
+        <myYCoord>100.0</myYCoord>
+        <myImagePath>square.png</myImagePath>
+        <myEntities/>
+        <myImageSelector></myImageSelector>
+        <myImages/>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>6</myID>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myXCoord>200.0</myXCoord>
+        <myYCoord>100.0</myYCoord>
+        <myImagePath>square.png</myImagePath>
+        <myEntities/>
+        <myImageSelector></myImageSelector>
+        <myImages/>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>7</myID>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myXCoord>0.0</myXCoord>
+        <myYCoord>200.0</myYCoord>
+        <myImagePath>square.png</myImagePath>
+        <myEntities/>
+        <myImageSelector></myImageSelector>
+        <myImages/>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>8</myID>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myXCoord>100.0</myXCoord>
+        <myYCoord>200.0</myYCoord>
+        <myImagePath>square.png</myImagePath>
+        <myEntities/>
+        <myImageSelector></myImageSelector>
+        <myImages/>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>9</myID>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myXCoord>200.0</myXCoord>
+        <myYCoord>200.0</myYCoord>
+        <myImagePath>square.png</myImagePath>
+        <myEntities/>
+        <myImageSelector></myImageSelector>
+        <myImages/>
+    </gameplay.Tile>
+    <gameplay.Phase>
+        <myID>1</myID>
+        <myStartNodeID>1</myStartNodeID>
+        <myCurrentNodeID>0</myCurrentNodeID>
+        <myNodeIDs>
+            <int>1</int>
+            <int>2</int>
+        </myNodeIDs>
+    </gameplay.Phase>
+    <gameplay.Node>
+        <myPhaseID>1</myPhaseID>
+        <myID>1</myID>
+        <myExecution>
+            gameDataClass.getMethod(&quot;clearArguments&quot;, null).invoke(null, null);
+            gameDataClass.getMethod(&quot;addArgumentListener&quot;, argListenerClass).invoke(null,
+            edgeClass.cast(gameDataClass.getMethod(&quot;getEdge&quot;, int.class).invoke(null, 1)));</myExecution>
+        <myOutgoingEdgeIDs>
+            <int>1</int>
+        </myOutgoingEdgeIDs>
+    </gameplay.Node>
+    <gameplay.Node>
+        <myPhaseID>1</myPhaseID>
+        <myID>2</myID>
+        <myExecution>
+            Object turn = turnClass.cast(gameDataClass.getMethod(&quot;getTurn&quot;, null).invoke(null, null));
+            String filepath = (turnClass.cast(turn)).getCurrentPlayerID() == 1 ? &quot;x.png&quot; :&quot;circle.png&quot;;
+            Object entity = entityClass.getConstructor(int.class).newInstance(Integer.class.cast(gameDataClass.getMethod("getNextEntityID", null).invoke(null, null)));
+            entityClass.cast(entity).setImagePath(filepath);
+            entityClass.cast(entity).setPlayer(turnClass.cast(turn).getCurrentPlayerID());
+            playerClass.cast(gameDataClass.getMethod(&quot;getPlayer&quot;, int.class).invoke(null, (turnClass.cast(turn)).getCurrentPlayerID())).addEntity(entity.getID());
+            gameDataClass.getMethod(&quot;addEntity&quot;, entityClass).invoke(null, entity);
+            Object tile = tileClass.cast(gameDataClass.getMethod(&quot;getTile&quot;, int.class).invoke(null, tagClass.cast(gameDataClass.getMethod(&quot;getArguments&quot;, null).invoke(null, null).get(0)).getID()));
+            tileClass.cast(tile).addEntity(entity.getID(), groupClass.cast(gameDataClass.getMethod(&quot;getRoot&quot;, null).invoke(null, null)));
+            int nextPlayerID = (turnClass.cast(turn)).getCurrentPlayerID() == 1 ? 2 : 1;
+            (turnClass.cast(turn)).setPlayer(nextPlayerID);
+            gameDataClass.getMethod(&quot;clearArguments&quot;, null).invoke(null, null);
+            (turnClass.cast(turn)).startPhase();
+        </myExecution>
+        <myOutgoingEdgeIDs/>
+    </gameplay.Node>
+    <gameplay.Edge>
+        <myID>1</myID>
+        <myPhaseID>1</myPhaseID>
+        <myStartNodeID>1</myStartNodeID>
+        <myEndNodeID>2</myEndNodeID>
+        <myGuard>if (arguments.size() != 1 || !arguments.get(0).getType().equals(tileClass)){
+            answer = false;
+            } else {
+            Object tile = tileClass.cast(gameDataClass.getMethod(&quot;getTile&quot;, int.class).invoke(null, arguments.get(0).getID()));
+            answer = tileClass.cast(tile).hasNoEntities();
+            }</myGuard>
+    </gameplay.Edge>
+    <gameplay.Turn>
+        <myCurrentPhaseID>1</myCurrentPhaseID>
+        <myCurrentPlayerID>1</myCurrentPlayerID>
+    </gameplay.Turn>
+</game>
