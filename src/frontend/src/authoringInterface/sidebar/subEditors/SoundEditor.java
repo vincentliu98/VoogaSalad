@@ -5,6 +5,11 @@ import authoringInterface.sidebar.treeItemEntries.EditTreeItem;
 import authoringInterface.sidebar.treeItemEntries.Sound;
 import javafx.scene.layout.AnchorPane;
 
+/**
+ * This class provides an editor for sound files used in the editor.
+ *
+ * @author Haotian Wang
+ */
 public class SoundEditor extends AbstractObjectEditor<Sound> {
     /**
      * This method returns the responsible JavaFx Node responsible to be added or deleted from other graphical elements.
