@@ -35,6 +35,18 @@ public class Entity implements EventHandler {
         this.myImagePath = imagePath;
     }
 
+    public String getImagePath(){
+        return myImagePath;
+    }
+
+    public double getXCoord(){
+        return myXCoord;
+    }
+
+    public double getYCoord(){
+        return myYCoord;
+    }
+
     public ImageView getImageView(){
         return myImageView;
     }

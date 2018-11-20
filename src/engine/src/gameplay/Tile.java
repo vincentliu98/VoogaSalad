@@ -43,6 +43,18 @@ public class Tile {
         root.getChildren().add(GameData.getEntity(entityID).getImageView());
     }
 
+    public String getImagePath(){
+        return myImagePath;
+    }
+
+    public double getXCoord(){
+        return myXCoord;
+    }
+
+    public double getYCoord(){
+        return myYCoord;
+    }
+
     public void setImagePath(String imagePath) {
         this.myImagePath = imagePath;
     }
