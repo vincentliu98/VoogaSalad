@@ -121,7 +121,10 @@ public class PhasePane implements SubView<GridPane> {
         });
 
         root.addEventFilter(KeyEvent.KEY_RELEASED, e -> {
-            if(e.getCode() == KeyCode.DELETE) deleteSelected();
+            if((e.getCode() == KeyCode.BACK_SPACE) || (e.getCode() == KeyCode.DELETE)) {
+                System.out.println("try to delete");
+                deleteSelected();
+            }
             if(e.getCode() == KeyCode.ESCAPE) {
                 selectedNode.set(null);
                 selectedEdge.set(null);
@@ -208,6 +211,7 @@ public class PhasePane implements SubView<GridPane> {
 
     private void deleteSelected() {
         if(selectedEdge.get() != null) {
+            System.out.print("try to delete");
             selectedEdge.get().removeFromScreen();
             lines.remove(selectedEdge.get());
             graph.removeEdge(phaseDB.createTransition(

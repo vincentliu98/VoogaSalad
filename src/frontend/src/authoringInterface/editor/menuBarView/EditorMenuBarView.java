@@ -38,7 +38,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
     private final EditorCaretaker editorCaretaker = new EditorCaretaker();
     private final Editor editor = new Editor();
     private Integer currentMemento = 0;
-    private Runnable closeWindow;
+    private Runnable closeWindow; //For each window closable
 
     public EditorMenuBarView(AuthoringTools authTools, Runnable closeWindow) {
         this.authTools = authTools;
@@ -65,7 +65,6 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         MenuItem runProject = new MenuItem("Run");
         MenuItem helpDoc = new MenuItem("Help");
         MenuItem about = new MenuItem("About");
-        MenuItem graph = new MenuItem("Graph");
 
         save.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
         newFile.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN));
@@ -82,7 +81,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         about.setOnAction(this::handleAbout);
 
         file.getItems().addAll(newFile, open, save, saveAs, close);
-        edit.getItems().addAll(undo, redo, graph);
+        edit.getItems().addAll(undo, redo);
         run.getItems().addAll(runProject);
         help.getItems().addAll(helpDoc, about);
 

@@ -49,6 +49,10 @@ public class EditView implements SubView<TabPane> {
     }
 
     private void initializeTab(){
+        Tab MainTab = new Tab("Main");
+        MainTab.setContent(new AddTabView().getView());
+        tabPane.getTabs().add(MainTab);
+
         Tab GridTab = new Tab("Grid");
         GridTab.setContent(new EditGridView(sideView).getView());
 
@@ -56,26 +60,15 @@ public class EditView implements SubView<TabPane> {
         EntityTab.setContent(new EditEntityView(sideView).getView());
 
         Tab PhaseTab = new Tab("Phase");
-//        PhaseTab.setContent(
-//                        new PhasePane(
-//                                authTools.phaseDB(),
-//                                groovyPaneFactory::gen)
-//                                .getView());
-        PhaseTab.setOnSelectionChanged(e -> {
-            while(!exist) {
-                PhaseTab.setContent(
-                        new PhasePane(
-                                authTools.phaseDB(),
-                                groovyPaneFactory::gen)
-                                .getView());
-                exist = true;
-            }
-        });
-
-
+        PhaseTab.setContent(
+                new PhasePane(
+                        authTools.phaseDB(),
+                        groovyPaneFactory::gen)
+                        .getView());
         Tab LevelTab = new Tab("Level");
 
         tabPane.getTabs().addAll(GridTab,EntityTab,PhaseTab, LevelTab);
+
     }
 
     /**
