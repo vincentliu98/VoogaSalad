@@ -5,6 +5,7 @@ module frontend {
     requires javafx.media;
 
     requires authoring_backend;
+    requires engine;
 
     requires org.codehaus.groovy; // should remove later
 

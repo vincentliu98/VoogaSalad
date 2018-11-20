@@ -1,40 +1,60 @@
 package gameplay;
 
-import javafx.event.Event;
+import groovy.lang.GroovyShell;
+import javafx.scene.Group;
 
-public class Edge {
+import java.util.List;
+
+public class Edge implements ArgumentListener {
     private int myID;
-    private Phase myPhase;
-    private Node myStartNode;
-    private Node myEndNode;
-    private Event myTrigger;
+    private int myPhaseID;
+    private int myStartNodeID;
+    private int myEndNodeID;
+    //private Event myTrigger;
     private String myGuard; // Groovy code
 
-    public Edge(Phase phase, int id, Node start, Node end, Event trigger, String guard) {
-        this.myPhase = phase;
+    public Edge(int phaseID, int id, int startNodeID, int endNodeID, String guard) {
+        this.myPhaseID = phaseID;
         this.myID = id;
-        this.myStartNode = start;
-        this.myEndNode = end;
-        this.myTrigger = trigger;
+        this.myStartNodeID = startNodeID;
+        this.myEndNodeID = endNodeID;
         this.myGuard = guard;
     }
 
-    public void setListener(){
-        // set listener based on myTrigger that calls validity and execution
-        if (checkValidity()){
-            myPhase.step(myEndNode);
-        } else {
-            setListener(); // start over again
+    private boolean checkValidity(List<Tag> arguments){
+        try{
+            GroovyShell groovyShell = new GroovyShell();
+            groovyShell.setVariable("arguments", arguments);
+            groovyShell.setVariable("gameDataClass", GameData.class);
+            groovyShell.setVariable("edgeClass", Edge.class);
+            groovyShell.setVariable("argListenerClass", ArgumentListener.class);
+            groovyShell.setVariable("entityClass", Entity.class);
+            groovyShell.setVariable("nodeClass", Node.class);
+            groovyShell.setVariable("phaseClass", Phase.class);
+            groovyShell.setVariable("playerClass", Player.class);
+            groovyShell.setVariable("tagClass", Tag.class);
+            groovyShell.setVariable("tileClass", Tile.class);
+            groovyShell.setVariable("turnClass", Turn.class);
+            groovyShell.setVariable("groupClass", Group.class);
+            groovyShell.evaluate(myGuard);
+            return (boolean) groovyShell.getVariable("answer");
+        } catch (Exception e){
+            e.printStackTrace();
         }
-    }
-
-    private boolean checkValidity(){
-        // execute Groovy guard, returns true if valid
-        return true;
+        return false;
     }
 
     public int getID(){
         return myID;
     }
-}
 
+    @Override
+    public void hasChanged() {
+        if (checkValidity(GameData.getArguments())){
+            GameData.removeArgumentListener(this);
+            GameData.getNode(myEndNodeID).execute();
+        } else {
+            GameData.clearArguments();
+        }
+    }
+}
