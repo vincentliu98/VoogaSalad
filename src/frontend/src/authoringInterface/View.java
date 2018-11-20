@@ -54,9 +54,9 @@ public class View implements ParentView<SubView>, DraggingCanvas {
     }
 
     private void initializeElements() {
-        menuBar = new EditorMenuBarView(tools, groovyPaneFactory, primaryStage::close);
+        menuBar = new EditorMenuBarView(tools, primaryStage::close);
         sideView = new SideView();
-        editView = new EditView(sideView);
+        editView = new EditView(sideView,tools, groovyPaneFactory);
     }
 
     private void setElements() {

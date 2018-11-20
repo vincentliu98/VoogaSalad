@@ -12,7 +12,6 @@ import gameplay.Initializer;
 import authoringInterface.editor.menuBarView.subMenuBarView.NewWindowView;
 import authoringInterface.editor.menuBarView.subMenuBarView.SaveFileView;
 import graphUI.groovy.GroovyPaneFactory;
-import graphUI.phase.PhasePane;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
@@ -24,22 +23,25 @@ import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
 import runningGame.GameWindow;
 import java.io.File;
-
+/**
+ * MenuBarView class
+ *
+ * @author Haotian
+ * @author Amy
+ */
 public class EditorMenuBarView implements SubView<MenuBar> {
 
     private MenuBar menuBar;
     private GameWindow gameWindow;
     private AuthoringTools authTools;
-    private GroovyPaneFactory groovyPaneFactory; // hmm it's probably temporary
 
     private final EditorCaretaker editorCaretaker = new EditorCaretaker();
     private final Editor editor = new Editor();
     private Integer currentMemento = 0;
     private Runnable closeWindow;
 
-    public EditorMenuBarView(AuthoringTools authTools, GroovyPaneFactory groovyPaneFactory, Runnable closeWindow) {
+    public EditorMenuBarView(AuthoringTools authTools, Runnable closeWindow) {
         this.authTools = authTools;
-        this.groovyPaneFactory = groovyPaneFactory;
         editor.setState(authTools.globalData());
 
         this.closeWindow = closeWindow;
@@ -78,7 +80,6 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         runProject.setOnAction(this::handleRunProject);
         helpDoc.setOnAction(this::handleHelpDoc);
         about.setOnAction(this::handleAbout);
-        graph.setOnAction(this::handleGraph);
 
         file.getItems().addAll(newFile, open, save, saveAs, close);
         edit.getItems().addAll(undo, redo, graph);
@@ -86,14 +87,6 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         help.getItems().addAll(helpDoc, about);
 
         menuBar.getMenus().addAll(file, edit, tools, run, help);
-    }
-    private void handleGraph(ActionEvent e) {
-        var newStage = new Stage();
-//        new PhasePane(
-//            newStage,
-//            authTools.phaseDB(),
-//            groovyPaneFactory.withStage(newStage)::gen
-//        );
     }
 
     void handleSave(ActionEvent event) {

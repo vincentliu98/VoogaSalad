@@ -1,5 +1,6 @@
 package graphUI.phase;
 
+import api.SubView;
 import authoringInterface.spritechoosingwindow.PopUpWindow;
 import graphUI.groovy.GroovyPaneFactory.GroovyPane;
 import graphUI.phase.PhaseNodeFactory.PhaseNode;
@@ -8,9 +9,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
@@ -19,6 +18,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import phase.api.GameEvent;
+import phase.api.Phase;
 import phase.api.PhaseDB;
 import phase.api.PhaseGraph;
 
@@ -34,9 +34,10 @@ import java.util.stream.Stream;
  * Reference: https://stackoverflow.com/questions/46562957/define-object-position-at-runtime-with-javafx
  *
  * @author jl729
+ * @author Amy
  */
 
-public class PhasePane extends PopUpWindow {
+public class PhasePane implements SubView<GridPane> {
     public static final Double WIDTH = 1200.0;
     public static final Double HEIGHT = 800.0;
     public static final Double ICON_WIDTH = 100.0;
@@ -73,8 +74,7 @@ public class PhasePane extends PopUpWindow {
     private PhaseNode edgeFrom;
     private Line tmpLine;
 
-    public PhasePane(Stage primaryStage, PhaseDB phaseDB, Supplier<GroovyPane> genGroovyPane) {
-        super(primaryStage);
+    public PhasePane(PhaseDB phaseDB, Supplier<GroovyPane> genGroovyPane) {
         this.phaseDB = phaseDB;
         factory = new PhaseNodeFactory(phaseDB, genGroovyPane);
         trFactory = new TransitionLineFactory(genGroovyPane, group.getChildren()::add, group.getChildren()::remove);
@@ -120,7 +120,7 @@ public class PhasePane extends PopUpWindow {
             }
         });
 
-        dialog.addEventFilter(KeyEvent.KEY_RELEASED, e -> {
+        root.addEventFilter(KeyEvent.KEY_RELEASED, e -> {
             if(e.getCode() == KeyCode.DELETE) deleteSelected();
             if(e.getCode() == KeyCode.ESCAPE) {
                 selectedNode.set(null);
@@ -129,20 +129,7 @@ public class PhasePane extends PopUpWindow {
         });
 
         initializeUI();
-        showWindow();
     }
-
-    @Override
-    public void showWindow() {
-        dialog.setScene(myScene);
-        dialog.show();
-    }
-
-    /**
-     *  We do not close the window; instead, we just hide it and show it when a button is clicked
-     */
-    @Override
-    public void closeWindow() { dialog.hide(); }
 
     private void initializeUI() {
         root.setPrefWidth(WIDTH);
@@ -377,6 +364,11 @@ public class PhasePane extends PopUpWindow {
                 l.setEndY(n.getCenterY());
             }
         }
+    }
+
+    @Override
+    public GridPane getView() {
+        return root;
     }
 }
 
