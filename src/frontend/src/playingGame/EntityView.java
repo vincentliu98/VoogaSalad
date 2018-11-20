@@ -1,6 +1,5 @@
-package playing;
+package playingGame;
 
-import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -20,6 +19,12 @@ public class EntityView implements Viewable, PropertyChangeListener {
     private Double posY;
 
     private PropertyChangeSupport mySupport;
+
+    public EntityView(){
+        mySupport = new PropertyChangeSupport(this);
+        posX = 0.0;
+        posY = 0.0;
+    }
 
     public EntityView(String imagePath, double xpos, double ypos){
         mySupport = new PropertyChangeSupport(this);

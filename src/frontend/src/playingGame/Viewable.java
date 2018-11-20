@@ -1,10 +1,8 @@
-package playing;
+package playingGame;
 
-import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 
 import java.beans.PropertyChangeListener;
-import java.util.function.Consumer;
 
 public interface Viewable {
 

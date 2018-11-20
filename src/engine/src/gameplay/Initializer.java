@@ -1,13 +1,12 @@
 package gameplay;
-import playing.Communicator;
 
 import java.io.File;
 
 public class Initializer {
     XMLParser myXMLParser;
-    Communicator myCommunicator;
+    Communicable myCommunicator;
 
-    public Initializer(File file, Communicator communicator){
+    public Initializer(File file, Communicable communicator){
         myXMLParser = new XMLParser();
         myCommunicator = communicator;
         initGameData(file);

@@ -1,6 +1,5 @@
-package playingGame;
+package gameplay;
 
-import gameplay.Tag;
 
 public interface Communicable {
 
