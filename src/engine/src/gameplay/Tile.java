@@ -3,13 +3,15 @@ package gameplay;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Tile implements EventHandler {
+public class Tile {
     private int myID;
     private int myWidth;
     private int myHeight;
@@ -17,7 +19,7 @@ public class Tile implements EventHandler {
     private double myYCoord;
     private String myImagePath;
     private List<Integer> myEntities;
-    private String myImageSelector; // Groovy code
+    private String myImageSelector; // Groovy codee
     private List<String> myImages;
     @XStreamOmitField
     private transient ImageView myImageView;
@@ -35,9 +37,22 @@ public class Tile implements EventHandler {
         this.myImageView = null;
     }
 
-    public void addEntity(int entityID){
+    public void addEntity(int entityID, Group root){
         myEntities.add(entityID);
-        GameData.getEntity(entityID).setLocation(myImageView.getX(), myImageView.getY());
+        GameData.getEntity(entityID).setLocation(myXCoord, myYCoord);
+        root.getChildren().add(GameData.getEntity(entityID).getImageView());
+    }
+
+    public String getImagePath(){
+        return myImagePath;
+    }
+
+    public double getXCoord(){
+        return myXCoord;
+    }
+
+    public double getYCoord(){
+        return myYCoord;
     }
 
     public void setImagePath(String imagePath) {
@@ -52,6 +67,9 @@ public class Tile implements EventHandler {
             myImageView.setFitWidth(100); // TODO: delete later
             myImageView.setX(myXCoord);
             myImageView.setY(myYCoord);
+            myImageView.setOnMouseClicked(event -> {
+                GameData.addArgument(new Tag(Tile.class, myID));
+            });
         }
     }
 
@@ -69,11 +87,6 @@ public class Tile implements EventHandler {
 
     public int getID(){
         return myID;
-    }
-
-    @Override
-    public void handle(Event event) {
-        GameData.addArgument(new Tag(Tile.class, myID));
     }
 
     /*

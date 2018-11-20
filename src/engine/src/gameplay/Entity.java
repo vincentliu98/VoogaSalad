@@ -35,6 +35,18 @@ public class Entity implements EventHandler {
         this.myImagePath = imagePath;
     }
 
+    public String getImagePath(){
+        return myImagePath;
+    }
+
+    public double getXCoord(){
+        return myXCoord;
+    }
+
+    public double getYCoord(){
+        return myYCoord;
+    }
+
     public ImageView getImageView(){
         return myImageView;
     }
@@ -68,6 +80,7 @@ public class Entity implements EventHandler {
 
     @Override
     public void handle(Event event) {
+        System.out.println("handle called by Entity of id " + myID);
         GameData.addArgument(new Tag(Entity.class, myID));
     }
 }

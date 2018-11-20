@@ -2,6 +2,7 @@ package gameplay;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import javafx.scene.Group;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +70,10 @@ public class GameData {
     public static void addArgument(Tag tag){
         myArguments.add(tag);
         notifyArgumentListeners();
+    }
+
+    public static int getNextEntityID(){
+        return ENTITIES.size() + 1;
     }
 
     public static void clearArguments(){

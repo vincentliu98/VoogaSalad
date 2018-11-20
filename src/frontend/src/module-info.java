@@ -10,7 +10,6 @@ module frontend {
     requires engine;
 
     exports authoringInterface;
-    exports graphUI;
     exports playingGame;
     exports launchingGame;
     exports runningGame;

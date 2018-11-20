@@ -121,8 +121,10 @@
     <gameplay.Node>
         <myPhaseID>1</myPhaseID>
         <myID>1</myID>
-        <myExecution>GameData.clearArguments();
-            GameData.addArgumentListener(GameData.getEdge(1));</myExecution>
+        <myExecution>
+            gameDataClass.getMethod(&quot;clearArguments&quot;, null).invoke(null, null);
+            gameDataClass.getMethod(&quot;addArgumentListener&quot;, argListenerClass).invoke(null,
+            edgeClass.cast(gameDataClass.getMethod(&quot;getEdge&quot;, int.class).invoke(null, 1)));</myExecution>
         <myOutgoingEdgeIDs>
             <int>1</int>
         </myOutgoingEdgeIDs>
@@ -130,18 +132,21 @@
     <gameplay.Node>
         <myPhaseID>1</myPhaseID>
         <myID>2</myID>
-        <myExecution>String filePath = GameData.getTurn().getCurrentPlayerID() == 1 ? &quot;x.png&quot; : &quot;circle.png&quot;;
-            Entity entity = new Entity(Collections.max(GameData.getEntities().keySet()) + 1);
-            entity.setImagePath(filePath);
-            entity.setPlayer(GameData.getTurn().getCurrentPlayerID());
-            GameData.getPlayer(GameData.getTurn().getCurrentPlayerID()).addEntity(entity.getID());
-            GameData.addEntity(entity);
-            Tile tile = GameData.getTile(GameData.getArguments().get(0).getID());
-            tile.addEntity(entity.getID());
-            int nextPlayerID = GameData.getTurn().getCurrentPlayerID() == 1 ? 2 : 1;
-            GameData.getTurn().setPlayer(nextPlayerID);
-            GameData.clearArguments();
-            GameData.getTurn().startPhase();</myExecution>
+        <myExecution>
+            Object turn = turnClass.cast(gameDataClass.getMethod(&quot;getTurn&quot;, null).invoke(null, null));
+            String filepath = (turnClass.cast(turn)).getCurrentPlayerID() == 1 ? &quot;x.png&quot; :&quot;circle.png&quot;;
+            Object entity = entityClass.getConstructor(int.class).newInstance(Integer.class.cast(gameDataClass.getMethod("getNextEntityID", null).invoke(null, null)));
+            entityClass.cast(entity).setImagePath(filepath);
+            entityClass.cast(entity).setPlayer(turnClass.cast(turn).getCurrentPlayerID());
+            playerClass.cast(gameDataClass.getMethod(&quot;getPlayer&quot;, int.class).invoke(null, (turnClass.cast(turn)).getCurrentPlayerID())).addEntity(entity.getID());
+            gameDataClass.getMethod(&quot;addEntity&quot;, entityClass).invoke(null, entity);
+            Object tile = tileClass.cast(gameDataClass.getMethod(&quot;getTile&quot;, int.class).invoke(null, tagClass.cast(gameDataClass.getMethod(&quot;getArguments&quot;, null).invoke(null, null).get(0)).getID()));
+            tileClass.cast(tile).addEntity(entity.getID(), groupClass.cast(gameDataClass.getMethod(&quot;getRoot&quot;, null).invoke(null, null)));
+            int nextPlayerID = (turnClass.cast(turn)).getCurrentPlayerID() == 1 ? 2 : 1;
+            (turnClass.cast(turn)).setPlayer(nextPlayerID);
+            gameDataClass.getMethod(&quot;clearArguments&quot;, null).invoke(null, null);
+            (turnClass.cast(turn)).startPhase();
+        </myExecution>
         <myOutgoingEdgeIDs/>
     </gameplay.Node>
     <gameplay.Edge>
@@ -149,11 +154,11 @@
         <myPhaseID>1</myPhaseID>
         <myStartNodeID>1</myStartNodeID>
         <myEndNodeID>2</myEndNodeID>
-        <myGuard>if (arguments.size() != 1 || !arguments.get(0).getType().equals(Tile.class)){
+        <myGuard>if (arguments.size() != 1 || !arguments.get(0).getType().equals(tileClass)){
             answer = false;
             } else {
-            Tile tile = GameData.getTile(arguments.get(0).getID());
-            answer = tile.hasNoEntities();
+            Object tile = tileClass.cast(gameDataClass.getMethod(&quot;getTile&quot;, int.class).invoke(null, arguments.get(0).getID()));
+            answer = tileClass.cast(tile).hasNoEntities();
             }</myGuard>
     </gameplay.Edge>
     <gameplay.Turn>

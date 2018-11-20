@@ -6,5 +6,5 @@ package authoringInterface.sidebar.subEditors;
  * @author Haotian Wang
  */
 public enum EditingMode {
-    EDIT_TREEITEM, ADD_TREEITEM, EDIT_NODE, NONE;
+    EDIT_TREEITEM, ADD_TREEITEM, EDIT_NODE, NONE
 }

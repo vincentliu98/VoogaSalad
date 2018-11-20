@@ -1,6 +1,8 @@
 package gameplay;
 
 import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Initializer {
     XMLParser myXMLParser;
@@ -32,15 +34,4 @@ public class Initializer {
     public void saveGame(){
         String xmlString = GameData.saveGameData();
     }
-
-    /*public static void main(String[] args){
-        //Turn turn = new Turn(1, 1);
-        XStream xStream = new XStream(new DomDriver());
-        //String x = xStream.toXML(turn);
-        //System.out.println(x);
-        Turn t2 = (Turn) xStream.fromXML("<gameplay.Turn>\n" +
-                "  <myCurrentPhaseID>1</myCurrentPhaseID>\n" +
-                "  <myCurrentPlayerID>1</myCurrentPlayerID>\n" +
-                "</gameplay.Turn>");
-    }*/
 }
