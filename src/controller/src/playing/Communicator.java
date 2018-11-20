@@ -1,4 +1,4 @@
-package playing;
+package playingGame;
 
 import gameplay.Entity;
 import gameplay.GameData;

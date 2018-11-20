@@ -6,7 +6,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public class GameLauncher extends Application {
-
+    public static final String STYLESHEET_PATH = "/stylesheets/testing.css";
     public static final int SCREEN_WIDTH = 1200;
     public static final int SCREEN_HEIGHT = 700;
 
@@ -14,7 +14,7 @@ public class GameLauncher extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-       String style = getClass().getResource("/stylesheets/testing.css").toExternalForm();
+       String style = getClass().getResource(STYLESHEET_PATH).toExternalForm();
 
         primaryStage.setTitle(STAGE_TITLE);
         //primaryStage.initStyle(StageStyle.UNDECORATED);

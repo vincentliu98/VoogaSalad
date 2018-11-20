@@ -31,7 +31,7 @@ public interface Viewable {
      * This method provides a consumer to remove the entity from the current javafx scene
      * @return
      */
-    void removeEntity(Scene currentScene);
+    void removeEntity();
 
     /**
      * This method adds a PropertyChangeListener to the viewable

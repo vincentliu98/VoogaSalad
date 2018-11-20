@@ -1,9 +1,9 @@
 package playing;
 
-import authoringInterface.View;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import runningGame.GameWindow;
 
 public class MainPlayer extends Application {
 
@@ -13,8 +13,8 @@ public class MainPlayer extends Application {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("VoogaSalad!");
-        View myView = new View(primaryStage);
-        primaryStage.setScene(new Scene(myView.getRootPane(), SCREEN_WIDTH, SCREEN_HEIGHT));
+        GameWindow myWindow = new GameWindow();
+        primaryStage.setScene(new Scene(myWindow.getView(), SCREEN_WIDTH, SCREEN_HEIGHT));
         primaryStage.show();
     }
 

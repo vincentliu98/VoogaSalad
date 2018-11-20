@@ -45,6 +45,9 @@ public class EntityView implements Viewable, PropertyChangeListener {
         else if(evt.getPropertyName().equals(MOVE_KEY)){
             changeCoordinates(((Pair<Double, Double>) evt.getNewValue()).getData1(), ((Pair<Double, Double>) evt.getNewValue()).getData2());
         }
+        else if(evt.getPropertyName().equals(REMOVE_KEY)){
+            removeEntity();
+        }
     }
 
     @Override
@@ -61,7 +64,7 @@ public class EntityView implements Viewable, PropertyChangeListener {
     }
 
     @Override
-    public void removeEntity(Scene currentScene) {
+    public void removeEntity() {
         Consumer<DisplayData> cons = (disp) -> {
             disp.removeEntity(this);
         };
