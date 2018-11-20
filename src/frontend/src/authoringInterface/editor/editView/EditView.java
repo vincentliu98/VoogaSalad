@@ -12,6 +12,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabDragPolicy;
 import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.stage.Stage;
+import phase.api.Phase;
 
 
 /**
@@ -25,7 +26,6 @@ import javafx.stage.Stage;
 public class EditView implements SubView<TabPane> {
     private final TabPane tabPane = new TabPane();
     private SideViewInterface sideView;
-    private PhasePane phasePane;
     private AuthoringTools authTools;
     private final Editor editor = new Editor();
     private GroovyPaneFactory groovyPaneFactory;
@@ -56,10 +56,18 @@ public class EditView implements SubView<TabPane> {
         EntityTab.setContent(new EditEntityView(sideView).getView());
 
         Tab PhaseTab = new Tab("Phase");
+//        PhaseTab.setContent(
+//                        new PhasePane(
+//                                authTools.phaseDB(),
+//                                groovyPaneFactory::gen)
+//                                .getView());
         PhaseTab.setOnSelectionChanged(e -> {
             while(!exist) {
-                phasePane = new PhasePane(authTools.phaseDB(), groovyPaneFactory::gen);
-                PhaseTab.setContent(phasePane.getView());
+                PhaseTab.setContent(
+                        new PhasePane(
+                                authTools.phaseDB(),
+                                groovyPaneFactory::gen)
+                                .getView());
                 exist = true;
             }
         });
