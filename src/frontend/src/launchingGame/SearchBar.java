@@ -10,7 +10,7 @@ import javafx.scene.layout.HBox;
 
 public class SearchBar implements SubView<HBox> {
     public static final String PROMPT_MESSAGE = "Game Name";
-    public static final String CROSS_PATH = "/icons/black-cross.png";
+    public static final String CROSS_PATH = "/graphics/black-cross.png";
     public static final double BAR_WIDTH = 400;
 
     private HBox myBox;

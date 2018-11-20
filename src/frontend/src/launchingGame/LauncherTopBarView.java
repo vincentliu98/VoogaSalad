@@ -9,7 +9,7 @@ import javafx.scene.layout.HBox;
 
 
 public class LauncherTopBarView implements SubView<HBox> {
-    public static final String DIVIDER_PATH = "/icons/gray-line.png";
+    public static final String DIVIDER_PATH = "/graphics/gray-line.png";
     public static final double DIVIDER_RATIO = 0.7;
     public static final double SPACING = 25;
 
