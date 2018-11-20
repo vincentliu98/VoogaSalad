@@ -123,16 +123,7 @@ public class GameIcon implements SubView<StackPane> {
         myButtonHolder.getChildren().add(myPlayButton);
         myButtonHolder.setAlignment(Pos.BOTTOM_LEFT);
         myButtonHolder.getStyleClass().add(BUTTON_HOLDER_CSS);
-//        myButtonHolder.setOnMouseEntered(event -> {
-//            myPlayButton.getStyleClass().remove(PLAYBUTTON_CSS_NORMAL);
-//            myPlayButton.getStyleClass().add(PLAYBUTTON_CSS_HOVER);
-//        });
-//        myButtonHolder.setOnMouseExited(event -> {
-//            myPlayButton.getStyleClass().remove(PLAYBUTTON_CSS_HOVER);
-//            myPlayButton.getStyleClass().add(PLAYBUTTON_CSS_NORMAL);
-//        });
     }
-
 
     @Override
     public StackPane getView() {

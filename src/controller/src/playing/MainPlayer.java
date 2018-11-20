@@ -7,7 +7,6 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import playingGame.DisplayData;
-import runningGame.GameWindow;
 
 import java.io.File;
 
@@ -19,12 +18,11 @@ public class MainPlayer extends Application {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("VoogaSalad!");
-//        GameWindow myWindow = new GameWindow();
         Group myGroup = new Group();
         primaryStage.setScene(new Scene(myGroup, SCREEN_WIDTH, SCREEN_HEIGHT));
         DisplayData myDisp = new DisplayData(myGroup);
 
-        File file = new File("/");
+        File file = new File(getClass().getClassLoader().getResource("TicTacToe.xml").getFile());
         Communicable myCommuicator = new Communicator(myDisp);
         Initializer myInit = new Initializer(file, myCommuicator);
         primaryStage.show();
