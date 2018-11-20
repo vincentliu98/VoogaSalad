@@ -43,7 +43,7 @@ public class EditView implements SubView<TabPane> {
         EntityTab.setContent(new EditEntityView(sideView).getView());
 
         Tab PhaseTab = new Tab("Phase");
-        //TODO:  if we'll put this on tab.
+
         Tab LevelTab = new Tab("Level");
 
         tabPane.getTabs().addAll(GridTab,EntityTab,PhaseTab, LevelTab);

@@ -67,11 +67,11 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         save.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
         newFile.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN));
 
-        newFile.setOnAction(this::handleNewFile);
-        open.setOnAction(this::handleOpen);
+        newFile.setOnAction(e -> new NewWindowView());
+        open.setOnAction(e -> new LoadFileView());
         save.setOnAction(this::handleSave);
         saveAs.setOnAction(this::handleSaveAs);
-        close.setOnAction(this::handleClose);
+        close.setOnAction(e -> new CloseFileView(closeWindow));
         undo.setOnAction(this::handleUndo);
         redo.setOnAction(this::handleRedo);
         runProject.setOnAction(this::handleRunProject);
@@ -88,18 +88,13 @@ public class EditorMenuBarView implements SubView<MenuBar> {
     }
     private void handleGraph(ActionEvent e) {
         var newStage = new Stage();
-        new PhasePane(
-            newStage,
-            authTools.phaseDB(),
-            groovyPaneFactory.withStage(newStage)::gen
-        );
+//        new PhasePane(
+//            newStage,
+//            authTools.phaseDB(),
+//            groovyPaneFactory.withStage(newStage)::gen
+//        );
     }
 
-    void handleOpen(ActionEvent event) {
-        new LoadFileView();
-    }
-    void handleNewFile(ActionEvent event) { new NewWindowView(); }
-    void handleClose(ActionEvent event) { new CloseFileView(closeWindow); }
     void handleSave(ActionEvent event) {
         editorCaretaker.addMemento(editor.save());
         editor.setState(editorCaretaker.getMemento(currentMemento++).getSavedState());
