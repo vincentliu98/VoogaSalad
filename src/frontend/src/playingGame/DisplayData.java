@@ -1,5 +1,6 @@
-package playing;
+package playingGame;
 
+import javafx.scene.Group;
 import javafx.scene.layout.Pane;
 
 import java.beans.PropertyChangeEvent;
@@ -11,11 +12,11 @@ import java.util.function.Consumer;
 public class DisplayData implements PropertyChangeListener {
 
     List<Viewable> myDisplayedEntities;
-    Pane myPane;
+    Group myGroup;
 
-    public DisplayData(Pane pane){
+    public DisplayData(Group group){
         myDisplayedEntities = new ArrayList<>();
-        myPane = pane;
+        myGroup = group;
     }
 
     // Receives a consumer from a viewable object that removes the object from the pane
@@ -29,11 +30,11 @@ public class DisplayData implements PropertyChangeListener {
     public void addNewEntity(Viewable nwEntity){
         nwEntity.addListener(this);
         myDisplayedEntities.add(nwEntity);
-        myPane.getChildren().add(nwEntity.getImageView());
+        myGroup.getChildren().add(nwEntity.getImageView());
     }
 
     public void removeEntity(Viewable rmEntity){
         myDisplayedEntities.remove(rmEntity);
-        myPane.getChildren().remove(rmEntity);
+        myGroup.getChildren().remove(rmEntity);
     }
 }

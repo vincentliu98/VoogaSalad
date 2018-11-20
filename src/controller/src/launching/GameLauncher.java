@@ -1,9 +1,9 @@
-package launchingGame;
+package launching;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+import launchingGame.LauncherWindow;
 
 public class GameLauncher extends Application {
     public static final String STYLESHEET_PATH = "/stylesheets/testing.css";
@@ -14,10 +14,12 @@ public class GameLauncher extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-       String style = getClass().getResource(STYLESHEET_PATH).toExternalForm();
+
+        String style = getClass().getResource(STYLESHEET_PATH).toExternalForm();
 
         primaryStage.setTitle(STAGE_TITLE);
         //primaryStage.initStyle(StageStyle.UNDECORATED);
+        primaryStage.setResizable(false);
 
         LauncherWindow myWindow = new LauncherWindow();
         Scene myScene = new Scene(myWindow.getView(), SCREEN_WIDTH, SCREEN_HEIGHT);

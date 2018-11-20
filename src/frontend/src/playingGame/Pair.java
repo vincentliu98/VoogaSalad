@@ -1,4 +1,4 @@
-package playing;
+package playingGame;
 
 public class Pair<A, B> {
     private A data1;

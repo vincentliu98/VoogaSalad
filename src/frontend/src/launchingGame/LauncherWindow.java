@@ -12,14 +12,16 @@ public class LauncherWindow implements SubView<BorderPane> {
     public LauncherWindow(){
         myPane = new BorderPane();
 
-        //LauncherMenuBarView myBar = new LauncherMenuBarView(50);
 
         LauncherTopBarView myBar = new LauncherTopBarView(TOP_HEIGHT);
 
         LauncherSideBarView mySide = new LauncherSideBarView(SIDE_WIDTH);
 
+        LauncherGamesDisplay myDisplay = new LauncherGamesDisplay();
+
         myPane.setTop(myBar.getView());
         myPane.setLeft(mySide.getView());
+        myPane.setCenter(myDisplay.getView());
     }
 
 

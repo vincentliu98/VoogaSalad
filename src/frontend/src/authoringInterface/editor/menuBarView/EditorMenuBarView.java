@@ -122,13 +122,13 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         newWindow.setTitle("Your Game");
         gameWindow = new GameWindow();
         try{
-            Initializer initializer = new Initializer(new File(getClass().getClassLoader().getResource("TicTacToe.xml").getFile()));
-            //Scene newScene = new Scene(gameWindow.getView(), View.GAME_WIDTH, View.GAME_HEIGHT);
-            Scene newScene = new Scene(initializer.getRoot(), View.GAME_WIDTH, View.GAME_HEIGHT);
-            newWindow.setScene(newScene);
-            newWindow.setX(MainAuthoringProgram.SCREEN_WIDTH*0.5 - View.GAME_WIDTH*0.5);
-            newWindow.setY(MainAuthoringProgram.SCREEN_HEIGHT*0.5 - View.GAME_HEIGHT*0.5);
-            newWindow.show();
+//            Initializer initializer = new Initializer(new File(getClass().getClassLoader().getResource("TicTacToe.xml").getFile()));
+//            //Scene newScene = new Scene(gameWindow.getView(), View.GAME_WIDTH, View.GAME_HEIGHT);
+//            Scene newScene = new Scene(initializer.getRoot(), View.GAME_WIDTH, View.GAME_HEIGHT);
+//            newWindow.setScene(newScene);
+//            newWindow.setX(MainAuthoringProgram.SCREEN_WIDTH*0.5 - View.GAME_WIDTH*0.5);
+//            newWindow.setY(MainAuthoringProgram.SCREEN_HEIGHT*0.5 - View.GAME_HEIGHT*0.5);
+//            newWindow.show();
         } catch (Exception e){
             e.printStackTrace();
         }

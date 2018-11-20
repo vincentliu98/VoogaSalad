@@ -1,4 +1,4 @@
-package playing;
+package playingGame;
 
 import javafx.scene.layout.BorderPane;
 

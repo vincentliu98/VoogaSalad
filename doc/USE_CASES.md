@@ -56,7 +56,7 @@
     The EntityView editor panel will have more than options to change pictures, audio etc. It allows user to add/edit the specific logic diagrams between state machines just like the one in the main editor, specifically for this entity.
 25. **The author wants to write a three-player card game that has a card that flips the order of turns.**
    The Turn class would have a script that determines which player gets the turn, using values within the global data. The author can set the script so that the order is flipped when "flip" variable within the global data is set to true (the "flip" variable is set within the script that runs when a player plays that card)
-26. **The author wants to write a single player game with an AI playing against the player.** 
+26. **The author wants to write a single player game with an AI playingGame against the player.** 
    The author would include the ai code that makes a move within the edge
 ```
 O ---Mouse Clicked (Let's say this ends the player's turn) ---> O
@@ -86,7 +86,7 @@ O ---Mouse Clicked (Let's say this ends the player's turn) ---> O
 9. **The player can remove a sprite**
     The player can through some action, whether it be an attack or dragging one piece over another in chess, cause an entity to be removed from the game
 10. **The player can change levels**
-    After some objective is completed, the screen will replace the current set of tiles and entities with a new set and the player can keep playing.
+    After some objective is completed, the screen will replace the current set of tiles and entities with a new set and the player can keep playingGame.
 11. **An event can occur after a certain number of turns without player prompting**
     It's possible to make some event happen to entities or tiles in the game on some turn based clock.
 12. **The player can play against an AI**
