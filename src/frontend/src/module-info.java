@@ -6,6 +6,8 @@ module frontend {
 
     requires authoring_backend;
 
+    requires org.codehaus.groovy; // should remove later
+
     exports authoringInterface;
 //    exports graphUI;
 }
