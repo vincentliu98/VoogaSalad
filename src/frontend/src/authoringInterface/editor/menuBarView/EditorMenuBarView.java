@@ -9,10 +9,10 @@ import authoringInterface.editor.memento.Editor;
 import authoringInterface.editor.memento.EditorCaretaker;
 import authoringInterface.editor.menuBarView.subMenuBarView.LoadFileView;
 import authoringInterface.editor.menuBarView.subMenuBarView.NewWindowView;
-import graphUI.groovy.GroovyPane;
-import graphUI.phase.GraphPane;
-import javafx.beans.Observable;
-import javafx.collections.ObservableMap;
+import authoringInterface.editor.menuBarView.subMenuBarView.SaveFileView;
+import graphUI.groovy.GroovyPaneFactory;
+import graphUI.groovy.GroovyPaneFactory.GroovyPane;
+import graphUI.phase.PhasePane;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
@@ -23,19 +23,22 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
 import runningGame.GameWindow;
+
 public class EditorMenuBarView implements SubView<MenuBar> {
 
     private MenuBar menuBar;
     private GameWindow gameWindow;
     private AuthoringTools authTools;
+    private GroovyPaneFactory groovyPaneFactory; // hmm it's probably temporary
 
     private final EditorCaretaker editorCaretaker = new EditorCaretaker();
     private final Editor editor = new Editor();
     private Integer currentMemento = 0;
     private Runnable closeWindow;
 
-    public EditorMenuBarView(AuthoringTools authTools, Runnable closeWindow) {
+    public EditorMenuBarView(AuthoringTools authTools, GroovyPaneFactory groovyPaneFactory, Runnable closeWindow) {
         this.authTools = authTools;
+        this.groovyPaneFactory = groovyPaneFactory;
         editor.setState(authTools.globalData());
 
         this.closeWindow = closeWindow;
@@ -60,7 +63,6 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         MenuItem helpDoc = new MenuItem("Help");
         MenuItem about = new MenuItem("About");
         MenuItem graph = new MenuItem("Graph");
-        MenuItem groovyGraph = new MenuItem("GroovyGraph");
 
         save.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
         newFile.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN));
@@ -76,20 +78,22 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         helpDoc.setOnAction(this::handleHelpDoc);
         about.setOnAction(this::handleAbout);
         graph.setOnAction(this::handleGraph);
-        groovyGraph.setOnAction(this::handleGroovyGraph);
 
         file.getItems().addAll(newFile, open, save, saveAs, close);
-        edit.getItems().addAll(undo, redo, graph, groovyGraph);
+        edit.getItems().addAll(undo, redo, graph);
         run.getItems().addAll(runProject);
         help.getItems().addAll(helpDoc, about);
 
         menuBar.getMenus().addAll(file, edit, tools, run, help);
     }
-
-    private void handleGroovyGraph(ActionEvent actionEvent) {
-        new GroovyPane(new Stage(), authTools.factory());
+    private void handleGraph(ActionEvent e) {
+        var newStage = new Stage();
+        new PhasePane(
+            newStage,
+            authTools.phaseDB(),
+            groovyPaneFactory.withStage(newStage)::gen
+        );
     }
-    private void handleGraph(ActionEvent e) { new GraphPane(new Stage()); }
 
     void handleOpen(ActionEvent event) {
         new LoadFileView();
@@ -102,8 +106,8 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         editor.setState(editorCaretaker.getMemento(currentMemento++).getSavedState());
     }
     void handleSaveAs(ActionEvent event) {
+        new SaveFileView();
         handleSave(event);
-        // TODO: 11/17/18 add a fileChooser and allow user to save
     }
     void handleUndo(ActionEvent event) {
         if (currentMemento < 2) return;

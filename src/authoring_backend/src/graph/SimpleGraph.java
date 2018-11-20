@@ -13,9 +13,7 @@ public class SimpleGraph<N extends Node, E extends Edge<N>>
     public SimpleGraph() { super(); }
 
     @Override
-    public void addNode(N n) {
-        if(!containsKey(n)) put(n, new ArrayList<>());
-    }
+    public void addNode(N n) { if(!containsKey(n)) put(n, new ArrayList<>()); }
 
     @Override
     public void removeNode(N n) {

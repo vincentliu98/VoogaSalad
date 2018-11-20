@@ -1,4 +1,4 @@
-package graphUI.groovy.factory;
+package graphUI.groovy;
 
 import groovy.api.GroovyFactory;
 import groovy.api.Ports;
@@ -19,14 +19,14 @@ public class GroovyNodeFactory {
     );
 
     private static List<Pair<Pos, Ports>> FOREACH_PORT = List.of(
-        new Pair<>(Pos.CENTER_LEFT, Ports.FOREACH_LIST),
-        new Pair<>(Pos.CENTER_RIGHT, Ports.FOREACH_BODY),
+        new Pair<>(Pos.TOP_RIGHT, Ports.FOREACH_LIST),
+        new Pair<>(Pos.BOTTOM_RIGHT, Ports.FOREACH_BODY),
         new Pair<>(Pos.BOTTOM_CENTER, Ports.FLOW_OUT)
     );
 
     private static List<Pair<Pos, Ports>> IF_PORT = List.of(
-        new Pair<>(Pos.CENTER_LEFT, Ports.IF_PREDICATE),
-        new Pair<>(Pos.CENTER_RIGHT, Ports.IF_BODY),
+        new Pair<>(Pos.TOP_RIGHT, Ports.IF_PREDICATE),
+        new Pair<>(Pos.BOTTOM_RIGHT, Ports.IF_BODY),
         new Pair<>(Pos.BOTTOM_CENTER, Ports.FLOW_OUT)
     );
 
@@ -55,7 +55,7 @@ public class GroovyNodeFactory {
     public GroovyNodeFactory(GroovyFactory factory) { this.factory = factory; }
 
     public GroovyNode source(GroovyBlock sourceBlock, double xPos, double yPos) {
-        return new GroovyNode(sourceBlock, xPos, yPos, 50, 50, FONT_NORMAL, Color.MAGENTA, SOURCE_PORT);
+        return new GroovyNode(sourceBlock, xPos, yPos, 50, 50, FONT_NORMAL, Color.INDIGO, SOURCE_PORT);
     }
 
     public Try<GroovyNode> toModel(String type, double xPos, double yPos, String arg) {

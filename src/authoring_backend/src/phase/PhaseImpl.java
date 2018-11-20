@@ -2,21 +2,21 @@ package phase;
 
 import graph.SimpleNode;
 import groovy.api.BlockGraph;
-import groovy.graph.blocks.core.GroovyBlock;
 import phase.api.Phase;
 
-import java.util.UUID;
-
 public class PhaseImpl extends SimpleNode implements Phase {
-    private UUID uuid;
+    private String name;
     private BlockGraph exec;
 
-    public PhaseImpl(BlockGraph exec) {
+    public PhaseImpl(BlockGraph exec, String name) {
         super();
-        uuid = UUID.randomUUID();
+        this.name = name;
         this.exec = exec;
     }
 
-    public UUID id() { return uuid; }
+    @Override
+    public String name() { return name; }
+
+    @Override
     public BlockGraph exec() { return exec; }
 }
