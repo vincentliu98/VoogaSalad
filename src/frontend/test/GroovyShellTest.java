@@ -1,65 +1,26 @@
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.application.Application;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
-import javafx.util.Duration;
 
+public class GroovyShellTest {
+    public static void main(String[] args) {
+        var sharedData = new Binding();
+        var shell = new GroovyShell(sharedData);
 
-public class GroovyShellTest extends Application {
-    private Binding sharedVariables;
-    private GroovyShell shell;
+        TestGameData.setup();
+        sharedData.setVariable("GameData", TestGameData.class);
 
-    private Pane testPane;
-    private ImageView view;
-    private Image[] imgs;
-    private SimpleIntegerProperty imgIndex;
+        shell.evaluate("GameData.addEntry('A', 'a', '0')");
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        initializeGroovyShell();
-        initializeTestView();
+        System.out.println(TestGameData.getValue("A", "a")); // 0
 
-        var myScene = new Scene(testPane, 300, 300);
-        primaryStage.setScene(myScene);
-        primaryStage.show();
+        shell.evaluate("GameData.addEntry('A', 'b', '1')");
 
+        System.out.println(TestGameData.getValue("A", "b")); // 1
 
-        var frame = new KeyFrame(Duration.millis(2000), e -> tick()); // tick every 2 seconds
-        var animation = new Timeline();
-        animation.setCycleCount(Timeline.INDEFINITE);
-        animation.getKeyFrames().add(frame);
-        animation.play();
-    }
+        shell.evaluate("GameData.addEntry('A', 'b', '2')");
 
-    private void initializeGroovyShell() {
-        sharedVariables = new Binding();
-        shell = new GroovyShell(sharedVariables);
-        imgIndex = new SimpleIntegerProperty(0);
-        sharedVariables.setVariable("imgIndex", imgIndex); // share imgIndex between Java/Groovy
-    }
+        System.out.println(TestGameData.getValue("A", "b")); // 2
 
-    private void initializeTestView() {
-        testPane = new Pane();
-        imgs = new Image[] {new Image(this.getClass().getClassLoader().getResourceAsStream("assign.png")),
-                            new Image(this.getClass().getClassLoader().getResourceAsStream("each.png")) };
-        view = new ImageView(imgs[0]);
-        view.setX(100);
-        view.setY(100);
-        testPane.getChildren().add(view);
-
-        imgIndex.addListener((e, oldVal, newVal) ->
-            view.setImage(imgs[newVal.intValue()])
-        ); // have imgIndex listen to changes to imgIndex
-    }
-
-    private void tick() {
-        shell.evaluate("imgIndex.set(1-imgIndex.get())"); // change imgIndex within the shell
+        System.out.println(TestGameData.getMap("A")); // a->0 b->2
     }
 }
