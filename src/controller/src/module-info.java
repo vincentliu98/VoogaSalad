@@ -1,4 +1,4 @@
-module frontend {
+module controller {
     requires javafx.graphics;
     requires javafx.fxml;
     requires javafx.controls;
@@ -6,12 +6,10 @@ module frontend {
     requires java.desktop;
     requires java.scripting;
 
-    requires authoring_backend;
+    requires frontend;
     requires engine;
 
-    exports authoringInterface;
-    exports graphUI;
-    exports playingGame;
-    exports launchingGame;
-    exports runningGame;
+    exports launching;
+    exports playing;
+
 }
