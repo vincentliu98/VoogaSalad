@@ -1,10 +1,19 @@
 package gameplay;
 
+import java.util.Map;
 import java.util.Set;
 
 public class Player {
-    // PLACEHOLDER
-    int myID;
-    Set<Entity> myEntities;
+    /**
+     *  We should implement a HUD for this on the second sprint
+     */
+    private int myID;
+    private Map<String, Double> myStats;
+    private Set<Integer> myEntityIDs;
 
+    public void addEntity(int entityID){ myEntityIDs.add(entityID); }
+    public void removeEntity(int entityID){ myEntityIDs.remove(entityID); }
+    public void addStat(String key, double value){ myStats.put(key, value); }
+    public double getValue(String key){ return myStats.get(key); }
+    public int getID(){ return myID; }
 }

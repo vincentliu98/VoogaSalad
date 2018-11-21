@@ -1,40 +1,44 @@
 package gameplay;
 
 import javafx.event.Event;
+import phase.api.GameEvent;
 
-public class Edge {
+public class Edge implements ArgumentListener {
     private int myID;
-    private Phase myPhase;
-    private Node myStartNode;
-    private Node myEndNode;
-    private Event myTrigger;
+    private int myPhaseID;
+    private int myStartNodeID;
+    private int myEndNodeID;
+    private GameEvent myTrigger;
     private String myGuard; // Groovy code
 
-    public Edge(Phase phase, int id, Node start, Node end, Event trigger, String guard) {
-        this.myPhase = phase;
+    public Edge(int phaseID, int id, int startNodeID, int endNodeID, String guard) {
+        this.myPhaseID = phaseID;
         this.myID = id;
-        this.myStartNode = start;
-        this.myEndNode = end;
-        this.myTrigger = trigger;
+        this.myStartNodeID = startNodeID;
+        this.myEndNodeID = endNodeID;
         this.myGuard = guard;
     }
 
-    public void setListener(){
-        // set listener based on myTrigger that calls validity and execution
-        if (checkValidity()){
-            myPhase.step(myEndNode);
-        } else {
-            setListener(); // start over again
-        }
-    }
-
     private boolean checkValidity(){
-        // execute Groovy guard, returns true if valid
-        return true;
+        if(myGuard.isEmpty()) return false; // false by default ? or true by default ?
+        try{
+            // arguments are already set by each entities/tiles
+            GameData.shell().evaluate(myGuard);
+            return (boolean) GameData.shell().getVariable("$return");
+        } catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public int getID(){
         return myID;
     }
-}
+    public int getMyStartNodeID() { return myStartNodeID; }
 
+    @Override
+    public int trigger(Event event) {
+        if(myTrigger.matches(event) && checkValidity()) return myEndNodeID;
+        else return DONT_PASS;
+    }
+}

@@ -63,7 +63,7 @@ public class SerializerForEngine {
                 writer.endNode();
 
                 writer.startNode("trigger");
-                writer.setValue(e.trigger().eventType());
+                writer.setValue(new XStream(new DomDriver()).toXML(e));
                 writer.endNode();
 
                 writer.startNode("guard");
