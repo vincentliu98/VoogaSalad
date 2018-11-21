@@ -81,11 +81,13 @@ public class PhasePane implements SubView<GridPane> {
         this.phaseDB = phaseDB;
         factory = new PhaseNodeFactory(phaseDB, genGroovyPane);
         trFactory = new TransitionLineFactory(genGroovyPane, group.getChildren()::add, group.getChildren()::remove);
+        phase = observableArrayList();
 
         while(name.equals("")) {
             TextInputDialog dialog = new TextInputDialog("");
             dialog.setContentText("Please enter the name of this phase graph:");
             dialog.showAndWait().ifPresent(name -> {
+                phase.add(name);
                 var tryGraph = phaseDB.createGraph(name);
                 if(tryGraph.isSuccess()) {
                     try {
@@ -98,7 +100,7 @@ public class PhasePane implements SubView<GridPane> {
 
         lines = new HashSet<>();
         nodes = new HashSet<>();
-        createNode(factory.source(graph.source(), 100, 50));
+//        createNode(factory.source(graph.source(), 100, 50));
 
         selectedEdge = new SimpleObjectProperty<>();
         selectedNode = new SimpleObjectProperty<>();
@@ -154,7 +156,6 @@ public class PhasePane implements SubView<GridPane> {
 
     private void initializeItemBox() {
         var vbox = new VBox();
-        phase = observableArrayList();
 
         vbox.setSpacing(10);
         var nodeImg = new Image(
@@ -204,7 +205,6 @@ public class PhasePane implements SubView<GridPane> {
                 var dialog = new TextInputDialog();
                 dialog.setHeaderText("Name of the phase");
                 String name = dialog.showAndWait().get();
-                phase.add(name);
                 createNode(factory.gen(newNodeX, newNodeY, name).get());
 
             } catch (Throwable t) { displayError(t.toString()); }
