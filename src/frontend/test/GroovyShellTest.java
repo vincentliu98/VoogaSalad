@@ -22,5 +22,23 @@ public class GroovyShellTest {
         System.out.println(TestGameData.getValue("A", "b")); // 2
 
         System.out.println(TestGameData.getMap("A")); // a->0 b->2
+
+        passMeTheShell(shell);
+
+        System.out.println(TestGameData.getValue("B", "b"));
+
+        new PassMeTheShell(shell);
+
+        System.out.println(TestGameData.getValue("C", "b"));
+    }
+
+    private static void passMeTheShell(GroovyShell shell) {
+        shell.evaluate("GameData.addEntry('B', 'b', '3')");
+    }
+
+    private static class PassMeTheShell {
+        private PassMeTheShell(GroovyShell shell) {
+            shell.evaluate("GameData.addEntry('C', 'b', '3')");
+        }
     }
 }

@@ -17,6 +17,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -116,7 +117,9 @@ public class EditorMenuBarView implements SubView<MenuBar> {
             newWindow.setScene(newScene);
             newWindow.setX(MainAuthoringProgram.SCREEN_WIDTH*0.5 - View.GAME_WIDTH*0.5);
             newWindow.setY(MainAuthoringProgram.SCREEN_HEIGHT*0.5 - View.GAME_HEIGHT*0.5);
+            initializer.setScreenSize(View.GAME_WIDTH, View.GAME_HEIGHT);
             newWindow.show();
+
         } catch (Exception e){
             e.printStackTrace();
         }

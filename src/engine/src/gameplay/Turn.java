@@ -1,8 +1,5 @@
 package gameplay;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.DomDriver;
-
 public class Turn {
     private int myCurrentPhaseID;
     private int myCurrentPlayerID;
@@ -12,28 +9,12 @@ public class Turn {
         myCurrentPlayerID = playerID;
     }
 
-    public int getCurrentPlayerID(){
-        return myCurrentPlayerID;
-    }
-
-    public void setPhase(int phaseID){
-        myCurrentPhaseID = phaseID;
-    }
-
-    public void setPlayer(int playerID){
-        myCurrentPlayerID = playerID;
-    }
-
-    public void startPhase(){
-        GameData.getPhase(myCurrentPhaseID).startTraversal();
-    }
+    public int getCurrentPlayerID(){ return myCurrentPlayerID; }
+    public void setPhase(int phaseID){ myCurrentPhaseID = phaseID; }
+    public void setPlayer(int playerID){ myCurrentPlayerID = playerID; }
+    public void startPhase(){ GameData.getPhase(myCurrentPhaseID).startTraversal(); }
 
     public void endGame(){
         // end the game
-    }
-
-    public String serializeTurn(){
-        XStream xStream = new XStream(new DomDriver());
-        return xStream.toXML(this);
     }
 }

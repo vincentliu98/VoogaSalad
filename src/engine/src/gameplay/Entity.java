@@ -1,86 +1,130 @@
 package gameplay;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
-import javafx.event.Event;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-public class Entity implements EventHandler {
-    private int myPlayerID;
+public class Entity extends PropertyHolder<Entity> implements EventHandler<MouseEvent> {
     private int myID;
-    private double myXCoord; // TODO: Only temporary; delete later
-    private double myYCoord;
-    Map<String, Double> myStats;
-    private String myImagePath;
+
+    private String name;
+
+    // A hidden assumption here is that each entity can only cover one tile.
+    // * These exist solely because I'm not sure whether xstream can correctly
+    // * serialize SimpleIntegerProperties
+    private double myXCoord, myYCoord;
+
+    private List<String> myImagePaths;
+
+    private String myImageSelector; // Groovy codee
+
     @XStreamOmitField
-    private ImageView myImageView;
+    private transient SimpleIntegerProperty imgIndex;
+    private transient SimpleDoubleProperty xCoord, yCoord;
 
-    public Entity(int id){
-        this.myID = id;
-        myStats = new HashMap<>();
-        myImagePath = "";
-        myXCoord = -1; //FIXME: temporary default values only
-        myYCoord = -1;
+    @XStreamOmitField
+    private transient List<Image> myImages;
+
+    @XStreamOmitField
+    private transient ImageView myImageView;
+
+    public Entity(
+        int myID,
+
+        String name,
+        Map<String, Object> properties,
+        List<String> myImagePaths,
+        String myImageSelector
+    ) {
+        this.myID = myID;
+        this.properties = properties;
+        this.name = name;
+        this.myImagePaths = myImagePaths;
+        this.myImageSelector = myImageSelector;
+        setupView();
     }
 
-    public void setPlayer(int playerID){
-        this.myPlayerID = playerID;
-    } // FIXME: is this necessary?
+    /**
+     *  Fills out the transient parts
+     */
+    public void setupView() {
+        myImageView = new ImageView();
+        myImageView.setPreserveRatio(true);
+        myImageView.setOnMouseClicked(this);
 
-    public void setImagePath(String imagePath) {
-        this.myImagePath = imagePath;
+        imgIndex = new SimpleIntegerProperty(-1);
+        imgIndex.addListener((e, oldVal, newVal) -> myImageView.setImage(myImages.get(newVal.intValue())));
+
+        xCoord = new SimpleDoubleProperty(myXCoord);
+        yCoord = new SimpleDoubleProperty(myYCoord);
     }
 
-    public String getImagePath(){
-        return myImagePath;
+    /**
+     *  Adjusts the size of this tile in pixels with respect to screen dimensions
+     *  TODO: test whether "addListener" replaces the old one
+     */
+    public void adjustViewSize(double screenWidth, double screenHeight) {
+        myImageView.setY((screenHeight * xCoord.get()) / GameData.gridHeight());
+        myImageView.setX((screenWidth * yCoord.get()) / GameData.gridWidth());
+        myImageView.setFitWidth(screenWidth/GameData.gridWidth());
+        myImageView.setFitHeight(screenHeight/GameData.gridHeight());
+
+        myImages = myImagePaths.stream()
+                               .map(path ->
+                                   new Image(
+                                       this.getClass().getClassLoader().getResourceAsStream(path),
+                                       screenWidth/GameData.gridWidth(), screenHeight/GameData.gridHeight(),
+                                       false, true
+                                   )
+                               ).collect(Collectors.toList());
+
+        xCoord.addListener((e, oldVal, newVal) -> {
+            myImageView.setX(screenWidth * newVal.doubleValue() / GameData.gridWidth());
+            myXCoord = newVal.intValue();
+        });
+
+        yCoord.addListener((e, oldVal, newVal) -> {
+            myImageView.setY(screenHeight * newVal.doubleValue() / GameData.gridHeight());
+            myYCoord = newVal.intValue();
+        });
+
     }
 
-    public double getXCoord(){
-        return myXCoord;
+    /**
+     *  Since all image selectors assume that $this refers to THIS specific instance of a tile,
+     *  we set the variable $this to this.
+     */
+    public void updateView() {
+        if(!myImageSelector.isEmpty()) {
+            GameData.shell().setVariable("$this", this);
+            GameData.shell().evaluate(myImageSelector);
+            imgIndex.set(Integer.parseInt(GameData.shell().getVariable("$return").toString()));
+        } else imgIndex.set(0);
     }
 
-    public double getYCoord(){
-        return myYCoord;
-    }
-
-    public ImageView getImageView(){
-        return myImageView;
-    }
-
-    public void setImageView(){
-        if (!myImagePath.isEmpty()){
-            myImageView = new ImageView();
-            myImageView.setImage(new Image(myImagePath)); // FIXME: shouldn't make new Image just for changing location
-            myImageView.setPreserveRatio(true);
-            myImageView.setFitWidth(100); // TODO: delete later
-        }
-        if (myXCoord != -1 && myYCoord != -1){
-            myImageView.setX(myXCoord);
-            myImageView.setY(myYCoord);
-        }
-    }
-
+    /**
+     *  This method should be called by Tile.addEntity, not from anywhere else
+     */
     public void setLocation(double xCoord, double yCoord){
-        myXCoord = xCoord;
-        myYCoord = yCoord;
-        setImageView();
+        this.xCoord.set(xCoord);
+        this.yCoord.set(yCoord);
     }
 
-    public void addStat(String key, Double value){
-        myStats.put(key, value);
-    }
-
-    public int getID(){
-        return myID;
-    }
+    public ImageView getImageView(){ return myImageView; }
+    public int getID(){ return myID; }
+    public String getName() { return name; }
 
     @Override
-    public void handle(Event event) {
-        System.out.println("handle called by Entity of id " + myID);
-        GameData.addArgument(new Tag(Entity.class, myID));
+    public void handle(MouseEvent event) {
+        System.out.println("MouseEvent from entity of id " + myID);
+        GameData.addArgument(event, new ClickTag(Entity.class, myID));
     }
 }
