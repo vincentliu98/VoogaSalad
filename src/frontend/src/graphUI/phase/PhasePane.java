@@ -22,6 +22,7 @@ import phase.api.Phase;
 import phase.api.PhaseDB;
 import phase.api.PhaseGraph;
 
+import java.util.EventListener;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -82,21 +83,21 @@ public class PhasePane implements SubView<GridPane> {
         factory = new PhaseNodeFactory(phaseDB, genGroovyPane);
         trFactory = new TransitionLineFactory(genGroovyPane, group.getChildren()::add, group.getChildren()::remove);
         phase = observableArrayList();
-
-        while(name.equals("")) {
-            TextInputDialog dialog = new TextInputDialog("");
-            dialog.setContentText("Please enter the name of this phase graph:");
-            dialog.showAndWait().ifPresent(name -> {
-                phase.add(name);
-                var tryGraph = phaseDB.createGraph(name);
-                if(tryGraph.isSuccess()) {
-                    try {
-                        graph = tryGraph.get();
-                        this.name = name;
-                    } catch (Throwable ignored) { }
-                }
-            });
-        }
+//        while(name.equals("")) {
+//            TextInputDialog dialog = new TextInputDialog("");
+//            dialog.setContentText("Please enter the name of this phase graph:");
+//            dialog.showAndWait().ifPresent(name -> {
+//                phase.add(name);
+//                var tryGraph = phaseDB.createGraph(name);
+//                if (tryGraph.isSuccess()) {
+//                    try {
+//                        graph = tryGraph.get();
+//                        this.name = name;
+//                    } catch (Throwable ignored) {
+//                    }
+//                }
+//            });
+//        }
 
         lines = new HashSet<>();
         nodes = new HashSet<>();
@@ -156,16 +157,37 @@ public class PhasePane implements SubView<GridPane> {
 
     private void initializeItemBox() {
         var vbox = new VBox();
+        var createPhaseBtn =  new Button("New PHASE");
 
         vbox.setSpacing(10);
         var nodeImg = new Image(
             this.getClass().getClassLoader().getResourceAsStream("phaseNode.png"),
             ICON_WIDTH, ICON_HEIGHT, true, true
         );
-        vbox.getChildren().addAll(draggableGroovyIcon(nodeImg), new ListView<>(phase));
+        vbox.getChildren().addAll(draggableGroovyIcon(nodeImg), createPhaseBtn, new ListView<>(phase));
 
         itemBox.setContent(vbox);
         itemBox.setMinHeight(HEIGHT);
+
+        createPhaseBtn.setOnMouseClicked(this::handlePhanseCreation);
+    }
+
+    private void handlePhanseCreation(MouseEvent e) {
+        while(name.equals("")) {
+            TextInputDialog dialog = new TextInputDialog("");
+            dialog.setContentText("Please enter the name of this phase graph:");
+            dialog.showAndWait().ifPresent(name -> {
+                phase.add(name);
+                var tryGraph = phaseDB.createGraph(name);
+                if(tryGraph.isSuccess()) {
+                    try {
+                        graph = tryGraph.get();
+                        this.name = name;
+                    } catch (Throwable ignored) { }
+                }
+            });
+        }
+        createNode(factory.source(graph.source(), 100, 50));
     }
 
     private ImageView draggableGroovyIcon(Image icon) {
