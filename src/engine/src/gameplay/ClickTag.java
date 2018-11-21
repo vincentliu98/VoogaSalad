@@ -1,11 +1,10 @@
 package gameplay;
 
-public class Tag {
-
+public class ClickTag {
     private Class myType;
     private int myID;
 
-    public Tag(Class type, int id){
+    public ClickTag(Class type, int id){
         this.myType = type;
         this.myID = id;
     }

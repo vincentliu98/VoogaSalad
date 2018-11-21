@@ -51,7 +51,7 @@ public class TransitionLineFactory {
             super(x, y, x2, y2);
             this.start = start;
             this.end = end;
-            this.label = new Text(event.eventType());
+            this.label = new Text(event.toString());
             this.model = event;
             this.cnt = cnt;
 

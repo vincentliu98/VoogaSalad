@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<XStreamTest_-Entity>
+    <properties/>
+    <images>
+        <string>/img1.png</string>
+        <string>/img2.png</string>
+    </images>
+</XStreamTest_-Entity>
