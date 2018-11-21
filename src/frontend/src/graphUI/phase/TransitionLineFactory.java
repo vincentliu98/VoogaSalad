@@ -1,6 +1,5 @@
 package graphUI.phase;
 
-import graphUI.groovy.GroovyPaneFactory;
 import graphUI.groovy.GroovyPaneFactory.GroovyPane;
 import graphUI.phase.PhaseNodeFactory.PhaseNode;
 import javafx.scene.Node;
@@ -12,6 +11,11 @@ import phase.api.GameEvent;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+/**
+ *TransitionLineFactory
+ *  -Handling the lines (i.e arrows)
+ * @author Amy
+ */
 public class TransitionLineFactory {
     private Supplier<GroovyPane> genGroovyPane;
     private Consumer<Node> removeFromScreen;
