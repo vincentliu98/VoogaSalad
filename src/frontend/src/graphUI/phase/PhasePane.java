@@ -6,6 +6,7 @@ import graphUI.groovy.GroovyPaneFactory.GroovyPane;
 import graphUI.phase.PhaseNodeFactory.PhaseNode;
 import graphUI.phase.TransitionLineFactory.TransitionLine;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.ObservableList;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -16,7 +17,6 @@ import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
-import javafx.stage.Stage;
 import phase.api.GameEvent;
 import phase.api.Phase;
 import phase.api.PhaseDB;
@@ -27,6 +27,8 @@ import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static javafx.collections.FXCollections.observableArrayList;
 
 /**
  * Playground for testing graph function
@@ -73,6 +75,7 @@ public class PhasePane implements SubView<GridPane> {
     private PhaseGraph graph;
     private PhaseNode edgeFrom;
     private Line tmpLine;
+    private ObservableList<String> phase;
 
     public PhasePane(PhaseDB phaseDB, Supplier<GroovyPane> genGroovyPane) {
         this.phaseDB = phaseDB;
@@ -122,7 +125,6 @@ public class PhasePane implements SubView<GridPane> {
 
         root.addEventFilter(KeyEvent.KEY_RELEASED, e -> {
             if((e.getCode() == KeyCode.BACK_SPACE) || (e.getCode() == KeyCode.DELETE)) {
-                System.out.println("try to delete");
                 deleteSelected();
             }
             if(e.getCode() == KeyCode.ESCAPE) {
@@ -152,13 +154,14 @@ public class PhasePane implements SubView<GridPane> {
 
     private void initializeItemBox() {
         var vbox = new VBox();
+        phase = observableArrayList();
 
         vbox.setSpacing(10);
         var nodeImg = new Image(
             this.getClass().getClassLoader().getResourceAsStream("phaseNode.png"),
             ICON_WIDTH, ICON_HEIGHT, true, true
         );
-        vbox.getChildren().add(draggableGroovyIcon(nodeImg));
+        vbox.getChildren().addAll(draggableGroovyIcon(nodeImg), new ListView<>(phase));
 
         itemBox.setContent(vbox);
         itemBox.setMinHeight(HEIGHT);
@@ -183,7 +186,6 @@ public class PhasePane implements SubView<GridPane> {
         graphBox.setOnDragOver(this::graphBoxDragOverHandler);
         graphBox.setOnDragDropped(this::graphBoxDragDropHandler);
     }
-
     private void graphBoxDragOverHandler(DragEvent event) {
         if (event.getGestureSource() != graphBox && event.getDragboard().hasImage()) {
             event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
@@ -202,7 +204,9 @@ public class PhasePane implements SubView<GridPane> {
                 var dialog = new TextInputDialog();
                 dialog.setHeaderText("Name of the phase");
                 String name = dialog.showAndWait().get();
+                phase.add(name);
                 createNode(factory.gen(newNodeX, newNodeY, name).get());
+
             } catch (Throwable t) { displayError(t.toString()); }
         }
         event.setDropCompleted(success);
@@ -211,7 +215,6 @@ public class PhasePane implements SubView<GridPane> {
 
     private void deleteSelected() {
         if(selectedEdge.get() != null) {
-            System.out.print("try to delete");
             selectedEdge.get().removeFromScreen();
             lines.remove(selectedEdge.get());
             graph.removeEdge(phaseDB.createTransition(

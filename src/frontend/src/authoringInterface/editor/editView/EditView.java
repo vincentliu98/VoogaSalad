@@ -3,7 +3,6 @@ package authoringInterface.editor.editView;
 import api.SubView;
 import authoring.AuthoringTools;
 import authoringInterface.editor.memento.Editor;
-import authoringInterface.editor.memento.EditorCaretaker;
 import authoringInterface.sidebar.SideViewInterface;
 import graphUI.groovy.GroovyPaneFactory;
 import graphUI.phase.PhasePane;
@@ -11,8 +10,6 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabDragPolicy;
 import javafx.scene.control.TabPane.TabClosingPolicy;
-import javafx.stage.Stage;
-import phase.api.Phase;
 
 
 /**
@@ -29,7 +26,6 @@ public class EditView implements SubView<TabPane> {
     private AuthoringTools authTools;
     private final Editor editor = new Editor();
     private GroovyPaneFactory groovyPaneFactory;
-    private boolean exist;
 
     /**
      * This method constructs the tabView.
@@ -41,7 +37,6 @@ public class EditView implements SubView<TabPane> {
         this.sideView = sideView;
         this.authTools = authTools;
         this.groovyPaneFactory = groovyPaneFactory;
-        this.exist = false;
         editor.setState(authTools.globalData());
         initializeTab();
         tabPane.setTabDragPolicy(TabDragPolicy.REORDER);
@@ -49,9 +44,8 @@ public class EditView implements SubView<TabPane> {
     }
 
     private void initializeTab(){
-        Tab MainTab = new Tab("Main");
-        MainTab.setContent(new AddTabView().getView());
-        tabPane.getTabs().add(MainTab);
+        Tab mainTab = new Tab("Main");
+        mainTab.setContent(new MainTabView().getView());
 
         Tab GridTab = new Tab("Grid");
         GridTab.setContent(new EditGridView(sideView).getView());
