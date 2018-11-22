@@ -12,6 +12,10 @@ public class SearchBar implements SubView<HBox> {
     public static final String PROMPT_MESSAGE = "Game Name";
     public static final String CROSS_PATH = "/graphics/black-cross.png";
     public static final double BAR_WIDTH = 400;
+    public static final double MIN_WIDTH = 200;
+    public static final double ICON_WIDTH = 10;
+    public static final double ICON_HEIGHT = 10;
+
 
     private HBox myBox;
 
@@ -40,14 +44,15 @@ public class SearchBar implements SubView<HBox> {
         myTextField.getStyleClass().add("search-bar");
 
         myTextField.setPrefWidth(BAR_WIDTH);
+        myTextField.setMinWidth(MIN_WIDTH);
     }
 
     private void initButton(){
         Image image = new Image(getClass().getResourceAsStream(CROSS_PATH));
         ImageView imageView = new ImageView(image);
 
-        imageView.setFitWidth(10);
-        imageView.setFitHeight(10);
+        imageView.setFitWidth(ICON_WIDTH);
+        imageView.setFitHeight(ICON_HEIGHT);
 
         myCloseButton = new Button();
         myCloseButton.setGraphic(imageView);
