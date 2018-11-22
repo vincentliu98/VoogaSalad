@@ -3,6 +3,7 @@ package launching;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import launchingGame.LauncherWindow;
 
 public class GameLauncher extends Application {
@@ -19,9 +20,9 @@ public class GameLauncher extends Application {
 
         primaryStage.setTitle(STAGE_TITLE);
         //primaryStage.initStyle(StageStyle.UNDECORATED);
-        primaryStage.setResizable(false);
+        //primaryStage.setResizable(false);
 
-        LauncherWindow myWindow = new LauncherWindow();
+        LauncherWindow myWindow = new LauncherWindow(primaryStage);
         Scene myScene = new Scene(myWindow.getView(), SCREEN_WIDTH, SCREEN_HEIGHT);
 
         myScene.getStylesheets().add(style);
