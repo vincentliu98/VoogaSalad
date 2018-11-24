@@ -38,7 +38,10 @@ public class Edge implements ArgumentListener {
 
     @Override
     public int trigger(Event event) {
-        if(myTrigger.matches(event) && checkValidity()) return myEndNodeID;
+        if(myTrigger.matches(event) && checkValidity()) {
+            System.out.printf("Transitioning from Node %d to Node %d\n", myStartNodeID, myEndNodeID);
+            return myEndNodeID;
+        }
         else return DONT_PASS;
     }
 }

@@ -27,7 +27,7 @@ public class IconLoader {
         ret.add(new Separator());
         var reader = new BufferedReader(
             new InputStreamReader(
-                IconLoader.class.getClassLoader().getResourceAsStream(category + ".properties")
+                IconLoader.class.getClassLoader().getResourceAsStream(category + ".props")
             )
         );
         var map = new LinkedHashMap<String, String>();
@@ -77,9 +77,9 @@ public class IconLoader {
         return loadIcons("literal", draggableIcon);
     }
 
-    public static List<Node> loadUnaries(
+    public static List<Node> loadFunctions(
         Function<Image, Function<String, Function<Boolean, ImageView>>> draggableIcon
     ) {
-        return loadIcons("unary", draggableIcon);
+        return loadIcons("function", draggableIcon);
     }
 }
