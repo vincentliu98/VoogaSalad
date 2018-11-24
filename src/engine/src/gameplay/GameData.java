@@ -68,8 +68,9 @@ public class GameData {
         var newEntity = ENTITY_PROTOTYPES.get(entityName).build(nextID);
         newEntity.adjustViewSize(ROOT.getWidth(), ROOT.getHeight());
         ENTITIES.put(nextID, newEntity);
-        ROOT.getChildren().add(newEntity.getImageView());
+        PLAYERS.get(ownerID).addEntity(nextID);
         TILES.get(tileID).addEntity(newEntity.getID());
+        ROOT.getChildren().add(newEntity.getImageView());
         return newEntity;
     }
 

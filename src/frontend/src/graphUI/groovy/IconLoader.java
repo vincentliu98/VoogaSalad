@@ -77,9 +77,9 @@ public class IconLoader {
         return loadIcons("literal", draggableIcon);
     }
 
-    public static List<Node> loadUnaries(
+    public static List<Node> loadFunctions(
         Function<Image, Function<String, Function<Boolean, ImageView>>> draggableIcon
     ) {
-        return loadIcons("unary", draggableIcon);
+        return loadIcons("function", draggableIcon);
     }
 }

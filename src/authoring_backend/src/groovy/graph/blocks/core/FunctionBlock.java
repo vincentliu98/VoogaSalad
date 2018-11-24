@@ -56,5 +56,8 @@ public class FunctionBlock extends SimpleNode implements GroovyBlock<FunctionBlo
     public Set<Ports> ports() { return Set.of(A, B, C, D, E, FLOW_OUT); }
 
     @Override
-    public String name() { return op; }
+    public String name() {
+        var s = op.split("\\.");
+        return s[s.length-1];
+    }
 }
