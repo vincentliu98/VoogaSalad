@@ -14,6 +14,7 @@ public class Player {
     public void addEntity(int entityID){ myEntityIDs.add(entityID); }
     public void removeEntity(int entityID){ myEntityIDs.remove(entityID); }
     public void addStat(String key, double value){ myStats.put(key, value); }
+    public boolean isMyEntity(Entity entity) { return myEntityIDs.contains(entity.getID()); }
     public double getValue(String key){ return myStats.get(key); }
     public int getID(){ return myID; }
 }

@@ -76,7 +76,13 @@ public class GameData {
 
     public static void removeEntity(Entity entity) {
         ROOT.getChildren().remove(entity.getImageView());
+        TILES.values().forEach(t -> t.removeEntity(entity.getID()));
         ENTITIES.remove(entity.getID());
+    }
+
+    public static void moveEntity(Entity entity, Tile to) {
+        TILES.values().forEach(t -> t.removeEntity(entity.getID()));
+        to.addEntity(entity.getID());
     }
 
     public static Player getPlayer(int playerID){
@@ -104,10 +110,29 @@ public class GameData {
         return TILES.get(tileID);
     }
 
+    public static Player getCurrentPlayer() { return PLAYERS.get(TURN.getCurrentPlayerID()); }
     public static int getCurrentPlayerID(){ return TURN.getCurrentPlayerID(); }
     public static void setCurrentPlayerID(int id){ TURN.setPlayer(id); }
 
     public static Turn getTurn(){ return TURN; }
+
+    public static boolean isTile(GameObject object) {
+        return !ENTITY_PROTOTYPES.keySet().contains(object.getName());
+    }
+
+    public static void goTo(int nodeID) {
+        getNode(nodeID).execute();
+    }
+
+    public static boolean isEntity(GameObject object) {
+        return ENTITY_PROTOTYPES.keySet().contains(object.getName());
+    }
+
+    public static double distance(GameObject a, GameObject b) {
+        double dx = a.getX() - b.getX();
+        double dy = a.getY() - b.getY();
+        return Math.sqrt(dx*dx+dy*dy);
+    }
 
     public static Pane getRoot() { return ROOT; }
 

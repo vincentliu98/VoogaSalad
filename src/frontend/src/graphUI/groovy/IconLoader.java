@@ -27,7 +27,7 @@ public class IconLoader {
         ret.add(new Separator());
         var reader = new BufferedReader(
             new InputStreamReader(
-                IconLoader.class.getClassLoader().getResourceAsStream(category + ".properties")
+                IconLoader.class.getClassLoader().getResourceAsStream(category + ".props")
             )
         );
         var map = new LinkedHashMap<String, String>();
