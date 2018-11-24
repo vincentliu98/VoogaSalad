@@ -42,6 +42,16 @@ public class GroovyNode extends StackPane {
         Color color,
         List<Pair<Pos, Ports>> portPositions
     ) {
+        text = new Label(block.name());
+        text.setFont(new Font(labelSize));
+        text.setWrapText(true);
+
+        text.setTextFill(
+            color.getRed()*0.299 +
+            color.getGreen()*0.587 +
+            color.getBlue()*0.114 > 0.73 ? Color.BLACK : Color.WHITE
+        );
+
         model = block;
         rectangle = new Rectangle(xPos, yPos, width, height);
         rectangle.setFill(color);
@@ -49,9 +59,6 @@ public class GroovyNode extends StackPane {
         inner = new Rectangle(PADDING, PADDING, width-2*PADDING, height-2*PADDING);
         inner.setFill(Color.TRANSPARENT);
 
-        text = new Label(block.name());
-        text.setFont(new Font(labelSize));
-        text.setTextFill(Color.WHITE);
 
         setLayoutX(xPos);
         setLayoutY(yPos);
@@ -85,25 +92,27 @@ public class GroovyNode extends StackPane {
         double y = getCenterY();
 
         switch(pos) {
-            case TOP_CENTER:
+            case TOP_LEFT:
+                x = getCenterX()-rectangle.getWidth()/2;
                 y = getCenterY()-rectangle.getHeight()/2;
                 break;
-            case BOTTOM_CENTER:
-                y = getCenterY()+rectangle.getHeight()/2;
-                break;
-            case CENTER_LEFT:
-                x = getCenterX()-rectangle.getWidth()/2;
-                break;
-            case CENTER_RIGHT:
-                x = getCenterX()+rectangle.getWidth()/2;
+            case TOP_CENTER:
+                y = getCenterY()-rectangle.getHeight()/2;
                 break;
             case TOP_RIGHT:
                 x = getCenterX()+rectangle.getWidth()/2;
                 y = getCenterY()-rectangle.getHeight()/2;
                 break;
+            case CENTER_RIGHT:
+                x = getCenterX()+rectangle.getWidth()/2;
+                break;
+            case BOTTOM_CENTER:
+                y = getCenterY()+rectangle.getHeight()/2;
+                break;
             case BOTTOM_RIGHT:
                 x = getCenterX()+rectangle.getWidth()/2;
                 y = getCenterY()+rectangle.getHeight()/2;
+                break;
         }
         return new Pair<>(x, y);
     }

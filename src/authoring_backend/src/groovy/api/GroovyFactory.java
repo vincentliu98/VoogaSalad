@@ -6,9 +6,6 @@ import groovy.graph.blocks.core.*;
 import groovy.graph.blocks.small_factory.LiteralFactory;
 import utils.Try;
 
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 /**
  *  A Factory that can generate Graph/Node/Edge that represents Groovy code.
  */
@@ -60,7 +57,7 @@ public class GroovyFactory {
         return LiteralFactory.refBlock(value);
     }
 
-    public UnaryBlock unaryBlock(String op) { return new UnaryBlock(op); }
+    public FunctionBlock functionBlock(String op) { return new FunctionBlock(op); }
     public InfixBinaryBlock binaryBlock(String op) { return new InfixBinaryBlock(op); }
     // We'll eventually remove this
     public RawGroovyBlock rawBlock(String code) { return new RawGroovyBlock(code); }
