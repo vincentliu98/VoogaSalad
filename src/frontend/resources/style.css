@@ -65,3 +65,27 @@
 .mySide {
     -fx-focus-color: transparent;
 }
+
+.viewEntered :hover{
+    -fx-cursor: hand;
+}
+
+.viewEntered :focused{
+    -fx-cursor: hand;
+}
+
+.phaseBtn {
+    -fx-cursor: hand;
+    -fx-background-color: #343a40;
+    -fx-text-fill: #fff;
+}
+
+.vboxPhase {
+    -fx-padding: 20 0 0 0;
+}
+
+.list-cell:filled:selected:focused, .list-cell:filled:selected {
+    -fx-background-color: #343a40;
+    -fx-font-weight: bold;
+    -fx-text-fill: #fff;
+}

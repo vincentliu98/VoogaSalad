@@ -1,16 +1,16 @@
 package graphUI.phase;
 
 import api.SubView;
-import authoringInterface.spritechoosingwindow.PopUpWindow;
 import graphUI.groovy.GroovyPaneFactory.GroovyPane;
 import graphUI.phase.PhaseNodeFactory.PhaseNode;
 import graphUI.phase.TransitionLineFactory.TransitionLine;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.ObservableList;
+import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
@@ -18,18 +18,14 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import phase.api.GameEvent;
-import phase.api.Phase;
 import phase.api.PhaseDB;
 import phase.api.PhaseGraph;
 
-import java.util.EventListener;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static javafx.collections.FXCollections.observableArrayList;
 
 /**
  * Playground for testing graph function
@@ -40,11 +36,9 @@ import static javafx.collections.FXCollections.observableArrayList;
  * @author Amy
  */
 
-public class PhasePane implements SubView<GridPane> {
-    public static final Double WIDTH = 1200.0;
-    public static final Double HEIGHT = 800.0;
-    public static final Double ICON_WIDTH = 100.0;
-    public static final Double ICON_HEIGHT = 100.0;
+public class PhasePane implements SubView<StackPane> {
+    public static final Double ICON_WIDTH = 90.0;
+    public static final Double ICON_HEIGHT = 90.0;
 
     private enum DRAG_PURPOSE {
         NOTHING,
@@ -56,11 +50,10 @@ public class PhasePane implements SubView<GridPane> {
     private double orgSceneX, orgSceneY;
     private double orgTranslateX, orgTranslateY;
 
-    private GridPane root = new GridPane();
+    private StackPane root = new StackPane();
+    private Pane pane = new Pane();
     private Pane graphBox = new Pane();
     private Group group = new Group();
-    private ScrollPane itemBox = new ScrollPane();
-    private Scene myScene;
     private double newNodeX;
     private double newNodeY;
     private PhaseDB phaseDB;
@@ -72,39 +65,22 @@ public class PhasePane implements SubView<GridPane> {
     private SimpleObjectProperty<TransitionLine> selectedEdge;
     private SimpleObjectProperty<PhaseNode> selectedNode;
 
-    private String name = "";
-    private PhaseGraph graph;
     private PhaseNode edgeFrom;
     private Line tmpLine;
-    private ObservableList<String> phase;
+    private PhaseGraph graph;
 
-    public PhasePane(PhaseDB phaseDB, Supplier<GroovyPane> genGroovyPane) {
+    public PhasePane(PhaseDB phaseDB, Supplier<GroovyPane> genGroovyPane, PhaseGraph graph) {
+        this.graph = graph;
         this.phaseDB = phaseDB;
         factory = new PhaseNodeFactory(phaseDB, genGroovyPane);
         trFactory = new TransitionLineFactory(genGroovyPane, group.getChildren()::add, group.getChildren()::remove);
-        phase = observableArrayList();
-//        while(name.equals("")) {
-//            TextInputDialog dialog = new TextInputDialog("");
-//            dialog.setContentText("Please enter the name of this phase graph:");
-//            dialog.showAndWait().ifPresent(name -> {
-//                phase.add(name);
-//                var tryGraph = phaseDB.createGraph(name);
-//                if (tryGraph.isSuccess()) {
-//                    try {
-//                        graph = tryGraph.get();
-//                        this.name = name;
-//                    } catch (Throwable ignored) {
-//                    }
-//                }
-//            });
-//        }
 
         lines = new HashSet<>();
         nodes = new HashSet<>();
-//        createNode(factory.source(graph.source(), 100, 50));
 
         selectedEdge = new SimpleObjectProperty<>();
         selectedNode = new SimpleObjectProperty<>();
+
 
         selectedEdge.addListener((e, o, n) -> {
             if(o != null && lines.contains(o)) o.setColor(Color.BLACK);
@@ -137,63 +113,30 @@ public class PhasePane implements SubView<GridPane> {
         });
 
         initializeUI();
-    }
-
-    private void initializeUI() {
-        root.setPrefWidth(WIDTH);
-        root.setPrefHeight(HEIGHT);
-        graphBox.getChildren().add(group);
-        graphBox.setPrefSize(2*WIDTH, 3*HEIGHT);
-        setupGraphbox();
-        initializeGridPane();
-        initializeItemBox();
-        root.add(itemBox, 0, 0);
-        HBox.setHgrow(itemBox, Priority.ALWAYS);
-        var graphBoxWrapper = new ScrollPane();
-        graphBoxWrapper.setContent(graphBox);
-        root.add(graphBoxWrapper, 1, 0);
-        myScene = new Scene(root, WIDTH, HEIGHT);
-    }
-
-    private void initializeItemBox() {
-        var vbox = new VBox();
-        var createPhaseBtn =  new Button("New PHASE");
-
-        vbox.setSpacing(10);
-        var nodeImg = new Image(
-            this.getClass().getClassLoader().getResourceAsStream("phaseNode.png"),
-            ICON_WIDTH, ICON_HEIGHT, true, true
-        );
-        vbox.getChildren().addAll(draggableGroovyIcon(nodeImg), createPhaseBtn, new ListView<>(phase));
-
-        itemBox.setContent(vbox);
-        itemBox.setMinHeight(HEIGHT);
-
-        createPhaseBtn.setOnMouseClicked(this::handlePhanseCreation);
-    }
-
-    private void handlePhanseCreation(MouseEvent e) {
-        while(name.equals("")) {
-            TextInputDialog dialog = new TextInputDialog("");
-            dialog.setContentText("Please enter the name of this phase graph:");
-            dialog.showAndWait().ifPresent(name -> {
-                phase.add(name);
-                var tryGraph = phaseDB.createGraph(name);
-                if(tryGraph.isSuccess()) {
-                    try {
-                        graph = tryGraph.get();
-                        this.name = name;
-                    } catch (Throwable ignored) { }
-                }
-            });
-        }
         createNode(factory.source(graph.source(), 100, 50));
     }
 
+    private void initializeUI() {
+        graphBox.getChildren().add(group);
+        graphBox.setPrefSize(2000, 2000);
+        setupGraphbox();
+        root.getChildren().add(new ScrollPane(graphBox));
+
+        pane.setMaxWidth(150);
+        pane.setMaxHeight(150);
+        var nodeImg = new Image(
+                this.getClass().getClassLoader().getResourceAsStream("phaseNode.png"),
+                ICON_WIDTH, ICON_HEIGHT, true, true
+        );
+        var nodeImgView = draggableGroovyIcon(nodeImg);
+        pane.getChildren().add(nodeImgView);
+        StackPane.setAlignment(pane, Pos.BOTTOM_RIGHT);
+        root.getChildren().add(pane);
+    }
+
+
     private ImageView draggableGroovyIcon(Image icon) {
         var view = new ImageView(icon);
-        view.setOnMouseEntered(e -> myScene.setCursor(Cursor.HAND));
-        view.setOnMouseExited(e -> myScene.setCursor(Cursor.DEFAULT));
         view.setOnDragDetected(event -> {
             Dragboard db = view.startDragAndDrop(TransferMode.ANY);
             ClipboardContent content = new ClipboardContent();
@@ -228,7 +171,6 @@ public class PhasePane implements SubView<GridPane> {
                 dialog.setHeaderText("Name of the phase");
                 String name = dialog.showAndWait().get();
                 createNode(factory.gen(newNodeX, newNodeY, name).get());
-
             } catch (Throwable t) { displayError(t.toString()); }
         }
         event.setDropCompleted(success);
@@ -260,13 +202,6 @@ public class PhasePane implements SubView<GridPane> {
     }
 
 
-    private void initializeGridPane() {
-        var col1 = new ColumnConstraints();
-        col1.setPercentWidth(15);
-        var col2 = new ColumnConstraints();
-        col2.setPercentWidth(85);
-        root.getColumnConstraints().addAll(col1, col2);
-    }
 
     private void connectNodes(PhaseNode node1, GameEvent event, PhaseNode node2) {
         try {
@@ -281,14 +216,14 @@ public class PhasePane implements SubView<GridPane> {
                 node1, event, node2
             );
             edgeLine.setStrokeWidth(3);
-            edgeLine.setOnMouseEntered(e -> myScene.setCursor(Cursor.HAND));
-            edgeLine.setOnMouseExited(e -> myScene.setCursor(Cursor.DEFAULT));
+            edgeLine.setOnMouseEntered(e -> root.setCursor(Cursor.HAND));
+            edgeLine.setOnMouseExited(e -> root.setCursor(Cursor.DEFAULT));
             edgeLine.setOnMouseClicked(e -> {
                 if(e.getClickCount() == 1) selectedEdge.set(edgeLine);
                 else selectedEdge.get().showGraph();
             });
-            edgeLine.label().setOnMouseEntered(e -> myScene.setCursor(Cursor.HAND));
-            edgeLine.label().setOnMouseExited(e -> myScene.setCursor(Cursor.DEFAULT));
+            edgeLine.label().setOnMouseEntered(e -> root.setCursor(Cursor.HAND));
+            edgeLine.label().setOnMouseExited(e -> root.setCursor(Cursor.DEFAULT));
             edgeLine.label().setOnMouseClicked(e -> {
                 if(e.getClickCount() == 1) selectedEdge.set(edgeLine);
                 else selectedEdge.get().showGraph();
@@ -308,8 +243,8 @@ public class PhasePane implements SubView<GridPane> {
             node.setOnMousePressed(this::nodeMousePressedHandler);
             node.setOnMouseDragged(this::nodeMouseDraggedHandler);
             node.setOnMouseReleased(this::nodeMouseReleasedHandler);
-            node.inner().setOnMouseEntered(e -> myScene.setCursor(Cursor.MOVE));
-            node.inner().setOnMouseExited(e -> myScene.setCursor(Cursor.DEFAULT));
+            node.inner().setOnMouseEntered(e -> root.setCursor(Cursor.MOVE));
+            node.inner().setOnMouseExited(e -> root.setCursor(Cursor.DEFAULT));
             node.setOnMouseClicked(e -> {
                 if(e.getClickCount() == 1) selectedNode.set(node);
                 else node.showGraph();
@@ -396,7 +331,7 @@ public class PhasePane implements SubView<GridPane> {
     }
 
     @Override
-    public GridPane getView() {
+    public StackPane getView() {
         return root;
     }
 }

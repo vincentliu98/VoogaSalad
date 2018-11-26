@@ -9,6 +9,7 @@ public class Node {
     public int getID(){ return myID; }
 
     public void execute(){
+        System.out.printf("On Node %d\n", myID);
         GameData.clearArgumentListeners(); // clear previous listeners
         GameData.getEdges()
                 .stream()

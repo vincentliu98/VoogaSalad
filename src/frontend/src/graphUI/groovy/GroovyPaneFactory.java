@@ -182,7 +182,7 @@ public class GroovyPaneFactory {
                 IconLoader.loadLiterals(img -> type -> fetchArg -> draggableGroovyIcon(img, type, fetchArg))
             );
             vbox.getChildren().addAll(
-                IconLoader.loadUnaries(img -> type -> fetchArg -> draggableGroovyIcon(img, type, fetchArg))
+                IconLoader.loadFunctions(img -> type -> fetchArg -> draggableGroovyIcon(img, type, fetchArg))
             );
 
             vbox.setSpacing(10);
