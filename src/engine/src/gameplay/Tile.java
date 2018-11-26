@@ -10,7 +10,7 @@ import javafx.scene.input.MouseEvent;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Tile extends PropertyHolder<Tile> implements EventHandler<MouseEvent> {
+public class Tile extends PropertyHolder<Tile> implements GameObject, EventHandler<MouseEvent> {
     private int myID;
     private String name;
     private int myWidth, myHeight;
@@ -83,7 +83,7 @@ public class Tile extends PropertyHolder<Tile> implements EventHandler<MouseEven
         GameData.getEntity(entityID).setLocation(myXCoord + (myWidth-1)/2., myYCoord + (myHeight-1)/2);
     }
     public void removeEntity(int entityID) {
-        myEntities.remove(entityID);
+        myEntities.removeIf(id -> id == entityID);
         // TODO: make sure this removes the OBJECT
         // This method is good enough here.
     }
@@ -94,6 +94,12 @@ public class Tile extends PropertyHolder<Tile> implements EventHandler<MouseEven
 
     public int getID(){ return myID; }
     public String getName() { return name; }
+
+    @Override
+    public double getX() { return myXCoord; }
+
+    @Override
+    public double getY() { return myYCoord; }
 
     @Override
     public void handle(MouseEvent event) {

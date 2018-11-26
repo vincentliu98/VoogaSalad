@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class Entity extends PropertyHolder<Entity> implements EventHandler<MouseEvent> {
+public class Entity extends PropertyHolder<Entity> implements GameObject, EventHandler<MouseEvent> {
     private int myID;
 
     private String name;
@@ -45,7 +45,7 @@ public class Entity extends PropertyHolder<Entity> implements EventHandler<Mouse
         String myImageSelector
     ) {
         this.myID = myID;
-        this.properties = properties;
+        this.props = properties;
         this.name = name;
         this.myImagePaths = myImagePaths;
         this.myImageSelector = myImageSelector;
@@ -72,8 +72,8 @@ public class Entity extends PropertyHolder<Entity> implements EventHandler<Mouse
      *  TODO: test whether "addListener" replaces the old one
      */
     public void adjustViewSize(double screenWidth, double screenHeight) {
-        myImageView.setY((screenHeight * xCoord.get()) / GameData.gridHeight());
-        myImageView.setX((screenWidth * yCoord.get()) / GameData.gridWidth());
+        myImageView.setY((screenHeight * yCoord.get()) / GameData.gridHeight());
+        myImageView.setX((screenWidth * xCoord.get()) / GameData.gridWidth());
         myImageView.setFitWidth(screenWidth/GameData.gridWidth());
         myImageView.setFitHeight(screenHeight/GameData.gridHeight());
 
@@ -121,6 +121,8 @@ public class Entity extends PropertyHolder<Entity> implements EventHandler<Mouse
     public ImageView getImageView(){ return myImageView; }
     public int getID(){ return myID; }
     public String getName() { return name; }
+    public double getX() { return xCoord.get(); }
+    public double getY() { return yCoord.get(); }
 
     @Override
     public void handle(MouseEvent event) {

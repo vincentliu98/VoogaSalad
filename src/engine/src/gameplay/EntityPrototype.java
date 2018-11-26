@@ -9,12 +9,12 @@ import java.util.Map;
 /**
  *  EntityPrototype is a builder for Entities;
  *  (I mean, it's a builder but one and only buildable component is the
- *   properties, which is dealt on PropertyHolder)
+ *   props, which is dealt on PropertyHolder)
  *
  *  So within groovy, one can do
  *
  *  GameData.createEntity("goblin", tileID); to use default hp
- *  GameData.createEntity("goblin", tileID).withProperty("hp", 1); to override default hp
+ *  GameData.createEntity("goblin", tileID).withProps("hp", 1); to override default hp
  *
  */
 public class EntityPrototype extends PropertyHolder<EntityPrototype> {
@@ -26,7 +26,7 @@ public class EntityPrototype extends PropertyHolder<EntityPrototype> {
 
     public Map<String, Object> freshMap() {
         var serializer = new XStream(new DomDriver());
-        return (Map<String, Object>) serializer.fromXML(serializer.toXML(properties));
+        return (Map<String, Object>) serializer.fromXML(serializer.toXML(props));
     }
 
     public String name() { return name; }

@@ -7,9 +7,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import phase.api.GameEvent;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class XStreamTest {
     public static void main(String[] args) {
@@ -45,10 +43,14 @@ public class XStreamTest {
 
     public static class Entity extends Property {
         private List<String> images;
+        private Set<Integer> ids;
         private GameEvent trigger;
 
         public Entity() {
             properties = new HashMap<>();
+            ids = new HashSet<>();
+            properties.put("ha", 1);
+            ids.add(1);
             trigger = GameEvent.mouseClick();
         }
 
