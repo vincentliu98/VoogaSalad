@@ -5,6 +5,7 @@ import authoring.AuthoringTools;
 import authoringInterface.editor.memento.Editor;
 import authoringInterface.sidebar.SideViewInterface;
 import graphUI.groovy.GroovyPaneFactory;
+import graphUI.phase.PhaseChooserPane;
 import graphUI.phase.PhasePane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -55,10 +56,11 @@ public class EditView implements SubView<TabPane> {
 
         Tab PhaseTab = new Tab("Phase");
         PhaseTab.setContent(
-                new PhasePane(
-                        authTools.phaseDB(),
-                        groovyPaneFactory::gen)
-                        .getView());
+               new PhaseChooserPane(
+                       authTools.phaseDB(),
+                       groovyPaneFactory::gen
+               ).getView()
+        );
         Tab LevelTab = new Tab("Level");
 
         tabPane.getTabs().addAll(GridTab,EntityTab,PhaseTab, LevelTab);
