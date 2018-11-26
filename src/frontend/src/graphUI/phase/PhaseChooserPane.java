@@ -92,11 +92,12 @@ public class PhaseChooserPane implements SubView<GridPane> {
             if(tryGraph.isSuccess()) {
                 try {
                     var graph = tryGraph.get();
+                    var phasePane = new PhasePane(phaseDB, genGroovyPane, graph);
                     phaseList.add(name);
-                    phasePanes.add(new PhasePane(phaseDB, genGroovyPane, graph));
+                    phasePanes.add(phasePane);
                     phaseListView.getSelectionModel().select(phaseList.size()-1);
-                } catch (Throwable ignored) {
-                    displayError("Name already exists!");
+                } catch (Throwable t) {
+                    displayError(t.toString());
                 }
             }
         });
