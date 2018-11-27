@@ -120,6 +120,7 @@ public class GameData {
     }
 
     public static void goTo(int nodeID) {
+        System.out.println("hahha"+nodeID);
         getNode(nodeID).execute();
     }
 

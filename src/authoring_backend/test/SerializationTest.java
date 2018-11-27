@@ -74,48 +74,77 @@ public class SerializationTest {
         graph.addEdge(edge24);
 
         var edge12graph = edge12.guard();
-        var edge23graph = edge23.guard();
-        var edge24graph = edge24.guard();
 
-//      if(GameData.isEntity($clicked) &amp;&amp; GameData.getCurrentPlayer().isMyEntity($clicked)) { $return = true }
-//          else { $return = false }
+        // this is properly done, but I'm gonna cheat afterwards
         var n1 = factory.ifBlock();
         var n2 = factory.functionBlock("GameData.isEntity");
         var n3 = factory.refBlock("$clicked").get();
         var n4 = factory.binaryBlock("&&");
         var n5 = factory.functionBlock("GameData.getCurrentPlayer().isMyEntity");
+        var n6 = factory.assignBlock();
+        var n7 = factory.refBlock("$return").get();
+        var n8 = factory.booleanBlock("true").get();
+        var n9 = factory.elseBlock();
+        var n10 = factory.assignBlock();
+        var n11 = factory.booleanBlock("false").get();
+        edge12graph.addNode(n1);
+        edge12graph.addNode(n2);
+        edge12graph.addNode(n3);
+        edge12graph.addNode(n4);
+        edge12graph.addNode(n5);
+        edge12graph.addNode(n6);
+        edge12graph.addNode(n7);
+        edge12graph.addNode(n8);
+        edge12graph.addNode(n9);
+        edge12graph.addNode(n10);
+        edge12graph.addNode(n11);
 
-        var e14 = factory.createEdge(n1, Ports.IF_PREDICATE, n4);
-        var e42 = factory.createEdge(n4, Ports.A, n2);
-        var e45 = factory.createEdge(n4, Ports.B, n5);
-        var e23 = factory.createEdge(n2, Ports.A, n3);
-        var e53 = factory.createEdge(n5, Ports.A, n3);
+        edge12graph.addEdge(factory.createEdge(edge12graph.source(), Ports.FLOW_OUT, n1));
+        edge12graph.addEdge(factory.createEdge(n1, Ports.IF_PREDICATE, n4));
+        edge12graph.addEdge(factory.createEdge(n4, Ports.A, n2));
+        edge12graph.addEdge(factory.createEdge(n4, Ports.B, n5));
+        edge12graph.addEdge(factory.createEdge(n2, Ports.A, n3));
+        edge12graph.addEdge(factory.createEdge(n5, Ports.A, n3));
+        edge12graph.addEdge(factory.createEdge(n1, Ports.IF_BODY, n6));
+        edge12graph.addEdge(factory.createEdge(n6, Ports.ASSIGN_LHS, n7));
+        edge12graph.addEdge(factory.createEdge(n6, Ports.ASSIGN_RHS, n8));
+        edge12graph.addEdge(factory.createEdge(n1, Ports.FLOW_OUT, n9));
+        edge12graph.addEdge(factory.createEdge(n9, Ports.IF_BODY, n10));
+        edge12graph.addEdge(factory.createEdge(n10, Ports.ASSIGN_LHS, n7));
+        edge12graph.addEdge(factory.createEdge(n10, Ports.ASSIGN_RHS, n11));
+
+        var edge23graph = edge23.guard();
+        var n23 = factory.rawBlock("if(GameData.isTile($clicked) && GameData.distance($clicked, selected) <= 1 && GameData.hasNoEntities($clicked)) { $return = true } else { $return = false }");
+        edge23graph.addNode(n23);
+        edge23graph.addEdge(factory.createEdge(edge23graph.source(), Ports.FLOW_OUT, n23));
+
+        var edge24graph = edge24.guard();
+        var n24 = factory.rawBlock("if(GameData.isEntity($clicked) && !GameData.getCurrentPlayer().isMyEntity($clicked) && GameData.distance($clicked, selected) <= selected.props.attackRange ) { $return = true } else { $return = false }");
+        edge24graph.addNode(n24);
+        edge24graph.addEdge(factory.createEdge(edge24graph.source(), Ports.FLOW_OUT, n24));
+
+        var exec2 = factory.rawBlock("selected = $clicked");
+        node2.exec().addNode(exec2);
+        node2.exec().addEdge(factory.createEdge(node2.exec().source(), Ports.FLOW_OUT, exec2));
+
+        var exec3 = factory.rawBlock(
+            "GameData.moveEntity(selected, $clicked)\n" +
+            "GameData.setCurrentPlayerID(1-GameData.getCurrentPlayerID())\n" +
+            "GameData.goTo('A')"
+        );
+        node3.exec().addNode(exec3);
+        node3.exec().addEdge(factory.createEdge(node3.exec().source(), Ports.FLOW_OUT, exec3));
 
 
+        var exec4 = factory.rawBlock(
+            "$clicked.props.hp = $clicked.props.hp - selected.props.dmg\n" +
+            "if($clicked.props.hp <= 0) { GameData.removeEntity($clicked) }\n" +
+            "GameData.setCurrentPlayerID(1-GameData.getCurrentPlayerID())\n" +
+            "GameData.goTo('A')"
+        );
+        node4.exec().addNode(exec4);
+        node4.exec().addEdge(factory.createEdge(node4.exec().source(), Ports.FLOW_OUT, exec4));
 
-        edge12graph.addNode();
-        edge12graph.addNode();
-
-
-//        if(GameData.isTile($clicked) &amp;&amp; GameData.distance($clicked, selected) &lt;= 1 &amp;&amp; GameData.hasNoEntities($clicked)) { $return = true }
-//            else { $return = false }
-//
-//
-//        if(GameData.isEntity($clicked) &amp;&amp; !GameData.getCurrentPlayer().isMyEntity($clicked) &amp;&amp; GameData.distance($clicked, selected) &lt;= selected.props.attackRange ) { $return = true }
-//            else { $return = false }
-//
-//        selected = $clicked
-//
-//        GameData.moveEntity(selected, $clicked)
-//        GameData.setCurrentPlayerID(1-GameData.getCurrentPlayerID())
-//        GameData.goTo(1)
-//
-//        $clicked.props.hp = $clicked.props.hp - selected.props.dmg
-//        if($clicked.props.hp &lt;= 0) {
-//            GameData.removeEntity($clicked)
-//        }
-//        GameData.setCurrentPlayerID(1-GameData.getCurrentPlayerID())
-//        GameData.goTo(1)
         System.out.println(authTools.toEngineXML());
     }
 }
