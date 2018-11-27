@@ -4,7 +4,7 @@ import phase.api.GameEvent;
 
 public class PhaseSerializationTest {
     public static void main(String[] args) throws Throwable {
-        var authTools = new AuthoringTools();
+        var authTools = new AuthoringTools(5,5);
         var phaseDB = authTools.phaseDB();
 
         var graph = phaseDB.createGraph("A").get(null);
@@ -24,10 +24,6 @@ public class PhaseSerializationTest {
         graph.addEdge(edge12);
         graph.addEdge(edge23);
         graph.addEdge(edge24);
-
-        var edge12graph = edge12.guard();
-        var edge23graph = edge23.guard();
-        var edge24graph = edge24.guard();
 
         System.out.println(SerializerForEngine.gen().toXML(phaseDB));
     }

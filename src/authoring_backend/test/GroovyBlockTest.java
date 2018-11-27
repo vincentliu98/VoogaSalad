@@ -15,7 +15,7 @@ public class GroovyBlockTest {
 
     @BeforeEach
     public void setupTestData() {
-        tools = new AuthoringTools();
+        tools = new AuthoringTools(5,5);
         factory = tools.factory();
         shell = new GroovyShell();
     }

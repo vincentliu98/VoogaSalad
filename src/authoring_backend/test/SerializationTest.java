@@ -1,13 +1,14 @@
 import authoring.AuthoringTools;
 import gameObjects.GameObjectInstance;
 import grids.PointImpl;
+import groovy.api.Ports;
 import phase.api.GameEvent;
 
 import java.util.ArrayList;
 
 public class SerializationTest {
     public static void main(String[] args) throws Throwable {
-        var authTools = new AuthoringTools();
+        var authTools = new AuthoringTools(5, 5);
 
         // --------------- ENTITY/TILE ------------- //
 
@@ -52,6 +53,7 @@ public class SerializationTest {
         // -------------- PHASE ------------- //
 
         var phaseDB = authTools.phaseDB();
+        var factory = authTools.factory();
 
         var graph = phaseDB.createGraph("A").get(null);
 
@@ -75,6 +77,45 @@ public class SerializationTest {
         var edge23graph = edge23.guard();
         var edge24graph = edge24.guard();
 
+//      if(GameData.isEntity($clicked) &amp;&amp; GameData.getCurrentPlayer().isMyEntity($clicked)) { $return = true }
+//          else { $return = false }
+        var n1 = factory.ifBlock();
+        var n2 = factory.functionBlock("GameData.isEntity");
+        var n3 = factory.refBlock("$clicked").get();
+        var n4 = factory.binaryBlock("&&");
+        var n5 = factory.functionBlock("GameData.getCurrentPlayer().isMyEntity");
+
+        var e14 = factory.createEdge(n1, Ports.IF_PREDICATE, n4);
+        var e42 = factory.createEdge(n4, Ports.A, n2);
+        var e45 = factory.createEdge(n4, Ports.B, n5);
+        var e23 = factory.createEdge(n2, Ports.A, n3);
+        var e53 = factory.createEdge(n5, Ports.A, n3);
+
+
+
+        edge12graph.addNode();
+        edge12graph.addNode();
+
+
+//        if(GameData.isTile($clicked) &amp;&amp; GameData.distance($clicked, selected) &lt;= 1 &amp;&amp; GameData.hasNoEntities($clicked)) { $return = true }
+//            else { $return = false }
+//
+//
+//        if(GameData.isEntity($clicked) &amp;&amp; !GameData.getCurrentPlayer().isMyEntity($clicked) &amp;&amp; GameData.distance($clicked, selected) &lt;= selected.props.attackRange ) { $return = true }
+//            else { $return = false }
+//
+//        selected = $clicked
+//
+//        GameData.moveEntity(selected, $clicked)
+//        GameData.setCurrentPlayerID(1-GameData.getCurrentPlayerID())
+//        GameData.goTo(1)
+//
+//        $clicked.props.hp = $clicked.props.hp - selected.props.dmg
+//        if($clicked.props.hp &lt;= 0) {
+//            GameData.removeEntity($clicked)
+//        }
+//        GameData.setCurrentPlayerID(1-GameData.getCurrentPlayerID())
+//        GameData.goTo(1)
         System.out.println(authTools.toEngineXML());
     }
 }
