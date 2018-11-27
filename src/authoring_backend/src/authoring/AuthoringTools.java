@@ -36,10 +36,19 @@ public class AuthoringTools {
     public PhaseDB phaseDB() { return phaseDB; }
 
     public String toEngineXML() {
+        String notNatural = "\\$NOBODY\\$IS\\$GONNA\\$WRITE\\$THIS";
         return Serializers.forEngine()
                           .toXML(this)
+                          .replaceAll("&lt; ", "<"+notNatural)
+                          .replaceAll("&gt; ", ">"+notNatural)
+                          .replaceAll("&lt;= ", "<="+notNatural)
+                          .replaceAll("&gt;= ", ">="+notNatural)
                           .replaceAll("&lt;", "<")
-                          .replaceAll("&gt;", ">");
+                          .replaceAll("&gt;", ">")
+                          .replaceAll("<"+notNatural, "&lt; " )
+                          .replaceAll(">"+notNatural, "&gt; " )
+                          .replaceAll("<="+notNatural, "&lt;= ")
+                          .replaceAll(">="+notNatural, "&gt;= ");
     }
     public String toAuthoringXML() { return null; }
 }
