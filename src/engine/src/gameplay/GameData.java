@@ -2,6 +2,7 @@ package gameplay;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import grids.Point;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 import javafx.event.Event;
@@ -28,14 +29,14 @@ public class GameData {
     private static GroovyShell shell;
 
     public static void setGameData(
-        Pair<Integer, Integer> grid_dimension,
+        Point grid_dimension,
         Map<Integer, Player> players, Map<Integer, Entity> entities,
         Map<String, EntityPrototype> entityPrototypes,
         Map<Integer, Tile> tiles, Map<Integer, Phase> phases, Map<Integer, Node> nodes,
         Map<Integer, Edge> edges, Turn turn, Pane root
     ){
-        GameData.GRID_WIDTH = grid_dimension.getKey();
-        GameData.GRID_HEIGHT = grid_dimension.getValue();
+        GameData.GRID_WIDTH = grid_dimension.getX();
+        GameData.GRID_HEIGHT = grid_dimension.getY();
 
         PLAYERS = players;
         ENTITIES = entities;
@@ -69,20 +70,18 @@ public class GameData {
         newEntity.adjustViewSize(ROOT.getWidth(), ROOT.getHeight());
         ENTITIES.put(nextID, newEntity);
         PLAYERS.get(ownerID).addEntity(nextID);
-        TILES.get(tileID).addEntity(newEntity.getID());
+        newEntity.setLocation(tileID);
         ROOT.getChildren().add(newEntity.getImageView());
         return newEntity;
     }
 
     public static void removeEntity(Entity entity) {
         ROOT.getChildren().remove(entity.getImageView());
-        TILES.values().forEach(t -> t.removeEntity(entity.getID()));
         ENTITIES.remove(entity.getID());
     }
 
     public static void moveEntity(Entity entity, Tile to) {
-        TILES.values().forEach(t -> t.removeEntity(entity.getID()));
-        to.addEntity(entity.getID());
+        entity.setLocation(to.getID());
     }
 
     public static Player getPlayer(int playerID){

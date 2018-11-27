@@ -1,6 +1,7 @@
 package gameplay;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
+import grids.Point;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.EventHandler;
@@ -17,10 +18,7 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
 
     private String name;
 
-    // A hidden assumption here is that each entity can only cover one tile.
-    // * These exist solely because I'm not sure whether xstream can correctly
-    // * serialize SimpleIntegerProperties
-    private double myXCoord, myYCoord;
+    private int tileID;
 
     private List<String> myImagePaths;
 
@@ -63,8 +61,10 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
         imgIndex = new SimpleIntegerProperty(-1);
         imgIndex.addListener((e, oldVal, newVal) -> myImageView.setImage(myImages.get(newVal.intValue())));
 
-        xCoord = new SimpleDoubleProperty(myXCoord);
-        yCoord = new SimpleDoubleProperty(myYCoord);
+        var pos = GameData.getTile(tileID);
+
+        xCoord = new SimpleDoubleProperty(pos.getX());
+        yCoord = new SimpleDoubleProperty(pos.getY());
     }
 
     /**
@@ -88,12 +88,10 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
 
         xCoord.addListener((e, oldVal, newVal) -> {
             myImageView.setX(screenWidth * newVal.doubleValue() / GameData.gridWidth());
-            myXCoord = newVal.intValue();
         });
 
         yCoord.addListener((e, oldVal, newVal) -> {
             myImageView.setY(screenHeight * newVal.doubleValue() / GameData.gridHeight());
-            myYCoord = newVal.intValue();
         });
 
     }
@@ -110,12 +108,11 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
         } else imgIndex.set(0);
     }
 
-    /**
-     *  This method should be called by Tile.addEntity, not from anywhere else
-     */
-    public void setLocation(double xCoord, double yCoord){
-        this.xCoord.set(xCoord);
-        this.yCoord.set(yCoord);
+    public void setLocation(int tileID){
+        this.tileID = tileID;
+        var data = GameData.getTile(tileID);
+        this.xCoord.set(data.getX());
+        this.yCoord.set(data.getY());
     }
 
     public ImageView getImageView(){ return myImageView; }
