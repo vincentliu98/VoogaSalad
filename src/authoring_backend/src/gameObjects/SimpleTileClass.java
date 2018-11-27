@@ -1,6 +1,6 @@
-package entities;
+package gameObjects;
 
-import groovy.api.BlockGraph;
+import grids.Point;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,48 +10,53 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class SimpleSpriteClass implements SpriteClass {
+public class SimpleTileClass implements TileClass {
+
+    private int numRow;
+    private int numCol;
 
     private String CONST_CLASSNAME = "className";
     private String CONST_ID = "id";
-    private String CONST_MOVABLE = "movable";
+    private String CONST_ENTITYCONTAINABLE = "entityContainable";
 
     private ReadOnlyStringWrapper className;
     private ReadOnlyIntegerWrapper classId;
-    private SimpleBooleanProperty movable;
+    private SimpleBooleanProperty entityContainable;
     private ObservableList<String> imagePathList;
-    private ObservableMap<String, BlockGraph> propertiesMap;
-    private BlockGraph imageSelector;
+    private ObservableMap<String, String> propertiesMap;
+    private String imageSelector;
 
-    private Function<Integer, Boolean> verifyTileInstanceIdFunc;
+    private TriFunction<Set<Point>, Integer, Integer, Boolean> verifyPointsFunc;
 
-    private Function<String, Set<EntityInstance>> getSpriteInstancesFunc;
-    private Consumer<EntityInstance> setInstanceIdFunc;
-    private Consumer<EntityInstance> returnInstanceIdFunc;
-    private Consumer<SpriteInstance> addSpriteInstanceToMapFunc;
+    private Function<String, Set<GameObjectInstance>> getTileInstancesFunc;
+    private Consumer<GameObjectInstance> setInstanceIdFunc;
+    private Consumer<GameObjectInstance> returnInstanceIdFunc;
+    private Consumer<TileInstance> addTileInstanceToMapFunc;
 
-    private SimpleSpriteClass() {
+    private SimpleTileClass() {
         className = new ReadOnlyStringWrapper(this, CONST_CLASSNAME);
         classId = new ReadOnlyIntegerWrapper(this, CONST_ID);
-        movable = new SimpleBooleanProperty(this, CONST_MOVABLE);
+        entityContainable = new SimpleBooleanProperty(this, CONST_ENTITYCONTAINABLE);
         imagePathList = FXCollections.observableArrayList();
         propertiesMap = FXCollections.observableHashMap();
-
     }
 
-    SimpleSpriteClass(Function<Integer, Boolean> verifyTileInstanceIdFunction,
-                      Consumer<EntityInstance> setInstanceIdFunc,
-                      Consumer<EntityInstance> returnInstanceIdFunc,
-                      Consumer<SpriteInstance> addSpriteInstanceToMapFunc,
-                      Function<String, Set<EntityInstance>> getSpriteInstancesFunc) {
+    SimpleTileClass(int numRow,
+                    int numCol,
+                    TriFunction<Set<Point>, Integer, Integer, Boolean> verifyPointsFunc,
+                    Consumer<GameObjectInstance> setInstanceIdFunc,
+                    Consumer<GameObjectInstance> returnInstanceIdFunc,
+                    Consumer<TileInstance> addTileInstanceToMapFunc,
+                    Function<String, Set<GameObjectInstance>> getTileInstancesFunc) {
         this();
-        this.verifyTileInstanceIdFunc = verifyTileInstanceIdFunction;
+        this.numRow = numRow;
+        this.numCol = numCol;
+        this.verifyPointsFunc = verifyPointsFunc;
         this.setInstanceIdFunc = setInstanceIdFunc;
         this.returnInstanceIdFunc = returnInstanceIdFunc;
-        this.addSpriteInstanceToMapFunc = addSpriteInstanceToMapFunc;
-        this.getSpriteInstancesFunc = getSpriteInstancesFunc;
+        this.addTileInstanceToMapFunc = addTileInstanceToMapFunc;
+        this.getTileInstancesFunc = getTileInstancesFunc;
     }
-
 
     @Override
     public ReadOnlyIntegerProperty getClassId() {
@@ -79,7 +84,7 @@ public class SimpleSpriteClass implements SpriteClass {
     }
 
     @Override
-    public boolean addProperty(String propertyName, BlockGraph defaultValue) {
+    public boolean addProperty(String propertyName, String defaultValue) {
         if (!propertiesMap.containsKey(propertyName)) {
             propertiesMap.put(propertyName, defaultValue);
             return true;
@@ -91,6 +96,7 @@ public class SimpleSpriteClass implements SpriteClass {
     public boolean removeProperty(String propertyName) {
         return propertiesMap.remove(propertyName) != null;
     }
+
 
     @Override
     public ObservableList getImagePathList() {
@@ -115,40 +121,46 @@ public class SimpleSpriteClass implements SpriteClass {
     }
 
     @Override
-    public void setImageSelector(BlockGraph blockCode) {
+    public void setImageSelector(String blockCode) {
         imageSelector = blockCode;
     }
 
     @Override
-    public BlockGraph getImageSelectorCode() {
+    public String getImageSelectorCode() {
         return imageSelector;
     }
 
     @Override
-    public EntityInstance createInstance(int tileId) {
-        if (!verifyTileInstanceIdFunc.apply(tileId)) {
-            throw new InvalidIdException();
+    public Set<GameObjectInstance> getInstances() {
+        return null;
+    }
+
+    @Override
+    public boolean deleteInstance(int id) {
+        return false;
+    }
+
+    @Override
+    public GameObjectInstance createInstance(Set<Point> points) {
+        if (!verifyPointsFunc.apply(points, numRow, numCol)) {
+            throw new InvalidPointsException();
         }
         ObservableMap propertiesMapCopy = FXCollections.observableHashMap();
         propertiesMapCopy.putAll(propertiesMap);
-        SpriteInstance spriteInstance = new SimpleSpriteInstance(className.getName(), tileId, propertiesMapCopy, returnInstanceIdFunc);
-        setInstanceIdFunc.accept(spriteInstance);
-        addSpriteInstanceToMapFunc.accept(spriteInstance);
-        return spriteInstance;
+        TileInstance tileInstance = new SimpleTileInstance(className.getName(), points, propertiesMapCopy, returnInstanceIdFunc);
+        setInstanceIdFunc.accept(tileInstance);
+        addTileInstanceToMapFunc.accept(tileInstance);
+        return tileInstance;
+
     }
 
     @Override
-    public Set<EntityInstance> getInstances() {
-        return getSpriteInstancesFunc.apply(getClassName().get());
+    public SimpleBooleanProperty isEntityContainable() {
+        return entityContainable;
     }
 
     @Override
-    public SimpleBooleanProperty isMovable() {
-        return movable;
-    }
-
-    @Override
-    public void setMovable(boolean move) {
-        movable.setValue(move);
+    public void setEntityContainable(boolean contains) {
+        entityContainable.setValue(contains);
     }
 }

@@ -1,20 +1,18 @@
-package entities;
+package gameObjects;
 
-import groovy.api.BlockGraph;
 import javafx.beans.property.*;
 import javafx.collections.ObservableMap;
 
-import java.util.Map;
 import java.util.function.Consumer;
 
-public class SimpleSpriteInstance implements SpriteInstance {
+public class SimpleEntityInstance implements EntityInstance {
     private ReadOnlyStringWrapper className;
     private ReadOnlyIntegerWrapper instanceId;
     private SimpleIntegerProperty tileId;
-    private ObservableMap<String, BlockGraph> propertiesMap;
-    private Consumer<EntityInstance> returnInstanceIdFunc;
+    private ObservableMap<String, String> propertiesMap;
+    private Consumer<GameObjectInstance> returnInstanceIdFunc;
 
-    SimpleSpriteInstance(String className, int tileId, ObservableMap<String, BlockGraph> properties, Consumer<EntityInstance> returnInstanceIdFunc) {
+    SimpleEntityInstance(String className, int tileId, ObservableMap<String, String> properties, Consumer<GameObjectInstance> returnInstanceIdFunc) {
         this.className = new ReadOnlyStringWrapper();
         this.className.set(className);
         this.tileId = new ReadOnlyIntegerWrapper();
@@ -38,7 +36,22 @@ public class SimpleSpriteInstance implements SpriteInstance {
         return className.getReadOnlyProperty();
     }
 
-    public Consumer<EntityInstance> getReturnInstanceIdFunc() {
+    public Consumer<GameObjectInstance> getReturnInstanceIdFunc() {
         return returnInstanceIdFunc;
     }
+
+    @Override
+    public boolean addProperty(String propertyName, String defaultValue) {
+        if (!propertiesMap.containsKey(propertyName)) {
+            propertiesMap.put(propertyName, defaultValue);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean removeProperty(String propertyName) {
+        return propertiesMap.remove(propertyName) != null;
+    }
+
 }
