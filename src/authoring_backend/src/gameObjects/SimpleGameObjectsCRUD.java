@@ -17,9 +17,9 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     private int numRow;
     private int numCol;
     private ObservableMap<String, TileClass> tileClassMap;
-    private ObservableMap<String, SpriteClass> spriteClassMap;
+    private ObservableMap<String, EntityClass> entityClassMap;
     private ObservableMap<Integer, TileInstance> tileInstanceMap;
-    private ObservableMap<Integer, SpriteInstance> spriteInstanceMap;
+    private ObservableMap<Integer, EntityInstance> entityInstanceMap;
 
     private Consumer<GameObjectClass> returnClassId;
     private IdManager myIdManager;
@@ -28,15 +28,15 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         this.numRow = numRow;
         this.numCol = numCol;
         tileClassMap = FXCollections.observableHashMap();
-        spriteClassMap = FXCollections.observableHashMap();
+        entityClassMap = FXCollections.observableHashMap();
         myIdManager = new IdManagerClass();
         returnClassId = myIdManager.returnClassIdFunc();
     }
 
-    public SimpleGameObjectsCRUD(int numRow, int numCol, ObservableMap<String, TileClass> tileClasses, ObservableMap<String, SpriteClass> spriteClasses) {
+    public SimpleGameObjectsCRUD(int numRow, int numCol, ObservableMap<String, TileClass> tileClasses, ObservableMap<String, EntityClass> entityClasses) {
         this(numRow, numCol);
         tileClassMap = tileClasses;
-        spriteClassMap = spriteClasses;
+        entityClassMap = entityClasses;
     }
 
     @Override
@@ -116,41 +116,41 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
 
 
     @Override
-    public SpriteClass createEntityClass(String name) {
-        if (spriteClassMap.containsKey(name)) {
+    public EntityClass createEntityClass(String name) {
+        if (entityClassMap.containsKey(name)) {
             throw new DuplicateClassException();
         }
 
-        SpriteClass newSpriteClass = new SimpleSpriteClass(
+        EntityClass newEntityClass = new SimpleEntityClass(
                 myIdManager.verifyTileInstanceIdFunc(),
                 myIdManager.requestEntityInstanceIdFunc(),
                 myIdManager.returnEntityInstanceIdFunc(),
-                addSpriteInstanceToMapFunc(),
-                deleteSpriteInstanceFromMapFunc(),
-                getSpriteInstancesFunc(),
-                addSpritePropertyFunc(),
-                removeSpritePropertyFunc());
+                addEntityInstanceToMapFunc(),
+                deleteEntityInstanceFromMapFunc(),
+                getEntityInstancesFunc(),
+                addEntityPropertyFunc(),
+                removeEntityPropertyFunc());
 
-        myIdManager.requestClassIdFunc().accept(newSpriteClass);
-        spriteClassMap.put(name, newSpriteClass);
-        return newSpriteClass;
+        myIdManager.requestClassIdFunc().accept(newEntityClass);
+        entityClassMap.put(name, newEntityClass);
+        return newEntityClass;
     }
 
     @Override
-    public SpriteClass getEntityClass(String name) {
-        if (!spriteClassMap.containsKey(name)) {
-            throw new NoSpriteClassException();
+    public EntityClass getEntityClass(String name) {
+        if (!entityClassMap.containsKey(name)) {
+            throw new NoEntityClassException();
         }
-        return spriteClassMap.get(name);
+        return entityClassMap.get(name);
     }
 
     @Override
     public boolean deleteEntityClass(String name) {
-        if (!spriteClassMap.containsKey(name)) {
+        if (!entityClassMap.containsKey(name)) {
             return false;
         }
-        returnClassId.accept(spriteClassMap.remove(name));
-        for (Map.Entry<Integer, SpriteInstance> e : spriteInstanceMap.entrySet()) {
+        returnClassId.accept(entityClassMap.remove(name));
+        for (Map.Entry<Integer, EntityInstance> e : entityInstanceMap.entrySet()) {
             if (e.getValue().getClassName().equals(name)) {
                 deleteEntityInstance(e.getKey());
             }
@@ -160,27 +160,27 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
 
     @Override
     public boolean deleteEntityInstance(int instanceId) {
-        if (!spriteInstanceMap.containsKey(instanceId)) {
+        if (!entityInstanceMap.containsKey(instanceId)) {
             return false;
         }
-        SpriteInstance spriteInstance = spriteInstanceMap.remove(instanceId);
-        spriteInstance.getReturnInstanceIdFunc().accept(spriteInstance);
+        EntityInstance entityInstance = entityInstanceMap.remove(instanceId);
+        entityInstance.getReturnInstanceIdFunc().accept(entityInstance);
         return true;
     }
 
 
-    private Consumer<SpriteInstance> addSpriteInstanceToMapFunc() {
-        return spriteInstance -> spriteInstanceMap.put(spriteInstance.getInstanceId().getValue(), spriteInstance);
+    private Consumer<EntityInstance> addEntityInstanceToMapFunc() {
+        return entityInstance -> entityInstanceMap.put(entityInstance.getInstanceId().getValue(), entityInstance);
     }
 
-    private Function<Integer, Boolean> deleteSpriteInstanceFromMapFunc() {
+    private Function<Integer, Boolean> deleteEntityInstanceFromMapFunc() {
         return instanceId -> deleteEntityInstance(instanceId);
     }
 
-    private Function<String, Set<GameObjectInstance>> getSpriteInstancesFunc() {
+    private Function<String, Set<GameObjectInstance>> getEntityInstancesFunc() {
         return name -> {
             Set<GameObjectInstance> instancesSet = new HashSet<>();
-            for (Map.Entry<Integer, SpriteInstance> entry : spriteInstanceMap.entrySet()) {
+            for (Map.Entry<Integer, EntityInstance> entry : entityInstanceMap.entrySet()) {
                 if (entry.getValue().getClassName().getName().equals(name)) {
                     instancesSet.add(entry.getValue());
                 }
@@ -189,9 +189,9 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         };
     }
 
-    private TriConsumer<String, String, String> addSpritePropertyFunc() {
+    private TriConsumer<String, String, String> addEntityPropertyFunc() {
         return (className, propertyName, defaultValue) -> {
-            for (Map.Entry<Integer, SpriteInstance> entry : spriteInstanceMap.entrySet()) {
+            for (Map.Entry<Integer, EntityInstance> entry : entityInstanceMap.entrySet()) {
                 if (entry.getValue().getClassName().equals(className)) {
                     entry.getValue().addProperty(propertyName, defaultValue);
                 }
@@ -199,9 +199,9 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         };
     }
 
-    private BiConsumer<String, String> removeSpritePropertyFunc() {
+    private BiConsumer<String, String> removeEntityPropertyFunc() {
         return (className, propertyName) -> {
-            for (Map.Entry<Integer, SpriteInstance> entry : spriteInstanceMap.entrySet()) {
+            for (Map.Entry<Integer, EntityInstance> entry : entityInstanceMap.entrySet()) {
                 if (entry.getValue().getClassName().equals(className)) {
                     entry.getValue().removeProperty(propertyName);
                 }

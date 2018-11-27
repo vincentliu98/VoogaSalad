@@ -81,7 +81,7 @@ public class EntityWindow extends PopUpWindow {
         imageView = new ImageView();
         imageBox = new VBox(imageView);
 
-        imageBtn = new Button("Choose SpriteClass");
+        imageBtn = new Button("Choose EntityClass");
         imageBtn.setOnMouseClicked(e -> {
             final FileChooser fileChooser = new FileChooser();
             File file = fileChooser.showOpenDialog(primaryStage);

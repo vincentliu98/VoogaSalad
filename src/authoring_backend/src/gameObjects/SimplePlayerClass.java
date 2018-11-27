@@ -26,7 +26,7 @@
 //    private Function<String, Set<GameObjectInstance>> getPlayerInstancesFunc;
 //    private Consumer<GameObjectInstance> setInstanceIdFunc;
 //    private Consumer<GameObjectInstance> returnInstanceIdFunc;
-//    private Consumer<SpriteInstance> addPlayerInstanceToMapFunc;
+//    private Consumer<EntityInstance> addPlayerInstanceToMapFunc;
 //
 //    private SimplePlayerClass() {
 //        className = new ReadOnlyStringWrapper(this, CONST_CLASSNAME);
@@ -40,7 +40,7 @@
 //    SimplePlayerClass(Function<Integer, Boolean> verifyEnitityInstanceIdFunction,
 //                      Consumer<GameObjectInstance> setInstanceIdFunc,
 //                      Consumer<GameObjectInstance> returnInstanceIdFunc,
-//                      Consumer<SpriteInstance> addSpriteInstanceToMapFunc,
+//                      Consumer<EntityInstance> addSpriteInstanceToMapFunc,
 //                      Function<String, Set<GameObjectInstance>> getSpriteInstancesFunc) {
 //        this();
 //        this.verifyEnitityInstanceIdFunc = verifyEnitityInstanceIdFunction;

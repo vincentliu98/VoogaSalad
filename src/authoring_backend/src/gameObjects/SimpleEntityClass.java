@@ -10,7 +10,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class SimpleSpriteClass implements SpriteClass {
+public class SimpleEntityClass implements EntityClass {
 
     private String CONST_CLASSNAME = "className";
     private String CONST_ID = "id";
@@ -25,16 +25,16 @@ public class SimpleSpriteClass implements SpriteClass {
 
     private Function<Integer, Boolean> verifyTileInstanceIdFunc;
 
-    private Function<String, Set<GameObjectInstance>> getSpriteInstancesFunc;
+    private Function<String, Set<GameObjectInstance>> getEntityInstancesFunc;
     private Consumer<GameObjectInstance> setInstanceIdFunc;
     private Consumer<GameObjectInstance> returnInstanceIdFunc;
-    private Consumer<SpriteInstance> addSpriteInstanceToMapFunc;
-    private Function<Integer, Boolean> deleteSpriteInstanceFromMapFunc;
-    private TriConsumer<String, String, String> addSpritePropertyFunc;
-    private BiConsumer<String, String> removeSpritePropertyFunc;
+    private Consumer<EntityInstance> addSpriteInstanceToMapFunc;
+    private Function<Integer, Boolean> deleteEntityInstanceFromMapFunc;
+    private TriConsumer<String, String, String> addEntityPropertyFunc;
+    private BiConsumer<String, String> removeEntityPropertyFunc;
 
 
-    private SimpleSpriteClass() {
+    private SimpleEntityClass() {
         className = new ReadOnlyStringWrapper(this, CONST_CLASSNAME);
         classId = new ReadOnlyIntegerWrapper(this, CONST_ID);
         movable = new SimpleBooleanProperty(this, CONST_MOVABLE);
@@ -43,23 +43,23 @@ public class SimpleSpriteClass implements SpriteClass {
 
     }
 
-    SimpleSpriteClass(Function<Integer, Boolean> verifyTileInstanceIdFunction,
+    SimpleEntityClass(Function<Integer, Boolean> verifyTileInstanceIdFunction,
                       Consumer<GameObjectInstance> setInstanceIdFunc,
                       Consumer<GameObjectInstance> returnInstanceIdFunc,
-                      Consumer<SpriteInstance> addSpriteInstanceToMapFunc,
-                      Function<Integer, Boolean> deleteSpriteInstanceFromMapFunc,
-                      Function<String, Set<GameObjectInstance>> getSpriteInstancesFunc,
-                      TriConsumer<String, String, String> addSpritePropertyFunc,
-                      BiConsumer<String, String> removeSpritePropertyFunc) {
+                      Consumer<EntityInstance> addEntityInstanceToMapFunc,
+                      Function<Integer, Boolean> deleteEntityInstanceFromMapFunc,
+                      Function<String, Set<GameObjectInstance>> getEntityInstancesFunc,
+                      TriConsumer<String, String, String> addEntityPropertyFunc,
+                      BiConsumer<String, String> removeEntityPropertyFunc) {
         this();
         this.verifyTileInstanceIdFunc = verifyTileInstanceIdFunction;
         this.setInstanceIdFunc = setInstanceIdFunc;
         this.returnInstanceIdFunc = returnInstanceIdFunc;
-        this.addSpriteInstanceToMapFunc = addSpriteInstanceToMapFunc;
-        this.deleteSpriteInstanceFromMapFunc = deleteSpriteInstanceFromMapFunc;
-        this.getSpriteInstancesFunc = getSpriteInstancesFunc;
-        this.addSpritePropertyFunc = addSpritePropertyFunc;
-        this.removeSpritePropertyFunc = removeSpritePropertyFunc;
+        this.addSpriteInstanceToMapFunc = addEntityInstanceToMapFunc;
+        this.deleteEntityInstanceFromMapFunc = deleteEntityInstanceFromMapFunc;
+        this.getEntityInstancesFunc = getEntityInstancesFunc;
+        this.addEntityPropertyFunc = addEntityPropertyFunc;
+        this.removeEntityPropertyFunc = removeEntityPropertyFunc;
     }
 
 
@@ -92,7 +92,7 @@ public class SimpleSpriteClass implements SpriteClass {
     public boolean addProperty(String propertyName, String defaultValue) {
         if (!propertiesMap.containsKey(propertyName)) {
             propertiesMap.put(propertyName, defaultValue);
-            addSpritePropertyFunc.accept(className.getValue(), propertyName, defaultValue);
+            addEntityPropertyFunc.accept(className.getValue(), propertyName, defaultValue);
             return true;
         }
         return false;
@@ -100,7 +100,7 @@ public class SimpleSpriteClass implements SpriteClass {
 
     @Override
     public boolean removeProperty(String propertyName) {
-        removeSpritePropertyFunc.accept(className.getValue(), propertyName);
+        removeEntityPropertyFunc.accept(className.getValue(), propertyName);
         return propertiesMap.remove(propertyName) != null;
     }
 
@@ -143,19 +143,19 @@ public class SimpleSpriteClass implements SpriteClass {
         }
         ObservableMap propertiesMapCopy = FXCollections.observableHashMap();
         propertiesMapCopy.putAll(propertiesMap);
-        SpriteInstance spriteInstance = new SimpleSpriteInstance(className.getName(), tileId, propertiesMapCopy, returnInstanceIdFunc);
-        setInstanceIdFunc.accept(spriteInstance);
-        addSpriteInstanceToMapFunc.accept(spriteInstance);
-        return spriteInstance;
+        EntityInstance entityInstance = new SimpleEntityInstance(className.getName(), tileId, propertiesMapCopy, returnInstanceIdFunc);
+        setInstanceIdFunc.accept(entityInstance);
+        addSpriteInstanceToMapFunc.accept(entityInstance);
+        return entityInstance;
     }
 
     public boolean deleteInstance(int spriteInstanceId) {
-        return deleteSpriteInstanceFromMapFunc.apply(spriteInstanceId);
+        return deleteEntityInstanceFromMapFunc.apply(spriteInstanceId);
     }
 
     @Override
     public Set<GameObjectInstance> getInstances() {
-        return getSpriteInstancesFunc.apply(getClassName().get());
+        return getEntityInstancesFunc.apply(getClassName().get());
     }
 
     @Override

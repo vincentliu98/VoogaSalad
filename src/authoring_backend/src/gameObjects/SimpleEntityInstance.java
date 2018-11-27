@@ -5,14 +5,14 @@ import javafx.collections.ObservableMap;
 
 import java.util.function.Consumer;
 
-public class SimpleSpriteInstance implements SpriteInstance {
+public class SimpleEntityInstance implements EntityInstance {
     private ReadOnlyStringWrapper className;
     private ReadOnlyIntegerWrapper instanceId;
     private SimpleIntegerProperty tileId;
     private ObservableMap<String, String> propertiesMap;
     private Consumer<GameObjectInstance> returnInstanceIdFunc;
 
-    SimpleSpriteInstance(String className, int tileId, ObservableMap<String, String> properties, Consumer<GameObjectInstance> returnInstanceIdFunc) {
+    SimpleEntityInstance(String className, int tileId, ObservableMap<String, String> properties, Consumer<GameObjectInstance> returnInstanceIdFunc) {
         this.className = new ReadOnlyStringWrapper();
         this.className.set(className);
         this.tileId = new ReadOnlyIntegerWrapper();

@@ -2,7 +2,7 @@ package gameObjects;
 
 import javafx.beans.property.SimpleBooleanProperty;
 
-public interface SpriteClass extends GameObjectClass {
+public interface EntityClass extends GameObjectClass {
 
     SimpleBooleanProperty isMovable();
 

@@ -40,14 +40,14 @@ public interface GameObjectsCRUDInterface {
      * @return the Entity Class if there is no name collision and the method is successful
      * @throws DuplicateClassException if a class with the same name exists
      */
-    SpriteClass createEntityClass(String name);
+    EntityClass createEntityClass(String name);
 
     /**
      * @param name the name of the Entity Class to be retrieved
      * @return the Entity Class with the name
-     * @throws NoSpriteClassException if there is no such Entity Class
+     * @throws NoEntityClassException if there is no such Entity Class
      */
-    SpriteClass getEntityClass(String name);
+    EntityClass getEntityClass(String name);
 
     /**
      *
