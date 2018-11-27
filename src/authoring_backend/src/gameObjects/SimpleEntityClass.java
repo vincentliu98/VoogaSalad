@@ -1,4 +1,4 @@
-package entities;
+package gameObjects;
 
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
