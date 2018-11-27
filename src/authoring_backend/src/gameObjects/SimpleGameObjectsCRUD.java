@@ -54,7 +54,10 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
                 myIdManager.requestTileInstanceIdFunc(),
                 myIdManager.returnTileInstanceIdFunc(),
                 addTileInstanceToMapFunc(),
-                getTileInstancesFunc());
+                deleteTileInstanceFromMapFunc(),
+                getTileInstancesFunc(),
+                addTilePropertyFunc(),
+                removeTilePropertyFunc());
 
         myIdManager.requestClassIdFunc().accept(newTileClass);
         tileClassMap.put(name, newTileClass);
@@ -97,7 +100,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         return tileInstance -> tileInstanceMap.put(tileInstance.getInstanceId().getValue(), tileInstance);
     }
 
-    private Consumer<Integer> deleteTileInstanceFromMapFunc() {
+    private Function<Integer, Boolean> deleteTileInstanceFromMapFunc() {
         return instanceId -> deleteTileInstance(instanceId);
     }
 
@@ -110,6 +113,26 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
                 }
             }
             return instancesSet;
+        };
+    }
+
+    private TriConsumer<String, String, String> addTilePropertyFunc() {
+        return (className, propertyName, defaultValue) -> {
+            for (Map.Entry<Integer, TileInstance> entry : tileInstanceMap.entrySet()) {
+                if (entry.getValue().getClassName().equals(className)) {
+                    entry.getValue().addProperty(propertyName, defaultValue);
+                }
+            }
+        };
+    }
+
+    private BiConsumer<String, String> removeTilePropertyFunc() {
+        return (className, propertyName) -> {
+            for (Map.Entry<Integer, TileInstance> entry : tileInstanceMap.entrySet()) {
+                if (entry.getValue().getClassName().equals(className)) {
+                    entry.getValue().removeProperty(propertyName);
+                }
+            }
         };
     }
 

@@ -14,10 +14,6 @@ public class PointImpl implements Point {
     private final int y;
     public static final PointImpl ZERO = new PointImpl(0, 0);
 
-
-
-
-
     /**
      * Instantiate a point given x and y coordinates.
      * @param x is the x-coord

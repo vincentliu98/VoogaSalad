@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -27,10 +28,13 @@ public class SimpleTileClass implements TileClass {
 
     private TriFunction<Point, Integer, Integer, Boolean> verifyPointsFunc;
 
-    private Function<String, Set<GameObjectInstance>> getTileInstancesFunc;
     private Consumer<GameObjectInstance> setInstanceIdFunc;
     private Consumer<GameObjectInstance> returnInstanceIdFunc;
+    private Function<String, Set<GameObjectInstance>> getTileInstancesFunc;
     private Consumer<TileInstance> addTileInstanceToMapFunc;
+    private Function<Integer, Boolean> deleteTileInstanceFromMapFunc;
+    private TriConsumer<String, String, String> addTilePropertyFunc;
+    private BiConsumer<String, String> removeTilePropertyFunc;
 
     private SimpleTileClass(String name) {
         className = new ReadOnlyStringWrapper(this, CONST_CLASSNAME, name);
@@ -49,7 +53,10 @@ public class SimpleTileClass implements TileClass {
                     Consumer<GameObjectInstance> setInstanceIdFunc,
                     Consumer<GameObjectInstance> returnInstanceIdFunc,
                     Consumer<TileInstance> addTileInstanceToMapFunc,
-                    Function<String, Set<GameObjectInstance>> getTileInstancesFunc) {
+                    Function<Integer, Boolean> deleteTileInstanceFromMapFunc,
+                    Function<String, Set<GameObjectInstance>> getTileInstancesFunc,
+                    TriConsumer<String, String, String> addTilePropertyFunc,
+                    BiConsumer<String, String> removeTilePropertyFunc) {
         this(name);
         this.numRow = numRow;
         this.numCol = numCol;
@@ -57,7 +64,10 @@ public class SimpleTileClass implements TileClass {
         this.setInstanceIdFunc = setInstanceIdFunc;
         this.returnInstanceIdFunc = returnInstanceIdFunc;
         this.addTileInstanceToMapFunc = addTileInstanceToMapFunc;
+        this.deleteTileInstanceFromMapFunc = deleteTileInstanceFromMapFunc;
         this.getTileInstancesFunc = getTileInstancesFunc;
+        this.addTilePropertyFunc = addTilePropertyFunc;
+        this.removeTilePropertyFunc = removeTilePropertyFunc;
     }
 
     @Override
@@ -89,6 +99,7 @@ public class SimpleTileClass implements TileClass {
     public boolean addProperty(String propertyName, String defaultValue) {
         if (!propertiesMap.containsKey(propertyName)) {
             propertiesMap.put(propertyName, defaultValue);
+            addTilePropertyFunc.accept(className.getValue(), propertyName, defaultValue);
             return true;
         }
         return false;
@@ -96,6 +107,7 @@ public class SimpleTileClass implements TileClass {
 
     @Override
     public boolean removeProperty(String propertyName) {
+        removeTilePropertyFunc.accept(className.getValue(), propertyName);
         return propertiesMap.remove(propertyName) != null;
     }
 
@@ -133,16 +145,6 @@ public class SimpleTileClass implements TileClass {
     }
 
     @Override
-    public Set<GameObjectInstance> getInstances() {
-        return null;
-    }
-
-    @Override
-    public boolean deleteInstance(int id) {
-        return false;
-    }
-
-    @Override
     public GameObjectInstance createInstance(Point coord) {
         if (verifyPointsFunc.apply(coord, numRow, numCol)) {
             throw new InvalidPointsException();
@@ -154,6 +156,15 @@ public class SimpleTileClass implements TileClass {
         addTileInstanceToMapFunc.accept(tileInstance);
         return tileInstance;
 
+    }
+
+    public boolean deleteInstance(int tileInstanceId) {
+        return deleteTileInstanceFromMapFunc.apply(tileInstanceId);
+    }
+
+    @Override
+    public Set<GameObjectInstance> getInstances() {
+        return getTileInstancesFunc.apply(getClassName().getValue());
     }
 
     @Override

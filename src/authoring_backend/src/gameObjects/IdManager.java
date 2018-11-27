@@ -3,6 +3,9 @@ package gameObjects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+/**
+ * @author Jason Zhou
+ */
 public interface IdManager {
 
     Consumer<GameObjectClass> requestClassIdFunc();

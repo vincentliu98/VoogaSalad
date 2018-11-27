@@ -153,13 +153,13 @@ public class SimpleEntityClass implements EntityClass {
         return entityInstance;
     }
 
-    public boolean deleteInstance(int spriteInstanceId) {
-        return deleteEntityInstanceFromMapFunc.apply(spriteInstanceId);
+    public boolean deleteInstance(int entityInstanceId) {
+        return deleteEntityInstanceFromMapFunc.apply(entityInstanceId);
     }
 
     @Override
     public Set<GameObjectInstance> getInstances() {
-        return getEntityInstancesFunc.apply(getClassName().get());
+        return getEntityInstancesFunc.apply(getClassName().getValue());
     }
 
     @Override
