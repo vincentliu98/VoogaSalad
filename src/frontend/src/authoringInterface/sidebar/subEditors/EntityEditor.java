@@ -1,18 +1,12 @@
 package authoringInterface.sidebar.subEditors;
 
-import api.SubView;
-import authoringInterface.sidebar.treeItemEntries.EditTreeItem;
 import authoringInterface.sidebar.treeItemEntries.Entity;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
-import javafx.scene.control.cell.TextFieldTreeCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -24,7 +18,7 @@ import java.io.File;
  *
  * @author Haotian Wang
  */
-public class EntityEditor extends AbstractObjectEditor<Entity> {
+public class EntityEditor extends AbstractGameObjectEditor<Entity> {
     private Text imageText;
     private Button chooseImage;
     private ImageView preview;

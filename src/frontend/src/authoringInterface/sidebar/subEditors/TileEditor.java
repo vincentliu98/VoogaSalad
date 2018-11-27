@@ -1,11 +1,9 @@
 package authoringInterface.sidebar.subEditors;
 
-import api.SubView;
-import authoringInterface.sidebar.treeItemEntries.EditTreeItem;
 import authoringInterface.sidebar.treeItemEntries.Tile;
 import javafx.scene.layout.AnchorPane;
 
-public class TileEditor extends AbstractObjectEditor<Tile> {
+public class TileEditor extends AbstractGameObjectEditor<Tile> {
     /**
      * This method returns the responsible JavaFx Node responsible to be added or deleted from other graphical elements.
      *

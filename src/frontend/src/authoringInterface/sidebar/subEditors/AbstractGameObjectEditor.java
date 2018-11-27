@@ -20,7 +20,7 @@ import java.util.Map;
  *
  * @author Haotian Wang
  */
-public abstract class AbstractObjectEditor<T extends EditTreeItem> implements SubView<AnchorPane> {
+public abstract class AbstractGameObjectEditor<T extends EditTreeItem> implements SubView<AnchorPane> {
     protected AnchorPane rootPane;
     protected Text inputText;
     protected TextField nameField;
@@ -32,7 +32,7 @@ public abstract class AbstractObjectEditor<T extends EditTreeItem> implements Su
     protected EditingMode editingMode;
     protected Node nodeEdited;
 
-    public AbstractObjectEditor() {
+    public AbstractGameObjectEditor() {
         editingMode = EditingMode.NONE;
         rootPane = new AnchorPane();
         inputText = new Text();

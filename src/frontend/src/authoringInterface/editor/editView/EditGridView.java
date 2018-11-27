@@ -2,22 +2,16 @@ package authoringInterface.editor.editView;
 
 import api.DraggingCanvas;
 import api.SubView;
-import authoringInterface.sidebar.SideView;
 import authoringInterface.sidebar.SideViewInterface;
 import authoringInterface.sidebar.subEditors.*;
 import authoringInterface.sidebar.treeItemEntries.EditTreeItem;
 import authoringInterface.sidebar.treeItemEntries.Entity;
 import authoringInterface.sidebar.treeItemEntries.TreeItemType;
-import javafx.event.ActionEvent;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseDragEvent;
@@ -71,7 +65,7 @@ public class EditGridView implements SubView<ScrollPane>, DraggingCanvas {
             EditTreeItem userObject = nodeToObjectMap.get(targetNode);
             TreeItemType type = userObject.getType();
             Stage dialogStage = new Stage();
-            AbstractObjectEditor editor = null;
+            AbstractGameObjectEditor editor = null;
             switch (type) {
                 case ENTITY:
                     editor = new EntityEditor();
