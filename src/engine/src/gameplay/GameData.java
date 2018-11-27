@@ -21,7 +21,7 @@ public class GameData {
     private static Map<Integer, Tile> TILES;
     private static Map<Integer, Phase> PHASES;
     private static Map<Integer, Node> NODES;
-    private static Map<Integer, Edge> EDGES;
+    private static Set<Edge> EDGES;
     private static Turn TURN;
     private static Pane ROOT;
     private static List<ArgumentListener> myArgumentListeners;
@@ -33,7 +33,7 @@ public class GameData {
         Map<Integer, Player> players, Map<Integer, Entity> entities,
         Map<String, EntityPrototype> entityPrototypes,
         Map<Integer, Tile> tiles, Map<Integer, Phase> phases, Map<Integer, Node> nodes,
-        Map<Integer, Edge> edges, Turn turn, Pane root
+        Set<Edge> edges, Turn turn, Pane root
     ){
         GameData.GRID_WIDTH = grid_dimension.getX();
         GameData.GRID_HEIGHT = grid_dimension.getY();
@@ -102,10 +102,6 @@ public class GameData {
 
     public static Node getNode(int nodeID){
         return NODES.get(nodeID);
-    }
-
-    public static Edge getEdge(int edgeID){
-        return EDGES.get(edgeID);
     }
 
     public static Map<Integer, Tile> getTiles() { return TILES; }
@@ -180,7 +176,7 @@ public class GameData {
         if(destination != ArgumentListener.DONT_PASS) NODES.get(destination).execute();
     }
 
-    public static Collection<Edge> getEdges() { return EDGES.values(); }
+    public static Collection<Edge> getEdges() { return EDGES; }
 
     public static String saveGameData(){
         String xmlString = "";
@@ -196,9 +192,16 @@ public class GameData {
         return xmlString;
     }
 
+    public static String serializeData(XStream serializer, String xmlString, Set<?> dataSet){
+        for (var entry : dataSet){
+            xmlString = xmlString + serializer.toXML(entry) + "\n";
+        }
+        return xmlString;
+    }
+
     public static String serializeData(XStream serializer, String xmlString, Map<?, ?> dataMap){
         for (Map.Entry<?, ?> entry : dataMap.entrySet()){
-            xmlString = serializer.toXML(entry.getValue()) + "\n";
+            xmlString = xmlString + serializer.toXML(entry.getValue()) + "\n";
         }
         return xmlString;
     }

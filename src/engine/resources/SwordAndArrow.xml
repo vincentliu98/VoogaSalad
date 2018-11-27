@@ -620,7 +620,6 @@
     </gameplay.Node>
 
     <gameplay.Edge>
-        <myID>1</myID>
         <myPhaseID>1</myPhaseID>
         <myStartNodeID>1</myStartNodeID>
         <myEndNodeID>2</myEndNodeID>
@@ -632,7 +631,6 @@
     </gameplay.Edge>
 
     <gameplay.Edge>
-        <myID>2</myID>
         <myPhaseID>1</myPhaseID>
         <myStartNodeID>2</myStartNodeID>
         <myEndNodeID>3</myEndNodeID>
@@ -644,7 +642,6 @@
     </gameplay.Edge>
 
     <gameplay.Edge>
-        <myID>3</myID>
         <myPhaseID>1</myPhaseID>
         <myStartNodeID>2</myStartNodeID>
         <myEndNodeID>4</myEndNodeID>
