@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <game>
-    <grid-width>5</grid-width>
-    <grid-height>5</grid-height>
+    <!-- Hand written part, which we need to implement later -->
+    <gameplay.Turn>
+        <myCurrentPhaseID>1</myCurrentPhaseID>
+        <myCurrentPlayerID>0</myCurrentPlayerID>
+    </gameplay.Turn>
 
     <gameplay.Player>
         <myID>0</myID>
@@ -21,7 +24,10 @@
         </myEntityIDs>
     </gameplay.Player>
 
+    <!-- Generated Code from GameObjectSerializationTest, not hand-written -->
     <game-objects>
+        <grid-width>5</grid-width>
+        <grid-height>5</grid-height>
         <gameplay.EntityPrototype>
             <name>swordman</name><props>
             <entry>
@@ -445,6 +451,8 @@
         </gameplay.Tile>
     </game-objects>
 
+
+    <!-- Can be generated, but is too much pain to generate groovy graphs with code -->
     <gameplay.Phase>
         <myID>1</myID>
         <myStartNodeID>1</myStartNodeID>
@@ -524,10 +532,4 @@
             else { $return = false }
         </myGuard>
     </gameplay.Edge>
-
-
-    <gameplay.Turn>
-        <myCurrentPhaseID>1</myCurrentPhaseID>
-        <myCurrentPlayerID>0</myCurrentPlayerID>
-    </gameplay.Turn>
 </game>
