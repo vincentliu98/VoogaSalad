@@ -5,9 +5,17 @@ import gameObjects.TriFunction;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ *
+ *
+ * @author Jason Zhou
+ */
 public interface Point {
 
-
+    /**
+     *
+     * @return
+     */
     static TriFunction<Set<Point>, Integer, Integer, Boolean> verifyPointsFunc() {
 
         return (points, numRow, numCol) -> {
@@ -21,6 +29,13 @@ public interface Point {
         };
     }
 
+    /**
+     *
+     * @param points
+     * @param numRow
+     * @param numCol
+     * @return
+     */
     static Set<Point> getNeighborsOfPoints(Set<Point> points, int numRow, int numCol) {
         Set<Point> neighbors = new HashSet<>();
         for (Point p : points) {
@@ -34,6 +49,13 @@ public interface Point {
         return neighbors;
     }
 
+    /**
+     *
+     * @param p
+     * @param numRow
+     * @param numCol
+     * @return
+     */
     static Set<Point> getNeighborsOfAPoint(Point p, int numRow, int numCol) {
         Set<Point> neighbors = new HashSet<>();
             for (Directions.EightDirections d : Directions.EightDirections.values()) {
@@ -46,6 +68,12 @@ public interface Point {
     }
 
 
+    /**
+     *
+     * @param x
+     * @param numColumns
+     * @return
+     */
     static boolean outOfXBounds(int x, int numColumns) {
         return x < 0 || x >= numColumns;
     }
@@ -58,12 +86,49 @@ public interface Point {
         return outOfXBounds(position.getX(), numCol) || outOfYBounds(position.getY(), numRow);
     }
 
-
+    /**
+     *
+     * @return
+     */
     int getX();
+
+    /**
+     *
+     * @return
+     */
     int getY();
+
+    /**
+     *
+     * @param x
+     * @param y
+     * @return
+     */
     Point add(int x, int y);
+
+    /**
+     *
+     * @param p
+     * @return
+     */
     Point add(Point p);
+
+    /**
+     *
+     * @param p
+     * @return
+     */
     boolean equals(Object p);
+
+    /**
+     *
+     * @return
+     */
     int hashCode();
+
+    /**
+     *
+     * @return
+     */
     String toString();
 }

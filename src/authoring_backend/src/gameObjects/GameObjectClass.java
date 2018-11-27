@@ -11,15 +11,14 @@ import java.util.function.Consumer;
 
 /**
  * This interface is implemented by Tile and Entity Classes.
- *
+ * Supports editing of properties of the GameObject Classes
  * @author Jason Zhou
  *
  */
 public interface GameObjectClass {
 
     /**
-     *
-     * This method sets the id of the GameObject Class
+     * This method sets the id of the GameObject Class.
      * @return classId
      */
     ReadOnlyIntegerProperty getClassId();
@@ -45,44 +44,47 @@ public interface GameObjectClass {
     void setClassName(Consumer<SimpleStringProperty> setFunc);
 
     /**
-     *
-     * 
-     * @return
+     * This method gets the properties map of the GameObject Class.
+     * @return properties map
      */
     ObservableMap getPropertiesMap();
 
     /**
      * This method adds the property to the GameObject Class and to all instances of the class.
-     * @param propertyName
-     * @param defaultValue
-     * @return
+     * @param propertyName property name
+     * @param defaultValue default value of the property in GroovyCode
+     * @return true if property is successfully added
      */
     boolean addProperty(String propertyName, String defaultValue);
 
     /**
      * This method removes the property from the GameObject Class and from all instances of the class.
-     * @param propertyName
-     * @return
+     * @param propertyName property name to be removed
+     * @return true if the property name exists in the properties map
      */
     boolean removeProperty(String propertyName);
 
-    ObservableList getImagePathList();
-
     /**
      * This method adds the image path to the GameObject Class and to all instances of the class.
-     * @param path
+     * @param path file path of the image
      */
     void addImagePath(String path);
 
     /**
+     * This method gets the image path list of the GameObject Class.
+     * @return a list of the file paths of the images
+     */
+    ObservableList getImagePathList();
+
+    /**
      * This method removes the image path from the Entity Class and from all instances of the class.
      * @param index
-     * @return
+     * @return true if the image file path successfully removed
      */
     boolean removeImagePath(int index);
 
     /**
-     *
+     * This method sets the GroovyCode for choosing the image to display from the list of images.
      * @param blockCode
      */
     void setImageSelector(String blockCode);
@@ -94,15 +96,15 @@ public interface GameObjectClass {
     String getImageSelectorCode();
 
     /**
-     *
-     * @return
+     * This method returns all of the instance of the GameObject Class.
+     * @return the set of all instances of the class
      */
     Set<GameObjectInstance> getInstances();
 
     /**
-     *
+     * This method 
      * @param id
-     * @return
+     * @return true if the instance exists
      */
     boolean deleteInstance(int id);
 
