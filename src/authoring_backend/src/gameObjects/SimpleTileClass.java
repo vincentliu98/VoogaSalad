@@ -17,11 +17,11 @@ public class SimpleTileClass implements TileClass {
 
     private String CONST_CLASSNAME = "className";
     private String CONST_ID = "id";
-    private String CONST_SPRITECONTAINABLE = "spriteContainable";
+    private String CONST_ENTITYCONTAINABLE = "entityContainable";
 
     private ReadOnlyStringWrapper className;
     private ReadOnlyIntegerWrapper classId;
-    private SimpleBooleanProperty spriteContainable;
+    private SimpleBooleanProperty entityContainable;
     private ObservableList<String> imagePathList;
     private ObservableMap<String, String> propertiesMap;
     private String imageSelector;
@@ -36,7 +36,7 @@ public class SimpleTileClass implements TileClass {
     private SimpleTileClass() {
         className = new ReadOnlyStringWrapper(this, CONST_CLASSNAME);
         classId = new ReadOnlyIntegerWrapper(this, CONST_ID);
-        spriteContainable = new SimpleBooleanProperty(this, CONST_SPRITECONTAINABLE);
+        entityContainable = new SimpleBooleanProperty(this, CONST_ENTITYCONTAINABLE);
         imagePathList = FXCollections.observableArrayList();
         propertiesMap = FXCollections.observableHashMap();
     }
@@ -155,12 +155,12 @@ public class SimpleTileClass implements TileClass {
     }
 
     @Override
-    public SimpleBooleanProperty isSpriteContainable() {
-        return spriteContainable;
+    public SimpleBooleanProperty isEntityContainable() {
+        return entityContainable;
     }
 
     @Override
-    public void setSpriteContainable(boolean contains) {
-        spriteContainable.setValue(contains);
+    public void setEntityContainable(boolean contains) {
+        entityContainable.setValue(contains);
     }
 }

@@ -7,9 +7,9 @@ import java.util.Set;
 
 public interface TileClass extends GameObjectClass {
 
-    SimpleBooleanProperty isSpriteContainable();
+    SimpleBooleanProperty isEntityContainable();
 
-    void setSpriteContainable(boolean contains);
+    void setEntityContainable(boolean contains);
 
     GameObjectInstance createInstance(Set<Point> points);
 }
