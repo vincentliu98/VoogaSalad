@@ -1,6 +1,5 @@
 package entities;
 
-import groovy.api.BlockGraph;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -10,7 +9,6 @@ import javafx.collections.ObservableMap;
 
 import java.util.Set;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 public interface EntityClass {
 
@@ -30,7 +28,7 @@ public interface EntityClass {
      * @param defaultValue
      * @return
      */
-    boolean addProperty(String propertyName, BlockGraph defaultValue);
+    boolean addProperty(String propertyName, String defaultValue);
 
     /**
      * This method removes the property from the Entity Class and from all instances of the class.
@@ -54,9 +52,9 @@ public interface EntityClass {
      */
     boolean removeImagePath(int index);
 
-    void setImageSelector(BlockGraph blockCode);
+    void setImageSelector(String blockCode);
 
-    BlockGraph getImageSelectorCode();
+    String getImageSelectorCode();
 
     Set<EntityInstance> getInstances();
 
