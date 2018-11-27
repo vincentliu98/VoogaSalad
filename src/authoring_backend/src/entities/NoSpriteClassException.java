@@ -1,4 +1,4 @@
-package gameObjects;
+package entities;
 
 public class NoSpriteClassException extends NoEntityClassException {
 }

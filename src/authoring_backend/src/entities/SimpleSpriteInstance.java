@@ -1,8 +1,10 @@
-package gameObjects;
+package entities;
 
+import groovy.api.BlockGraph;
 import javafx.beans.property.*;
 import javafx.collections.ObservableMap;
 
+import java.util.Map;
 import java.util.function.Consumer;
 
 public class SimpleSpriteInstance implements SpriteInstance {
