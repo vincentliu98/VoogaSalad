@@ -78,20 +78,20 @@ public interface GameObjectClass {
 
     /**
      * This method removes the image path from the Entity Class and from all instances of the class.
-     * @param index
+     * @param index index of the image file path in the list
      * @return true if the image file path successfully removed
      */
     boolean removeImagePath(int index);
 
     /**
      * This method sets the GroovyCode for choosing the image to display from the list of images.
-     * @param blockCode
+     * @param blockCode GroovyCode
      */
     void setImageSelector(String blockCode);
 
     /**
-     *
-     * @return
+     * This method gets the image selector code.
+     * @return image selector code
      */
     String getImageSelectorCode();
 
@@ -102,8 +102,8 @@ public interface GameObjectClass {
     Set<GameObjectInstance> getInstances();
 
     /**
-     * This method 
-     * @param id
+     * This method removes the instance with the specified instance id
+     * @param id id of the instance
      * @return true if the instance exists
      */
     boolean deleteInstance(int id);
