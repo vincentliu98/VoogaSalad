@@ -19,7 +19,7 @@ public class AuthoringTools {
     public AuthoringTools() {
         factory = new GroovyFactory();
 
-        entityDB = new SimpleGameObjectsCRUD(50,50);
+        entityDB = new SimpleGameObjectsCRUD(5,5);
 
         phaseDB = new PhaseDB(factory);
     }

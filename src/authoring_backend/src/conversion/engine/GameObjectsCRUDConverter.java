@@ -25,6 +25,13 @@ public class GameObjectsCRUDConverter extends ReflectionConverter {
         var db = (SimpleGameObjectsCRUD) o;
         var shell = new GroovyShell();
 
+        writer.startNode("grid-width");
+        writer.setValue(String.valueOf(db.getWidth()));
+        writer.endNode();
+        writer.startNode("grid-height");
+        writer.setValue(String.valueOf(db.getHeight()));
+        writer.endNode();
+
         // EntityPrototypes
         for(var entityClass : db.getEntityClasses()) {
             writer.startNode("gameplay.EntityPrototype");
