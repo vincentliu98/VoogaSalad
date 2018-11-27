@@ -26,13 +26,12 @@
         <name>Box</name>
         <props/>
         <myWidth>1</myWidth>
-        <myHeight>1</myHeight>
-        <myXCoord>0</myXCoord>
-        <myYCoord>0</myYCoord>
+        <myHeight>1</myHeight> <myCoord>
+        <x>0</x>
+        <y>0</y> </myCoord>
         <myImagePaths>
             <string>square.png</string>
         </myImagePaths>
-        <myEntities/>
         <myImageSelector></myImageSelector>
         <myImages/>
     </gameplay.Tile>
@@ -41,13 +40,13 @@
         <name>Box</name>
         <props/>
         <myWidth>1</myWidth>
-        <myHeight>1</myHeight>
-        <myXCoord>1</myXCoord>
-        <myYCoord>0</myYCoord>
+        <myHeight>1</myHeight> <myCoord>
+        <x>1</x>
+        <y>0</y> </myCoord>
         <myImagePaths>
             <string>square.png</string>
         </myImagePaths>
-        <myEntities/>
+        
         <myImageSelector></myImageSelector>
         <myImages/>
     </gameplay.Tile>
@@ -56,13 +55,13 @@
         <name>Box</name>
         <props/>
         <myWidth>1</myWidth>
-        <myHeight>1</myHeight>
-        <myXCoord>2</myXCoord>
-        <myYCoord>0</myYCoord>
+        <myHeight>1</myHeight> <myCoord>
+        <x>2</x>
+        <y>0</y> </myCoord>
         <myImagePaths>
             <string>square.png</string>
         </myImagePaths>
-        <myEntities/>
+        
         <myImageSelector></myImageSelector>
         <myImages/>
     </gameplay.Tile>
@@ -71,13 +70,13 @@
         <name>Box</name>
         <props/>
         <myWidth>1</myWidth>
-        <myHeight>1</myHeight>
-        <myXCoord>3</myXCoord>
-        <myYCoord>0</myYCoord>
+        <myHeight>1</myHeight> <myCoord>
+        <x>3</x>
+        <y>0</y> </myCoord>
         <myImagePaths>
             <string>square.png</string>
         </myImagePaths>
-        <myEntities/>
+        
         <myImageSelector></myImageSelector>
         <myImages/>
     </gameplay.Tile>
@@ -86,13 +85,13 @@
         <name>Box</name>
         <props/>
         <myWidth>1</myWidth>
-        <myHeight>1</myHeight>
-        <myXCoord>4</myXCoord>
-        <myYCoord>0</myYCoord>
+        <myHeight>1</myHeight> <myCoord>
+        <x>4</x>
+        <y>0</y> </myCoord>
         <myImagePaths>
             <string>square.png</string>
         </myImagePaths>
-        <myEntities/>
+        
         <myImageSelector></myImageSelector>
         <myImages/>
     </gameplay.Tile>
@@ -101,13 +100,13 @@
         <name>Box</name>
         <props/>
         <myWidth>1</myWidth>
-        <myHeight>1</myHeight>
-        <myXCoord>0</myXCoord>
-        <myYCoord>1</myYCoord>
+        <myHeight>1</myHeight> <myCoord>
+        <x>0</x>
+        <y>1</y> </myCoord>
         <myImagePaths>
             <string>square.png</string>
         </myImagePaths>
-        <myEntities/>
+        
         <myImageSelector></myImageSelector>
         <myImages/>
     </gameplay.Tile>
@@ -116,13 +115,13 @@
         <name>Box</name>
         <props/>
         <myWidth>1</myWidth>
-        <myHeight>1</myHeight>
-        <myXCoord>1</myXCoord>
-        <myYCoord>1</myYCoord>
+        <myHeight>1</myHeight> <myCoord>
+        <x>1</x>
+        <y>1</y> </myCoord>
         <myImagePaths>
             <string>square.png</string>
         </myImagePaths>
-        <myEntities/>
+        
         <myImageSelector></myImageSelector>
         <myImages/>
     </gameplay.Tile>
@@ -131,13 +130,13 @@
         <name>Box</name>
         <props/>
         <myWidth>1</myWidth>
-        <myHeight>1</myHeight>
-        <myXCoord>2</myXCoord>
-        <myYCoord>1</myYCoord>
+        <myHeight>1</myHeight> <myCoord>
+        <x>2</x>
+        <y>1</y> </myCoord>
         <myImagePaths>
             <string>square.png</string>
         </myImagePaths>
-        <myEntities/>
+        
         <myImageSelector></myImageSelector>
         <myImages/>
     </gameplay.Tile>
@@ -146,13 +145,13 @@
         <name>Box</name>
         <props/>
         <myWidth>1</myWidth>
-        <myHeight>1</myHeight>
-        <myXCoord>3</myXCoord>
-        <myYCoord>1</myYCoord>
+        <myHeight>1</myHeight> <myCoord>
+        <x>3</x>
+        <y>1</y> </myCoord>
         <myImagePaths>
             <string>square.png</string>
         </myImagePaths>
-        <myEntities/>
+        
         <myImageSelector></myImageSelector>
         <myImages/>
     </gameplay.Tile>
@@ -161,13 +160,13 @@
         <name>Box</name>
         <props/>
         <myWidth>1</myWidth>
-        <myHeight>1</myHeight>
-        <myXCoord>4</myXCoord>
-        <myYCoord>1</myYCoord>
+        <myHeight>1</myHeight> <myCoord>
+        <x>4</x>
+        <y>1</y> </myCoord>
         <myImagePaths>
             <string>square.png</string>
         </myImagePaths>
-        <myEntities/>
+        
         <myImageSelector></myImageSelector>
         <myImages/>
     </gameplay.Tile>
@@ -176,13 +175,13 @@
         <name>Box</name>
         <props/>
         <myWidth>1</myWidth>
-        <myHeight>1</myHeight>
-        <myXCoord>0</myXCoord>
-        <myYCoord>2</myYCoord>
+        <myHeight>1</myHeight> <myCoord>
+        <x>0</x>
+        <y>2</y> </myCoord>
         <myImagePaths>
             <string>square.png</string>
         </myImagePaths>
-        <myEntities/>
+        
         <myImageSelector></myImageSelector>
         <myImages/>
     </gameplay.Tile>
@@ -191,13 +190,13 @@
         <name>Box</name>
         <props/>
         <myWidth>1</myWidth>
-        <myHeight>1</myHeight>
-        <myXCoord>1</myXCoord>
-        <myYCoord>2</myYCoord>
+        <myHeight>1</myHeight> <myCoord>
+        <x>1</x>
+        <y>2</y> </myCoord>
         <myImagePaths>
             <string>square.png</string>
         </myImagePaths>
-        <myEntities/>
+        
         <myImageSelector></myImageSelector>
         <myImages/>
     </gameplay.Tile>
@@ -206,13 +205,13 @@
         <name>Box</name>
         <props/>
         <myWidth>1</myWidth>
-        <myHeight>1</myHeight>
-        <myXCoord>2</myXCoord>
-        <myYCoord>2</myYCoord>
+        <myHeight>1</myHeight> <myCoord>
+        <x>2</x>
+        <y>2</y> </myCoord>
         <myImagePaths>
             <string>square.png</string>
         </myImagePaths>
-        <myEntities/>
+        
         <myImageSelector></myImageSelector>
         <myImages/>
     </gameplay.Tile>
@@ -221,13 +220,13 @@
         <name>Box</name>
         <props/>
         <myWidth>1</myWidth>
-        <myHeight>1</myHeight>
-        <myXCoord>3</myXCoord>
-        <myYCoord>2</myYCoord>
+        <myHeight>1</myHeight> <myCoord>
+        <x>3</x>
+        <y>2</y> </myCoord>
         <myImagePaths>
             <string>square.png</string>
         </myImagePaths>
-        <myEntities/>
+        
         <myImageSelector></myImageSelector>
         <myImages/>
     </gameplay.Tile>
@@ -236,13 +235,13 @@
         <name>Box</name>
         <props/>
         <myWidth>1</myWidth>
-        <myHeight>1</myHeight>
-        <myXCoord>4</myXCoord>
-        <myYCoord>2</myYCoord>
+        <myHeight>1</myHeight> <myCoord>
+        <x>4</x>
+        <y>2</y> </myCoord>
         <myImagePaths>
             <string>square.png</string>
         </myImagePaths>
-        <myEntities/>
+        
         <myImageSelector></myImageSelector>
         <myImages/>
     </gameplay.Tile>
@@ -251,13 +250,13 @@
         <name>Box</name>
         <props/>
         <myWidth>1</myWidth>
-        <myHeight>1</myHeight>
-        <myXCoord>0</myXCoord>
-        <myYCoord>3</myYCoord>
+        <myHeight>1</myHeight> <myCoord>
+        <x>0</x>
+        <y>3</y> </myCoord>
         <myImagePaths>
             <string>square.png</string>
         </myImagePaths>
-        <myEntities/>
+        
         <myImageSelector></myImageSelector>
         <myImages/>
     </gameplay.Tile>
@@ -266,13 +265,13 @@
         <name>Box</name>
         <props/>
         <myWidth>1</myWidth>
-        <myHeight>1</myHeight>
-        <myXCoord>1</myXCoord>
-        <myYCoord>3</myYCoord>
+        <myHeight>1</myHeight> <myCoord>
+        <x>1</x>
+        <y>3</y> </myCoord>
         <myImagePaths>
             <string>square.png</string>
         </myImagePaths>
-        <myEntities/>
+        
         <myImageSelector></myImageSelector>
         <myImages/>
     </gameplay.Tile>
@@ -281,13 +280,13 @@
         <name>Box</name>
         <props/>
         <myWidth>1</myWidth>
-        <myHeight>1</myHeight>
-        <myXCoord>2</myXCoord>
-        <myYCoord>3</myYCoord>
+        <myHeight>1</myHeight> <myCoord>
+        <x>2</x>
+        <y>3</y> </myCoord>
         <myImagePaths>
             <string>square.png</string>
         </myImagePaths>
-        <myEntities/>
+        
         <myImageSelector></myImageSelector>
         <myImages/>
     </gameplay.Tile>
@@ -296,13 +295,13 @@
         <name>Box</name>
         <props/>
         <myWidth>1</myWidth>
-        <myHeight>1</myHeight>
-        <myXCoord>3</myXCoord>
-        <myYCoord>3</myYCoord>
+        <myHeight>1</myHeight> <myCoord>
+        <x>3</x>
+        <y>3</y> </myCoord>
         <myImagePaths>
             <string>square.png</string>
         </myImagePaths>
-        <myEntities/>
+        
         <myImageSelector></myImageSelector>
         <myImages/>
     </gameplay.Tile>
@@ -311,13 +310,13 @@
         <name>Box</name>
         <props/>
         <myWidth>1</myWidth>
-        <myHeight>1</myHeight>
-        <myXCoord>4</myXCoord>
-        <myYCoord>3</myYCoord>
+        <myHeight>1</myHeight> <myCoord>
+        <x>4</x>
+        <y>3</y> </myCoord>
         <myImagePaths>
             <string>square.png</string>
         </myImagePaths>
-        <myEntities/>
+        
         <myImageSelector></myImageSelector>
         <myImages/>
     </gameplay.Tile>
@@ -326,13 +325,13 @@
         <name>Box</name>
         <props/>
         <myWidth>1</myWidth>
-        <myHeight>1</myHeight>
-        <myXCoord>0</myXCoord>
-        <myYCoord>4</myYCoord>
+        <myHeight>1</myHeight> <myCoord>
+        <x>0</x>
+        <y>4</y> </myCoord>
         <myImagePaths>
             <string>square.png</string>
         </myImagePaths>
-        <myEntities/>
+        
         <myImageSelector></myImageSelector>
         <myImages/>
     </gameplay.Tile>
@@ -341,13 +340,13 @@
         <name>Box</name>
         <props/>
         <myWidth>1</myWidth>
-        <myHeight>1</myHeight>
-        <myXCoord>1</myXCoord>
-        <myYCoord>4</myYCoord>
+        <myHeight>1</myHeight> <myCoord>
+        <x>1</x>
+        <y>4</y> </myCoord>
         <myImagePaths>
             <string>square.png</string>
         </myImagePaths>
-        <myEntities/>
+        
         <myImageSelector></myImageSelector>
         <myImages/>
     </gameplay.Tile>
@@ -356,13 +355,13 @@
         <name>Box</name>
         <props/>
         <myWidth>1</myWidth>
-        <myHeight>1</myHeight>
-        <myXCoord>2</myXCoord>
-        <myYCoord>4</myYCoord>
+        <myHeight>1</myHeight> <myCoord>
+        <x>2</x>
+        <y>4</y> </myCoord>
         <myImagePaths>
             <string>square.png</string>
         </myImagePaths>
-        <myEntities/>
+        
         <myImageSelector></myImageSelector>
         <myImages/>
     </gameplay.Tile>
@@ -371,13 +370,13 @@
         <name>Box</name>
         <props/>
         <myWidth>1</myWidth>
-        <myHeight>1</myHeight>
-        <myXCoord>3</myXCoord>
-        <myYCoord>4</myYCoord>
+        <myHeight>1</myHeight> <myCoord>
+        <x>3</x>
+        <y>4</y> </myCoord>
         <myImagePaths>
             <string>square.png</string>
         </myImagePaths>
-        <myEntities/>
+        
         <myImageSelector></myImageSelector>
         <myImages/>
     </gameplay.Tile>
@@ -386,13 +385,13 @@
         <name>Box</name>
         <props/>
         <myWidth>1</myWidth>
-        <myHeight>1</myHeight>
-        <myXCoord>4</myXCoord>
-        <myYCoord>4</myYCoord>
+        <myHeight>1</myHeight> <myCoord>
+        <x>4</x>
+        <y>4</y> </myCoord>
         <myImagePaths>
             <string>square.png</string>
         </myImagePaths>
-        <myEntities/>
+        
         <myImageSelector></myImageSelector>
         <myImages/>
     </gameplay.Tile>
@@ -456,8 +455,7 @@
     <gameplay.Entity>
         <myID>1</myID>
         <name>Swordman</name>
-        <myXCoord>0</myXCoord>
-        <myYCoord>0</myYCoord>
+        <tileID>0</tileID>
         <props>
             <entry>
                 <string>hp</string>
@@ -485,10 +483,9 @@
     </gameplay.Entity>
 
     <gameplay.Entity>
-        <myID>2</myID>
+        <myID>1</myID>
         <name>Swordman</name>
-        <myXCoord>1</myXCoord>
-        <myYCoord>0</myYCoord>
+        <tileID>2</tileID>
         <props>
             <entry>
                 <string>hp</string>
@@ -518,8 +515,7 @@
     <gameplay.Entity>
         <myID>3</myID>
         <name>Bowman</name>
-        <myXCoord>4</myXCoord>
-        <myYCoord>4</myYCoord>
+        <tileID>23</tileID>
         <props>
             <entry>
                 <string>hp</string>
@@ -549,8 +545,7 @@
     <gameplay.Entity>
         <myID>4</myID>
         <name>Bowman</name>
-        <myXCoord>3</myXCoord>
-        <myYCoord>4</myYCoord>
+        <tileID>24</tileID>
         <props>
             <entry>
                 <string>hp</string>
@@ -643,7 +638,7 @@
         <myEndNodeID>3</myEndNodeID>
         <myTrigger class="phase.api.GameEvent$MouseClick"/>
         <myGuard>
-            if(GameData.isTile($clicked) &amp;&amp; GameData.distance($clicked, selected) &lt;= 1 &amp;&amp; $clicked.hasNoEntities()) { $return = true }
+            if(GameData.isTile($clicked) &amp;&amp; GameData.distance($clicked, selected) &lt;= 1 &amp;&amp; GameData.hasNoEntities($clicked)) { $return = true }
             else { $return = false }
         </myGuard>
     </gameplay.Edge>

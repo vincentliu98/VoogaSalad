@@ -2,6 +2,8 @@ package gameplay;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import grids.Point;
+import grids.PointImpl;
 import javafx.util.Pair;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -40,9 +42,9 @@ public class XMLParser {
         catch (Exception e){ }
     }
 
-    public Pair<Integer, Integer> getDimension() {
-        return new Pair<>(Integer.parseInt(myDocTree.getElementsByTagName("grid-width").item(0).getTextContent()),
-                          Integer.parseInt(myDocTree.getElementsByTagName("grid-height").item(0).getTextContent()));
+    public Point getDimension() {
+        return new PointImpl(Integer.parseInt(myDocTree.getElementsByTagName("grid-width").item(0).getTextContent()),
+                             Integer.parseInt(myDocTree.getElementsByTagName("grid-height").item(0).getTextContent()));
     }
 
     public Map<Integer, Player> getPlayers(){
