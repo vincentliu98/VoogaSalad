@@ -2,6 +2,7 @@ package gameplay;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import grids.Point;
+import grids.PointImpl;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
@@ -15,7 +16,7 @@ public class Tile extends PropertyHolder<Tile> implements GameObject, EventHandl
     private int myID;
     private String name;
     private int myWidth, myHeight;
-    private Point myCoord; // a hidden assumption here is that the tiles are immovable objects
+    private PointImpl myCoord; // ugh interfaces are hard to use with XStream
     private List<String> myImagePaths;
     private String myImageSelector; // Groovy codee
 

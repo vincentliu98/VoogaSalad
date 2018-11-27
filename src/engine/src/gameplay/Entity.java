@@ -62,7 +62,6 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
         imgIndex.addListener((e, oldVal, newVal) -> myImageView.setImage(myImages.get(newVal.intValue())));
 
         var pos = GameData.getTile(tileID);
-
         xCoord = new SimpleDoubleProperty(pos.getX());
         yCoord = new SimpleDoubleProperty(pos.getY());
     }
@@ -120,6 +119,7 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
     public String getName() { return name; }
     public double getX() { return xCoord.get(); }
     public double getY() { return yCoord.get(); }
+    public int getTileID() { return tileID; }
 
     @Override
     public void handle(MouseEvent event) {

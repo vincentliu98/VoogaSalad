@@ -48,7 +48,7 @@ public class XMLParser {
     }
 
     public Map<Integer, Player> getPlayers(){
-        NodeList players = myDocTree.getElementsByTagName("Player");
+        NodeList players = myDocTree.getElementsByTagName("gameplay.Player");
         Map<Integer, Player> myPlayers = new HashMap<>();
         for (int i = 0; i < players.getLength(); i++){
             String currentPlayer = nodeToString(players.item(i));
@@ -59,7 +59,7 @@ public class XMLParser {
     }
 
     public Map<Integer, Entity> getEntities(){
-        NodeList entities = myDocTree.getElementsByTagName("Entity");
+        NodeList entities = myDocTree.getElementsByTagName("gameplay.Entity");
         Map<Integer, Entity> myEntities = new HashMap<>();
         for (int i = 0; i < entities.getLength(); i++){
             String currentEntity = nodeToString(entities.item(i));
@@ -70,7 +70,7 @@ public class XMLParser {
     }
 
     public Map<String, EntityPrototype> getEntityPrototypes(){
-        NodeList entities = myDocTree.getElementsByTagName("EntityPrototype");
+        NodeList entities = myDocTree.getElementsByTagName("gameplay.EntityPrototype");
         Map<String, EntityPrototype> myEntities = new HashMap<>();
         for (int i = 0; i < entities.getLength(); i++){
             String currentEntity = nodeToString(entities.item(i));
@@ -81,7 +81,7 @@ public class XMLParser {
     }
 
     public Map<Integer, Tile> getTiles(){
-        NodeList tiles = myDocTree.getElementsByTagName("Tile");
+        NodeList tiles = myDocTree.getElementsByTagName("gameplay.Tile");
         Map<Integer, Tile> myTiles = new HashMap<>();
         for (int i = 0; i < tiles.getLength(); i++){
             String currentTile = nodeToString(tiles.item(i));
@@ -92,7 +92,7 @@ public class XMLParser {
     }
 
     public Map<Integer, Phase> getPhases(){
-        NodeList phases = myDocTree.getElementsByTagName("Phase");
+        NodeList phases = myDocTree.getElementsByTagName("gameplay.Phase");
         Map<Integer, Phase> myPhases = new HashMap<>();
         for (int i = 0; i < phases.getLength(); i++){
             String currentPhase = nodeToString(phases.item(i));
@@ -103,7 +103,7 @@ public class XMLParser {
     }
 
     public Map<Integer, Node> getNodes(){
-        NodeList nodes = myDocTree.getElementsByTagName("Node");
+        NodeList nodes = myDocTree.getElementsByTagName("gameplay.Node");
         Map<Integer, Node> myNodes = new HashMap<>();
         for (int i = 0; i < nodes.getLength(); i++){
             String currentNode = nodeToString(nodes.item(i));
@@ -114,7 +114,7 @@ public class XMLParser {
     }
 
     public Map<Integer, Edge> getEdges(){
-        NodeList edges = myDocTree.getElementsByTagName("Edge");
+        NodeList edges = myDocTree.getElementsByTagName("gameplay.Edge");
         Map<Integer, Edge> myEdges = new HashMap<>();
         for (int i = 0; i < edges.getLength(); i++){
             String currentEdge = nodeToString(edges.item(i));
@@ -125,7 +125,7 @@ public class XMLParser {
     }
 
     public Turn getTurn(){
-        NodeList turns = myDocTree.getElementsByTagName("Turn");
+        NodeList turns = myDocTree.getElementsByTagName("gameplay.Turn");
         String currentTurn = nodeToString(turns.item(0)); // only one Turn per game
         Turn turn = (Turn) mySerializer.fromXML(currentTurn);
         return turn;

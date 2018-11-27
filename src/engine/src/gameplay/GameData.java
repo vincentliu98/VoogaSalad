@@ -84,6 +84,10 @@ public class GameData {
         entity.setLocation(to.getID());
     }
 
+    public static boolean hasNoEntities(Tile t) {
+        return ENTITIES.values().stream().noneMatch(e -> t.getID() == e.getTileID());
+    }
+
     public static Player getPlayer(int playerID){
         return PLAYERS.get(playerID);
     }
