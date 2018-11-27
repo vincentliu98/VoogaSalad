@@ -2,6 +2,8 @@ package authoring;
 
 import entities.EntitiesCRUDInterface;
 import entities.SimpleEntitiesCRUD;
+import grids.Grid;
+import grids.GridImpl;
 import grids.GridShape;
 import groovy.api.GroovyFactory;
 import javafx.collections.FXCollections;
@@ -20,8 +22,8 @@ public class AuthoringTools {
     public AuthoringTools() {
         factory = new GroovyFactory();
         globalData = FXCollections.observableHashMap();
-
-        entityDB = new SimpleEntitiesCRUD(50,50);
+        Grid grid = new GridImpl(50, 50, GridShape.Square);
+        entityDB = new SimpleEntitiesCRUD(grid);
         phaseDB = new PhaseDB(factory);
     }
 
