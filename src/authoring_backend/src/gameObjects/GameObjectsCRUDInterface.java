@@ -3,7 +3,7 @@ package gameObjects;
 /**
  *
  * This class encapsulates the Game Data for the GameObjects (Tiles and Entities). It provides methods to create, edit, and delete the Tile and Entity Classes.
- * It holds maps of GameObject Classes as well as GameObject Instances.
+ * It holds maps of GameObject Classes and GameObject Instances.
  * @author Jason Zhou
  */
 public interface GameObjectsCRUDInterface {
@@ -39,7 +39,7 @@ public interface GameObjectsCRUDInterface {
     boolean deleteTileInstance(int instanceId);
 
     /**
-     * 
+     * This method creates an Entity Class and adds it to the map.
      * @param name the name of the Entity Class to be created
      * @return the Entity Class if there is no name collision and the method is successful
      * @throws DuplicateClassException if a class with the same name exists
@@ -47,6 +47,7 @@ public interface GameObjectsCRUDInterface {
     EntityClass createEntityClass(String name);
 
     /**
+     * This method gets the Entity Class from the map.
      * @param name the name of the Entity Class to be retrieved
      * @return the Entity Class with the name
      * @throws NoEntityClassException if there is no such Entity Class
@@ -54,7 +55,7 @@ public interface GameObjectsCRUDInterface {
     EntityClass getEntityClass(String name);
 
     /**
-     *
+     * This method deletes the specified Entity Class.
      * @param name the name of the Entity Class to be deleted
      * @return True if the Entity Class exists
      */
@@ -62,13 +63,14 @@ public interface GameObjectsCRUDInterface {
 
     /**
      *
-     * @param instanceId
-     * @return
+     * This method deletes the specified Entity Instance.
+     * @param instanceId the id of the instance
+     * @return True if the Entity Instance with the instanceId exists
      */
     boolean deleteEntityInstance(int instanceId);
 
     /**
-     *
+     * Transforms the maps of GameObject Classes and GameObject Instances to XML.
      * @return Entity Data of the Game in XML format
      */
     String toXML();
