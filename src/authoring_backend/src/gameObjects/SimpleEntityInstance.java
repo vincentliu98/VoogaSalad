@@ -13,12 +13,12 @@ public class SimpleEntityInstance implements EntityInstance {
     private Consumer<GameObjectInstance> returnInstanceIdFunc;
 
     SimpleEntityInstance(String className, int tileId, ObservableMap<String, String> properties, Consumer<GameObjectInstance> returnInstanceIdFunc) {
-        this.className = new ReadOnlyStringWrapper();
-        this.className.set(className);
+        this.className = new ReadOnlyStringWrapper(className);
         this.tileId = new ReadOnlyIntegerWrapper();
         this.tileId.setValue(tileId);
         this.propertiesMap = properties;
         this.returnInstanceIdFunc = returnInstanceIdFunc;
+        instanceId = new ReadOnlyIntegerWrapper();
     }
 
     @Override
@@ -32,9 +32,7 @@ public class SimpleEntityInstance implements EntityInstance {
     }
 
     @Override
-    public ReadOnlyStringProperty getClassName() {
-        return className.getReadOnlyProperty();
-    }
+    public ReadOnlyStringProperty getClassName() { return className; }
 
     public Consumer<GameObjectInstance> getReturnInstanceIdFunc() {
         return returnInstanceIdFunc;
@@ -54,4 +52,6 @@ public class SimpleEntityInstance implements EntityInstance {
         return propertiesMap.remove(propertyName) != null;
     }
 
+    @Override
+    public SimpleIntegerProperty getTileID() { return tileId; }
 }

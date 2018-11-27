@@ -28,34 +28,38 @@ public class SimpleEntityClass implements EntityClass {
     private Function<String, Set<GameObjectInstance>> getEntityInstancesFunc;
     private Consumer<GameObjectInstance> setInstanceIdFunc;
     private Consumer<GameObjectInstance> returnInstanceIdFunc;
-    private Consumer<EntityInstance> addSpriteInstanceToMapFunc;
+    private Consumer<EntityInstance> addEntityInstanceToMapFunc;
     private Function<Integer, Boolean> deleteEntityInstanceFromMapFunc;
     private TriConsumer<String, String, String> addEntityPropertyFunc;
     private BiConsumer<String, String> removeEntityPropertyFunc;
 
 
-    private SimpleEntityClass() {
-        className = new ReadOnlyStringWrapper(this, CONST_CLASSNAME);
+    private SimpleEntityClass(String name) {
+        className = new ReadOnlyStringWrapper(this, CONST_CLASSNAME, name);
         classId = new ReadOnlyIntegerWrapper(this, CONST_ID);
         movable = new SimpleBooleanProperty(this, CONST_MOVABLE);
         imagePathList = FXCollections.observableArrayList();
         propertiesMap = FXCollections.observableHashMap();
-
+        imageSelector = "";
     }
 
-    SimpleEntityClass(Function<Integer, Boolean> verifyTileInstanceIdFunction,
-                      Consumer<GameObjectInstance> setInstanceIdFunc,
-                      Consumer<GameObjectInstance> returnInstanceIdFunc,
-                      Consumer<EntityInstance> addEntityInstanceToMapFunc,
-                      Function<Integer, Boolean> deleteEntityInstanceFromMapFunc,
-                      Function<String, Set<GameObjectInstance>> getEntityInstancesFunc,
-                      TriConsumer<String, String, String> addEntityPropertyFunc,
-                      BiConsumer<String, String> removeEntityPropertyFunc) {
-        this();
+    SimpleEntityClass(
+        String name,
+        Function<Integer, Boolean> verifyTileInstanceIdFunction,
+        Consumer<GameObjectInstance> setInstanceIdFunc,
+        Consumer<GameObjectInstance> returnInstanceIdFunc,
+        Consumer<EntityInstance> addEntityInstanceToMapFunc,
+        Function<Integer, Boolean> deleteEntityInstanceFromMapFunc,
+        Function<String, Set<GameObjectInstance>> getEntityInstancesFunc,
+        TriConsumer<String, String, String> addEntityPropertyFunc,
+        BiConsumer<String, String> removeEntityPropertyFunc
+    ) {
+        this(name);
+        this.className.set(name);
         this.verifyTileInstanceIdFunc = verifyTileInstanceIdFunction;
         this.setInstanceIdFunc = setInstanceIdFunc;
         this.returnInstanceIdFunc = returnInstanceIdFunc;
-        this.addSpriteInstanceToMapFunc = addEntityInstanceToMapFunc;
+        this.addEntityInstanceToMapFunc = addEntityInstanceToMapFunc;
         this.deleteEntityInstanceFromMapFunc = deleteEntityInstanceFromMapFunc;
         this.getEntityInstancesFunc = getEntityInstancesFunc;
         this.addEntityPropertyFunc = addEntityPropertyFunc;
@@ -75,7 +79,7 @@ public class SimpleEntityClass implements EntityClass {
 
     @Override
     public ReadOnlyStringProperty getClassName() {
-        return className.getReadOnlyProperty();
+        return className;
     }
 
     @Override
@@ -105,7 +109,7 @@ public class SimpleEntityClass implements EntityClass {
     }
 
     @Override
-    public ObservableList getImagePathList() {
+    public ObservableList<String> getImagePathList() {
         return imagePathList;
     }
 
@@ -143,9 +147,9 @@ public class SimpleEntityClass implements EntityClass {
         }
         ObservableMap propertiesMapCopy = FXCollections.observableHashMap();
         propertiesMapCopy.putAll(propertiesMap);
-        EntityInstance entityInstance = new SimpleEntityInstance(className.getName(), tileId, propertiesMapCopy, returnInstanceIdFunc);
+        EntityInstance entityInstance = new SimpleEntityInstance(className.get(), tileId, propertiesMapCopy, returnInstanceIdFunc);
         setInstanceIdFunc.accept(entityInstance);
-        addSpriteInstanceToMapFunc.accept(entityInstance);
+        addEntityInstanceToMapFunc.accept(entityInstance);
         return entityInstance;
     }
 

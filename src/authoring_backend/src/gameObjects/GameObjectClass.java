@@ -20,7 +20,7 @@ public interface GameObjectClass {
 
     void setClassName(Consumer<SimpleStringProperty> setFunc);
 
-    ObservableMap getPropertiesMap();
+    ObservableMap<String, String> getPropertiesMap();
 
     /**
      * This method adds the property to the GameObject Class and to all instances of the class.
@@ -37,7 +37,7 @@ public interface GameObjectClass {
      */
     boolean removeProperty(String propertyName);
 
-    ObservableList getImagePathList();
+    ObservableList<String> getImagePathList();
 
     /**
      * This method adds the image path to the GameObject Class and to all instances of the class.

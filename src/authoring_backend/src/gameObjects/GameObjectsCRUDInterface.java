@@ -62,10 +62,4 @@ public interface GameObjectsCRUDInterface {
      * @return
      */
     boolean deleteEntityInstance(int instanceId);
-
-    /**
-     *
-     * @return Entity Data of the Game in XML format
-     */
-    String toXML();
 }

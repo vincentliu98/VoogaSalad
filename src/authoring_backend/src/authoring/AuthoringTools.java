@@ -13,13 +13,11 @@ import phase.api.PhaseDB;
  */
 public class AuthoringTools {
     private GroovyFactory factory;
-    private ObservableMap<String, Object> globalData;
     private GameObjectsCRUDInterface entityDB;
     private PhaseDB phaseDB;
 
     public AuthoringTools() {
         factory = new GroovyFactory();
-        globalData = FXCollections.observableHashMap();
 
         entityDB = new SimpleGameObjectsCRUD(50,50);
 
@@ -27,7 +25,6 @@ public class AuthoringTools {
     }
 
     public GroovyFactory factory() { return factory; }
-    public ObservableMap globalData() { return globalData; }
     public GameObjectsCRUDInterface entityDB() { return entityDB; }
     public PhaseDB phaseDB() { return phaseDB; }
 

@@ -1,5 +1,5 @@
 import authoring.AuthoringTools;
-import conversion.SerializerForEngine;
+import conversion.engine.SerializerForEngine;
 import phase.api.GameEvent;
 
 public class PhaseSerializationTest {
@@ -25,9 +25,9 @@ public class PhaseSerializationTest {
         graph.addEdge(edge23);
         graph.addEdge(edge24);
 
-//        System.out.println(SerializerForEngine.gen().toXML(graph));
-
-        var graph2 = phaseDB.createGraph("B").get(null);
+        var edge12graph = edge12.guard();
+        var edge23graph = edge23.guard();
+        var edge24graph = edge24.guard();
 
         System.out.println(SerializerForEngine.gen().toXML(phaseDB));
     }

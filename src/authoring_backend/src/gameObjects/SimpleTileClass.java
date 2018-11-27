@@ -11,9 +11,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class SimpleTileClass implements TileClass {
-
-    private int numRow;
-    private int numCol;
+    private int numRow, numCol;
 
     private String CONST_CLASSNAME = "className";
     private String CONST_ID = "id";
@@ -22,33 +20,37 @@ public class SimpleTileClass implements TileClass {
     private ReadOnlyStringWrapper className;
     private ReadOnlyIntegerWrapper classId;
     private SimpleBooleanProperty entityContainable;
+    private SimpleIntegerProperty width, height;
     private ObservableList<String> imagePathList;
     private ObservableMap<String, String> propertiesMap;
     private String imageSelector;
 
-    private TriFunction<Set<Point>, Integer, Integer, Boolean> verifyPointsFunc;
+    private TriFunction<Point, Integer, Integer, Boolean> verifyPointsFunc;
 
     private Function<String, Set<GameObjectInstance>> getTileInstancesFunc;
     private Consumer<GameObjectInstance> setInstanceIdFunc;
     private Consumer<GameObjectInstance> returnInstanceIdFunc;
     private Consumer<TileInstance> addTileInstanceToMapFunc;
 
-    private SimpleTileClass() {
-        className = new ReadOnlyStringWrapper(this, CONST_CLASSNAME);
+    private SimpleTileClass(String name) {
+        className = new ReadOnlyStringWrapper(this, CONST_CLASSNAME, name);
         classId = new ReadOnlyIntegerWrapper(this, CONST_ID);
         entityContainable = new SimpleBooleanProperty(this, CONST_ENTITYCONTAINABLE);
         imagePathList = FXCollections.observableArrayList();
         propertiesMap = FXCollections.observableHashMap();
+        imageSelector = "";
+        width = new SimpleIntegerProperty(1);
+        height = new SimpleIntegerProperty(1);
     }
 
-    SimpleTileClass(int numRow,
-                    int numCol,
-                    TriFunction<Set<Point>, Integer, Integer, Boolean> verifyPointsFunc,
+    SimpleTileClass(String name,
+                    int numRow, int numCol,
+                    TriFunction<Point, Integer, Integer, Boolean> verifyPointsFunc,
                     Consumer<GameObjectInstance> setInstanceIdFunc,
                     Consumer<GameObjectInstance> returnInstanceIdFunc,
                     Consumer<TileInstance> addTileInstanceToMapFunc,
                     Function<String, Set<GameObjectInstance>> getTileInstancesFunc) {
-        this();
+        this(name);
         this.numRow = numRow;
         this.numCol = numCol;
         this.verifyPointsFunc = verifyPointsFunc;
@@ -141,18 +143,25 @@ public class SimpleTileClass implements TileClass {
     }
 
     @Override
-    public GameObjectInstance createInstance(Set<Point> points) {
-        if (!verifyPointsFunc.apply(points, numRow, numCol)) {
+    public GameObjectInstance createInstance(Point coord) {
+        if (verifyPointsFunc.apply(coord, numRow, numCol)) {
             throw new InvalidPointsException();
         }
         ObservableMap propertiesMapCopy = FXCollections.observableHashMap();
         propertiesMapCopy.putAll(propertiesMap);
-        TileInstance tileInstance = new SimpleTileInstance(className.getName(), points, propertiesMapCopy, returnInstanceIdFunc);
+        TileInstance tileInstance = new SimpleTileInstance(className.get(), coord, propertiesMapCopy, returnInstanceIdFunc);
         setInstanceIdFunc.accept(tileInstance);
         addTileInstanceToMapFunc.accept(tileInstance);
         return tileInstance;
 
     }
+
+    @Override
+    public SimpleIntegerProperty getWidth() { return width; }
+
+    @Override
+    public SimpleIntegerProperty getHeight() { return height; }
+
 
     @Override
     public SimpleBooleanProperty isEntityContainable() {
