@@ -1,31 +1,25 @@
-package entities;
+package gameObjects;
 
-import grids.Point;
-import groovy.api.BlockGraph;
 import javafx.beans.property.*;
 import javafx.collections.ObservableMap;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.function.Consumer;
 
-public class SimpleTileInstance implements TileInstance {
+public class SimpleSpriteInstance implements SpriteInstance {
     private ReadOnlyStringWrapper className;
     private ReadOnlyIntegerWrapper instanceId;
-    private Set<Point> points;
-    private ObservableMap<String, BlockGraph> propertiesMap;
+    private SimpleIntegerProperty tileId;
+    private ObservableMap<String, String> propertiesMap;
     private Consumer<EntityInstance> returnInstanceIdFunc;
 
-
-    SimpleTileInstance(String className, Set<Point> points, ObservableMap<String, BlockGraph> properties, Consumer<EntityInstance> returnInstanceIdFunc) {
+    SimpleSpriteInstance(String className, int tileId, ObservableMap<String, String> properties, Consumer<EntityInstance> returnInstanceIdFunc) {
         this.className = new ReadOnlyStringWrapper();
         this.className.set(className);
-        this.points = new HashSet<>();
-        this.points.addAll(points);
+        this.tileId = new ReadOnlyIntegerWrapper();
+        this.tileId.setValue(tileId);
         this.propertiesMap = properties;
         this.returnInstanceIdFunc = returnInstanceIdFunc;
     }
-
 
     @Override
     public ReadOnlyIntegerProperty getInstanceId() {
@@ -45,4 +39,19 @@ public class SimpleTileInstance implements TileInstance {
     public Consumer<EntityInstance> getReturnInstanceIdFunc() {
         return returnInstanceIdFunc;
     }
+
+    @Override
+    public boolean addProperty(String propertyName, String defaultValue) {
+        if (!propertiesMap.containsKey(propertyName)) {
+            propertiesMap.put(propertyName, defaultValue);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean removeProperty(String propertyName) {
+        return propertiesMap.remove(propertyName) != null;
+    }
+
 }

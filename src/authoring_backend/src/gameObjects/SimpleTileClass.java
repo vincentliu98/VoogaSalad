@@ -1,7 +1,6 @@
 package entities;
 
 import grids.Point;
-import groovy.api.BlockGraph;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,6 +12,9 @@ import java.util.function.Function;
 
 public class SimpleTileClass implements TileClass {
 
+    private int numRow;
+    private int numCol;
+
     private String CONST_CLASSNAME = "className";
     private String CONST_ID = "id";
     private String CONST_SPRITECONTAINABLE = "spriteContainable";
@@ -21,10 +23,10 @@ public class SimpleTileClass implements TileClass {
     private ReadOnlyIntegerWrapper classId;
     private SimpleBooleanProperty spriteContainable;
     private ObservableList<String> imagePathList;
-    private ObservableMap<String, BlockGraph> propertiesMap;
-    private BlockGraph imageSelector;
+    private ObservableMap<String, String> propertiesMap;
+    private String imageSelector;
 
-    private Function<Set<Point>, Boolean> verifyPointsFunc;
+    private TriFunction<Set<Point>, Integer, Integer, Boolean> verifyPointsFunc;
 
     private Function<String, Set<EntityInstance>> getTileInstancesFunc;
     private Consumer<EntityInstance> setInstanceIdFunc;
@@ -39,12 +41,16 @@ public class SimpleTileClass implements TileClass {
         propertiesMap = FXCollections.observableHashMap();
     }
 
-    SimpleTileClass(Function<Set<Point>, Boolean> verifyPointsFunc,
+    SimpleTileClass(int numRow,
+                    int numCol,
+                    TriFunction<Set<Point>, Integer, Integer, Boolean> verifyPointsFunc,
                     Consumer<EntityInstance> setInstanceIdFunc,
                     Consumer<EntityInstance> returnInstanceIdFunc,
                     Consumer<TileInstance> addTileInstanceToMapFunc,
                     Function<String, Set<EntityInstance>> getTileInstancesFunc) {
         this();
+        this.numRow = numRow;
+        this.numCol = numCol;
         this.verifyPointsFunc = verifyPointsFunc;
         this.setInstanceIdFunc = setInstanceIdFunc;
         this.returnInstanceIdFunc = returnInstanceIdFunc;
@@ -78,7 +84,7 @@ public class SimpleTileClass implements TileClass {
     }
 
     @Override
-    public boolean addProperty(String propertyName, BlockGraph defaultValue) {
+    public boolean addProperty(String propertyName, String defaultValue) {
         if (!propertiesMap.containsKey(propertyName)) {
             propertiesMap.put(propertyName, defaultValue);
             return true;
@@ -115,12 +121,12 @@ public class SimpleTileClass implements TileClass {
     }
 
     @Override
-    public void setImageSelector(BlockGraph blockCode) {
+    public void setImageSelector(String blockCode) {
         imageSelector = blockCode;
     }
 
     @Override
-    public BlockGraph getImageSelectorCode() {
+    public String getImageSelectorCode() {
         return imageSelector;
     }
 
@@ -131,7 +137,7 @@ public class SimpleTileClass implements TileClass {
 
     @Override
     public EntityInstance createInstance(Set<Point> points) {
-        if (!verifyPointsFunc.apply(points)) {
+        if (!verifyPointsFunc.apply(points, numRow, numCol)) {
             throw new InvalidPointsException();
         }
         ObservableMap propertiesMapCopy = FXCollections.observableHashMap();

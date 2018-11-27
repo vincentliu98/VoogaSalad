@@ -1,27 +1,33 @@
 package entities;
 
+import grids.Point;
 import groovy.api.BlockGraph;
 import javafx.beans.property.*;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
+import javafx.collections.ObservableSet;
 
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Consumer;
 
-public class SimpleSpriteInstance implements SpriteInstance {
+public class SimpleTileInstance implements TileInstance {
     private ReadOnlyStringWrapper className;
     private ReadOnlyIntegerWrapper instanceId;
-    private SimpleIntegerProperty tileId;
-    private ObservableMap<String, BlockGraph> propertiesMap;
+    private ObservableSet<Point> points;
+    private ObservableMap<String, String> propertiesMap;
     private Consumer<EntityInstance> returnInstanceIdFunc;
 
-    SimpleSpriteInstance(String className, int tileId, ObservableMap<String, BlockGraph> properties, Consumer<EntityInstance> returnInstanceIdFunc) {
+
+    SimpleTileInstance(String className, Set<Point> points, ObservableMap<String, String> properties, Consumer<EntityInstance> returnInstanceIdFunc) {
         this.className = new ReadOnlyStringWrapper();
         this.className.set(className);
-        this.tileId = new ReadOnlyIntegerWrapper();
-        this.tileId.setValue(tileId);
+        this.points = FXCollections.observableSet();
+        this.points.addAll(points);
         this.propertiesMap = properties;
         this.returnInstanceIdFunc = returnInstanceIdFunc;
     }
+
 
     @Override
     public ReadOnlyIntegerProperty getInstanceId() {
