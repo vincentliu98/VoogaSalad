@@ -139,7 +139,7 @@ public class SimpleSpriteClass implements SpriteClass {
 
     @Override
     public Set<EntityInstance> getInstances() {
-        return getSpriteInstancesFunc.apply(getClassName().get());
+        return getSpriteInstancesFunc.apply(getClassName().getValue());
     }
 
     @Override
