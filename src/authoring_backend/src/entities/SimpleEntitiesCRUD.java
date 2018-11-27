@@ -1,43 +1,46 @@
 package entities;
 
-import grids.Point;
+import grids.Grid;
+import grids.GridImpl;
+import grids.GridShape;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 
 public class SimpleEntitiesCRUD implements EntitiesCRUDInterface {
 
-    private int numRow;
-    private int numCol;
     private ObservableMap<String, TileClass> tileClassMap;
     private ObservableMap<String, SpriteClass> spriteClassMap;
     private ObservableMap<Integer, TileInstance> tileInstanceMap;
     private ObservableMap<Integer, SpriteInstance> spriteInstanceMap;
 
+    private Grid grid;
     private Consumer<EntityClass> returnClassId;
     private IdManager myIdManager;
 
-    public SimpleEntitiesCRUD(int numRow, int numCol) {
-        this.numRow = numRow;
-        this.numCol = numCol;
+    private SimpleEntitiesCRUD() {
         tileClassMap = FXCollections.observableHashMap();
         spriteClassMap = FXCollections.observableHashMap();
         myIdManager = new IdManagerClass();
         returnClassId = myIdManager.returnClassIdFunc();
     }
 
-    public SimpleEntitiesCRUD(int numRow, int numCol, ObservableMap<String, TileClass> tileClasses, ObservableMap<String, SpriteClass> spriteClasses) {
-        this(numRow, numCol);
+    public SimpleEntitiesCRUD(Grid g) {
+        this();
+        grid = g;
+    }
+
+    public SimpleEntitiesCRUD(ObservableMap<String, TileClass> tileClasses, ObservableMap<String, SpriteClass> spriteClasses, Grid g) {
+        this();
         tileClassMap = tileClasses;
         spriteClassMap = spriteClasses;
+        grid = g;
     }
 
     @Override
@@ -46,14 +49,11 @@ public class SimpleEntitiesCRUD implements EntitiesCRUDInterface {
             throw new DuplicateClassException();
         }
         TileClass newTileClass = new SimpleTileClass(
-                numRow,
-                numCol,
-                Point.verifyPointsFunc(),
+                grid.verifyPointsFunc(),
                 myIdManager.requestTileInstanceIdFunc(),
                 myIdManager.returnTileInstanceIdFunc(),
                 addTileInstanceToMapFunc(),
                 getTileInstancesFunc());
-
         myIdManager.requestClassIdFunc().accept(newTileClass);
         tileClassMap.put(name, newTileClass);
         return newTileClass;
@@ -73,11 +73,6 @@ public class SimpleEntitiesCRUD implements EntitiesCRUDInterface {
             return false;
         }
         returnClassId.accept(tileClassMap.remove(name));
-        for (Map.Entry<Integer, TileInstance> e : tileInstanceMap.entrySet()) {
-            if (e.getValue().getClassName().equals(name)) {
-                deleteTileInstance(e.getKey());
-            }
-        }
         return true;
     }
 
@@ -91,31 +86,6 @@ public class SimpleEntitiesCRUD implements EntitiesCRUDInterface {
         return true;
     }
 
-    private Consumer<TileInstance> addTileInstanceToMapFunc() {
-        return tileInstance -> tileInstanceMap.put(tileInstance.getInstanceId().getValue(), tileInstance);
-    }
-
-    private Consumer<Integer> deleteTileInstanceFromMapFunc() {
-        return instanceId -> deleteTileInstance(instanceId);
-    }
-
-    private Function<String, Set<EntityInstance>> getTileInstancesFunc() {
-        return name -> {
-            Set<EntityInstance> instancesSet = new HashSet<>();
-            for (Map.Entry<Integer, TileInstance> entry : tileInstanceMap.entrySet()) {
-                if (entry.getValue().getClassName().getName().equals(name)) {
-                    instancesSet.add(entry.getValue());
-                }
-            }
-            return instancesSet;
-        };
-    }
-
-
-
-
-
-
     @Override
     public SpriteClass createSpriteClass(String name) {
         if (spriteClassMap.containsKey(name)) {
@@ -127,10 +97,7 @@ public class SimpleEntitiesCRUD implements EntitiesCRUDInterface {
                 myIdManager.requestSpriteInstanceIdFunc(),
                 myIdManager.returnSpriteInstanceIdFunc(),
                 addSpriteInstanceToMapFunc(),
-                deleteSpriteInstanceFromMapFunc(),
-                getSpriteInstancesFunc(),
-                addSpritePropertyFunc(),
-                removeSpritePropertyFunc());
+                getSpriteInstancesFunc());
 
         myIdManager.requestClassIdFunc().accept(newSpriteClass);
         spriteClassMap.put(name, newSpriteClass);
@@ -151,11 +118,6 @@ public class SimpleEntitiesCRUD implements EntitiesCRUDInterface {
             return false;
         }
         returnClassId.accept(spriteClassMap.remove(name));
-        for (Map.Entry<Integer, SpriteInstance> e : spriteInstanceMap.entrySet()) {
-            if (e.getValue().getClassName().equals(name)) {
-                deleteSpriteInstance(e.getKey());
-            }
-        }
         return true;
     }
 
@@ -169,13 +131,24 @@ public class SimpleEntitiesCRUD implements EntitiesCRUDInterface {
         return true;
     }
 
+    private Consumer<TileInstance> addTileInstanceToMapFunc() {
+        return tileInstance -> tileInstanceMap.put(tileInstance.getInstanceId().getValue(), tileInstance);
+    }
 
     private Consumer<SpriteInstance> addSpriteInstanceToMapFunc() {
         return spriteInstance -> spriteInstanceMap.put(spriteInstance.getInstanceId().getValue(), spriteInstance);
     }
 
-    private Function<Integer, Boolean> deleteSpriteInstanceFromMapFunc() {
-        return instanceId -> deleteSpriteInstance(instanceId);
+    private Function<String, Set<EntityInstance>> getTileInstancesFunc() {
+        return name -> {
+            Set<EntityInstance> instancesSet = new HashSet<>();
+            for (Map.Entry<Integer, TileInstance> entry : tileInstanceMap.entrySet()) {
+                if (entry.getValue().getClassName().getName().equals(name)) {
+                    instancesSet.add(entry.getValue());
+                }
+            }
+            return instancesSet;
+        };
     }
 
     private Function<String, Set<EntityInstance>> getSpriteInstancesFunc() {
@@ -190,30 +163,8 @@ public class SimpleEntitiesCRUD implements EntitiesCRUDInterface {
         };
     }
 
-    private TriConsumer<String, String, String> addSpritePropertyFunc() {
-        return (className, propertyName, defaultValue) -> {
-            for (Map.Entry<Integer, SpriteInstance> entry : spriteInstanceMap.entrySet()) {
-                if (entry.getValue().getClassName().equals(className)) {
-                    entry.getValue().addProperty(propertyName, defaultValue);
-                }
-            }
-        };
-    }
-
-    private BiConsumer<String, String> removeSpritePropertyFunc() {
-        return (className, propertyName) -> {
-            for (Map.Entry<Integer, SpriteInstance> entry : spriteInstanceMap.entrySet()) {
-                if (entry.getValue().getClassName().equals(className)) {
-                    entry.getValue().removeProperty(propertyName);
-                }
-            }
-        };
-    }
-
     @Override
     public String toXML() {
-
-        // TODO??
         return null;
     }
 
