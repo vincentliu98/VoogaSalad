@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<game>
+    <grid-width>3</grid-width>
+    <grid-height>3</grid-height>
+
+    <gameplay.Player>
+        <myID>0</myID>
+        <myStats/>
+        <myEntityIDs/>
+    </gameplay.Player>
+
+    <gameplay.Player>
+        <myID>1</myID>
+        <myStats/>
+        <myEntityIDs/>
+    </gameplay.Player>
+
+    <gameplay.Tile>
+        <myID>1</myID>
+        <name>Box</name>
+        <properties/>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myXCoord>0</myXCoord>
+        <myYCoord>0</myYCoord>
+        <myImagePaths>
+            <string>square.png</string>
+        </myImagePaths>
+        <myEntities/>
+        <myImageSelector></myImageSelector>
+        <myImages/>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>2</myID>
+        <name>Box</name>
+        <properties/>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myXCoord>1</myXCoord>
+        <myYCoord>0</myYCoord>
+        <myImagePaths>
+            <string>square.png</string>
+        </myImagePaths>
+        <myEntities/>
+        <myImageSelector></myImageSelector>
+        <myImages/>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>3</myID>
+        <name>Box</name>
+        <properties/>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myXCoord>2</myXCoord>
+        <myYCoord>0</myYCoord>
+        <myImagePaths>
+            <string>square.png</string>
+        </myImagePaths>
+        <myEntities/>
+        <myImageSelector></myImageSelector>
+        <myImages/>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>4</myID>
+        <name>Box</name>
+        <properties/>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myXCoord>0</myXCoord>
+        <myYCoord>1</myYCoord>
+        <myImagePaths>
+            <string>square.png</string>
+        </myImagePaths>
+        <myEntities/>
+        <myImageSelector></myImageSelector>
+        <myImages/>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>5</myID>
+        <name>Box</name>
+        <properties/>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myXCoord>1</myXCoord>
+        <myYCoord>1</myYCoord>
+        <myImagePaths>
+            <string>square.png</string>
+        </myImagePaths>
+        <myEntities/>
+        <myImageSelector></myImageSelector>
+        <myImages/>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>6</myID>
+        <name>Box</name>
+        <properties/>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myXCoord>2</myXCoord>
+        <myYCoord>1</myYCoord>
+        <myImagePaths>
+            <string>square.png</string>
+        </myImagePaths>
+        <myEntities/>
+        <myImageSelector></myImageSelector>
+        <myImages/>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>7</myID>
+        <name>Box</name>
+        <properties/>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myXCoord>0</myXCoord>
+        <myYCoord>2</myYCoord>
+        <myImagePaths>
+            <string>square.png</string>
+        </myImagePaths>
+        <myEntities/>
+        <myImageSelector></myImageSelector>
+        <myImages/>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>8</myID>
+        <name>Box</name>
+        <properties/>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myXCoord>1</myXCoord>
+        <myYCoord>2</myYCoord>
+        <myImagePaths>
+            <string>square.png</string>
+        </myImagePaths>
+        <myEntities/>
+        <myImageSelector></myImageSelector>
+        <myImages/>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>9</myID>
+        <name>Box</name>
+        <properties/>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myXCoord>2</myXCoord>
+        <myYCoord>2</myYCoord>
+        <myImagePaths>
+            <string>square.png</string>
+        </myImagePaths>
+        <myEntities/>
+        <myImageSelector></myImageSelector>
+        <myImages/>
+    </gameplay.Tile>
+
+    <gameplay.EntityPrototype>
+        <name>X</name>
+        <properties/>
+        <myImagePaths>
+            <string>x.png</string>
+        </myImagePaths>
+        <myImageSelector/>
+    </gameplay.EntityPrototype>
+
+    <gameplay.EntityPrototype>
+        <name>O</name>
+        <properties/>
+        <myImagePaths>
+            <string>circle.png</string>
+        </myImagePaths>
+        <myImageSelector/>
+    </gameplay.EntityPrototype>
+
+    <gameplay.Phase>
+        <myID>1</myID>
+        <myStartNodeID>1</myStartNodeID>
+        <myCurrentNodeID>0</myCurrentNodeID>
+        <myNodeIDs>
+            <int>1</int>
+            <int>2</int>
+        </myNodeIDs>
+    </gameplay.Phase>
+
+    <gameplay.Node>
+        <myPhaseID>1</myPhaseID>
+        <myID>1</myID>
+        <myExecution/>
+    </gameplay.Node>
+
+    <gameplay.Node>
+        <myPhaseID>1</myPhaseID>
+        <myID>2</myID>
+        <myExecution>
+            turn = GameData.getCurrentPlayerID()
+            if(turn == 0) {
+                entityName = "X";
+            }
+            else {
+                entityName = "O";
+            }
+            GameData.createEntity(entityName, $clicked.getID(), turn);
+            GameData.setCurrentPlayerID(1-turn);
+        </myExecution>
+    </gameplay.Node>
+
+    <gameplay.Edge>
+        <myID>1</myID>
+        <myPhaseID>1</myPhaseID>
+        <myStartNodeID>1</myStartNodeID>
+        <myEndNodeID>2</myEndNodeID>
+        <myTrigger class="phase.api.GameEvent$MouseClick"/>
+        <myGuard>
+            if($clicked.getName() == 'Box' &amp;&amp; $clicked.hasNoEntities()) { $return = true }
+            else { $return = false }
+        </myGuard>
+    </gameplay.Edge>
+
+    <gameplay.Edge>
+        <myID>2</myID>
+        <myPhaseID>1</myPhaseID>
+        <myStartNodeID>2</myStartNodeID>
+        <myEndNodeID>2</myEndNodeID>
+        <myTrigger class="phase.api.GameEvent$MouseClick"/>
+        <myGuard>
+            if($clicked.getName() == 'Box' &amp;&amp; $clicked.hasNoEntities()) { $return = true }
+            else { $return = false }
+        </myGuard>
+    </gameplay.Edge>
+
+    <gameplay.Turn>
+        <myCurrentPhaseID>1</myCurrentPhaseID>
+        <myCurrentPlayerID>0</myCurrentPlayerID>
+    </gameplay.Turn>
+</game>

@@ -2,6 +2,9 @@ package gameplay;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import grids.Point;
+import grids.PointImpl;
+import javafx.util.Pair;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilder;
@@ -39,6 +42,11 @@ public class XMLParser {
         catch (Exception e){ }
     }
 
+    public Point getDimension() {
+        return new PointImpl(Integer.parseInt(myDocTree.getElementsByTagName("grid-width").item(0).getTextContent()),
+                             Integer.parseInt(myDocTree.getElementsByTagName("grid-height").item(0).getTextContent()));
+    }
+
     public Map<Integer, Player> getPlayers(){
         NodeList players = myDocTree.getElementsByTagName("gameplay.Player");
         Map<Integer, Player> myPlayers = new HashMap<>();
@@ -57,6 +65,17 @@ public class XMLParser {
             String currentEntity = nodeToString(entities.item(i));
             Entity entity = (Entity) mySerializer.fromXML(currentEntity);
             myEntities.put(entity.getID(), entity);
+        }
+        return myEntities;
+    }
+
+    public Map<String, EntityPrototype> getEntityPrototypes(){
+        NodeList entities = myDocTree.getElementsByTagName("gameplay.EntityPrototype");
+        Map<String, EntityPrototype> myEntities = new HashMap<>();
+        for (int i = 0; i < entities.getLength(); i++){
+            String currentEntity = nodeToString(entities.item(i));
+            EntityPrototype entity = (EntityPrototype) mySerializer.fromXML(currentEntity);
+            myEntities.put(entity.name(), entity);
         }
         return myEntities;
     }

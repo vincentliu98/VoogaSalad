@@ -1,5 +1,6 @@
 package authoring;
 
+
 import gameObjects.GameObjectsCRUDInterface;
 import gameObjects.SimpleGameObjectsCRUD;
 import groovy.api.GroovyFactory;
@@ -21,6 +22,7 @@ public class AuthoringTools {
         globalData = FXCollections.observableHashMap();
 
         entityDB = new SimpleGameObjectsCRUD(50,50);
+
         phaseDB = new PhaseDB(factory);
     }
 

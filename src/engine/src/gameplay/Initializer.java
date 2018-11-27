@@ -1,42 +1,44 @@
 package gameplay;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.DomDriver;
-import javafx.scene.Group;
+import javafx.scene.layout.Pane;
 
 import java.io.File;
-import java.util.HashSet;
-import java.util.Set;
 
 public class Initializer {
     XMLParser myXMLParser;
-    Group myRoot;
+    Pane myRoot;
 
     public Initializer(File file){
         myXMLParser = new XMLParser();
-        myRoot = new Group();
+        myRoot = new Pane();
         initGameData(file);
     }
 
     private void initGameData(File file){
         myXMLParser.loadFile(file);
-        GameData.setGameData(myXMLParser.getPlayers(), myXMLParser.getEntities(), myXMLParser.getTiles(),
-                myXMLParser.getPhases(), myXMLParser.getNodes(), myXMLParser.getEdges(), myXMLParser.getTurn(), myRoot);
-        for (Tile tile : myXMLParser.getTiles().values()){
-            tile.setImageView();
+        GameData.setGameData(
+            myXMLParser.getDimension(), myXMLParser.getPlayers(), myXMLParser.getEntities(),
+            myXMLParser.getEntityPrototypes(), myXMLParser.getTiles(),
+            myXMLParser.getPhases(), myXMLParser.getNodes(), myXMLParser.getEdges(), myXMLParser.getTurn(), myRoot);
+        for (Tile tile : GameData.getTiles().values()){
+            tile.setupView();
             myRoot.getChildren().add(tile.getImageView());
         }
-        for (Entity entity : myXMLParser.getEntities().values()){
-            entity.setImageView();
+        for (Entity entity : GameData.getEntities().values()){
+            entity.setupView();
             myRoot.getChildren().add(entity.getImageView());
         }
         startGame();
     }
 
-    public Group getRoot(){
-        return myRoot;
+    public Pane getRoot(){ return myRoot; }
+    public void setScreenSize(double screenWidth, double screenHeight) {
+        myRoot.setPrefWidth(screenWidth);
+        myRoot.setPrefHeight(screenHeight);
+        GameData.getTiles().values().forEach(e -> e.adjustViewSize(screenWidth, screenHeight));
+        GameData.getEntities().values().forEach(e -> e.adjustViewSize(screenWidth, screenHeight));
+        GameData.updateViews();
     }
-
     public void startGame(){
         myXMLParser.getTurn().startPhase();
     }

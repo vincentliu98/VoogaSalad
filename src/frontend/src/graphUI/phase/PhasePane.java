@@ -1,13 +1,13 @@
 package graphUI.phase;
 
-import authoringInterface.spritechoosingwindow.PopUpWindow;
+import api.SubView;
 import graphUI.groovy.GroovyPaneFactory.GroovyPane;
 import graphUI.phase.PhaseNodeFactory.PhaseNode;
 import graphUI.phase.TransitionLineFactory.TransitionLine;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextInputDialog;
@@ -17,7 +17,6 @@ import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
-import javafx.stage.Stage;
 import phase.api.GameEvent;
 import phase.api.PhaseDB;
 import phase.api.PhaseGraph;
@@ -34,13 +33,12 @@ import java.util.stream.Stream;
  * Reference: https://stackoverflow.com/questions/46562957/define-object-position-at-runtime-with-javafx
  *
  * @author jl729
+ * @author Amy
  */
 
-public class PhasePane extends PopUpWindow {
-    public static final Double WIDTH = 1200.0;
-    public static final Double HEIGHT = 800.0;
-    public static final Double ICON_WIDTH = 100.0;
-    public static final Double ICON_HEIGHT = 100.0;
+public class PhasePane implements SubView<StackPane> {
+    public static final Double ICON_WIDTH = 90.0;
+    public static final Double ICON_HEIGHT = 90.0;
 
     private enum DRAG_PURPOSE {
         NOTHING,
@@ -52,11 +50,10 @@ public class PhasePane extends PopUpWindow {
     private double orgSceneX, orgSceneY;
     private double orgTranslateX, orgTranslateY;
 
-    private GridPane root = new GridPane();
+    private StackPane root = new StackPane();
+    private Pane pane = new Pane();
     private Pane graphBox = new Pane();
     private Group group = new Group();
-    private ScrollPane itemBox = new ScrollPane();
-    private Scene myScene;
     private double newNodeX;
     private double newNodeY;
     private PhaseDB phaseDB;
@@ -68,37 +65,22 @@ public class PhasePane extends PopUpWindow {
     private SimpleObjectProperty<TransitionLine> selectedEdge;
     private SimpleObjectProperty<PhaseNode> selectedNode;
 
-    private String name = "";
-    private PhaseGraph graph;
     private PhaseNode edgeFrom;
     private Line tmpLine;
+    private PhaseGraph graph;
 
-    public PhasePane(Stage primaryStage, PhaseDB phaseDB, Supplier<GroovyPane> genGroovyPane) {
-        super(primaryStage);
+    public PhasePane(PhaseDB phaseDB, Supplier<GroovyPane> genGroovyPane, PhaseGraph graph) {
+        this.graph = graph;
         this.phaseDB = phaseDB;
         factory = new PhaseNodeFactory(phaseDB, genGroovyPane);
         trFactory = new TransitionLineFactory(genGroovyPane, group.getChildren()::add, group.getChildren()::remove);
 
-        while(name.equals("")) {
-            TextInputDialog dialog = new TextInputDialog("");
-            dialog.setContentText("Please enter the name of this phase graph:");
-            dialog.showAndWait().ifPresent(name -> {
-                var tryGraph = phaseDB.createGraph(name);
-                if(tryGraph.isSuccess()) {
-                    try {
-                        graph = tryGraph.get();
-                        this.name = name;
-                    } catch (Throwable ignored) { }
-                }
-            });
-        }
-
         lines = new HashSet<>();
         nodes = new HashSet<>();
-        createNode(factory.source(graph.source(), 100, 50));
 
         selectedEdge = new SimpleObjectProperty<>();
         selectedNode = new SimpleObjectProperty<>();
+
 
         selectedEdge.addListener((e, o, n) -> {
             if(o != null && lines.contains(o)) o.setColor(Color.BLACK);
@@ -120,8 +102,10 @@ public class PhasePane extends PopUpWindow {
             }
         });
 
-        dialog.addEventFilter(KeyEvent.KEY_RELEASED, e -> {
-            if(e.getCode() == KeyCode.DELETE) deleteSelected();
+        root.addEventFilter(KeyEvent.KEY_RELEASED, e -> {
+            if((e.getCode() == KeyCode.BACK_SPACE) || (e.getCode() == KeyCode.DELETE)) {
+                deleteSelected();
+            }
             if(e.getCode() == KeyCode.ESCAPE) {
                 selectedNode.set(null);
                 selectedEdge.set(null);
@@ -129,55 +113,30 @@ public class PhasePane extends PopUpWindow {
         });
 
         initializeUI();
-        showWindow();
+        createNode(factory.source(graph.source(), 100, 50));
     }
-
-    @Override
-    public void showWindow() {
-        dialog.setScene(myScene);
-        dialog.show();
-    }
-
-    /**
-     *  We do not close the window; instead, we just hide it and show it when a button is clicked
-     */
-    @Override
-    public void closeWindow() { dialog.hide(); }
 
     private void initializeUI() {
-        root.setPrefWidth(WIDTH);
-        root.setPrefHeight(HEIGHT);
         graphBox.getChildren().add(group);
-        graphBox.setPrefSize(2*WIDTH, 3*HEIGHT);
+        graphBox.setPrefSize(2000, 2000);
         setupGraphbox();
-        initializeGridPane();
-        initializeItemBox();
-        root.add(itemBox, 0, 0);
-        HBox.setHgrow(itemBox, Priority.ALWAYS);
-        var graphBoxWrapper = new ScrollPane();
-        graphBoxWrapper.setContent(graphBox);
-        root.add(graphBoxWrapper, 1, 0);
-        myScene = new Scene(root, WIDTH, HEIGHT);
-    }
+        root.getChildren().add(new ScrollPane(graphBox));
 
-    private void initializeItemBox() {
-        var vbox = new VBox();
-
-        vbox.setSpacing(10);
+        pane.setMaxWidth(150);
+        pane.setMaxHeight(150);
         var nodeImg = new Image(
-            this.getClass().getClassLoader().getResourceAsStream("phaseNode.png"),
-            ICON_WIDTH, ICON_HEIGHT, true, true
+                this.getClass().getClassLoader().getResourceAsStream("phaseNode.png"),
+                ICON_WIDTH, ICON_HEIGHT, true, true
         );
-        vbox.getChildren().add(draggableGroovyIcon(nodeImg));
-
-        itemBox.setContent(vbox);
-        itemBox.setMinHeight(HEIGHT);
+        var nodeImgView = draggableGroovyIcon(nodeImg);
+        pane.getChildren().add(nodeImgView);
+        StackPane.setAlignment(pane, Pos.BOTTOM_RIGHT);
+        root.getChildren().add(pane);
     }
+
 
     private ImageView draggableGroovyIcon(Image icon) {
         var view = new ImageView(icon);
-        view.setOnMouseEntered(e -> myScene.setCursor(Cursor.HAND));
-        view.setOnMouseExited(e -> myScene.setCursor(Cursor.DEFAULT));
         view.setOnDragDetected(event -> {
             Dragboard db = view.startDragAndDrop(TransferMode.ANY);
             ClipboardContent content = new ClipboardContent();
@@ -193,7 +152,6 @@ public class PhasePane extends PopUpWindow {
         graphBox.setOnDragOver(this::graphBoxDragOverHandler);
         graphBox.setOnDragDropped(this::graphBoxDragDropHandler);
     }
-
     private void graphBoxDragOverHandler(DragEvent event) {
         if (event.getGestureSource() != graphBox && event.getDragboard().hasImage()) {
             event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
@@ -244,13 +202,6 @@ public class PhasePane extends PopUpWindow {
     }
 
 
-    private void initializeGridPane() {
-        var col1 = new ColumnConstraints();
-        col1.setPercentWidth(15);
-        var col2 = new ColumnConstraints();
-        col2.setPercentWidth(85);
-        root.getColumnConstraints().addAll(col1, col2);
-    }
 
     private void connectNodes(PhaseNode node1, GameEvent event, PhaseNode node2) {
         try {
@@ -265,14 +216,14 @@ public class PhasePane extends PopUpWindow {
                 node1, event, node2
             );
             edgeLine.setStrokeWidth(3);
-            edgeLine.setOnMouseEntered(e -> myScene.setCursor(Cursor.HAND));
-            edgeLine.setOnMouseExited(e -> myScene.setCursor(Cursor.DEFAULT));
+            edgeLine.setOnMouseEntered(e -> root.setCursor(Cursor.HAND));
+            edgeLine.setOnMouseExited(e -> root.setCursor(Cursor.DEFAULT));
             edgeLine.setOnMouseClicked(e -> {
                 if(e.getClickCount() == 1) selectedEdge.set(edgeLine);
                 else selectedEdge.get().showGraph();
             });
-            edgeLine.label().setOnMouseEntered(e -> myScene.setCursor(Cursor.HAND));
-            edgeLine.label().setOnMouseExited(e -> myScene.setCursor(Cursor.DEFAULT));
+            edgeLine.label().setOnMouseEntered(e -> root.setCursor(Cursor.HAND));
+            edgeLine.label().setOnMouseExited(e -> root.setCursor(Cursor.DEFAULT));
             edgeLine.label().setOnMouseClicked(e -> {
                 if(e.getClickCount() == 1) selectedEdge.set(edgeLine);
                 else selectedEdge.get().showGraph();
@@ -292,8 +243,8 @@ public class PhasePane extends PopUpWindow {
             node.setOnMousePressed(this::nodeMousePressedHandler);
             node.setOnMouseDragged(this::nodeMouseDraggedHandler);
             node.setOnMouseReleased(this::nodeMouseReleasedHandler);
-            node.inner().setOnMouseEntered(e -> myScene.setCursor(Cursor.MOVE));
-            node.inner().setOnMouseExited(e -> myScene.setCursor(Cursor.DEFAULT));
+            node.inner().setOnMouseEntered(e -> root.setCursor(Cursor.MOVE));
+            node.inner().setOnMouseExited(e -> root.setCursor(Cursor.DEFAULT));
             node.setOnMouseClicked(e -> {
                 if(e.getClickCount() == 1) selectedNode.set(node);
                 else node.showGraph();
@@ -377,6 +328,11 @@ public class PhasePane extends PopUpWindow {
                 l.setEndY(n.getCenterY());
             }
         }
+    }
+
+    @Override
+    public StackPane getView() {
+        return root;
     }
 }
 

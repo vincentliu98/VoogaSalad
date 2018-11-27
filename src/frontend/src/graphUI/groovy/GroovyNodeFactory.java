@@ -42,7 +42,11 @@ public class GroovyNodeFactory {
     );
 
     private static List<Pair<Pos, Ports>> UNARY_PORT = List.of(
-        new Pair<>(Pos.CENTER_RIGHT, Ports.A),
+        new Pair<>(Pos.TOP_LEFT, Ports.A),
+        new Pair<>(Pos.TOP_CENTER, Ports.B),
+        new Pair<>(Pos.TOP_RIGHT, Ports.C),
+        new Pair<>(Pos.CENTER_RIGHT, Ports.D),
+        new Pair<>(Pos.BOTTOM_RIGHT, Ports.E),
         new Pair<>(Pos.BOTTOM_CENTER, Ports.FLOW_OUT)
     );
 
@@ -102,8 +106,9 @@ public class GroovyNodeFactory {
         if(type.equals("ESC")) return keyBlock(xPos, yPos, "27");
         if(type.equals("space")) return keyBlock(xPos, yPos, "32");
 
-        if(type.equals("del")) return Try.success(unaryBlock(xPos, yPos, "$remove"));
-        if(type.equals("unary")) return Try.success(unaryBlock(xPos, yPos, arg));
+        if(type.equals("new")) return Try.success(functionBlock(xPos, yPos, "$GameData.createEntity"));
+        if(type.equals("del")) return Try.success(functionBlock(xPos, yPos, "$GameData.removeEntity"));
+        if(type.equals("function")) return Try.success(functionBlock(xPos, yPos, arg));
         return Try.failure(new Exception("There is no such type;")); // it can't happen from the user side
     }
 
@@ -114,22 +119,22 @@ public class GroovyNodeFactory {
 
     public GroovyNode ifBlock(double xPos, double yPos) {
         var block = factory.ifBlock();
-        return new GroovyNode(block, xPos, yPos, 100, 50, FONT_BIG, Color.GOLD, IF_PORT);
+        return new GroovyNode(block, xPos, yPos, 50, 50, FONT_BIG, Color.GOLD, IF_PORT);
     }
 
     public GroovyNode ifElseBlock(double xPos, double yPos) {
         var block = factory.ifElseBlock();
-        return new GroovyNode(block, xPos, yPos, 100, 50, FONT_BIG, Color.GOLD, IF_PORT);
+        return new GroovyNode(block, xPos, yPos, 50, 50, FONT_BIG, Color.GOLD, IF_PORT);
     }
 
     public GroovyNode elseBlock(double xPos, double yPos) {
         var block = factory.elseBlock();
-        return new GroovyNode(block, xPos, yPos, 100, 50, FONT_BIG, Color.GOLD, ELSE_PORT);
+        return new GroovyNode(block, xPos, yPos, 50, 50, FONT_BIG, Color.GOLD, ELSE_PORT);
     }
 
     public GroovyNode assignBlock(double xPos, double yPos) {
         var block = factory.assignBlock();
-        return new GroovyNode(block, xPos, yPos, 100, 50, FONT_BIG, Color.LIGHTSKYBLUE, ASSIGN_PORT);
+        return new GroovyNode(block, xPos, yPos, 50, 50, FONT_BIG, Color.LIGHTSKYBLUE, ASSIGN_PORT);
     }
 
     public Try<GroovyNode> booleanBlock(double xPos, double yPos, String value) {
@@ -172,13 +177,13 @@ public class GroovyNodeFactory {
         return block.map(e -> new GroovyNode(e, xPos, yPos, 100, 50, FONT_NORMAL, Color.DARKGREEN, List.of()));
     }
 
-    public GroovyNode unaryBlock(double xPos, double yPos, String op) {
-        var block = factory.unaryBlock(op);
-        return new GroovyNode(block, xPos, yPos, 100, 50, FONT_BIG, Color.PERU, UNARY_PORT);
+    public GroovyNode functionBlock(double xPos, double yPos, String op) {
+        var block = factory.functionBlock(op);
+        return new GroovyNode(block, xPos, yPos, 120, 50, FONT_BIG, Color.PERU, UNARY_PORT);
     }
 
     public GroovyNode binaryBlock(double xPos, double yPos, String op) {
         var block = factory.binaryBlock(op);
-        return new GroovyNode(block, xPos, yPos, 100, 50, FONT_BIG, Color.DARKRED, BINARY_PORT);
+        return new GroovyNode(block, xPos, yPos, 50, 50, FONT_BIG, Color.DARKRED, BINARY_PORT);
     }
 }

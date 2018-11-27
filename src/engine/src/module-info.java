@@ -9,6 +9,8 @@ module engine {
     requires xstream;
     requires org.codehaus.groovy;
 
+    requires authoring_backend;
+
     opens gameplay to xstream, org.codehaus.groovy;
     exports gameplay;
 
