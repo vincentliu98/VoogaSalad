@@ -1,5 +1,7 @@
 package gameObjects;
 
-public interface TileInstance extends GameObjectInstance {
+import grids.Point;
 
+public interface TileInstance extends GameObjectInstance {
+    Point getCoord();
 }

@@ -38,7 +38,6 @@ public class EditView implements SubView<TabPane> {
         this.sideView = sideView;
         this.authTools = authTools;
         this.groovyPaneFactory = groovyPaneFactory;
-        editor.setState(authTools.globalData());
         initializeTab();
         tabPane.setTabDragPolicy(TabDragPolicy.REORDER);
         tabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);

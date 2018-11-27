@@ -68,10 +68,4 @@ public interface GameObjectsCRUDInterface {
      * @return True if the Entity Instance with the instanceId exists
      */
     boolean deleteEntityInstance(int instanceId);
-
-    /**
-     * Transforms the maps of GameObject Classes and GameObject Instances to XML.
-     * @return Entity Data of the Game in XML format
-     */
-    String toXML();
 }

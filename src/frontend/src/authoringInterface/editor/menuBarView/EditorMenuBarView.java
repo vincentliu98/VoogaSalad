@@ -43,7 +43,6 @@ public class EditorMenuBarView implements SubView<MenuBar> {
 
     public EditorMenuBarView(AuthoringTools authTools, Runnable closeWindow) {
         this.authTools = authTools;
-        editor.setState(authTools.globalData());
 
         this.closeWindow = closeWindow;
 

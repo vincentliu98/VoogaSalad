@@ -113,13 +113,13 @@ public class XMLParser {
         return myNodes;
     }
 
-    public Map<Integer, Edge> getEdges(){
+    public Set<Edge> getEdges(){
         NodeList edges = myDocTree.getElementsByTagName("gameplay.Edge");
-        Map<Integer, Edge> myEdges = new HashMap<>();
+        Set<Edge> myEdges = new HashSet<>();
         for (int i = 0; i < edges.getLength(); i++){
             String currentEdge = nodeToString(edges.item(i));
             Edge edge = (Edge) mySerializer.fromXML(currentEdge);
-            myEdges.put(edge.getID(), edge);
+            myEdges.add(edge);
         }
         return myEdges;
     }

@@ -12,21 +12,8 @@ import java.util.Set;
  */
 public interface Point {
 
-    /**
-     *
-     * @return
-     */
-    static TriFunction<Set<Point>, Integer, Integer, Boolean> verifyPointsFunc() {
-
-        return (points, numRow, numCol) -> {
-            boolean outOfBounds = false;
-            for (Point p : points) {
-                if (outOfBounds(p, numRow, numCol)) {
-                    outOfBounds = true;
-                }
-            }
-            return outOfBounds;
-        };
+    static TriFunction<Point, Integer, Integer, Boolean> verifyPointsFunc() {
+        return Point::outOfBounds;
     }
 
     /**
