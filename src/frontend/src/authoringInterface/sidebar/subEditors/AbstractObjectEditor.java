@@ -20,7 +20,7 @@ import java.util.Map;
  *
  * @author Haotian Wang
  */
-public abstract class AbstractObjectEditor<T extends EditTreeItem> implements ObjectEditor<T>, SubView<AnchorPane> {
+public abstract class AbstractObjectEditor<T extends EditTreeItem> implements SubView<AnchorPane> {
     protected AnchorPane rootPane;
     protected Text inputText;
     protected TextField nameField;
@@ -78,7 +78,6 @@ public abstract class AbstractObjectEditor<T extends EditTreeItem> implements Ob
      * @param treeItem: An existing TreeItem.
      * @param map: The map from String name to Entity.
      */
-    @Override
     public void editTreeItem(TreeItem<String> treeItem, Map<String, EditTreeItem> map) {
         this.treeItem = treeItem;
         this.objectMap = map;
@@ -91,7 +90,6 @@ public abstract class AbstractObjectEditor<T extends EditTreeItem> implements Ob
      * @param treeItem: An existing TreeItem.
      * @param map: The map from String name to Entity.
      */
-    @Override
     public void addTreeItem(TreeItem<String> treeItem, Map<String, EditTreeItem> map) {
         this.treeItem = treeItem;
         this.objectMap = map;
@@ -104,10 +102,23 @@ public abstract class AbstractObjectEditor<T extends EditTreeItem> implements Ob
      * @param node: The node that is to be altered.
      * @param map: The node to user object map.
      */
-    @Override
     public void editNode(Node node, Map<Node, EditTreeItem> map) {
         this.nodeToObjectMap = map;
         this.nodeEdited = node;
         editingMode = EditingMode.EDIT_NODE;
     }
+
+    /**
+     * This method brings up an editor that contains the data of an existing object that is already created.
+     *
+     * @param userObject
+     */
+    public abstract void readObject(T userObject);
+
+    /**
+     * Return the object after edits in this ObjectEditor.
+     *
+     * @return A specific user object.
+     */
+    public abstract T getObject();
 }
