@@ -190,6 +190,12 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         return true;
     }
 
+    @Override
+    public void setDimension(int width, int height) {
+        numCol = width;
+        numRow = height;
+    }
+
 
     private Consumer<EntityInstance> addEntityInstanceToMapFunc() {
         return entityInstance -> entityInstanceMap.put(entityInstance.getInstanceId().getValue(), entityInstance);

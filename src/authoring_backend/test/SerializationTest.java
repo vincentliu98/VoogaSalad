@@ -1,16 +1,16 @@
 import authoring.AuthoringTools;
-import com.thoughtworks.xstream.XStream;
-import conversion.engine.SerializerForEngine;
 import gameObjects.GameObjectInstance;
 import grids.PointImpl;
+import phase.api.GameEvent;
 
 import java.util.ArrayList;
 
-public class GameObjectSerializationTest {
-    public static void main(String[] args) {
-        XStream serializer = SerializerForEngine.gen();
-
+public class SerializationTest {
+    public static void main(String[] args) throws Throwable {
         var authTools = new AuthoringTools();
+
+        // --------------- ENTITY/TILE ------------- //
+
         var db = authTools.entityDB();
 
         var box = db.createTileClass("box");
@@ -49,6 +49,32 @@ public class GameObjectSerializationTest {
         bowmanClass.createInstance(boxes.get(23).getInstanceId().get());
         bowmanClass.createInstance(boxes.get(24).getInstanceId().get());
 
-        System.out.println(serializer.toXML(db).replaceAll("&lt;", "<").replaceAll("&gt;", ">"));
+        // -------------- PHASE ------------- //
+
+        var phaseDB = authTools.phaseDB();
+
+        var graph = phaseDB.createGraph("A").get(null);
+
+        var node2 = phaseDB.createPhase("b").get(null);
+        var node3 = phaseDB.createPhase("c").get(null);
+        var node4 = phaseDB.createPhase("d").get(null);
+
+        var edge12 = phaseDB.createTransition(graph.source(), GameEvent.mouseClick(), node2);
+        var edge23 = phaseDB.createTransition(node2, GameEvent.mouseClick(), node3);
+        var edge24 = phaseDB.createTransition(node2, GameEvent.mouseClick(), node4);
+
+        graph.addNode(node2);
+        graph.addNode(node3);
+        graph.addNode(node4);
+
+        graph.addEdge(edge12);
+        graph.addEdge(edge23);
+        graph.addEdge(edge24);
+
+        var edge12graph = edge12.guard();
+        var edge23graph = edge23.guard();
+        var edge24graph = edge24.guard();
+
+        System.out.println(authTools.toEngineXML());
     }
 }
