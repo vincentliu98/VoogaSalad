@@ -18,4 +18,9 @@ public interface EntityInstance {
 
     Consumer<EntityInstance> getReturnInstanceIdFunc();
 
+
+    boolean addProperty(String propertyName, String defaultValue);
+
+
+    boolean removeProperty(String propertyName);
 }

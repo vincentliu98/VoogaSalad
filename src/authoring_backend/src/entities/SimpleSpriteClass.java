@@ -1,12 +1,12 @@
 package entities;
 
-import groovy.api.BlockGraph;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -20,8 +20,8 @@ public class SimpleSpriteClass implements SpriteClass {
     private ReadOnlyIntegerWrapper classId;
     private SimpleBooleanProperty movable;
     private ObservableList<String> imagePathList;
-    private ObservableMap<String, BlockGraph> propertiesMap;
-    private BlockGraph imageSelector;
+    private ObservableMap<String, String> propertiesMap;
+    private String imageSelector;
 
     private Function<Integer, Boolean> verifyTileInstanceIdFunc;
 
@@ -29,6 +29,10 @@ public class SimpleSpriteClass implements SpriteClass {
     private Consumer<EntityInstance> setInstanceIdFunc;
     private Consumer<EntityInstance> returnInstanceIdFunc;
     private Consumer<SpriteInstance> addSpriteInstanceToMapFunc;
+    private Function<Integer, Boolean> deleteSpriteInstanceFromMapFunc;
+    private TriConsumer<String, String, String> addSpritePropertyFunc;
+    private BiConsumer<String, String> removeSpritePropertyFunc;
+
 
     private SimpleSpriteClass() {
         className = new ReadOnlyStringWrapper(this, CONST_CLASSNAME);
@@ -43,13 +47,19 @@ public class SimpleSpriteClass implements SpriteClass {
                       Consumer<EntityInstance> setInstanceIdFunc,
                       Consumer<EntityInstance> returnInstanceIdFunc,
                       Consumer<SpriteInstance> addSpriteInstanceToMapFunc,
-                      Function<String, Set<EntityInstance>> getSpriteInstancesFunc) {
+                      Function<Integer, Boolean> deleteSpriteInstanceFromMapFunc,
+                      Function<String, Set<EntityInstance>> getSpriteInstancesFunc,
+                      TriConsumer<String, String, String> addSpritePropertyFunc,
+                      BiConsumer<String, String> removeSpritePropertyFunc) {
         this();
         this.verifyTileInstanceIdFunc = verifyTileInstanceIdFunction;
         this.setInstanceIdFunc = setInstanceIdFunc;
         this.returnInstanceIdFunc = returnInstanceIdFunc;
         this.addSpriteInstanceToMapFunc = addSpriteInstanceToMapFunc;
+        this.deleteSpriteInstanceFromMapFunc = deleteSpriteInstanceFromMapFunc;
         this.getSpriteInstancesFunc = getSpriteInstancesFunc;
+        this.addSpritePropertyFunc = addSpritePropertyFunc;
+        this.removeSpritePropertyFunc = removeSpritePropertyFunc;
     }
 
 
@@ -79,9 +89,10 @@ public class SimpleSpriteClass implements SpriteClass {
     }
 
     @Override
-    public boolean addProperty(String propertyName, BlockGraph defaultValue) {
+    public boolean addProperty(String propertyName, String defaultValue) {
         if (!propertiesMap.containsKey(propertyName)) {
             propertiesMap.put(propertyName, defaultValue);
+            addSpritePropertyFunc.accept(className.getValue(), propertyName, defaultValue);
             return true;
         }
         return false;
@@ -89,6 +100,7 @@ public class SimpleSpriteClass implements SpriteClass {
 
     @Override
     public boolean removeProperty(String propertyName) {
+        removeSpritePropertyFunc.accept(className.getValue(), propertyName);
         return propertiesMap.remove(propertyName) != null;
     }
 
@@ -115,12 +127,12 @@ public class SimpleSpriteClass implements SpriteClass {
     }
 
     @Override
-    public void setImageSelector(BlockGraph blockCode) {
+    public void setImageSelector(String blockCode) {
         imageSelector = blockCode;
     }
 
     @Override
-    public BlockGraph getImageSelectorCode() {
+    public String getImageSelectorCode() {
         return imageSelector;
     }
 
@@ -135,6 +147,10 @@ public class SimpleSpriteClass implements SpriteClass {
         setInstanceIdFunc.accept(spriteInstance);
         addSpriteInstanceToMapFunc.accept(spriteInstance);
         return spriteInstance;
+    }
+
+    public boolean deleteInstance(int spriteInstanceId) {
+        return deleteSpriteInstanceFromMapFunc.apply(spriteInstanceId);
     }
 
     @Override

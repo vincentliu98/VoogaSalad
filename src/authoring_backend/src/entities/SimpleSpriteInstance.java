@@ -11,10 +11,10 @@ public class SimpleSpriteInstance implements SpriteInstance {
     private ReadOnlyStringWrapper className;
     private ReadOnlyIntegerWrapper instanceId;
     private SimpleIntegerProperty tileId;
-    private ObservableMap<String, BlockGraph> propertiesMap;
+    private ObservableMap<String, String> propertiesMap;
     private Consumer<EntityInstance> returnInstanceIdFunc;
 
-    SimpleSpriteInstance(String className, int tileId, ObservableMap<String, BlockGraph> properties, Consumer<EntityInstance> returnInstanceIdFunc) {
+    SimpleSpriteInstance(String className, int tileId, ObservableMap<String, String> properties, Consumer<EntityInstance> returnInstanceIdFunc) {
         this.className = new ReadOnlyStringWrapper();
         this.className.set(className);
         this.tileId = new ReadOnlyIntegerWrapper();
@@ -41,4 +41,19 @@ public class SimpleSpriteInstance implements SpriteInstance {
     public Consumer<EntityInstance> getReturnInstanceIdFunc() {
         return returnInstanceIdFunc;
     }
+
+    @Override
+    public boolean addProperty(String propertyName, String defaultValue) {
+        if (!propertiesMap.containsKey(propertyName)) {
+            propertiesMap.put(propertyName, defaultValue);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean removeProperty(String propertyName) {
+        return propertiesMap.remove(propertyName) != null;
+    }
+
 }
