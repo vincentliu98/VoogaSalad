@@ -6,7 +6,7 @@ For this project, our team will build an authoring environment and engine for te
 
 Our design will need to support the ability to dynamically change the turn sequence (such as by skipping players or reversing direction), define multiple objectives (such as winning via elimination or attrition), create sprites of different function (like the pieces in chess), and manipulate the shared model (like moving pieces across the board). 
  
-We hope to design the game authoring environment and game engine in such a way to provide the author with the most flexibility in terms of the behavior and logic of the entities in a turn-based game. For example, the author will be able to designate exactly what the win conditions are, what should happen in every combination of moves, the functionality of each sprite, etc. We will have pre-defined drag-and-drop Groovy code blocks for them, as well as give them the user the ability to write their own Groovy code to execute. 
+We hope to design the game authoring environment and game engine in such a way to provide the author with the most flexibility in terms of the behavior and logic of the gameObjects in a turn-based game. For example, the author will be able to designate exactly what the win conditions are, what should happen in every combination of moves, the functionality of each sprite, etc. We will have pre-defined drag-and-drop Groovy code blocks for them, as well as give them the user the ability to write their own Groovy code to execute. 
 
 The front-end elements in the game authoring engine will support modularized design that allows users as much as possible, to customize their workspaces. They will be allowed to add/toggle different editing panels at different layers of the authoring interface, very much like PhotoShop. The back-end of the game authoring environment will provide the game author with tiles and grid. They are both configurable in terms of appearance and logic that are triggered by user-inputs. The game engine's Turn class will be entirely public, and new Sprites can be able to instantiated via Groovy code. 
 
@@ -16,7 +16,7 @@ The front-end elements in the game authoring engine will support modularized des
 
 The game authoring engine allows the author to have access to a pane, which consists of premade list of possible tiles. 
 
-On another tab, the author can define entities that this game consists of - their (class name, instance id) and other custom attributes that users can set. Also, the authors would be required to set a default sprite for each entities, but they can also add custom logic that tells it to display different sprites depending on its instance attributes. Within the programming pane, the author can reference each instance of each class through (class name, instance id) pair. 
+On another tab, the author can define gameObjects that this game consists of - their (class name, instance id) and other custom attributes that users can set. Also, the authors would be required to set a default sprite for each gameObjects, but they can also add custom logic that tells it to display different sprites depending on its instance attributes. Within the programming pane, the author can reference each instance of each class through (class name, instance id) pair. 
 
 Once in the pane, the author can choose from a list of possible user inputs and define the possible effects each chosen input would have on the entity. In addition, there would also be a default option which does not depend on user inputs.
 
@@ -30,7 +30,7 @@ Once the rules, objectives, and sprites are defined within the authoring environ
 
 ![editWindow UI](editWindow.png "Edit Window UI")
 
-* This is pop up screen when the user wants to add entities. 
+* This is pop up screen when the user wants to add gameObjects. 
 
 ![sideView UI](TreeviewPopUp.png "Side View UI")
 
@@ -201,7 +201,7 @@ When the user is adding an entity to the storage, a new window will appear below
                 - void addSound(Sound);
                 - void addTileSets(TileSets);
         - `EditView` (AnchorPane > TabPane > ScrollPane)
-            - Representation of the game setting (e.g. entities, grids)
+            - Representation of the game setting (e.g. gameObjects, grids)
             - Support Zoom in and zoom out
             - Internal APIs
                 - void handleZoom();

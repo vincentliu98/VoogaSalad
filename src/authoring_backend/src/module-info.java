@@ -8,7 +8,7 @@ module authoring_backend {
     opens phase.api to xstream;
     opens phase to xstream;
     opens authoring to xstream;
-    opens entities to xstream;
+    opens gameObjects to xstream;
     opens grids to xstream;
 
     requires org.codehaus.groovy;
@@ -18,7 +18,7 @@ module authoring_backend {
     exports phase.api;
     exports groovy.api;
     exports groovy.graph.blocks.core;
-    exports entities;
+    exports gameObjects;
     exports grids;
     exports utils;
 }

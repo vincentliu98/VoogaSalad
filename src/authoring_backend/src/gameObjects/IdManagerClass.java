@@ -1,6 +1,4 @@
-package entities;
-
-import javafx.beans.property.SimpleIntegerProperty;
+package gameObjects;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +7,7 @@ import java.util.function.Function;
 
 /**
  * This Class implements the IdManager Interface.
- * This Class assigns an id to every Entity Class and Tile or Sprite Instance.
+ * This Class assigns an id to every GameObject Class and Tile or Sprite Instance.
  * It maintains lists of returned ids for classes, tile instances and sprite instances.
  * @author Jason Zhou
  */
@@ -18,23 +16,23 @@ import java.util.function.Function;
 public class IdManagerClass implements IdManager {
     private List<Integer> returnedClassIds;
     private List<Integer> returnedTileInstanceIds;
-    private List<Integer> returnedSpriteInstanceIds;
+    private List<Integer> returnedEntityInstanceIds;
 
     private int classCount;
     private int tileInstanceCount;
-    private int spriteInstanceCount;
+    private int entityInstanceCount;
 
     IdManagerClass() {
         classCount = 0;
         tileInstanceCount = 0;
-        spriteInstanceCount = 0;
+        entityInstanceCount = 0;
         returnedClassIds = new ArrayList<>();
         returnedTileInstanceIds = new ArrayList<>();
-        returnedSpriteInstanceIds = new ArrayList<>();
+        returnedEntityInstanceIds = new ArrayList<>();
     }
 
     @Override
-    public Consumer<EntityClass> requestClassIdFunc() {
+    public Consumer<GameObjectClass> requestClassIdFunc() {
         int id;
         if (!returnedClassIds.isEmpty()) {
             id = returnedClassIds.remove(0);
@@ -42,11 +40,11 @@ public class IdManagerClass implements IdManager {
             id = classCount;
             classCount++;
         }
-        return entityClass -> entityClass.setClassId(simpleIntegerProperty -> simpleIntegerProperty.setValue(id));
+        return gameObjectClass -> gameObjectClass.setClassId(simpleIntegerProperty -> simpleIntegerProperty.setValue(id));
     }
 
     @Override
-    public Consumer<EntityInstance> requestTileInstanceIdFunc() {
+    public Consumer<GameObjectInstance> requestTileInstanceIdFunc() {
         int id;
         if (!returnedTileInstanceIds.isEmpty()) {
             id = returnedTileInstanceIds.remove(0);
@@ -58,22 +56,22 @@ public class IdManagerClass implements IdManager {
     }
 
     @Override
-    public Consumer<EntityInstance> requestSpriteInstanceIdFunc() {
+    public Consumer<GameObjectInstance> requestEntityInstanceIdFunc() {
         int id;
-        if (!returnedSpriteInstanceIds.isEmpty()) {
-            id = returnedSpriteInstanceIds.remove(0);
+        if (!returnedEntityInstanceIds.isEmpty()) {
+            id = returnedEntityInstanceIds.remove(0);
         } else {
-            id = spriteInstanceCount;
-            spriteInstanceCount++;
+            id = entityInstanceCount;
+            entityInstanceCount++;
         }
-        return spriteInstance -> spriteInstance.setInstanceId(simpleIntegerProperty -> simpleIntegerProperty.setValue(id));
+        return entityInstance -> entityInstance.setInstanceId(simpleIntegerProperty -> simpleIntegerProperty.setValue(id));
     }
 
     @Override
-    public Consumer<EntityClass> returnClassIdFunc() {
+    public Consumer<GameObjectClass> returnClassIdFunc() {
 
-        return (entityClass) -> {
-            int returnedId = entityClass.getClassId().getValue();
+        return (gameObjectClass) -> {
+            int returnedId = gameObjectClass.getClassId().getValue();
             if (classCount < returnedId || returnedClassIds.contains(returnedId)) {
                 throw new DuplicateIdException();
             }
@@ -82,7 +80,7 @@ public class IdManagerClass implements IdManager {
     }
 
     @Override
-    public Consumer<EntityInstance> returnTileInstanceIdFunc() {
+    public Consumer<GameObjectInstance> returnTileInstanceIdFunc() {
         return (tileInstance) -> {
             int returnedId = tileInstance.getInstanceId().getValue();
             if (tileInstanceCount < returnedId || returnedTileInstanceIds.contains(returnedId)) {
@@ -93,13 +91,13 @@ public class IdManagerClass implements IdManager {
     }
 
     @Override
-    public Consumer<EntityInstance> returnSpriteInstanceIdFunc() {
-        return (spriteInstance) -> {
-            int returnedId = spriteInstance.getInstanceId().getValue();
-            if (spriteInstanceCount < returnedId || returnedSpriteInstanceIds.contains(returnedId)) {
+    public Consumer<GameObjectInstance> returnEntityInstanceIdFunc() {
+        return (entityInstance) -> {
+            int returnedId = entityInstance.getInstanceId().getValue();
+            if (entityInstanceCount < returnedId || returnedEntityInstanceIds.contains(returnedId)) {
                 throw new DuplicateIdException();
             }
-            returnedSpriteInstanceIds.add(returnedId);
+            returnedEntityInstanceIds.add(returnedId);
         };
     }
 
@@ -114,7 +112,7 @@ public class IdManagerClass implements IdManager {
     }
 
     @Override
-    public Function<Integer, Boolean> verifySpriteInstanceIdFunc() {
-        return (i) -> spriteInstanceCount >= i && !returnedSpriteInstanceIds.contains(i);
+    public Function<Integer, Boolean> verifyEntityInstanceIdFunc() {
+        return (i) -> entityInstanceCount >= i && !returnedEntityInstanceIds.contains(i);
     }
 }
