@@ -47,4 +47,14 @@ public class SimpleTileInstance implements TileInstance {
     public Consumer<EntityInstance> getReturnInstanceIdFunc() {
         return returnInstanceIdFunc;
     }
+
+    @Override
+    public boolean addProperty(String propertyName, String defaultValue) {
+        return false;
+    }
+
+    @Override
+    public boolean removeProperty(String propertyName) {
+        return false;
+    }
 }
