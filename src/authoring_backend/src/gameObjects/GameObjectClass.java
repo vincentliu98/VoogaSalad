@@ -47,7 +47,7 @@ public interface GameObjectClass {
      * This method gets the properties map of the GameObject Class.
      * @return properties map
      */
-    ObservableMap getPropertiesMap();
+    ObservableMap<String, String> getPropertiesMap();
 
     /**
      * This method adds the property to the GameObject Class and to all instances of the class.
@@ -74,7 +74,7 @@ public interface GameObjectClass {
      * This method gets the image path list of the GameObject Class.
      * @return a list of the file paths of the images
      */
-    ObservableList getImagePathList();
+    ObservableList<String> getImagePathList();
 
     /**
      * This method removes the image path from the Entity Class and from all instances of the class.

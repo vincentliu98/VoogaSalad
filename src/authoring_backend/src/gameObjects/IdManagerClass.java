@@ -45,26 +45,30 @@ public class IdManagerClass implements IdManager {
 
     @Override
     public Consumer<GameObjectInstance> requestTileInstanceIdFunc() {
-        int id;
-        if (!returnedTileInstanceIds.isEmpty()) {
-            id = returnedTileInstanceIds.remove(0);
-        } else {
-            id = tileInstanceCount;
-            tileInstanceCount++;
-        }
-        return tileInstance -> tileInstance.setInstanceId(simpleIntegerProperty -> simpleIntegerProperty.setValue(id));
+        return tileInstance -> tileInstance.setInstanceId(simpleIntegerProperty -> {
+            int id;
+            if (!returnedTileInstanceIds.isEmpty()) {
+                id = returnedTileInstanceIds.remove(0);
+            } else {
+                id = tileInstanceCount;
+                tileInstanceCount++;
+            }
+            simpleIntegerProperty.setValue(id);
+        });
     }
 
     @Override
     public Consumer<GameObjectInstance> requestEntityInstanceIdFunc() {
-        int id;
-        if (!returnedEntityInstanceIds.isEmpty()) {
-            id = returnedEntityInstanceIds.remove(0);
-        } else {
-            id = entityInstanceCount;
-            entityInstanceCount++;
-        }
-        return entityInstance -> entityInstance.setInstanceId(simpleIntegerProperty -> simpleIntegerProperty.setValue(id));
+        return entityInstance -> entityInstance.setInstanceId(simpleIntegerProperty -> {
+            int id;
+            if (!returnedEntityInstanceIds.isEmpty()) {
+                id = returnedEntityInstanceIds.remove(0);
+            } else {
+                id = entityInstanceCount;
+                entityInstanceCount++;
+            }
+            simpleIntegerProperty.setValue(id);
+        });
     }
 
     @Override

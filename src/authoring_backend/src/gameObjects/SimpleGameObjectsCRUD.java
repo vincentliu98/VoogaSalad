@@ -4,6 +4,7 @@ import grids.Point;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -13,7 +14,6 @@ import java.util.function.Function;
 
 
 public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
-
     private int numRow;
     private int numCol;
     private ObservableMap<String, TileClass> tileClassMap;
@@ -29,6 +29,9 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         this.numCol = numCol;
         tileClassMap = FXCollections.observableHashMap();
         entityClassMap = FXCollections.observableHashMap();
+        tileInstanceMap = FXCollections.observableHashMap();
+        entityInstanceMap = FXCollections.observableHashMap();
+
         myIdManager = new IdManagerClass();
         returnClassId = myIdManager.returnClassIdFunc();
     }
@@ -45,8 +48,8 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
             throw new DuplicateClassException();
         }
         TileClass newTileClass = new SimpleTileClass(
-                numRow,
-                numCol,
+                name,
+                numRow, numCol,
                 Point.verifyPointsFunc(),
                 myIdManager.requestTileInstanceIdFunc(),
                 myIdManager.returnTileInstanceIdFunc(),
@@ -133,11 +136,6 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         };
     }
 
-
-
-
-
-
     @Override
     public EntityClass createEntityClass(String name) {
         if (entityClassMap.containsKey(name)) {
@@ -145,6 +143,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         }
 
         EntityClass newEntityClass = new SimpleEntityClass(
+                name,
                 myIdManager.verifyTileInstanceIdFunc(),
                 myIdManager.requestEntityInstanceIdFunc(),
                 myIdManager.returnEntityInstanceIdFunc(),
@@ -232,11 +231,8 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         };
     }
 
-    @Override
-    public String toXML() {
-
-        // TODO??
-        return null;
-    }
-
+    public Collection<TileClass> getTileClasses() { return tileClassMap.values(); }
+    public Collection<EntityClass> getEntityClasses() { return entityClassMap.values(); }
+    public Collection<TileInstance> getTileInstances() { return tileInstanceMap.values(); }
+    public Collection<EntityInstance> getEntityInstances() { return entityInstanceMap.values(); }
 }

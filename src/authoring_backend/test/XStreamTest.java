@@ -37,6 +37,7 @@ public class XStreamTest {
         System.out.println(shell.evaluate("entity.properties().get('he').properties().get('hello')-2"));
         Point p = new PointImpl(1,2);
         System.out.println(xstream.toXML(p));
+
     }
 
     public static abstract class Property {
@@ -49,7 +50,7 @@ public class XStreamTest {
         private GameEvent trigger;
 
         public Entity() {
-            properties = new HashMap<>();
+            properties = new LinkedHashMap<>();
             ids = new HashSet<>();
             properties.put("ha", 1);
             ids.add(1);

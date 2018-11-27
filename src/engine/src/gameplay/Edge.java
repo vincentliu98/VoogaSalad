@@ -4,16 +4,14 @@ import javafx.event.Event;
 import phase.api.GameEvent;
 
 public class Edge implements ArgumentListener {
-    private int myID;
     private int myPhaseID;
     private int myStartNodeID;
     private int myEndNodeID;
     private GameEvent myTrigger;
     private String myGuard; // Groovy code
 
-    public Edge(int phaseID, int id, int startNodeID, int endNodeID, String guard) {
+    public Edge(int phaseID, int startNodeID, int endNodeID, String guard) {
         this.myPhaseID = phaseID;
-        this.myID = id;
         this.myStartNodeID = startNodeID;
         this.myEndNodeID = endNodeID;
         this.myGuard = guard;
@@ -31,9 +29,6 @@ public class Edge implements ArgumentListener {
         }
     }
 
-    public int getID(){
-        return myID;
-    }
     public int getMyStartNodeID() { return myStartNodeID; }
 
     @Override
