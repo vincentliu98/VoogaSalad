@@ -1,4 +1,4 @@
-package gameObjects;
+package entities;
 
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyStringProperty;
