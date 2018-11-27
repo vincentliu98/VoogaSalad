@@ -24,8 +24,8 @@
         </myEntityIDs>
     </gameplay.Player>
 
-    <!-- Generated Code from GameObjectSerializationTest, not hand-written -->
-    <game-objects>
+    <!-- Generated Code from SerializationTest, not hand-written -->
+    <entityDB class="game-objects">
         <grid-width>5</grid-width>
         <grid-height>5</grid-height>
         <gameplay.EntityPrototype>
@@ -449,7 +449,7 @@
         </myImagePaths>
             <myImageSelector></myImageSelector>
         </gameplay.Tile>
-    </game-objects>
+    </entityDB>
 
 
     <!-- Can be generated, but is too much pain to generate groovy graphs with code -->

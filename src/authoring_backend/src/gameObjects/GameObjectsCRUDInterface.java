@@ -68,4 +68,9 @@ public interface GameObjectsCRUDInterface {
      * @return True if the Entity Instance with the instanceId exists
      */
     boolean deleteEntityInstance(int instanceId);
+
+    /**
+     *  Sets the dimension of the entire grid
+     */
+    void setDimension(int width, int height);
 }
