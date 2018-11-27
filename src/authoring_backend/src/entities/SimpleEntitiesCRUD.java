@@ -1,4 +1,4 @@
-package gameObjects;
+package entities;
 
 import grids.Point;
 import javafx.collections.FXCollections;
@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 
 public class SimpleEntitiesCRUD implements EntitiesCRUDInterface {
