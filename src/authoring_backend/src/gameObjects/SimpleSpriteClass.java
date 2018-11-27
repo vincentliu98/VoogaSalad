@@ -1,4 +1,4 @@
-package entities;
+package gameObjects;
 
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
@@ -25,9 +25,9 @@ public class SimpleSpriteClass implements SpriteClass {
 
     private Function<Integer, Boolean> verifyTileInstanceIdFunc;
 
-    private Function<String, Set<EntityInstance>> getSpriteInstancesFunc;
-    private Consumer<EntityInstance> setInstanceIdFunc;
-    private Consumer<EntityInstance> returnInstanceIdFunc;
+    private Function<String, Set<GameObjectInstance>> getSpriteInstancesFunc;
+    private Consumer<GameObjectInstance> setInstanceIdFunc;
+    private Consumer<GameObjectInstance> returnInstanceIdFunc;
     private Consumer<SpriteInstance> addSpriteInstanceToMapFunc;
     private Function<Integer, Boolean> deleteSpriteInstanceFromMapFunc;
     private TriConsumer<String, String, String> addSpritePropertyFunc;
@@ -44,11 +44,11 @@ public class SimpleSpriteClass implements SpriteClass {
     }
 
     SimpleSpriteClass(Function<Integer, Boolean> verifyTileInstanceIdFunction,
-                      Consumer<EntityInstance> setInstanceIdFunc,
-                      Consumer<EntityInstance> returnInstanceIdFunc,
+                      Consumer<GameObjectInstance> setInstanceIdFunc,
+                      Consumer<GameObjectInstance> returnInstanceIdFunc,
                       Consumer<SpriteInstance> addSpriteInstanceToMapFunc,
                       Function<Integer, Boolean> deleteSpriteInstanceFromMapFunc,
-                      Function<String, Set<EntityInstance>> getSpriteInstancesFunc,
+                      Function<String, Set<GameObjectInstance>> getSpriteInstancesFunc,
                       TriConsumer<String, String, String> addSpritePropertyFunc,
                       BiConsumer<String, String> removeSpritePropertyFunc) {
         this();
@@ -137,7 +137,7 @@ public class SimpleSpriteClass implements SpriteClass {
     }
 
     @Override
-    public EntityInstance createInstance(int tileId) {
+    public GameObjectInstance createInstance(int tileId) {
         if (!verifyTileInstanceIdFunc.apply(tileId)) {
             throw new InvalidIdException();
         }
@@ -154,7 +154,7 @@ public class SimpleSpriteClass implements SpriteClass {
     }
 
     @Override
-    public Set<EntityInstance> getInstances() {
+    public Set<GameObjectInstance> getInstances() {
         return getSpriteInstancesFunc.apply(getClassName().get());
     }
 

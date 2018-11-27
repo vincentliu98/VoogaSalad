@@ -1,12 +1,12 @@
-package entities;
+package gameObjects;
 
 import javafx.beans.property.SimpleBooleanProperty;
 
-public interface SpriteClass extends EntityClass {
+public interface SpriteClass extends GameObjectClass {
 
     SimpleBooleanProperty isMovable();
 
     void setMovable(boolean move);
 
-    EntityInstance createInstance(int tileId);
+    GameObjectInstance createInstance(int tileId);
 }

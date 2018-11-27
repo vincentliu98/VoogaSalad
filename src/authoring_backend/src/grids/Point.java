@@ -1,6 +1,6 @@
 package grids;
 
-import entities.TriFunction;
+import gameObjects.TriFunction;
 
 import java.util.HashSet;
 import java.util.Set;

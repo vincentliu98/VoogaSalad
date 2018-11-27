@@ -1,4 +1,4 @@
-package entities;
+package gameObjects;
 
 @FunctionalInterface
 public interface TriFunction<T, U, V, W> {

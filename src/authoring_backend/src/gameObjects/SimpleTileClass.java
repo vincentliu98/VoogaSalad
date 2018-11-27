@@ -1,4 +1,4 @@
-package entities;
+package gameObjects;
 
 import grids.Point;
 import javafx.beans.property.*;
@@ -28,9 +28,9 @@ public class SimpleTileClass implements TileClass {
 
     private TriFunction<Set<Point>, Integer, Integer, Boolean> verifyPointsFunc;
 
-    private Function<String, Set<EntityInstance>> getTileInstancesFunc;
-    private Consumer<EntityInstance> setInstanceIdFunc;
-    private Consumer<EntityInstance> returnInstanceIdFunc;
+    private Function<String, Set<GameObjectInstance>> getTileInstancesFunc;
+    private Consumer<GameObjectInstance> setInstanceIdFunc;
+    private Consumer<GameObjectInstance> returnInstanceIdFunc;
     private Consumer<TileInstance> addTileInstanceToMapFunc;
 
     private SimpleTileClass() {
@@ -44,10 +44,10 @@ public class SimpleTileClass implements TileClass {
     SimpleTileClass(int numRow,
                     int numCol,
                     TriFunction<Set<Point>, Integer, Integer, Boolean> verifyPointsFunc,
-                    Consumer<EntityInstance> setInstanceIdFunc,
-                    Consumer<EntityInstance> returnInstanceIdFunc,
+                    Consumer<GameObjectInstance> setInstanceIdFunc,
+                    Consumer<GameObjectInstance> returnInstanceIdFunc,
                     Consumer<TileInstance> addTileInstanceToMapFunc,
-                    Function<String, Set<EntityInstance>> getTileInstancesFunc) {
+                    Function<String, Set<GameObjectInstance>> getTileInstancesFunc) {
         this();
         this.numRow = numRow;
         this.numCol = numCol;
@@ -131,12 +131,17 @@ public class SimpleTileClass implements TileClass {
     }
 
     @Override
-    public Set<EntityInstance> getInstances() {
+    public Set<GameObjectInstance> getInstances() {
         return null;
     }
 
     @Override
-    public EntityInstance createInstance(Set<Point> points) {
+    public boolean deleteInstance(int id) {
+        return false;
+    }
+
+    @Override
+    public GameObjectInstance createInstance(Set<Point> points) {
         if (!verifyPointsFunc.apply(points, numRow, numCol)) {
             throw new InvalidPointsException();
         }

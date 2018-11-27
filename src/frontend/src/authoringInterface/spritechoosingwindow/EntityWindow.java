@@ -22,7 +22,7 @@ import java.io.File;
 
 */
 /**
- * Pop-up window for the user to add settings for EntityClass
+ * Pop-up window for the user to add settings for GameObjectClass
  *
  * @author jl729
  *//*

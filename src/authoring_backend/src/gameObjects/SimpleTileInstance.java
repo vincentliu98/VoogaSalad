@@ -1,27 +1,31 @@
-package entities;
+package gameObjects;
 
-import groovy.api.BlockGraph;
+import grids.Point;
 import javafx.beans.property.*;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
+import javafx.collections.ObservableSet;
 
-import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 
-public class SimpleSpriteInstance implements SpriteInstance {
+public class SimpleTileInstance implements TileInstance {
     private ReadOnlyStringWrapper className;
     private ReadOnlyIntegerWrapper instanceId;
-    private SimpleIntegerProperty tileId;
+    private ObservableSet<Point> points;
     private ObservableMap<String, String> propertiesMap;
-    private Consumer<EntityInstance> returnInstanceIdFunc;
+    private Consumer<GameObjectInstance> returnInstanceIdFunc;
 
-    SimpleSpriteInstance(String className, int tileId, ObservableMap<String, String> properties, Consumer<EntityInstance> returnInstanceIdFunc) {
+
+    SimpleTileInstance(String className, Set<Point> points, ObservableMap<String, String> properties, Consumer<GameObjectInstance> returnInstanceIdFunc) {
         this.className = new ReadOnlyStringWrapper();
         this.className.set(className);
-        this.tileId = new ReadOnlyIntegerWrapper();
-        this.tileId.setValue(tileId);
+        this.points = FXCollections.observableSet();
+        this.points.addAll(points);
         this.propertiesMap = properties;
         this.returnInstanceIdFunc = returnInstanceIdFunc;
     }
+
 
     @Override
     public ReadOnlyIntegerProperty getInstanceId() {
@@ -38,22 +42,17 @@ public class SimpleSpriteInstance implements SpriteInstance {
         return className.getReadOnlyProperty();
     }
 
-    public Consumer<EntityInstance> getReturnInstanceIdFunc() {
+    public Consumer<GameObjectInstance> getReturnInstanceIdFunc() {
         return returnInstanceIdFunc;
     }
 
     @Override
     public boolean addProperty(String propertyName, String defaultValue) {
-        if (!propertiesMap.containsKey(propertyName)) {
-            propertiesMap.put(propertyName, defaultValue);
-            return true;
-        }
         return false;
     }
 
     @Override
     public boolean removeProperty(String propertyName) {
-        return propertiesMap.remove(propertyName) != null;
+        return false;
     }
-
 }

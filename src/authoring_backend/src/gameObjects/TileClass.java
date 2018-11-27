@@ -1,17 +1,15 @@
-package entities;
+package gameObjects;
 
 import grids.Point;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 
-import java.util.Iterator;
 import java.util.Set;
 
-public interface TileClass extends EntityClass {
+public interface TileClass extends GameObjectClass {
 
     SimpleBooleanProperty isSpriteContainable();
 
     void setSpriteContainable(boolean contains);
 
-    EntityInstance createInstance(Set<Point> points);
+    GameObjectInstance createInstance(Set<Point> points);
 }

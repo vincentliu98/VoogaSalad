@@ -1,11 +1,11 @@
-package entities;
+package gameObjects;
 
 /**
  *
  * This class encapsulates the Game Data for the Entities (Tiles and Sprites). It provides methods to create, edit, and delete the Sprites and Tiles Classes.
  * @author Jason Zhou
  */
-public interface EntitiesCRUDInterface {
+public interface GameObjectsCRUDInterface {
 
     /**
      * @param name the name of the Tile Class to be created
@@ -36,32 +36,32 @@ public interface EntitiesCRUDInterface {
     boolean deleteTileInstance(int instanceId);
 
     /**
-     * @param name the name of the Sprite Class to be created
-     * @return the Sprite Class if there is no name collision and the method is successful
+     * @param name the name of the Entity Class to be created
+     * @return the Entity Class if there is no name collision and the method is successful
      * @throws DuplicateClassException if a class with the same name exists
      */
-    SpriteClass createSpriteClass(String name);
+    SpriteClass createEntityClass(String name);
 
     /**
-     * @param name the name of the Sprite Class to be retrieved
-     * @return the Sprite Class with the name
-     * @throws NoSpriteClassException if there is no such Sprite Class
+     * @param name the name of the Entity Class to be retrieved
+     * @return the Entity Class with the name
+     * @throws NoSpriteClassException if there is no such Entity Class
      */
-    SpriteClass getSpriteClass(String name);
+    SpriteClass getEntityClass(String name);
 
     /**
      *
-     * @param name the name of the Tile Class to be deleted
-     * @return True if the Sprite Class exists
+     * @param name the name of the Entity Class to be deleted
+     * @return True if the Entity Class exists
      */
-    boolean deleteSpriteClass(String name);
+    boolean deleteEntityClass(String name);
 
     /**
      *
      * @param instanceId
      * @return
      */
-    boolean deleteSpriteInstance(int instanceId);
+    boolean deleteEntityInstance(int instanceId);
 
     /**
      *

@@ -1,9 +1,9 @@
 //package test;
 //
 //import authoring.AuthoringTools;
-//import entities.EntitiesCRUDInterface;
-//import entities.SimpleEntitiesCRUD;
-//import entities.TileClass;
+//import gameObjects.GameObjectsCRUDInterface;
+//import gameObjects.SimpleGameObjectsCRUD;
+//import gameObjects.TileClass;
 //import grids.Point;
 //import grids.PointImpl;
 //import javafx.scene.input.KeyCode;

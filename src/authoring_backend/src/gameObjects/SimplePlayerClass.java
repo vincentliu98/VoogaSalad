@@ -1,4 +1,4 @@
-//package entities;
+//package gameObjects;
 //
 //import groovy.api.BlockGraph;
 //import javafx.beans.property.*;
@@ -23,9 +23,9 @@
 //
 //    private Function<Integer, Boolean> verifyEnitityInstanceIdFunc;
 //
-//    private Function<String, Set<EntityInstance>> getPlayerInstancesFunc;
-//    private Consumer<EntityInstance> setInstanceIdFunc;
-//    private Consumer<EntityInstance> returnInstanceIdFunc;
+//    private Function<String, Set<GameObjectInstance>> getPlayerInstancesFunc;
+//    private Consumer<GameObjectInstance> setInstanceIdFunc;
+//    private Consumer<GameObjectInstance> returnInstanceIdFunc;
 //    private Consumer<SpriteInstance> addPlayerInstanceToMapFunc;
 //
 //    private SimplePlayerClass() {
@@ -38,10 +38,10 @@
 //    }
 //
 //    SimplePlayerClass(Function<Integer, Boolean> verifyEnitityInstanceIdFunction,
-//                      Consumer<EntityInstance> setInstanceIdFunc,
-//                      Consumer<EntityInstance> returnInstanceIdFunc,
+//                      Consumer<GameObjectInstance> setInstanceIdFunc,
+//                      Consumer<GameObjectInstance> returnInstanceIdFunc,
 //                      Consumer<SpriteInstance> addSpriteInstanceToMapFunc,
-//                      Function<String, Set<EntityInstance>> getSpriteInstancesFunc) {
+//                      Function<String, Set<GameObjectInstance>> getSpriteInstancesFunc) {
 //        this();
 //        this.verifyEnitityInstanceIdFunc = verifyEnitityInstanceIdFunction;
 //        this.setInstanceIdFunc = setInstanceIdFunc;

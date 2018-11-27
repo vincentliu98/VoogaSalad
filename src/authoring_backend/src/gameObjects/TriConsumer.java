@@ -1,4 +1,4 @@
-package entities;
+package gameObjects;
 
 @FunctionalInterface
 public interface TriConsumer<T, U, V> {
