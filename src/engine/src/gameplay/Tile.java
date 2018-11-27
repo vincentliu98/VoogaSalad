@@ -1,127 +1,109 @@
 package gameplay;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
-import javafx.event.Event;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.EventHandler;
-import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class Tile {
+public class Tile extends PropertyHolder<Tile> implements GameObject, EventHandler<MouseEvent> {
     private int myID;
-    private int myWidth;
-    private int myHeight;
-    private double myXCoord; // TODO: Only temporary; delete later
-    private double myYCoord;
-    private String myImagePath;
+    private String name;
+    private int myWidth, myHeight;
+    private int myXCoord, myYCoord; // a hidden assumption here is that the tiles are immovable objects
+    private List<String> myImagePaths;
     private List<Integer> myEntities;
     private String myImageSelector; // Groovy codee
-    private List<String> myImages;
+
+    @XStreamOmitField
+    private transient SimpleIntegerProperty imgIndex;
+
+    @XStreamOmitField
+    private transient List<Image> myImages;
+
     @XStreamOmitField
     private transient ImageView myImageView;
 
-    public Tile(int id, int width, int height, double xCoord, double yCoord){
-        this.myID = id;
-        this.myWidth = width;
-        this.myHeight = height;
-        this.myXCoord = xCoord;
-        this.myYCoord = yCoord;
-        this.myImagePath = "";
-        this.myImageSelector = "";
-        this.myImages = new ArrayList<>();
-        this.myEntities = new ArrayList<>();
-        this.myImageView = null;
+    /**
+     *  Fills out the transient parts
+     */
+    public void setupView() {
+        myImageView = new ImageView();
+        myImageView.setPreserveRatio(true);
+        myImageView.setOnMouseClicked(this);
+
+        imgIndex = new SimpleIntegerProperty(-1);
+        imgIndex.addListener((e, oldVal, newVal) -> myImageView.setImage(myImages.get(newVal.intValue())));
     }
 
-    public void addEntity(int entityID, Group root){
+    /**
+     *  Adjusts the size of this tile in pixels with respect to screen dimensions
+     */
+    public void adjustViewSize(double screenWidth, double screenHeight) {
+        myImageView.setX((screenWidth*myXCoord)/GameData.gridWidth());
+        myImageView.setY((screenHeight*myYCoord)/GameData.gridHeight());
+        myImageView.setFitWidth((screenWidth*myWidth)/GameData.gridWidth());
+        myImageView.setFitHeight((screenHeight*myHeight)/GameData.gridHeight());
+
+        myImages = myImagePaths.stream()
+                               .map(path ->
+                                   new Image(
+                                       this.getClass().getClassLoader().getResourceAsStream(path),
+                                       (screenWidth*myWidth)/GameData.gridWidth(),
+                                       (screenHeight*myHeight)/GameData.gridHeight(),
+                                       false, true
+                                   )
+                               ).collect(Collectors.toList());
+    }
+
+    /**
+     *  Since all image selectors assume that $this refers to THIS specific instance of a tile,
+     *  we set the variable $this to this.
+     */
+    public void updateView() {
+        if(!myImageSelector.isEmpty()) {
+            GameData.shell().setVariable("$this", this);
+            GameData.shell().evaluate(myImageSelector);
+            imgIndex.set(Integer.parseInt(GameData.shell().getVariable("$return").toString()));
+        } else imgIndex.set(0);
+    }
+
+    /**
+     *  When the entity moves, it would always call these two methods at the same time
+     *
+     *  newTile.addEntity(entity.myID)
+     *  oldTile.removeEntity(entity.myID)
+     */
+    public void addEntity(int entityID){
         myEntities.add(entityID);
-        GameData.getEntity(entityID).setLocation(myXCoord, myYCoord);
-        root.getChildren().add(GameData.getEntity(entityID).getImageView());
+        GameData.getEntity(entityID).setLocation(myXCoord + (myWidth-1)/2., myYCoord + (myHeight-1)/2);
+    }
+    public void removeEntity(int entityID) {
+        myEntities.removeIf(id -> id == entityID);
+        // TODO: make sure this removes the OBJECT
+        // This method is good enough here.
     }
 
-    public String getImagePath(){
-        return myImagePath;
+    public ImageView getImageView(){ return myImageView; }
+
+    public boolean hasNoEntities(){ return myEntities.isEmpty(); }
+
+    public int getID(){ return myID; }
+    public String getName() { return name; }
+
+    @Override
+    public double getX() { return myXCoord; }
+
+    @Override
+    public double getY() { return myYCoord; }
+
+    @Override
+    public void handle(MouseEvent event) {
+        System.out.println("MouseEvent on tile of id " + myID);
+        GameData.addArgument(event, new ClickTag(Tile.class, myID));
     }
-
-    public double getXCoord(){
-        return myXCoord;
-    }
-
-    public double getYCoord(){
-        return myYCoord;
-    }
-
-    public void setImagePath(String imagePath) {
-        this.myImagePath = imagePath;
-    }
-
-    public void setImageView(){
-        if (!myImagePath.isEmpty()){
-            myImageView = new ImageView();
-            myImageView.setImage(new Image(myImagePath));
-            myImageView.setPreserveRatio(true);
-            myImageView.setFitWidth(100); // TODO: delete later
-            myImageView.setX(myXCoord);
-            myImageView.setY(myYCoord);
-            myImageView.setOnMouseClicked(event -> {
-                GameData.addArgument(new Tag(Tile.class, myID));
-            });
-        }
-    }
-
-    public ImageView getImageView(){
-        return myImageView;
-    }
-
-    public void removeEntity(int entityID){
-        myEntities.remove(entityID); // TODO: make sure this removes the OBJECT
-    }
-
-    public boolean hasNoEntities(){
-        return myEntities.isEmpty();
-    }
-
-    public int getID(){
-        return myID;
-    }
-
-    /*
-    // IF WE WANT TO USE THE BUILDER PATTERN
-
-    public static class Builder {
-        private int width = 0;
-        private int height = 0;
-        private Set<Image> images = new HashSet<>();
-        private String imageSelector = "";
-
-        public Builder(int width, int height){
-            this.width = width;
-            this.height = height;
-        }
-
-        public Builder images(Set<Image> images){
-            this.images = images;
-            return this;
-        }
-
-        public Builder imageSelector(String imageSelector){
-            this.imageSelector = imageSelector;
-            return this;
-        }
-
-        public Tile build(){
-            return new Tile(this);
-        }
-    }
-
-    private Tile(Builder builder){
-        myWidth = builder.width;
-        myHeight = builder.height;
-        myImages = builder.images;
-        myImageSelector = builder.imageSelector;
-    }*/
 }

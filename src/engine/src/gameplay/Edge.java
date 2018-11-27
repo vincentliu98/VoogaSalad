@@ -1,16 +1,14 @@
 package gameplay;
 
-import groovy.lang.GroovyShell;
-import javafx.scene.Group;
-
-import java.util.List;
+import javafx.event.Event;
+import phase.api.GameEvent;
 
 public class Edge implements ArgumentListener {
     private int myID;
     private int myPhaseID;
     private int myStartNodeID;
     private int myEndNodeID;
-    //private Event myTrigger;
+    private GameEvent myTrigger;
     private String myGuard; // Groovy code
 
     public Edge(int phaseID, int id, int startNodeID, int endNodeID, String guard) {
@@ -21,40 +19,29 @@ public class Edge implements ArgumentListener {
         this.myGuard = guard;
     }
 
-    private boolean checkValidity(List<Tag> arguments){
+    private boolean checkValidity(){
+        if(myGuard.isEmpty()) return false; // false by default ? or true by default ?
         try{
-            GroovyShell groovyShell = new GroovyShell();
-            groovyShell.setVariable("arguments", arguments);
-            groovyShell.setVariable("gameDataClass", GameData.class);
-            groovyShell.setVariable("edgeClass", Edge.class);
-            groovyShell.setVariable("argListenerClass", ArgumentListener.class);
-            groovyShell.setVariable("entityClass", Entity.class);
-            groovyShell.setVariable("nodeClass", Node.class);
-            groovyShell.setVariable("phaseClass", Phase.class);
-            groovyShell.setVariable("playerClass", Player.class);
-            groovyShell.setVariable("tagClass", Tag.class);
-            groovyShell.setVariable("tileClass", Tile.class);
-            groovyShell.setVariable("turnClass", Turn.class);
-            groovyShell.setVariable("groupClass", Group.class);
-            groovyShell.evaluate(myGuard);
-            return (boolean) groovyShell.getVariable("answer");
+            // arguments are already set by each entities/tiles
+            GameData.shell().evaluate(myGuard);
+            return (boolean) GameData.shell().getVariable("$return");
         } catch (Exception e){
             e.printStackTrace();
+            return false;
         }
-        return false;
     }
 
     public int getID(){
         return myID;
     }
+    public int getMyStartNodeID() { return myStartNodeID; }
 
     @Override
-    public void hasChanged() {
-        if (checkValidity(GameData.getArguments())){
-            GameData.removeArgumentListener(this);
-            GameData.getNode(myEndNodeID).execute();
-        } else {
-            GameData.clearArguments();
+    public int trigger(Event event) {
+        if(myTrigger.matches(event) && checkValidity()) {
+            System.out.printf("Transitioning from Node %d to Node %d\n", myStartNodeID, myEndNodeID);
+            return myEndNodeID;
         }
+        else return DONT_PASS;
     }
 }
