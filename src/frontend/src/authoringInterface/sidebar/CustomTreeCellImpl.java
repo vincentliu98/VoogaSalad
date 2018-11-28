@@ -1,7 +1,10 @@
 package authoringInterface.sidebar;
 
-import authoringInterface.subEditors.EntityEditor;
+import authoringInterface.subEditors.*;
 import gameObjects.GameObjectsCRUDInterface;
+import gameObjects.gameObject.GameObjectClass;
+import gameObjects.gameObject.GameObjectInstance;
+import gameObjects.gameObject.GameObjectType;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
@@ -15,6 +18,7 @@ import javafx.stage.Stage;
 public class CustomTreeCellImpl extends TreeCell<String> {
     private TextField textField;
     private ContextMenu addMenu = new ContextMenu();
+    private ContextMenu editMenu = new ContextMenu();
     private GameObjectsCRUDInterface objectManager;
 
     public CustomTreeCellImpl(GameObjectsCRUDInterface manager) {
@@ -39,6 +43,35 @@ public class CustomTreeCellImpl extends TreeCell<String> {
         });
         addMenu.getItems().add(addMenuItem);
         setOnDragDetected(e -> startFullDrag());
+        MenuItem editMenuItem = new MenuItem("Edit this GameObject");
+        MenuItem deleteMenuItem = new MenuItem("Delete this GameObject");
+        editMenuItem.setOnAction(e -> {
+            GameObjectClass objectClass = objectManager.getGameObjectClass(getItem());
+            Stage dialogStage = new Stage();
+            AbstractGameObjectEditor editor = null;
+            switch (objectClass.getType()) {
+                case ENTITY:
+                    editor = new EntityEditor(objectManager);
+                    break;
+                case SOUND:
+                    // TODO
+                    break;
+                case CATEGORY:
+                    // TODO
+                    break;
+                case TILE:
+                    // TODO
+                    break;
+            }
+            dialogStage.setScene(new Scene(editor.getView(), 500, 500));
+            dialogStage.show();
+            editor.editTreeItem(getTreeItem(), objectClass);
+        });
+        deleteMenuItem.setOnAction(e -> {
+            objectManager.de
+            getTreeItem().getParent().getChildren().remove(getTreeItem());
+        });
+        editMenu.getItems().add(editMenuItem);
     }
 
     @Override

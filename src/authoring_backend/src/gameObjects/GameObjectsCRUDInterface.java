@@ -98,5 +98,5 @@ public interface GameObjectsCRUDInterface {
     CategoryClass getCategoryClass(String name);
 
     boolean deleteCategoryClass(String name);
-
+    
 }
