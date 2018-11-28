@@ -260,11 +260,11 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
             return false;
         }
         if (entityClassMap.containsKey(oldName)) {
+            changeEntityClassName(oldName, newName);
+        } else if (tileClassMap.containsKey(oldName)){
             changeTileClassName(oldName, newName);
         }
-        else {
-            changeEntityClassName(oldName, newName);
-        }
+        // TODO: Other kinds of GameObjects
         return true;
     }
 
@@ -355,6 +355,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
      */
     @Override
     public boolean deleteGameObjectClass(String name) {
+        // TODO: make this method automatically recognizes newly added user categories. For example, for now, this method doesn't support sound edit. What if the user added more categories during run time.
         return (deleteTileClass(name) || deleteCategoryClass(name) || deleteEntityClass(name));
     }
 }

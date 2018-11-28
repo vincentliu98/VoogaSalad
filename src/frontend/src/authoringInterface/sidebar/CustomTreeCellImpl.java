@@ -68,10 +68,10 @@ public class CustomTreeCellImpl extends TreeCell<String> {
             editor.editTreeItem(getTreeItem(), objectClass);
         });
         deleteMenuItem.setOnAction(e -> {
-            objectManager.de
+            objectManager.deleteGameObjectClass(getItem());
             getTreeItem().getParent().getChildren().remove(getTreeItem());
         });
-        editMenu.getItems().add(editMenuItem);
+        editMenu.getItems().addAll(editMenuItem, deleteMenuItem);
     }
 
     @Override
@@ -110,6 +110,8 @@ public class CustomTreeCellImpl extends TreeCell<String> {
                 setGraphic(getTreeItem().getGraphic());
                 if (!getTreeItem().isLeaf()) {
                     setContextMenu(addMenu);
+                } else {
+                    setContextMenu(editMenu);
                 }
             }
         }
