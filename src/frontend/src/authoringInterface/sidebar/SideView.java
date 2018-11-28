@@ -2,8 +2,11 @@ package authoringInterface.sidebar;
 
 import api.SubView;
 import gameObjects.GameObjectsCRUDInterface;
-import gameplay.Entity;
-import gameplay.Tile;
+import gameObjects.entity.SimpleEntityClass;
+import gameObjects.gameObject.GameObjectClass;
+import gameObjects.gameObject.GameObjectType;
+import gameObjects.sound.SimpleSoundClass;
+import gameObjects.tile.SimpleTileClass;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
 
@@ -23,20 +26,33 @@ public class SideView implements SubView<StackPane> {
         gameObjectsManager = manager;
         sidePane = new StackPane();
         TreeItem<String> rootNode = new TreeItem<>(ROOT_NAME);
-        objectMap.put(ROOT_NAME, new Category(ROOT_NAME));
+        // TODO: put the ROOT CategoryClass in the gameObjectsManager
         rootNode.setExpanded(true);
-        List<EditTreeItem> defaultList = new ArrayList<>(Arrays.asList(
-                new Entity(0, "O"),
-                new Entity(1, "X"),
-                new Tile(0, "Default Grid"),
-                new Sound(0, "Sound file")
+        List<GameObjectClass> defaultList = new ArrayList<>(Arrays.asList(
+                new SimpleEntityClass("O"),
+                new SimpleEntityClass("X"),
+                new SimpleTileClass("Default Grid")
+                // TODO: new SimpleSoundClass("Sound file")
         ));
-        for (EditTreeItem item : defaultList) {
-            objectMap.put(item.getName(), item);
-            TreeItem<String> objectLeaf = new TreeItem<>(item.getName());
+        for (GameObjectClass item : defaultList) {
+            switch (item.getType()) {
+                case CATEGORY:
+                    // TODO
+                    break;
+                case ENTITY:
+                    gameObjectsManager.createEntityClass(item.getClassName().getValue());
+                    break;
+                case TILE:
+                    gameObjectsManager.createTileClass(item.getClassName().getValue());
+                    break;
+                case SOUND:
+                    // TODO
+                    break;
+            }
+            TreeItem<String> objectLeaf = new TreeItem<>(item.getClassName().getValue());
             boolean found = false;
             for (TreeItem<String> categoryNode : rootNode.getChildren()) {
-                if (TreeItemType.valueOf(categoryNode.getValue()) == item.getType()) {
+                if (GameObjectType.valueOf(categoryNode.getValue()) == item.getType()) {
                     categoryNode.getChildren().add(objectLeaf);
                     found = true;
                     break;
