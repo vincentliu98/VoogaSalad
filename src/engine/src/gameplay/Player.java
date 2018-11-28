@@ -16,5 +16,6 @@ public class Player {
     public void addStat(String key, double value){ myStats.put(key, value); }
     public boolean isMyEntity(Entity entity) { return myEntityIDs.contains(entity.getID()); }
     public double getValue(String key){ return myStats.get(key); }
+    public Set<Integer> getMyEntities(){ return myEntityIDs; }
     public int getID(){ return myID; }
 }
