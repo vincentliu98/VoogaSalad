@@ -1,5 +1,5 @@
 import authoring.AuthoringTools;
-import gameObjects.GameObjectInstance;
+import gameObjects.gameObject.GameObjectInstance;
 import grids.PointImpl;
 import groovy.api.Ports;
 import phase.api.GameEvent;
