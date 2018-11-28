@@ -1,5 +1,8 @@
 package gameObjects;
 
+import gameObjects.gameObject.GameObjectClass;
+import gameObjects.gameObject.GameObjectInstance;
+
 import java.util.function.Consumer;
 import java.util.function.Function;
 

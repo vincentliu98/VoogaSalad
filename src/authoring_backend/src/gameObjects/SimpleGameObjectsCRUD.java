@@ -1,5 +1,16 @@
 package gameObjects;
 
+import gameObjects.entity.EntityClass;
+import gameObjects.entity.EntityInstance;
+import gameObjects.entity.SimpleEntityClass;
+import gameObjects.exception.DuplicateClassException;
+import gameObjects.exception.NoEntityClassException;
+import gameObjects.exception.NoTileClassException;
+import gameObjects.gameObject.GameObjectClass;
+import gameObjects.gameObject.GameObjectInstance;
+import gameObjects.tile.SimpleTileClass;
+import gameObjects.tile.TileClass;
+import gameObjects.tile.TileInstance;
 import grids.Point;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;

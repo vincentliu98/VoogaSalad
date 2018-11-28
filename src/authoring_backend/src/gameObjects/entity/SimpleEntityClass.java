@@ -1,5 +1,8 @@
-package gameObjects;
+package gameObjects.entity;
 
+import gameObjects.gameObject.GameObjectInstance;
+import gameObjects.TriConsumer;
+import gameObjects.exception.InvalidIdException;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

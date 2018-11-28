@@ -1,5 +1,8 @@
-package gameObjects;
+package gameObjects.entity;
 
+import gameObjects.gameObject.GameObjectClass;
+import gameObjects.gameObject.GameObjectInstance;
+import gameObjects.gameObject.GameObjectType;
 import javafx.beans.property.SimpleBooleanProperty;
 
 public interface EntityClass extends GameObjectClass {

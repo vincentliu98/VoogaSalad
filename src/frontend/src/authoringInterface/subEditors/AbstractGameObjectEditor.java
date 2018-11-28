@@ -1,12 +1,9 @@
 package authoringInterface.subEditors;
 
 import api.SubView;
-import authoringInterface.sidebar.treeItemEntries.EditTreeItem;
-import gameObjects.GameObjectClass;
-import gameObjects.GameObjectInstance;
-import gameObjects.GameObjectType;
+import gameObjects.gameObject.GameObjectClass;
+import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.GameObjectsCRUDInterface;
-import gameplay.GameObject;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;

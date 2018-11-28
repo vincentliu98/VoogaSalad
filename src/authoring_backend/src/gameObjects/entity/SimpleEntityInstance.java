@@ -1,33 +1,26 @@
-package gameObjects;
+package gameObjects.entity;
 
-import grids.Point;
-import grids.PointImpl;
+import gameObjects.gameObject.GameObjectInstance;
 import javafx.beans.property.*;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
-import javafx.collections.ObservableSet;
 
-import java.util.Comparator;
-import java.util.Set;
 import java.util.function.Consumer;
 
-public class SimpleTileInstance implements TileInstance {
+public class SimpleEntityInstance implements EntityInstance {
     private ReadOnlyStringWrapper className;
     private ReadOnlyIntegerWrapper instanceId;
-    private SimpleObjectProperty<Point> coord;
+    private SimpleIntegerProperty tileId;
     private ObservableMap<String, String> propertiesMap;
     private Consumer<GameObjectInstance> returnInstanceIdFunc;
 
-
-    SimpleTileInstance(String className, Point coord, ObservableMap<String, String> properties, Consumer<GameObjectInstance> returnInstanceIdFunc) {
-        this.className = new ReadOnlyStringWrapper();
-        this.className.set(className);
-        this.coord = new SimpleObjectProperty<>(coord);
+    SimpleEntityInstance(String className, int tileId, ObservableMap<String, String> properties, Consumer<GameObjectInstance> returnInstanceIdFunc) {
+        this.className = new ReadOnlyStringWrapper(className);
+        this.tileId = new ReadOnlyIntegerWrapper();
+        this.tileId.setValue(tileId);
         this.propertiesMap = properties;
         this.returnInstanceIdFunc = returnInstanceIdFunc;
         instanceId = new ReadOnlyIntegerWrapper();
     }
-
 
     @Override
     public ReadOnlyIntegerProperty getInstanceId() {
@@ -40,9 +33,7 @@ public class SimpleTileInstance implements TileInstance {
     }
 
     @Override
-    public ReadOnlyStringProperty getClassName() {
-        return className.getReadOnlyProperty();
-    }
+    public ReadOnlyStringProperty getClassName() { return className; }
 
     public Consumer<GameObjectInstance> getReturnInstanceIdFunc() {
         return returnInstanceIdFunc;
@@ -50,14 +41,18 @@ public class SimpleTileInstance implements TileInstance {
 
     @Override
     public boolean addProperty(String propertyName, String defaultValue) {
+        if (!propertiesMap.containsKey(propertyName)) {
+            propertiesMap.put(propertyName, defaultValue);
+            return true;
+        }
         return false;
     }
 
     @Override
     public boolean removeProperty(String propertyName) {
-        return false;
+        return propertiesMap.remove(propertyName) != null;
     }
 
     @Override
-    public Point getCoord() { return coord.get(); }
+    public SimpleIntegerProperty getTileID() { return tileId; }
 }

@@ -1,5 +1,11 @@
 package gameObjects;
 
+import gameObjects.entity.EntityClass;
+import gameObjects.exception.DuplicateClassException;
+import gameObjects.exception.NoEntityClassException;
+import gameObjects.exception.NoTileClassException;
+import gameObjects.tile.TileClass;
+
 /**
  *
  * This class encapsulates the Game Data for the GameObjects (Tiles and Entities). It provides methods to create, edit, and delete the Tile and Entity Classes.

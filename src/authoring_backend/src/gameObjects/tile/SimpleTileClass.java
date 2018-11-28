@@ -1,5 +1,9 @@
-package gameObjects;
+package gameObjects.tile;
 
+import gameObjects.TriConsumer;
+import gameObjects.TriFunction;
+import gameObjects.exception.InvalidPointsException;
+import gameObjects.gameObject.GameObjectInstance;
 import grids.Point;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
