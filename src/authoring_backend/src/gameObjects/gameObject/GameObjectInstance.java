@@ -32,6 +32,12 @@ public interface GameObjectInstance {
 
     /**
      *
+     * @param name
+     */
+    void setClassName(String name);
+
+    /**
+     *
      * @return
      */
     Consumer<GameObjectInstance> getReturnInstanceIdFunc();

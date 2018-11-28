@@ -91,6 +91,8 @@ public class SimpleTileClass implements TileClass {
 
     @Override
     public void setClassName(Consumer<SimpleStringProperty> setFunc) {
+
+
         setFunc.accept(className);
     }
 
