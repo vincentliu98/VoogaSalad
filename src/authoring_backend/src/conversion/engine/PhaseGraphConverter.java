@@ -12,6 +12,10 @@ import java.util.HashMap;
 import java.util.stream.Collectors;
 
 public class PhaseGraphConverter implements Converter {
+    /**
+     *  We convert all node names to hashCode, and we replace goTo('A') to goTo('A'.hashCode());
+     *  It's a dirty hack that might fail if hashCodes collide but ... it's not likely
+     */
     @Override
     public void marshal(Object o, HierarchicalStreamWriter writer, MarshallingContext ctx) {
         var graph = (PhaseGraphImpl) o;
@@ -23,7 +27,7 @@ public class PhaseGraphConverter implements Converter {
 
         var graphID = String.valueOf(Math.abs(graph.hashCode()));
         var nodeIDs = new HashMap<String, String>();
-        nodes.forEach(n -> nodeIDs.put(n.name(), String.valueOf(nodeIDs.size())));
+        nodes.forEach(n -> nodeIDs.put(n.name(), String.valueOf(n.name().hashCode())));
 
         for(var node : nodes) {
             writer.startNode("gameplay.Node");
@@ -37,7 +41,8 @@ public class PhaseGraphConverter implements Converter {
             writer.endNode();
 
             writer.startNode("myExecution");
-            writer.setValue(node.exec().transformToGroovy().get(""));
+            String execStr = node.exec().transformToGroovy().get("");
+            writer.setValue(execStr.replaceAll("GameData.goTo\\(('.*')\\)", "GameData.goTo\\($1.hashCode()\\)"));
             writer.endNode();
 
             writer.endNode();
@@ -71,7 +76,7 @@ public class PhaseGraphConverter implements Converter {
 
         writer.startNode("gameplay.Phase");
 
-        writer.startNode("myPhaseID");
+        writer.startNode("myID");
         writer.setValue(graphID);
         writer.endNode();
 

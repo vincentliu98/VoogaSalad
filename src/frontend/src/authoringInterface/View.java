@@ -44,7 +44,7 @@ public class View implements ParentView<SubView>, DraggingCanvas {
     public View(Stage primaryStage) {
         this.primaryStage = primaryStage;
         rootPane = new AnchorPane();
-        tools = new AuthoringTools();
+        tools = new AuthoringTools(5, 5);
         groovyPaneFactory = new GroovyPaneFactory(primaryStage, tools.factory());
 
         initializeElements();

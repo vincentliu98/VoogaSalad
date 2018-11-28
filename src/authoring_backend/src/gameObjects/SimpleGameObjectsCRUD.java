@@ -190,6 +190,12 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         return true;
     }
 
+    @Override
+    public void setDimension(int width, int height) {
+        numCol = width;
+        numRow = height;
+    }
+
 
     private Consumer<EntityInstance> addEntityInstanceToMapFunc() {
         return entityInstance -> entityInstanceMap.put(entityInstance.getInstanceId().getValue(), entityInstance);
@@ -231,6 +237,8 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         };
     }
 
+    public int getWidth() { return numCol; }
+    public int getHeight() { return numRow; }
     public Collection<TileClass> getTileClasses() { return tileClassMap.values(); }
     public Collection<EntityClass> getEntityClasses() { return entityClassMap.values(); }
     public Collection<TileInstance> getTileInstances() { return tileInstanceMap.values(); }
