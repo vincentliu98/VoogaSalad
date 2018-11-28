@@ -14,7 +14,7 @@ public class Initializer {
         initGameData(file);
     }
 
-    private void initGameData(File file){
+    public void initGameData(File file){
         myXMLParser.loadFile(file);
         GameData.setGameData(
             myXMLParser.getDimension(), myXMLParser.getPlayers(), myXMLParser.getEntities(),
