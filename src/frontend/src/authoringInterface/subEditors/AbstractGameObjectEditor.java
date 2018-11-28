@@ -2,6 +2,11 @@ package authoringInterface.subEditors;
 
 import api.SubView;
 import authoringInterface.sidebar.treeItemEntries.EditTreeItem;
+import gameObjects.GameObjectClass;
+import gameObjects.GameObjectInstance;
+import gameObjects.GameObjectType;
+import gameObjects.GameObjectsCRUDInterface;
+import gameplay.GameObject;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -17,20 +22,21 @@ import java.util.Map;
  *
  * @author Haotian Wang
  */
-public abstract class AbstractGameObjectEditor<T extends EditTreeItem> implements SubView<AnchorPane> {
+public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V extends GameObjectInstance> implements SubView<AnchorPane> {
     protected AnchorPane rootPane;
     protected Text inputText;
     protected TextField nameField;
     protected Button confirm;
     protected Button cancel;
     protected TreeItem<String> treeItem;
-    protected Map<String, EditTreeItem> objectMap;
-    protected Map<Node, EditTreeItem> nodeToObjectMap;
+    protected GameObjectsCRUDInterface gameObjectManager;
+    protected Map<Node, GameObjectInstance> nodeToInstanceMap;
     protected EditingMode editingMode;
     protected Node nodeEdited;
 
-    public AbstractGameObjectEditor() {
+    public AbstractGameObjectEditor(GameObjectsCRUDInterface manager) {
         editingMode = EditingMode.NONE;
+        gameObjectManager = manager;
         rootPane = new AnchorPane();
         inputText = new Text();
         nameField = new TextField();
@@ -73,11 +79,9 @@ public abstract class AbstractGameObjectEditor<T extends EditTreeItem> implement
      * Register the editor with an existing TreeItem in order to update or edit existing entries.
      *
      * @param treeItem: An existing TreeItem.
-     * @param map: The map from String name to Entity.
      */
-    public void editTreeItem(TreeItem<String> treeItem, Map<String, EditTreeItem> map) {
+    public void editTreeItem(TreeItem<String> treeItem) {
         this.treeItem = treeItem;
-        this.objectMap = map;
         editingMode = EditingMode.EDIT_TREEITEM;
     }
 
@@ -85,11 +89,9 @@ public abstract class AbstractGameObjectEditor<T extends EditTreeItem> implement
      * Register the object map.
      *
      * @param treeItem: An existing TreeItem.
-     * @param map: The map from String name to Entity.
      */
-    public void addTreeItem(TreeItem<String> treeItem, Map<String, EditTreeItem> map) {
+    public void addTreeItem(TreeItem<String> treeItem) {
         this.treeItem = treeItem;
-        this.objectMap = map;
         editingMode = EditingMode.ADD_TREEITEM;
     }
 
@@ -99,8 +101,8 @@ public abstract class AbstractGameObjectEditor<T extends EditTreeItem> implement
      * @param node: The node that is to be altered.
      * @param map: The node to user object map.
      */
-    public void editNode(Node node, Map<Node, EditTreeItem> map) {
-        this.nodeToObjectMap = map;
+    public void editNode(Node node, Map<Node, GameObjectInstance> map) {
+        this.nodeToInstanceMap = map;
         this.nodeEdited = node;
         editingMode = EditingMode.EDIT_NODE;
     }
@@ -110,12 +112,24 @@ public abstract class AbstractGameObjectEditor<T extends EditTreeItem> implement
      *
      * @param userObject
      */
-    public abstract void readObject(T userObject);
+    public abstract void readObject(V userObject);
 
     /**
      * Return the object after edits in this ObjectEditor.
      *
      * @return A specific user object.
      */
-    public abstract T getObject();
+    public abstract V getObject();
+
+    /**
+     * Read the GameObjectClass represented by this editor.
+     *
+     * @param gameObjectClass: The GameObjectClass interface that is being read.
+     */
+    public abstract void readGameObjectClass(T gameObjectClass);
+
+    /**
+     * @return The GameObjectClass stored in the internal memory right now.
+     */
+    public abstract T getGameObjectClass();
 }
