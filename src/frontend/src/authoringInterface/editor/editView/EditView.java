@@ -50,9 +50,6 @@ public class EditView implements SubView<TabPane> {
         Tab GridTab = new Tab("Grid");
         GridTab.setContent(new EditGridView(sideView).getView());
 
-        Tab EntityTab = new Tab("Entity");
-        EntityTab.setContent(new EditEntityView(sideView).getView());
-
         Tab PhaseTab = new Tab("Phase");
         PhaseTab.setContent(
                new PhaseChooserPane(
@@ -60,9 +57,8 @@ public class EditView implements SubView<TabPane> {
                        groovyPaneFactory::gen
                ).getView()
         );
-        Tab LevelTab = new Tab("Level");
 
-        tabPane.getTabs().addAll(GridTab,EntityTab,PhaseTab, LevelTab);
+        tabPane.getTabs().addAll(GridTab, PhaseTab);
 
     }
 

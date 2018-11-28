@@ -81,7 +81,6 @@ public class PhasePane implements SubView<StackPane> {
         selectedEdge = new SimpleObjectProperty<>();
         selectedNode = new SimpleObjectProperty<>();
 
-
         selectedEdge.addListener((e, o, n) -> {
             if(o != null && lines.contains(o)) o.setColor(Color.BLACK);
             if(n != null) {
@@ -129,6 +128,7 @@ public class PhasePane implements SubView<StackPane> {
                 ICON_WIDTH, ICON_HEIGHT, true, true
         );
         var nodeImgView = draggableGroovyIcon(nodeImg);
+        nodeImgView.getStyleClass().add("cursorImage");
         pane.getChildren().add(nodeImgView);
         StackPane.setAlignment(pane, Pos.BOTTOM_RIGHT);
         root.getChildren().add(pane);
@@ -231,6 +231,7 @@ public class PhasePane implements SubView<StackPane> {
 
             graph.addEdge(phaseDB.createTransition(node1.model(), event, node2.model()));
             lines.add(edgeLine);
+            edgeLine.getStyleClass().add("cursorImage");
             edgeLine.toBack();
         } catch (Throwable t) { displayError(t.toString());}
     }
@@ -239,6 +240,7 @@ public class PhasePane implements SubView<StackPane> {
         try {
             graph.addNode(node.model());
             nodes.add(node);
+            node.getStyleClass().add("cursorImage");
             // Add mouseEvent to the GroovyNode to update position
             node.setOnMousePressed(this::nodeMousePressedHandler);
             node.setOnMouseDragged(this::nodeMouseDraggedHandler);
