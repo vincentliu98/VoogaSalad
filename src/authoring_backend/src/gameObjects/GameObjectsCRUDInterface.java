@@ -1,5 +1,12 @@
 package gameObjects;
 
+import gameObjects.entity.EntityClass;
+import gameObjects.exception.DuplicateClassException;
+import gameObjects.exception.NoEntityClassException;
+import gameObjects.exception.NoTileClassException;
+import gameObjects.gameObject.GameObjectClass;
+import gameObjects.tile.TileClass;
+
 /**
  *
  * This class encapsulates the Game Data for the GameObjects (Tiles and Entities). It provides methods to create, edit, and delete the Tile and Entity Classes.
@@ -71,6 +78,18 @@ public interface GameObjectsCRUDInterface {
 
     /**
      *  Sets the dimension of the entire grid
+     * @param width
+     * @param height
      */
     void setDimension(int width, int height);
+
+    /**
+     *
+     * @param className
+     * @return
+     */
+    GameObjectClass getGameObjectClass(String className);
+
+    boolean changeGameObjectClassName(String oldName, String newName);
+
 }
