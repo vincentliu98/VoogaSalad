@@ -206,6 +206,21 @@
                 entityName = "O";
             }
             GameData.createEntity(entityName, $clicked.getID(), turn);
+            GameData.updateViews();
+            entities = GameData.getPlayer(turn).getMyEntities();
+            def tileSet = [] as HashSet;
+            for (Integer i : entities){ tileSet.add(GameData.getEntity(i).getTile()); }
+            if ((tileSet.contains(1) &amp;&amp; tileSet.contains(2) &amp;&amp; tileSet.contains(3)) ||
+                (tileSet.contains(4) &amp;&amp; tileSet.contains(5) &amp;&amp; tileSet.contains(6)) ||
+                (tileSet.contains(7) &amp;&amp; tileSet.contains(8) &amp;&amp; tileSet.contains(9)) ||
+                (tileSet.contains(1) &amp;&amp; tileSet.contains(4) &amp;&amp; tileSet.contains(7)) ||
+                (tileSet.contains(2) &amp;&amp; tileSet.contains(5) &amp;&amp; tileSet.contains(8)) ||
+                (tileSet.contains(3) &amp;&amp; tileSet.contains(6) &amp;&amp; tileSet.contains(9)) ||
+                (tileSet.contains(1) &amp;&amp; tileSet.contains(5) &amp;&amp; tileSet.contains(9)) ||
+                (tileSet.contains(3) &amp;&amp; tileSet.contains(5) &amp;&amp; tileSet.contains(7))) {
+                    GameData.getTurn().endGame(turn);
+                    return;
+            }
             GameData.setCurrentPlayerID(1-turn);
             GameData.getTurn().startPhase();
         </myExecution>
@@ -221,17 +236,6 @@
             else { $return = false }
         </myGuard>
     </gameplay.Edge>
-
-     <!--<gameplay.Edge>-->
-        <!--<myPhaseID>1</myPhaseID>-->
-        <!--<myStartNodeID>2</myStartNodeID>-->
-        <!--<myEndNodeID>2</myEndNodeID>-->
-        <!--<myTrigger class="phase.api.GameEvent$MouseClick"/>-->
-        <!--<myGuard>-->
-            <!--if($clicked.getName() == 'Box' &amp;&amp; $clicked.hasNoEntities()) { $return = true }-->
-            <!--else { $return = false }-->
-        <!--</myGuard>-->
-    <!--</gameplay.Edge> -->
 
     <gameplay.Turn>
         <myCurrentPhaseID>1</myCurrentPhaseID>
