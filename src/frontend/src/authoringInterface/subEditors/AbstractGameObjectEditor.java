@@ -27,7 +27,6 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
     protected Button cancel;
     protected TreeItem<String> treeItem;
     protected GameObjectsCRUDInterface gameObjectManager;
-    protected Map<Node, GameObjectInstance> nodeToInstanceMap;
     protected EditingMode editingMode;
     protected Node nodeEdited;
 
@@ -76,10 +75,12 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
      * Register the editor with an existing TreeItem in order to update or edit existing entries.
      *
      * @param treeItem: An existing TreeItem.
+     * @param gameObjectClass: The GameObjectClass associated with the TreeItem to be edited by the user.
      */
-    public void editTreeItem(TreeItem<String> treeItem) {
+    public void editTreeItem(TreeItem<String> treeItem, T gameObjectClass) {
         this.treeItem = treeItem;
         editingMode = EditingMode.EDIT_TREEITEM;
+        readGameObjectClass(gameObjectClass);
     }
 
     /**
@@ -96,37 +97,37 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
      * Register the node to Object map.
      *
      * @param node: The node that is to be altered.
-     * @param map: The node to user object map.
+     * @param gameObjectInstance: The GameObjectInstance that is associated with the Node on the rootPane.
      */
-    public void editNode(Node node, Map<Node, GameObjectInstance> map) {
-        this.nodeToInstanceMap = map;
+    public void editNode(Node node, V gameObjectInstance) {
         this.nodeEdited = node;
         editingMode = EditingMode.EDIT_NODE;
+        readGameObjectInstance(gameObjectInstance);
     }
 
     /**
      * This method brings up an editor that contains the data of an existing object that is already created.
      *
-     * @param userObject
+     * @param gameObject
      */
-    public abstract void readObject(V userObject);
-
-    /**
-     * Return the object after edits in this ObjectEditor.
-     *
-     * @return A specific user object.
-     */
-    public abstract V getObject();
-
+    public abstract void readGameObjectInstance(V gameObject);
+//
+//    /**
+//     * Return the object after edits in this ObjectEditor.
+//     *
+//     * @return A specific user object.
+//     */
+//    public abstract V getObject();
+//
     /**
      * Read the GameObjectClass represented by this editor.
      *
      * @param gameObjectClass: The GameObjectClass interface that is being read.
      */
     public abstract void readGameObjectClass(T gameObjectClass);
-
-    /**
-     * @return The GameObjectClass stored in the internal memory right now.
-     */
-    public abstract T getGameObjectClass();
+//
+//    /**
+//     * @return The GameObjectClass stored in the internal memory right now.
+//     */
+//    public abstract T getGameObjectClass();
 }

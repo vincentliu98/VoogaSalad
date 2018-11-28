@@ -16,33 +16,13 @@ public class CategoryEditor extends AbstractGameObjectEditor<CategoryClass, Cate
     }
 
     /**
-     * This method returns the responsible JavaFx Node responsible to be added or deleted from other graphical elements.
-     *
-     * @return A "root" JavaFx Node representative of this object.
-     */
-    @Override
-    public AnchorPane getView() {
-        return null;
-    }
-
-    /**
      * This method brings up an editor that contains the data of an existing object that is already created.
      *
-     * @param userObject
+     * @param gameObject
      */
     @Override
-    public void readObject(CategoryInstance userObject) {
+    public void readGameObjectInstance(CategoryInstance gameObject) {
 
-    }
-
-    /**
-     * Return the object after edits in this ObjectEditor.
-     *
-     * @return A specific user object.
-     */
-    @Override
-    public CategoryInstance getObject() {
-        return null;
     }
 
     /**
@@ -53,13 +33,5 @@ public class CategoryEditor extends AbstractGameObjectEditor<CategoryClass, Cate
     @Override
     public void readGameObjectClass(CategoryClass gameObjectClass) {
 
-    }
-
-    /**
-     * @return The GameObjectClass stored in the internal memory right now.
-     */
-    @Override
-    public CategoryClass getGameObjectClass() {
-        return null;
     }
 }
