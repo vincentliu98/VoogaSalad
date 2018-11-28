@@ -1,5 +1,14 @@
 package gameplay;
 
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.stage.Stage;
+
+import java.io.File;
+import java.util.Optional;
+
 public class Turn {
     private int myCurrentPhaseID;
     private int myCurrentPlayerID;
@@ -18,7 +27,15 @@ public class Turn {
         GameData.getPhase(myCurrentPhaseID).startTraversal();
     }
 
-    public void endGame(){
+    public void endGame(int winnerID){
         // end the game
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation Dialog");
+        alert.setHeaderText(String.format("Player %d has won!", winnerID));
+        alert.setContentText("Restart?");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            // TODO: Figure out how to restart within window
+        } else { }
     }
 }
