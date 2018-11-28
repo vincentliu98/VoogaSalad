@@ -14,7 +14,6 @@ import java.util.Map;
  * @author Haotian Wang
  */
 public class CustomTreeCellImpl extends TreeCell<String> {
-    private Map<String, EditTreeItem> objectMap;
     private TextField textField;
     private ContextMenu addMenu = new ContextMenu();
 

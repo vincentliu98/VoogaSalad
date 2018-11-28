@@ -4,6 +4,7 @@ import api.DraggingCanvas;
 import api.SubView;
 import authoringInterface.sidebar.SideViewInterface;
 import authoringInterface.subEditors.*;
+import gameObjects.GameObjectsCRUDInterface;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import gameplay.Entity;
@@ -33,11 +34,15 @@ import java.util.Map;
 public class EditGridView implements SubView<ScrollPane>, DraggingCanvas {
     private GridPane gridScrollView;
     private ScrollPane scrollPane;
-    private SideViewInterface sideView;
+    private int rowNumber;
+    private int colNumber;
+    private GameObjectsCRUDInterface gameObjectManager;
     private Map<Node, GameObjectInstance> nodeToGameObjectInstanceMap;
 
-    public EditGridView(SideViewInterface sideView) {
-        this.sideView = sideView;
+    public EditGridView(int row, int col, GameObjectsCRUDInterface manager) {
+        rowNumber = row;
+        colNumber = col;
+        gameObjectManager = manager;
         scrollPane = new ScrollPane();
         nodeToGameObjectInstanceMap = new HashMap<>();
         gridScrollView = new GridPane();

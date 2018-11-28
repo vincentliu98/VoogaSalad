@@ -1,6 +1,7 @@
 package authoringInterface.sidebar;
 
 import api.SubView;
+import gameObjects.GameObjectsCRUDInterface;
 import gameplay.Entity;
 import gameplay.Tile;
 import javafx.scene.control.*;
@@ -15,10 +16,11 @@ import java.util.*;
  */
 public class SideView implements SubView<StackPane>, SideViewInterface {
     private StackPane sidePane;
-    private Map<String, EditTreeItem> objectMap;
+    private GameObjectsCRUDInterface gameObjectsManager;
     private static final String ROOT_NAME = "User Objects";
 
-    public SideView() {
+    public SideView(GameObjectsCRUDInterface manager) {
+        gameObjectsManager = manager;
         sidePane = new StackPane();
         objectMap = new HashMap<>();
         TreeItem<String> rootNode = new TreeItem<>(ROOT_NAME);
