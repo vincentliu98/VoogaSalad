@@ -16,21 +16,17 @@ public class SoundEditor extends AbstractGameObjectEditor<SoundClass, SoundInsta
 
     /**
      * This method brings up an editor that contains the data of an existing object that is already created.
-     *
-     * @param gameObject
      */
     @Override
-    public void readGameObjectInstance(SoundInstance gameObject) {
+    public void readGameObjectInstance() {
 
     }
 
     /**
      * Read the GameObjectClass represented by this editor.
-     *
-     * @param gameObjectClass : The GameObjectClass interface that is being read.
      */
     @Override
-    public void readGameObjectClass(SoundClass gameObjectClass) {
+    public void readGameObjectClass() {
 
     }
 }

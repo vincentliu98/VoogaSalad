@@ -26,7 +26,7 @@ public class SideView implements SubView<StackPane> {
         gameObjectsManager = manager;
         sidePane = new StackPane();
         TreeItem<String> rootNode = new TreeItem<>(ROOT_NAME);
-        // TODO: put the ROOT CategoryClass in the gameObjectsManager
+        gameObjectsManager.createCategoryClass(ROOT_NAME);
         rootNode.setExpanded(true);
         List<GameObjectClass> defaultList = new ArrayList<>(Arrays.asList(
                 new SimpleEntityClass("O"),

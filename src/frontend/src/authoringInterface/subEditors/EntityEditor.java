@@ -3,6 +3,7 @@ package authoringInterface.subEditors;
 import gameObjects.GameObjectsCRUDInterface;
 import gameObjects.entity.EntityClass;
 import gameObjects.entity.EntityInstance;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TreeItem;
@@ -51,17 +52,17 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                 alert.setContentText("You must give your entity a non-empty name");
                 alert.showAndWait();
             } else {
-                gameObjectManager.createEntityClass(nameField.getText().trim());
                 ((Stage) rootPane.getScene().getWindow()).close();
                 switch (editingMode) {
                     case ADD_TREEITEM:
+                        gameObjectManager.createEntityClass(nameField.getText().trim());
                         EntityClass entityClass = gameObjectManager.getEntityClass(nameField.getText().trim());
                         TreeItem<String> newItem = new TreeItem<>(entityClass.getClassName().getValue());
                         entityClass.addImagePath(imagePath);
                         ImageView icon = new ImageView(preview.getImage());
                         icon.setFitWidth(50);
                         icon.setFitHeight(50);
-                        newItem.setGraphic(preview);
+                        newItem.setGraphic(icon);
                         treeItem.getChildren().add(newItem);
                         break;
                     case NONE:
@@ -72,8 +73,20 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                         } else if (nodeEdited instanceof Text) {
                             ((Text) nodeEdited).setText(nameField.getText());
                         }
+                        // TODO make changes to the GameObjectInstance as well. Waiting for changes at JC's side.
                         break;
                     case EDIT_TREEITEM:
+                        if (imagePath != null) {
+                            gameObjectClass.addImagePath(imagePath);
+                        }
+                        gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName().getValue(), nameField.getText());
+                        if (preview.getImage() != null) {
+                            ImageView icon1 = new ImageView(preview.getImage());
+                            icon1.setFitWidth(50);
+                            icon1.setFitHeight(50);
+                            treeItem.setGraphic(icon1);
+                        }
+                        treeItem.setValue(nameField.getText());
                         break;
                 }
             }
@@ -84,22 +97,26 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
 
     /**
      * This method brings up an editor that contains the data of an existing object that is already created.
-     *
-     * @param gameObject
      */
     @Override
-    public void readGameObjectInstance(EntityInstance gameObject) {
-
+    public void readGameObjectInstance() {
+        nameField.setText(gameObjectInstance.getClassName().getValue());
+        // TODO: REmove this disgusting shite
+        preview.setImage(new Image(gameObjectManager.getEntityClass(gameObjectInstance.getClassName().getValue()).getImagePathList().get(0)));
     }
 
     /**
      * Read the GameObjectClass represented by this editor.
-     *
-     * @param gameObjectClass : The GameObjectClass interface that is being read.
      */
     @Override
-    public void readGameObjectClass(EntityClass gameObjectClass) {
-
+    public void readGameObjectClass() {
+        nameField.setText(gameObjectClass.getClassName().getValue());
+        // TODO: REmove this disgusting shite
+        try {
+            preview.setImage(new Image(gameObjectManager.getEntityClass(gameObjectClass.getClassName().getValue()).getImagePathList().get(0)));
+        } catch (IndexOutOfBoundsException e) {
+            return;
+        }
     }
 
     private void setupLayout() {
