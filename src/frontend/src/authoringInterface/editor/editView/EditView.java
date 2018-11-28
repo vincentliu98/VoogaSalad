@@ -3,7 +3,7 @@ package authoringInterface.editor.editView;
 import api.SubView;
 import authoring.AuthoringTools;
 import authoringInterface.editor.memento.Editor;
-import authoringInterface.sidebar.SideViewInterface;
+import authoringInterface.sidebar.SideView;
 import gameObjects.GameObjectsCRUDInterface;
 import graphUI.groovy.GroovyPaneFactory;
 import graphUI.phase.PhaseChooserPane;
@@ -25,7 +25,6 @@ import javafx.scene.control.TabPane.TabClosingPolicy;
 
 public class EditView implements SubView<TabPane> {
     private final TabPane tabPane = new TabPane();
-    private SideViewInterface sideView;
     private AuthoringTools authTools;
     private final Editor editor = new Editor();
     private GroovyPaneFactory groovyPaneFactory;
@@ -39,9 +38,9 @@ public class EditView implements SubView<TabPane> {
      * @return A tabView Node to be displayed at the left side of the createGraph window.
      */
     public EditView(AuthoringTools authTools, GroovyPaneFactory groovyPaneFactory, int row, int col, GameObjectsCRUDInterface manager){
-        this.sideView = sideView;
         this.authTools = authTools;
         this.groovyPaneFactory = groovyPaneFactory;
+        objectManager = manager;
         rowNumber = row;
         colNumber = col;
         initializeTab();
@@ -57,7 +56,7 @@ public class EditView implements SubView<TabPane> {
         GridTab.setContent(new EditGridView(rowNumber, colNumber, objectManager).getView());
 
         Tab EntityTab = new Tab("Entity");
-        EntityTab.setContent(new EditEntityView(sideView).getView());
+        EntityTab.setContent(new EditEntityView().getView());
 
         Tab PhaseTab = new Tab("Phase");
         PhaseTab.setContent(

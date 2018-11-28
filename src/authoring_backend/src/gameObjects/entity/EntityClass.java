@@ -11,7 +11,7 @@ public interface EntityClass extends GameObjectClass {
 
     void setMovable(boolean move);
 
-    GameObjectInstance createInstance(int tileId);
+    EntityInstance createInstance(int tileId);
 
     @Override
     default GameObjectType getType() {

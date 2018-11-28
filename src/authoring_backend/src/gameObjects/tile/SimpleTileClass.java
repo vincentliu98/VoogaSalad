@@ -149,7 +149,7 @@ public class SimpleTileClass implements TileClass {
     }
 
     @Override
-    public GameObjectInstance createInstance(Point coord) {
+    public TileInstance createInstance(Point coord) {
         if (verifyPointsFunc.apply(coord, numRow, numCol)) {
             throw new InvalidPointsException();
         }

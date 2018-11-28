@@ -2,9 +2,11 @@ package authoringInterface.editor.editView;
 
 import api.DraggingCanvas;
 import api.SubView;
-import authoringInterface.sidebar.SideViewInterface;
 import authoringInterface.subEditors.*;
 import gameObjects.GameObjectsCRUDInterface;
+import gameObjects.entity.EntityClass;
+import gameObjects.entity.EntityInstance;
+import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import gameplay.Entity;
@@ -13,6 +15,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseDragEvent;
@@ -34,20 +37,16 @@ import java.util.Map;
 public class EditGridView implements SubView<ScrollPane>, DraggingCanvas {
     private GridPane gridScrollView;
     private ScrollPane scrollPane;
-    private int rowNumber;
-    private int colNumber;
     private GameObjectsCRUDInterface gameObjectManager;
     private Map<Node, GameObjectInstance> nodeToGameObjectInstanceMap;
 
     public EditGridView(int row, int col, GameObjectsCRUDInterface manager) {
-        rowNumber = row;
-        colNumber = col;
         gameObjectManager = manager;
         scrollPane = new ScrollPane();
         nodeToGameObjectInstanceMap = new HashMap<>();
         gridScrollView = new GridPane();
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
                 StackPane cell = new StackPane();
                 cell.setPrefWidth(100);
                 cell.setPrefHeight(100);
@@ -73,19 +72,19 @@ public class EditGridView implements SubView<ScrollPane>, DraggingCanvas {
             AbstractGameObjectEditor editor = null;
             switch (type) {
                 case ENTITY:
-                    editor = new EntityEditor();
+                    editor = new EntityEditor(gameObjectManager);
                     editor.readObject(userObject);
                 case SOUND:
-                    editor = new SoundEditor();
+                    editor = new SoundEditor(gameObjectManager);
                     editor.readObject(userObject);
                 case TILE:
-                    editor = new TileEditor();
+                    editor = new TileEditor(gameObjectManager);
                     editor.readObject(userObject);
                 case CATEGORY:
-                    editor = new CategoryEditor();
+                    editor = new CategoryEditor(gameObjectManager);
                     editor.readObject(userObject);
             }
-            editor.editNode(targetNode, nodeToObjectMap);
+            editor.editNode(targetNode, nodeToGameObjectInstanceMap);
             dialogStage.setScene(new Scene(editor.getView(), 500, 500));
             dialogStage.show();
         }
@@ -108,20 +107,24 @@ public class EditGridView implements SubView<ScrollPane>, DraggingCanvas {
                     return;
                 }
                 StackPane intersected = (StackPane) e.getTarget();
-                EditTreeItem object = sideView.getObject(item.getValue());
-                TreeItemType type = object.getType();
+                GameObjectClass objectClass = gameObjectManager.getGameObjectClass(item.getValue());
+                GameObjectType type = objectClass.getType();
                 switch (type) {
                     case ENTITY:
-                        if (((Entity) object).getSprite() == null) {
-                            Text deploy = new Text(object.getName());
+                        if (objectClass.getImagePathList().isEmpty()) {
+                            Text deploy = new Text(objectClass.getClassName().getValue());
                             deploy.setOnMouseClicked(e1 -> handleDoubleClick(e1, deploy));
                             intersected.getChildren().add(deploy);
-                            nodeToObjectMap.put(deploy, object);
+                            // TODO: get tile id
+                            EntityInstance objectInstance = ((EntityClass) objectClass).createInstance(0);
+                            nodeToGameObjectInstanceMap.put(deploy, objectInstance);
                         } else {
-                            ImageView deploy = new ImageView(((Entity) object).getSprite());
+                            ImageView deploy = new ImageView(new Image(objectClass.getImagePathList().get(0)));
                             deploy.setOnMouseClicked(e1 -> handleDoubleClick(e1, deploy));
                             intersected.getChildren().add(deploy);
-                            nodeToObjectMap.put(deploy, object);
+                            // TODO: get tile id
+                            EntityInstance objectInstance = ((EntityClass) objectClass).createInstance(0);
+                            nodeToGameObjectInstanceMap.put(deploy, objectInstance);
                         }
                         break;
                 }

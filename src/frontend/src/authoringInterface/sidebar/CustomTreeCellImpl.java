@@ -1,12 +1,11 @@
 package authoringInterface.sidebar;
 
 import authoringInterface.subEditors.EntityEditor;
+import gameObjects.GameObjectsCRUDInterface;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
-
-import java.util.Map;
 
 /**
  * This class organizes the cell factory call back methods into a nicer format.
@@ -17,18 +16,17 @@ public class CustomTreeCellImpl extends TreeCell<String> {
     private TextField textField;
     private ContextMenu addMenu = new ContextMenu();
 
-    public CustomTreeCellImpl(Map<String, EditTreeItem> map) {
-        objectMap = map;
+    public CustomTreeCellImpl(GameObjectsCRUDInterface manager) {
         MenuItem addMenuItem = new MenuItem("Add an entry");
         addMenuItem.setOnAction(e -> {
             int id = getTreeItem().getChildren().size();
             switch (getItem()) {
                 case "ENTITY":
                     Stage dialogStage = new Stage();
-                    EntityEditor editor = new EntityEditor();
+                    EntityEditor editor = new EntityEditor(manager);
                     dialogStage.setScene(new Scene(editor.getView(), 500, 500));
                     dialogStage.show();
-                    editor.addTreeItem(getTreeItem(), objectMap);
+                    editor.addTreeItem(getTreeItem());
                     break;
                 case "SOUND":
                     break;
