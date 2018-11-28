@@ -108,5 +108,8 @@ public interface GameObjectClass {
      */
     boolean deleteInstance(int id);
 
+    /**
+     * @return The GameObjectType enum variable for this GameObjectClass
+     */
     GameObjectType getType();
 }

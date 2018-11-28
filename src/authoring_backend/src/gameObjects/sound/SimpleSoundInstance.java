@@ -1,6 +1,7 @@
 package gameObjects.sound;
 
 import gameObjects.gameObject.GameObjectInstance;
+import gameObjects.gameObject.GameObjectType;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -30,6 +31,14 @@ public class SimpleSoundInstance implements SoundInstance {
     @Override
     public ReadOnlyStringProperty getClassName() {
         return null;
+    }
+
+    /**
+     * @param name
+     */
+    @Override
+    public void setClassName(String name) {
+
     }
 
     /**

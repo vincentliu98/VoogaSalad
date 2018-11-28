@@ -162,9 +162,4 @@ public class SimpleCategroyClass implements CategoryClass{
     public boolean deleteInstance(int id) {
         return false;
     }
-
-    @Override
-    public GameObjectType getType() {
-        return null;
-    }
 }

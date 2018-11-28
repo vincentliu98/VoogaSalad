@@ -34,6 +34,14 @@ public class SimpleCategoryInstance implements CategoryInstance {
     }
 
     /**
+     * @param name
+     */
+    @Override
+    public void setClassName(String name) {
+
+    }
+
+    /**
      * @return
      */
     @Override
@@ -58,10 +66,5 @@ public class SimpleCategoryInstance implements CategoryInstance {
     @Override
     public boolean removeProperty(String propertyName) {
         return false;
-    }
-
-    @Override
-    public GameObjectType getType() {
-        return null;
     }
 }

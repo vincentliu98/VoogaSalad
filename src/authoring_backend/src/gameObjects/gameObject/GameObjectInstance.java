@@ -58,5 +58,8 @@ public interface GameObjectInstance {
      */
     boolean removeProperty(String propertyName);
 
+    /**
+     * @return The GameObjectType enum variable for this GameObjectInstance object.
+     */
     GameObjectType getType();
 }
