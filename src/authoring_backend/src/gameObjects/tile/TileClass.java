@@ -17,6 +17,7 @@ public interface TileClass extends GameObjectClass {
 
     GameObjectInstance createInstance(Point coord);
 
+    @Override
     default GameObjectType getType() {
         return GameObjectType.TILE;
     }

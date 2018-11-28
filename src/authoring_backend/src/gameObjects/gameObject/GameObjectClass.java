@@ -108,4 +108,5 @@ public interface GameObjectClass {
      */
     boolean deleteInstance(int id);
 
+    GameObjectType getType();
 }

@@ -4,6 +4,8 @@ import api.DraggingCanvas;
 import api.SubView;
 import authoringInterface.sidebar.SideViewInterface;
 import authoringInterface.subEditors.*;
+import gameObjects.gameObject.GameObjectInstance;
+import gameObjects.gameObject.GameObjectType;
 import gameplay.Entity;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -32,12 +34,12 @@ public class EditGridView implements SubView<ScrollPane>, DraggingCanvas {
     private GridPane gridScrollView;
     private ScrollPane scrollPane;
     private SideViewInterface sideView;
-    private Map<Node, EditTreeItem> nodeToObjectMap;
+    private Map<Node, GameObjectInstance> nodeToGameObjectInstanceMap;
 
     public EditGridView(SideViewInterface sideView) {
         this.sideView = sideView;
         scrollPane = new ScrollPane();
-        nodeToObjectMap = new HashMap<>();
+        nodeToGameObjectInstanceMap = new HashMap<>();
         gridScrollView = new GridPane();
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
@@ -60,8 +62,8 @@ public class EditGridView implements SubView<ScrollPane>, DraggingCanvas {
      */
     private void handleDoubleClick(MouseEvent event, Node targetNode) {
         if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) {
-            EditTreeItem userObject = nodeToObjectMap.get(targetNode);
-            TreeItemType type = userObject.getType();
+            GameObjectInstance userObject = nodeToGameObjectInstanceMap.get(targetNode);
+            GameObjectType type = userObject.getType();
             Stage dialogStage = new Stage();
             AbstractGameObjectEditor editor = null;
             switch (type) {

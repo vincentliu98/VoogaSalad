@@ -51,4 +51,6 @@ public interface GameObjectInstance {
      * @return
      */
     boolean removeProperty(String propertyName);
+
+    GameObjectType getType();
 }

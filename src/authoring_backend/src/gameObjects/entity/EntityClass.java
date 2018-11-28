@@ -13,6 +13,7 @@ public interface EntityClass extends GameObjectClass {
 
     GameObjectInstance createInstance(int tileId);
 
+    @Override
     default GameObjectType getType() {
         return GameObjectType.ENTITY;
     }

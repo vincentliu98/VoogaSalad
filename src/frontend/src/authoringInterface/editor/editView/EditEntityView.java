@@ -3,7 +3,7 @@ package authoringInterface.editor.editView;
 import api.DraggingCanvas;
 import api.SubView;
 import authoringInterface.sidebar.SideViewInterface;
-import authoringInterface.sidebar.treeItemEntries.EditTreeItem;
+import gameObjects.gameObject.GameObjectInstance;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
@@ -16,14 +16,13 @@ public class EditEntityView implements SubView<ScrollPane>, DraggingCanvas {
     private GridPane entityScrollView;
     private ScrollPane scrollPane;
     private SideViewInterface sideView;
-    private Map<Node, EditTreeItem> nodeToObjectMap;
+    private Map<Node, GameObjectInstance> nodeToGameObjectInstanceMap;
 
     public EditEntityView(SideViewInterface sideView) {
         this.sideView = sideView;
         scrollPane = new ScrollPane();
-        nodeToObjectMap = new HashMap<>();
+        nodeToGameObjectInstanceMap = new HashMap<>();
         entityScrollView = new GridPane();
-
     }
 
     @Override
