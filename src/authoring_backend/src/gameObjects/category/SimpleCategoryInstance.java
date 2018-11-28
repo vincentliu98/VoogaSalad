@@ -33,11 +33,6 @@ public class SimpleCategoryInstance implements CategoryInstance {
         return null;
     }
 
-    @Override
-    public void setClassName(String name) {
-
-    }
-
     /**
      * @param name
      */
