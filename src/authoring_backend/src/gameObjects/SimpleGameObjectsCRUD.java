@@ -12,6 +12,7 @@ import gameObjects.tile.SimpleTileClass;
 import gameObjects.tile.TileClass;
 import gameObjects.tile.TileInstance;
 import grids.Point;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
@@ -107,6 +108,10 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         }
         tileClassMap.put(newName, tileClassMap.get(oldName));
         tileClassMap.remove(oldName);
+        Consumer<SimpleStringProperty> c = s -> {
+          s.setValue(newName);
+        };
+        tileClassMap.get(newName).setClassName(c);
         for (Map.Entry<Integer, TileInstance> e : tileInstanceMap.entrySet()) {
             if (e.getValue().getClassName().equals(oldName)) {
                 e.getValue().setClassName(newName);
@@ -216,6 +221,10 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         }
         entityClassMap.put(newName, entityClassMap.get(oldName));
         entityClassMap.remove(oldName);
+        Consumer<SimpleStringProperty> c = s -> {
+            s.setValue(newName);
+        };
+        entityClassMap.get(newName).setClassName(c);
         for (Map.Entry<Integer, EntityInstance> e : entityInstanceMap.entrySet()) {
             if (e.getValue().getClassName().equals(oldName)) {
                 e.getValue().setClassName(newName);
