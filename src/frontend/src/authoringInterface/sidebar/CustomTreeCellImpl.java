@@ -1,7 +1,6 @@
 package authoringInterface.sidebar;
 
 import authoringInterface.subEditors.EntityEditor;
-import authoringInterface.sidebar.treeItemEntries.EditTreeItem;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;

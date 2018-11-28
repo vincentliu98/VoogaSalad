@@ -1,7 +1,8 @@
 package authoringInterface.sidebar;
 
 import api.SubView;
-import authoringInterface.sidebar.treeItemEntries.*;
+import gameplay.Entity;
+import gameplay.Tile;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
 

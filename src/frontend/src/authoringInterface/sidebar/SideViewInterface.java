@@ -1,7 +1,6 @@
 package authoringInterface.sidebar;
 
 import api.SubView;
-import authoringInterface.sidebar.treeItemEntries.EditTreeItem;
 import javafx.scene.layout.StackPane;
 
 import java.util.Map;

@@ -1,17 +1,12 @@
 package authoringInterface.subEditors;
 
-import authoringInterface.sidebar.treeItemEntries.Tile;
-import javafx.scene.layout.AnchorPane;
+import gameObjects.GameObjectsCRUDInterface;
+import gameObjects.tile.TileClass;
+import gameObjects.tile.TileInstance;
 
-public class TileEditor extends AbstractGameObjectEditor<Tile> {
-    /**
-     * This method returns the responsible JavaFx Node responsible to be added or deleted from other graphical elements.
-     *
-     * @return A "root" JavaFx Node representative of this object.
-     */
-    @Override
-    public AnchorPane getView() {
-        return null;
+public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance> {
+    public TileEditor(GameObjectsCRUDInterface manager) {
+        super(manager);
     }
 
     /**
@@ -20,7 +15,7 @@ public class TileEditor extends AbstractGameObjectEditor<Tile> {
      * @param userObject
      */
     @Override
-    public void readObject(Tile userObject) {
+    public void readObject(TileInstance userObject) {
 
     }
 
@@ -30,7 +25,25 @@ public class TileEditor extends AbstractGameObjectEditor<Tile> {
      * @return A specific user object.
      */
     @Override
-    public Tile getObject() {
+    public TileInstance getObject() {
+        return null;
+    }
+
+    /**
+     * Read the GameObjectClass represented by this editor.
+     *
+     * @param gameObjectClass : The GameObjectClass interface that is being read.
+     */
+    @Override
+    public void readGameObjectClass(TileClass gameObjectClass) {
+
+    }
+
+    /**
+     * @return The GameObjectClass stored in the internal memory right now.
+     */
+    @Override
+    public TileClass getGameObjectClass() {
         return null;
     }
 }

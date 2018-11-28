@@ -1,22 +1,17 @@
 package authoringInterface.subEditors;
 
-import authoringInterface.sidebar.treeItemEntries.Sound;
-import javafx.scene.layout.AnchorPane;
+import gameObjects.GameObjectsCRUDInterface;
+import gameObjects.sound.SoundClass;
+import gameObjects.sound.SoundInstance;
 
 /**
  * This class provides an editor for sound files used in the editor.
  *
  * @author Haotian Wang
  */
-public class SoundEditor extends AbstractGameObjectEditor<Sound> {
-    /**
-     * This method returns the responsible JavaFx Node responsible to be added or deleted from other graphical elements.
-     *
-     * @return A "root" JavaFx Node representative of this object.
-     */
-    @Override
-    public AnchorPane getView() {
-        return null;
+public class SoundEditor extends AbstractGameObjectEditor<SoundClass, SoundInstance> {
+    public SoundEditor(GameObjectsCRUDInterface manager) {
+        super(manager);
     }
 
     /**
@@ -25,7 +20,7 @@ public class SoundEditor extends AbstractGameObjectEditor<Sound> {
      * @param userObject
      */
     @Override
-    public void readObject(Sound userObject) {
+    public void readObject(SoundInstance userObject) {
 
     }
 
@@ -35,8 +30,25 @@ public class SoundEditor extends AbstractGameObjectEditor<Sound> {
      * @return A specific user object.
      */
     @Override
-    public Sound getObject() {
+    public SoundInstance getObject() {
         return null;
     }
 
+    /**
+     * Read the GameObjectClass represented by this editor.
+     *
+     * @param gameObjectClass : The GameObjectClass interface that is being read.
+     */
+    @Override
+    public void readGameObjectClass(SoundClass gameObjectClass) {
+
+    }
+
+    /**
+     * @return The GameObjectClass stored in the internal memory right now.
+     */
+    @Override
+    public SoundClass getGameObjectClass() {
+        return null;
+    }
 }

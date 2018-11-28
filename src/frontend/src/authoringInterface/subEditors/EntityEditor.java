@@ -1,6 +1,9 @@
 package authoringInterface.subEditors;
 
-import authoringInterface.sidebar.treeItemEntries.Entity;
+import gameObjects.GameObjectsCRUDInterface;
+import gameObjects.entity.EntityClass;
+import gameObjects.entity.EntityInstance;
+import gameplay.Entity;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TreeItem;
@@ -18,14 +21,14 @@ import java.io.File;
  *
  * @author Haotian Wang
  */
-public class EntityEditor extends AbstractGameObjectEditor<Entity> {
+public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityInstance> {
     private Text imageText;
     private Button chooseImage;
     private ImageView preview;
     private Entity entity;
 
-    public EntityEditor() {
-        super();
+    public EntityEditor(GameObjectsCRUDInterface manager) {
+        super(manager);
         entity = new Entity();
         inputText.setText("Your entity name:");
         imageText = new Text("Choose an image for your entity");
@@ -91,25 +94,21 @@ public class EntityEditor extends AbstractGameObjectEditor<Entity> {
     }
 
     /**
-     * This method brings up an editor that contains the data of an existing object that is already created.
+     * Read the GameObjectClass represented by this editor.
      *
-     * @param userObject
+     * @param gameObjectClass : The GameObjectClass interface that is being read.
      */
     @Override
-    public void readObject(Entity userObject) {
-        entity = userObject;
-        nameField.setText(entity.getName());
-        preview.setImage(entity.getSprite());
+    public void readGameObjectClass(EntityClass gameObjectClass) {
+
     }
 
     /**
-     * Return the object after edits in this ObjectEditor.
-     *
-     * @return A specific user object.
+     * @return The GameObjectClass stored in the internal memory right now.
      */
     @Override
-    public Entity getObject() {
-        return entity;
+    public EntityClass getGameObjectClass() {
+        return null;
     }
 
     /**
@@ -120,5 +119,25 @@ public class EntityEditor extends AbstractGameObjectEditor<Entity> {
     @Override
     public AnchorPane getView() {
         return rootPane;
+    }
+
+    /**
+     * This method brings up an editor that contains the data of an existing object that is already created.
+     *
+     * @param userObject
+     */
+    @Override
+    public void readObject(EntityInstance userObject) {
+
+    }
+
+    /**
+     * Return the object after edits in this ObjectEditor.
+     *
+     * @return A specific user object.
+     */
+    @Override
+    public EntityInstance getObject() {
+        return null;
     }
 }

@@ -1,6 +1,6 @@
 package authoringInterface.subEditors;
 
-import authoringInterface.sidebar.treeItemEntries.Category;
+import gameObjects.GameObjectsCRUDInterface;
 import gameObjects.category.CategoryClass;
 import gameObjects.category.CategoryInstance;
 import javafx.scene.layout.AnchorPane;
@@ -11,6 +11,10 @@ import javafx.scene.layout.AnchorPane;
  * @author Haotian Wang
  */
 public class CategoryEditor extends AbstractGameObjectEditor<CategoryClass, CategoryInstance> {
+    public CategoryEditor(GameObjectsCRUDInterface manager) {
+        super(manager);
+    }
+
     /**
      * This method returns the responsible JavaFx Node responsible to be added or deleted from other graphical elements.
      *
@@ -27,7 +31,7 @@ public class CategoryEditor extends AbstractGameObjectEditor<CategoryClass, Cate
      * @param userObject
      */
     @Override
-    public void readObject(Category userObject) {
+    public void readObject(CategoryInstance userObject) {
 
     }
 
@@ -37,7 +41,25 @@ public class CategoryEditor extends AbstractGameObjectEditor<CategoryClass, Cate
      * @return A specific user object.
      */
     @Override
-    public Category getObject() {
+    public CategoryInstance getObject() {
+        return null;
+    }
+
+    /**
+     * Read the GameObjectClass represented by this editor.
+     *
+     * @param gameObjectClass : The GameObjectClass interface that is being read.
+     */
+    @Override
+    public void readGameObjectClass(CategoryClass gameObjectClass) {
+
+    }
+
+    /**
+     * @return The GameObjectClass stored in the internal memory right now.
+     */
+    @Override
+    public CategoryClass getGameObjectClass() {
         return null;
     }
 }
