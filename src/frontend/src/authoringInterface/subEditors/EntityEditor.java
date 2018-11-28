@@ -72,7 +72,6 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                         } else if (nodeEdited instanceof Text) {
                             ((Text) nodeEdited).setText(nameField.getText());
                         }
-                        objectInstance.setClassName(nameField.getText());
                         break;
                     case EDIT_TREEITEM:
                         break;
@@ -81,6 +80,26 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         });
         setupLayout();
         rootPane.getChildren().addAll(imageText, chooseImage, preview);
+    }
+
+    /**
+     * This method brings up an editor that contains the data of an existing object that is already created.
+     *
+     * @param gameObject
+     */
+    @Override
+    public void readGameObjectInstance(EntityInstance gameObject) {
+
+    }
+
+    /**
+     * Read the GameObjectClass represented by this editor.
+     *
+     * @param gameObjectClass : The GameObjectClass interface that is being read.
+     */
+    @Override
+    public void readGameObjectClass(EntityClass gameObjectClass) {
+
     }
 
     private void setupLayout() {

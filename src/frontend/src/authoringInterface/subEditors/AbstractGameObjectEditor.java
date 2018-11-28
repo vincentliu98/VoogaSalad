@@ -29,8 +29,6 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
     protected GameObjectsCRUDInterface gameObjectManager;
     protected EditingMode editingMode;
     protected Node nodeEdited;
-    protected T objectClass;
-    protected V objectInstance;
 
     public AbstractGameObjectEditor(GameObjectsCRUDInterface manager) {
         editingMode = EditingMode.NONE;
@@ -82,7 +80,7 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
     public void editTreeItem(TreeItem<String> treeItem, T gameObjectClass) {
         this.treeItem = treeItem;
         editingMode = EditingMode.EDIT_TREEITEM;
-        objectClass = gameObjectClass;
+        readGameObjectClass(gameObjectClass);
     }
 
     /**
@@ -104,14 +102,15 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
     public void editNode(Node node, V gameObjectInstance) {
         this.nodeEdited = node;
         editingMode = EditingMode.EDIT_NODE;
-        objectInstance = gameObjectInstance;
+        readGameObjectInstance(gameObjectInstance);
     }
-//    /**
-//     * This method brings up an editor that contains the data of an existing object that is already created.
-//     *
-//     * @param userObject
-//     */
-//    public abstract void readObject(V userObject);
+
+    /**
+     * This method brings up an editor that contains the data of an existing object that is already created.
+     *
+     * @param gameObject
+     */
+    public abstract void readGameObjectInstance(V gameObject);
 //
 //    /**
 //     * Return the object after edits in this ObjectEditor.
@@ -120,12 +119,12 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
 //     */
 //    public abstract V getObject();
 //
-//    /**
-//     * Read the GameObjectClass represented by this editor.
-//     *
-//     * @param gameObjectClass: The GameObjectClass interface that is being read.
-//     */
-//    public abstract void readGameObjectClass(T gameObjectClass);
+    /**
+     * Read the GameObjectClass represented by this editor.
+     *
+     * @param gameObjectClass: The GameObjectClass interface that is being read.
+     */
+    public abstract void readGameObjectClass(T gameObjectClass);
 //
 //    /**
 //     * @return The GameObjectClass stored in the internal memory right now.
