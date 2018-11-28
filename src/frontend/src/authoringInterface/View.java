@@ -7,7 +7,6 @@ import authoring.AuthoringTools;
 import authoringInterface.editor.editView.EditView;
 import authoringInterface.editor.menuBarView.EditorMenuBarView;
 import authoringInterface.sidebar.SideView;
-import authoringInterface.sidebar.SideViewInterface;
 import gameObjects.GameObjectsCRUDInterface;
 import gameObjects.SimpleGameObjectsCRUD;
 import graphUI.groovy.GroovyPaneFactory;
@@ -30,7 +29,7 @@ import javafx.stage.Stage;
 public class View implements ParentView<SubView>, DraggingCanvas {
     private AnchorPane rootPane;
     private EditorMenuBarView menuBar;
-    private SideViewInterface sideView;
+    private SideView sideView;
     private GroovyPaneFactory groovyPaneFactory;
     private EditView editView;
     private Stage primaryStage;
