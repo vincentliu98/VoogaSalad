@@ -1,12 +1,11 @@
 package gameObjects;
 
+import gameObjects.category.CategoryClass;
+import gameObjects.category.SimpleCategoryClass;
 import gameObjects.entity.EntityClass;
 import gameObjects.entity.EntityInstance;
 import gameObjects.entity.SimpleEntityClass;
-import gameObjects.exception.DuplicateClassException;
-import gameObjects.exception.NoEntityClassException;
-import gameObjects.exception.NoGameObjectClassException;
-import gameObjects.exception.NoTileClassException;
+import gameObjects.exception.*;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.tile.SimpleTileClass;
@@ -15,6 +14,7 @@ import gameObjects.tile.TileInstance;
 import grids.Point;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
+import javafx.collections.ObservableSet;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -30,6 +30,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     private int numCol;
     private ObservableMap<String, TileClass> tileClassMap;
     private ObservableMap<String, EntityClass> entityClassMap;
+    private ObservableMap<String, CategoryClass> categoryClassMap;
     private ObservableMap<Integer, TileInstance> tileInstanceMap;
     private ObservableMap<Integer, EntityInstance> entityInstanceMap;
 
@@ -41,6 +42,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         this.numCol = numCol;
         tileClassMap = FXCollections.observableHashMap();
         entityClassMap = FXCollections.observableHashMap();
+        categoryClassMap = FXCollections.observableHashMap();
         tileInstanceMap = FXCollections.observableHashMap();
         entityInstanceMap = FXCollections.observableHashMap();
 
@@ -313,4 +315,35 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     public Collection<EntityClass> getEntityClasses() { return entityClassMap.values(); }
     public Collection<TileInstance> getTileInstances() { return tileInstanceMap.values(); }
     public Collection<EntityInstance> getEntityInstances() { return entityInstanceMap.values(); }
+
+
+
+
+
+    @Override
+    public CategoryClass createCategoryClass(String name) {
+        if (categoryClassMap.containsKey(name)) {
+            throw new DuplicateClassException();
+        }
+
+        CategoryClass newCategoryClass = new SimpleCategoryClass(name);
+        return newCategoryClass;
+    }
+
+    @Override
+    public CategoryClass getCategoryClass(String name) {
+        if (!categoryClassMap.containsKey(name)) {
+            throw new NoCategoryClassException();
+        }
+        return categoryClassMap.get(name);
+    }
+
+    @Override
+    public boolean deleteCategoryClass(String name) {
+        if (!categoryClassMap.containsKey(name)) {
+            return false;
+        }
+        categoryClassMap.remove(name);
+        return true;
+    }
 }

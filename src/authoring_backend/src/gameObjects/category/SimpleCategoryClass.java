@@ -15,7 +15,14 @@ import java.util.function.Consumer;
 /**
  * @author Haotian Wang
  */
-public class SimpleCategroyClass implements CategoryClass{
+public class SimpleCategoryClass implements CategoryClass{
+
+    private String categoryName;
+
+    public SimpleCategoryClass(String name) {
+        categoryName = name;
+    }
+
     /**
      * This method sets the id of the GameObject Class.
      *
@@ -34,7 +41,6 @@ public class SimpleCategroyClass implements CategoryClass{
      */
     @Override
     public void setClassId(Consumer<SimpleIntegerProperty> setFunc) {
-
     }
 
     /**
