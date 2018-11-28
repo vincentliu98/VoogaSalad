@@ -3,7 +3,6 @@ package authoringInterface.sidebar.old;
 import api.SubView;
 import authoringInterface.sidebar.treeItemEntries.EditTreeItem;
 import authoringInterface.sidebar.treeItemEntries.Entity;
-import authoringInterface.sidebar.SideViewInterface;
 //import authoringInterface.spritechoosingwindow.EntityWindow;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -29,7 +28,7 @@ import java.util.Map;
 
 // TODO: 11/12/18 Make the string in the TreeCell represent the object itself
 
-public class OldSideView implements SubView<StackPane>, SideViewInterface {
+public class OldSideView implements SubView<StackPane>{
     private final ObjectManager objectManager;
     //    private final TreeView<String> rootTreeView;
 //    private final TreeItem<String> rootTreeItem;
@@ -93,29 +92,18 @@ public class OldSideView implements SubView<StackPane>, SideViewInterface {
     }
 
     public void addCell(Entity entity, TreeItem<String> item){
-            TreeItem newObject = new TreeItem<>(entity.getName());
-            newObject.setGraphic(new ImageView(entity.getSprite()));
-            // add to ListObjectManager
-            var type = item.getValue();
-            var myObj = new ListObject(entity.getName(), type, entity.getId());
-            objects.add(myObj);
+        TreeItem newObject = new TreeItem<>(entity.getName());
+        newObject.setGraphic(new ImageView(entity.getSprite()));
+        // add to ListObjectManager
+        var type = item.getValue();
+        var myObj = new ListObject(entity.getName(), type, entity.getId());
+        objects.add(myObj);
 
-            System.out.println("Type: " + type + "Cell: " + myObj);
-            item.getChildren().add(newObject);
+        System.out.println("Type: " + type + "Cell: " + myObj);
+        item.getChildren().add(newObject);
     }
 
-    @Override
-    public EditTreeItem getObject(String name) {
-        return null;
-    }
 
-    /**
-     * @return The internal object map.
-     */
-    @Override
-    public Map<String, EditTreeItem> getObjectMap() {
-        return null;
-    }
 
     private final class TextFieldTreeCellImpl extends TreeCell<String> {
 
@@ -257,5 +245,4 @@ public class OldSideView implements SubView<StackPane>, SideViewInterface {
         return sideView;
     }
 }
-
 

@@ -1,5 +1,9 @@
 package gameObjects;
 
+import gameObjects.exception.DuplicateIdException;
+import gameObjects.gameObject.GameObjectClass;
+import gameObjects.gameObject.GameObjectInstance;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;

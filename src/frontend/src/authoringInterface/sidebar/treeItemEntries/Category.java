@@ -2,6 +2,11 @@ package authoringInterface.sidebar.treeItemEntries;
 
 import javafx.scene.text.Text;
 
+/**
+ * This class represents a Category entry that the user can edit on the side view.
+ *
+ * @author Haotian Wang
+ */
 public class Category implements EditTreeItem<Text> {
     private String entryText;
 

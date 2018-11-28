@@ -1,13 +1,11 @@
 package authoringInterface.sidebar;
 
-import authoringInterface.sidebar.subEditors.EntityEditor;
-import authoringInterface.sidebar.treeItemEntries.EditTreeItem;
+import authoringInterface.subEditors.EntityEditor;
+import gameObjects.GameObjectsCRUDInterface;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
-
-import java.util.Map;
 
 /**
  * This class organizes the cell factory call back methods into a nicer format.
@@ -15,22 +13,22 @@ import java.util.Map;
  * @author Haotian Wang
  */
 public class CustomTreeCellImpl extends TreeCell<String> {
-    private Map<String, EditTreeItem> objectMap;
     private TextField textField;
     private ContextMenu addMenu = new ContextMenu();
+    private GameObjectsCRUDInterface objectManager;
 
-    public CustomTreeCellImpl(Map<String, EditTreeItem> map) {
-        objectMap = map;
+    public CustomTreeCellImpl(GameObjectsCRUDInterface manager) {
+        objectManager = manager;
         MenuItem addMenuItem = new MenuItem("Add an entry");
         addMenuItem.setOnAction(e -> {
             int id = getTreeItem().getChildren().size();
             switch (getItem()) {
                 case "ENTITY":
                     Stage dialogStage = new Stage();
-                    EntityEditor editor = new EntityEditor();
+                    EntityEditor editor = new EntityEditor(manager);
                     dialogStage.setScene(new Scene(editor.getView(), 500, 500));
                     dialogStage.show();
-                    editor.addTreeItem(getTreeItem(), objectMap);
+                    editor.addTreeItem(getTreeItem());
                     break;
                 case "SOUND":
                     break;
@@ -89,8 +87,7 @@ public class CustomTreeCellImpl extends TreeCell<String> {
         textField = new TextField(getString());
         textField.setOnKeyReleased(t -> {
             if (t.getCode() == KeyCode.ENTER) {
-                objectMap.put(textField.getText(), objectMap.get(getItem()));
-                objectMap.remove(getItem());
+                objectManager.changeGameObjectClassName(getItem(), textField.getText());
                 commitEdit(textField.getText());
             } else if (t.getCode() == KeyCode.ESCAPE) {
                 cancelEdit();

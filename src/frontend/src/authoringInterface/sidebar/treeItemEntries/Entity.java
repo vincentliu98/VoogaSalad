@@ -4,6 +4,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 
+/**
+ * This class represents and Entity object that the user can edit.
+ *
+ * @author Haotian Wang
+ */
 public class Entity implements EditTreeItem<ImageView> {
     private Image sprite;
     private int id;
