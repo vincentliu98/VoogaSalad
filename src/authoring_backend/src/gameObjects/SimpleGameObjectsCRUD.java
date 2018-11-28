@@ -346,4 +346,15 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         categoryClassMap.remove(name);
         return true;
     }
+
+    /**
+     * This method deletes the GameObjectClasses with the input String name. It scans through all possible maps of the String -> GameObjectClass.
+     *
+     * @param name : The name of the GameObjectClass to be deleted.
+     * @return: true if the GameObjectClass is successfully deleted and false otherwise.
+     */
+    @Override
+    public boolean deleteGameObjectClass(String name) {
+        return (deleteTileClass(name) || deleteCategoryClass(name) || deleteEntityClass(name));
+    }
 }

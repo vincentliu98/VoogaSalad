@@ -98,5 +98,12 @@ public interface GameObjectsCRUDInterface {
     CategoryClass getCategoryClass(String name);
 
     boolean deleteCategoryClass(String name);
-    
+
+    /**
+     * This method deletes the GameObjectClasses with the input String name. It scans through all possible maps of the String -> GameObjectClass.
+     *
+     * @param name: The name of the GameObjectClass to be deleted.
+     * @return: true if the GameObjectClass is successfully deleted and false otherwise.
+     */
+    boolean deleteGameObjectClass(String name);
 }
