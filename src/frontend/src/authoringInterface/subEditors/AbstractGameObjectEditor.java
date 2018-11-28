@@ -27,9 +27,10 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
     protected Button cancel;
     protected TreeItem<String> treeItem;
     protected GameObjectsCRUDInterface gameObjectManager;
-    protected Map<Node, GameObjectInstance> nodeToInstanceMap;
     protected EditingMode editingMode;
     protected Node nodeEdited;
+    protected T objectClass;
+    protected V objectInstance;
 
     public AbstractGameObjectEditor(GameObjectsCRUDInterface manager) {
         editingMode = EditingMode.NONE;
@@ -76,10 +77,12 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
      * Register the editor with an existing TreeItem in order to update or edit existing entries.
      *
      * @param treeItem: An existing TreeItem.
+     * @param gameObjectClass: The GameObjectClass associated with the TreeItem to be edited by the user.
      */
-    public void editTreeItem(TreeItem<String> treeItem) {
+    public void editTreeItem(TreeItem<String> treeItem, T gameObjectClass) {
         this.treeItem = treeItem;
         editingMode = EditingMode.EDIT_TREEITEM;
+        objectClass = gameObjectClass;
     }
 
     /**
@@ -96,12 +99,12 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
      * Register the node to Object map.
      *
      * @param node: The node that is to be altered.
-     * @param map: The node to user object map.
+     * @param gameObjectInstance: The GameObjectInstance that is associated with the Node on the rootPane.
      */
-    public void editNode(Node node, Map<Node, GameObjectInstance> map) {
-        this.nodeToInstanceMap = map;
+    public void editNode(Node node, V gameObjectInstance) {
         this.nodeEdited = node;
         editingMode = EditingMode.EDIT_NODE;
+        objectInstance = gameObjectInstance;
     }
 
     /**

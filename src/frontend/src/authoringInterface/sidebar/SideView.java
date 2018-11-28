@@ -20,7 +20,7 @@ import java.util.*;
 public class SideView implements SubView<StackPane> {
     private StackPane sidePane;
     private GameObjectsCRUDInterface gameObjectsManager;
-    private static final String ROOT_NAME = "User Objects";
+    private static final String ROOT_NAME = "Game Objects";
 
     public SideView(GameObjectsCRUDInterface manager) {
         gameObjectsManager = manager;

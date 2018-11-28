@@ -87,7 +87,7 @@ public class EditGridView implements SubView<ScrollPane>, DraggingCanvas {
                     editor.readObject(userObject);
                     break;
             }
-            editor.editNode(targetNode, nodeToGameObjectInstanceMap);
+            editor.editNode(targetNode);
             dialogStage.setScene(new Scene(editor.getView(), 500, 500));
             dialogStage.show();
         }
