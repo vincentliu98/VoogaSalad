@@ -1,5 +1,6 @@
 package gameObjects;
 
+import gameObjects.category.CategoryClass;
 import gameObjects.entity.EntityClass;
 import gameObjects.exception.DuplicateClassException;
 import gameObjects.exception.NoEntityClassException;
@@ -91,5 +92,11 @@ public interface GameObjectsCRUDInterface {
     GameObjectClass getGameObjectClass(String className);
 
     boolean changeGameObjectClassName(String oldName, String newName);
+
+    CategoryClass createCategoryClass(String name);
+
+    CategoryClass getCategoryClass(String name);
+
+    boolean deleteCategoryClass(String name);
 
 }

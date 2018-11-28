@@ -12,21 +12,11 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
     /**
      * This method brings up an editor that contains the data of an existing object that is already created.
      *
-     * @param userObject
+     * @param gameObject
      */
     @Override
-    public void readObject(TileInstance userObject) {
+    public void readGameObjectInstance(TileInstance gameObject) {
 
-    }
-
-    /**
-     * Return the object after edits in this ObjectEditor.
-     *
-     * @return A specific user object.
-     */
-    @Override
-    public TileInstance getObject() {
-        return null;
     }
 
     /**
@@ -37,13 +27,5 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
     @Override
     public void readGameObjectClass(TileClass gameObjectClass) {
 
-    }
-
-    /**
-     * @return The GameObjectClass stored in the internal memory right now.
-     */
-    @Override
-    public TileClass getGameObjectClass() {
-        return null;
     }
 }

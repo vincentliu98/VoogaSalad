@@ -21,7 +21,6 @@ public class CustomTreeCellImpl extends TreeCell<String> {
         objectManager = manager;
         MenuItem addMenuItem = new MenuItem("Add an entry");
         addMenuItem.setOnAction(e -> {
-            int id = getTreeItem().getChildren().size();
             switch (getItem()) {
                 case "ENTITY":
                     Stage dialogStage = new Stage();
