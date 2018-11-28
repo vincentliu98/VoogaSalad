@@ -1,8 +1,12 @@
 package gameplay;
 
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.stage.Stage;
 
+import java.io.File;
 import java.util.Optional;
 
 public class Turn {
@@ -31,7 +35,7 @@ public class Turn {
         alert.setContentText("Restart?");
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK){
-
+            // TODO: Figure out how to restart within window
         } else { }
     }
 }
