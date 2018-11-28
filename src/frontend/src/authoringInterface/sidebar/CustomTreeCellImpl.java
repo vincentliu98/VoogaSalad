@@ -15,8 +15,10 @@ import javafx.stage.Stage;
 public class CustomTreeCellImpl extends TreeCell<String> {
     private TextField textField;
     private ContextMenu addMenu = new ContextMenu();
+    private GameObjectsCRUDInterface objectManager;
 
     public CustomTreeCellImpl(GameObjectsCRUDInterface manager) {
+        objectManager = manager;
         MenuItem addMenuItem = new MenuItem("Add an entry");
         addMenuItem.setOnAction(e -> {
             int id = getTreeItem().getChildren().size();
@@ -85,8 +87,7 @@ public class CustomTreeCellImpl extends TreeCell<String> {
         textField = new TextField(getString());
         textField.setOnKeyReleased(t -> {
             if (t.getCode() == KeyCode.ENTER) {
-                objectMap.put(textField.getText(), objectMap.get(getItem()));
-                objectMap.remove(getItem());
+                objectManager.changeGameObjectClassName(getItem(), textField.getText());
                 commitEdit(textField.getText());
             } else if (t.getCode() == KeyCode.ESCAPE) {
                 cancelEdit();
