@@ -89,7 +89,9 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
      */
     @Override
     public void readGameObjectInstance(EntityInstance gameObject) {
-
+        nameField.setText(gameObject.getClassName().getValue());
+        // TODO: REmove this disgusting shite
+        preview.setImage(new Image(gameObjectManager.getEntityClass(gameObject.getClassName().getValue()).getImagePathList().get(0)));
     }
 
     /**
