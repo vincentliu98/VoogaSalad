@@ -126,6 +126,12 @@ public class EditGridView implements SubView<ScrollPane>, DraggingCanvas {
                             nodeToGameObjectInstanceMap.put(deploy, objectInstance);
                         }
                         break;
+                    case SOUND:
+                        // TODO
+                        break;
+                    case TILE:
+                        // TODO
+                        break;
                 }
             }
         });
