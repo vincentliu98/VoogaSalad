@@ -1,12 +1,9 @@
 package authoringInterface.sidebar;
 
 import api.SubView;
-import authoringInterface.sidebar.subEditors.EntityEditor;
 import authoringInterface.sidebar.treeItemEntries.*;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
 
 import java.util.*;
 

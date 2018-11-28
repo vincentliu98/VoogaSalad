@@ -1,6 +1,6 @@
 package authoringInterface.sidebar;
 
-import authoringInterface.sidebar.subEditors.EntityEditor;
+import authoringInterface.subEditors.EntityEditor;
 import authoringInterface.sidebar.treeItemEntries.EditTreeItem;
 import javafx.scene.Scene;
 import javafx.scene.control.*;

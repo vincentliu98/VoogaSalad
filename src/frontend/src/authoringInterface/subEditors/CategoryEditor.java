@@ -1,9 +1,14 @@
-package authoringInterface.sidebar.subEditors;
+package authoringInterface.subEditors;
 
-import authoringInterface.sidebar.treeItemEntries.Tile;
+import authoringInterface.sidebar.treeItemEntries.Category;
 import javafx.scene.layout.AnchorPane;
 
-public class TileEditor extends AbstractGameObjectEditor<Tile> {
+/**
+ * This class handles the addition and editing of category entries.
+ *
+ * @author Haotian Wang
+ */
+public class CategoryEditor extends AbstractGameObjectEditor<Category> {
     /**
      * This method returns the responsible JavaFx Node responsible to be added or deleted from other graphical elements.
      *
@@ -20,7 +25,7 @@ public class TileEditor extends AbstractGameObjectEditor<Tile> {
      * @param userObject
      */
     @Override
-    public void readObject(Tile userObject) {
+    public void readObject(Category userObject) {
 
     }
 
@@ -30,7 +35,7 @@ public class TileEditor extends AbstractGameObjectEditor<Tile> {
      * @return A specific user object.
      */
     @Override
-    public Tile getObject() {
+    public Category getObject() {
         return null;
     }
 }

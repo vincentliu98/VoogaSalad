@@ -1,15 +1,12 @@
-package authoringInterface.sidebar.subEditors;
+package authoringInterface.subEditors;
 
 import api.SubView;
 import authoringInterface.sidebar.treeItemEntries.EditTreeItem;
-import authoringInterface.sidebar.treeItemEntries.Entity;
-import authoringInterface.sidebar.treeItemEntries.TreeItemType;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 

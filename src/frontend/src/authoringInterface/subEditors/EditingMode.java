@@ -1,4 +1,4 @@
-package authoringInterface.sidebar.subEditors;
+package authoringInterface.subEditors;
 
 /**
  * This enum class enumerates the different editing modes of the sub editors.

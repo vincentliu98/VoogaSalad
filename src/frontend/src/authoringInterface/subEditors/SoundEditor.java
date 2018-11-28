@@ -1,14 +1,14 @@
-package authoringInterface.sidebar.subEditors;
+package authoringInterface.subEditors;
 
-import authoringInterface.sidebar.treeItemEntries.Category;
+import authoringInterface.sidebar.treeItemEntries.Sound;
 import javafx.scene.layout.AnchorPane;
 
 /**
- * This class handles the addition and editing of category entries.
+ * This class provides an editor for sound files used in the editor.
  *
  * @author Haotian Wang
  */
-public class CategoryEditor extends AbstractGameObjectEditor<Category> {
+public class SoundEditor extends AbstractGameObjectEditor<Sound> {
     /**
      * This method returns the responsible JavaFx Node responsible to be added or deleted from other graphical elements.
      *
@@ -25,7 +25,7 @@ public class CategoryEditor extends AbstractGameObjectEditor<Category> {
      * @param userObject
      */
     @Override
-    public void readObject(Category userObject) {
+    public void readObject(Sound userObject) {
 
     }
 
@@ -35,7 +35,8 @@ public class CategoryEditor extends AbstractGameObjectEditor<Category> {
      * @return A specific user object.
      */
     @Override
-    public Category getObject() {
+    public Sound getObject() {
         return null;
     }
+
 }

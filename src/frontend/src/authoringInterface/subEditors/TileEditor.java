@@ -1,14 +1,9 @@
-package authoringInterface.sidebar.subEditors;
+package authoringInterface.subEditors;
 
-import authoringInterface.sidebar.treeItemEntries.Sound;
+import authoringInterface.sidebar.treeItemEntries.Tile;
 import javafx.scene.layout.AnchorPane;
 
-/**
- * This class provides an editor for sound files used in the editor.
- *
- * @author Haotian Wang
- */
-public class SoundEditor extends AbstractGameObjectEditor<Sound> {
+public class TileEditor extends AbstractGameObjectEditor<Tile> {
     /**
      * This method returns the responsible JavaFx Node responsible to be added or deleted from other graphical elements.
      *
@@ -25,7 +20,7 @@ public class SoundEditor extends AbstractGameObjectEditor<Sound> {
      * @param userObject
      */
     @Override
-    public void readObject(Sound userObject) {
+    public void readObject(Tile userObject) {
 
     }
 
@@ -35,8 +30,7 @@ public class SoundEditor extends AbstractGameObjectEditor<Sound> {
      * @return A specific user object.
      */
     @Override
-    public Sound getObject() {
+    public Tile getObject() {
         return null;
     }
-
 }

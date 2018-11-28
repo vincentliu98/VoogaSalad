@@ -1,4 +1,4 @@
-package authoringInterface.sidebar.subEditors;
+package authoringInterface.subEditors;
 
 import authoringInterface.sidebar.treeItemEntries.Entity;
 import javafx.scene.control.Alert;

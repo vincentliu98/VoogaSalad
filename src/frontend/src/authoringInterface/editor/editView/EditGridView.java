@@ -3,7 +3,7 @@ package authoringInterface.editor.editView;
 import api.DraggingCanvas;
 import api.SubView;
 import authoringInterface.sidebar.SideViewInterface;
-import authoringInterface.sidebar.subEditors.*;
+import authoringInterface.subEditors.*;
 import authoringInterface.sidebar.treeItemEntries.EditTreeItem;
 import authoringInterface.sidebar.treeItemEntries.Entity;
 import authoringInterface.sidebar.treeItemEntries.TreeItemType;
