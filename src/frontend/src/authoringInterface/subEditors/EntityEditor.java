@@ -57,6 +57,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                     case ADD_TREEITEM:
                         EntityClass entityClass = gameObjectManager.getEntityClass(nameField.getText().trim());
                         TreeItem<String> newItem = new TreeItem<>(entityClass.getClassName().getValue());
+                        entityClass.addImagePath(imagePath);
                         ImageView icon = new ImageView(preview.getImage());
                         icon.setFitWidth(50);
                         icon.setFitHeight(50);
@@ -71,6 +72,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                         } else if (nodeEdited instanceof Text) {
                             ((Text) nodeEdited).setText(nameField.getText());
                         }
+                        objectInstance.setClassName(nameField.getText());
                         break;
                     case EDIT_TREEITEM:
                         break;
@@ -88,53 +90,5 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         chooseImage.setLayoutY(158);
         preview.setLayoutX(37);
         preview.setLayoutY(206);
-    }
-
-    /**
-     * Read the GameObjectClass represented by this editor.
-     *
-     * @param gameObjectClass : The GameObjectClass interface that is being read.
-     */
-    @Override
-    public void readGameObjectClass(EntityClass gameObjectClass) {
-
-    }
-
-    /**
-     * @return The GameObjectClass stored in the internal memory right now.
-     */
-    @Override
-    public EntityClass getGameObjectClass() {
-        return null;
-    }
-
-    /**
-     * This method returns the responsible JavaFx Node responsible to be added or deleted from other graphical elements.
-     *
-     * @return A "root" JavaFx Node representative of this object.
-     */
-    @Override
-    public AnchorPane getView() {
-        return rootPane;
-    }
-
-    /**
-     * This method brings up an editor that contains the data of an existing object that is already created.
-     *
-     * @param userObject
-     */
-    @Override
-    public void readObject(EntityInstance userObject) {
-
-    }
-
-    /**
-     * Return the object after edits in this ObjectEditor.
-     *
-     * @return A specific user object.
-     */
-    @Override
-    public EntityInstance getObject() {
-        return null;
     }
 }

@@ -106,30 +106,29 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
         editingMode = EditingMode.EDIT_NODE;
         objectInstance = gameObjectInstance;
     }
-
-    /**
-     * This method brings up an editor that contains the data of an existing object that is already created.
-     *
-     * @param userObject
-     */
-    public abstract void readObject(V userObject);
-
-    /**
-     * Return the object after edits in this ObjectEditor.
-     *
-     * @return A specific user object.
-     */
-    public abstract V getObject();
-
-    /**
-     * Read the GameObjectClass represented by this editor.
-     *
-     * @param gameObjectClass: The GameObjectClass interface that is being read.
-     */
-    public abstract void readGameObjectClass(T gameObjectClass);
-
-    /**
-     * @return The GameObjectClass stored in the internal memory right now.
-     */
-    public abstract T getGameObjectClass();
+//    /**
+//     * This method brings up an editor that contains the data of an existing object that is already created.
+//     *
+//     * @param userObject
+//     */
+//    public abstract void readObject(V userObject);
+//
+//    /**
+//     * Return the object after edits in this ObjectEditor.
+//     *
+//     * @return A specific user object.
+//     */
+//    public abstract V getObject();
+//
+//    /**
+//     * Read the GameObjectClass represented by this editor.
+//     *
+//     * @param gameObjectClass: The GameObjectClass interface that is being read.
+//     */
+//    public abstract void readGameObjectClass(T gameObjectClass);
+//
+//    /**
+//     * @return The GameObjectClass stored in the internal memory right now.
+//     */
+//    public abstract T getGameObjectClass();
 }
