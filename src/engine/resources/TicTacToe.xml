@@ -207,6 +207,7 @@
             }
             GameData.createEntity(entityName, $clicked.getID(), turn);
             GameData.setCurrentPlayerID(1-turn);
+            GameData.getTurn().startPhase();
         </myExecution>
     </gameplay.Node>
 
@@ -216,21 +217,21 @@
         <myEndNodeID>2</myEndNodeID>
         <myTrigger class="phase.api.GameEvent$MouseClick"/>
         <myGuard>
-            if($clicked.getName() == 'Box' &amp;&amp; $clicked.hasNoEntities()) { $return = true }
+            if($clicked.getName() == 'Box' &amp;&amp; GameData.hasNoEntities($clicked)) { $return = true }
             else { $return = false }
         </myGuard>
     </gameplay.Edge>
 
-    <gameplay.Edge>
-        <myPhaseID>1</myPhaseID>
-        <myStartNodeID>2</myStartNodeID>
-        <myEndNodeID>2</myEndNodeID>
-        <myTrigger class="phase.api.GameEvent$MouseClick"/>
-        <myGuard>
-            if($clicked.getName() == 'Box' &amp;&amp; $clicked.hasNoEntities()) { $return = true }
-            else { $return = false }
-        </myGuard>
-    </gameplay.Edge>
+     <!--<gameplay.Edge>-->
+        <!--<myPhaseID>1</myPhaseID>-->
+        <!--<myStartNodeID>2</myStartNodeID>-->
+        <!--<myEndNodeID>2</myEndNodeID>-->
+        <!--<myTrigger class="phase.api.GameEvent$MouseClick"/>-->
+        <!--<myGuard>-->
+            <!--if($clicked.getName() == 'Box' &amp;&amp; $clicked.hasNoEntities()) { $return = true }-->
+            <!--else { $return = false }-->
+        <!--</myGuard>-->
+    <!--</gameplay.Edge> -->
 
     <gameplay.Turn>
         <myCurrentPhaseID>1</myCurrentPhaseID>

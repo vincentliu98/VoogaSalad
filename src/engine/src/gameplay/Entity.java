@@ -36,7 +36,6 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
 
     public Entity(
         int myID,
-
         String name,
         Map<String, Object> properties,
         List<String> myImagePaths,
@@ -44,6 +43,23 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
     ) {
         this.myID = myID;
         this.props = properties;
+        this.name = name;
+        this.myImagePaths = myImagePaths;
+        this.myImageSelector = myImageSelector;
+        setupView();
+    }
+
+    public Entity(
+            int myID,
+            int tileID,
+            String name,
+            Map<String, Object> properties,
+            List<String> myImagePaths,
+            String myImageSelector
+    ) {
+        this.myID = myID;
+        this.props = properties;
+        this.tileID = tileID;
         this.name = name;
         this.myImagePaths = myImagePaths;
         this.myImageSelector = myImageSelector;
