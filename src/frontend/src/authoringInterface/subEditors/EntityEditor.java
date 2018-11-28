@@ -3,7 +3,6 @@ package authoringInterface.subEditors;
 import gameObjects.GameObjectsCRUDInterface;
 import gameObjects.entity.EntityClass;
 import gameObjects.entity.EntityInstance;
-import gameplay.Entity;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TreeItem;
@@ -25,21 +24,21 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     private Text imageText;
     private Button chooseImage;
     private ImageView preview;
-    private Entity entity;
+    private String imagePath;
 
     public EntityEditor(GameObjectsCRUDInterface manager) {
         super(manager);
-        entity = new Entity();
         inputText.setText("Your entity name:");
         imageText = new Text("Choose an image for your entity");
         chooseImage = new Button("Choose sprite");
         preview = new ImageView();
+        // TODO: Select multiple images
         chooseImage.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
             File file = fileChooser.showOpenDialog(new Stage());
             if (file != null) {
-                Image sprite = new Image(file.toURI().toString());
-                entity.setSprite(sprite);
+                imagePath = file.toURI().toString();
+                Image sprite = new Image(imagePath);
                 preview.setImage(sprite);
                 preview.setFitHeight(50);
                 preview.setFitWidth(50);
@@ -52,25 +51,23 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                 alert.setContentText("You must give your entity a non-empty name");
                 alert.showAndWait();
             } else {
-                entity.setName(nameField.getText().trim());
+                gameObjectManager.createEntityClass(nameField.getText().trim());
                 ((Stage) rootPane.getScene().getWindow()).close();
                 switch (editingMode) {
                     case ADD_TREEITEM:
-                        int id = treeItem.getChildren().size();
-                        TreeItem<String> newItem = new TreeItem<>(entity.getName());
-                        ImageView preview = new ImageView(entity.getSprite());
-                        preview.setFitWidth(50);
-                        preview.setFitHeight(50);
+                        EntityClass entityClass = gameObjectManager.getEntityClass(nameField.getText().trim());
+                        TreeItem<String> newItem = new TreeItem<>(entityClass.getClassName().getValue());
+                        ImageView icon = new ImageView(preview.getImage());
+                        icon.setFitWidth(50);
+                        icon.setFitHeight(50);
                         newItem.setGraphic(preview);
-                        entity.setId(id);
-                        objectMap.put(newItem.getValue(), entity);
                         treeItem.getChildren().add(newItem);
                         break;
                     case NONE:
                         return;
                     case EDIT_NODE:
                         if (nodeEdited instanceof ImageView) {
-                            ((ImageView) nodeEdited).setImage(entity.getSprite());
+                            ((ImageView) nodeEdited).setImage(preview.getImage());
                         } else if (nodeEdited instanceof Text) {
                             ((Text) nodeEdited).setText(nameField.getText());
                         }

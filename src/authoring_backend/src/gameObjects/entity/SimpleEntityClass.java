@@ -144,7 +144,7 @@ public class SimpleEntityClass implements EntityClass {
     }
 
     @Override
-    public GameObjectInstance createInstance(int tileId) {
+    public EntityInstance createInstance(int tileId) {
         if (!verifyTileInstanceIdFunc.apply(tileId)) {
             throw new InvalidIdException();
         }

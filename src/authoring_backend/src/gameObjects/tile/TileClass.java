@@ -15,7 +15,7 @@ public interface TileClass extends GameObjectClass {
 
     void setEntityContainable(boolean contains);
 
-    GameObjectInstance createInstance(Point coord);
+    TileInstance createInstance(Point coord);
 
     @Override
     default GameObjectType getType() {
