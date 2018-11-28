@@ -1,6 +1,8 @@
 package authoringInterface.subEditors;
 
 import authoringInterface.sidebar.treeItemEntries.Category;
+import gameObjects.category.CategoryClass;
+import gameObjects.category.CategoryInstance;
 import javafx.scene.layout.AnchorPane;
 
 /**
@@ -8,7 +10,7 @@ import javafx.scene.layout.AnchorPane;
  *
  * @author Haotian Wang
  */
-public class CategoryEditor extends AbstractGameObjectEditor<Category> {
+public class CategoryEditor extends AbstractGameObjectEditor<CategoryClass, CategoryInstance> {
     /**
      * This method returns the responsible JavaFx Node responsible to be added or deleted from other graphical elements.
      *

@@ -40,7 +40,7 @@ public class SimpleTileClass implements TileClass {
     private TriConsumer<String, String, String> addTilePropertyFunc;
     private BiConsumer<String, String> removeTilePropertyFunc;
 
-    private SimpleTileClass(String name) {
+    public SimpleTileClass(String name) {
         className = new ReadOnlyStringWrapper(this, CONST_CLASSNAME, name);
         classId = new ReadOnlyIntegerWrapper(this, CONST_ID);
         entityContainable = new SimpleBooleanProperty(this, CONST_ENTITYCONTAINABLE);
@@ -51,7 +51,7 @@ public class SimpleTileClass implements TileClass {
         height = new SimpleIntegerProperty(1);
     }
 
-    SimpleTileClass(String name,
+    public SimpleTileClass(String name,
                     int numRow, int numCol,
                     TriFunction<Point, Integer, Integer, Boolean> verifyPointsFunc,
                     Consumer<GameObjectInstance> setInstanceIdFunc,

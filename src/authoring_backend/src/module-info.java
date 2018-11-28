@@ -21,4 +21,10 @@ module authoring_backend {
     exports gameObjects;
     exports grids;
     exports utils;
+    exports gameObjects.category;
+    exports gameObjects.entity;
+    exports gameObjects.exception;
+    exports gameObjects.sound;
+    exports gameObjects.tile;
+    exports gameObjects.gameObject;
 }

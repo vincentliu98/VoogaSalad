@@ -37,7 +37,7 @@ public class SimpleEntityClass implements EntityClass {
     private BiConsumer<String, String> removeEntityPropertyFunc;
 
 
-    private SimpleEntityClass(String name) {
+    public SimpleEntityClass(String name) {
         className = new ReadOnlyStringWrapper(this, CONST_CLASSNAME, name);
         classId = new ReadOnlyIntegerWrapper(this, CONST_ID);
         movable = new SimpleBooleanProperty(this, CONST_MOVABLE);
@@ -46,7 +46,7 @@ public class SimpleEntityClass implements EntityClass {
         imageSelector = "";
     }
 
-    SimpleEntityClass(
+    public SimpleEntityClass(
         String name,
         Function<Integer, Boolean> verifyTileInstanceIdFunction,
         Consumer<GameObjectInstance> setInstanceIdFunc,
