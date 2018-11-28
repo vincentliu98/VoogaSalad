@@ -9,7 +9,6 @@ import javafx.event.Event;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.util.Pair;
 
 import java.util.*;
 
@@ -66,7 +65,7 @@ public class GameData {
 
     public static Entity createEntity(String entityName, int tileID, int ownerID){
         var nextID = ENTITIES.keySet().stream().max(Comparator.comparingInt(a -> a)).orElse(0)+1;
-        var newEntity = ENTITY_PROTOTYPES.get(entityName).build(nextID);
+        var newEntity = ENTITY_PROTOTYPES.get(entityName).build(nextID, tileID);
         newEntity.adjustViewSize(ROOT.getWidth(), ROOT.getHeight());
         ENTITIES.put(nextID, newEntity);
         PLAYERS.get(ownerID).addEntity(nextID);
