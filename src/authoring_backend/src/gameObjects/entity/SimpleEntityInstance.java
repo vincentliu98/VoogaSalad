@@ -35,6 +35,10 @@ public class SimpleEntityInstance implements EntityInstance {
     @Override
     public ReadOnlyStringProperty getClassName() { return className; }
 
+    public void setClassName(String name) {
+        className.set(name);
+    }
+
     public Consumer<GameObjectInstance> getReturnInstanceIdFunc() {
         return returnInstanceIdFunc;
     }

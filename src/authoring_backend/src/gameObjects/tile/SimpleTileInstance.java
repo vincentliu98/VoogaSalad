@@ -40,6 +40,10 @@ public class SimpleTileInstance implements TileInstance {
         return className.getReadOnlyProperty();
     }
 
+    public void setClassName(String name) {
+        className.set(name);
+    }
+
     public Consumer<GameObjectInstance> getReturnInstanceIdFunc() {
         return returnInstanceIdFunc;
     }

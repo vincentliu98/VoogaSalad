@@ -4,6 +4,7 @@ import gameObjects.entity.EntityClass;
 import gameObjects.exception.DuplicateClassException;
 import gameObjects.exception.NoEntityClassException;
 import gameObjects.exception.NoTileClassException;
+import gameObjects.gameObject.GameObjectClass;
 import gameObjects.tile.TileClass;
 
 /**
@@ -77,6 +78,18 @@ public interface GameObjectsCRUDInterface {
 
     /**
      *  Sets the dimension of the entire grid
+     * @param width
+     * @param height
      */
     void setDimension(int width, int height);
+
+    /**
+     *
+     * @param className
+     * @return
+     */
+    GameObjectClass getGameObjectClass(String className);
+
+    boolean changeGameObjectClassName(String oldName, String newName);
+
 }

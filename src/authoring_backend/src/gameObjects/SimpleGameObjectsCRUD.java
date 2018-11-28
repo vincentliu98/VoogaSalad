@@ -5,6 +5,7 @@ import gameObjects.entity.EntityInstance;
 import gameObjects.entity.SimpleEntityClass;
 import gameObjects.exception.DuplicateClassException;
 import gameObjects.exception.NoEntityClassException;
+import gameObjects.exception.NoGameObjectClassException;
 import gameObjects.exception.NoTileClassException;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
@@ -53,6 +54,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         entityClassMap = entityClasses;
     }
 
+    // TODO: check for duplicate class name in entity map
     @Override
     public TileClass createTileClass(String name) {
         if (tileClassMap.containsKey(name)) {
@@ -92,6 +94,20 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         for (Map.Entry<Integer, TileInstance> e : tileInstanceMap.entrySet()) {
             if (e.getValue().getClassName().equals(name)) {
                 deleteTileInstance(e.getKey());
+            }
+        }
+        return true;
+    }
+
+    private boolean changeTileClassName(String oldName, String newName) {
+        if (!tileClassMap.containsKey(oldName)) {
+            return false;
+        }
+        tileClassMap.put(newName, tileClassMap.get(oldName));
+        tileClassMap.remove(oldName);
+        for (Map.Entry<Integer, TileInstance> e : tileInstanceMap.entrySet()) {
+            if (e.getValue().getClassName().equals(oldName)) {
+                e.getValue().setClassName(newName);
             }
         }
         return true;
@@ -147,6 +163,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         };
     }
 
+    // TODO: check for duplicate class name in tile map
     @Override
     public EntityClass createEntityClass(String name) {
         if (entityClassMap.containsKey(name)) {
@@ -191,6 +208,20 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         return true;
     }
 
+    private boolean changeEntityClassName(String oldName, String newName) {
+        if (!entityClassMap.containsKey(oldName)) {
+            return false;
+        }
+        entityClassMap.put(newName, entityClassMap.get(oldName));
+        entityClassMap.remove(oldName);
+        for (Map.Entry<Integer, EntityInstance> e : entityInstanceMap.entrySet()) {
+            if (e.getValue().getClassName().equals(oldName)) {
+                e.getValue().setClassName(newName);
+            }
+        }
+        return true;
+    }
+
     @Override
     public boolean deleteEntityInstance(int instanceId) {
         if (!entityInstanceMap.containsKey(instanceId)) {
@@ -201,10 +232,38 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         return true;
     }
 
+    // TODO: propagate changes
     @Override
     public void setDimension(int width, int height) {
         numCol = width;
         numRow = height;
+    }
+
+    @Override
+    public GameObjectClass getGameObjectClass(String className) {
+        if (!entityClassMap.containsKey(className) && !tileClassMap.containsKey(className)) {
+            throw new NoGameObjectClassException();
+        }
+        if (entityClassMap.containsKey(className)) {
+            return entityClassMap.get(className);
+        }
+        else {
+            return tileClassMap.get(className);
+        }
+    }
+
+    @Override
+    public boolean changeGameObjectClassName(String oldName, String newName) {
+        if (!entityClassMap.containsKey(oldName) && !tileClassMap.containsKey(oldName)) {
+            return false;
+        }
+        if (entityClassMap.containsKey(oldName)) {
+            changeTileClassName(oldName, newName);
+        }
+        else {
+            changeEntityClassName(oldName, newName);
+        }
+        return true;
     }
 
 
