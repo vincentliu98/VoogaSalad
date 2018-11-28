@@ -30,7 +30,7 @@ public class NewWindowView {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("New Project");
         alert.setHeaderText("How would you like to start new project");
-        alert.setContentText("New projects can either be opened in a new window or replace the project in the existing window.");
+        alert.setContentText("New projects will be opened in a new window.");
         alert.getButtonTypes().setAll(ButtonType.CANCEL, new_window);
         return alert;
     }
