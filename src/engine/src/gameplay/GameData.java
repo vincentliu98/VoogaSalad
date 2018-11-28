@@ -65,20 +65,12 @@ public class GameData {
 
     public static Entity createEntity(String entityName, int tileID, int ownerID){
         var nextID = ENTITIES.keySet().stream().max(Comparator.comparingInt(a -> a)).orElse(0)+1;
-        System.out.println("breaking here 1");
-        System.out.println("EntityPrototypes are " + ENTITY_PROTOTYPES.keySet());
         var newEntity = ENTITY_PROTOTYPES.get(entityName).build(nextID, tileID);
-        System.out.println("breaking here 2");
         newEntity.adjustViewSize(ROOT.getWidth(), ROOT.getHeight());
-        System.out.println("breaking here 3");
         ENTITIES.put(nextID, newEntity);
-        System.out.println("breaking here 4");
         PLAYERS.get(ownerID).addEntity(nextID);
-        System.out.println("breaking here 5");
         newEntity.setLocation(tileID);
-        System.out.println("breaking here 6");
         ROOT.getChildren().add(newEntity.getImageView());
-        System.out.println("breaking here 7");
         return newEntity;
     }
 

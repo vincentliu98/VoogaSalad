@@ -34,7 +34,7 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
     @XStreamOmitField
     private transient ImageView myImageView;
 
-    public Entity(
+    /*public Entity(
         int myID,
         String name,
         Map<String, Object> properties,
@@ -47,7 +47,7 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
         this.myImagePaths = myImagePaths;
         this.myImageSelector = myImageSelector;
         setupView();
-    }
+    }*/
 
     public Entity(
             int myID,
