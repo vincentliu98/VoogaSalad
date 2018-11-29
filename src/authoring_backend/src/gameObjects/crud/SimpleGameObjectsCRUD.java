@@ -224,9 +224,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         }
         entityClassMap.put(newName, entityClassMap.get(oldName));
         entityClassMap.remove(oldName);
-        Consumer<SimpleStringProperty> c = s -> {
-            s.setValue(newName);
-        };
+        Consumer<SimpleStringProperty> c = s -> s.setValue(newName);
         entityClassMap.get(newName).setClassName(c);
         for (Map.Entry<Integer, EntityInstance> e : entityInstanceMap.entrySet()) {
             if (e.getValue().getClassName().equals(oldName)) {

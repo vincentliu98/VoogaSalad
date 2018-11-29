@@ -28,11 +28,11 @@ public class SimplePlayerClass implements PlayerClass {
 
     private Consumer<GameObjectInstance> setInstanceIdFunc;
     private Consumer<GameObjectInstance> returnInstanceIdFunc;
-    private Function<String, Set<GameObjectInstance>> getplayerInstancesFunc;
+    private Function<String, Set<GameObjectInstance>> getPlayerInstancesFunc;
 
     private Consumer<PlayerInstance> addPlayerInstanceToMapFunc;
 
-    private Function<Integer, Boolean> deleteplayerInstanceFromMapFunc;
+    private Function<Integer, Boolean> deletePlayerInstanceFromMapFunc;
 
     private SimplePlayerClass(String name) {
         className = new ReadOnlyStringWrapper(this, CONST_CLASSNAME, name);
@@ -47,15 +47,15 @@ public class SimplePlayerClass implements PlayerClass {
                       Consumer<GameObjectInstance> setInstanceIdFunc,
                       Consumer<GameObjectInstance> returnInstanceIdFunc,
                       Consumer<PlayerInstance> addPlayerInstanceToMapFunc,
-                      Function<Integer, Boolean> deleteplayerInstanceFromMapFunc,
-                      Function<String, Set<GameObjectInstance>> getplayerInstancesFunc) {
+                      Function<Integer, Boolean> deletePlayerInstanceFromMapFunc,
+                      Function<String, Set<GameObjectInstance>> getPlayerInstancesFunc) {
         this(name);
         this.verifyPlayerInstanceIdFunc = verifyPlayerInstanceIdFunc;
         this.setInstanceIdFunc = setInstanceIdFunc;
         this.returnInstanceIdFunc = returnInstanceIdFunc;
         this.addPlayerInstanceToMapFunc = addPlayerInstanceToMapFunc;
-        this.deleteplayerInstanceFromMapFunc = deleteplayerInstanceFromMapFunc;
-        this.getplayerInstancesFunc = getplayerInstancesFunc;
+        this.deletePlayerInstanceFromMapFunc = deletePlayerInstanceFromMapFunc;
+        this.getPlayerInstancesFunc = getPlayerInstancesFunc;
     }
 
     @Override
@@ -131,12 +131,12 @@ public class SimplePlayerClass implements PlayerClass {
     }
 
     public boolean deleteInstance(int playerInstanceId) {
-        return deleteplayerInstanceFromMapFunc.apply(playerInstanceId);
+        return deletePlayerInstanceFromMapFunc.apply(playerInstanceId);
     }
 
     @Override
     public Set<GameObjectInstance> getInstances() {
-        return getplayerInstancesFunc.apply(getClassName().getValue());
+        return getPlayerInstancesFunc.apply(getClassName().getValue());
     }
 
     @Override
