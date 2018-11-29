@@ -27,7 +27,7 @@ public class LauncherTopBarView {
     private double yOffset;
 
 
-    public LauncherTopBarView(double height, Stage stage){
+    public LauncherTopBarView(double height, Stage stage, Searchable searched){
         initHeight = height;
         myStage = stage;
 
@@ -35,7 +35,7 @@ public class LauncherTopBarView {
         initDivider();
         initSpacer();
 
-        mySearchBar = new SearchBar();
+        mySearchBar = new SearchBar(searched);
 
         myTextOptions = new TextOptions();
 
