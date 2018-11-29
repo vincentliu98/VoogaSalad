@@ -1,7 +1,11 @@
-package gameObjects;
+package gameObjects.crud;
 
+import gameObjects.IdManager;
+import gameObjects.IdManagerClass;
+import gameObjects.TriConsumer;
 import gameObjects.category.CategoryClass;
 import gameObjects.category.SimpleCategoryClass;
+import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.entity.EntityClass;
 import gameObjects.entity.EntityInstance;
 import gameObjects.entity.SimpleEntityClass;
@@ -15,7 +19,6 @@ import grids.Point;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
-import javafx.collections.ObservableSet;
 
 import java.util.Collection;
 import java.util.HashSet;

@@ -2,11 +2,9 @@ package authoring;
 
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
-import gameObjects.GameObjectsCRUDInterface;
-import gameObjects.SimpleGameObjectsCRUD;
+import gameObjects.crud.GameObjectsCRUDInterface;
+import gameObjects.crud.SimpleGameObjectsCRUD;
 import groovy.api.GroovyFactory;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableMap;
 import phase.api.PhaseDB;
 
 /**

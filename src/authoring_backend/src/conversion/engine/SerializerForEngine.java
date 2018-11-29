@@ -3,7 +3,7 @@ package conversion.engine;
 import authoring.AuthoringTools;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
-import gameObjects.SimpleGameObjectsCRUD;
+import gameObjects.crud.SimpleGameObjectsCRUD;
 import phase.api.PhaseDB;
 
 import java.util.LinkedHashMap;

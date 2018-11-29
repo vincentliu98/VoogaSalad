@@ -1,4 +1,4 @@
-package gameObjects;
+package gameObjects.crud;
 
 import gameObjects.category.CategoryClass;
 import gameObjects.entity.EntityClass;
