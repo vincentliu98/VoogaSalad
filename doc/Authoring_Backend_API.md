@@ -41,6 +41,10 @@ String getClassName()
 String getInstanceName()
 void setInstanceName()
 GameObjectType getType()
+setPoint(int x, int y)
+setPoint(Point position)
+Point getPoint()
+ObservableSet<GameObjectInstance> getInstancesAtSamePoint(GameObjectInstance instance)
 ```
 GameObjectInstance should not be able to change GameObjectClass name, but if you like it , you can do that as well. If we call changeGameObjectClassName on this instance, it should change the class names of all the brother instances and the class for that instance.
 
