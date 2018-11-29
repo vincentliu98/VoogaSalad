@@ -18,6 +18,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import org.codehaus.groovy.runtime.memoize.ConcurrentCommonCache;
@@ -35,6 +36,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
     private MenuBar menuBar;
     private GameWindow gameWindow;
     private AuthoringTools authTools;
+    private String fileName; //TODO: temp var, will be changed
 
     private final EditorCaretaker editorCaretaker = new EditorCaretaker();
     private final Editor editor = new Editor();
@@ -48,6 +50,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
     ) {
         this.authTools = authTools;
         this.closeWindow = closeWindow;
+        fileName = "TicTacToe.xml";
 
         menuBar = new MenuBar();
         menuBar.setPrefHeight(View.MENU_BAR_HEIGHT);
@@ -75,7 +78,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         resizeGrid.setAccelerator(new KeyCodeCombination(KeyCode.G, KeyCombination.CONTROL_DOWN));
 
         newFile.setOnAction(e -> new NewWindowView());
-        open.setOnAction(e -> new LoadFileView());
+        open.setOnAction(this::handleOpen);
         save.setOnAction(this::handleSave);
         saveAs.setOnAction(this::handleSaveAs);
         close.setOnAction(e -> new CloseFileView(closeWindow));
@@ -106,6 +109,16 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         new SaveFileView();
         handleSave(event);
     }
+    void handleOpen(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open project files");
+        File file = fileChooser.showOpenDialog(new Stage());
+        // TODO: keyboard warrior, backend do the rest.
+        if (file != null) {
+            fileName = file.getName();
+            // if (file.isLegitimate) {
+        }
+    }
     void handleUndo(ActionEvent event) {
         if (currentMemento < 2) return;
         editor.restoreToState(editorCaretaker.getMemento(--currentMemento));
@@ -123,7 +136,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         gameWindow = new GameWindow();
         try{
             Initializer initializer =
-                    new Initializer(new File(getClass().getClassLoader().getResource("SwordAndArrow.xml").getFile()));
+                    new Initializer(new File(getClass().getClassLoader().getResource(fileName).getFile()));
             Scene newScene = new Scene(initializer.getRoot(), View.GAME_WIDTH, View.GAME_HEIGHT);
             newWindow.setScene(newScene);
             newWindow.setX(MainAuthoringProgram.SCREEN_WIDTH*0.5 - View.GAME_WIDTH*0.5);
