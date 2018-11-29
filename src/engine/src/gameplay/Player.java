@@ -17,5 +17,6 @@ public class Player {
     public boolean isMyEntity(Entity entity) { return myEntityIDs.contains(entity.getID()); }
     public double getValue(String key){ return myStats.get(key); }
     public Set<Integer> getMyEntities(){ return myEntityIDs; }
+    public void clearMyEntities() { myEntityIDs.clear(); }
     public int getID(){ return myID; }
 }

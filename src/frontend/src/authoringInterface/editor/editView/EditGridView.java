@@ -120,6 +120,9 @@ public class EditGridView implements SubView<ScrollPane>, DraggingCanvas {
                 if (!item.isLeaf()) {
                     return;
                 }
+                if (!(e.getTarget() instanceof StackPane)) {
+                    return;
+                }
                 StackPane intersected = (StackPane) e.getTarget();
                 GameObjectClass objectClass = gameObjectManager.getGameObjectClass(item.getValue());
                 GameObjectType type = objectClass.getType();

@@ -3,16 +3,23 @@ package authoringInterface.subEditors;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.entity.EntityClass;
 import gameObjects.entity.EntityInstance;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is the editor for an "Entity" object that is opened when the user clicks on an existing entity or tries to add an entity to the game authoring library.
@@ -22,25 +29,23 @@ import java.io.File;
 public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityInstance> {
     private Text imageText;
     private Button chooseImage;
-    private ImageView preview;
-    private String imagePath;
+    private HBox imagePanel;
+    private ObservableList<String> imagePaths;
 
     public EntityEditor(GameObjectsCRUDInterface manager) {
         super(manager);
         inputText.setText("Your entity name:");
-        imageText = new Text("Choose an image for your entity");
-        chooseImage = new Button("Choose sprite");
-        preview = new ImageView();
-        // TODO: Select multiple images
+        imageText = new Text("Add an image to your entity");
+        chooseImage = new Button("Choose image");
+        imagePanel = new HBox(10);
+        imagePaths = FXCollections.observableArrayList();
+        imagePaths.addListener((ListChangeListener<String>) c -> presentImages());
         chooseImage.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
             File file = fileChooser.showOpenDialog(new Stage());
             if (file != null) {
-                imagePath = file.toURI().toString();
-                Image sprite = new Image(imagePath);
-                preview.setImage(sprite);
-                preview.setFitHeight(50);
-                preview.setFitWidth(50);
+                String imagePath = file.toURI().toString();
+                imagePaths.add(imagePath);
             }
         });
         confirm.setOnAction(e -> {
@@ -56,8 +61,8 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                         gameObjectManager.createEntityClass(nameField.getText().trim());
                         EntityClass entityClass = gameObjectManager.getEntityClass(nameField.getText().trim());
                         TreeItem<String> newItem = new TreeItem<>(entityClass.getClassName().getValue());
-                        entityClass.addImagePath(imagePath);
-                        ImageView icon = new ImageView(preview.getImage());
+                        entityClass.getImagePathList().addAll(imagePaths);
+                        ImageView icon = new ImageView(imagePaths.get(0));
                         icon.setFitWidth(50);
                         icon.setFitHeight(50);
                         newItem.setGraphic(icon);
@@ -67,19 +72,18 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                         return;
                     case EDIT_NODE:
                         if (nodeEdited instanceof ImageView) {
-                            ((ImageView) nodeEdited).setImage(preview.getImage());
+                            ((ImageView) nodeEdited).setImage(new Image(imagePaths.get(0)));
                         } else if (nodeEdited instanceof Text) {
                             ((Text) nodeEdited).setText(nameField.getText());
                         }
                         // TODO make changes to the GameObjectInstance as well. Waiting for changes at JC's side.
                         break;
                     case EDIT_TREEITEM:
-                        if (imagePath != null) {
-                            gameObjectClass.addImagePath(imagePath);
-                        }
+                        gameObjectClass.getImagePathList().clear();
+                        gameObjectClass.getImagePathList().addAll(imagePaths);
                         gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName().getValue(), nameField.getText());
-                        if (preview.getImage() != null) {
-                            ImageView icon1 = new ImageView(preview.getImage());
+                        if (!imagePaths.isEmpty()) {
+                            ImageView icon1 = new ImageView(imagePaths.get(0));
                             icon1.setFitWidth(50);
                             icon1.setFitHeight(50);
                             treeItem.setGraphic(icon1);
@@ -90,7 +94,22 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
             }
         });
         setupLayout();
-        rootPane.getChildren().addAll(imageText, chooseImage, preview);
+        rootPane.getChildren().addAll(imageText, chooseImage, imagePanel);
+    }
+
+    /**
+     * Present the ImageViews contained in the imagePanel according to the ObservableList of ImagePaths.
+     */
+    private void presentImages() {
+        List<Node> images = new ArrayList<>();
+        imagePaths.forEach(path -> {
+            ImageView preview = new ImageView(path);
+            preview.setFitWidth(50);
+            preview.setFitHeight(50);
+            images.add(preview);
+        });
+        imagePanel.getChildren().clear();
+        imagePanel.getChildren().addAll(images);
     }
 
     /**
@@ -100,7 +119,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     public void readGameObjectInstance() {
         nameField.setText(gameObjectInstance.getClassName().getValue());
         // TODO: REmove this disgusting shite
-        preview.setImage(new Image(gameObjectManager.getEntityClass(gameObjectInstance.getClassName().getValue()).getImagePathList().get(0)));
+        imagePaths.addAll(gameObjectManager.getEntityClass(gameObjectInstance.getClassName().getValue()).getImagePathList());
     }
 
     /**
@@ -110,11 +129,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     public void readGameObjectClass() {
         nameField.setText(gameObjectClass.getClassName().getValue());
         // TODO: REmove this disgusting shite
-        try {
-            preview.setImage(new Image(gameObjectManager.getEntityClass(gameObjectClass.getClassName().getValue()).getImagePathList().get(0)));
-        } catch (IndexOutOfBoundsException e) {
-            return;
-        }
+        imagePaths.addAll(gameObjectClass.getImagePathList());
     }
 
     private void setupLayout() {
@@ -122,7 +137,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         imageText.setLayoutY(176);
         chooseImage.setLayoutX(261);
         chooseImage.setLayoutY(158);
-        preview.setLayoutX(37);
-        preview.setLayoutY(206);
+        imagePanel.setLayoutX(37);
+        imagePanel.setLayoutY(206);
     }
 }
