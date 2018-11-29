@@ -62,7 +62,7 @@ public class PhaseChooserPane implements SubView<GridPane> {
         vbox.getStyleClass().add("vboxPhase");
         createPhaseBtn.getStyleClass().add("phaseBtn");
         phaseListView = new ListView<>(phaseList);
-        phaseListView.setMinHeight(580);
+        phaseListView.setMinHeight(570);
         vbox.setSpacing(15);
         vbox.getChildren().addAll(stack, phaseListView);
         phaseListView.getSelectionModel().selectedIndexProperty().addListener((e, o, n) -> {
