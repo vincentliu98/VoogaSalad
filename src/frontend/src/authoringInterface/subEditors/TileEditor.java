@@ -3,6 +3,7 @@ package authoringInterface.subEditors;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.tile.TileClass;
 import gameObjects.tile.TileInstance;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -30,6 +31,7 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
 
     public TileEditor(GameObjectsCRUDInterface manager) {
         super(manager);
+        imagePaths = FXCollections.observableArrayList();
         widthText.setPromptText("Width");
         heightText.setPromptText("Height");
         nameText.setPromptText("Tile Name");
@@ -45,7 +47,8 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
         confirm.setOnAction(e -> {
             if (nameField.getText().trim().isEmpty()) {
                 new ErrorWindow("Empty name", "You must give your tile a non-empty name").showAndWait();
-            } else {
+            } else if (widthText.getText().trim().isEmpty())
+            else {
                 ((Stage) rootPane.getScene().getWindow()).close();
                 switch (editingMode) {
 //                    case ADD_TREEITEM:
