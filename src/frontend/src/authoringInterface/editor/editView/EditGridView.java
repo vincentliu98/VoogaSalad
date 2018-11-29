@@ -122,8 +122,16 @@ public class EditGridView implements SubView<ScrollPane> {
      * @param hoveringColor: The JavaFx Color scheme applied to the hovering.
      */
     private void setupHoveringColorChange(Region cell, Paint hoveringColor) {
-        cell.setOnMouseDragEntered(e -> cell.setBackground(new Background(new BackgroundFill(hoveringColor, CornerRadii.EMPTY, Insets.EMPTY))));
-        cell.setOnMouseDragExited(e -> cell.setBackground(Background.EMPTY));
+        cell.setOnMouseDragEntered(e -> {
+            if (e.getGestureSource() instanceof TreeCell) {
+                cell.setBackground(new Background(new BackgroundFill(hoveringColor, CornerRadii.EMPTY, Insets.EMPTY)));
+            }
+        });
+        cell.setOnMouseDragExited(e -> {
+            if (e.getGestureSource() instanceof TreeCell) {
+                cell.setBackground(Background.EMPTY);
+            }
+        });
     }
 
     /**
@@ -131,17 +139,13 @@ public class EditGridView implements SubView<ScrollPane> {
      *
      * @param cell: A region where the event handler will be set up.
      */
-    private void receiveDragFromSideView(Region cell) {
+    private void receiveDragFromSideView(Pane cell) {
         cell.setOnMouseDragReleased( e -> {
             if (e.getGestureSource() instanceof TreeCell) {
                 TreeItem<String> item = ((TreeCell<String>) e.getGestureSource()).getTreeItem();
                 if (!item.isLeaf()) {
                     return;
                 }
-                if (!(e.getTarget() instanceof StackPane)) {
-                    return;
-                }
-                StackPane intersected = (StackPane) e.getTarget();
                 GameObjectClass objectClass = gameObjectManager.getGameObjectClass(item.getValue());
                 GameObjectType type = objectClass.getType();
                 switch (type) {
@@ -149,14 +153,14 @@ public class EditGridView implements SubView<ScrollPane> {
                         if (objectClass.getImagePathList().isEmpty()) {
                             Text deploy = new Text(objectClass.getClassName().getValue());
                             deploy.setOnMouseClicked(e1 -> handleDoubleClick(e1, deploy));
-                            intersected.getChildren().add(deploy);
+                            cell.getChildren().add(deploy);
                             // TODO: get tile id
                             EntityInstance objectInstance = ((EntityClass) objectClass).createInstance(0);
                             nodeToGameObjectInstanceMap.put(deploy, objectInstance);
                         } else {
                             ImageView deploy = new ImageView(new Image(objectClass.getImagePathList().get(0)));
                             deploy.setOnMouseClicked(e1 -> handleDoubleClick(e1, deploy));
-                            intersected.getChildren().add(deploy);
+                            cell.getChildren().add(deploy);
                             // TODO: get tile id
                             EntityInstance objectInstance = ((EntityClass) objectClass).createInstance(0);
                             nodeToGameObjectInstanceMap.put(deploy, objectInstance);
