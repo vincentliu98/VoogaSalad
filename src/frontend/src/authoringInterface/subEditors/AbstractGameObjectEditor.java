@@ -6,10 +6,10 @@ import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /**
@@ -19,7 +19,7 @@ import javafx.stage.Stage;
  */
 public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V extends GameObjectInstance> implements SubView<AnchorPane> {
     protected AnchorPane rootPane;
-    protected Text inputText;
+    protected Label nameLabel;
     protected TextField nameField;
     protected Button confirm;
     protected Button cancel;
@@ -34,14 +34,14 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
         editingMode = EditingMode.NONE;
         gameObjectManager = manager;
         rootPane = new AnchorPane();
-        inputText = new Text();
+        nameLabel = new Label();
         nameField = new TextField();
         confirm = new Button("Apply");
         cancel = new Button("Cancel");
         cancel.setOnAction(e -> {
             ((Stage) rootPane.getScene().getWindow()).close();
         });
-        rootPane.getChildren().addAll(inputText, nameField, confirm, cancel);
+        rootPane.getChildren().addAll(nameLabel, nameField, confirm, cancel);
         setupBasicLayout();
     }
 
@@ -49,10 +49,10 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
      * This sets up the basic layout for the Abstract Editor.
      */
     private void setupBasicLayout() {
-        AnchorPane.setLeftAnchor(inputText, 50.0);
-        AnchorPane.setTopAnchor(inputText, 50.0);
-        inputText.setLayoutX(14);
-        inputText.setLayoutY(27);
+        AnchorPane.setLeftAnchor(nameLabel, 50.0);
+        AnchorPane.setTopAnchor(nameLabel, 50.0);
+        nameLabel.setLayoutX(14);
+        nameLabel.setLayoutY(37);
         nameField.setLayoutX(208);
         nameField.setLayoutY(37);
         confirm.setLayoutX(296);
@@ -111,21 +111,9 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
      * This method brings up an editor that contains the data of an existing object that is already created.
      */
     protected abstract void readGameObjectInstance();
-//
-//    /**
-//     * Return the object after edits in this ObjectEditor.
-//     *
-//     * @return A specific user object.
-//     */
-//    public abstract V getObject();
-//
+
     /**
      * Read the GameObjectClass represented by this editor.
      */
     protected abstract void readGameObjectClass();
-//
-//    /**
-//     * @return The GameObjectClass stored in the internal memory right now.
-//     */
-//    public abstract T getGameObjectClass();
 }

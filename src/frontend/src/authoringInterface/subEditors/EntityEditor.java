@@ -7,8 +7,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -28,17 +28,18 @@ import java.util.List;
  * @author Haotian Wang
  */
 public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityInstance> {
-    private Text imageText;
+    private Label imageText;
     private Button chooseImage;
     private HBox imagePanel;
     private ObservableList<String> imagePaths;
 
     public EntityEditor(GameObjectsCRUDInterface manager) {
         super(manager);
-        inputText.setText("Your entity name:");
-        imageText = new Text("Add an image to your entity");
+        nameLabel.setText("Your entity name:");
+        imageText = new Label("Add an image to your entity");
         chooseImage = new Button("Choose image");
         imagePanel = new HBox(10);
+        nameField.setPromptText("Your entity name");
         imagePaths = FXCollections.observableArrayList();
         imagePaths.addListener((ListChangeListener<String>) c -> presentImages());
         chooseImage.setOnAction(e -> {
@@ -134,8 +135,8 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         imageText.setLayoutX(36);
         imageText.setLayoutY(176);
         chooseImage.setLayoutX(261);
-        chooseImage.setLayoutY(158);
-        imagePanel.setLayoutX(37);
+        chooseImage.setLayoutY(176);
+        imagePanel.setLayoutX(36);
         imagePanel.setLayoutY(206);
     }
 }

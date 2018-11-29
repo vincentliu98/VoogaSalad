@@ -9,6 +9,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import utils.ErrorWindow;
 
@@ -21,28 +22,27 @@ import utils.ErrorWindow;
 public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance> {
     private TextField widthText = new TextField();
     private TextField heightText = new TextField();
-    private TextField nameText = new TextField();
-    private Label nameLabel = new Label();
+    private GridPane geometry = new GridPane();
     private Label widthLabel = new Label();
     private Label heightLabel = new Label();
-    private ObservableList<String> imagePaths;
+    private ObservableList<String> imagePaths = FXCollections.observableArrayList();
     private double width;
     private double height;
 
     public TileEditor(GameObjectsCRUDInterface manager) {
         super(manager);
-        imagePaths = FXCollections.observableArrayList();
+        nameLabel.setText("Your tile name");
         widthText.setPromptText("Width");
         heightText.setPromptText("Height");
-        nameText.setPromptText("Tile Name");
-        nameLabel.setText("Name");
+        nameField.setPromptText("Tile name");
         widthLabel.setText("Width");
         heightLabel.setText("Height");
+        geometry.setHgap(30);
+        geometry.addRow(0, widthLabel, widthText);
+        geometry.addRow(1, heightLabel, heightText);
 
         rootPane.getChildren().addAll(
-                nameLabel, nameText,
-                widthLabel, widthText,
-                heightLabel, heightText);
+                geometry);
 
         confirm.setOnAction(e -> {
             if (nameField.getText().trim().isEmpty()) {
@@ -126,17 +126,7 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
     }
 
     private void setupLayout() {
-        widthText.setLayoutX(36);
-        widthText.setLayoutY(176);
-        widthLabel.setLayoutX(30);
-        widthLabel.setLayoutY(176);
-        heightText.setLayoutX(261);
-        heightText.setLayoutY(176);
-        heightLabel.setLayoutX(250);
-        heightLabel.setLayoutY(176);
-        nameText.setLayoutX(37);
-        nameText.setLayoutY(206);
-        nameLabel.setLayoutX(30);
-        nameLabel.setLayoutY(206);
+        geometry.setLayoutX(50);
+        geometry.setLayoutY(100);
     }
 }
