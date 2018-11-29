@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.stage.Stage;
+import utils.ErrorWindow;
 
 /**
  * Editor to change the Tile settings. Need to work on it. Low priority
@@ -43,10 +44,7 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
 
         confirm.setOnAction(e -> {
             if (nameField.getText().trim().isEmpty()) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Empty Name");
-                alert.setContentText("You must give your tile a non-empty name");
-                alert.showAndWait();
+                new ErrorWindow("Empty name", "You must give your tile a non-empty name").showAndWait();
             } else {
                 ((Stage) rootPane.getScene().getWindow()).close();
                 switch (editingMode) {

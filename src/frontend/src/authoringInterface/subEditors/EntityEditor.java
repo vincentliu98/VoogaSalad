@@ -51,7 +51,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         });
         confirm.setOnAction(e -> {
             if (nameField.getText().trim().isEmpty()) {
-                new ErrorWindow("Empty name", "You must give your entity a non-empty name");
+                new ErrorWindow("Empty name", "You must give your entity a non-empty name").showAndWait();
             } else {
                 ((Stage) rootPane.getScene().getWindow()).close();
                 switch (editingMode) {

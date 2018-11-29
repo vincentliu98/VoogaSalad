@@ -12,6 +12,5 @@ public class ErrorWindow extends Alert {
         super(AlertType.ERROR);
         setTitle(alertName);
         setContentText(content);
-        showAndWait();
     }
 }
