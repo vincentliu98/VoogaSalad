@@ -3,6 +3,7 @@ package authoringInterface.subEditors;
 import gameObjects.GameObjectsCRUDInterface;
 import gameObjects.tile.TileClass;
 import gameObjects.tile.TileInstance;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 /**
@@ -22,11 +23,15 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
         heightText.setPromptText("Height");
         nameText.setPromptText("Tile Name");
 
+        rootPane.getChildren().addAll(
+                new Label("name"), nameText,
+                new Label("Width"), widthText,
+                new Label("Height"), heightText);
+
         confirm.setOnAction(e -> {
 
         });
         setupLayout();
-        rootPane.getChildren().addAll(widthText,heightText,nameText);
     }
 
     /**
