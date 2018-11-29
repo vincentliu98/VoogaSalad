@@ -1,6 +1,5 @@
 package launchingGame;
 
-import api.SubView;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -12,9 +11,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import playing.MainPlayer;
 
-
-public class GameIcon implements SubView<StackPane> {
+public class GameIcon {
     public static final String TEXT_CSS = "title-box";
     public static final String DESCRIPTION_CSS = "description-box";
     public static final double DESCRIPTION_INSET = 10;
@@ -24,6 +23,9 @@ public class GameIcon implements SubView<StackPane> {
     public static final double PLAYBUTTON_HEIGHT = 35;
     public static final String PLAYBUTTON_CSS_HOVER = "play-button-hover";
     public static final String BUTTON_HOLDER_CSS = "button-holder";
+    public static double ICON_WIDTH = 250;
+    public static double ICON_HEIGHT = 180;
+    public static String IMAGES_FOLDER_PATH = "/game-images/";
 
     private StackPane myPane;
     private ImageView myBackground;
@@ -34,12 +36,22 @@ public class GameIcon implements SubView<StackPane> {
     private Button myPlayButton;
     private HBox myButtonHolder;
 
-    private double myWidth;
+    private String myName;
+    private String myDescriptionString;
+    private String myImagePath;
+    private String myTags;
+    private String myReferencePath;
 
-    public GameIcon(double width, double height){
-        myWidth = width;
+
+    public GameIcon(String gameName, String description, String reference, String color, String imagePath, String tags){
+        myName = gameName;
+        myDescriptionString = description;
+        myReferencePath = reference;
+        myImagePath = imagePath;
+        myTags = tags;
+
         initPane();
-        initBackground(width, height);
+        initBackground();
         initTitle();
         initDescription();
         initButton();
@@ -62,16 +74,16 @@ public class GameIcon implements SubView<StackPane> {
 
     }
 
-    private void initBackground(double width, double height){
-        Image image = new Image(getClass().getResourceAsStream("/images/background.jpg"));
+    private void initBackground(){
+        Image image = new Image(getClass().getResourceAsStream(IMAGES_FOLDER_PATH + myImagePath));
         myBackground = new ImageView(image);
-        myBackground.setFitWidth(width);
-        myBackground.setFitHeight(height);
+        myBackground.setFitWidth(ICON_WIDTH);
+        myBackground.setFitHeight(ICON_HEIGHT);
         myPane.getChildren().add(myBackground);
     }
 
     private void initTitle(){
-        myTitle = new Text("Chess");
+        myTitle = new Text(myName);
         myTitle.setFill(Color.BLACK);
 
         myTitleHolder = new HBox();
@@ -87,10 +99,10 @@ public class GameIcon implements SubView<StackPane> {
         myDescriptionHolder.setAlignment(Pos.CENTER);
         myDescriptionHolder.getStyleClass().add(DESCRIPTION_CSS);
 
-        myDescription = new Text("Info: Released in 1976, Omen was directed by Richard Donner and written by David Seltzer. It stars Gregory Peck and Lee Remick. The film was a major critical and financial success and was released originally by 20th Century Fox in the UK and the US. ");
+        myDescription = new Text(myDescriptionString);
         myDescription.setTextAlignment(TextAlignment.LEFT);
         myDescription.setFill(Color.BLACK);
-        myDescription.setWrappingWidth(myWidth - DESCRIPTION_INSET);
+        myDescription.setWrappingWidth(ICON_WIDTH - DESCRIPTION_INSET);
 
 
         myDescriptionHolder.getChildren().add(myDescription);
@@ -118,7 +130,13 @@ public class GameIcon implements SubView<StackPane> {
                 myPlayButton.getStyleClass().add(PLAYBUTTON_CSS_NORMAL);
             }
         });
-
+        myPlayButton.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                MainPlayer myPlayer = new MainPlayer();
+                myPlayer.launchGame(myReferencePath);
+            }
+        });
 
         myButtonHolder = new HBox();
         myButtonHolder.getChildren().add(myPlayButton);
@@ -126,7 +144,6 @@ public class GameIcon implements SubView<StackPane> {
         myButtonHolder.getStyleClass().add(BUTTON_HOLDER_CSS);
     }
 
-    @Override
     public StackPane getView() {
         return myPane;
     }
