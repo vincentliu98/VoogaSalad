@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<game>
+    <name>
+        Chess
+    </name>
+    <info>
+        Chess is a two-player strategy board game played on a chessboard, a checkered gameboard with 64 squares arranged in an 8×8 grid.
+        The game is played by millions of people worldwide.
+        Chess is believed to have originated in India sometime before the 7th century.
+    </info>
+    <color>
+        black
+    </color>
+    <displaygraphic>
+        chess-background.jpg
+    </displaygraphic>
+</game>
