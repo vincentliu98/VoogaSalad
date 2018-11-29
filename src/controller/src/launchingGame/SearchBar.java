@@ -5,6 +5,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 
 public class SearchBar {
@@ -20,8 +22,11 @@ public class SearchBar {
 
     private TextField myTextField;
     private Button myCloseButton;
+    private Searchable mySearchable;
 
-    public SearchBar(){
+    public SearchBar(Searchable searchable){
+        mySearchable = searchable;
+
         initField();
         initButton();
         initBox();
@@ -44,6 +49,14 @@ public class SearchBar {
 
         myTextField.setPrefWidth(BAR_WIDTH);
         myTextField.setMinWidth(MIN_WIDTH);
+
+        myTextField.setOnKeyPressed(event -> {
+            if(event.getCode() == KeyCode.ENTER){
+                String txt = myTextField.getCharacters().toString();
+                mySearchable.showByTag(txt);
+                myTextField.clear();
+            }
+        });
     }
 
     private void initButton(){
@@ -60,6 +73,7 @@ public class SearchBar {
 
         myCloseButton.setOnAction(event -> {
             myTextField.clear();
+            mySearchable.showAll();
         });
     }
 

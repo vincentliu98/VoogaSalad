@@ -18,9 +18,9 @@ public class LauncherWindow {
         myPane = new BorderPane();
         myStage = stage;
 
-        myBar = new LauncherTopBarView(TOP_HEIGHT, myStage);
-        mySide = new LauncherSideBarView(SIDE_WIDTH);
         myDisplay = new LauncherGamesDisplay();
+        myBar = new LauncherTopBarView(TOP_HEIGHT, myStage, myDisplay);
+        mySide = new LauncherSideBarView(SIDE_WIDTH, myDisplay);
 
         myPane.setTop(myBar.getView());
         myPane.setLeft(mySide.getView());

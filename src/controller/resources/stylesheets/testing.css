@@ -62,3 +62,7 @@
 .play-button-hover {
     -fx-background-color: rgb(104,210,180);
 }
+
+.sort-button {
+    -fx-background-color: transparent;
+}
