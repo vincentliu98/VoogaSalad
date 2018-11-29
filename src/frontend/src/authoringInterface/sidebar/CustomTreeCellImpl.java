@@ -1,14 +1,14 @@
 package authoringInterface.sidebar;
 
-import authoringInterface.sidebar.subEditors.EntityEditor;
-import authoringInterface.sidebar.subEditors.TileEditor;
-import authoringInterface.sidebar.treeItemEntries.EditTreeItem;
+import authoringInterface.subEditors.*;
+import gameObjects.GameObjectsCRUDInterface;
+import gameObjects.gameObject.GameObjectClass;
+import gameObjects.gameObject.GameObjectInstance;
+import gameObjects.gameObject.GameObjectType;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
-
-import java.util.Map;
 
 /**
  * This class organizes the cell factory call back methods into a nicer format.
@@ -16,31 +16,26 @@ import java.util.Map;
  * @author Haotian Wang
  */
 public class CustomTreeCellImpl extends TreeCell<String> {
-    private Map<String, EditTreeItem> objectMap;
     private TextField textField;
     private ContextMenu addMenu = new ContextMenu();
+    private ContextMenu editMenu = new ContextMenu();
+    private GameObjectsCRUDInterface objectManager;
 
-    public CustomTreeCellImpl(Map<String, EditTreeItem> map) {
-        objectMap = map;
+    public CustomTreeCellImpl(GameObjectsCRUDInterface manager) {
+        objectManager = manager;
         MenuItem addMenuItem = new MenuItem("Add an entry");
         addMenuItem.setOnAction(e -> {
-            int id = getTreeItem().getChildren().size();
             switch (getItem()) {
                 case "ENTITY":
                     Stage dialogStage = new Stage();
-                    EntityEditor editor = new EntityEditor();
+                    EntityEditor editor = new EntityEditor(manager);
                     dialogStage.setScene(new Scene(editor.getView(), 500, 500));
                     dialogStage.show();
-                    editor.addTreeItem(getTreeItem(), objectMap);
+                    editor.addTreeItem(getTreeItem());
                     break;
                 case "SOUND":
                     break;
                 case "TILE":
-                    Stage tileDialogStage = new Stage();
-                    TileEditor tileEditor = new TileEditor();
-                    tileDialogStage.setScene(new Scene(tileEditor.getView(), 500, 500));
-                    tileDialogStage.show();
-                    tileEditor.addTreeItem(getTreeItem(), objectMap);
                     break;
                 case "User Settings":
                     break;
@@ -48,6 +43,35 @@ public class CustomTreeCellImpl extends TreeCell<String> {
         });
         addMenu.getItems().add(addMenuItem);
         setOnDragDetected(e -> startFullDrag());
+        MenuItem editMenuItem = new MenuItem("Edit this GameObject");
+        MenuItem deleteMenuItem = new MenuItem("Delete this GameObject");
+        editMenuItem.setOnAction(e -> {
+            GameObjectClass objectClass = objectManager.getGameObjectClass(getItem());
+            Stage dialogStage = new Stage();
+            AbstractGameObjectEditor editor = null;
+            switch (objectClass.getType()) {
+                case ENTITY:
+                    editor = new EntityEditor(objectManager);
+                    break;
+                case SOUND:
+                    // TODO
+                    break;
+                case CATEGORY:
+                    // TODO
+                    break;
+                case TILE:
+                    // TODO
+                    break;
+            }
+            dialogStage.setScene(new Scene(editor.getView(), 500, 500));
+            dialogStage.show();
+            editor.editTreeItem(getTreeItem(), objectClass);
+        });
+        deleteMenuItem.setOnAction(e -> {
+            objectManager.deleteGameObjectClass(getItem());
+            getTreeItem().getParent().getChildren().remove(getTreeItem());
+        });
+        editMenu.getItems().addAll(editMenuItem, deleteMenuItem);
     }
 
     @Override
@@ -86,6 +110,8 @@ public class CustomTreeCellImpl extends TreeCell<String> {
                 setGraphic(getTreeItem().getGraphic());
                 if (!getTreeItem().isLeaf()) {
                     setContextMenu(addMenu);
+                } else {
+                    setContextMenu(editMenu);
                 }
             }
         }
@@ -95,8 +121,7 @@ public class CustomTreeCellImpl extends TreeCell<String> {
         textField = new TextField(getString());
         textField.setOnKeyReleased(t -> {
             if (t.getCode() == KeyCode.ENTER) {
-                objectMap.put(textField.getText(), objectMap.get(getItem()));
-                objectMap.remove(getItem());
+                objectManager.changeGameObjectClassName(getItem(), textField.getText());
                 commitEdit(textField.getText());
             } else if (t.getCode() == KeyCode.ESCAPE) {
                 cancelEdit();

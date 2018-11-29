@@ -2,6 +2,13 @@ package authoringInterface.editor.memento;
 
 import java.util.ArrayList;
 
+/**
+ * An EditorCaretaker (Memento pattern) class that stores all the state of the program
+ * An instance is created whenever the user saves the file, which will be added to EditorCaretaker
+ *
+ * @author jl729
+ */
+
 public class EditorCaretaker {
     private ArrayList<EditorMemento> mementos = new ArrayList<>();
 

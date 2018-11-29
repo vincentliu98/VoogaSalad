@@ -1,6 +1,8 @@
 package gameplay;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
+import grids.Point;
+import grids.PointImpl;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
@@ -14,9 +16,8 @@ public class Tile extends PropertyHolder<Tile> implements GameObject, EventHandl
     private int myID;
     private String name;
     private int myWidth, myHeight;
-    private int myXCoord, myYCoord; // a hidden assumption here is that the tiles are immovable objects
+    private PointImpl myCoord; // ugh interfaces are hard to use with XStream
     private List<String> myImagePaths;
-    private List<Integer> myEntities;
     private String myImageSelector; // Groovy codee
 
     @XStreamOmitField
@@ -44,8 +45,8 @@ public class Tile extends PropertyHolder<Tile> implements GameObject, EventHandl
      *  Adjusts the size of this tile in pixels with respect to screen dimensions
      */
     public void adjustViewSize(double screenWidth, double screenHeight) {
-        myImageView.setX((screenWidth*myXCoord)/GameData.gridWidth());
-        myImageView.setY((screenHeight*myYCoord)/GameData.gridHeight());
+        myImageView.setX((screenWidth*myCoord.getX())/GameData.gridWidth());
+        myImageView.setY((screenHeight*myCoord.getY())/GameData.gridHeight());
         myImageView.setFitWidth((screenWidth*myWidth)/GameData.gridWidth());
         myImageView.setFitHeight((screenHeight*myHeight)/GameData.gridHeight());
 
@@ -72,34 +73,16 @@ public class Tile extends PropertyHolder<Tile> implements GameObject, EventHandl
         } else imgIndex.set(0);
     }
 
-    /**
-     *  When the entity moves, it would always call these two methods at the same time
-     *
-     *  newTile.addEntity(entity.myID)
-     *  oldTile.removeEntity(entity.myID)
-     */
-    public void addEntity(int entityID){
-        myEntities.add(entityID);
-        GameData.getEntity(entityID).setLocation(myXCoord + (myWidth-1)/2., myYCoord + (myHeight-1)/2);
-    }
-    public void removeEntity(int entityID) {
-        myEntities.removeIf(id -> id == entityID);
-        // TODO: make sure this removes the OBJECT
-        // This method is good enough here.
-    }
-
     public ImageView getImageView(){ return myImageView; }
-
-    public boolean hasNoEntities(){ return myEntities.isEmpty(); }
 
     public int getID(){ return myID; }
     public String getName() { return name; }
 
     @Override
-    public double getX() { return myXCoord; }
+    public double getX() { return myCoord.getX(); }
 
     @Override
-    public double getY() { return myYCoord; }
+    public double getY() { return myCoord.getY(); }
 
     @Override
     public void handle(MouseEvent event) {

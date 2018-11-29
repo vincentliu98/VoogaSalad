@@ -15,7 +15,7 @@ public class GroovyBlockTest {
 
     @BeforeEach
     public void setupTestData() {
-        tools = new AuthoringTools();
+        tools = new AuthoringTools(5,5);
         factory = tools.factory();
         shell = new GroovyShell();
     }
@@ -55,7 +55,7 @@ public class GroovyBlockTest {
         graph.addEdge(e5);
 
         // Now the author makes the second line
-        // if($clicked.hp <= 0) $entities.$instances.remove($clicked)
+        // if($clicked.hp <= 0) $gameObjects.$instances.remove($clicked)
 
         var ifBlock = factory.ifBlock();
         graph.addNode(ifBlock);

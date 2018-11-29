@@ -1,10 +1,9 @@
 package authoring;
 
-import entities.EntitiesCRUDInterface;
-import entities.SimpleEntitiesCRUD;
-import grids.Grid;
-import grids.GridImpl;
-import grids.GridShape;
+
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
+import gameObjects.GameObjectsCRUDInterface;
+import gameObjects.SimpleGameObjectsCRUD;
 import groovy.api.GroovyFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
@@ -14,25 +13,42 @@ import phase.api.PhaseDB;
  *  This class contains all the tools to author a game;
  */
 public class AuthoringTools {
-    private GroovyFactory factory;
-    private ObservableMap<String, Object> globalData;
-    private EntitiesCRUDInterface entityDB;
+    private GameObjectsCRUDInterface entityDB;
     private PhaseDB phaseDB;
 
-    public AuthoringTools() {
+    @XStreamOmitField
+    private transient GroovyFactory factory;
+
+    public AuthoringTools(int gridWidth, int gridHeight) {
         factory = new GroovyFactory();
-        globalData = FXCollections.observableHashMap();
-        Grid grid = new GridImpl(50, 50, GridShape.Square);
-        entityDB = new SimpleEntitiesCRUD(grid);
+
+        entityDB = new SimpleGameObjectsCRUD(gridWidth, gridHeight);
+
         phaseDB = new PhaseDB(factory);
     }
 
+    public void setGridDimension(int width, int height) {
+        entityDB.setDimension(width, height);
+    }
+
     public GroovyFactory factory() { return factory; }
-    public ObservableMap globalData() { return globalData; }
-    public EntitiesCRUDInterface entityDB() { return entityDB; }
+    public GameObjectsCRUDInterface entityDB() { return entityDB; }
     public PhaseDB phaseDB() { return phaseDB; }
 
-    // ... Not exactly, but something like this
-    public String toEngineXML() { return Serializers.forEngine().toXML(this); }
+    public String toEngineXML() {
+        String notNatural = "\\$NOBODY\\$IS\\$GONNA\\$WRITE\\$THIS";
+        return Serializers.forEngine()
+                          .toXML(this)
+                          .replaceAll("&lt; ", "<"+notNatural)
+                          .replaceAll("&gt; ", ">"+notNatural)
+                          .replaceAll("&lt;= ", "<="+notNatural)
+                          .replaceAll("&gt;= ", ">="+notNatural)
+                          .replaceAll("&lt;", "<")
+                          .replaceAll("&gt;", ">")
+                          .replaceAll("<"+notNatural, "&lt; " )
+                          .replaceAll(">"+notNatural, "&gt; " )
+                          .replaceAll("<="+notNatural, "&lt;= ")
+                          .replaceAll(">="+notNatural, "&gt;= ");
+    }
     public String toAuthoringXML() { return null; }
 }

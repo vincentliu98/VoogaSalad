@@ -3,7 +3,8 @@ package authoringInterface.editor.editView;
 import api.SubView;
 import authoring.AuthoringTools;
 import authoringInterface.editor.memento.Editor;
-import authoringInterface.sidebar.SideViewInterface;
+import authoringInterface.sidebar.SideView;
+import gameObjects.GameObjectsCRUDInterface;
 import graphUI.groovy.GroovyPaneFactory;
 import graphUI.phase.PhaseChooserPane;
 import graphUI.phase.PhasePane;
@@ -19,26 +20,29 @@ import javafx.scene.control.TabPane.TabClosingPolicy;
  *
  * @author Amy Kim
  * @author jl729
+ * @author Haotian Wang
  */
 
 public class EditView implements SubView<TabPane> {
     private final TabPane tabPane = new TabPane();
-    private SideViewInterface sideView;
     private AuthoringTools authTools;
     private final Editor editor = new Editor();
     private GroovyPaneFactory groovyPaneFactory;
+    private GameObjectsCRUDInterface objectManager;
+    private int rowNumber;
+    private int colNumber;
 
     /**
      * This method constructs the tabView.
      *
      * @return A tabView Node to be displayed at the left side of the createGraph window.
-     * @param sideView
      */
-    public EditView(SideViewInterface sideView, AuthoringTools authTools,  GroovyPaneFactory groovyPaneFactory){
-        this.sideView = sideView;
+    public EditView(AuthoringTools authTools, GroovyPaneFactory groovyPaneFactory, int row, int col, GameObjectsCRUDInterface manager){
         this.authTools = authTools;
         this.groovyPaneFactory = groovyPaneFactory;
-        editor.setState(authTools.globalData());
+        objectManager = manager;
+        rowNumber = row;
+        colNumber = col;
         initializeTab();
         tabPane.setTabDragPolicy(TabDragPolicy.REORDER);
         tabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
@@ -49,10 +53,10 @@ public class EditView implements SubView<TabPane> {
         mainTab.setContent(new MainTabView().getView());
 
         Tab GridTab = new Tab("Grid");
-        GridTab.setContent(new EditGridView(sideView).getView());
+        GridTab.setContent(new EditGridView(rowNumber, colNumber, objectManager).getView());
 
         Tab EntityTab = new Tab("Entity");
-        EntityTab.setContent(new EditEntityView(sideView).getView());
+        EntityTab.setContent(new EditEntityView().getView());
 
         Tab PhaseTab = new Tab("Phase");
         PhaseTab.setContent(

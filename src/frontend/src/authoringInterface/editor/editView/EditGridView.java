@@ -2,22 +2,16 @@ package authoringInterface.editor.editView;
 
 import api.DraggingCanvas;
 import api.SubView;
-import authoringInterface.sidebar.SideView;
-import authoringInterface.sidebar.SideViewInterface;
-import authoringInterface.sidebar.subEditors.AbstractObjectEditor;
-import authoringInterface.sidebar.subEditors.EditingMode;
-import authoringInterface.sidebar.subEditors.EntityEditor;
-import authoringInterface.sidebar.subEditors.ObjectEditor;
-import authoringInterface.sidebar.treeItemEntries.EditTreeItem;
-import authoringInterface.sidebar.treeItemEntries.Entity;
-import authoringInterface.sidebar.treeItemEntries.TreeItemType;
-import javafx.event.ActionEvent;
+import authoringInterface.subEditors.*;
+import gameObjects.GameObjectsCRUDInterface;
+import gameObjects.entity.EntityClass;
+import gameObjects.entity.EntityInstance;
+import gameObjects.gameObject.GameObjectClass;
+import gameObjects.gameObject.GameObjectInstance;
+import gameObjects.gameObject.GameObjectType;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.Image;
@@ -42,16 +36,16 @@ import java.util.Map;
 public class EditGridView implements SubView<ScrollPane>, DraggingCanvas {
     private GridPane gridScrollView;
     private ScrollPane scrollPane;
-    private SideViewInterface sideView;
-    private Map<Node, EditTreeItem> nodeToObjectMap;
+    private GameObjectsCRUDInterface gameObjectManager;
+    private Map<Node, GameObjectInstance> nodeToGameObjectInstanceMap;
 
-    public EditGridView(SideViewInterface sideView) {
-        this.sideView = sideView;
+    public EditGridView(int row, int col, GameObjectsCRUDInterface manager) {
+        gameObjectManager = manager;
         scrollPane = new ScrollPane();
-        nodeToObjectMap = new HashMap<>();
+        nodeToGameObjectInstanceMap = new HashMap<>();
         gridScrollView = new GridPane();
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
                 StackPane cell = new StackPane();
                 cell.setPrefWidth(100);
                 cell.setPrefHeight(100);
@@ -59,32 +53,7 @@ public class EditGridView implements SubView<ScrollPane>, DraggingCanvas {
             }
         }
         gridScrollView.setGridLinesVisible(true);
-        gridScrollView.addEventFilter(MouseDragEvent.MOUSE_DRAG_RELEASED, e -> {
-            if (e.getGestureSource() instanceof TreeCell) {
-                TreeItem<String> item = ((TreeCell<String>) e.getGestureSource()).getTreeItem();
-                if (!item.isLeaf()) {
-                    return;
-                }
-                StackPane intersected = (StackPane) e.getTarget();
-                EditTreeItem object = sideView.getObject(item.getValue());
-                TreeItemType type = object.getType();
-                switch (type) {
-                    case ENTITY:
-                        if (((Entity) object).getSprite() == null) {
-                            Text deploy = new Text(object.getName());
-                            deploy.setOnMouseClicked(e1 -> handleDoubleClick(e1, deploy));
-                            intersected.getChildren().add(deploy);
-                            nodeToObjectMap.put(deploy, object);
-                        } else {
-                            ImageView deploy = new ImageView(((Entity) object).getSprite());
-                            deploy.setOnMouseClicked(e1 -> handleDoubleClick(e1, deploy));
-                            intersected.getChildren().add(deploy);
-                            nodeToObjectMap.put(deploy, object);
-                        }
-                        break;
-                }
-            }
-        });
+        setupDraggingCanvas();
         scrollPane = new ScrollPane(gridScrollView);
     }
 
@@ -96,22 +65,25 @@ public class EditGridView implements SubView<ScrollPane>, DraggingCanvas {
      */
     private void handleDoubleClick(MouseEvent event, Node targetNode) {
         if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) {
-            EditTreeItem userObject = nodeToObjectMap.get(targetNode);
-            TreeItemType type = userObject.getType();
+            GameObjectInstance userObject = nodeToGameObjectInstanceMap.get(targetNode);
+            GameObjectType type = userObject.getType();
             Stage dialogStage = new Stage();
-            AbstractObjectEditor editor = null;
+            AbstractGameObjectEditor editor = null;
             switch (type) {
                 case ENTITY:
-                    editor = new EntityEditor();
-                    editor.readObject(userObject);
+                    editor = new EntityEditor(gameObjectManager);
+                    break;
                 case SOUND:
+                    editor = new SoundEditor(gameObjectManager);
                     break;
                 case TILE:
+                    editor = new TileEditor(gameObjectManager);
                     break;
                 case CATEGORY:
+                    editor = new CategoryEditor(gameObjectManager);
                     break;
             }
-            editor.editNode(targetNode, nodeToObjectMap);
+            editor.editNode(targetNode, userObject);
             dialogStage.setScene(new Scene(editor.getView(), 500, 500));
             dialogStage.show();
         }
@@ -127,6 +99,41 @@ public class EditGridView implements SubView<ScrollPane>, DraggingCanvas {
      */
     @Override
     public void setupDraggingCanvas() {
-
+        gridScrollView.addEventFilter(MouseDragEvent.MOUSE_DRAG_RELEASED, e -> {
+            if (e.getGestureSource() instanceof TreeCell) {
+                TreeItem<String> item = ((TreeCell<String>) e.getGestureSource()).getTreeItem();
+                if (!item.isLeaf()) {
+                    return;
+                }
+                StackPane intersected = (StackPane) e.getTarget();
+                GameObjectClass objectClass = gameObjectManager.getGameObjectClass(item.getValue());
+                GameObjectType type = objectClass.getType();
+                switch (type) {
+                    case ENTITY:
+                        if (objectClass.getImagePathList().isEmpty()) {
+                            Text deploy = new Text(objectClass.getClassName().getValue());
+                            deploy.setOnMouseClicked(e1 -> handleDoubleClick(e1, deploy));
+                            intersected.getChildren().add(deploy);
+                            // TODO: get tile id
+                            EntityInstance objectInstance = ((EntityClass) objectClass).createInstance(0);
+                            nodeToGameObjectInstanceMap.put(deploy, objectInstance);
+                        } else {
+                            ImageView deploy = new ImageView(new Image(objectClass.getImagePathList().get(0)));
+                            deploy.setOnMouseClicked(e1 -> handleDoubleClick(e1, deploy));
+                            intersected.getChildren().add(deploy);
+                            // TODO: get tile id
+                            EntityInstance objectInstance = ((EntityClass) objectClass).createInstance(0);
+                            nodeToGameObjectInstanceMap.put(deploy, objectInstance);
+                        }
+                        break;
+                    case SOUND:
+                        // TODO
+                        break;
+                    case TILE:
+                        // TODO
+                        break;
+                }
+            }
+        });
     }
 }

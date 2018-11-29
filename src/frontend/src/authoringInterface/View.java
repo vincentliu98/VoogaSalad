@@ -7,7 +7,8 @@ import authoring.AuthoringTools;
 import authoringInterface.editor.editView.EditView;
 import authoringInterface.editor.menuBarView.EditorMenuBarView;
 import authoringInterface.sidebar.SideView;
-import authoringInterface.sidebar.SideViewInterface;
+import gameObjects.GameObjectsCRUDInterface;
+import gameObjects.SimpleGameObjectsCRUD;
 import graphUI.groovy.GroovyPaneFactory;
 import javafx.scene.Node;
 import javafx.scene.control.TreeCell;
@@ -28,23 +29,27 @@ import javafx.stage.Stage;
 public class View implements ParentView<SubView>, DraggingCanvas {
     private AnchorPane rootPane;
     private EditorMenuBarView menuBar;
-    private SideViewInterface sideView;
+    private SideView sideView;
     private GroovyPaneFactory groovyPaneFactory;
     private EditView editView;
     private Stage primaryStage;
     private AuthoringTools tools;
     private Node preview;
+    private GameObjectsCRUDInterface gameObjectManager;
     public static final double MENU_BAR_HEIGHT = 30;
     public static final double GAME_WIDTH = 700;
     public static final double GAME_HEIGHT = 500;
+    private static final int ROW_NUMBER = 5;
+    private static final int COL_NUMBER = 5;
 
     /**
      * Constructor for an createGraph window, with an AnchorPane as the root Node, and the AnchorPane constraints on top, left and right are 0.
      */
     public View(Stage primaryStage) {
+        gameObjectManager = new SimpleGameObjectsCRUD(ROW_NUMBER, COL_NUMBER);
         this.primaryStage = primaryStage;
         rootPane = new AnchorPane();
-        tools = new AuthoringTools();
+        tools = new AuthoringTools(COL_NUMBER, ROW_NUMBER);
         groovyPaneFactory = new GroovyPaneFactory(primaryStage, tools.factory());
 
         initializeElements();
@@ -55,8 +60,8 @@ public class View implements ParentView<SubView>, DraggingCanvas {
 
     private void initializeElements() {
         menuBar = new EditorMenuBarView(tools, primaryStage::close);
-        sideView = new SideView();
-        editView = new EditView(sideView,tools, groovyPaneFactory);
+        sideView = new SideView(gameObjectManager);
+        editView = new EditView(tools, groovyPaneFactory, ROW_NUMBER, COL_NUMBER, gameObjectManager);
     }
 
     private void setElements() {

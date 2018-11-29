@@ -1,6 +1,8 @@
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import grids.Point;
+import grids.PointImpl;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 import javafx.scene.image.ImageView;
@@ -33,8 +35,9 @@ public class XStreamTest {
         shell.evaluate("$ret.put('hello', 1)");
         System.out.println(((Entity) e.properties().get("he")).properties().get("hello"));
         System.out.println(shell.evaluate("entity.properties().get('he').properties().get('hello')-2"));
+        Point p = new PointImpl(1,2);
+        System.out.println(xstream.toXML(p));
 
-        System.out.println(xstream.toXML(new Entity()));
     }
 
     public static abstract class Property {
@@ -47,7 +50,7 @@ public class XStreamTest {
         private GameEvent trigger;
 
         public Entity() {
-            properties = new HashMap<>();
+            properties = new LinkedHashMap<>();
             ids = new HashSet<>();
             properties.put("ha", 1);
             ids.add(1);
