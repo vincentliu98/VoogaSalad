@@ -10,8 +10,10 @@ ObservableList<GameObjectInstance> getAllInstances()
 I don't think this super class should have methods that get images etc.
 
 ### EntityClass
+```java
 ObservableList<String> getImagePathList()
 void addImagePath(String filePath)
+```
 
 ### SoundClass
 ```java
