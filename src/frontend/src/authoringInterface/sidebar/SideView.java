@@ -36,7 +36,7 @@ public class SideView implements SubView<StackPane> {
         for (GameObjectClass item : defaultList) {
             switch (item.getType()) {
                 case CATEGORY:
-                    // TODO
+                    gameObjectsManager.createCategoryClass(item.getClassName().getValue());
                     break;
                 case ENTITY:
                     gameObjectsManager.createEntityClass(item.getClassName().getValue());
@@ -51,7 +51,7 @@ public class SideView implements SubView<StackPane> {
             TreeItem<String> objectLeaf = new TreeItem<>(item.getClassName().getValue());
             boolean found = false;
             for (TreeItem<String> categoryNode : rootNode.getChildren()) {
-                if (GameObjectType.valueOf(categoryNode.getValue()) == item.getType()) {
+                if (categoryNode.getValue() == item.getType().toString()) {
                     categoryNode.getChildren().add(objectLeaf);
                     found = true;
                     break;

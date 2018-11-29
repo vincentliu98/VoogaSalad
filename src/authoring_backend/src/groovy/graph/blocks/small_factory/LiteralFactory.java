@@ -1,6 +1,6 @@
 package groovy.graph.blocks.small_factory;
 
-import utils.Try;
+import frontendUtils.Try;
 import groovy.graph.blocks.core.LiteralBlock;
 
 import java.util.Arrays;

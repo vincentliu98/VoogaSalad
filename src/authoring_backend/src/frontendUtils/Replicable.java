@@ -1,4 +1,4 @@
-package utils;
+package frontendUtils;
 
 /**
  * Every Classes implementing Replicable interface should be able to replicate itself.

@@ -109,6 +109,9 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         if (!tileClassMap.containsKey(oldName)) {
             return false;
         }
+        if (newName.equals(oldName)) {
+            return true;
+        }
         tileClassMap.put(newName, tileClassMap.get(oldName));
         tileClassMap.remove(oldName);
         Consumer<SimpleStringProperty> c = s -> {
@@ -266,8 +269,13 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
 
     @Override
     public boolean changeGameObjectClassName(String oldName, String newName) {
+        // TODO: Needs serious refactoring, this is bad
+
         if (!entityClassMap.containsKey(oldName) && !tileClassMap.containsKey(oldName)) {
             return false;
+        }
+        if (newName.equals(oldName)) {
+            return true;
         }
         if (entityClassMap.containsKey(oldName)) {
             changeEntityClassName(oldName, newName);

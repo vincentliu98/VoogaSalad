@@ -6,7 +6,7 @@ import groovy.graph.blocks.core.GroovyBlock;
 import javafx.geometry.Pos;
 import javafx.scene.paint.Color;
 import javafx.util.Pair;
-import utils.Try;
+import frontendUtils.Try;
 
 import java.util.List;
 
