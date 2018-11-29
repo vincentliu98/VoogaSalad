@@ -38,7 +38,8 @@ Once the rules, objectives, and sprites are defined within the authoring environ
 
 ![gamePlayer UI](gamePlayerUI.png "Game Player UI")
 
-
+* When the user give behaviors on the game (i.e phase, entity).
+![Groovy UI](groovyblocks.png "groovy block UI")
 
 ## Design Details
 
