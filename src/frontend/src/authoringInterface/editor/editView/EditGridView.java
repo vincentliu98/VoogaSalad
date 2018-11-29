@@ -31,7 +31,8 @@ import java.util.Map;
  *      - Representation of the game's grid setting
  *      - It should support Zoom in and zoom out
  *
- * @author Amy Kim, Haotian Wang
+ * @author Amy Kim
+ * @author Haotian Wang
  */
 public class EditGridView implements SubView<ScrollPane>, DraggingCanvas {
     private GridPane gridScrollView;
@@ -55,6 +56,20 @@ public class EditGridView implements SubView<ScrollPane>, DraggingCanvas {
         gridScrollView.setGridLinesVisible(true);
         setupDraggingCanvas();
         scrollPane = new ScrollPane(gridScrollView);
+    }
+
+    public void updateDimension(int width, int height) {
+        gridScrollView.getChildren().removeIf(c -> c instanceof StackPane);
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                StackPane cell = new StackPane();
+                cell.setPrefWidth(100);
+                cell.setPrefHeight(100);
+                gridScrollView.add(cell, i, j);
+            }
+        }
+        gameObjectManager.getEntityInstances().clear();
+        gameObjectManager.getTileInstances().clear();
     }
 
     /**
@@ -130,7 +145,6 @@ public class EditGridView implements SubView<ScrollPane>, DraggingCanvas {
                         // TODO
                         break;
                     case TILE:
-                        // TODO
                         break;
                 }
             }

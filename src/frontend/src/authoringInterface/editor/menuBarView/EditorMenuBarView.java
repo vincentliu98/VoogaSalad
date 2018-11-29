@@ -4,13 +4,10 @@ import api.SubView;
 import authoring.AuthoringTools;
 import authoringInterface.MainAuthoringProgram;
 import authoringInterface.View;
-import authoringInterface.editor.menuBarView.subMenuBarView.CloseFileView;
+import authoringInterface.editor.menuBarView.subMenuBarView.*;
 import authoringInterface.editor.memento.Editor;
 import authoringInterface.editor.memento.EditorCaretaker;
-import authoringInterface.editor.menuBarView.subMenuBarView.LoadFileView;
 import gameplay.Initializer;
-import authoringInterface.editor.menuBarView.subMenuBarView.NewWindowView;
-import authoringInterface.editor.menuBarView.subMenuBarView.SaveFileView;
 import graphUI.groovy.GroovyPaneFactory;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
@@ -22,8 +19,12 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
+import javafx.util.Pair;
+import org.codehaus.groovy.runtime.memoize.ConcurrentCommonCache;
 import runningGame.GameWindow;
 import java.io.File;
+import java.util.function.BiConsumer;
+
 /**
  * MenuBarView class
  *
@@ -31,7 +32,6 @@ import java.io.File;
  * @author Amy
  */
 public class EditorMenuBarView implements SubView<MenuBar> {
-
     private MenuBar menuBar;
     private GameWindow gameWindow;
     private AuthoringTools authTools;
@@ -41,9 +41,12 @@ public class EditorMenuBarView implements SubView<MenuBar> {
     private Integer currentMemento = 0;
     private Runnable closeWindow; //For each window closable
 
-    public EditorMenuBarView(AuthoringTools authTools, Runnable closeWindow) {
+    public EditorMenuBarView(
+            AuthoringTools authTools,
+            Runnable closeWindow,
+            BiConsumer<Integer, Integer> updateGridDimension
+    ) {
         this.authTools = authTools;
-
         this.closeWindow = closeWindow;
 
         menuBar = new MenuBar();
@@ -63,11 +66,13 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         MenuItem undo = new MenuItem("Undo");
         MenuItem redo = new MenuItem("Redo");
         MenuItem runProject = new MenuItem("Run");
+        MenuItem resizeGrid = new MenuItem("Resize Grid");
         MenuItem helpDoc = new MenuItem("Help");
         MenuItem about = new MenuItem("About");
 
         save.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
         newFile.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN));
+        resizeGrid.setAccelerator(new KeyCodeCombination(KeyCode.G, KeyCombination.CONTROL_DOWN));
 
         newFile.setOnAction(e -> new NewWindowView());
         open.setOnAction(e -> new LoadFileView());
@@ -77,12 +82,16 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         undo.setOnAction(this::handleUndo);
         redo.setOnAction(this::handleRedo);
         runProject.setOnAction(this::handleRunProject);
+        resizeGrid.setOnAction(e -> new ResizeGridView().showAndWait().ifPresent(dimension ->
+                updateGridDimension.accept(dimension.getKey(), dimension.getValue())
+        ));
         helpDoc.setOnAction(this::handleHelpDoc);
         about.setOnAction(this::handleAbout);
 
         file.getItems().addAll(newFile, open, save, saveAs, close);
         edit.getItems().addAll(undo, redo);
         run.getItems().addAll(runProject);
+        tools.getItems().addAll(resizeGrid);
         help.getItems().addAll(helpDoc, about);
 
         menuBar.getMenus().addAll(file, edit, tools, run, help);

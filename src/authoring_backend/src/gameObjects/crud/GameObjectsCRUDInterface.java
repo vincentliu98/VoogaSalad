@@ -2,11 +2,15 @@ package gameObjects.crud;
 
 import gameObjects.category.CategoryClass;
 import gameObjects.entity.EntityClass;
+import gameObjects.entity.EntityInstance;
 import gameObjects.exception.DuplicateClassException;
 import gameObjects.exception.NoEntityClassException;
 import gameObjects.exception.NoTileClassException;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.tile.TileClass;
+import gameObjects.tile.TileInstance;
+
+import java.util.Collection;
 
 /**
  *
@@ -106,4 +110,7 @@ public interface GameObjectsCRUDInterface {
      * @return: true if the GameObjectClass is successfully deleted and false otherwise.
      */
     boolean deleteGameObjectClass(String name);
+
+    Collection<TileInstance> getTileInstances();
+    Collection<EntityInstance> getEntityInstances();
 }

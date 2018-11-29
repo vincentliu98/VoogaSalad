@@ -30,6 +30,7 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
 
         confirm.setOnAction(e -> {
 
+
         });
         setupLayout();
     }

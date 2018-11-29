@@ -29,6 +29,7 @@ public class EditView implements SubView<TabPane> {
     private GameObjectsCRUDInterface objectManager;
     private int rowNumber;
     private int colNumber;
+    private EditGridView gridView;
 
     /**
      * This method constructs the tabView.
@@ -51,8 +52,8 @@ public class EditView implements SubView<TabPane> {
         mainTab.setContent(new MainTabView().getView());
 
         Tab GridTab = new Tab("Grid");
-        GridTab.setContent(new EditGridView(rowNumber, colNumber, objectManager).getView());
-
+        gridView = new EditGridView(rowNumber, colNumber, objectManager);
+        GridTab.setContent(gridView.getView());
 
         Tab PhaseTab = new Tab("Phase");
         PhaseTab.setContent(
@@ -63,7 +64,10 @@ public class EditView implements SubView<TabPane> {
         );
 
         tabPane.getTabs().addAll(mainTab, GridTab, PhaseTab);
+    }
 
+    public void updateDimension(int width, int height) {
+        gridView.updateDimension(width, height);
     }
 
     /**
