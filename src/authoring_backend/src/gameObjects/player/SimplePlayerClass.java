@@ -32,7 +32,7 @@ public class SimplePlayerClass implements PlayerClass {
 
     private Consumer<PlayerInstance> addPlayerInstanceToMapFunc;
 
-    private Function<Integer, Boolean> deleteplayerInstanceFromMapFunc;
+    private Function<Integer, Boolean> deletePlayerInstanceFromMapFunc;
 
     private SimplePlayerClass(String name) {
         className = new ReadOnlyStringWrapper(this, CONST_CLASSNAME, name);
@@ -47,14 +47,14 @@ public class SimplePlayerClass implements PlayerClass {
                       Consumer<GameObjectInstance> setInstanceIdFunc,
                       Consumer<GameObjectInstance> returnInstanceIdFunc,
                       Consumer<PlayerInstance> addPlayerInstanceToMapFunc,
-                      Function<Integer, Boolean> deleteplayerInstanceFromMapFunc,
+                      Function<Integer, Boolean> deletePlayerInstanceFromMapFunc,
                       Function<String, Set<GameObjectInstance>> getPlayerInstancesFunc) {
         this(name);
         this.verifyPlayerInstanceIdFunc = verifyPlayerInstanceIdFunc;
         this.setInstanceIdFunc = setInstanceIdFunc;
         this.returnInstanceIdFunc = returnInstanceIdFunc;
         this.addPlayerInstanceToMapFunc = addPlayerInstanceToMapFunc;
-        this.deleteplayerInstanceFromMapFunc = deleteplayerInstanceFromMapFunc;
+        this.deletePlayerInstanceFromMapFunc = deletePlayerInstanceFromMapFunc;
         this.getPlayerInstancesFunc = getPlayerInstancesFunc;
     }
 
@@ -131,7 +131,7 @@ public class SimplePlayerClass implements PlayerClass {
     }
 
     public boolean deleteInstance(int playerInstanceId) {
-        return deleteplayerInstanceFromMapFunc.apply(playerInstanceId);
+        return deletePlayerInstanceFromMapFunc.apply(playerInstanceId);
     }
 
     @Override
