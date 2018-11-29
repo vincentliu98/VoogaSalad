@@ -19,8 +19,7 @@ public class GameLauncher extends Application {
         String style = getClass().getResource(STYLESHEET_PATH).toExternalForm();
 
         primaryStage.setTitle(STAGE_TITLE);
-        //primaryStage.initStyle(StageStyle.UNDECORATED);
-        //primaryStage.setResizable(false);
+        primaryStage.initStyle(StageStyle.UNDECORATED);
 
         LauncherWindow myWindow = new LauncherWindow(primaryStage);
         Scene myScene = new Scene(myWindow.getView(), SCREEN_WIDTH, SCREEN_HEIGHT);
