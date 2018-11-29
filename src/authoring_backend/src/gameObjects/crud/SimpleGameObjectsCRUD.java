@@ -269,6 +269,8 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
 
     @Override
     public boolean changeGameObjectClassName(String oldName, String newName) {
+        // TODO: Needs serious refactoring, this is bad
+
         if (!entityClassMap.containsKey(oldName) && !tileClassMap.containsKey(oldName)) {
             return false;
         }
