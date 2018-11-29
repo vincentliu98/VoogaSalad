@@ -15,7 +15,6 @@ public class Node {
                 .stream()
                 .filter(e -> e.getMyStartNodeID() == myID)
                 .forEach(GameData::addArgumentListener); // add new ones
-
         if(myExecution.isEmpty()) return;
         try{
             GameData.shell().evaluate(myExecution);
