@@ -119,6 +119,7 @@ public class GameIcon implements SubView<StackPane> {
             }
         });
 
+
         myButtonHolder = new HBox();
         myButtonHolder.getChildren().add(myPlayButton);
         myButtonHolder.setAlignment(Pos.BOTTOM_LEFT);
