@@ -36,7 +36,7 @@ import java.util.Map;
  * @author Amy Kim
  * @author Haotian Wang
  */
-public class EditGridView implements SubView<ScrollPane>, DraggingCanvas {
+public class EditGridView implements SubView<ScrollPane> {
     private GridPane gridScrollView;
     private ScrollPane scrollPane;
     private GameObjectsCRUDInterface gameObjectManager;
@@ -53,6 +53,8 @@ public class EditGridView implements SubView<ScrollPane>, DraggingCanvas {
                 cell.setPrefWidth(100);
                 cell.setPrefHeight(100);
                 gridScrollView.add(cell, i, j);
+                cell.addEventFilter(MouseDragEvent.MOUSE_DRAG_ENTERED, e -> cell.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, CornerRadii.EMPTY, Insets.EMPTY))));
+                cell.addEventFilter(MouseDragEvent.MOUSE_DRAG_EXITED, e -> cell.setBackground(Background.EMPTY));
             }
         }
         gridScrollView.setGridLinesVisible(true);
@@ -68,6 +70,8 @@ public class EditGridView implements SubView<ScrollPane>, DraggingCanvas {
                 cell.setPrefWidth(100);
                 cell.setPrefHeight(100);
                 gridScrollView.add(cell, i, j);
+                cell.addEventFilter(MouseDragEvent.MOUSE_DRAG_ENTERED, e -> cell.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, CornerRadii.EMPTY, Insets.EMPTY))));
+                cell.addEventFilter(MouseDragEvent.MOUSE_DRAG_EXITED, e -> cell.setBackground(Background.EMPTY));
             }
         }
         gameObjectManager.getEntityInstances().clear();
@@ -114,15 +118,7 @@ public class EditGridView implements SubView<ScrollPane>, DraggingCanvas {
     /**
      * Setup the dragging canvas event filters.
      */
-    @Override
     public void setupDraggingCanvas() {
-        gridScrollView.addEventFilter(MouseDragEvent.MOUSE_DRAG_OVER, e -> {
-            if (!(e.getTarget() instanceof StackPane)) {
-                return;
-            }
-            System.out.println();
-            ((StackPane) e.getTarget()).setBackground(new Background(new BackgroundFill(Color.WHITESMOKE, CornerRadii.EMPTY, Insets.EMPTY)));
-        });
         gridScrollView.addEventFilter(MouseDragEvent.MOUSE_DRAG_RELEASED, e -> {
             if (e.getGestureSource() instanceof TreeCell) {
                 TreeItem<String> item = ((TreeCell<String>) e.getGestureSource()).getTreeItem();
