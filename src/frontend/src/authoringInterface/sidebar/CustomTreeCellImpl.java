@@ -34,7 +34,11 @@ public class CustomTreeCellImpl extends TreeCell<String> {
                 case "SOUND":
                     break;
                 case "TILE":
-                    break;
+                    Stage dialogTileStage = new Stage();
+                    TileEditor tileEditor = new TileEditor(manager);
+                    dialogTileStage.setScene(new Scene(tileEditor.getView(), 500, 500));
+                    dialogTileStage.show();
+                    tileEditor.addTreeItem(getTreeItem());
                 case "User Settings":
                     break;
             }

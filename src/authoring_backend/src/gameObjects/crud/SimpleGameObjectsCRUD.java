@@ -328,10 +328,6 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     public Collection<TileInstance> getTileInstances() { return tileInstanceMap.values(); }
     public Collection<EntityInstance> getEntityInstances() { return entityInstanceMap.values(); }
 
-
-
-
-
     @Override
     public CategoryClass createCategoryClass(String name) {
         if (categoryClassMap.containsKey(name)) {

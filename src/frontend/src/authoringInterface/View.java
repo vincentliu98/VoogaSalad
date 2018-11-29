@@ -25,6 +25,7 @@ import javafx.stage.Stage;
  *
  * @author Haotian Wang
  * @author jl729
+ * @author Amy
  */
 public class View implements ParentView<SubView>, DraggingCanvas {
     private AnchorPane rootPane;
@@ -46,10 +47,10 @@ public class View implements ParentView<SubView>, DraggingCanvas {
      * Constructor for an createGraph window, with an AnchorPane as the root Node, and the AnchorPane constraints on top, left and right are 0.
      */
     public View(Stage primaryStage) {
-        gameObjectManager = new SimpleGameObjectsCRUD(ROW_NUMBER, COL_NUMBER);
         this.primaryStage = primaryStage;
         rootPane = new AnchorPane();
         tools = new AuthoringTools(COL_NUMBER, ROW_NUMBER);
+        gameObjectManager = tools.entityDB();
         groovyPaneFactory = new GroovyPaneFactory(primaryStage, tools.factory());
 
         initializeElements();
@@ -59,9 +60,14 @@ public class View implements ParentView<SubView>, DraggingCanvas {
     }
 
     private void initializeElements() {
-        menuBar = new EditorMenuBarView(tools, primaryStage::close);
+        menuBar = new EditorMenuBarView(tools, primaryStage::close, this::updateGridDimension);
         sideView = new SideView(gameObjectManager);
         editView = new EditView(tools, groovyPaneFactory, ROW_NUMBER, COL_NUMBER, gameObjectManager);
+    }
+
+    private void updateGridDimension(Integer width, Integer height) {
+        tools.setGridDimension(width, height);
+        editView.updateDimension(width, height);
     }
 
     private void setElements() {
