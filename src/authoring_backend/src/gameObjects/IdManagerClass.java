@@ -21,18 +21,22 @@ public class IdManagerClass implements IdManager {
     private List<Integer> returnedClassIds;
     private List<Integer> returnedTileInstanceIds;
     private List<Integer> returnedEntityInstanceIds;
+    private List<Integer> returnedPlayerInstanceIds;
 
     private int classCount;
     private int tileInstanceCount;
     private int entityInstanceCount;
+    private int playerInstanceCount;
 
     public IdManagerClass() {
         classCount = 0;
         tileInstanceCount = 0;
         entityInstanceCount = 0;
+        playerInstanceCount = 0;
         returnedClassIds = new ArrayList<>();
         returnedTileInstanceIds = new ArrayList<>();
         returnedEntityInstanceIds = new ArrayList<>();
+        returnedPlayerInstanceIds = new ArrayList<>();
     }
 
     @Override
