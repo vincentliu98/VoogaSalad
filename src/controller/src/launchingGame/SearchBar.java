@@ -50,6 +50,7 @@ public class SearchBar {
         myTextField.setPrefWidth(BAR_WIDTH);
         myTextField.setMinWidth(MIN_WIDTH);
 
+
         myTextField.setOnKeyPressed(event -> {
             if(event.getCode() == KeyCode.ENTER){
                 String txt = myTextField.getCharacters().toString();
