@@ -1,4 +1,4 @@
-package utils;
+package frontendUtils;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
