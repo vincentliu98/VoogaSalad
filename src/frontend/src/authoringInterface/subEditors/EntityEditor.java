@@ -16,6 +16,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import utils.ErrorWindow;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -50,10 +51,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         });
         confirm.setOnAction(e -> {
             if (nameField.getText().trim().isEmpty()) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Empty Name");
-                alert.setContentText("You must give your entity a non-empty name");
-                alert.showAndWait();
+                new ErrorWindow("Empty name", "You must give your entity a non-empty name");
             } else {
                 ((Stage) rootPane.getScene().getWindow()).close();
                 switch (editingMode) {
