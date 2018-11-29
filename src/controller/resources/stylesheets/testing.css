@@ -1,0 +1,64 @@
+
+
+.launcher-top-bar {
+    -fx-background-color: rgb(43,45,56);
+}
+
+.launcher-side-bar {
+    -fx-background-color: rgb(21,24,29);
+}
+
+.launcher-games-display {
+    -fx-background-color: rgb(31,34,40);
+    -fx-padding: 40 30 40 30;
+}
+
+.search-bar {
+    -fx-background-color: rgb(60,64,75);
+}
+
+.closebutton {
+    -fx-background-color: transparent;
+}
+
+.text-option {
+    -fx-font-family: "Arial Black";
+    -fx-font-size: 18 pt;
+
+}
+
+.text-option-holder {
+    -fx-border-color: rgb(101, 213, 187);
+    -fx-border-width: 0 0 2 0;
+    -fx-border-insets: 20;
+}
+
+.icon-background-image {
+    -fx-background-radius: 30;
+    -fx-border-radius: 30;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+}
+
+.title-box {
+    -fx-padding: 0 0 5 10;
+    -fx-font-family: "Arial";
+    -fx-font-size: 15 pt;
+}
+
+.description-box {
+    -fx-padding: 0 0 10 8;
+    -fx-font-family: "Arial";
+    -fx-font-size: 12 pt;
+}
+
+.button-holder {
+    -fx-padding: 0 0 10 10;
+}
+
+.play-button-normal {
+    -fx-background-color: rgb(28,29,34);
+}
+
+.play-button-hover {
+    -fx-background-color: rgb(104,210,180);
+}
