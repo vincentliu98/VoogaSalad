@@ -126,6 +126,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         }
 //        Scene newScene = new Scene(gameWindow.getView(), View.GAME_WIDTH, View.GAME_HEIGHT);
 
+
     }
     void handleHelpDoc(ActionEvent event) {}
     void handleAbout(ActionEvent event) {}

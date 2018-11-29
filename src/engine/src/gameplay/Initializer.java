@@ -32,6 +32,7 @@ public class Initializer {
     }
 
     public Pane getRoot(){ return myRoot; }
+
     public void setScreenSize(double screenWidth, double screenHeight) {
         myRoot.setPrefWidth(screenWidth);
         myRoot.setPrefHeight(screenHeight);
@@ -39,6 +40,7 @@ public class Initializer {
         GameData.getEntities().values().forEach(e -> e.adjustViewSize(screenWidth, screenHeight));
         GameData.updateViews();
     }
+
     public void startGame(){
         myXMLParser.getTurn().startPhase();
     }
