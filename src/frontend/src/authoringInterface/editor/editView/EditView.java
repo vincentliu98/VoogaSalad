@@ -64,7 +64,7 @@ public class EditView implements SubView<TabPane> {
                ).getView()
         );
 
-        tabPane.getTabs().addAll(GridTab, PhaseTab);
+        tabPane.getTabs().addAll(mainTab, GridTab, PhaseTab);
 
     }
 
