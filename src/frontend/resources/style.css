@@ -16,7 +16,7 @@
 .tab .tab-label {
     -fx-alignment: CENTER;
     -fx-font-weight: bold;
-    -fx-text-fill: #607d8b;
+    -fx-text-fill: #b4c3cb;
 }
 
 .tab:selected .tab-label {
@@ -42,21 +42,30 @@
     -fx-selection-bar: #2b383f;
 }
 
+/*.menu-item{*/
+    /*-fx-background-color: #1d2529;*/
+/*}*/
+
 .menu-bar .label {
-    -fx-text-fill: #607d8b;
+    -fx-text-fill: #b4c3cb;
 }
 
 .sideView {
-    -fx-background-color: #607d8b;
+    -fx-background-color: #b4c3cb;
 }
 
 .addBtn {
-    -fx-text-fill: #607d8b;
+    -fx-text-fill: #b4c3cb;
 }
 .myTree .tree-cell {
     -fx-background-color: #212c31;
-    -fx-text-fill: #607d8b;
+    -fx-text-fill: #b4c3cb;
 }
+
+.tree-cell > .tree-disclosure-node > .arrow{
+    -fx-background-color: #b4c3cb;
+}
+
 
 .myTree .tree-cell:selected {
     -fx-text-fill: #80cbc4;

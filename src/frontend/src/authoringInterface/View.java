@@ -39,8 +39,8 @@ public class View implements ParentView<SubView>, DraggingCanvas {
     public static final double MENU_BAR_HEIGHT = 30;
     public static final double GAME_WIDTH = 700;
     public static final double GAME_HEIGHT = 500;
-    private static final int ROW_NUMBER = 5;
-    private static final int COL_NUMBER = 5;
+    private static final int ROW_NUMBER = 10;
+    private static final int COL_NUMBER = 7;
 
     /**
      * Constructor for an createGraph window, with an AnchorPane as the root Node, and the AnchorPane constraints on top, left and right are 0.

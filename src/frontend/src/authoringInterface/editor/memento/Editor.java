@@ -2,6 +2,13 @@ package authoringInterface.editor.memento;
 
 import javafx.collections.ObservableMap;
 
+/**
+ * An Editor class (Memento pattern) that keeps track with the global data.
+ * It is initialized in the front end's EditorMenuBarView
+ *
+ * @author jl729
+ */
+
 //Originator
 public class Editor {
     ObservableMap globalData;
