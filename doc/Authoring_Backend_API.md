@@ -13,7 +13,7 @@ I don't think this super class should have methods that get images etc.
 ObservableList<String> getImagePathList()
 void addImagePath(String filePath)
 
-SoundClass
+### SoundClass
 ```java
 String getMediaFilePath()
 void setMediaFilePath(String filePath)
