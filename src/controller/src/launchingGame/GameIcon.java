@@ -23,9 +23,10 @@ public class GameIcon {
     public static final double PLAYBUTTON_HEIGHT = 35;
     public static final String PLAYBUTTON_CSS_HOVER = "play-button-hover";
     public static final String BUTTON_HOLDER_CSS = "button-holder";
-    public static double ICON_WIDTH = 250;
-    public static double ICON_HEIGHT = 180;
-    public static String IMAGES_FOLDER_PATH = "/game-images/";
+    public static final double ICON_WIDTH = 250;
+    public static final double ICON_HEIGHT = 180;
+    public static final String IMAGES_FOLDER_PATH = "/game-images/";
+    public static final String SPACE_REGEX = "[ \\t]+";
 
     private StackPane myPane;
     private ImageView myBackground;
@@ -39,7 +40,7 @@ public class GameIcon {
     private String myName;
     private String myDescriptionString;
     private String myImagePath;
-    private String myTags;
+    private String[] myTags;
     private String myReferencePath;
 
 
@@ -48,13 +49,25 @@ public class GameIcon {
         myDescriptionString = description;
         myReferencePath = reference;
         myImagePath = imagePath;
-        myTags = tags;
+        myTags = tags.split(SPACE_REGEX);
 
         initPane();
         initBackground();
         initTitle();
         initDescription();
         initButton();
+    }
+
+    public Boolean checkTag(String tag){
+        if(myName.equals(tag)){
+            return true;
+        }
+        for(String tg: myTags){
+            if(tg.equals(tag)){
+                return true;
+            }
+        }
+        return false;
     }
 
     private void initPane(){
@@ -142,6 +155,10 @@ public class GameIcon {
         myButtonHolder.getChildren().add(myPlayButton);
         myButtonHolder.setAlignment(Pos.BOTTOM_LEFT);
         myButtonHolder.getStyleClass().add(BUTTON_HOLDER_CSS);
+    }
+
+    public String getName(){
+        return myName;
     }
 
     public StackPane getView() {

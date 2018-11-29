@@ -3,9 +3,10 @@ package launchingGame;
 import javafx.scene.layout.TilePane;
 import launching.GameParser;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class LauncherGamesDisplay {
+public class LauncherGamesDisplay implements Searchable, Sortable{
     public static final String CSS_PATH = "launcher-games-display";
     public static final int COLUMN_NUMBER = 4;
     public static final String CURRENT_FOLDER_KEY = "user.dir";
@@ -17,10 +18,12 @@ public class LauncherGamesDisplay {
 
     private TilePane myPane;
     private List<GameIcon> myGames;
+    private List<GameIcon> myActiveGames;
 
     public LauncherGamesDisplay(){
         initTiles();
         initGames();
+
     }
 
     private void initTiles(){
@@ -33,13 +36,50 @@ public class LauncherGamesDisplay {
     }
 
     private void initGames(){
-        //GameParser myParser = new GameParser("/Users/jonathannakagawa/Desktop/Stuff/CompSci308/voogasalad_printstacktrace/src/controller/resources/games");
         GameParser myParser = new GameParser(System.getProperty(CURRENT_FOLDER_KEY) + GAMES_PATH);
         myGames = myParser.getMyGames();
+        myActiveGames = new ArrayList<>();
         for(GameIcon myIcon: myGames){
             myPane.getChildren().add(myIcon.getView());
+            myActiveGames.add(myIcon);
         }
 
+    }
+
+    @Override
+    public void showByTag(String tag){
+        for(GameIcon icon: myActiveGames){
+            myPane.getChildren().remove(icon.getView());
+        }
+        myActiveGames = new ArrayList<>();
+        for(GameIcon icon: myGames){
+            if(icon.checkTag(tag)){
+                myActiveGames.add(icon);
+                myPane.getChildren().add(icon.getView());
+            }
+        }
+    }
+
+    @Override
+    public void showAll(){
+        for(GameIcon icon: myActiveGames){
+            myPane.getChildren().remove(icon.getView());
+        }
+        myActiveGames = new ArrayList<>();
+        for(GameIcon icon: myGames){
+            myActiveGames.add(icon);
+            myPane.getChildren().add(icon.getView());
+        }
+    }
+
+    public void sortByAlphabet(){
+        myActiveGames.sort(new NameComparator());
+        for(GameIcon icon: myActiveGames){
+            myPane.getChildren().remove(icon.getView());
+        }
+        for(GameIcon icon: myActiveGames){
+            myPane.getChildren().add(icon.getView());
+        }
     }
 
     public TilePane getView() {
