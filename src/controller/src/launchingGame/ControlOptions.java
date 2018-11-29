@@ -1,6 +1,5 @@
 package launchingGame;
 
-import api.SubView;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -10,7 +9,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 
-public class ControlOptions implements SubView<HBox> {
+public class ControlOptions {
     public static final String CROSS_PATH = "/graphics/black-cross.png";
     public static final String MINIMIZE_PATH = "/graphics/black-minimize.png";
     public static final double BUTTON_WIDTH = 10;
@@ -71,7 +70,6 @@ public class ControlOptions implements SubView<HBox> {
         myBox.getChildren().add(myMinButton);
     }
 
-    @Override
     public HBox getView() {
         return myBox;
     }

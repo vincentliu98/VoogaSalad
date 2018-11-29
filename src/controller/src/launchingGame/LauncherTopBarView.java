@@ -1,6 +1,5 @@
 package launchingGame;
 
-import api.SubView;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -10,7 +9,7 @@ import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 
 
-public class LauncherTopBarView implements SubView<HBox> {
+public class LauncherTopBarView {
     public static final String DIVIDER_PATH = "/graphics/gray-line.png";
     public static final double DIVIDER_RATIO = 0.7;
     public static final double SPACING = 25;
@@ -87,7 +86,6 @@ public class LauncherTopBarView implements SubView<HBox> {
     }
 
 
-    @Override
     public HBox getView() {
         return myBox;
     }

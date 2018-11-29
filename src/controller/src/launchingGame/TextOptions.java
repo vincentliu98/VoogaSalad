@@ -1,6 +1,5 @@
 package launchingGame;
 
-import api.SubView;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 
@@ -9,7 +8,7 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
 
-public class TextOptions implements SubView<HBox>, PropertyChangeListener {
+public class TextOptions implements PropertyChangeListener {
     public static final String MY_GAME_TEXT = "My Games";
     public static final String STORE_TEXT = "Store";
     public static final String SOCIAL_TEXT = "Social";
@@ -66,7 +65,6 @@ public class TextOptions implements SubView<HBox>, PropertyChangeListener {
         toggleSelected((OptionHolder) evt.getNewValue());
     }
 
-    @Override
     public HBox getView() {
         return myHbox;
     }

@@ -1,6 +1,5 @@
 package launchingGame;
 
-import api.SubView;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -8,7 +7,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
-public class SearchBar implements SubView<HBox> {
+public class SearchBar {
     public static final String PROMPT_MESSAGE = "Game Name";
     public static final String CROSS_PATH = "/graphics/black-cross.png";
     public static final double BAR_WIDTH = 400;
@@ -64,7 +63,6 @@ public class SearchBar implements SubView<HBox> {
         });
     }
 
-    @Override
     public HBox getView() {
         return myBox;
     }

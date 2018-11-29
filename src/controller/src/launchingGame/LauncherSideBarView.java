@@ -1,9 +1,8 @@
 package launchingGame;
 
-import api.SubView;
 import javafx.scene.layout.VBox;
 
-public class LauncherSideBarView implements SubView <VBox> {
+public class LauncherSideBarView {
     private VBox myVBox;
 
     public LauncherSideBarView(double width){
@@ -15,7 +14,6 @@ public class LauncherSideBarView implements SubView <VBox> {
 
     }
 
-    @Override
     public VBox getView() {
         return myVBox;
     }

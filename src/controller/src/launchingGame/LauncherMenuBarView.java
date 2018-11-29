@@ -1,6 +1,5 @@
 package launchingGame;
 
-import api.SubView;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
@@ -15,7 +14,7 @@ import runningGame.IllegalSavedGameException;
 import java.io.File;
 import java.util.Optional;
 
-public class LauncherMenuBarView implements SubView<MenuBar> {
+public class LauncherMenuBarView {
 
     private MenuBar menuBar;
     private GameLoader gameLoader;
@@ -88,12 +87,7 @@ public class LauncherMenuBarView implements SubView<MenuBar> {
 //
 //    private void handleAbout(ActionEvent event) {}
 
-    /**
-     * This method returns the responsible JavaFx Node responsible to be added or deleted from other graphical elements.
-     *
-     * @return A "root" JavaFx Node representative of this object.
-     */
-    @Override
+
     public MenuBar getView() {
         return menuBar;
     }

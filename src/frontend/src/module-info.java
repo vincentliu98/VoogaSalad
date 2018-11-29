@@ -13,6 +13,5 @@ module frontend {
 
     exports authoringInterface;
     exports playingGame;
-    exports launchingGame;
     exports runningGame;
 }

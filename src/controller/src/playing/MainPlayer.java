@@ -1,5 +1,7 @@
 package playing;
 
+import authoringInterface.MainAuthoringProgram;
+import authoringInterface.View;
 import gameplay.Communicable;
 import gameplay.Initializer;
 import javafx.application.Application;
@@ -10,26 +12,31 @@ import playingGame.DisplayData;
 
 import java.io.File;
 
-public class MainPlayer extends Application {
+public class MainPlayer {
+
 
     public static final int SCREEN_WIDTH = 1200;
     public static final int SCREEN_HEIGHT = 700;
 
-    @Override
-    public void start(Stage primaryStage) {
-        primaryStage.setTitle("VoogaSalad!");
-        Group myGroup = new Group();
-        primaryStage.setScene(new Scene(myGroup, SCREEN_WIDTH, SCREEN_HEIGHT));
-        DisplayData myDisp = new DisplayData(myGroup);
+    private Initializer myInitializer;
+    private Stage myStage;
 
-        File file = new File(getClass().getClassLoader().getResource("TicTacToe.xml").getFile());
-        //Communicable myCommuicator = new Communicator(myDisp);
-        // myInit = new Initializer(file, myCommuicator);
-        Initializer myInit = new Initializer(file);
-        primaryStage.show();
+    public MainPlayer(){
+
     }
 
+
+    public void launchGame(String gameName){
+        myInitializer = new Initializer(new File(getClass().getClassLoader().getResource(gameName).getFile()));
+        myStage = new Stage();
+        myInitializer.setScreenSize(700, 500);
+        Scene newScene = new Scene(myInitializer.getRoot(), View.GAME_WIDTH, View.GAME_HEIGHT);
+        myStage.setScene(newScene);
+        myStage.show();
+    }
+
+
     public static void main(String[] args) {
-        launch(args);
+        //launch(args);
     }
 }

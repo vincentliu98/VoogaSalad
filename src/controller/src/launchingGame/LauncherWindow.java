@@ -1,10 +1,9 @@
 package launchingGame;
 
-import api.SubView;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
-public class LauncherWindow implements SubView<BorderPane> {
+public class LauncherWindow {
     public static final double TOP_HEIGHT = 65;
     public static final double SIDE_WIDTH = 50;
 
@@ -29,7 +28,6 @@ public class LauncherWindow implements SubView<BorderPane> {
     }
 
 
-    @Override
     public BorderPane getView() {
         return myPane;
     }

@@ -32,6 +32,7 @@ public class Initializer {
     }
 
     public Pane getRoot(){ return myRoot; }
+
     public void setScreenSize(double screenWidth, double screenHeight) {
         myRoot.setPrefWidth(screenWidth);
         myRoot.setPrefHeight(screenHeight);
