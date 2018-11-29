@@ -4,6 +4,8 @@ import api.SubView;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.crud.GameObjectsCRUDInterface;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -18,19 +20,21 @@ import javafx.stage.Stage;
  * @author Haotian Wang
  */
 public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V extends GameObjectInstance> implements SubView<AnchorPane> {
-    protected AnchorPane rootPane;
-    protected Label nameLabel;
-    protected TextField nameField;
-    protected Button confirm;
-    protected Button cancel;
-    protected TreeItem<String> treeItem;
-    protected GameObjectsCRUDInterface gameObjectManager;
-    protected EditingMode editingMode;
-    protected Node nodeEdited;
-    protected T gameObjectClass;
-    protected V gameObjectInstance;
+    AnchorPane rootPane;
+    Label nameLabel;
+    TextField nameField;
+    Button confirm;
+    Button cancel;
+    TreeItem<String> treeItem;
+    GameObjectsCRUDInterface gameObjectManager;
+    EditingMode editingMode;
+    Node nodeEdited;
+    T gameObjectClass;
+    V gameObjectInstance;
+    ObservableList<String> imagePaths;
 
     public AbstractGameObjectEditor(GameObjectsCRUDInterface manager) {
+        imagePaths = FXCollections.observableArrayList();
         editingMode = EditingMode.NONE;
         gameObjectManager = manager;
         rootPane = new AnchorPane();

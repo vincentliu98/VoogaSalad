@@ -31,7 +31,6 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     private Label imageText;
     private Button chooseImage;
     private HBox imagePanel;
-    private ObservableList<String> imagePaths;
 
     public EntityEditor(GameObjectsCRUDInterface manager) {
         super(manager);
@@ -61,10 +60,12 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                         EntityClass entityClass = gameObjectManager.getEntityClass(nameField.getText().trim());
                         TreeItem<String> newItem = new TreeItem<>(entityClass.getClassName().getValue());
                         entityClass.getImagePathList().addAll(imagePaths);
-                        ImageView icon = new ImageView(imagePaths.get(0));
-                        icon.setFitWidth(50);
-                        icon.setFitHeight(50);
-                        newItem.setGraphic(icon);
+                        if (!imagePaths.isEmpty()) {
+                            ImageView icon = new ImageView(imagePaths.get(0));
+                            icon.setFitWidth(50);
+                            icon.setFitHeight(50);
+                            newItem.setGraphic(icon);
+                        }
                         treeItem.getChildren().add(newItem);
                         break;
                     case NONE:
