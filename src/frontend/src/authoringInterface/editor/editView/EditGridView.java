@@ -9,6 +9,7 @@ import gameObjects.entity.EntityInstance;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
@@ -20,6 +21,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -114,6 +116,13 @@ public class EditGridView implements SubView<ScrollPane>, DraggingCanvas {
      */
     @Override
     public void setupDraggingCanvas() {
+        gridScrollView.addEventFilter(MouseDragEvent.MOUSE_DRAG_OVER, e -> {
+            if (!(e.getTarget() instanceof StackPane)) {
+                return;
+            }
+            System.out.println();
+            ((StackPane) e.getTarget()).setBackground(new Background(new BackgroundFill(Color.WHITESMOKE, CornerRadii.EMPTY, Insets.EMPTY)));
+        });
         gridScrollView.addEventFilter(MouseDragEvent.MOUSE_DRAG_RELEASED, e -> {
             if (e.getGestureSource() instanceof TreeCell) {
                 TreeItem<String> item = ((TreeCell<String>) e.getGestureSource()).getTreeItem();

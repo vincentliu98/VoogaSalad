@@ -5,7 +5,7 @@ import graph.SimpleGraph;
 import groovy.api.BlockEdge;
 import groovy.api.BlockGraph;
 import groovy.api.Ports;
-import utils.Try;
+import frontendUtils.Try;
 import groovy.graph.blocks.core.GroovyBlock;
 import groovy.graph.blocks.core.RawGroovyBlock;
 import groovy.graph.blocks.core.SourceBlock;

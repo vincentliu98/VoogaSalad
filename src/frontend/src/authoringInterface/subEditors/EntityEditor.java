@@ -7,8 +7,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -16,6 +16,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import utils.ErrorWindow;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -27,17 +28,17 @@ import java.util.List;
  * @author Haotian Wang
  */
 public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityInstance> {
-    private Text imageText;
+    private Label imageText;
     private Button chooseImage;
     private HBox imagePanel;
-    private ObservableList<String> imagePaths;
 
     public EntityEditor(GameObjectsCRUDInterface manager) {
         super(manager);
-        inputText.setText("Your entity name:");
-        imageText = new Text("Add an image to your entity");
+        nameLabel.setText("Your entity name:");
+        imageText = new Label("Add an image to your entity");
         chooseImage = new Button("Choose image");
         imagePanel = new HBox(10);
+        nameField.setPromptText("Your entity name");
         imagePaths = FXCollections.observableArrayList();
         imagePaths.addListener((ListChangeListener<String>) c -> presentImages());
         chooseImage.setOnAction(e -> {
@@ -50,10 +51,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         });
         confirm.setOnAction(e -> {
             if (nameField.getText().trim().isEmpty()) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Empty Name");
-                alert.setContentText("You must give your entity a non-empty name");
-                alert.showAndWait();
+                new ErrorWindow("Empty name", "You must give your entity a non-empty name").showAndWait();
             } else {
                 ((Stage) rootPane.getScene().getWindow()).close();
                 switch (editingMode) {
@@ -62,10 +60,12 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                         EntityClass entityClass = gameObjectManager.getEntityClass(nameField.getText().trim());
                         TreeItem<String> newItem = new TreeItem<>(entityClass.getClassName().getValue());
                         entityClass.getImagePathList().addAll(imagePaths);
-                        ImageView icon = new ImageView(imagePaths.get(0));
-                        icon.setFitWidth(50);
-                        icon.setFitHeight(50);
-                        newItem.setGraphic(icon);
+                        if (!imagePaths.isEmpty()) {
+                            ImageView icon = new ImageView(imagePaths.get(0));
+                            icon.setFitWidth(50);
+                            icon.setFitHeight(50);
+                            newItem.setGraphic(icon);
+                        }
                         treeItem.getChildren().add(newItem);
                         break;
                     case NONE:
@@ -136,8 +136,8 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         imageText.setLayoutX(36);
         imageText.setLayoutY(176);
         chooseImage.setLayoutX(261);
-        chooseImage.setLayoutY(158);
-        imagePanel.setLayoutX(37);
+        chooseImage.setLayoutY(176);
+        imagePanel.setLayoutX(36);
         imagePanel.setLayoutY(206);
     }
 }

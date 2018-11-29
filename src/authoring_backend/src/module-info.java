@@ -20,7 +20,7 @@ module authoring_backend {
     exports groovy.graph.blocks.core;
     exports gameObjects;
     exports grids;
-    exports utils;
+    exports frontendUtils;
     exports gameObjects.category;
     exports gameObjects.entity;
     exports gameObjects.exception;

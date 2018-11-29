@@ -4,7 +4,7 @@ import groovy.graph.BlockEdgeImpl;
 import groovy.graph.BlockGraphImpl;
 import groovy.graph.blocks.core.*;
 import groovy.graph.blocks.small_factory.LiteralFactory;
-import utils.Try;
+import frontendUtils.Try;
 
 /**
  *  A Factory that can generate Graph/Node/Edge that represents Groovy code.

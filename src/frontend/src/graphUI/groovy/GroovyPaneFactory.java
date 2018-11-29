@@ -20,7 +20,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import javafx.util.Pair;
-import utils.Try;
+import frontendUtils.Try;
 
 import java.util.HashMap;
 import java.util.HashSet;
