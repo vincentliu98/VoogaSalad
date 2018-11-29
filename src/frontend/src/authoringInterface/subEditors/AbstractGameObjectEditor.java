@@ -3,7 +3,7 @@ package authoringInterface.subEditors;
 import api.SubView;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
-import gameObjects.GameObjectsCRUDInterface;
+import gameObjects.crud.GameObjectsCRUDInterface;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -11,8 +11,6 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
-import java.util.Map;
 
 /**
  * This abstract class provides a boiler plate for different editors because they are pretty similar.

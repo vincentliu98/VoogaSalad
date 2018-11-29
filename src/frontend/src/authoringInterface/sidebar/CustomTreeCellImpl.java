@@ -1,10 +1,8 @@
 package authoringInterface.sidebar;
 
 import authoringInterface.subEditors.*;
-import gameObjects.GameObjectsCRUDInterface;
+import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.gameObject.GameObjectClass;
-import gameObjects.gameObject.GameObjectInstance;
-import gameObjects.gameObject.GameObjectType;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;

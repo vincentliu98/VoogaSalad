@@ -26,7 +26,7 @@ public class IdManagerClass implements IdManager {
     private int tileInstanceCount;
     private int entityInstanceCount;
 
-    IdManagerClass() {
+    public IdManagerClass() {
         classCount = 0;
         tileInstanceCount = 0;
         entityInstanceCount = 0;

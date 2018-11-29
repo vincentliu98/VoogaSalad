@@ -3,7 +3,7 @@ package authoringInterface.editor.editView;
 import api.DraggingCanvas;
 import api.SubView;
 import authoringInterface.subEditors.*;
-import gameObjects.GameObjectsCRUDInterface;
+import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.entity.EntityClass;
 import gameObjects.entity.EntityInstance;
 import gameObjects.gameObject.GameObjectClass;

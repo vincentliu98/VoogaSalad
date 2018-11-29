@@ -1,11 +1,10 @@
 package authoringInterface.sidebar;
 
 import api.SubView;
-import gameObjects.GameObjectsCRUDInterface;
+import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.entity.SimpleEntityClass;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectType;
-import gameObjects.sound.SimpleSoundClass;
 import gameObjects.tile.SimpleTileClass;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;

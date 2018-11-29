@@ -9,7 +9,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.thoughtworks.xstream.mapper.Mapper;
-import gameObjects.SimpleGameObjectsCRUD;
+import gameObjects.crud.SimpleGameObjectsCRUD;
 import grids.PointImpl;
 import groovy.lang.GroovyShell;
 

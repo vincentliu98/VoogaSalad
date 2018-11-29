@@ -27,4 +27,5 @@ module authoring_backend {
     exports gameObjects.sound;
     exports gameObjects.tile;
     exports gameObjects.gameObject;
+    exports gameObjects.crud;
 }

@@ -1,6 +1,6 @@
 package authoringInterface.subEditors;
 
-import gameObjects.GameObjectsCRUDInterface;
+import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.sound.SoundClass;
 import gameObjects.sound.SoundInstance;
 

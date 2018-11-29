@@ -1,9 +1,8 @@
 package authoringInterface.subEditors;
 
-import gameObjects.GameObjectsCRUDInterface;
+import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.category.CategoryClass;
 import gameObjects.category.CategoryInstance;
-import javafx.scene.layout.AnchorPane;
 
 /**
  * This class handles the addition and editing of category entries.
