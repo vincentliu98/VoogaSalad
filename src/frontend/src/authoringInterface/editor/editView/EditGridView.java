@@ -122,8 +122,16 @@ public class EditGridView implements SubView<ScrollPane> {
      * @param hoveringColor: The JavaFx Color scheme applied to the hovering.
      */
     private void setupHoveringColorChange(Region cell, Paint hoveringColor) {
-        cell.setOnMouseDragEntered(e -> cell.setBackground(new Background(new BackgroundFill(hoveringColor, CornerRadii.EMPTY, Insets.EMPTY))));
-        cell.setOnMouseDragExited(e -> cell.setBackground(Background.EMPTY));
+        cell.setOnMouseDragEntered(e -> {
+            if (e.getGestureSource() instanceof TreeCell) {
+                cell.setBackground(new Background(new BackgroundFill(hoveringColor, CornerRadii.EMPTY, Insets.EMPTY)));
+            }
+        });
+        cell.setOnMouseDragExited(e -> {
+            if (e.getGestureSource() instanceof TreeCell) {
+                cell.setBackground(Background.EMPTY);
+            }
+        });
     }
 
     /**
