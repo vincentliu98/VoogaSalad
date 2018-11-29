@@ -12,6 +12,7 @@ import gameObjects.tile.SimpleTileClass;
 import gameObjects.tile.TileClass;
 import gameObjects.tile.TileInstance;
 import grids.Point;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
@@ -107,6 +108,10 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         }
         tileClassMap.put(newName, tileClassMap.get(oldName));
         tileClassMap.remove(oldName);
+        Consumer<SimpleStringProperty> c = s -> {
+          s.setValue(newName);
+        };
+        tileClassMap.get(newName).setClassName(c);
         for (Map.Entry<Integer, TileInstance> e : tileInstanceMap.entrySet()) {
             if (e.getValue().getClassName().equals(oldName)) {
                 e.getValue().setClassName(newName);
@@ -216,6 +221,10 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         }
         entityClassMap.put(newName, entityClassMap.get(oldName));
         entityClassMap.remove(oldName);
+        Consumer<SimpleStringProperty> c = s -> {
+            s.setValue(newName);
+        };
+        entityClassMap.get(newName).setClassName(c);
         for (Map.Entry<Integer, EntityInstance> e : entityInstanceMap.entrySet()) {
             if (e.getValue().getClassName().equals(oldName)) {
                 e.getValue().setClassName(newName);
@@ -260,11 +269,11 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
             return false;
         }
         if (entityClassMap.containsKey(oldName)) {
+            changeEntityClassName(oldName, newName);
+        } else if (tileClassMap.containsKey(oldName)){
             changeTileClassName(oldName, newName);
         }
-        else {
-            changeEntityClassName(oldName, newName);
-        }
+        // TODO: Other kinds of GameObjects
         return true;
     }
 
@@ -345,5 +354,17 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         }
         categoryClassMap.remove(name);
         return true;
+    }
+
+    /**
+     * This method deletes the GameObjectClasses with the input String name. It scans through all possible maps of the String -> GameObjectClass.
+     *
+     * @param name : The name of the GameObjectClass to be deleted.
+     * @return: true if the GameObjectClass is successfully deleted and false otherwise.
+     */
+    @Override
+    public boolean deleteGameObjectClass(String name) {
+        // TODO: make this method automatically recognizes newly added user categories. For example, for now, this method doesn't support sound edit. What if the user added more categories during run time.
+        return (deleteTileClass(name) || deleteCategoryClass(name) || deleteEntityClass(name));
     }
 }
