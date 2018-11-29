@@ -47,8 +47,23 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
         confirm.setOnAction(e -> {
             if (nameField.getText().trim().isEmpty()) {
                 new ErrorWindow("Empty name", "You must give your tile a non-empty name").showAndWait();
-            } else if (widthText.getText().trim().isEmpty())
-            else {
+            } else if (widthText.getText().trim().isEmpty()) {
+                new ErrorWindow("Empty width", "You must specify a width for this tile class").showAndWait();
+            } else if (heightText.getText().trim().isEmpty()) {
+                new ErrorWindow("Empty height", "You must specify a height for this tile class").showAndWait();
+            } else {
+                try {
+                    width = Double.parseDouble(widthText.getText());
+                } catch (NumberFormatException e1) {
+                    new ErrorWindow("Incorrect width", "The input width is in an unsupported format");
+                    return;
+                }
+                try {
+                    height = Double.parseDouble(heightText.getText());
+                } catch (NumberFormatException e1) {
+                    new ErrorWindow("Incorrect height", "The input height is in an unsupported format");
+                    return;
+                }
                 ((Stage) rootPane.getScene().getWindow()).close();
                 switch (editingMode) {
 //                    case ADD_TREEITEM:
