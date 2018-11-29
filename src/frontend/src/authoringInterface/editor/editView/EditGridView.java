@@ -53,8 +53,7 @@ public class EditGridView implements SubView<ScrollPane> {
                 cell.setPrefWidth(100);
                 cell.setPrefHeight(100);
                 gridScrollView.add(cell, i, j);
-                cell.addEventFilter(MouseDragEvent.MOUSE_DRAG_ENTERED, e -> cell.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, CornerRadii.EMPTY, Insets.EMPTY))));
-                cell.addEventFilter(MouseDragEvent.MOUSE_DRAG_EXITED, e -> cell.setBackground(Background.EMPTY));
+                setupHoveringColorChange(cell, Color.LIGHTGREEN);
             }
         }
         gridScrollView.setGridLinesVisible(true);
@@ -70,8 +69,7 @@ public class EditGridView implements SubView<ScrollPane> {
                 cell.setPrefWidth(100);
                 cell.setPrefHeight(100);
                 gridScrollView.add(cell, i, j);
-                cell.addEventFilter(MouseDragEvent.MOUSE_DRAG_ENTERED, e -> cell.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, CornerRadii.EMPTY, Insets.EMPTY))));
-                cell.addEventFilter(MouseDragEvent.MOUSE_DRAG_EXITED, e -> cell.setBackground(Background.EMPTY));
+                setupHoveringColorChange(cell, Color.LIGHTGREEN);
             }
         }
         gameObjectManager.getEntityInstances().clear();
@@ -113,6 +111,11 @@ public class EditGridView implements SubView<ScrollPane> {
     @Override
     public ScrollPane getView() {
         return scrollPane;
+    }
+
+    private void setupHoveringColorChange(Region cell, Color hoveringColor) {
+        cell.setOnMouseDragEntered(e -> cell.setBackground(new Background(new BackgroundFill(hoveringColor, CornerRadii.EMPTY, Insets.EMPTY))));
+        cell.setOnMouseDragExited(e -> cell.setBackground(Background.EMPTY));
     }
 
     /**
