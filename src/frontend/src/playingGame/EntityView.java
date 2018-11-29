@@ -22,6 +22,7 @@ public class EntityView implements Viewable, PropertyChangeListener {
 
     public EntityView(){
         mySupport = new PropertyChangeSupport(this);
+        myImage = new ImageView();
         posX = 0.0;
         posY = 0.0;
     }
