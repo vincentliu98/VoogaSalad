@@ -2,7 +2,7 @@ package playing;
 
 import gameplay.Entity;
 import gameplay.GameData;
-import gameplay.Tag;
+//import gameplay.Tag;
 import gameplay.Tile;
 import gameplay.Communicable;
 import playingGame.DisplayData;
@@ -15,7 +15,7 @@ public class Communicator implements Communicable {
         myDisplayData = displayData;
 
     }
-
+/*
     @Override
     public void addNewEntity(Tag tag) {
         EntityView nwEntity = new EntityView();
@@ -31,4 +31,5 @@ public class Communicator implements Communicable {
         }
         myDisplayData.addNewEntity(nwEntity);
     }
+    */
 }

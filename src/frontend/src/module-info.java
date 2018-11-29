@@ -9,6 +9,8 @@ module frontend {
     requires authoring_backend;
     requires engine;
 
+    requires org.codehaus.groovy; // should remove later
+
     exports authoringInterface;
     exports playingGame;
     exports launchingGame;

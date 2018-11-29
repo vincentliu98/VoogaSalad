@@ -2,7 +2,7 @@ package authoring;
 
 import com.thoughtworks.xstream.XStream;
 import conversion.SerializerForAuthor;
-import conversion.SerializerForEngine;
+import conversion.engine.SerializerForEngine;
 
 /**
  *  These serializers generate XStream instances that are initialized with

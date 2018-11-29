@@ -15,6 +15,7 @@ public class PhaseGraphImpl extends SimpleGraph<Phase, Transition> implements Ph
     public PhaseGraphImpl(String name, Phase source, Function<String, Boolean> registerName) {
         super();
         this.source = source;
+        addNode(this.source);
         this.source.description().setValue("source");
         this.name = name;
         this.registerName = registerName;

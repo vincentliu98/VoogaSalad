@@ -16,5 +16,8 @@ public enum Ports {
     ASSIGN_RHS,
 
     A,
-    B
+    B,
+    C,
+    D,
+    E
 }

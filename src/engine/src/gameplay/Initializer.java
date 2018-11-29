@@ -1,30 +1,43 @@
 package gameplay;
 
+import javafx.scene.layout.Pane;
+
 import java.io.File;
-import java.util.HashSet;
-import java.util.Set;
 
 public class Initializer {
     XMLParser myXMLParser;
-    Communicable myCommunicator;
+    Pane myRoot;
 
-    public Initializer(File file, Communicable communicator){
+    public Initializer(File file){
         myXMLParser = new XMLParser();
-        myCommunicator = communicator;
+        myRoot = new Pane();
         initGameData(file);
     }
 
-    private void initGameData(File file){
+    public void initGameData(File file){
         myXMLParser.loadFile(file);
-        GameData.setGameData(myXMLParser.getPlayers(), myXMLParser.getEntities(), myXMLParser.getTiles(),
-                myXMLParser.getPhases(), myXMLParser.getNodes(), myXMLParser.getEdges(), myXMLParser.getTurn());
-        for (Tile tile : myXMLParser.getTiles().values()){
-            myCommunicator.addNewEntity(new Tag(Tile.class, tile.getID()));
+        GameData.setGameData(
+            myXMLParser.getDimension(), myXMLParser.getPlayers(), myXMLParser.getEntities(),
+            myXMLParser.getEntityPrototypes(), myXMLParser.getTiles(),
+            myXMLParser.getPhases(), myXMLParser.getNodes(), myXMLParser.getEdges(), myXMLParser.getTurn(), myRoot);
+        for (Tile tile : GameData.getTiles().values()){
+            tile.setupView();
+            myRoot.getChildren().add(tile.getImageView());
         }
-        for (Entity entity : myXMLParser.getEntities().values()){
-            myCommunicator.addNewEntity(new Tag(Entity.class, entity.getID()));
+        for (Entity entity : GameData.getEntities().values()){
+            entity.setupView();
+            myRoot.getChildren().add(entity.getImageView());
         }
         startGame();
+    }
+
+    public Pane getRoot(){ return myRoot; }
+    public void setScreenSize(double screenWidth, double screenHeight) {
+        myRoot.setPrefWidth(screenWidth);
+        myRoot.setPrefHeight(screenHeight);
+        GameData.getTiles().values().forEach(e -> e.adjustViewSize(screenWidth, screenHeight));
+        GameData.getEntities().values().forEach(e -> e.adjustViewSize(screenWidth, screenHeight));
+        GameData.updateViews();
     }
 
     public void startGame(){

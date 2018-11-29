@@ -23,8 +23,9 @@ public class MainPlayer extends Application {
         DisplayData myDisp = new DisplayData(myGroup);
 
         File file = new File(getClass().getClassLoader().getResource("TicTacToe.xml").getFile());
-        Communicable myCommuicator = new Communicator(myDisp);
-        Initializer myInit = new Initializer(file, myCommuicator);
+        //Communicable myCommuicator = new Communicator(myDisp);
+        // myInit = new Initializer(file, myCommuicator);
+        Initializer myInit = new Initializer(file);
         primaryStage.show();
     }
 

@@ -8,5 +8,5 @@ public interface Communicable {
      *
      * @param id The id of the new entity
      */
-    void addNewEntity(Tag id);
+    //void addNewEntity(Tag id);
 }

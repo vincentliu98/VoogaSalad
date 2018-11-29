@@ -1,5 +1,7 @@
 package grids;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Abstract representation of a position in the grid.
@@ -11,7 +13,6 @@ public class PointImpl implements Point {
     private final int x;
     private final int y;
     public static final PointImpl ZERO = new PointImpl(0, 0);
-
 
     /**
      * Instantiate a point given x and y coordinates.
