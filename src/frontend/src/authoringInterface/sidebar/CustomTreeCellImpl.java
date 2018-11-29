@@ -60,7 +60,8 @@ public class CustomTreeCellImpl extends TreeCell<String> {
                     // TODO
                     break;
                 case TILE:
-                    // TODO
+                    editor = new TileEditor(objectManager);
+                    System.out.println("Tile is created");
                     break;
             }
             dialogStage.setScene(new Scene(editor.getView(), 500, 500));
