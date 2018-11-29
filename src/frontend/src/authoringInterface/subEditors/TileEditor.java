@@ -55,7 +55,7 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
         widthText.setLayoutX(36);
         widthText.setLayoutY(176);
         heightText.setLayoutX(261);
-        heightText.setLayoutY(158);
+        heightText.setLayoutY(176);
         nameText.setLayoutX(37);
         nameText.setLayoutY(206);
     }
