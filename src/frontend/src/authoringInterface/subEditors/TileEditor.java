@@ -55,13 +55,13 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
                 try {
                     width = Double.parseDouble(widthText.getText());
                 } catch (NumberFormatException e1) {
-                    new ErrorWindow("Incorrect width", "The input width is in an unsupported format");
+                    new ErrorWindow("Incorrect width", "The input width is in an unsupported format").showAndWait();
                     return;
                 }
                 try {
                     height = Double.parseDouble(heightText.getText());
                 } catch (NumberFormatException e1) {
-                    new ErrorWindow("Incorrect height", "The input height is in an unsupported format");
+                    new ErrorWindow("Incorrect height", "The input height is in an unsupported format").showAndWait();
                     return;
                 }
                 ((Stage) rootPane.getScene().getWindow()).close();
