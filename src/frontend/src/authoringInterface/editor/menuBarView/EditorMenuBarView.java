@@ -21,7 +21,6 @@ import javafx.scene.input.KeyCombination;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
-import org.codehaus.groovy.runtime.memoize.ConcurrentCommonCache;
 import runningGame.GameWindow;
 import java.io.File;
 import java.util.function.BiConsumer;

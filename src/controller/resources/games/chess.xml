@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <game>
     <name>
-        Chess
+        Rock, Paper, Scissors
     </name>
     <info>
-        Chess is a two-player strategy board game played on a chessboard, a checkered gameboard with 64 squares arranged in an 8×8 grid. The game is played by millions of people worldwide. Chess is believed to have originated in India sometime before the 7th century.
+        Rock, Paper, Scissors is a 2 player game that utilizes luck and--if the game is repeated and/or you observe
+        your opponent closely--strategy.
     </info>
     <reference>
-        SwordAndArrow.xml
+        RockPaperScissors.xml
     </reference>
     <color>
         Black
     </color>
     <displaygraphic>
-        chess-background.jpg
+        RockPaperScissors_Background.jpg
     </displaygraphic>
     <tags>
         Strategy
