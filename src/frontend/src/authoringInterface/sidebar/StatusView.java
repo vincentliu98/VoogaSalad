@@ -4,6 +4,7 @@ import api.SubView;
 import authoringInterface.customEvent.UpdateStatusEventListener;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import javafx.event.Event;
+import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 
@@ -14,7 +15,7 @@ import java.awt.event.MouseEvent;
  *
  * @author Haotian Wang
  */
-public class StatusView implements SubView<AnchorPane>, UpdateStatusEventListener {
+public class StatusView implements SubView<AnchorPane>, UpdateStatusEventListener<Node> {
     private AnchorPane rootPane = new AnchorPane();
     private GameObjectsCRUDInterface objectsManager;
 
@@ -30,5 +31,16 @@ public class StatusView implements SubView<AnchorPane>, UpdateStatusEventListene
     @Override
     public AnchorPane getView() {
         return rootPane;
+    }
+
+    /**
+     * This method specifies what the event listener will do in events occurring.
+     *
+     * @param view : The parameter to be passed to the EventListener.
+     */
+    @Override
+    public void setOnUpdateStatusEvent(Node view) {
+        rootPane.getChildren().clear();
+        rootPane.getChildren().add(view);
     }
 }

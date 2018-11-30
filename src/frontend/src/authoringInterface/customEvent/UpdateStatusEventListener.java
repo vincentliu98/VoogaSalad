@@ -9,9 +9,11 @@ import javafx.scene.Node;
  * @author Haotian Wang
  */
 @FunctionalInterface
-public interface UpdateStatusEventListener<T extends Node> {
+public interface UpdateStatusEventListener<T> {
     /**
      * This method specifies what the event listener will do in events occurring.
+     *
+     * @param view: The parameter to be passed to the EventListener.
      */
-    void setOnUpdateStatusEvent();
+    void setOnUpdateStatusEvent(T view);
 }

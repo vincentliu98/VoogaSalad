@@ -2,6 +2,7 @@ package authoringInterface.editor.editView;
 
 import api.DraggingCanvas;
 import api.SubView;
+import authoringInterface.customEvent.UpdateStatusEventListener;
 import authoringInterface.subEditors.*;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.entity.EntityClass;
@@ -26,7 +27,9 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -42,6 +45,7 @@ public class EditGridView implements SubView<ScrollPane> {
     private ScrollPane scrollPane;
     private GameObjectsCRUDInterface gameObjectManager;
     private Map<Node, GameObjectInstance> nodeToGameObjectInstanceMap;
+    private List<UpdateStatusEventListener<Node>> listeners = new ArrayList<>();
 
     public EditGridView(int row, int col, GameObjectsCRUDInterface manager) {
         gameObjectManager = manager;
@@ -108,6 +112,15 @@ public class EditGridView implements SubView<ScrollPane> {
             dialogStage.setScene(new Scene(editor.getView(), 500, 500));
             dialogStage.show();
         }
+    }
+
+    /**
+     * Register the EditGridView with some listener to listen for StatusUpdateEvent changes.
+     *
+     * @param listener: A listener that listens for UpdateStatusEvents.
+     */
+    public void addUpdateStatusEventListener(UpdateStatusEventListener<Node> listener) {
+        listeners.add(listener);
     }
 
     @Override
