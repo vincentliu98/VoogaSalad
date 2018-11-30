@@ -2,6 +2,7 @@ package authoringInterface.editor.editView;
 
 import api.DraggingCanvas;
 import api.SubView;
+import authoringInterface.customEvent.UpdateStatusEventListener;
 import authoringInterface.subEditors.*;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.entity.EntityClass;
@@ -12,6 +13,7 @@ import gameObjects.gameObject.GameObjectType;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
@@ -26,7 +28,9 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,14 +38,15 @@ import java.util.Map;
  *      - Representation of the game's grid setting
  *      - It should support Zoom in and zoom out
  *
- * @author Amy Kim
  * @author Haotian Wang
+ * @author Amy Kim
  */
 public class EditGridView implements SubView<ScrollPane> {
     private GridPane gridScrollView;
     private ScrollPane scrollPane;
     private GameObjectsCRUDInterface gameObjectManager;
     private Map<Node, GameObjectInstance> nodeToGameObjectInstanceMap;
+    private List<UpdateStatusEventListener<Node>> listeners = new ArrayList<>();
 
     public EditGridView(int row, int col, GameObjectsCRUDInterface manager) {
         gameObjectManager = manager;
@@ -56,6 +61,7 @@ public class EditGridView implements SubView<ScrollPane> {
                 gridScrollView.add(cell, i, j);
                 setupHoveringColorChange(cell, Color.LIGHTGREEN);
                 receiveDragFromSideView(cell);
+                cell.setOnMouseClicked(e -> listeners.forEach(listener -> listener.setOnUpdateStatusEvent(constructStatusView(cell))));
             }
         }
         gridScrollView.setGridLinesVisible(true);
@@ -72,10 +78,24 @@ public class EditGridView implements SubView<ScrollPane> {
                 gridScrollView.add(cell, i, j);
                 setupHoveringColorChange(cell, Color.LIGHTGREEN);
                 receiveDragFromSideView(cell);
+                cell.setOnMouseClicked(e -> listeners.forEach(listener -> listener.setOnUpdateStatusEvent(constructStatusView(cell))));
             }
         }
         gameObjectManager.getEntityInstances().clear();
         gameObjectManager.getTileInstances().clear();
+    }
+
+    /**
+     * This method returns a GridPane listing as entries the GameObjectInstances together with their JavaFx Nodes to be shown in the UpdateStatusEventListener.
+     *
+     * @return GridPane: The GridPane that contains information about the GameObjectInstances and JavaFx nodes at this cell.
+     */
+    private GridPane constructStatusView(Region cell) {
+        GridPane listView = new GridPane();
+        listView.setGridLinesVisible(true);
+        listView.addRow(0, new Label("GameObjectInstance"), new Label("Instance ID"));
+        cell.getChildrenUnmodifiable().forEach(node -> listView.addRow(listView.getRowCount(), new Text(nodeToGameObjectInstanceMap.get(node).getClassName().getValue()), new Text(nodeToGameObjectInstanceMap.get(node).getInstanceId().getValue().toString())));
+        return listView;
     }
 
     /**
@@ -108,6 +128,15 @@ public class EditGridView implements SubView<ScrollPane> {
             dialogStage.setScene(new Scene(editor.getView(), 500, 500));
             dialogStage.show();
         }
+    }
+
+    /**
+     * Register the EditGridView with some listener to listen for StatusUpdateEvent changes.
+     *
+     * @param listener: A listener that listens for UpdateStatusEvents.
+     */
+    public void addUpdateStatusEventListener(UpdateStatusEventListener<Node> listener) {
+        listeners.add(listener);
     }
 
     @Override
