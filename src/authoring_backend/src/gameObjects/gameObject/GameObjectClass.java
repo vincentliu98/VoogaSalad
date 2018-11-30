@@ -111,5 +111,7 @@ public interface GameObjectClass {
     /**
      * @return The GameObjectType enum variable for this GameObjectClass
      */
-    GameObjectType getType();
+    default GameObjectType getType() {
+        return GameObjectType.UNSPECIFIED;
+    }
 }
