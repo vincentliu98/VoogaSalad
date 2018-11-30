@@ -22,6 +22,7 @@ import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -36,7 +37,7 @@ import java.util.Map;
  * @author Amy Kim
  * @author Haotian Wang
  */
-public class EditGridView implements SubView<ScrollPane>, DraggingCanvas {
+public class EditGridView implements SubView<ScrollPane> {
     private GridPane gridScrollView;
     private ScrollPane scrollPane;
     private GameObjectsCRUDInterface gameObjectManager;
@@ -53,10 +54,11 @@ public class EditGridView implements SubView<ScrollPane>, DraggingCanvas {
                 cell.setPrefWidth(100);
                 cell.setPrefHeight(100);
                 gridScrollView.add(cell, i, j);
+                setupHoveringColorChange(cell, Color.LIGHTGREEN);
+                receiveDragFromSideView(cell);
             }
         }
         gridScrollView.setGridLinesVisible(true);
-        setupDraggingCanvas();
         scrollPane = new ScrollPane(gridScrollView);
     }
 
@@ -68,6 +70,8 @@ public class EditGridView implements SubView<ScrollPane>, DraggingCanvas {
                 cell.setPrefWidth(100);
                 cell.setPrefHeight(100);
                 gridScrollView.add(cell, i, j);
+                setupHoveringColorChange(cell, Color.LIGHTGREEN);
+                receiveDragFromSideView(cell);
             }
         }
         gameObjectManager.getEntityInstances().clear();
@@ -112,27 +116,36 @@ public class EditGridView implements SubView<ScrollPane>, DraggingCanvas {
     }
 
     /**
-     * Setup the dragging canvas event filters.
+     * This method accepts a Region as input and another Paint variable as input to set up a hovering coloring scheme. The region that is inputted will change to the defined color when hovered over.
+     *
+     * @param cell: The input Region where a pair of EventHandlers will be set.
+     * @param hoveringColor: The JavaFx Color scheme applied to the hovering.
      */
-    @Override
-    public void setupDraggingCanvas() {
-        gridScrollView.addEventFilter(MouseDragEvent.MOUSE_DRAG_OVER, e -> {
-            if (!(e.getTarget() instanceof StackPane)) {
-                return;
+    private void setupHoveringColorChange(Region cell, Paint hoveringColor) {
+        cell.setOnMouseDragEntered(e -> {
+            if (e.getGestureSource() instanceof TreeCell) {
+                cell.setBackground(new Background(new BackgroundFill(hoveringColor, CornerRadii.EMPTY, Insets.EMPTY)));
             }
-            System.out.println();
-            ((StackPane) e.getTarget()).setBackground(new Background(new BackgroundFill(Color.WHITESMOKE, CornerRadii.EMPTY, Insets.EMPTY)));
         });
-        gridScrollView.addEventFilter(MouseDragEvent.MOUSE_DRAG_RELEASED, e -> {
+        cell.setOnMouseDragExited(e -> {
+            if (e.getGestureSource() instanceof TreeCell) {
+                cell.setBackground(Background.EMPTY);
+            }
+        });
+    }
+
+    /**
+     * This method sets up a region so that it accepts a MouseDragEvent Released event from the sideview. The Release event will create an instance according to the GameObjectClass from which the drag is initiated.
+     *
+     * @param cell: A region where the event handler will be set up.
+     */
+    private void receiveDragFromSideView(Pane cell) {
+        cell.setOnMouseDragReleased( e -> {
             if (e.getGestureSource() instanceof TreeCell) {
                 TreeItem<String> item = ((TreeCell<String>) e.getGestureSource()).getTreeItem();
                 if (!item.isLeaf()) {
                     return;
                 }
-                if (!(e.getTarget() instanceof StackPane)) {
-                    return;
-                }
-                StackPane intersected = (StackPane) e.getTarget();
                 GameObjectClass objectClass = gameObjectManager.getGameObjectClass(item.getValue());
                 GameObjectType type = objectClass.getType();
                 switch (type) {
@@ -140,14 +153,14 @@ public class EditGridView implements SubView<ScrollPane>, DraggingCanvas {
                         if (objectClass.getImagePathList().isEmpty()) {
                             Text deploy = new Text(objectClass.getClassName().getValue());
                             deploy.setOnMouseClicked(e1 -> handleDoubleClick(e1, deploy));
-                            intersected.getChildren().add(deploy);
+                            cell.getChildren().add(deploy);
                             // TODO: get tile id
                             EntityInstance objectInstance = ((EntityClass) objectClass).createInstance(0);
                             nodeToGameObjectInstanceMap.put(deploy, objectInstance);
                         } else {
                             ImageView deploy = new ImageView(new Image(objectClass.getImagePathList().get(0)));
                             deploy.setOnMouseClicked(e1 -> handleDoubleClick(e1, deploy));
-                            intersected.getChildren().add(deploy);
+                            cell.getChildren().add(deploy);
                             // TODO: get tile id
                             EntityInstance objectInstance = ((EntityClass) objectClass).createInstance(0);
                             nodeToGameObjectInstanceMap.put(deploy, objectInstance);
