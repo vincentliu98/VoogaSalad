@@ -95,7 +95,7 @@ public class View implements ParentView<SubView>, DraggingCanvas {
     }
 
     private void addElements() {
-        rootPane.getChildren().addAll(menuBar.getView(), sideView.getView(), editView.getView());
+        rootPane.getChildren().addAll(menuBar.getView(), sideView.getView(), editView.getView(), statusView.getView());
     }
 
     /**
