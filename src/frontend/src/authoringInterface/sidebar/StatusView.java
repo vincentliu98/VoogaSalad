@@ -1,6 +1,7 @@
 package authoringInterface.sidebar;
 
 import api.SubView;
+import authoringInterface.customEvent.UpdateStatusEventListener;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import javafx.event.Event;
 import javafx.scene.layout.AnchorPane;
@@ -13,7 +14,7 @@ import java.awt.event.MouseEvent;
  *
  * @author Haotian Wang
  */
-public class StatusView implements SubView<AnchorPane> {
+public class StatusView implements SubView<AnchorPane>, UpdateStatusEventListener {
     private AnchorPane rootPane = new AnchorPane();
     private GameObjectsCRUDInterface objectsManager;
 
