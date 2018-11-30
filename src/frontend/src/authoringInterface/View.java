@@ -7,6 +7,7 @@ import authoring.AuthoringTools;
 import authoringInterface.editor.editView.EditView;
 import authoringInterface.editor.menuBarView.EditorMenuBarView;
 import authoringInterface.sidebar.SideView;
+import authoringInterface.sidebar.StatusView;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.crud.SimpleGameObjectsCRUD;
 import graphUI.groovy.GroovyPaneFactory;
@@ -36,10 +37,12 @@ public class View implements ParentView<SubView>, DraggingCanvas {
     private Stage primaryStage;
     private AuthoringTools tools;
     private Node preview;
+    private StatusView statusView;
     private GameObjectsCRUDInterface gameObjectManager;
     public static final double MENU_BAR_HEIGHT = 30;
     public static final double GAME_WIDTH = 700;
     public static final double GAME_HEIGHT = 500;
+    private static final double SIDEBAR_WIDTH = 240;
     private static final int ROW_NUMBER = 10;
     private static final int COL_NUMBER = 7;
 
@@ -63,6 +66,7 @@ public class View implements ParentView<SubView>, DraggingCanvas {
         menuBar = new EditorMenuBarView(tools, primaryStage::close, this::updateGridDimension);
         sideView = new SideView(gameObjectManager);
         editView = new EditView(tools, groovyPaneFactory, ROW_NUMBER, COL_NUMBER, gameObjectManager);
+        statusView = new StatusView(gameObjectManager);
     }
 
     private void updateGridDimension(Integer width, Integer height) {
@@ -70,17 +74,24 @@ public class View implements ParentView<SubView>, DraggingCanvas {
         editView.updateDimension(width, height);
     }
 
+    /**
+     * Set the positions of the components in an AnchorPane.
+     */
     private void setElements() {
         AnchorPane.setLeftAnchor(menuBar.getView(), 0.0);
         AnchorPane.setRightAnchor(menuBar.getView(), 0.0);
         AnchorPane.setTopAnchor(menuBar.getView(), 0.0);
         AnchorPane.setRightAnchor(sideView.getView(), 0.0);
         AnchorPane.setTopAnchor(sideView.getView(), MENU_BAR_HEIGHT);
-        AnchorPane.setBottomAnchor(sideView.getView(), 0.0);
+        AnchorPane.setBottomAnchor(sideView.getView(), GAME_HEIGHT / 3 * 2);
         AnchorPane.setLeftAnchor(editView.getView(), 0.0);
-        AnchorPane.setRightAnchor(editView.getView(), 247.9);
+        AnchorPane.setRightAnchor(editView.getView(), SIDEBAR_WIDTH);
         AnchorPane.setTopAnchor(editView.getView(), MENU_BAR_HEIGHT);
         AnchorPane.setBottomAnchor(editView.getView(), 0.0);
+        AnchorPane.setTopAnchor(statusView.getView(), GAME_HEIGHT / 3);
+        AnchorPane.setRightAnchor(statusView.getView(), 0.0);
+        AnchorPane.setBottomAnchor(statusView.getView(), 0.0);
+        AnchorPane.setLeftAnchor(statusView.getView(), SIDEBAR_WIDTH);
     }
 
     private void addElements() {
