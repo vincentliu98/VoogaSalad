@@ -47,29 +47,39 @@ Once the rules, objectives, and sprites are defined within the authoring environ
 
 #### Phase class
 
-This class contains a finite state machine that represents the actions and logic (see Node class, below) within each turn. It contains a start node and a terminal node, which will change the Player whose turn it is and will start a new Phase within the Turn class. It contains a "cursor" that will traverse the FSM in the traverse() method. 
+This class contains a finite state machine that represents the actions and logic (see Node class, below) within each
+turn. It contains a start node and a terminal node, which will change the Player whose turn it is and will start a
+new Phase within the Turn class. It contains a "cursor" that will traverse the graph in the traverse() method.
 
 #### Node class
-
-This class represents an action that is requested from the player, such as a mouse click or key press. It has an EventHandler, which will be passed from the authoring environment, that contains a validity check and execution script that is performed in response to the user's input. If the input is valid, the next Node is visited; if not, it visits the startNode within the FSM. 
+This class contains execution code (in Groovy) that is defined by the author. Whenever the "cursor" is on a node,
+certain Groovy code is executed.
 
 #### Player class
 
-This class contains the id of the player, as well as any stats (like score, HP, etc.) associated with him/her. 
+This class contains the id of the player, as well as any stats (like score, HP, etc.) associated with him/her. It
+also has the IDs of the entities they possess.
 
-#### Sprite class
-This class contains the id of the sprite, its location (in terms of which Cell it's on), which player it belongs to (if any), and any other related stats (like sprite HP, etc.). The logic of how this sprite is able to move is encoded within the edges of each Phase's FSM.  
+#### Entity class
+This class contains the id of the sprite, its location (in terms of which Cell it's on), and any other related stats (like sprite HP, etc.). The logic of how this sprite is able to move is encoded within the edges of each Phase's FSM.
 
-#### Cell class
-Cells makes up the game's grid, which is an abstract concept in our design. Each cell has an id and which player it belongs to (if any). The latter information is important in games like chess, where the location of the piece may change its functionality (such as when a pawn crosses to the opposing player's side). It also contains a set of Sprites that may be on top of it. 
+#### Tile class
+Cells makes up the game's grid, which is an abstract concept in our design. Each cell has an id. The latter
+information is important in games like chess, where the location of the piece may change its functionality (such as
+when a pawn crosses to the opposing player's side). It also contains a set of Entities that may be on top of it.
 
 #### Turn class
+This class indicates the current phase and the current Player (whose turn it is). Its method startPhase() calls the
+traverse method of the current Phase, which essentially starts the execution of game logic. If the win/lose condition
+ is ever met (which are checked for during the validity checks within the Phase's graph), then the Turn class's endGame() method is called to end the game.
 
-This class indicates the current phase, the current Player (whose turn it is), and any global data relevant to the game. Its method startPhase() calls the traverse method of the current Phase, which essentially starts the execution of game logic. If the win/lose condition is ever met (which are checked for during the validity checks within the Phase's FSM), then the Turn class's endGame() method is called to end the game. 
+#### Initializer class
+Based on the XML, this class initializes and displays the Cell, Entities, Players, Phases (and their FSMs), and
+finally, the Turn class. This class then starts gameplay by calling startPhase() in the Turn class.
 
-#### Initialization class
-
-Based on the XML, this class initializes and displays the Cell, Sprites, Players, Phases (and their FSMs), and finally, the Turn class. This class then starts gameplay by calling startPhase() in the Turn class. 
+#### GameData class
+Every Phase, Entity, Tile, and Player has an ID. In these classes, they reference each other by ID alone in order to
+make serialization neater. The GameData class is populated with maps of every ID to object by the Initializer.
 
 ### Game Authoring
 

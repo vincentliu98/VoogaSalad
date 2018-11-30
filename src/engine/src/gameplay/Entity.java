@@ -1,7 +1,6 @@
 package gameplay;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
-import grids.Point;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.EventHandler;
@@ -15,39 +14,17 @@ import java.util.stream.Collectors;
 
 public class Entity extends PropertyHolder<Entity> implements GameObject, EventHandler<MouseEvent> {
     private int myID;
-
     private String name;
-
     private int tileID;
-
     private List<String> myImagePaths;
-
-    private String myImageSelector; // Groovy codee
-
+    private String myImageSelector; // Groovy code
     @XStreamOmitField
     private transient SimpleIntegerProperty imgIndex;
     private transient SimpleDoubleProperty xCoord, yCoord;
-
     @XStreamOmitField
     private transient List<Image> myImages;
-
     @XStreamOmitField
     private transient ImageView myImageView;
-
-    /*public Entity(
-        int myID,
-        String name,
-        Map<String, Object> properties,
-        List<String> myImagePaths,
-        String myImageSelector
-    ) {
-        this.myID = myID;
-        this.props = properties;
-        this.name = name;
-        this.myImagePaths = myImagePaths;
-        this.myImageSelector = myImageSelector;
-        setupView();
-    }*/
 
     public Entity(
             int myID,
