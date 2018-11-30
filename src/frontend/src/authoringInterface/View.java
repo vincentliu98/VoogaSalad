@@ -67,6 +67,7 @@ public class View implements ParentView<SubView>, DraggingCanvas {
         sideView = new SideView(gameObjectManager);
         editView = new EditView(tools, groovyPaneFactory, ROW_NUMBER, COL_NUMBER, gameObjectManager);
         statusView = new StatusView(gameObjectManager);
+        editView.addUpdateStatusEventListener(statusView);
     }
 
     private void updateGridDimension(Integer width, Integer height) {

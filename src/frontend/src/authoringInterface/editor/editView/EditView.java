@@ -2,10 +2,12 @@ package authoringInterface.editor.editView;
 
 import api.SubView;
 import authoring.AuthoringTools;
+import authoringInterface.customEvent.UpdateStatusEventListener;
 import authoringInterface.editor.memento.Editor;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import graphUI.groovy.GroovyPaneFactory;
 import graphUI.phase.PhaseChooserPane;
+import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabDragPolicy;
@@ -78,5 +80,14 @@ public class EditView implements SubView<TabPane> {
     @Override
     public TabPane getView() {
         return tabPane;
+    }
+
+    /**
+     * This method uses the proxy pattern to pass the registration of listener to the child GridPane.
+     *
+     * @param listener: The listener to be registered by the child GridPane.
+     */
+    public void addUpdateStatusEventListener(UpdateStatusEventListener<Node> listener) {
+        gridView.addUpdateStatusEventListener(listener);
     }
 }

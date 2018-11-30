@@ -60,6 +60,7 @@ public class EditGridView implements SubView<ScrollPane> {
                 gridScrollView.add(cell, i, j);
                 setupHoveringColorChange(cell, Color.LIGHTGREEN);
                 receiveDragFromSideView(cell);
+                cell.setOnMouseClicked(e -> listeners.forEach(listener -> listener.setOnUpdateStatusEvent(constructStatusView())));
             }
         }
         gridScrollView.setGridLinesVisible(true);
@@ -76,10 +77,21 @@ public class EditGridView implements SubView<ScrollPane> {
                 gridScrollView.add(cell, i, j);
                 setupHoveringColorChange(cell, Color.LIGHTGREEN);
                 receiveDragFromSideView(cell);
+                cell.setOnMouseClicked(e -> listeners.forEach(listener -> listener.setOnUpdateStatusEvent(constructStatusView())));
             }
         }
         gameObjectManager.getEntityInstances().clear();
         gameObjectManager.getTileInstances().clear();
+    }
+
+    /**
+     * This method returns a GridPane listing as entries the GameObjectInstances together with their JavaFx Nodes to be shown in the UpdateStatusEventListener.
+     *
+     * @return GridPane: The GridPane that contains information about the GameObjectInstances and JavaFx nodes at this cell.
+     */
+    private GridPane constructStatusView() {
+        GridPane listView = new GridPane();
+        return listView;
     }
 
     /**
