@@ -94,6 +94,7 @@ public class EditGridView implements SubView<ScrollPane> {
         GridPane listView = new GridPane();
         listView.setGridLinesVisible(true);
         listView.addRow(0, new Label("GameObjectInstance"), new Label("Instance ID"));
+        // TODO: wait for updates in GameObjectInstance
         cell.getChildrenUnmodifiable().forEach(node -> listView.addRow(listView.getRowCount(), new Text(nodeToGameObjectInstanceMap.get(node).getClassName().getValue()), new Text(nodeToGameObjectInstanceMap.get(node).getInstanceId().getValue().toString())));
         return listView;
     }
