@@ -13,6 +13,7 @@ import gameObjects.gameObject.GameObjectType;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
@@ -60,7 +61,7 @@ public class EditGridView implements SubView<ScrollPane> {
                 gridScrollView.add(cell, i, j);
                 setupHoveringColorChange(cell, Color.LIGHTGREEN);
                 receiveDragFromSideView(cell);
-                cell.setOnMouseClicked(e -> listeners.forEach(listener -> listener.setOnUpdateStatusEvent(constructStatusView())));
+                cell.setOnMouseClicked(e -> listeners.forEach(listener -> listener.setOnUpdateStatusEvent(constructStatusView(cell))));
             }
         }
         gridScrollView.setGridLinesVisible(true);
@@ -77,7 +78,7 @@ public class EditGridView implements SubView<ScrollPane> {
                 gridScrollView.add(cell, i, j);
                 setupHoveringColorChange(cell, Color.LIGHTGREEN);
                 receiveDragFromSideView(cell);
-                cell.setOnMouseClicked(e -> listeners.forEach(listener -> listener.setOnUpdateStatusEvent(constructStatusView())));
+                cell.setOnMouseClicked(e -> listeners.forEach(listener -> listener.setOnUpdateStatusEvent(constructStatusView(cell))));
             }
         }
         gameObjectManager.getEntityInstances().clear();
@@ -89,8 +90,14 @@ public class EditGridView implements SubView<ScrollPane> {
      *
      * @return GridPane: The GridPane that contains information about the GameObjectInstances and JavaFx nodes at this cell.
      */
-    private GridPane constructStatusView() {
+    private GridPane constructStatusView(Region cell) {
         GridPane listView = new GridPane();
+        listView.addRow(0, new Label("Node"), new Label("GameObjectInstance"), new Label("Instance ID"));
+        cell.getChildrenUnmodifiable().forEach(node -> {
+            GameObjectInstance instance = nodeToGameObjectInstanceMap.get(node);
+            int id = instance.getInstanceId().getValue();
+            listView.addRow(listView.getRowCount(), node, new Text(instance.getClassName().getValue()), new Text(String.valueOf(id)));
+        });
         return listView;
     }
 
