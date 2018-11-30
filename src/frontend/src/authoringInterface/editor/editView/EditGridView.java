@@ -37,8 +37,8 @@ import java.util.Map;
  *      - Representation of the game's grid setting
  *      - It should support Zoom in and zoom out
  *
- * @author Amy Kim
  * @author Haotian Wang
+ * @author Amy Kim
  */
 public class EditGridView implements SubView<ScrollPane> {
     private GridPane gridScrollView;
