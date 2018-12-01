@@ -29,4 +29,5 @@ module authoring_backend {
     exports gameObjects.gameObject;
     exports gameObjects.crud;
     exports gameObjects.player;
+    exports gameObjects.turn;
 }
