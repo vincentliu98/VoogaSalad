@@ -40,6 +40,8 @@ public interface TileInstance extends GameObjectInstance {
 
     Point getCoord();
 
+    TileClass getGameObjectClass();
+
     @Override
     default GameObjectType getType() {
         return GameObjectType.TILE;

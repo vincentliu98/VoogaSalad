@@ -8,6 +8,8 @@ import gameObjects.gameObject.GameObjectType;
  */
 public interface SoundInstance extends GameObjectInstance {
 
+    SoundClass getGameObjectClass();
+
     @Override
     default GameObjectType getType() {
         return GameObjectType.SOUND;

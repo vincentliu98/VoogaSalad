@@ -102,4 +102,10 @@ public class SimpleSoundInstance implements SoundInstance {
         propertiesMap.put(propertyName, newValue);
         return true;
     }
+
+    @Override
+    public SoundClass getGameObjectClass() {
+        return getSoundClassFunc.get();
+    }
+
 }
