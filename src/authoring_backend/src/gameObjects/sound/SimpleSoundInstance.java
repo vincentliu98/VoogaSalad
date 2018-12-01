@@ -1,21 +1,43 @@
 package gameObjects.sound;
 
+import gameObjects.category.CategoryClass;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
-import javafx.beans.property.ReadOnlyIntegerProperty;
-import javafx.beans.property.ReadOnlyStringProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.*;
+import javafx.collections.ObservableMap;
 
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class SimpleSoundInstance implements SoundInstance {
+    private ReadOnlyStringWrapper className;
+    private SimpleStringProperty instanceName;
+    private ReadOnlyIntegerWrapper instanceId;
+
+    private SimpleStringProperty mediaFilePath;
+    private ObservableMap<String, String> propertiesMap;
+    private Supplier<SoundClass> getSoundClassFunc;
+
+    public SimpleSoundInstance(
+            String className,
+            SimpleStringProperty mediaFilePath,
+            ObservableMap<String, String> properties,
+            Supplier<SoundClass> getSoundClassFunc) {
+        this.className = new ReadOnlyStringWrapper();
+        this.className.setValue(className);
+        this.instanceName = new SimpleStringProperty();
+        this.mediaFilePath = mediaFilePath;
+        this.propertiesMap = properties;
+        this.getSoundClassFunc = getSoundClassFunc;
+        instanceId = new ReadOnlyIntegerWrapper();
+    }
+
     /**
      * @return
      */
     @Override
     public ReadOnlyIntegerProperty getInstanceId() {
-        return null;
+        return instanceId.getReadOnlyProperty();
     }
 
     /**
@@ -23,7 +45,7 @@ public class SimpleSoundInstance implements SoundInstance {
      */
     @Override
     public void setInstanceId(Consumer<SimpleIntegerProperty> setFunc) {
-
+        setFunc.accept(instanceId);
     }
 
     /**
@@ -31,7 +53,7 @@ public class SimpleSoundInstance implements SoundInstance {
      */
     @Override
     public ReadOnlyStringProperty getClassName() {
-        return null;
+        return className.getReadOnlyProperty();
     }
 
     /**
@@ -39,31 +61,45 @@ public class SimpleSoundInstance implements SoundInstance {
      */
     @Override
     public void setClassName(String name) {
-
+        className.setValue(name);
     }
 
     @Override
     public SimpleStringProperty getInstanceName() {
-        return null;
+        return instanceName;
     }
 
     @Override
-    public void setInstanceName(String instanceName) {
-
+    public void setInstanceName(String newInstanceName) {
+        instanceName.setValue(newInstanceName);
     }
 
+
+    /**
+     * @param propertyName
+     * @param defaultValue
+     * @return
+     */
     @Override
     public void addProperty(String propertyName, String defaultValue) {
-
+        propertiesMap.put(propertyName, defaultValue);
     }
 
+    /**
+     * @param propertyName
+     * @return
+     */
     @Override
     public void removeProperty(String propertyName) {
-
+        propertiesMap.remove(propertyName);
     }
 
     @Override
     public boolean changePropertyValue(String propertyName, String newValue) {
-        return false;
+        if (!propertiesMap.containsKey(propertyName)) {
+            return false;
+        }
+        propertiesMap.put(propertyName, newValue);
+        return true;
     }
 }

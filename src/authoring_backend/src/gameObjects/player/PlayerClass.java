@@ -10,5 +10,5 @@ public interface PlayerClass extends GameObjectClass {
         return GameObjectType.PLAYER;
     }
 
-    PlayerInstance createInstance(int playerId);
+    PlayerInstance createInstance();
 }

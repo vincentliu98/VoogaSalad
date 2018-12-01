@@ -2,7 +2,6 @@ package gameObjects.crud;
 
 import gameObjects.IdManager;
 import gameObjects.IdManagerClass;
-import gameObjects.TriConsumer;
 import gameObjects.category.CategoryClass;
 import gameObjects.category.CategoryInstance;
 import gameObjects.category.CategoryInstanceFactory;
@@ -284,7 +283,10 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
 
 
 
-
+    @Override
+    public PlayerInstance createPlayerInstance(String playerName) {
+        return null;
+    }
 
 
 
@@ -357,13 +359,13 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         return null;
     }
 
+
+
     private void addGameObjectClassToMaps(GameObjectClass g) {
         myIdManager.requestClassIdFunc().accept(g);
         gameObjectClassMapByName.put(g.getClassName().getValue(), g);
         gameObjectClassMapById.put(g.getClassId().getValue(), g);
     }
-
-
 
     private void removeGameObjectClassFromMaps(GameObjectClass g) {
         myIdManager.returnClassIdFunc().accept(g);
@@ -425,11 +427,6 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         return true;
     }
 
-    @Override
-    public PlayerInstance createPlayerInstance(String playerName) {
-        return null;
-    }
-
     /**
      * Delete all instances currently in the CRUD.
      */
@@ -437,6 +434,76 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     public void deleteAllInstances() {
         gameObjectInstanceMapById.keySet().forEach(this::removeGameObjectInstanceFromMap);
     }
+
+    private Function<Integer, Boolean> deleteGameObjectInstanceFunc() {
+        return this::deleteGameObjectInstance;
+    }
+
+    private void removeGameObjectInstanceFromMap(int instanceId) {
+        GameObjectInstance gameObjectInstance = gameObjectInstanceMapById.get(instanceId);
+        myIdManager.returnInstanceIdFunc().accept(gameObjectInstance);
+        gameObjectInstanceMapById.remove(instanceId);
+    }
+
+
+    @Override
+    public boolean changeGameObjectClassName(String oldClassName, String newClassName) {
+        if (!gameObjectClassMapByName.containsKey(oldClassName)) {
+            return false;
+        }
+        if (newClassName.equals(oldClassName)) {
+            return true;
+        }
+        GameObjectClass gameObjectClass = gameObjectClassMapByName.get(oldClassName);
+        gameObjectClass.setClassName(newClassName);
+        gameObjectClassMapByName.put(newClassName, gameObjectClass);
+        gameObjectClassMapByName.remove(oldClassName);
+        changeAllGameObjectInstancesClassName(oldClassName, newClassName);
+        return true;
+    }
+
+    private BiConsumer<String, String> changeGameObjectClassNameFunc() {
+        return this::changeGameObjectClassName;
+    }
+
+    private Consumer<GameObjectInstance> addGameObjectInstanceToMapFunc() {
+        return gameObjectInstance -> {
+            int instanceId = gameObjectInstance.getInstanceId().getValue();
+            if (instanceId == 0) {
+                throw new InvalidIdException();
+            }
+            gameObjectInstanceMapById.put(instanceId, gameObjectInstance);
+        };
+    }
+
+
+
+    private void changeAllGameObjectInstancesClassName(String oldClassName, String newClassName) {
+        for (Map.Entry<Integer, GameObjectInstance> e : gameObjectInstanceMapById.entrySet()) {
+            if (e.getValue().getClassName().equals(oldClassName)) {
+                e.getValue().setClassName(newClassName);
+            }
+        }
+    }
+
+
+
+    // TODO: propagate changes
+    @Override
+    public void setDimension(int width, int height) {
+        numCols = width;
+        numRows = height;
+    }
+
+    public int getWidth() { return numCols; }
+    public int getHeight() { return numRows; }
+
+
+
+
+
+
+
 
     /**
      * Getters
@@ -531,70 +598,6 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         return ret;
     }
 
-    private Function<Integer, Boolean> deleteGameObjectInstanceFunc() {
-        return this::deleteGameObjectInstance;
-    }
-
-    private void removeGameObjectInstanceFromMap(int instanceId) {
-        GameObjectInstance gameObjectInstance = gameObjectInstanceMapById.get(instanceId);
-        myIdManager.returnInstanceIdFunc().accept(gameObjectInstance);
-        gameObjectInstanceMapById.remove(instanceId);
-    }
 
 
-    @Override
-    public boolean changeGameObjectClassName(String oldClassName, String newClassName) {
-        if (!gameObjectClassMapByName.containsKey(oldClassName)) {
-            return false;
-        }
-        if (newClassName.equals(oldClassName)) {
-            return true;
-        }
-        GameObjectClass gameObjectClass = gameObjectClassMapByName.get(oldClassName);
-        gameObjectClass.setClassName(newClassName);
-        gameObjectClassMapByName.put(newClassName, gameObjectClass);
-        gameObjectClassMapByName.remove(oldClassName);
-        changeAllGameObjectInstancesClassName(oldClassName, newClassName);
-        return true;
-    }
-
-    private BiConsumer<String, String> changeGameObjectClassNameFunc() {
-        return this::changeGameObjectClassName;
-    }
-
-    private Consumer<GameObjectInstance> addGameObjectInstanceToMapFunc() {
-        return gameObjectInstance -> {
-            int instanceId = gameObjectInstance.getInstanceId().getValue();
-            if (instanceId == 0) {
-                throw new InvalidIdException();
-            }
-            gameObjectInstanceMapById.put(instanceId, gameObjectInstance);
-        };
-    }
-
-
-
-    private void changeAllGameObjectInstancesClassName(String oldClassName, String newClassName) {
-        for (Map.Entry<Integer, GameObjectInstance> e : gameObjectInstanceMapById.entrySet()) {
-            if (e.getValue().getClassName().equals(oldClassName)) {
-                e.getValue().setClassName(newClassName);
-            }
-        }
-    }
-
-
-
-
-
-
-
-    // TODO: propagate changes
-    @Override
-    public void setDimension(int width, int height) {
-        numCols = width;
-        numRows = height;
-    }
-
-    public int getWidth() { return numCols; }
-    public int getHeight() { return numRows; }
 }
