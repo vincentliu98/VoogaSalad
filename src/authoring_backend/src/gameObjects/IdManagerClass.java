@@ -39,6 +39,7 @@ public class IdManagerClass implements IdManager {
         instanceCount = 1;
         playerInstanceCount = 0;
         returnedClassIds = new ArrayList<>();
+        returnedInstanceIds = new ArrayList<>();
         returnedPlayerInstanceIds = new ArrayList<>();
 
         this.getClassFromMapFunc = getClassFromMapFunc;
@@ -118,8 +119,9 @@ public class IdManagerClass implements IdManager {
     @Override
     public Function<Integer, Boolean> verifyTileInstanceIdFunc() {
         return i -> {
-            GameObjectInstance g = getInstanceFromMapFunc.apply(i);
-            return g != null && g.getType() == GameObjectType.TILE;
+//            GameObjectInstance g = getInstanceFromMapFunc.apply(i);
+//            return g != null && g.getType() == GameObjectType.TILE;
+            return true;
         };
     }
 }

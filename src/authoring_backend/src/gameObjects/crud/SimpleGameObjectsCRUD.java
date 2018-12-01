@@ -24,6 +24,7 @@ import gameObjects.tile.TileInstance;
 import gameObjects.tile.TileInstanceFactory;
 import grids.Point;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 
 import java.util.Collection;
@@ -56,11 +57,12 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         gameObjectClassMapById = FXCollections.observableHashMap();
         gameObjectInstanceMapById = FXCollections.observableHashMap();
 
+        myIdManager = new IdManagerClass(getGameObjectClassFromMapFunc(), getGameObjectInstanceFromMapFunc());
+
         myTileInstanceFactory = instantiateTileInstanceFactory();
         myEntityInstanceFactory = instantiateEntityInstanceFactory();
         myCategoryInstanceFactory = instantiateCategoryInstanceFactory();
 
-        myIdManager = new IdManagerClass(getGameObjectClassFromMapFunc(), getGameObjectInstanceFromMapFunc());
     }
 
 //    public SimpleGameObjectsCRUD(int numRows, int numCols, ObservableMap<String, TileClass> tileClasses, ObservableMap<String, EntityClass> entityClasses) {
@@ -394,6 +396,107 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     @Override
     public PlayerInstance createPlayerInstance(String playerName) {
         return null;
+    }
+
+    /**
+     * Delete all instances currently in the CRUD.
+     */
+    @Override
+    public void deleteAllInstances() {
+        gameObjectInstanceMapById.keySet().forEach(this::removeGameObjectInstanceFromMap);
+    }
+
+    /**
+     * Getters
+     *
+     * @return ObservableList of things
+     */
+    @Override
+    public ObservableList<EntityClass> getEntityClasses() {
+        ObservableList<EntityClass> ret = FXCollections.observableArrayList();
+        for (GameObjectClass objectClass : gameObjectClassMapByName.values()) {
+            if (objectClass.getType() == GameObjectType.ENTITY) {
+                ret.add((EntityClass) objectClass);
+            }
+        }
+        return ret;
+    }
+
+    @Override
+    public ObservableList<TileClass> getTileClasses() {
+        ObservableList<TileClass> ret = FXCollections.observableArrayList();
+        for (GameObjectClass objectClass : gameObjectClassMapByName.values()) {
+            if (objectClass.getType() == GameObjectType.TILE) {
+                ret.add((TileClass) objectClass);
+            }
+        }
+        return ret;
+    }
+
+    @Override
+    public ObservableList<CategoryClass> getCategoryClasses() {
+        ObservableList<CategoryClass> ret = FXCollections.observableArrayList();
+        for (GameObjectClass objectClass : gameObjectClassMapByName.values()) {
+            if (objectClass.getType() == GameObjectType.CATEGORY) {
+                ret.add((CategoryClass) objectClass);
+            }
+        }
+        return ret;
+    }
+
+    @Override
+    public ObservableList<SoundClass> getSoundClasses() {
+        ObservableList<SoundClass> ret = FXCollections.observableArrayList();
+        for (GameObjectClass objectClass : gameObjectClassMapByName.values()) {
+            if (objectClass.getType() == GameObjectType.SOUND) {
+                ret.add((SoundClass) objectClass);
+            }
+        }
+        return ret;
+    }
+
+    @Override
+    public ObservableList<EntityInstance> getEntityInstances() {
+        ObservableList<EntityInstance> ret = FXCollections.observableArrayList();
+        for (GameObjectClass objectClass : gameObjectClassMapByName.values()) {
+            if (objectClass.getType() == GameObjectType.ENTITY) {
+                ret.add((EntityInstance) objectClass);
+            }
+        }
+        return ret;
+    }
+
+    @Override
+    public ObservableList<TileInstance> getTileInstances() {
+        ObservableList<TileInstance> ret = FXCollections.observableArrayList();
+        for (GameObjectClass objectClass : gameObjectClassMapByName.values()) {
+            if (objectClass.getType() == GameObjectType.TILE) {
+                ret.add((TileInstance) objectClass);
+            }
+        }
+        return ret;
+    }
+
+    @Override
+    public ObservableList<CategoryInstance> getCategoryInstances() {
+        ObservableList<CategoryInstance> ret = FXCollections.observableArrayList();
+        for (GameObjectClass objectClass : gameObjectClassMapByName.values()) {
+            if (objectClass.getType() == GameObjectType.CATEGORY) {
+                ret.add((CategoryInstance) objectClass);
+            }
+        }
+        return ret;
+    }
+
+    @Override
+    public ObservableList<SoundInstance> getSoundInstances() {
+        ObservableList<SoundInstance> ret = FXCollections.observableArrayList();
+        for (GameObjectClass objectClass : gameObjectClassMapByName.values()) {
+            if (objectClass.getType() == GameObjectType.SOUND) {
+                ret.add((SoundInstance) objectClass);
+            }
+        }
+        return ret;
     }
 
     private Function<Integer, Boolean> deleteGameObjectInstanceFunc() {
