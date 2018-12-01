@@ -12,34 +12,28 @@ import static java.lang.Integer.parseInt;
 /**
  * @author Amy
  */
-//TODO: Refactor this stuff
 public class ResizeGridView{
     private Dialog<Pair<Integer, Integer>> dialog;
 
     public ResizeGridView() {
-        dialog = new Dialog<>();
-
-        dialog.setTitle("Resize Grid of the Game");
-        dialog.setHeaderText("This action will remove all entities on the grid.");
-
-        ButtonType resizeBtn = new ButtonType("Resize", ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(resizeBtn, ButtonType.CANCEL);
-
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(20, 150, 10, 10));
+        GridPane grid = setUpGridPane();
 
         TextField col = new TextField();
         col.setPromptText("Column");
         TextField row = new TextField();
         row.setPromptText("Row");
 
-        grid.add(new Label("Column of the Grid:"), 0, 0);
-        grid.add(col, 1, 0);
-        grid.add(new Label("Row of the Grid:"), 0, 1);
-        grid.add(row, 1, 1);
+        addElements(grid, col, row);
 
+        setUpGrid(grid, col, row);
+    }
+
+    private void setUpGrid(GridPane grid, TextField col, TextField row) {
+        dialog = new Dialog<>();
+        dialog.setTitle("Resize Grid of the Game");
+        dialog.setHeaderText("This action will remove all entities on the grid.");
+        ButtonType resizeBtn = new ButtonType("Resize", ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(resizeBtn, ButtonType.CANCEL);
 
         dialog.getDialogPane().setContent(grid);
 
@@ -58,6 +52,21 @@ public class ResizeGridView{
             }
             return null;
         });
+    }
+
+    private GridPane setUpGridPane() {
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10));
+        return grid;
+    }
+
+    private void addElements(GridPane grid, TextField col, TextField row) {
+        grid.add(new Label("Column of the Grid:"), 0, 0);
+        grid.add(col, 1, 0);
+        grid.add(new Label("Row of the Grid:"), 0, 1);
+        grid.add(row, 1, 1);
     }
 
     public Optional<Pair<Integer, Integer>> showAndWait() {
