@@ -1,6 +1,7 @@
 package gameObjects.category;
 
 import gameObjects.entity.EntityClass;
+import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import javafx.beans.property.*;
@@ -102,4 +103,20 @@ public class SimpleCategoryInstance implements CategoryInstance {
         propertiesMap.put(propertyName, newValue);
         return true;
     }
+
+    @Override
+    public SimpleStringProperty getImagePath() {
+        return imagePath;
+    }
+
+    @Override
+    public void setImagePath(String newImagePath) {
+        imagePath.setValue(newImagePath);
+    }
+
+    @Override
+    public CategoryClass getGameObjectClass() {
+        return getCategoryClassFunc.get();
+    }
+
 }

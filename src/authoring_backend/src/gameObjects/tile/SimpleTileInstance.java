@@ -124,4 +124,9 @@ public class SimpleTileInstance implements TileInstance {
 
     @Override
     public Point getCoord() { return coord.get(); }
+
+    @Override
+    public TileClass getGameObjectClass() {
+        return getTileClassFunc.get();
+    }
 }

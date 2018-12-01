@@ -117,5 +117,10 @@ public class SimpleEntityInstance implements EntityInstance {
     }
 
     @Override
+    public EntityClass getGameObjectClass() {
+        return getEntityClassFunc.get();
+    }
+
+    @Override
     public SimpleIntegerProperty getTileID() { return tileId; }
 }

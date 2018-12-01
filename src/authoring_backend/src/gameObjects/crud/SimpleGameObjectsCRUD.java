@@ -12,6 +12,7 @@ import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import gameObjects.player.PlayerInstance;
+import gameObjects.player.PlayerInstanceFactory;
 import gameObjects.sound.SimpleSoundClass;
 import gameObjects.sound.SoundClass;
 import gameObjects.sound.SoundInstance;
@@ -20,6 +21,8 @@ import gameObjects.tile.SimpleTileClass;
 import gameObjects.tile.TileClass;
 import gameObjects.tile.TileInstance;
 import gameObjects.tile.TileInstanceFactory;
+import gameObjects.turn.SimpleTurn;
+import gameObjects.turn.Turn;
 import grids.Point;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -40,12 +43,14 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     private ObservableMap<String, GameObjectClass> gameObjectClassMapByName;
     private ObservableMap<Integer, GameObjectClass> gameObjectClassMapById;
     private ObservableMap<Integer, GameObjectInstance> gameObjectInstanceMapById;
+    private ObservableMap<String, Turn> turnMap;
 
 
     private TileInstanceFactory myTileInstanceFactory;
     private EntityInstanceFactory myEntityInstanceFactory;
     private CategoryInstanceFactory myCategoryInstanceFactory;
     private SoundInstanceFactory mySoundInstanceFactory;
+    private PlayerInstanceFactory myPlayerInstanceFactory;
 
     private IdManager myIdManager;
 
@@ -62,6 +67,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         myEntityInstanceFactory = instantiateEntityInstanceFactory();
         myCategoryInstanceFactory = instantiateCategoryInstanceFactory();
         mySoundInstanceFactory = instantiateSoundInstanceFactory();
+        myPlayerInstanceFactory = instantiatePlayerInstanceFactory();
 
     }
 
@@ -278,17 +284,46 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
 
 
 
+    private PlayerInstanceFactory instantiatePlayerInstanceFactory() {
+        PlayerInstanceFactory f = new PlayerInstanceFactory(
+                myIdManager.requestInstanceIdFunc(),
+                addGameObjectInstanceToMapFunc());
+        return f;
+
+    }
 
 
     @Override
     public PlayerInstance createPlayerInstance(String playerName) {
-        return null;
+        PlayerInstance playerInstance = myPlayerInstanceFactory.createInstance();
+        playerInstance.setInstanceName(playerName);
+        return playerInstance;
     }
 
 
+    @Override
+    public Turn createTurn(String phaseName) {
+        Turn t = new SimpleTurn(phaseName);
+        turnMap.put(phaseName, t);
+        return t;
+    }
 
+    @Override
+    public Turn getTurn(String phaseName) {
+        if (!turnMap.containsKey(phaseName)) {
+            throw new NoTurnException();
+        }
+        return turnMap.get(phaseName);
+    }
 
-
+    @Override
+    public boolean deleteTurn(String phaseName) {
+        if (!turnMap.containsKey(phaseName)) {
+            return false;
+        }
+        turnMap.remove(phaseName);
+        return true;
+    }
 
     @Override
     public GameObjectClass getGameObjectClass(String className) {
@@ -298,31 +333,12 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         return gameObjectClassMapByName.get(className);
     }
 
-    private Function<Integer, GameObjectClass> getGameObjectClassFromMapFunc() {
-        return classId -> {
-            if (!gameObjectClassMapById.containsKey(classId)) {
-                throw new NoGameObjectClassException();
-            }
-            return gameObjectClassMapById.get(classId);
-        };
-    }
-
-
     @Override
     public GameObjectInstance getGameObjectInstance(int instanceId) {
         if (!gameObjectInstanceMapById.containsKey(instanceId)) {
             throw new NoGameObjectClassException();
         }
         return gameObjectInstanceMapById.get(instanceId);
-    }
-
-    private Function<Integer, GameObjectInstance> getGameObjectInstanceFromMapFunc() {
-        return instanceId -> {
-            if (!gameObjectInstanceMapById.containsKey(instanceId)) {
-                throw new NoGameObjectInstanceException();
-            }
-            return gameObjectInstanceMapById.get(instanceId);
-        };
     }
 
     @Override
@@ -336,39 +352,24 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         return instancesSet;
     }
 
-    private Function<String, Collection<GameObjectInstance>> getAllInstancesFunc() {
-        return this::getAllInstances;
-    }
-
     @Override
     public Collection<GameObjectInstance> getAllInstances(GameObjectClass gameObjectClass) {
         String className = gameObjectClass.getClassName().getValue();
         return getAllInstances(className);
     }
 
+    // TODO
     @Override
     public Collection<GameObjectInstance> getAllInstancesAtPoint(int x, int y) {
         return null;
     }
 
+    // TODO
     @Override
     public Collection<GameObjectInstance> getAllInstancesAtPoint(Point point) {
         return null;
     }
 
-
-
-    private void addGameObjectClassToMaps(GameObjectClass g) {
-        myIdManager.requestClassIdFunc().accept(g);
-        gameObjectClassMapByName.put(g.getClassName().getValue(), g);
-        gameObjectClassMapById.put(g.getClassId().getValue(), g);
-    }
-
-    private void removeGameObjectClassFromMaps(GameObjectClass g) {
-        myIdManager.returnClassIdFunc().accept(g);
-        gameObjectClassMapByName.remove(g.getClassName().getValue());
-        gameObjectClassMapById.remove(g.getClassId().getValue());
-    }
 
     /**
      * This method deletes the GameObjectClasses with the input String name. It scans through all possible maps of the String -> GameObjectClass.
@@ -389,31 +390,20 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
 
     @Override
     public boolean deleteGameObjectClass(int classId) {
-        return false;
+        if (!gameObjectClassMapById.containsKey(classId)) {
+            return false;
+        }
+        GameObjectClass gameObjectClass = gameObjectClassMapById.get(classId);
+        removeGameObjectClassFromMaps(gameObjectClass);
+        removeAllGameObjectInstancesFromMap(gameObjectClass.getClassName().getValue());
+        return true;
     }
 
     @Override
     public boolean deleteGameObjectClass(GameObjectClass gameObjectClass) {
-        return false;
+        removeGameObjectClassFromMaps(gameObjectClass);
+        return removeAllGameObjectInstancesFromMap(gameObjectClass.getClassName().getValue());
     }
-
-    public boolean removeAllGameObjectInstancesFromMap(String className) {
-        if (!gameObjectClassMapByName.containsKey(className)) {
-            return false;
-        }
-        for (Map.Entry<Integer, GameObjectInstance> e : gameObjectInstanceMapById.entrySet()) {
-            if (e.getValue().getClassName().equals(className)) {
-                removeGameObjectInstanceFromMap(e.getKey());
-            }
-        }
-        return true;
-    }
-
-    private void removeAllGameObjectInstancesFromMap(GameObjectClass gameObjectClass) {
-        String className = gameObjectClass.getClassName().getValue();
-        removeAllGameObjectInstancesFromMap(className);
-    }
-
 
     @Override
     public boolean deleteGameObjectInstance(int instanceId) {
@@ -432,17 +422,6 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         gameObjectInstanceMapById.keySet().forEach(this::removeGameObjectInstanceFromMap);
     }
 
-    private Function<Integer, Boolean> deleteGameObjectInstanceFunc() {
-        return this::deleteGameObjectInstance;
-    }
-
-    private void removeGameObjectInstanceFromMap(int instanceId) {
-        GameObjectInstance gameObjectInstance = gameObjectInstanceMapById.get(instanceId);
-        myIdManager.returnInstanceIdFunc().accept(gameObjectInstance);
-        gameObjectInstanceMapById.remove(instanceId);
-    }
-
-
     @Override
     public boolean changeGameObjectClassName(String oldClassName, String newClassName) {
         if (!gameObjectClassMapByName.containsKey(oldClassName)) {
@@ -457,6 +436,75 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         gameObjectClassMapByName.remove(oldClassName);
         changeAllGameObjectInstancesClassName(oldClassName, newClassName);
         return true;
+    }
+
+    private void addGameObjectClassToMaps(GameObjectClass g) {
+        myIdManager.requestClassIdFunc().accept(g);
+        gameObjectClassMapByName.put(g.getClassName().getValue(), g);
+        gameObjectClassMapById.put(g.getClassId().getValue(), g);
+    }
+
+    private void removeGameObjectClassFromMaps(GameObjectClass g) {
+        myIdManager.returnClassIdFunc().accept(g);
+        gameObjectClassMapByName.remove(g.getClassName().getValue());
+        gameObjectClassMapById.remove(g.getClassId().getValue());
+    }
+
+    private void removeGameObjectInstanceFromMap(int instanceId) {
+        GameObjectInstance gameObjectInstance = gameObjectInstanceMapById.get(instanceId);
+        myIdManager.returnInstanceIdFunc().accept(gameObjectInstance);
+        gameObjectInstanceMapById.remove(instanceId);
+    }
+
+
+    private boolean removeAllGameObjectInstancesFromMap(String className) {
+        if (!gameObjectClassMapByName.containsKey(className)) {
+            return false;
+        }
+        for (Map.Entry<Integer, GameObjectInstance> e : gameObjectInstanceMapById.entrySet()) {
+            if (e.getValue().getClassName().equals(className)) {
+                removeGameObjectInstanceFromMap(e.getKey());
+            }
+        }
+        return true;
+    }
+
+    private void changeAllGameObjectInstancesClassName(String oldClassName, String newClassName) {
+        for (Map.Entry<Integer, GameObjectInstance> e : gameObjectInstanceMapById.entrySet()) {
+            if (e.getValue().getClassName().equals(oldClassName)) {
+                e.getValue().setClassName(newClassName);
+            }
+        }
+    }
+
+    private Function<Integer, GameObjectClass> getGameObjectClassFromMapFunc() {
+        return classId -> {
+            if (!gameObjectClassMapById.containsKey(classId)) {
+                throw new NoGameObjectClassException();
+            }
+            return gameObjectClassMapById.get(classId);
+        };
+    }
+
+
+    private Function<Integer, GameObjectInstance> getGameObjectInstanceFromMapFunc() {
+        return instanceId -> {
+            if (!gameObjectInstanceMapById.containsKey(instanceId)) {
+                throw new NoGameObjectInstanceException();
+            }
+            return gameObjectInstanceMapById.get(instanceId);
+        };
+    }
+
+
+    private Function<String, Collection<GameObjectInstance>> getAllInstancesFunc() {
+        return this::getAllInstances;
+    }
+
+
+
+    private Function<Integer, Boolean> deleteGameObjectInstanceFunc() {
+        return this::deleteGameObjectInstance;
     }
 
     private BiConsumer<String, String> changeGameObjectClassNameFunc() {
@@ -475,14 +523,6 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
 
 
 
-    private void changeAllGameObjectInstancesClassName(String oldClassName, String newClassName) {
-        for (Map.Entry<Integer, GameObjectInstance> e : gameObjectInstanceMapById.entrySet()) {
-            if (e.getValue().getClassName().equals(oldClassName)) {
-                e.getValue().setClassName(newClassName);
-            }
-        }
-    }
-
 
 
     // TODO: propagate changes
@@ -494,9 +534,6 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
 
     public int getWidth() { return numCols; }
     public int getHeight() { return numRows; }
-
-
-
 
 
 

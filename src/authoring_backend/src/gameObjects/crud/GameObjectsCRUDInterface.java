@@ -7,6 +7,7 @@ import gameObjects.gameObject.*;
 import gameObjects.player.PlayerInstance;
 import gameObjects.tile.*;
 import gameObjects.sound.*;
+import gameObjects.turn.Turn;
 import grids.Point;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
@@ -145,6 +146,15 @@ public interface GameObjectsCRUDInterface {
     SoundInstance createSoundInstance(SoundClass soundClass);
 
 
+    PlayerInstance createPlayerInstance(String playerName);
+
+    Turn createTurn(String phaseName);
+
+    Turn getTurn(String phaseName);
+
+
+    boolean deleteTurn(String phaseName);
+
 
     /**
      *  Sets the dimension of the entire grid
@@ -231,8 +241,6 @@ public interface GameObjectsCRUDInterface {
 
     boolean deleteGameObjectInstance(int instanceId);
 
-
-    PlayerInstance createPlayerInstance(String playerName);
 
     /**
      * Delete all instances currently in the CRUD.

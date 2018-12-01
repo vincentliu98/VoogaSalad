@@ -28,4 +28,6 @@ module authoring_backend {
     exports gameObjects.tile;
     exports gameObjects.gameObject;
     exports gameObjects.crud;
+    exports gameObjects.player;
+    exports gameObjects.turn;
 }
