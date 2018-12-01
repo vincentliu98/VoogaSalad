@@ -19,11 +19,11 @@ public class SimpleCategoryInstance implements CategoryInstance {
     private ObservableMap<String, String> propertiesMap;
     private Supplier<CategoryClass> getCategoryClassFunc;
 
-    SimpleCategoryInstance(
+    public SimpleCategoryInstance(
             String className,
             SimpleStringProperty imagePath,
             ObservableMap<String, String> properties,
-            Supplier<CategoryClass> getEntityClassFunc) {
+            Supplier<CategoryClass> getCategoryClassFunc) {
         this.className = new ReadOnlyStringWrapper();
         this.className.setValue(className);
         this.instanceName = new SimpleStringProperty();

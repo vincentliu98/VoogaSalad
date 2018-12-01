@@ -2,7 +2,6 @@ package gameObjects.crud;
 
 import gameObjects.IdManager;
 import gameObjects.IdManagerClass;
-import gameObjects.TriConsumer;
 import gameObjects.category.CategoryClass;
 import gameObjects.category.CategoryInstance;
 import gameObjects.category.CategoryInstanceFactory;
@@ -16,8 +15,10 @@ import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import gameObjects.player.PlayerInstance;
+import gameObjects.sound.SimpleSoundClass;
 import gameObjects.sound.SoundClass;
 import gameObjects.sound.SoundInstance;
+import gameObjects.sound.SoundInstanceFactory;
 import gameObjects.tile.SimpleTileClass;
 import gameObjects.tile.TileClass;
 import gameObjects.tile.TileInstance;
@@ -47,6 +48,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     private TileInstanceFactory myTileInstanceFactory;
     private EntityInstanceFactory myEntityInstanceFactory;
     private CategoryInstanceFactory myCategoryInstanceFactory;
+    private SoundInstanceFactory mySoundInstanceFactory;
 
     private IdManager myIdManager;
 
@@ -62,6 +64,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         myTileInstanceFactory = instantiateTileInstanceFactory();
         myEntityInstanceFactory = instantiateEntityInstanceFactory();
         myCategoryInstanceFactory = instantiateCategoryInstanceFactory();
+        mySoundInstanceFactory = instantiateSoundInstanceFactory();
 
     }
 
@@ -229,30 +232,61 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
 
 
 
-    @Override
-    public CategoryClass createSoundClass(String className) {
-        return null;
+    private SoundInstanceFactory instantiateSoundInstanceFactory() {
+        SoundInstanceFactory f = new SoundInstanceFactory(
+                myIdManager.requestInstanceIdFunc(),
+                addGameObjectInstanceToMapFunc());
+        return f;
     }
 
     @Override
-    public CategoryClass getSoundClass(String className) {
-        return null;
+    public SoundClass createSoundClass(String className) {
+        if (gameObjectClassMapByName.containsKey(className)) {
+            throw new DuplicateClassException();
+        }
+        SoundClass newSoundClass = new SimpleSoundClass(
+                className,
+                mySoundInstanceFactory,
+                changeGameObjectClassNameFunc(),
+                getAllInstancesFunc(),
+                deleteGameObjectInstanceFunc());
+        addGameObjectClassToMaps(newSoundClass);
+        return newSoundClass;
+    }
+
+    @Override
+    public SoundClass getSoundClass(String className) {
+        if (!gameObjectClassMapByName.containsKey(className)) {
+            throw new NoSoundClassException();
+        }
+        return (SoundClass) gameObjectClassMapByName.get(className);
     }
 
     @Override
     public SoundInstance createSoundInstance(String className) {
-        return null;
+        if (!gameObjectClassMapByName.containsKey(className) ) {
+            throw new NoSoundClassException();
+        }
+        GameObjectClass c = gameObjectClassMapByName.get(className);
+        if (c.getType() != GameObjectType.SOUND) {
+            throw new InvalidClassException();
+        }
+        return mySoundInstanceFactory.createInstance((SoundClass) c);
     }
 
     @Override
     public SoundInstance createSoundInstance(SoundClass soundClass) {
-        return null;
+        return mySoundInstanceFactory.createInstance(soundClass);
     }
 
 
 
 
 
+    @Override
+    public PlayerInstance createPlayerInstance(String playerName) {
+        return null;
+    }
 
 
 
@@ -325,13 +359,13 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         return null;
     }
 
+
+
     private void addGameObjectClassToMaps(GameObjectClass g) {
         myIdManager.requestClassIdFunc().accept(g);
         gameObjectClassMapByName.put(g.getClassName().getValue(), g);
         gameObjectClassMapById.put(g.getClassId().getValue(), g);
     }
-
-
 
     private void removeGameObjectClassFromMaps(GameObjectClass g) {
         myIdManager.returnClassIdFunc().accept(g);
@@ -393,11 +427,6 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         return true;
     }
 
-    @Override
-    public PlayerInstance createPlayerInstance(String playerName) {
-        return null;
-    }
-
     /**
      * Delete all instances currently in the CRUD.
      */
@@ -405,6 +434,76 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     public void deleteAllInstances() {
         gameObjectInstanceMapById.keySet().forEach(this::removeGameObjectInstanceFromMap);
     }
+
+    private Function<Integer, Boolean> deleteGameObjectInstanceFunc() {
+        return this::deleteGameObjectInstance;
+    }
+
+    private void removeGameObjectInstanceFromMap(int instanceId) {
+        GameObjectInstance gameObjectInstance = gameObjectInstanceMapById.get(instanceId);
+        myIdManager.returnInstanceIdFunc().accept(gameObjectInstance);
+        gameObjectInstanceMapById.remove(instanceId);
+    }
+
+
+    @Override
+    public boolean changeGameObjectClassName(String oldClassName, String newClassName) {
+        if (!gameObjectClassMapByName.containsKey(oldClassName)) {
+            return false;
+        }
+        if (newClassName.equals(oldClassName)) {
+            return true;
+        }
+        GameObjectClass gameObjectClass = gameObjectClassMapByName.get(oldClassName);
+        gameObjectClass.setClassName(newClassName);
+        gameObjectClassMapByName.put(newClassName, gameObjectClass);
+        gameObjectClassMapByName.remove(oldClassName);
+        changeAllGameObjectInstancesClassName(oldClassName, newClassName);
+        return true;
+    }
+
+    private BiConsumer<String, String> changeGameObjectClassNameFunc() {
+        return this::changeGameObjectClassName;
+    }
+
+    private Consumer<GameObjectInstance> addGameObjectInstanceToMapFunc() {
+        return gameObjectInstance -> {
+            int instanceId = gameObjectInstance.getInstanceId().getValue();
+            if (instanceId == 0) {
+                throw new InvalidIdException();
+            }
+            gameObjectInstanceMapById.put(instanceId, gameObjectInstance);
+        };
+    }
+
+
+
+    private void changeAllGameObjectInstancesClassName(String oldClassName, String newClassName) {
+        for (Map.Entry<Integer, GameObjectInstance> e : gameObjectInstanceMapById.entrySet()) {
+            if (e.getValue().getClassName().equals(oldClassName)) {
+                e.getValue().setClassName(newClassName);
+            }
+        }
+    }
+
+
+
+    // TODO: propagate changes
+    @Override
+    public void setDimension(int width, int height) {
+        numCols = width;
+        numRows = height;
+    }
+
+    public int getWidth() { return numCols; }
+    public int getHeight() { return numRows; }
+
+
+
+
+
+
+
 
     /**
      * Getters
@@ -499,70 +598,6 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         return ret;
     }
 
-    private Function<Integer, Boolean> deleteGameObjectInstanceFunc() {
-        return this::deleteGameObjectInstance;
-    }
-
-    private void removeGameObjectInstanceFromMap(int instanceId) {
-        GameObjectInstance gameObjectInstance = gameObjectInstanceMapById.get(instanceId);
-        myIdManager.returnInstanceIdFunc().accept(gameObjectInstance);
-        gameObjectInstanceMapById.remove(instanceId);
-    }
 
 
-    @Override
-    public boolean changeGameObjectClassName(String oldClassName, String newClassName) {
-        if (!gameObjectClassMapByName.containsKey(oldClassName)) {
-            return false;
-        }
-        if (newClassName.equals(oldClassName)) {
-            return true;
-        }
-        GameObjectClass gameObjectClass = gameObjectClassMapByName.get(oldClassName);
-        gameObjectClass.setClassName(newClassName);
-        gameObjectClassMapByName.put(newClassName, gameObjectClass);
-        gameObjectClassMapByName.remove(oldClassName);
-        changeAllGameObjectInstancesClassName(oldClassName, newClassName);
-        return true;
-    }
-
-    private BiConsumer<String, String> changeGameObjectClassNameFunc() {
-        return this::changeGameObjectClassName;
-    }
-
-    private Consumer<GameObjectInstance> addGameObjectInstanceToMapFunc() {
-        return gameObjectInstance -> {
-            int instanceId = gameObjectInstance.getInstanceId().getValue();
-            if (instanceId == 0) {
-                throw new InvalidIdException();
-            }
-            gameObjectInstanceMapById.put(instanceId, gameObjectInstance);
-        };
-    }
-
-
-
-    private void changeAllGameObjectInstancesClassName(String oldClassName, String newClassName) {
-        for (Map.Entry<Integer, GameObjectInstance> e : gameObjectInstanceMapById.entrySet()) {
-            if (e.getValue().getClassName().equals(oldClassName)) {
-                e.getValue().setClassName(newClassName);
-            }
-        }
-    }
-
-
-
-
-
-
-
-    // TODO: propagate changes
-    @Override
-    public void setDimension(int width, int height) {
-        numCols = width;
-        numRows = height;
-    }
-
-    public int getWidth() { return numCols; }
-    public int getHeight() { return numRows; }
 }
