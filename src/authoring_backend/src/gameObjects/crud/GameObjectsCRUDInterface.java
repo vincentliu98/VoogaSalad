@@ -120,7 +120,7 @@ public interface GameObjectsCRUDInterface {
      * @return the Sound Class if there is no name collision and the method is successful
      * @throws DuplicateClassException if a class with the same name exists
      */
-    CategoryClass createSoundClass(String className);
+    SoundClass createSoundClass(String className);
 
     /**
      * This method gets the Sound Class from the map.
@@ -128,7 +128,7 @@ public interface GameObjectsCRUDInterface {
      * @return the Sound Class with the name
      * @throws NoSoundClassException if there is no such Sound Class
      */
-    CategoryClass getSoundClass(String className);
+    SoundClass getSoundClass(String className);
 
     /**
      *

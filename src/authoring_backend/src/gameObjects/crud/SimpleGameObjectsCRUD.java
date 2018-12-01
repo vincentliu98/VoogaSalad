@@ -18,6 +18,7 @@ import gameObjects.gameObject.GameObjectType;
 import gameObjects.player.PlayerInstance;
 import gameObjects.sound.SoundClass;
 import gameObjects.sound.SoundInstance;
+import gameObjects.sound.SoundInstanceFactory;
 import gameObjects.tile.SimpleTileClass;
 import gameObjects.tile.TileClass;
 import gameObjects.tile.TileInstance;
@@ -229,25 +230,53 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
 
 
 
-    @Override
-    public CategoryClass createSoundClass(String className) {
-        return null;
+    private SoundInstanceFactory instantiateSoundInstanceFactory() {
+        SoundInstanceFactory f = new SoundInstanceFactory(
+                myIdManager.requestInstanceIdFunc(),
+                addGameObjectInstanceToMapFunc());
+        return f;
     }
 
     @Override
-    public CategoryClass getSoundClass(String className) {
-        return null;
+    public SoundClass createSoundClass(String className) {
+        if (gameObjectClassMapByName.containsKey(className)) {
+            throw new DuplicateClassException();
+        }
+        SoundClass newSoundClass = new SimpleSoundClass(
+                className,
+                mySoundInstanceFactory,
+                changeGameObjectClassNameFunc(),
+                getAllInstancesFunc(),
+                deleteGameObjectInstanceFunc());
+        addGameObjectClassToMaps(newSoundClass);
+        return newSoundClass;
+    }
+
+    @Override
+    public SoundClass getSoundClass(String className) {
+        if (!gameObjectClassMapByName.containsKey(className)) {
+            throw new NoSoundClassException();
+        }
+        return (SoundClass) gameObjectClassMapByName.get(className);
     }
 
     @Override
     public SoundInstance createSoundInstance(String className) {
-        return null;
+        if (!gameObjectClassMapByName.containsKey(className) ) {
+            throw new NoSoundClassException();
+        }
+        GameObjectClass c = gameObjectClassMapByName.get(className);
+        if (c.getType() != GameObjectType.SOUND) {
+            throw new InvalidClassException();
+        }
+        return mySoundInstanceFactory.createInstance((SoundClass) c);
     }
 
     @Override
     public SoundInstance createSoundInstance(SoundClass soundClass) {
-        return null;
+        return mySoundInstanceFactory.createInstance(soundClass);
     }
+
 
 
 
