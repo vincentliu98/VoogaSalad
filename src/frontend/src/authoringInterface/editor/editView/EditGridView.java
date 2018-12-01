@@ -81,8 +81,7 @@ public class EditGridView implements SubView<ScrollPane> {
                 cell.setOnMouseClicked(e -> listeners.forEach(listener -> listener.setOnUpdateStatusEvent(constructStatusView(cell))));
             }
         }
-        gameObjectManager.getEntityInstances().clear();
-        gameObjectManager.getTileInstances().clear();
+        gameObjectManager.deleteAllInstances();
     }
 
     /**
@@ -180,7 +179,7 @@ public class EditGridView implements SubView<ScrollPane> {
                 GameObjectType type = objectClass.getType();
                 switch (type) {
                     case ENTITY:
-                        if (objectClass.getImagePathList().isEmpty()) {
+                        if (((EntityClass) objectClass).getImagePathList().isEmpty()) {
                             Text deploy = new Text(objectClass.getClassName().getValue());
                             deploy.setOnMouseClicked(e1 -> handleDoubleClick(e1, deploy));
                             cell.getChildren().add(deploy);
@@ -188,7 +187,7 @@ public class EditGridView implements SubView<ScrollPane> {
                             EntityInstance objectInstance = ((EntityClass) objectClass).createInstance(0);
                             nodeToGameObjectInstanceMap.put(deploy, objectInstance);
                         } else {
-                            ImageView deploy = new ImageView(new Image(objectClass.getImagePathList().get(0)));
+                            ImageView deploy = new ImageView(((EntityClass) objectClass).getImagePathList().get(0));
                             deploy.setOnMouseClicked(e1 -> handleDoubleClick(e1, deploy));
                             cell.getChildren().add(deploy);
                             // TODO: get tile id

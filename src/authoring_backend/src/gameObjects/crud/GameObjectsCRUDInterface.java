@@ -234,4 +234,24 @@ public interface GameObjectsCRUDInterface {
 
     PlayerInstance createPlayerInstance(String playerName);
 
+    /**
+     * Delete all instances currently in the CRUD.
+     */
+    void deleteAllInstances();
+
+
+    /**
+     * Getters
+     *
+     * @return ObservableList of things
+     */
+    ObservableList<EntityClass> getEntityClasses();
+    ObservableList<TileClass> getTileClasses();
+    ObservableList<CategoryClass> getCategoryClasses();
+    ObservableList<SoundClass> getSoundClasses();
+
+    ObservableList<EntityInstance> getEntityInstances();
+    ObservableList<TileInstance> getTileInstances();
+    ObservableList<CategoryInstance> getCategoryInstances();
+    ObservableList<SoundInstance> getSoundInstances();
 }
