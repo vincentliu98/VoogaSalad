@@ -38,13 +38,14 @@ import java.util.function.Function;
 
 
 public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
+    private static final String DEFAULT_PLAYER_NAME = "$default$";
+
     private int numRows;
     private int numCols;
     private ObservableMap<String, GameObjectClass> gameObjectClassMapByName;
     private ObservableMap<Integer, GameObjectClass> gameObjectClassMapById;
     private ObservableMap<Integer, GameObjectInstance> gameObjectInstanceMapById;
     private ObservableMap<String, Turn> turnMap;
-
 
     private TileInstanceFactory myTileInstanceFactory;
     private EntityInstanceFactory myEntityInstanceFactory;
@@ -53,6 +54,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     private PlayerInstanceFactory myPlayerInstanceFactory;
 
     private IdManager myIdManager;
+    private PlayerInstance defaultPlayer;
 
     public SimpleGameObjectsCRUD(int numRows, int numCols) {
         this.numRows = numRows;
@@ -69,6 +71,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         mySoundInstanceFactory = instantiateSoundInstanceFactory();
         myPlayerInstanceFactory = instantiatePlayerInstanceFactory();
 
+        defaultPlayer = createPlayerInstance(DEFAULT_PLAYER_NAME);
     }
 
 //    public SimpleGameObjectsCRUD(int numRows, int numCols, ObservableMap<String, TileClass> tileClasses, ObservableMap<String, EntityClass> entityClasses) {
@@ -617,12 +620,16 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     public ObservableList<PlayerInstance> getPlayerInstances() {
         ObservableList<PlayerInstance> ret = FXCollections.observableArrayList();
         for (GameObjectInstance objectInstance : gameObjectInstanceMapById.values()) {
-            if (objectInstance.getType() == GameObjectType.PLAYER) {
+            if (objectInstance.getType() == GameObjectType.PLAYER &&
+                    !objectInstance.getInstanceName().get().equals(DEFAULT_PLAYER_NAME)) {
                 ret.add((PlayerInstance) objectInstance);
             }
         }
         return ret;
     }
+
+    @Override
+    public int getDefaultPlayerID() { return defaultPlayer.getInstanceId().get(); }
 
     @Override
     public ObservableList<CategoryInstance> getCategoryInstances() {

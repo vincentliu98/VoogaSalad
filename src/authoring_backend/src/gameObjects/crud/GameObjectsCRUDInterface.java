@@ -263,4 +263,6 @@ public interface GameObjectsCRUDInterface {
     ObservableList<CategoryInstance> getCategoryInstances();
     ObservableList<SoundInstance> getSoundInstances();
     ObservableList<PlayerInstance> getPlayerInstances();
+
+    int getDefaultPlayerID();
 }
