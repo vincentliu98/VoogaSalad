@@ -31,11 +31,7 @@ public class Turn {
         playerIdx = 0;
     }
 
-    public void startPhase(){
-        System.out.println(myCurrentPhaseID);
-        System.out.println(GameData.getPhase(myCurrentPhaseID));
-        GameData.getPhase(myCurrentPhaseID).startTraversal();
-    }
+    public void startPhase(){ GameData.getPhase(myCurrentPhaseID).startTraversal(); }
 
     public void endGame(int winnerID){
         // end the game

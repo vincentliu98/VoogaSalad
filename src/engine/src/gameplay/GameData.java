@@ -120,10 +120,7 @@ public class GameData {
         return !ENTITY_PROTOTYPES.keySet().contains(object.getName());
     }
 
-    public static void goTo(int nodeID) {
-        System.out.println("hahha"+nodeID);
-        getNode(nodeID).execute();
-    }
+    public static void goTo(int nodeID) { getNode(nodeID).execute(); }
 
     public static boolean isEntity(GameObject object) {
         return ENTITY_PROTOTYPES.keySet().contains(object.getName());
