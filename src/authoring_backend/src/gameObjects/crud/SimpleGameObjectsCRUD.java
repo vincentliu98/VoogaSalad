@@ -6,10 +6,7 @@ import gameObjects.category.CategoryClass;
 import gameObjects.category.CategoryInstance;
 import gameObjects.category.CategoryInstanceFactory;
 import gameObjects.category.SimpleCategoryClass;
-import gameObjects.entity.EntityClass;
-import gameObjects.entity.EntityInstance;
-import gameObjects.entity.EntityInstanceFactory;
-import gameObjects.entity.SimpleEntityClass;
+import gameObjects.entity.*;
 import gameObjects.exception.*;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
@@ -137,10 +134,12 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
 
     private EntityInstanceFactory instantiateEntityInstanceFactory() {
         EntityInstanceFactory f = new EntityInstanceFactory(
-                // TODO
-                myIdManager.verifyTileInstanceIdFunc(),
-                myIdManager.requestInstanceIdFunc(),
-                addGameObjectInstanceToMapFunc());
+            // TODO
+            myIdManager.verifyTileInstanceIdFunc(),
+            myIdManager.requestInstanceIdFunc(),
+            addGameObjectInstanceToMapFunc(),
+            (entityID, playerID) -> ((PlayerInstance) gameObjectInstanceMapById.get(playerID)).addEntity(entityID)
+        );
         return f;
     }
 
@@ -168,7 +167,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     }
 
     @Override
-    public EntityInstance createEntityInstance(String className, int tileId) {
+    public EntityInstance createEntityInstance(String className, int tileId, int playerID) {
         if (!gameObjectClassMapByName.containsKey(className) ) {
             throw new NoEntityClassException();
         }
@@ -176,12 +175,12 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         if (t.getType() != GameObjectType.ENTITY) {
             throw new InvalidClassException();
         }
-        return myEntityInstanceFactory.createInstance((EntityClass) t, tileId);
+        return myEntityInstanceFactory.createInstance((EntityClass) t, tileId, playerID);
     }
 
     @Override
-    public EntityInstance createEntityInstance(EntityClass entityClass, int tileId) {
-        return myEntityInstanceFactory.createInstance(entityClass, tileId);
+    public EntityInstance createEntityInstance(EntityClass entityClass, int tileId, int playerID) {
+        return myEntityInstanceFactory.createInstance(entityClass, tileId, playerID);
     }
 
 
@@ -300,6 +299,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     public PlayerInstance createPlayerInstance(String playerName) {
         PlayerInstance playerInstance = myPlayerInstanceFactory.createInstance();
         playerInstance.setInstanceName(playerName);
+        gameObjectInstanceMapById.put(playerInstance.getInstanceId().get(), playerInstance);
         return playerInstance;
     }
 
@@ -594,9 +594,9 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     @Override
     public ObservableList<EntityInstance> getEntityInstances() {
         ObservableList<EntityInstance> ret = FXCollections.observableArrayList();
-        for (GameObjectClass objectClass : gameObjectClassMapByName.values()) {
-            if (objectClass.getType() == GameObjectType.ENTITY) {
-                ret.add((EntityInstance) objectClass);
+        for (GameObjectInstance objectInstance : gameObjectInstanceMapById.values()) {
+            if (objectInstance.getType() == GameObjectType.ENTITY) {
+                ret.add((EntityInstance) objectInstance);
             }
         }
         return ret;
@@ -605,9 +605,20 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     @Override
     public ObservableList<TileInstance> getTileInstances() {
         ObservableList<TileInstance> ret = FXCollections.observableArrayList();
-        for (GameObjectClass objectClass : gameObjectClassMapByName.values()) {
-            if (objectClass.getType() == GameObjectType.TILE) {
-                ret.add((TileInstance) objectClass);
+        for (GameObjectInstance objectInstance : gameObjectInstanceMapById.values()) {
+            if (objectInstance.getType() == GameObjectType.TILE) {
+                ret.add((TileInstance) objectInstance);
+            }
+        }
+        return ret;
+    }
+
+    @Override
+    public ObservableList<PlayerInstance> getPlayerInstances() {
+        ObservableList<PlayerInstance> ret = FXCollections.observableArrayList();
+        for (GameObjectInstance objectInstance : gameObjectInstanceMapById.values()) {
+            if (objectInstance.getType() == GameObjectType.PLAYER) {
+                ret.add((PlayerInstance) objectInstance);
             }
         }
         return ret;

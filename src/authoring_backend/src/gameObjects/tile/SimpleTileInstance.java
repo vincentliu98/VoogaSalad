@@ -71,6 +71,9 @@ public class SimpleTileInstance implements TileInstance {
     }
 
     @Override
+    public ObservableMap<String, String> getPropertiesMap() { return propertiesMap; }
+
+    @Override
     public void addProperty(String propertyName, String defaultValue) {
         propertiesMap.put(propertyName, defaultValue);
     }

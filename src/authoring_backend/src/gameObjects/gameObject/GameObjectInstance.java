@@ -4,6 +4,7 @@ import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableMap;
 
 import java.util.Collection;
 import java.util.function.Consumer;
@@ -49,6 +50,12 @@ public interface GameObjectInstance {
 
     void setInstanceName(String instanceName);
 
+
+    /**
+     * This method gets the properties map of the GameObject Class.
+     * @return properties map
+     */
+    ObservableMap<String, String> getPropertiesMap();
 
     /**
      * This method adds the property to the GameObject Class and to all instances of the class.

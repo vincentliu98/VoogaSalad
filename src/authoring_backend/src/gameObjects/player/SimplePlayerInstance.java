@@ -3,11 +3,11 @@ package gameObjects.player;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
-import gameObjects.gameObject.GameObjectInstance;
 import javafx.collections.ObservableSet;
 
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 public class SimplePlayerInstance implements PlayerInstance {
     private ReadOnlyStringWrapper className;
@@ -53,6 +53,8 @@ public class SimplePlayerInstance implements PlayerInstance {
         instanceName.setValue(newInstanceName);
     }
 
+    @Override
+    public ObservableMap<String, String> getPropertiesMap() { return propertiesMap; }
 
 
     @Override
@@ -73,6 +75,8 @@ public class SimplePlayerInstance implements PlayerInstance {
         propertiesMap.put(propertyName, newValue);
         return true;
     }
+
+    public Set<Integer> getEntityIDs() { return new TreeSet<>(entitiesSet); }
 
     @Override
     public boolean addEntity(int entityId) {

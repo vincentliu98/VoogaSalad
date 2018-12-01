@@ -221,8 +221,8 @@
                     GameData.getTurn().endGame(turn);
                     return;
             }
-            GameData.setCurrentPlayerID(1-turn);
-            GameData.getTurn().startPhase();
+            GameData.goTo(1);
+            GameData.toNextPlayer();
         </myExecution>
     </gameplay.Node>
 
@@ -239,6 +239,9 @@
 
     <gameplay.Turn>
         <myCurrentPhaseID>1</myCurrentPhaseID>
-        <myCurrentPlayerID>0</myCurrentPlayerID>
+        <playersOrder>
+            <int>0</int>
+            <int>1</int>
+        </playersOrder>
     </gameplay.Turn>
 </game>

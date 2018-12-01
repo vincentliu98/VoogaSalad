@@ -25,7 +25,7 @@ public class PhaseGraphConverter implements Converter {
                          .flatMap(Collection::stream)
                          .collect(Collectors.toSet());
 
-        var graphID = String.valueOf(Math.abs(graph.hashCode()));
+        var graphID = String.valueOf(graph.source().name().hashCode());
         var nodeIDs = new HashMap<String, String>();
         nodes.forEach(n -> nodeIDs.put(n.name(), String.valueOf(n.name().hashCode())));
 

@@ -21,11 +21,9 @@ public class PlayerInstanceFactory {
     }
 
     public PlayerInstance createInstance() {
-
         PlayerInstance playerInstance = new SimplePlayerInstance(CLASSNAME);
         requestInstanceIdFunc.accept(playerInstance);
         addInstanceToMapFunc.accept(playerInstance);
         return playerInstance;
-
     }
 }

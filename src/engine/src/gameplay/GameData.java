@@ -110,7 +110,9 @@ public class GameData {
 
     public static Player getCurrentPlayer() { return PLAYERS.get(TURN.getCurrentPlayerID()); }
     public static int getCurrentPlayerID(){ return TURN.getCurrentPlayerID(); }
-    public static void setCurrentPlayerID(int id){ TURN.setPlayer(id); }
+    public static int getNextPlayerID() { return TURN.nextPlayerID(); }
+    public static int toNextPlayer() { return TURN.toNextPlayer(); }
+    public static void setPlayerOrder(List<Integer> newOrder){ TURN.setPlayerOrder(newOrder); }
 
     public static Turn getTurn(){ return TURN; }
 
@@ -118,10 +120,7 @@ public class GameData {
         return !ENTITY_PROTOTYPES.keySet().contains(object.getName());
     }
 
-    public static void goTo(int nodeID) {
-        System.out.println("hahha"+nodeID);
-        getNode(nodeID).execute();
-    }
+    public static void goTo(int nodeID) { getNode(nodeID).execute(); }
 
     public static boolean isEntity(GameObject object) {
         return ENTITY_PROTOTYPES.keySet().contains(object.getName());

@@ -74,6 +74,9 @@ public class SimpleSoundInstance implements SoundInstance {
         instanceName.setValue(newInstanceName);
     }
 
+    @Override
+    public ObservableMap<String, String> getPropertiesMap() { return propertiesMap; }
+
 
     /**
      * @param propertyName
