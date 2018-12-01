@@ -16,6 +16,7 @@ import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import gameObjects.player.PlayerInstance;
+import gameObjects.sound.SimpleSoundClass;
 import gameObjects.sound.SoundClass;
 import gameObjects.sound.SoundInstance;
 import gameObjects.sound.SoundInstanceFactory;
@@ -48,6 +49,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     private TileInstanceFactory myTileInstanceFactory;
     private EntityInstanceFactory myEntityInstanceFactory;
     private CategoryInstanceFactory myCategoryInstanceFactory;
+    private SoundInstanceFactory mySoundInstanceFactory;
 
     private IdManager myIdManager;
 
@@ -63,6 +65,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         myTileInstanceFactory = instantiateTileInstanceFactory();
         myEntityInstanceFactory = instantiateEntityInstanceFactory();
         myCategoryInstanceFactory = instantiateCategoryInstanceFactory();
+        mySoundInstanceFactory = instantiateSoundInstanceFactory();
 
     }
 
