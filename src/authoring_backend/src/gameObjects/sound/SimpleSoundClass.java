@@ -43,16 +43,22 @@ public class SimpleSoundClass implements SoundClass {
         return null;
     }
 
+    @Override
+    public void changeClassName(String newClassName) {
+
+    }
+
+    @Override
+    public void setClassName(String newClassName) {
+
+    }
+
     /**
      * This method receives a function that sets the name of the GameObject Class.
      * The name of the GameObject Class is set by the received function.
      *
      * @param setFunc the function that sets the class name
      */
-    @Override
-    public void setClassName(Consumer<SimpleStringProperty> setFunc) {
-
-    }
 
     /**
      * This method gets the properties map of the GameObject Class.
@@ -88,63 +94,12 @@ public class SimpleSoundClass implements SoundClass {
     }
 
     /**
-     * This method adds the image path to the GameObject Class and to all instances of the class.
-     *
-     * @param path file path of the image
-     */
-    @Override
-    public void addImagePath(String path) {
-
-    }
-
-    /**
-     * This method gets the image path list of the GameObject Class.
-     *
-     * @return a list of the file paths of the images
-     */
-    @Override
-    public ObservableList<String> getImagePathList() {
-        return null;
-    }
-
-    /**
-     * This method removes the image path from the Entity Class and from all instances of the class.
-     *
-     * @param index index of the image file path in the list
-     * @return true if the image file path successfully removed
-     */
-    @Override
-    public boolean removeImagePath(int index) {
-        return false;
-    }
-
-    /**
-     * This method sets the GroovyCode for choosing the image to display from the list of images.
-     *
-     * @param blockCode GroovyCode
-     */
-    @Override
-    public void setImageSelector(String blockCode) {
-
-    }
-
-    /**
-     * This method gets the image selector code.
-     *
-     * @return image selector code
-     */
-    @Override
-    public String getImageSelectorCode() {
-        return null;
-    }
-
-    /**
      * This method returns all of the instance of the GameObject Class.
      *
      * @return the set of all instances of the class
      */
     @Override
-    public Set<GameObjectInstance> getInstances() {
+    public Set<GameObjectInstance> getAllInstances() {
         return null;
     }
 
@@ -157,5 +112,20 @@ public class SimpleSoundClass implements SoundClass {
     @Override
     public boolean deleteInstance(int id) {
         return false;
+    }
+
+    @Override
+    public SoundInstance createInstance() {
+        return null;
+    }
+
+    @Override
+    public String getMediaFilePath() {
+        return null;
+    }
+
+    @Override
+    public void setMediaFilePath(String mediaFilePath) {
+
     }
 }

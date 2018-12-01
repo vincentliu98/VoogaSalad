@@ -1,14 +1,14 @@
 package gameObjects.entity;
 
 import gameObjects.gameObject.GameObjectInstance;
-import gameObjects.TriConsumer;
-import gameObjects.exception.InvalidIdException;
+import gameObjects.gameObject.GameObjectType;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import javafx.collections.ObservableSet;
 
-import java.util.Set;
+import java.util.Collection;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -26,19 +26,14 @@ public class SimpleEntityClass implements EntityClass {
     private ObservableMap<String, String> propertiesMap;
     private String imageSelector;
 
-    private Function<Integer, Boolean> verifyTileInstanceIdFunc;
-
-    private Function<String, Set<GameObjectInstance>> getEntityInstancesFunc;
-    private Consumer<GameObjectInstance> setInstanceIdFunc;
-    private Consumer<GameObjectInstance> returnInstanceIdFunc;
-    private Consumer<EntityInstance> addEntityInstanceToMapFunc;
-    private Function<Integer, Boolean> deleteEntityInstanceFromMapFunc;
-    private TriConsumer<String, String, String> addEntityPropertyFunc;
-    private BiConsumer<String, String> removeEntityPropertyFunc;
+    private EntityInstanceFactory myFactory;
+    private BiConsumer<String, String> changeEntityClassNameFunc;
+    private Function<String, Collection<GameObjectInstance>> getAllEntityInstancesFunc;
+    private Function<Integer, Boolean> deleteEntityInstanceFunc;
 
 
-    public SimpleEntityClass(String name) {
-        className = new ReadOnlyStringWrapper(this, CONST_CLASSNAME, name);
+    public SimpleEntityClass(String className) {
+        this.className = new ReadOnlyStringWrapper(this, CONST_CLASSNAME, className);
         classId = new ReadOnlyIntegerWrapper(this, CONST_ID);
         movable = new SimpleBooleanProperty(this, CONST_MOVABLE);
         imagePathList = FXCollections.observableArrayList();
@@ -47,26 +42,16 @@ public class SimpleEntityClass implements EntityClass {
     }
 
     public SimpleEntityClass(
-        String name,
-        Function<Integer, Boolean> verifyTileInstanceIdFunction,
-        Consumer<GameObjectInstance> setInstanceIdFunc,
-        Consumer<GameObjectInstance> returnInstanceIdFunc,
-        Consumer<EntityInstance> addEntityInstanceToMapFunc,
-        Function<Integer, Boolean> deleteEntityInstanceFromMapFunc,
-        Function<String, Set<GameObjectInstance>> getEntityInstancesFunc,
-        TriConsumer<String, String, String> addEntityPropertyFunc,
-        BiConsumer<String, String> removeEntityPropertyFunc
-    ) {
-        this(name);
-        this.className.set(name);
-        this.verifyTileInstanceIdFunc = verifyTileInstanceIdFunction;
-        this.setInstanceIdFunc = setInstanceIdFunc;
-        this.returnInstanceIdFunc = returnInstanceIdFunc;
-        this.addEntityInstanceToMapFunc = addEntityInstanceToMapFunc;
-        this.deleteEntityInstanceFromMapFunc = deleteEntityInstanceFromMapFunc;
-        this.getEntityInstancesFunc = getEntityInstancesFunc;
-        this.addEntityPropertyFunc = addEntityPropertyFunc;
-        this.removeEntityPropertyFunc = removeEntityPropertyFunc;
+            String className,
+            EntityInstanceFactory entityInstanceFactory,
+            BiConsumer<String, String> changeEntityClassNameFunc,
+            Function<String, Collection<GameObjectInstance>> getAllEntityInstancesFunc,
+            Function<Integer, Boolean> deleteEntityInstanceFunc) {
+        this(className);
+        this.myFactory = entityInstanceFactory;
+        this.changeEntityClassNameFunc = changeEntityClassNameFunc;
+        this.getAllEntityInstancesFunc = getAllEntityInstancesFunc;
+        this.deleteEntityInstanceFunc = deleteEntityInstanceFunc;
     }
 
 
@@ -82,12 +67,18 @@ public class SimpleEntityClass implements EntityClass {
 
     @Override
     public ReadOnlyStringProperty getClassName() {
-        return className;
+        return className.getReadOnlyProperty();
+    }
+
+
+    @Override
+    public void changeClassName(String newClassName) {
+        changeEntityClassNameFunc.accept(className.getValue(), newClassName);
     }
 
     @Override
-    public void setClassName(Consumer<SimpleStringProperty> setFunc) {
-        setFunc.accept(className);
+    public void setClassName(String newClassName) {
+        className.setValue(newClassName);
     }
 
     @Override
@@ -97,18 +88,28 @@ public class SimpleEntityClass implements EntityClass {
 
     @Override
     public boolean addProperty(String propertyName, String defaultValue) {
-        if (!propertiesMap.containsKey(propertyName)) {
-            propertiesMap.put(propertyName, defaultValue);
-            addEntityPropertyFunc.accept(className.getValue(), propertyName, defaultValue);
-            return true;
+        if (propertiesMap.containsKey(propertyName)) {
+            return false;
         }
-        return false;
+        propertiesMap.put(propertyName, defaultValue);
+        Collection<EntityInstance> entityInstances = getAllInstances();
+        for (EntityInstance e : entityInstances) {
+            e.addProperty(propertyName, defaultValue);
+        }
+        return true;
     }
 
     @Override
     public boolean removeProperty(String propertyName) {
-        removeEntityPropertyFunc.accept(className.getValue(), propertyName);
-        return propertiesMap.remove(propertyName) != null;
+        if (!propertiesMap.containsKey(propertyName)) {
+            return false;
+        }
+        propertiesMap.remove(propertyName);
+        Collection<EntityInstance> entityInstances = getAllInstances();
+        for (EntityInstance e : entityInstances) {
+            e.removeProperty(propertyName);
+        }
+        return true;
     }
 
     @Override
@@ -145,24 +146,25 @@ public class SimpleEntityClass implements EntityClass {
 
     @Override
     public EntityInstance createInstance(int tileId) {
-        if (!verifyTileInstanceIdFunc.apply(tileId)) {
-            throw new InvalidIdException();
-        }
-        ObservableMap propertiesMapCopy = FXCollections.observableHashMap();
-        propertiesMapCopy.putAll(propertiesMap);
-        EntityInstance entityInstance = new SimpleEntityInstance(className.get(), tileId, propertiesMapCopy, returnInstanceIdFunc);
-        setInstanceIdFunc.accept(entityInstance);
-        addEntityInstanceToMapFunc.accept(entityInstance);
-        return entityInstance;
+        return myFactory.createInstance(this, tileId);
+
     }
 
     public boolean deleteInstance(int entityInstanceId) {
-        return deleteEntityInstanceFromMapFunc.apply(entityInstanceId);
+        return deleteEntityInstanceFunc.apply(entityInstanceId);
     }
 
+
     @Override
-    public Set<GameObjectInstance> getInstances() {
-        return getEntityInstancesFunc.apply(getClassName().getValue());
+    public Collection<EntityInstance> getAllInstances() {
+        ObservableSet<EntityInstance> s = FXCollections.observableSet();
+        Collection<GameObjectInstance> instances = getAllEntityInstancesFunc.apply(getClassName().getValue());
+        for (GameObjectInstance i : instances) {
+            if (i.getType() == GameObjectType.ENTITY) {
+                s.add((EntityInstance) i);
+            }
+        }
+        return s;
     }
 
     @Override

@@ -6,6 +6,9 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -36,12 +39,19 @@ public interface GameObjectClass {
      */
     ReadOnlyStringProperty getClassName();
 
+
+
+    void changeClassName(String newClassName);
+
+
     /**
-     * This method receives a function that sets the name of the GameObject Class.
+     * This method sets the name of the GameObject Class.
+     * This method should only be used by the CRUD Interface.
+     * This method should not be used externally.
      * The name of the GameObject Class is set by the received function.
-     * @param setFunc the function that sets the class name
+     * @param newClassName the function that sets the class name
      */
-    void setClassName(Consumer<SimpleStringProperty> setFunc);
+    void setClassName(String newClassName);
 
     /**
      * This method gets the properties map of the GameObject Class.
@@ -65,41 +75,10 @@ public interface GameObjectClass {
     boolean removeProperty(String propertyName);
 
     /**
-     * This method adds the image path to the GameObject Class and to all instances of the class.
-     * @param path file path of the image
-     */
-    void addImagePath(String path);
-
-    /**
-     * This method gets the image path list of the GameObject Class.
-     * @return a list of the file paths of the images
-     */
-    ObservableList<String> getImagePathList();
-
-    /**
-     * This method removes the image path from the Entity Class and from all instances of the class.
-     * @param index index of the image file path in the list
-     * @return true if the image file path successfully removed
-     */
-    boolean removeImagePath(int index);
-
-    /**
-     * This method sets the GroovyCode for choosing the image to display from the list of images.
-     * @param blockCode GroovyCode
-     */
-    void setImageSelector(String blockCode);
-
-    /**
-     * This method gets the image selector code.
-     * @return image selector code
-     */
-    String getImageSelectorCode();
-
-    /**
      * This method returns all of the instance of the GameObject Class.
      * @return the set of all instances of the class
      */
-    Set<GameObjectInstance> getInstances();
+    Collection<? extends GameObjectInstance> getAllInstances();
 
     /**
      * This method removes the instance with the specified instance id
@@ -108,8 +87,11 @@ public interface GameObjectClass {
      */
     boolean deleteInstance(int id);
 
+
     /**
      * @return The GameObjectType enum variable for this GameObjectClass
      */
-    GameObjectType getType();
+    default GameObjectType getType() {
+        return GameObjectType.UNSPECIFIED;
+    }
 }

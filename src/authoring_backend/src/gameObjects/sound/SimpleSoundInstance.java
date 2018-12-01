@@ -5,6 +5,7 @@ import gameObjects.gameObject.GameObjectType;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 
 import java.util.function.Consumer;
 
@@ -41,30 +42,28 @@ public class SimpleSoundInstance implements SoundInstance {
 
     }
 
-    /**
-     * @return
-     */
     @Override
-    public Consumer<GameObjectInstance> getReturnInstanceIdFunc() {
+    public SimpleStringProperty getInstanceName() {
         return null;
     }
 
-    /**
-     * @param propertyName
-     * @param defaultValue
-     * @return
-     */
     @Override
-    public boolean addProperty(String propertyName, String defaultValue) {
-        return false;
+    public void setInstanceName(String instanceName) {
+
     }
 
-    /**
-     * @param propertyName
-     * @return
-     */
     @Override
-    public boolean removeProperty(String propertyName) {
+    public void addProperty(String propertyName, String defaultValue) {
+
+    }
+
+    @Override
+    public void removeProperty(String propertyName) {
+
+    }
+
+    @Override
+    public boolean changePropertyValue(String propertyName, String newValue) {
         return false;
     }
 }
