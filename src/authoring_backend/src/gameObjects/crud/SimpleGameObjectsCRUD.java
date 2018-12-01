@@ -24,6 +24,7 @@ import gameObjects.tile.SimpleTileClass;
 import gameObjects.tile.TileClass;
 import gameObjects.tile.TileInstance;
 import gameObjects.tile.TileInstanceFactory;
+import gameObjects.turn.Turn;
 import grids.Point;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -44,6 +45,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     private ObservableMap<String, GameObjectClass> gameObjectClassMapByName;
     private ObservableMap<Integer, GameObjectClass> gameObjectClassMapById;
     private ObservableMap<Integer, GameObjectInstance> gameObjectInstanceMapById;
+    private ObservableMap<String, Turn> turnMap;
 
 
     private TileInstanceFactory myTileInstanceFactory;
@@ -295,7 +297,9 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
 
     @Override
     public PlayerInstance createPlayerInstance(String playerName) {
-        return null;
+        PlayerInstance playerInstance = myPlayerInstanceFactory.createInstance();
+        playerInstance.setInstanceName(playerName);
+        return playerInstance;
     }
 
 
@@ -512,9 +516,6 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
 
     public int getWidth() { return numCols; }
     public int getHeight() { return numRows; }
-
-
-
 
 
 
