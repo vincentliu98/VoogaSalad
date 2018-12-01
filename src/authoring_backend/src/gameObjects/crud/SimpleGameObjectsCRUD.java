@@ -6,10 +6,7 @@ import gameObjects.category.CategoryClass;
 import gameObjects.category.CategoryInstance;
 import gameObjects.category.CategoryInstanceFactory;
 import gameObjects.category.SimpleCategoryClass;
-import gameObjects.entity.EntityClass;
-import gameObjects.entity.EntityInstance;
-import gameObjects.entity.EntityInstanceFactory;
-import gameObjects.entity.SimpleEntityClass;
+import gameObjects.entity.*;
 import gameObjects.exception.*;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
@@ -557,9 +554,9 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     @Override
     public ObservableList<EntityInstance> getEntityInstances() {
         ObservableList<EntityInstance> ret = FXCollections.observableArrayList();
-        for (GameObjectClass objectClass : gameObjectClassMapByName.values()) {
-            if (objectClass.getType() == GameObjectType.ENTITY) {
-                ret.add((EntityInstance) objectClass);
+        for (GameObjectInstance objectInstance : gameObjectInstanceMapById.values()) {
+            if (objectInstance.getType() == GameObjectType.ENTITY) {
+                ret.add((EntityInstance) objectInstance);
             }
         }
         return ret;
@@ -568,9 +565,9 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     @Override
     public ObservableList<TileInstance> getTileInstances() {
         ObservableList<TileInstance> ret = FXCollections.observableArrayList();
-        for (GameObjectClass objectClass : gameObjectClassMapByName.values()) {
-            if (objectClass.getType() == GameObjectType.TILE) {
-                ret.add((TileInstance) objectClass);
+        for (GameObjectInstance objectInstance : gameObjectInstanceMapById.values()) {
+            if (objectInstance.getType() == GameObjectType.TILE) {
+                ret.add((TileInstance) objectInstance);
             }
         }
         return ret;

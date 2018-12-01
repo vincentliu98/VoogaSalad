@@ -21,6 +21,7 @@ public class PhaseDB {
     private Set<String> phaseNamespace;
     private List<PhaseGraph> phaseGraphs;
     private GroovyFactory factory;
+    private String startingPhase;
 
     public PhaseDB(GroovyFactory factory) {
         this.namespace = new HashSet<>();
@@ -34,6 +35,7 @@ public class PhaseDB {
         if(namespace.add(name)) {
             Try<PhaseGraph> graph = trySource.map(s -> new PhaseGraphImpl(name, s, namespace::add));
             graph.forEach(phaseGraphs::add);
+            if(namespace.size() == 1) startingPhase = name; // if there's only one phase, that's the starting one
             return graph;
         } else return Try.failure(new NamespaceException(name));
     }
@@ -54,4 +56,8 @@ public class PhaseDB {
     }
 
     public List<PhaseGraph> phases() { return phaseGraphs; }
+
+    public void setStartingPhase(String phaseName) { startingPhase = phaseName; }
+    public String getStartingPhase() { return startingPhase; }
+
 }
