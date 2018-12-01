@@ -12,7 +12,7 @@ public interface EntityClass extends GameObjectClass {
 
     void setMovable(boolean move);
 
-    EntityInstance createInstance(int tileId);
+    EntityInstance createInstance(int tileId, int playerID);
 
     /**
      * This method adds the image path to the GameObject Class and to all instances of the class.

@@ -75,14 +75,14 @@ public interface GameObjectsCRUDInterface {
      * @param className
      * @return
      */
-    EntityInstance createEntityInstance(String className, int tileId);
+    EntityInstance createEntityInstance(String className, int tileId, int playerID);
 
     /**
      *
      * @param entityClass
      * @return
      */
-    EntityInstance createEntityInstance(EntityClass entityClass, int tileId);
+    EntityInstance createEntityInstance(EntityClass entityClass, int tileId, int playerID);
 
 
     /**
@@ -262,4 +262,5 @@ public interface GameObjectsCRUDInterface {
     ObservableList<TileInstance> getTileInstances();
     ObservableList<CategoryInstance> getCategoryInstances();
     ObservableList<SoundInstance> getSoundInstances();
+    ObservableList<PlayerInstance> getPlayerInstances();
 }

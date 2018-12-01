@@ -76,6 +76,9 @@ public class SimpleCategoryInstance implements CategoryInstance {
         instanceName.setValue(newInstanceName);
     }
 
+    @Override
+    public ObservableMap<String, String> getPropertiesMap() { return propertiesMap; }
+
     /**
      * @param propertyName
      * @param defaultValue

@@ -110,7 +110,9 @@ public class GameData {
 
     public static Player getCurrentPlayer() { return PLAYERS.get(TURN.getCurrentPlayerID()); }
     public static int getCurrentPlayerID(){ return TURN.getCurrentPlayerID(); }
-    public static void setCurrentPlayerID(int id){ TURN.setPlayer(id); }
+    public static int getNextPlayerID() { return TURN.nextPlayerID(); }
+    public static int toNextPlayer() { return TURN.toNextPlayer(); }
+    public static void setPlayerOrder(List<Integer> newOrder){ TURN.setPlayerOrder(newOrder); }
 
     public static Turn getTurn(){ return TURN; }
 

@@ -4,6 +4,7 @@ import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.converters.collections.MapConverter;
+import com.thoughtworks.xstream.converters.collections.TreeSetConverter;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.mapper.Mapper;
@@ -83,7 +84,7 @@ public class GameObjectsCRUDConverter implements Converter {
             writer.endNode();
 
             // props
-            var toEval = mapToString(entityClass.getPropertiesMap());
+            var toEval = mapToString(entityInstance.getPropertiesMap());
             writer.startNode("props");
             new MapConverter(mapper).marshal(shell.evaluate(toEval), writer, ctx);
             writer.endNode();
@@ -156,6 +157,25 @@ public class GameObjectsCRUDConverter implements Converter {
             // myImageSelector
             writer.startNode("myImageSelector");
             writer.setValue(tileClass.getImageSelectorCode());
+            writer.endNode();
+
+            writer.endNode();
+        }
+
+        for(var player : db.getPlayerInstances()) {
+            writer.startNode("gameplay.Player");
+
+            writer.startNode("myID");
+            writer.setValue(String.valueOf(player.getInstanceId().get()));
+            writer.endNode();
+
+            writer.startNode("myStats");
+            var toEval = mapToString(player.getPropertiesMap());
+            new MapConverter(mapper).marshal(shell.evaluate(toEval), writer, ctx);
+            writer.endNode();
+
+            writer.startNode("myEntityIDs");
+            new TreeSetConverter(mapper).marshal(player.getEntityIDs(), writer, ctx);
             writer.endNode();
 
             writer.endNode();

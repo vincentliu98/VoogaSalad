@@ -183,15 +183,15 @@ public class EditGridView implements SubView<ScrollPane> {
                             Text deploy = new Text(objectClass.getClassName().getValue());
                             deploy.setOnMouseClicked(e1 -> handleDoubleClick(e1, deploy));
                             cell.getChildren().add(deploy);
-                            // TODO: get tile id
-                            EntityInstance objectInstance = ((EntityClass) objectClass).createInstance(0);
+                            // TODO: get tile id, (player id or we can have a "global" player to take care of entities without player)
+                            EntityInstance objectInstance = ((EntityClass) objectClass).createInstance(0, 0);
                             nodeToGameObjectInstanceMap.put(deploy, objectInstance);
                         } else {
                             ImageView deploy = new ImageView(((EntityClass) objectClass).getImagePathList().get(0));
                             deploy.setOnMouseClicked(e1 -> handleDoubleClick(e1, deploy));
                             cell.getChildren().add(deploy);
-                            // TODO: get tile id
-                            EntityInstance objectInstance = ((EntityClass) objectClass).createInstance(0);
+                            // TODO: get tile id, player id
+                            EntityInstance objectInstance = ((EntityClass) objectClass).createInstance(0, 0);
                             nodeToGameObjectInstanceMap.put(deploy, objectInstance);
                         }
                         break;

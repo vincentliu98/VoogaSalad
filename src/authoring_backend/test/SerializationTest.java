@@ -15,6 +15,9 @@ public class SerializationTest {
 
         var db = authTools.entityDB();
 
+        var playerA = db.createPlayerInstance("a");
+        var playerB = db.createPlayerInstance("b");
+
         var box = db.createTileClass("box");
         box.getImagePathList().add("square.png");
         var boxes = new ArrayList<GameObjectInstance>();
@@ -46,10 +49,10 @@ public class SerializationTest {
         bowmanClass.addImagePath("bowman5.png");
         bowmanClass.setImageSelector("$return = $this.props.hp-1");
 
-        swordmanClass.createInstance(boxes.get(0).getInstanceId().get());
-        swordmanClass.createInstance(boxes.get(1).getInstanceId().get());
-        bowmanClass.createInstance(boxes.get(23).getInstanceId().get());
-        bowmanClass.createInstance(boxes.get(24).getInstanceId().get());
+        swordmanClass.createInstance(boxes.get(0).getInstanceId().get(), playerA.getInstanceId().get());
+        swordmanClass.createInstance(boxes.get(1).getInstanceId().get(), playerA.getInstanceId().get());
+        bowmanClass.createInstance(boxes.get(23).getInstanceId().get(), playerB.getInstanceId().get());
+        bowmanClass.createInstance(boxes.get(24).getInstanceId().get(), playerB.getInstanceId().get());
 
         // -------------- PHASE ------------- //
 
@@ -130,7 +133,7 @@ public class SerializationTest {
 
         var exec3 = factory.rawBlock(
             "GameData.moveEntity(selected, $clicked)\n" +
-            "GameData.setCurrentPlayerID(1-GameData.getCurrentPlayerID())\n" +
+            "GameData.toNextPlayer()\n" +
             "GameData.goTo('A')"
         );
         node3.exec().addNode(exec3);
@@ -140,7 +143,7 @@ public class SerializationTest {
         var exec4 = factory.rawBlock(
             "$clicked.props.hp = $clicked.props.hp - selected.props.dmg\n" +
             "if($clicked.props.hp <= 0) { GameData.removeEntity($clicked) }\n" +
-            "GameData.setCurrentPlayerID(1-GameData.getCurrentPlayerID())\n" +
+            "GameData.toNextPlayer()\n" +
             "GameData.goTo('A')"
         );
         node4.exec().addNode(exec4);
