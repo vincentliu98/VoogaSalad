@@ -13,21 +13,20 @@ public class SimplePlayerInstance implements PlayerInstance {
     private ReadOnlyStringWrapper className;
     private SimpleStringProperty instanceName;
     private ReadOnlyIntegerWrapper instanceId;
+    private SimpleStringProperty imagePath;
     private ObservableMap<String, String> propertiesMap;
     private ObservableSet<Integer> entitiesSet;
-    Supplier<PlayerClass> getPlayerClassFunc;
+//    Supplier<PlayerClass> getPlayerClassFunc;
 
 
     public SimplePlayerInstance(
-            String className,
-            SimpleStringProperty imagePath,
-            Consumer<GameObjectInstance> returnInstanceIdFunc,
-            Supplier<PlayerClass> getPlayerClassFunc) {
+            String className) {
         this.className = new ReadOnlyStringWrapper(className);
         this.instanceName = new SimpleStringProperty();
+        this.imagePath = new SimpleStringProperty();
         this.propertiesMap = FXCollections.observableHashMap();
         this.entitiesSet = FXCollections.observableSet();
-        this.getPlayerClassFunc = getPlayerClassFunc;
+//        this.getPlayerClassFunc = getPlayerClassFunc;
         instanceId = new ReadOnlyIntegerWrapper();
     }
 
@@ -94,9 +93,9 @@ public class SimplePlayerInstance implements PlayerInstance {
         entitiesSet.clear();
     }
 
-    @Override
-    public PlayerClass getGameObjectClass() {
-        return getPlayerClassFunc.get();
-    }
+//    @Override
+//    public PlayerClass getGameObjectClass() {
+//        return getPlayerClassFunc.get();
+//    }
 
 }
