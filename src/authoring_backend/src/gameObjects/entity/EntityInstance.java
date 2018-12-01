@@ -40,6 +40,11 @@ public interface EntityInstance extends GameObjectInstance {
      * @return image selector code
      */
     String getImageSelectorCode();
+
+
+    EntityClass getGameObjectClass();
+
+
     @Override
     default GameObjectType getType() {
         return GameObjectType.ENTITY;

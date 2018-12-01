@@ -75,7 +75,6 @@ public interface GameObjectInstance {
 
 
 
-
 //    Collection<GameObjectInstance> getInstancesAtSamePoint();
 
 

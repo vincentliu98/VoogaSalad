@@ -1,5 +1,6 @@
 package gameObjects.category;
 
+import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 
@@ -7,6 +8,8 @@ import gameObjects.gameObject.GameObjectType;
  * @author Haotian Wang
  */
 public interface CategoryInstance extends GameObjectInstance {
+
+    CategoryClass getGameObjectClass();
 
 
     @Override
