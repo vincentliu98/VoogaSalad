@@ -1,15 +1,15 @@
 package gameObjects.tile;
 
-import gameObjects.TriConsumer;
-import gameObjects.TriFunction;
-import gameObjects.exception.InvalidPointsException;
 import gameObjects.gameObject.GameObjectInstance;
+import gameObjects.gameObject.GameObjectType;
 import grids.Point;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import javafx.collections.ObservableSet;
 
+import java.util.Collection;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -30,15 +30,10 @@ public class SimpleTileClass implements TileClass {
     private ObservableMap<String, String> propertiesMap;
     private String imageSelector;
 
-    private TriFunction<Point, Integer, Integer, Boolean> verifyPointsFunc;
-
-    private Consumer<GameObjectInstance> setInstanceIdFunc;
-    private Consumer<GameObjectInstance> returnInstanceIdFunc;
-    private Function<String, Set<GameObjectInstance>> getTileInstancesFunc;
-    private Consumer<TileInstance> addTileInstanceToMapFunc;
-    private Function<Integer, Boolean> deleteTileInstanceFromMapFunc;
-    private TriConsumer<String, String, String> addTilePropertyFunc;
-    private BiConsumer<String, String> removeTilePropertyFunc;
+    private TileInstanceFactory myFactory;
+    private BiConsumer<String, String> changeTileClassNameFunc;
+    private Function<String, Collection<GameObjectInstance>> getAllTileInstancesFunc;
+    private Function<Integer, Boolean> deleteTileInstanceFunc;
 
     public SimpleTileClass(String name) {
         className = new ReadOnlyStringWrapper(this, CONST_CLASSNAME, name);
@@ -51,27 +46,17 @@ public class SimpleTileClass implements TileClass {
         height = new SimpleIntegerProperty(1);
     }
 
-    public SimpleTileClass(String name,
-                    int numRow, int numCol,
-                    TriFunction<Point, Integer, Integer, Boolean> verifyPointsFunc,
-                    Consumer<GameObjectInstance> setInstanceIdFunc,
-                    Consumer<GameObjectInstance> returnInstanceIdFunc,
-                    Consumer<TileInstance> addTileInstanceToMapFunc,
-                    Function<Integer, Boolean> deleteTileInstanceFromMapFunc,
-                    Function<String, Set<GameObjectInstance>> getTileInstancesFunc,
-                    TriConsumer<String, String, String> addTilePropertyFunc,
-                    BiConsumer<String, String> removeTilePropertyFunc) {
-        this(name);
-        this.numRow = numRow;
-        this.numCol = numCol;
-        this.verifyPointsFunc = verifyPointsFunc;
-        this.setInstanceIdFunc = setInstanceIdFunc;
-        this.returnInstanceIdFunc = returnInstanceIdFunc;
-        this.addTileInstanceToMapFunc = addTileInstanceToMapFunc;
-        this.deleteTileInstanceFromMapFunc = deleteTileInstanceFromMapFunc;
-        this.getTileInstancesFunc = getTileInstancesFunc;
-        this.addTilePropertyFunc = addTilePropertyFunc;
-        this.removeTilePropertyFunc = removeTilePropertyFunc;
+    public SimpleTileClass(
+            String className,
+            TileInstanceFactory tileInstanceFactory,
+            BiConsumer<String, String> changeTileClassNameFunc,
+            Function<String, Collection<GameObjectInstance>> getAllTileInstancesFunc,
+            Function<Integer, Boolean> deleteTileInstanceFunc) {
+        this(className);
+        this.myFactory = tileInstanceFactory;
+        this.changeTileClassNameFunc = changeTileClassNameFunc;
+        this.getAllTileInstancesFunc = getAllTileInstancesFunc;
+        this.deleteTileInstanceFunc = deleteTileInstanceFunc;
     }
 
     @Override
@@ -89,11 +74,15 @@ public class SimpleTileClass implements TileClass {
         return className.getReadOnlyProperty();
     }
 
+
     @Override
-    public void setClassName(Consumer<SimpleStringProperty> setFunc) {
+    public void changeClassName(String newClassName) {
+        changeTileClassNameFunc.accept(className.getValue(), newClassName);
+    }
 
-
-        setFunc.accept(className);
+    @Override
+    public void setClassName(String newClassName) {
+        className.setValue(newClassName);
     }
 
     @Override
@@ -103,18 +92,28 @@ public class SimpleTileClass implements TileClass {
 
     @Override
     public boolean addProperty(String propertyName, String defaultValue) {
-        if (!propertiesMap.containsKey(propertyName)) {
-            propertiesMap.put(propertyName, defaultValue);
-            addTilePropertyFunc.accept(className.getValue(), propertyName, defaultValue);
-            return true;
+        if (propertiesMap.containsKey(propertyName)) {
+            return false;
         }
-        return false;
+        propertiesMap.put(propertyName, defaultValue);
+        Collection<TileInstance> tileInstances = getAllInstances();
+        for (TileInstance t : tileInstances) {
+            t.addProperty(propertyName, defaultValue);
+        }
+        return true;
     }
 
     @Override
     public boolean removeProperty(String propertyName) {
-        removeTilePropertyFunc.accept(className.getValue(), propertyName);
-        return propertiesMap.remove(propertyName) != null;
+        if (!propertiesMap.containsKey(propertyName)) {
+            return false;
+        }
+        propertiesMap.remove(propertyName);
+        Collection<TileInstance> tileInstances = getAllInstances();
+        for (TileInstance t : tileInstances) {
+            t.removeProperty(propertyName);
+        }
+        return true;
     }
 
 
@@ -150,27 +149,27 @@ public class SimpleTileClass implements TileClass {
         return imageSelector;
     }
 
+
     @Override
-    public TileInstance createInstance(Point coord) {
-        if (verifyPointsFunc.apply(coord, numRow, numCol)) {
-            throw new InvalidPointsException();
-        }
-        ObservableMap propertiesMapCopy = FXCollections.observableHashMap();
-        propertiesMapCopy.putAll(propertiesMap);
-        TileInstance tileInstance = new SimpleTileInstance(className.get(), coord, propertiesMapCopy, returnInstanceIdFunc);
-        setInstanceIdFunc.accept(tileInstance);
-        addTileInstanceToMapFunc.accept(tileInstance);
-        return tileInstance;
+    public TileInstance createInstance(Point topLeftCoord) {
+        return myFactory.createInstance(this, topLeftCoord);
 
     }
 
     public boolean deleteInstance(int tileInstanceId) {
-        return deleteTileInstanceFromMapFunc.apply(tileInstanceId);
+        return deleteTileInstanceFunc.apply(tileInstanceId);
     }
 
     @Override
-    public Set<GameObjectInstance> getInstances() {
-        return getTileInstancesFunc.apply(getClassName().getValue());
+    public Collection<TileInstance> getAllInstances() {
+        ObservableSet<TileInstance> s = FXCollections.observableSet();
+        Collection<GameObjectInstance> instances = getAllTileInstancesFunc.apply(getClassName().getValue());
+        for (GameObjectInstance i : instances) {
+            if (i.getType() == GameObjectType.TILE) {
+                s.add((TileInstance) i);
+            }
+        }
+        return s;
     }
 
     @Override

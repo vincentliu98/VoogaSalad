@@ -3,6 +3,9 @@ package gameObjects.gameObject;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+
+import java.util.Collection;
 import java.util.function.Consumer;
 
 /**
@@ -40,23 +43,41 @@ public interface GameObjectInstance {
      *
      * @return
      */
-    Consumer<GameObjectInstance> getReturnInstanceIdFunc();
+//    Consumer<GameObjectInstance> getReturnInstanceIdFunc();
+
+    SimpleStringProperty getInstanceName();
+
+    void setInstanceName(String instanceName);
+
+
+    /**
+     * This method adds the property to the GameObject Class and to all instances of the class.
+     * @param propertyName property name
+     * @param defaultValue default value of the property in GroovyCode
+     */
+    void addProperty(String propertyName, String defaultValue);
+
+    /**
+     * This method removes the property from the GameObject Class and from all instances of the class.
+     * @param propertyName property name to be removed
+     */
+    void removeProperty(String propertyName);
 
 
     /**
      *
      * @param propertyName
-     * @param defaultValue
+     * @param newValue
      * @return
      */
-    boolean addProperty(String propertyName, String defaultValue);
+    boolean changePropertyValue(String propertyName, String newValue);
 
-    /**
-     *
-     * @param propertyName
-     * @return
-     */
-    boolean removeProperty(String propertyName);
+
+
+
+
+//    Collection<GameObjectInstance> getInstancesAtSamePoint();
+
 
     /**
      * @return The GameObjectType enum variable for this GameObjectInstance object.

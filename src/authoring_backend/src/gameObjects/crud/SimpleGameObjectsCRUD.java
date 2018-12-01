@@ -4,19 +4,25 @@ import gameObjects.IdManager;
 import gameObjects.IdManagerClass;
 import gameObjects.TriConsumer;
 import gameObjects.category.CategoryClass;
+import gameObjects.category.CategoryInstance;
+import gameObjects.category.CategoryInstanceFactory;
 import gameObjects.category.SimpleCategoryClass;
-import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.entity.EntityClass;
 import gameObjects.entity.EntityInstance;
+import gameObjects.entity.EntityInstanceFactory;
 import gameObjects.entity.SimpleEntityClass;
 import gameObjects.exception.*;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
+import gameObjects.gameObject.GameObjectType;
+import gameObjects.player.PlayerInstance;
+import gameObjects.sound.SoundClass;
+import gameObjects.sound.SoundInstance;
 import gameObjects.tile.SimpleTileClass;
 import gameObjects.tile.TileClass;
 import gameObjects.tile.TileInstance;
+import gameObjects.tile.TileInstanceFactory;
 import grids.Point;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 
@@ -30,346 +36,430 @@ import java.util.function.Function;
 
 
 public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
-    private int numRow;
-    private int numCol;
-    private ObservableMap<String, TileClass> tileClassMap;
-    private ObservableMap<String, EntityClass> entityClassMap;
-    private ObservableMap<String, CategoryClass> categoryClassMap;
-    private ObservableMap<Integer, TileInstance> tileInstanceMap;
-    private ObservableMap<Integer, EntityInstance> entityInstanceMap;
+    private int numRows;
+    private int numCols;
+    private ObservableMap<String, GameObjectClass> gameObjectClassMapByName;
+    private ObservableMap<Integer, GameObjectClass> gameObjectClassMapById;
+    private ObservableMap<Integer, GameObjectInstance> gameObjectInstanceMapById;
 
-    private Consumer<GameObjectClass> returnClassId;
+
+    private TileInstanceFactory myTileInstanceFactory;
+    private EntityInstanceFactory myEntityInstanceFactory;
+    private CategoryInstanceFactory myCategoryInstanceFactory;
+
     private IdManager myIdManager;
 
-    public SimpleGameObjectsCRUD(int numRow, int numCol) {
-        this.numRow = numRow;
-        this.numCol = numCol;
-        tileClassMap = FXCollections.observableHashMap();
-        entityClassMap = FXCollections.observableHashMap();
-        categoryClassMap = FXCollections.observableHashMap();
-        tileInstanceMap = FXCollections.observableHashMap();
-        entityInstanceMap = FXCollections.observableHashMap();
+    public SimpleGameObjectsCRUD(int numRows, int numCols) {
+        this.numRows = numRows;
+        this.numCols = numCols;
+        gameObjectClassMapByName = FXCollections.observableHashMap();
+        gameObjectClassMapById = FXCollections.observableHashMap();
+        gameObjectInstanceMapById = FXCollections.observableHashMap();
 
-        myIdManager = new IdManagerClass();
-        returnClassId = myIdManager.returnClassIdFunc();
+        myTileInstanceFactory = instantiateTileInstanceFactory();
+        myEntityInstanceFactory = instantiateEntityInstanceFactory();
+        myCategoryInstanceFactory = instantiateCategoryInstanceFactory();
+
+        myIdManager = new IdManagerClass(getGameObjectClassFromMapFunc(), getGameObjectInstanceFromMapFunc());
     }
 
-    public SimpleGameObjectsCRUD(int numRow, int numCol, ObservableMap<String, TileClass> tileClasses, ObservableMap<String, EntityClass> entityClasses) {
-        this(numRow, numCol);
-        tileClassMap = tileClasses;
-        entityClassMap = entityClasses;
+//    public SimpleGameObjectsCRUD(int numRows, int numCols, ObservableMap<String, TileClass> tileClasses, ObservableMap<String, EntityClass> entityClasses) {
+//        this(numRows, numCols);
+//        tileClassMap = tileClasses;
+//        entityClassMap = entityClasses;
+//    }
+
+
+
+
+    private TileInstanceFactory instantiateTileInstanceFactory() {
+        TileInstanceFactory f = new TileInstanceFactory(
+                numRows,
+                numCols,
+                myIdManager.requestInstanceIdFunc(),
+                addGameObjectInstanceToMapFunc());
+        return f;
     }
 
-    // TODO: check for duplicate class name in entity map
     @Override
-    public TileClass createTileClass(String name) {
-        if (tileClassMap.containsKey(name)) {
+    public TileClass createTileClass(String className) {
+        if (gameObjectClassMapByName.containsKey(className)) {
             throw new DuplicateClassException();
         }
         TileClass newTileClass = new SimpleTileClass(
-                name,
-                numRow, numCol,
-                Point.verifyPointsFunc(),
-                myIdManager.requestTileInstanceIdFunc(),
-                myIdManager.returnTileInstanceIdFunc(),
-                addTileInstanceToMapFunc(),
-                deleteTileInstanceFromMapFunc(),
-                getTileInstancesFunc(),
-                addTilePropertyFunc(),
-                removeTilePropertyFunc());
-
-        myIdManager.requestClassIdFunc().accept(newTileClass);
-        tileClassMap.put(name, newTileClass);
+                className,
+                myTileInstanceFactory,
+                changeGameObjectClassNameFunc(),
+                getAllInstancesFunc(),
+                deleteGameObjectInstanceFunc());
+        addGameObjectClassToMaps(newTileClass);
         return newTileClass;
     }
 
     @Override
-    public TileClass getTileClass(String name) {
-        if (!tileClassMap.containsKey(name)) {
+    public TileClass getTileClass(String className) {
+        if (!gameObjectClassMapByName.containsKey(className)) {
             throw new NoTileClassException();
         }
-        return tileClassMap.get(name);
+        return (TileClass) gameObjectClassMapByName.get(className);
     }
 
     @Override
-    public boolean deleteTileClass(String name) {
-        if (!tileClassMap.containsKey(name)) {
-            return false;
+    public TileInstance createTileInstance(String className, Point topLeftCoord) {
+        if (!gameObjectClassMapByName.containsKey(className) ) {
+            throw new NoTileClassException();
         }
-        returnClassId.accept(tileClassMap.remove(name));
-        for (Map.Entry<Integer, TileInstance> e : tileInstanceMap.entrySet()) {
-            if (e.getValue().getClassName().equals(name)) {
-                deleteTileInstance(e.getKey());
-            }
+        GameObjectClass t = gameObjectClassMapByName.get(className);
+        if (t.getType() != GameObjectType.TILE) {
+            throw new InvalidClassException();
         }
-        return true;
-    }
-
-    private boolean changeTileClassName(String oldName, String newName) {
-        if (!tileClassMap.containsKey(oldName)) {
-            return false;
-        }
-        if (newName.equals(oldName)) {
-            return true;
-        }
-        tileClassMap.put(newName, tileClassMap.get(oldName));
-        tileClassMap.remove(oldName);
-        Consumer<SimpleStringProperty> c = s -> {
-          s.setValue(newName);
-        };
-        tileClassMap.get(newName).setClassName(c);
-        for (Map.Entry<Integer, TileInstance> e : tileInstanceMap.entrySet()) {
-            if (e.getValue().getClassName().equals(oldName)) {
-                e.getValue().setClassName(newName);
-            }
-        }
-        return true;
+        return myTileInstanceFactory.createInstance((TileClass) t, topLeftCoord);
     }
 
     @Override
-    public boolean deleteTileInstance(int instanceId) {
-        if (!tileInstanceMap.containsKey(instanceId)) {
-            return false;
-        }
-        TileInstance tileInstance = tileInstanceMap.remove(instanceId);
-        tileInstance.getReturnInstanceIdFunc().accept(tileInstance);
-        return true;
+    public TileInstance createTileInstance(TileClass tileClass, Point topLeftCoord) {
+        return myTileInstanceFactory.createInstance(tileClass, topLeftCoord);
     }
 
-    private Consumer<TileInstance> addTileInstanceToMapFunc() {
-        return tileInstance -> tileInstanceMap.put(tileInstance.getInstanceId().getValue(), tileInstance);
+
+
+
+    private EntityInstanceFactory instantiateEntityInstanceFactory() {
+        EntityInstanceFactory f = new EntityInstanceFactory(
+                // TODO
+                myIdManager.verifyTileInstanceIdFunc(),
+                myIdManager.requestInstanceIdFunc(),
+                addGameObjectInstanceToMapFunc());
+        return f;
     }
 
-    private Function<Integer, Boolean> deleteTileInstanceFromMapFunc() {
-        return instanceId -> deleteTileInstance(instanceId);
-    }
-
-    private Function<String, Set<GameObjectInstance>> getTileInstancesFunc() {
-        return name -> {
-            Set<GameObjectInstance> instancesSet = new HashSet<>();
-            for (Map.Entry<Integer, TileInstance> entry : tileInstanceMap.entrySet()) {
-                if (entry.getValue().getClassName().getName().equals(name)) {
-                    instancesSet.add(entry.getValue());
-                }
-            }
-            return instancesSet;
-        };
-    }
-
-    private TriConsumer<String, String, String> addTilePropertyFunc() {
-        return (className, propertyName, defaultValue) -> {
-            for (Map.Entry<Integer, TileInstance> entry : tileInstanceMap.entrySet()) {
-                if (entry.getValue().getClassName().equals(className)) {
-                    entry.getValue().addProperty(propertyName, defaultValue);
-                }
-            }
-        };
-    }
-
-    private BiConsumer<String, String> removeTilePropertyFunc() {
-        return (className, propertyName) -> {
-            for (Map.Entry<Integer, TileInstance> entry : tileInstanceMap.entrySet()) {
-                if (entry.getValue().getClassName().equals(className)) {
-                    entry.getValue().removeProperty(propertyName);
-                }
-            }
-        };
-    }
-
-    // TODO: check for duplicate class name in tile map
     @Override
-    public EntityClass createEntityClass(String name) {
-        if (entityClassMap.containsKey(name)) {
+    public EntityClass createEntityClass(String className) {
+        if (gameObjectClassMapByName.containsKey(className)) {
             throw new DuplicateClassException();
         }
-
         EntityClass newEntityClass = new SimpleEntityClass(
-                name,
-                myIdManager.verifyTileInstanceIdFunc(),
-                myIdManager.requestEntityInstanceIdFunc(),
-                myIdManager.returnEntityInstanceIdFunc(),
-                addEntityInstanceToMapFunc(),
-                deleteEntityInstanceFromMapFunc(),
-                getEntityInstancesFunc(),
-                addEntityPropertyFunc(),
-                removeEntityPropertyFunc());
-
-        myIdManager.requestClassIdFunc().accept(newEntityClass);
-        entityClassMap.put(name, newEntityClass);
+                className,
+                myEntityInstanceFactory,
+                changeGameObjectClassNameFunc(),
+                getAllInstancesFunc(),
+                deleteGameObjectInstanceFunc());
+        addGameObjectClassToMaps(newEntityClass);
         return newEntityClass;
     }
 
     @Override
-    public EntityClass getEntityClass(String name) {
-        if (!entityClassMap.containsKey(name)) {
+    public EntityClass getEntityClass(String className) {
+        if (!gameObjectClassMapByName.containsKey(className)) {
             throw new NoEntityClassException();
         }
-        return entityClassMap.get(name);
+        return (EntityClass) gameObjectClassMapByName.get(className);
     }
 
     @Override
-    public boolean deleteEntityClass(String name) {
-        if (!entityClassMap.containsKey(name)) {
-            return false;
+    public EntityInstance createEntityInstance(String className, int tileId) {
+        if (!gameObjectClassMapByName.containsKey(className) ) {
+            throw new NoEntityClassException();
         }
-        returnClassId.accept(entityClassMap.remove(name));
-        for (Map.Entry<Integer, EntityInstance> e : entityInstanceMap.entrySet()) {
-            if (e.getValue().getClassName().equals(name)) {
-                deleteEntityInstance(e.getKey());
-            }
+        GameObjectClass t = gameObjectClassMapByName.get(className);
+        if (t.getType() != GameObjectType.ENTITY) {
+            throw new InvalidClassException();
         }
-        return true;
-    }
-
-    private boolean changeEntityClassName(String oldName, String newName) {
-        if (!entityClassMap.containsKey(oldName)) {
-            return false;
-        }
-        entityClassMap.put(newName, entityClassMap.get(oldName));
-        entityClassMap.remove(oldName);
-        Consumer<SimpleStringProperty> c = s -> s.setValue(newName);
-        entityClassMap.get(newName).setClassName(c);
-        for (Map.Entry<Integer, EntityInstance> e : entityInstanceMap.entrySet()) {
-            if (e.getValue().getClassName().equals(oldName)) {
-                e.getValue().setClassName(newName);
-            }
-        }
-        return true;
+        return myEntityInstanceFactory.createInstance((EntityClass) t, tileId);
     }
 
     @Override
-    public boolean deleteEntityInstance(int instanceId) {
-        if (!entityInstanceMap.containsKey(instanceId)) {
-            return false;
-        }
-        EntityInstance entityInstance = entityInstanceMap.remove(instanceId);
-        entityInstance.getReturnInstanceIdFunc().accept(entityInstance);
-        return true;
+    public EntityInstance createEntityInstance(EntityClass entityClass, int tileId) {
+        return myEntityInstanceFactory.createInstance(entityClass, tileId);
     }
 
-    // TODO: propagate changes
-    @Override
-    public void setDimension(int width, int height) {
-        numCol = width;
-        numRow = height;
+
+    private CategoryInstanceFactory instantiateCategoryInstanceFactory() {
+        CategoryInstanceFactory f = new CategoryInstanceFactory(
+                myIdManager.requestInstanceIdFunc(),
+                addGameObjectInstanceToMapFunc());
+        return f;
     }
+
 
     @Override
-    public GameObjectClass getGameObjectClass(String className) {
-        if (!entityClassMap.containsKey(className) && !tileClassMap.containsKey(className)) {
-            throw new NoGameObjectClassException();
-        }
-        if (entityClassMap.containsKey(className)) {
-            return entityClassMap.get(className);
-        }
-        else {
-            return tileClassMap.get(className);
-        }
-    }
-
-    @Override
-    public boolean changeGameObjectClassName(String oldName, String newName) {
-        // TODO: Needs serious refactoring, this is bad
-
-        if (!entityClassMap.containsKey(oldName) && !tileClassMap.containsKey(oldName)) {
-            return false;
-        }
-        if (newName.equals(oldName)) {
-            return true;
-        }
-        if (entityClassMap.containsKey(oldName)) {
-            changeEntityClassName(oldName, newName);
-        } else if (tileClassMap.containsKey(oldName)){
-            changeTileClassName(oldName, newName);
-        }
-        // TODO: Other kinds of GameObjects
-        return true;
-    }
-
-
-    private Consumer<EntityInstance> addEntityInstanceToMapFunc() {
-        return entityInstance -> entityInstanceMap.put(entityInstance.getInstanceId().getValue(), entityInstance);
-    }
-
-    private Function<Integer, Boolean> deleteEntityInstanceFromMapFunc() {
-        return instanceId -> deleteEntityInstance(instanceId);
-    }
-
-    private Function<String, Set<GameObjectInstance>> getEntityInstancesFunc() {
-        return name -> {
-            Set<GameObjectInstance> instancesSet = new HashSet<>();
-            for (Map.Entry<Integer, EntityInstance> entry : entityInstanceMap.entrySet()) {
-                if (entry.getValue().getClassName().getName().equals(name)) {
-                    instancesSet.add(entry.getValue());
-                }
-            }
-            return instancesSet;
-        };
-    }
-
-    private TriConsumer<String, String, String> addEntityPropertyFunc() {
-        return (className, propertyName, defaultValue) -> {
-            for (Map.Entry<Integer, EntityInstance> entry : entityInstanceMap.entrySet()) {
-                if (entry.getValue().getClassName().equals(className)) {
-                    entry.getValue().addProperty(propertyName, defaultValue);
-                }
-            }
-        };
-    }
-
-    private BiConsumer<String, String> removeEntityPropertyFunc() {
-        return (className, propertyName) -> {
-            for (Map.Entry<Integer, EntityInstance> entry : entityInstanceMap.entrySet()) {
-                if (entry.getValue().getClassName().equals(className)) {
-                    entry.getValue().removeProperty(propertyName);
-                }
-            }
-        };
-    }
-
-    public int getWidth() { return numCol; }
-    public int getHeight() { return numRow; }
-    public Collection<TileClass> getTileClasses() { return tileClassMap.values(); }
-    public Collection<EntityClass> getEntityClasses() { return entityClassMap.values(); }
-    public Collection<TileInstance> getTileInstances() { return tileInstanceMap.values(); }
-    public Collection<EntityInstance> getEntityInstances() { return entityInstanceMap.values(); }
-
-    @Override
-    public CategoryClass createCategoryClass(String name) {
-        if (categoryClassMap.containsKey(name)) {
+    public CategoryClass createCategoryClass(String className) {
+        if (gameObjectClassMapByName.containsKey(className)) {
             throw new DuplicateClassException();
         }
-
-        CategoryClass newCategoryClass = new SimpleCategoryClass(name);
+        CategoryClass newCategoryClass = new SimpleCategoryClass(
+                className,
+                myCategoryInstanceFactory,
+                changeGameObjectClassNameFunc(),
+                getAllInstancesFunc(),
+                deleteGameObjectInstanceFunc());
+        addGameObjectClassToMaps(newCategoryClass);
         return newCategoryClass;
     }
 
     @Override
-    public CategoryClass getCategoryClass(String name) {
-        if (!categoryClassMap.containsKey(name)) {
+    public CategoryClass getCategoryClass(String className) {
+        if (!gameObjectClassMapByName.containsKey(className)) {
             throw new NoCategoryClassException();
         }
-        return categoryClassMap.get(name);
+        return (CategoryClass) gameObjectClassMapByName.get(className);
     }
 
     @Override
-    public boolean deleteCategoryClass(String name) {
-        if (!categoryClassMap.containsKey(name)) {
-            return false;
+    public CategoryInstance createCategoryInstance(String className) {
+        if (!gameObjectClassMapByName.containsKey(className) ) {
+            throw new NoCategoryClassException();
         }
-        categoryClassMap.remove(name);
-        return true;
+        GameObjectClass t = gameObjectClassMapByName.get(className);
+        if (t.getType() != GameObjectType.CATEGORY) {
+            throw new InvalidClassException();
+        }
+        return myCategoryInstanceFactory.createInstance((CategoryClass) t);
+    }
+
+    @Override
+    public CategoryInstance createCategoryInstance(CategoryClass categoryClass) {
+        return myCategoryInstanceFactory.createInstance(categoryClass);
+    }
+
+
+
+
+
+
+    @Override
+    public CategoryClass createSoundClass(String className) {
+        return null;
+    }
+
+    @Override
+    public CategoryClass getSoundClass(String className) {
+        return null;
+    }
+
+    @Override
+    public SoundInstance createSoundInstance(String className) {
+        return null;
+    }
+
+    @Override
+    public SoundInstance createSoundInstance(SoundClass soundClass) {
+        return null;
+    }
+
+
+
+
+
+
+
+
+
+
+
+    @Override
+    public GameObjectClass getGameObjectClass(String className) {
+        if (!gameObjectClassMapByName.containsKey(className)) {
+            throw new NoGameObjectClassException();
+        }
+        return gameObjectClassMapByName.get(className);
+    }
+
+    private Function<Integer, GameObjectClass> getGameObjectClassFromMapFunc() {
+        return classId -> {
+            if (!gameObjectClassMapById.containsKey(classId)) {
+                throw new NoGameObjectClassException();
+            }
+            return gameObjectClassMapById.get(classId);
+        };
+    }
+
+
+    @Override
+    public GameObjectInstance getGameObjectInstance(int instanceId) {
+        if (!gameObjectInstanceMapById.containsKey(instanceId)) {
+            throw new NoGameObjectClassException();
+        }
+        return gameObjectInstanceMapById.get(instanceId);
+    }
+
+    private Function<Integer, GameObjectInstance> getGameObjectInstanceFromMapFunc() {
+        return instanceId -> {
+            if (!gameObjectInstanceMapById.containsKey(instanceId)) {
+                throw new NoGameObjectInstanceException();
+            }
+            return gameObjectInstanceMapById.get(instanceId);
+        };
+    }
+
+    @Override
+    public Collection<GameObjectInstance> getAllInstances(String className) {
+        Set<GameObjectInstance> instancesSet = new HashSet<>();
+        for (Map.Entry<Integer, GameObjectInstance> entry : gameObjectInstanceMapById.entrySet()) {
+            if (entry.getValue().getClassName().getName().equals(className)) {
+                instancesSet.add(entry.getValue());
+            }
+        }
+        return instancesSet;
+    }
+
+    private Function<String, Collection<GameObjectInstance>> getAllInstancesFunc() {
+        return this::getAllInstances;
+    }
+
+    @Override
+    public Collection<GameObjectInstance> getAllInstances(GameObjectClass gameObjectClass) {
+        String className = gameObjectClass.getClassName().getValue();
+        return getAllInstances(className);
+    }
+
+    @Override
+    public Collection<GameObjectInstance> getAllInstancesAtPoint(int x, int y) {
+        return null;
+    }
+
+    @Override
+    public Collection<GameObjectInstance> getAllInstancesAtPoint(Point point) {
+        return null;
+    }
+
+    private void addGameObjectClassToMaps(GameObjectClass g) {
+        myIdManager.requestClassIdFunc().accept(g);
+        gameObjectClassMapByName.put(g.getClassName().getValue(), g);
+        gameObjectClassMapById.put(g.getClassId().getValue(), g);
+    }
+
+
+
+    private void removeGameObjectClassFromMaps(GameObjectClass g) {
+        myIdManager.returnClassIdFunc().accept(g);
+        gameObjectClassMapByName.remove(g.getClassName().getValue());
+        gameObjectClassMapById.remove(g.getClassId().getValue());
     }
 
     /**
      * This method deletes the GameObjectClasses with the input String name. It scans through all possible maps of the String -> GameObjectClass.
      *
-     * @param name : The name of the GameObjectClass to be deleted.
+     * @param className : The name of the GameObjectClass to be deleted.
      * @return: true if the GameObjectClass is successfully deleted and false otherwise.
      */
     @Override
-    public boolean deleteGameObjectClass(String name) {
-        // TODO: make this method automatically recognizes newly added user categories. For example, for now, this method doesn't support sound edit. What if the user added more categories during run time.
-        return (deleteTileClass(name) || deleteCategoryClass(name) || deleteEntityClass(name));
+    public boolean deleteGameObjectClass(String className) {
+        if (!gameObjectClassMapByName.containsKey(className)) {
+            return false;
+        }
+        GameObjectClass gameObjectClass = gameObjectClassMapByName.get(className);
+        removeGameObjectClassFromMaps(gameObjectClass);
+        removeAllGameObjectInstancesFromMap(className);
+        return true;
     }
+
+    @Override
+    public boolean deleteGameObjectClass(int classId) {
+        return false;
+    }
+
+    @Override
+    public boolean deleteGameObjectClass(GameObjectClass gameObjectClass) {
+        return false;
+    }
+
+    public boolean removeAllGameObjectInstancesFromMap(String className) {
+        if (!gameObjectClassMapByName.containsKey(className)) {
+            return false;
+        }
+        for (Map.Entry<Integer, GameObjectInstance> e : gameObjectInstanceMapById.entrySet()) {
+            if (e.getValue().getClassName().equals(className)) {
+                removeGameObjectInstanceFromMap(e.getKey());
+            }
+        }
+        return true;
+    }
+
+    private void removeAllGameObjectInstancesFromMap(GameObjectClass gameObjectClass) {
+        String className = gameObjectClass.getClassName().getValue();
+        removeAllGameObjectInstancesFromMap(className);
+    }
+
+
+    @Override
+    public boolean deleteGameObjectInstance(int instanceId) {
+        if (!gameObjectInstanceMapById.containsKey(instanceId)) {
+            return false;
+        }
+        removeGameObjectInstanceFromMap(instanceId);
+        return true;
+    }
+
+    @Override
+    public PlayerInstance createPlayerInstance(String playerName) {
+        return null;
+    }
+
+    private Function<Integer, Boolean> deleteGameObjectInstanceFunc() {
+        return this::deleteGameObjectInstance;
+    }
+
+    private void removeGameObjectInstanceFromMap(int instanceId) {
+        GameObjectInstance gameObjectInstance = gameObjectInstanceMapById.get(instanceId);
+        myIdManager.returnInstanceIdFunc().accept(gameObjectInstance);
+        gameObjectInstanceMapById.remove(instanceId);
+    }
+
+
+    @Override
+    public boolean changeGameObjectClassName(String oldClassName, String newClassName) {
+        if (!gameObjectClassMapByName.containsKey(oldClassName)) {
+            return false;
+        }
+        if (newClassName.equals(oldClassName)) {
+            return true;
+        }
+        GameObjectClass gameObjectClass = gameObjectClassMapByName.get(oldClassName);
+        gameObjectClass.setClassName(newClassName);
+        gameObjectClassMapByName.put(newClassName, gameObjectClass);
+        gameObjectClassMapByName.remove(oldClassName);
+        changeAllGameObjectInstancesClassName(oldClassName, newClassName);
+        return true;
+    }
+
+    private BiConsumer<String, String> changeGameObjectClassNameFunc() {
+        return this::changeGameObjectClassName;
+    }
+
+    private Consumer<GameObjectInstance> addGameObjectInstanceToMapFunc() {
+        return gameObjectInstance -> {
+            int instanceId = gameObjectInstance.getInstanceId().getValue();
+            if (instanceId == 0) {
+                throw new InvalidIdException();
+            }
+            gameObjectInstanceMapById.put(instanceId, gameObjectInstance);
+        };
+    }
+
+
+
+    private void changeAllGameObjectInstancesClassName(String oldClassName, String newClassName) {
+        for (Map.Entry<Integer, GameObjectInstance> e : gameObjectInstanceMapById.entrySet()) {
+            if (e.getValue().getClassName().equals(oldClassName)) {
+                e.getValue().setClassName(newClassName);
+            }
+        }
+    }
+
+
+
+
+
+
+
+    // TODO: propagate changes
+    @Override
+    public void setDimension(int width, int height) {
+        numCols = width;
+        numRows = height;
+    }
+
+    public int getWidth() { return numCols; }
+    public int getHeight() { return numRows; }
 }
