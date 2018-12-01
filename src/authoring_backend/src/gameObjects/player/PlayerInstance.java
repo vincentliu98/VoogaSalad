@@ -18,7 +18,7 @@ public interface PlayerInstance extends GameObjectInstance {
 
     void removeAllEntities();
 
-    PlayerClass getGameObjectClass();
+//    PlayerClass getGameObjectClass();
 
     @Override
     default GameObjectType getType() {

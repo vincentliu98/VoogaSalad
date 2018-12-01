@@ -105,6 +105,16 @@ public class SimpleCategoryInstance implements CategoryInstance {
     }
 
     @Override
+    public SimpleStringProperty getImagePath() {
+        return imagePath;
+    }
+
+    @Override
+    public void setImagePath(String newImagePath) {
+        imagePath.setValue(newImagePath);
+    }
+
+    @Override
     public CategoryClass getGameObjectClass() {
         return getCategoryClassFunc.get();
     }

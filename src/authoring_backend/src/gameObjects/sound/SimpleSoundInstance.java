@@ -104,6 +104,16 @@ public class SimpleSoundInstance implements SoundInstance {
     }
 
     @Override
+    public SimpleStringProperty getMediaFilePath() {
+        return mediaFilePath;
+    }
+
+    @Override
+    public void setMediaFilePath(String newMediaFilePath) {
+        mediaFilePath.setValue(newMediaFilePath);
+    }
+
+    @Override
     public SoundClass getGameObjectClass() {
         return getSoundClassFunc.get();
     }

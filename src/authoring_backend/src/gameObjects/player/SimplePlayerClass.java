@@ -74,6 +74,16 @@
 //    }
 //
 //    @Override
+//    public void changeClassName(String newClassName) {
+//
+//    }
+//
+//    @Override
+//    public void setClassName(String newClassName) {
+//
+//    }
+//
+//    @Override
 //    public void setClassName(Consumer<SimpleStringProperty> setFunc) {
 //        setFunc.accept(className);
 //    }
@@ -154,4 +164,8 @@
 //        return propertiesMap.remove(propertyName) != null;
 //    }
 //
+//    @Override
+//    public PlayerInstance createInstance() {
+//        return null;
+//    }
 //}
