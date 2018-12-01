@@ -5,7 +5,6 @@ import gameObjects.entity.EntityClass;
 import gameObjects.entity.EntityInstance;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;

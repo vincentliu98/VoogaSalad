@@ -59,7 +59,6 @@ public class EntityWindow extends PopUpWindow {
 
     @Override
     protected void closeWindow() {
-        // TODO: 11/14/18 add Events to somewhere
         Entity myEntity = new Entity(mySprite, id, nameField.getText());
         objectManager.getEntityList().add(myEntity);
         // add the entity to the TreeItem

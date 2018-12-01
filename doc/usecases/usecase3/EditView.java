@@ -22,7 +22,6 @@ import javafx.scene.layout.AnchorPane;
 public class EditView implements SubView {
     private AnchorPane anchorPane;
     private final TabPane tabPane = new TabPane();
-    //TODO: ScrollViews can be more; need to decide
 //    private EntityScrollView entityScrollView;
     private GridScrollView gridScrollView;
     private Button addButton;

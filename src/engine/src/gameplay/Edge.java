@@ -18,13 +18,13 @@ public class Edge implements ArgumentListener {
     }
 
     private boolean checkValidity(){
-        if(myGuard.isEmpty()) return false; // false by default ? or true by default ?
+        if(myGuard.isEmpty()) return false;
         try{
-            // arguments are already set by each entities/tiles
             GameData.shell().evaluate(myGuard);
             return (boolean) GameData.shell().getVariable("$return");
         } catch (Exception e){
             e.printStackTrace();
+            // TODO: throw an actual error
             return false;
         }
     }
@@ -34,7 +34,6 @@ public class Edge implements ArgumentListener {
     @Override
     public int trigger(Event event) {
         if(myTrigger.matches(event) && checkValidity()) {
-            System.out.printf("Transitioning from Node %d to Node %d\n", myStartNodeID, myEndNodeID);
             return myEndNodeID;
         }
         else return DONT_PASS;
