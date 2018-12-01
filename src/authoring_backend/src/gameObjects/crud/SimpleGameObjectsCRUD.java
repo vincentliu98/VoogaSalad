@@ -24,6 +24,7 @@ import gameObjects.tile.SimpleTileClass;
 import gameObjects.tile.TileClass;
 import gameObjects.tile.TileInstance;
 import gameObjects.tile.TileInstanceFactory;
+import gameObjects.turn.SimpleTurn;
 import gameObjects.turn.Turn;
 import grids.Point;
 import javafx.collections.FXCollections;
@@ -303,9 +304,29 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     }
 
 
+    @Override
+    public Turn createTurn(String phaseName) {
+        Turn t = new SimpleTurn(phaseName);
+        turnMap.put(phaseName, t);
+        return t;
+    }
 
+    @Override
+    public Turn getTurn(String phaseName) {
+        if (!turnMap.containsKey(phaseName)) {
+            throw new NoTurnException();
+        }
+        return turnMap.get(phaseName);
+    }
 
-
+    @Override
+    public boolean deleteTurn(String phaseName) {
+        if (!turnMap.containsKey(phaseName)) {
+            return false;
+        }
+        turnMap.remove(phaseName);
+        return true;
+    }
 
     @Override
     public GameObjectClass getGameObjectClass(String className) {
