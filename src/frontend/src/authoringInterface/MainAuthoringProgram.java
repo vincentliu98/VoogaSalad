@@ -3,6 +3,7 @@ package authoringInterface;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class MainAuthoringProgram extends Application {
 
@@ -28,7 +29,7 @@ public class MainAuthoringProgram extends Application {
      */
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setTitle("VoogaSalad!");
+        primaryStage.setTitle("GROOVE");
         View myView = new View(primaryStage);
         var myScene = new Scene(myView.getRootPane(), SCREEN_WIDTH, SCREEN_HEIGHT);
         myScene.getStylesheets().add(STYLESHEET);

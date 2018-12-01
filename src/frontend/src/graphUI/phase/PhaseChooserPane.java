@@ -47,6 +47,7 @@ public class PhaseChooserPane implements SubView<GridPane> {
 
     private void initializeView() {
         view = new GridPane();
+        view.getStyleClass().add("phasePane");
         var col1 = new ColumnConstraints();
         col1.setPercentWidth(15);
         var col2 = new ColumnConstraints();

@@ -1,7 +1,6 @@
 package authoringInterface.editor.menuBarView.subMenuBarView;
 
 
-import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.GridPane;
@@ -12,7 +11,7 @@ import static java.lang.Integer.parseInt;
 /**
  * @author Amy
  */
-//TODO: Refactor this stuff
+
 public class ResizeGridView{
     private Dialog<Pair<Integer, Integer>> dialog;
 
@@ -28,16 +27,16 @@ public class ResizeGridView{
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
-        grid.setPadding(new Insets(20, 150, 10, 10));
+        grid.getStyleClass().add("resizeGrid");
 
         TextField col = new TextField();
-        col.setPromptText("Column");
+        col.setPromptText("Width");
         TextField row = new TextField();
-        row.setPromptText("Row");
+        row.setPromptText("Height");
 
-        grid.add(new Label("Column of the Grid:"), 0, 0);
+        grid.add(new Label("Width of the Grid:"), 0, 0);
         grid.add(col, 1, 0);
-        grid.add(new Label("Row of the Grid:"), 0, 1);
+        grid.add(new Label("Height of the Grid:"), 0, 1);
         grid.add(row, 1, 1);
 
 
