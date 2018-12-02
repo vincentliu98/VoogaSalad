@@ -22,17 +22,18 @@ public interface NodeInstanceController {
      *
      * @param oldNode: The old Node whose link will be broken.
      * @param newNode: The new Node to which a link will be reattached.
+     * @throws NodeNotFoundException
      */
-    void changeNode(Node oldNode, Node newNode);
+    void changeNode(Node oldNode, Node newNode) throws NodeNotFoundException;
 
     /**
      * Get the corresponding GameObjectInstance for a JavaFx Node.
      *
      * @param node: The Node whose corresponding GameObjectInstance will be queried.
      * @return The corresponding GameObjectInstance.
-     * @throws GameObjectInstanceNotFoundException
+     * @throws NodeNotFoundException
      */
-    GameObjectInstance getGameObjectInstance(Node node) throws GameObjectInstanceNotFoundException;
+    GameObjectInstance getGameObjectInstance(Node node) throws NodeNotFoundException;
 
 
     /**
@@ -40,7 +41,12 @@ public interface NodeInstanceController {
      *
      * @param gameObjectInstance: The GameObjectInstance whose corresponding Node will be queried.
      * @return The corresponding Node.
-     * @throws NodeNotFoundException
+     * @throws GameObjectInstanceNotFoundException
      */
-    Node getNode(GameObjectInstance gameObjectInstance) throws NodeNotFoundException;
+    Node getNode(GameObjectInstance gameObjectInstance) throws GameObjectInstanceNotFoundException;
+
+    /**
+     * This method clears all the relationships between all Nodes and GameObjectInstances.
+     */
+    void clearAllLinks();
 }
