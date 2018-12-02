@@ -138,7 +138,6 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     @Override
     public void readGameObjectClass() {
         nameField.setText(gameObjectClass.getClassName().getValue());
-        // TODO: REmove this disgusting shite
         imagePaths.addAll(gameObjectClass.getImagePathList());
     }
 
