@@ -15,6 +15,7 @@ import javafx.scene.Node;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -71,7 +72,7 @@ public class View implements ParentView<SubView>, DraggingCanvas {
     private void initializeElements() {
         sidebar = new GridPane();
         menuBar = new EditorMenuBarView(tools, primaryStage::close, this::updateGridDimension);
-        sideView = new SideView(gameObjectManager, nodeInstanceController);
+        sideView = new SideView(gameObjectManager);
         editView = new EditView(tools, groovyPaneFactory, ROW_NUMBER, COL_NUMBER, gameObjectManager, nodeInstanceController);
         statusView = new StatusView(gameObjectManager);
         editView.addUpdateStatusEventListener(statusView);
@@ -145,7 +146,8 @@ public class View implements ParentView<SubView>, DraggingCanvas {
                 }
             }
         });
-        rootPane.addEventFilter(MouseDragEvent.MOUSE_DRAG_OVER, e -> {
+        rootPane.addEventFilter(DragEvent.DRAG_OVER, e -> {
+            System.out.println(e.toString());
             if (preview == null) {
                 return;
             }
@@ -164,7 +166,7 @@ public class View implements ParentView<SubView>, DraggingCanvas {
             }
         });
 
-        rootPane.addEventFilter(MouseDragEvent.MOUSE_DRAG_RELEASED, e -> {
+        rootPane.setOnDragDropped(e -> {
             if (preview == null) {
                 return;
             }

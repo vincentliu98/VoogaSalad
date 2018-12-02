@@ -22,6 +22,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -64,6 +65,14 @@ public class EditGridView implements SubView<ScrollPane> {
                 gridScrollView.add(cell, i, j);
                 setupHoveringColorChange(cell, Color.LIGHTGREEN);
                 receiveDragFromSideView(cell);
+                cell.setOnDragDetected(e -> {
+                    System.out.println("yes");
+                    cell.startDragAndDrop(TransferMode.ANY);
+                });
+                cell.setOnDragEntered(e -> {
+                    e.acceptTransferModes(TransferMode.ANY);
+                    System.out.println(e.toString());
+                });
                 cell.setOnMouseClicked(e -> listeners.forEach(listener -> listener.setOnUpdateStatusEvent(constructStatusView(cell))));
             }
         }
@@ -198,9 +207,11 @@ public class EditGridView implements SubView<ScrollPane> {
      * @param cell: A region where the event handler will be set up.
      */
     private void receiveDragFromSideView(Pane cell) {
-        cell.setOnMouseDragReleased( e -> {
+        cell.setOnDragDropped( e -> {
             if (e.getGestureSource() instanceof TreeCell) {
-                TreeItem<String> item = ((TreeCell<String>) e.getGestureSource()).getTreeItem();
+                TreeItem<String> item;
+                //noinspection unchecked
+                item = ((TreeCell<String>) e.getGestureSource()).getTreeItem();
                 if (!item.isLeaf()) {
                     return;
                 }
