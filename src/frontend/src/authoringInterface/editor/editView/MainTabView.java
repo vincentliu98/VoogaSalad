@@ -25,6 +25,7 @@ public class MainTabView implements SubView<StackPane> {
         myIcon.setFitHeight(ICON_SIZE);
 //        addPane.getChildren().addAll(myIcon, startBtn);
         addPane.getChildren().addAll(myIcon);
+        addPane.getStyleClass().add("mainTab");
 
     }
 

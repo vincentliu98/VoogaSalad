@@ -44,7 +44,7 @@ public class View implements ParentView<SubView>, DraggingCanvas {
     public static final double MENU_BAR_HEIGHT = 30;
     public static final double GAME_WIDTH = 700;
     public static final double GAME_HEIGHT = 500;
-    private static final double SIDEBAR_WIDTH = 250;
+    private static final double SIDEBAR_WIDTH = 247;
     private static final int ROW_NUMBER = 10;
     private static final int COL_NUMBER = 7;
 

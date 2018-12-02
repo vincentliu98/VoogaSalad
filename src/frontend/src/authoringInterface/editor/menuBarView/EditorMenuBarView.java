@@ -38,6 +38,8 @@ public class EditorMenuBarView implements SubView<MenuBar> {
     private AuthoringTools authTools;
     private String fileName; //TODO: temp var, will be changed
 
+    private SoundView soundView;
+
     private final EditorCaretaker editorCaretaker = new EditorCaretaker();
     private final Editor editor = new Editor();
     private Integer currentMemento = 0;
@@ -55,9 +57,11 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         menuBar = new MenuBar();
         menuBar.setPrefHeight(View.MENU_BAR_HEIGHT);
 
+        soundView = new SoundView();
+
         Menu file = new Menu("File");
         Menu edit = new Menu("Edit");
-        Menu tools = new Menu("Tools");
+        Menu settings = new Menu("Settings");
         Menu run = new Menu("Run");
         Menu help = new Menu("Help");
 
@@ -70,6 +74,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         MenuItem redo = new MenuItem("Redo");
         MenuItem runProject = new MenuItem("Run");
         MenuItem resizeGrid = new MenuItem("Resize Grid");
+        MenuItem setBGM = new MenuItem("BGM");
         MenuItem helpDoc = new MenuItem("Help");
         MenuItem about = new MenuItem("About");
 
@@ -88,16 +93,17 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         resizeGrid.setOnAction(e -> new ResizeGridView().showAndWait().ifPresent(dimension ->
                 updateGridDimension.accept(dimension.getKey(), dimension.getValue())
         ));
+        setBGM.setOnAction(e -> soundView.show());
         helpDoc.setOnAction(this::handleHelpDoc);
         about.setOnAction(this::handleAbout);
 
         file.getItems().addAll(newFile, open, save, saveAs, close);
         edit.getItems().addAll(undo, redo);
         run.getItems().addAll(runProject);
-        tools.getItems().addAll(resizeGrid);
+        settings.getItems().addAll(resizeGrid, setBGM);
         help.getItems().addAll(helpDoc, about);
 
-        menuBar.getMenus().addAll(file, edit, tools, run, help);
+        menuBar.getMenus().addAll(file, edit, settings, run, help);
     }
 
     void handleSave(ActionEvent event) {
@@ -109,6 +115,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         new SaveFileView();
         handleSave(event);
     }
+
     void handleOpen(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open project files");
@@ -116,9 +123,9 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         // TODO: keyboard warrior, backend do the rest.
         if (file != null) {
             fileName = file.getName();
-            // if (file.isLegitimate) {
         }
     }
+
     void handleUndo(ActionEvent event) {
         if (currentMemento < 2) return;
         editor.restoreToState(editorCaretaker.getMemento(--currentMemento));
@@ -144,9 +151,6 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         } catch (Exception e){
             e.printStackTrace();
         }
-//        Scene newScene = new Scene(gameWindow.getView(), View.GAME_WIDTH, View.GAME_HEIGHT);
-
-
     }
     void handleHelpDoc(ActionEvent event) {}
     void handleAbout(ActionEvent event) {}
