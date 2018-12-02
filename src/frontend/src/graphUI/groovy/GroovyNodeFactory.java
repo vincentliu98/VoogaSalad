@@ -11,6 +11,8 @@ import frontendUtils.Try;
 import java.util.List;
 
 /**
+ * A factory that reproduces a node
+ *
  * @author Inchan Hwang
  */
 public class GroovyNodeFactory {

@@ -25,6 +25,8 @@ import java.util.function.Supplier;
  * PhaseChooserPane
  *  - Parent Pane of PhasePane.
  *
+ * It is the entire tab that contains the listView of all the Phase on the right and the pane of nodes on the right
+ *
  * @author Amy
  */
 

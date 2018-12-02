@@ -8,7 +8,9 @@ import groovy.api.GroovyFactory;
 import phase.api.PhaseDB;
 
 /**
- *  This class contains all the tools to author a game;
+ * This class contains all the tools to author a game;
+ *
+ * @author Inchan Hwang
  */
 public class AuthoringTools {
     private GameObjectsCRUDInterface entityDB;

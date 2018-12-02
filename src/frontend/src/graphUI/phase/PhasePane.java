@@ -28,8 +28,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * A stack pane that contains a scroll pane in the left and a pane on the right.
- * It allows the user to add phase (left side) and nodes(right side) on the graph
+ * A stack pane that contains a pane on the right.
+ * It allows the user to add nodes(right side) on the graph
  *
  * @author jl729
  * @author Amy

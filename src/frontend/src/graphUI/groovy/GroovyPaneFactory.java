@@ -31,6 +31,8 @@ import java.util.Set;
  * A factory to product GroovyPane. The factory is used because many such GroovyPane is needed.
  * By calling the method `gen()`, the factory spits out a GroovyPane to be edited by the user.
  *
+ * It is only initialized once in the View class.
+ *
  * @author Inchan Hwang
  */
 
