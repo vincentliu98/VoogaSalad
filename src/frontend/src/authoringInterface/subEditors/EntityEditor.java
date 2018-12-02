@@ -6,12 +6,15 @@ import gameObjects.entity.EntityInstance;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -70,10 +73,18 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                     case NONE:
                         return;
                     case EDIT_NODE:
-                        if (nodeEdited instanceof ImageView) {
-                            ((ImageView) nodeEdited).setImage(new Image(imagePaths.get(0)));
-                        } else if (nodeEdited instanceof Text) {
-                            ((Text) nodeEdited).setText(nameField.getText());
+//                        if (nodeEdited instanceof ImageView) {
+//                            ((ImageView) nodeEdited).setImage(new Image(imagePaths.get(0)));
+//                        } else if (nodeEdited instanceof Text) {
+//                            ((Text) nodeEdited).setText(nameField.getText());
+//                        }
+                        // TODO: Improve this unnecessary cast
+                        Pane parent = (Pane) nodeEdited.getParent();
+                        parent.getChildren().remove(nodeEdited);
+                        if (!imagePaths.isEmpty()) {
+                            nodeEdited = new ImageView(imagePaths.get(0));
+                        } else {
+                            nodeEdited = new Text(nameField.getText());
                         }
                         gameObjectInstance.setInstanceName(nameField.getText());
                         gameObjectInstance.getImagePathList().clear();
@@ -118,9 +129,8 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
      */
     @Override
     public void readGameObjectInstance() {
-        nameField.setText(gameObjectInstance.getClassName().getValue());
-        // TODO: REmove this disgusting shite
-        imagePaths.addAll(gameObjectManager.getEntityClass(gameObjectInstance.getClassName().getValue()).getImagePathList());
+        nameField.setText(gameObjectInstance.getInstanceName().getValue());
+        imagePaths.addAll(gameObjectInstance.getImagePathList());
     }
 
     /**
