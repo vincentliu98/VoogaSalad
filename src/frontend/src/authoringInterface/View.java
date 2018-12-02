@@ -130,12 +130,6 @@ public class View implements ParentView<SubView>, DraggingCanvas {
      * @param e: A DragEvent which is a DragOverEvent.
      */
     private void handleMouseDragged(DragEvent e) {
-        if (preview != null) {
-            if (preview instanceof ImageView) {
-                ((ImageView) preview).setX(e.getX());
-                ((ImageView) preview).setY(e.getY());
-            }
-        }
         e.acceptTransferModes(TransferMode.ANY);
         GameObjectClass draggedClass = gameObjectManager.getGameObjectClass(e.getDragboard().getString());
         switch (draggedClass.getType()) {
