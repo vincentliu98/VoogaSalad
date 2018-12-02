@@ -16,8 +16,9 @@ import javafx.util.Pair;
 import java.util.List;
 
 /**
- * Draggable circle Nodes
- * <p>
+ * A StackPane that contains a single groovy block (rectangular shape).
+ * It represents one groovy block.
+ *
  * Reference: https://stackoverflow.com/questions/46562957/define-object-position-at-runtime-with-javafx
  *
  * @author Inchan Hwang

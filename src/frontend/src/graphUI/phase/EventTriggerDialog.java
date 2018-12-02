@@ -8,6 +8,10 @@ import javafx.scene.text.Text;
 import phase.api.GameEvent;
 
 /**
+ * A dialog that appears when connecting two nodes together and set action in the edge.
+ * This pop-up window asks the user to choose "onClick" or "onKeyPress". When the apply button
+ * is clicked, the edge is added to the graph and either "onClick" or "onKeyPress" will appear in the line
+ *
  * @author Inchan Hwang
  */
 public class EventTriggerDialog extends Dialog<GameEvent> {
