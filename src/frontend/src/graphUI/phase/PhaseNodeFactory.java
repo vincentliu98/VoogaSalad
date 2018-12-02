@@ -39,10 +39,10 @@ public class PhaseNodeFactory {
         public PhaseNode(double xPos, double yPos, Phase model, boolean isSource) {
             this.model = model;
             circle = new Circle(xPos, yPos, NODE_RADIUS);
-            circle.setFill(isSource ? Color.BLUE : Color.LIGHTBLUE);
+            circle.setFill(isSource ? Color.GRAY : Color.DIMGRAY);
 
             inner = new Circle(NODE_RADIUS, NODE_RADIUS, NODE_RADIUS-PADDING);
-            inner.setFill((isSource ? Color.BLUE : Color.LIGHTBLUE).darker());
+            inner.setFill((isSource ? Color.BLACK : Color.WHITE).darker());
 
             text = new Label(model.name());
             text.setFont(new Font(LABEL_SIZE));
