@@ -75,7 +75,9 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                         } else if (nodeEdited instanceof Text) {
                             ((Text) nodeEdited).setText(nameField.getText());
                         }
-                        // TODO make changes to the GameObjectInstance as well. Waiting for changes at JC's side.
+                        gameObjectInstance.setInstanceName(nameField.getText());
+                        gameObjectInstance.getImagePathList().clear();
+                        gameObjectInstance.getImagePathList().addAll(imagePaths);
                         break;
                     case EDIT_TREEITEM:
                         gameObjectClass.getImagePathList().clear();
