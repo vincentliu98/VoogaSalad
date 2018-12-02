@@ -12,6 +12,11 @@ import frontendUtils.Try;
 
 import java.util.function.Supplier;
 
+/**
+ * A factory that produces a node in a phase graph
+ *
+ * @author Inchan Hwang
+ */
 public class PhaseNodeFactory {
     private PhaseDB db;
     private Supplier<GroovyPane> genGroovyPane;
