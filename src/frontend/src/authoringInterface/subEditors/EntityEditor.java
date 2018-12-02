@@ -9,13 +9,15 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import utils.ErrorWindow;
+import utils.NodeInstanceController;
+import utils.NodeNotFoundException;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -49,7 +51,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
             }
         });
         confirm.setOnAction(e -> {
-            if (nameField.getText().trim().isEmpty()) {
+            if (nameField.getText() == null || nameField.getText().trim().isEmpty()) {
                 new ErrorWindow("Empty name", "You must give your entity a non-empty name").showAndWait();
             } else {
                 ((Stage) rootPane.getScene().getWindow()).close();
@@ -70,12 +72,21 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                     case NONE:
                         return;
                     case EDIT_NODE:
-                        if (nodeEdited instanceof ImageView) {
-                            ((ImageView) nodeEdited).setImage(new Image(imagePaths.get(0)));
-                        } else if (nodeEdited instanceof Text) {
-                            ((Text) nodeEdited).setText(nameField.getText());
+                        Node temp;
+                        if (!imagePaths.isEmpty()) {
+                            temp = new ImageView(imagePaths.get(0));
+                        } else {
+                            temp = new Text(nameField.getText());
                         }
-                        // TODO make changes to the GameObjectInstance as well. Waiting for changes at JC's side.
+                        try {
+                            nodeInstanceController.changeNode(nodeEdited, temp);
+                        } catch (NodeNotFoundException e1) {
+                            // TODO: proper error handling
+                            e1.printStackTrace();
+                        }
+                        gameObjectInstance.setInstanceName(nameField.getText());
+                        gameObjectInstance.getImagePathList().clear();
+                        gameObjectInstance.getImagePathList().addAll(imagePaths);
                         break;
                     case EDIT_TREEITEM:
                         gameObjectClass.getImagePathList().clear();
@@ -116,9 +127,8 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
      */
     @Override
     public void readGameObjectInstance() {
-        nameField.setText(gameObjectInstance.getClassName().getValue());
-        // TODO: REmove this disgusting shite
-        imagePaths.addAll(gameObjectManager.getEntityClass(gameObjectInstance.getClassName().getValue()).getImagePathList());
+        nameField.setText(gameObjectInstance.getInstanceName().getValue());
+        imagePaths.addAll(gameObjectInstance.getImagePathList());
     }
 
     /**
@@ -127,7 +137,6 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     @Override
     public void readGameObjectClass() {
         nameField.setText(gameObjectClass.getClassName().getValue());
-        // TODO: REmove this disgusting shite
         imagePaths.addAll(gameObjectClass.getImagePathList());
     }
 

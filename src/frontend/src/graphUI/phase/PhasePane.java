@@ -28,17 +28,16 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Playground for testing graph function
- * <p>
- * Reference: https://stackoverflow.com/questions/46562957/define-object-position-at-runtime-with-javafx
+ * A stack pane that contains a pane on the right.
+ * It allows the user to add nodes(right side) on the graph
  *
  * @author jl729
  * @author Amy
  */
 
 public class PhasePane implements SubView<StackPane> {
-    public static final Double ICON_WIDTH = 90.0;
-    public static final Double ICON_HEIGHT = 90.0;
+    public static final Double ICON_WIDTH = 95.0;
+    public static final Double ICON_HEIGHT = 95.0;
 
     private enum DRAG_PURPOSE {
         NOTHING,
@@ -85,7 +84,7 @@ public class PhasePane implements SubView<StackPane> {
             if(o != null && lines.contains(o)) o.setColor(Color.BLACK);
             if(n != null) {
                 if(selectedNode.get() != null) selectedNode.set(null);
-                n.setColor(Color.RED);
+                n.setColor(Color.CORAL);
             }
         });
 
@@ -95,7 +94,7 @@ public class PhasePane implements SubView<StackPane> {
                 if(selectedEdge.get() != null) selectedEdge.set(null);
                 n.setBorder(
                     new Border(
-                        new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, null, new BorderWidths(3))
+                        new BorderStroke(Color.CORAL, BorderStrokeStyle.SOLID, null, new BorderWidths(3))
                     )
                 );
             }

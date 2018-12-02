@@ -19,6 +19,9 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * @author Inchan Hwang
+ */
 public class IconLoader {
     private static final int ICONS_IN_ROW = 9;
 

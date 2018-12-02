@@ -15,6 +15,7 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import utils.ErrorWindow;
+import utils.NodeInstanceController;
 
 import java.io.File;
 

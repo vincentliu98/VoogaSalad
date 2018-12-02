@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
+import utils.NodeInstanceController;
 
 /**
  * This class organizes the cell factory call back methods into a nicer format.
@@ -31,8 +32,6 @@ public class CustomTreeCellImpl extends TreeCell<String> {
                     dialogStage.show();
                     editor.addTreeItem(getTreeItem());
                     break;
-                case "SOUND":
-                    break;
                 case "TILE":
                     Stage dialogTileStage = new Stage();
                     TileEditor tileEditor = new TileEditor(manager);
@@ -54,9 +53,6 @@ public class CustomTreeCellImpl extends TreeCell<String> {
             switch (objectClass.getType()) {
                 case ENTITY:
                     editor = new EntityEditor(objectManager);
-                    break;
-                case SOUND:
-                    // TODO
                     break;
                 case CATEGORY:
                     // TODO

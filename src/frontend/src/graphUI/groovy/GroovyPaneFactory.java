@@ -28,11 +28,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * Playground for testing graph function
- * <p>
- * Reference: https://stackoverflow.com/questions/46562957/define-object-position-at-runtime-with-javafx
+ * A factory to product GroovyPane. The factory is used because many such GroovyPane is needed.
+ * By calling the method `gen()`, the factory spits out a GroovyPane to be edited by the user.
  *
- * @author jl729
+ * It is only initialized once in the View class.
+ *
+ * @author Inchan Hwang
  */
 
 public class GroovyPaneFactory {
