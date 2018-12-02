@@ -11,6 +11,7 @@ import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class GroovyNodeFactory {
     private static final int FONT_BIG = 18;
@@ -184,7 +185,6 @@ public class GroovyNodeFactory {
         }
     }
 
-
     private static List<Pair<Pos, Ports>> FUNCTION_PORT = List.of(
         new Pair<>(Pos.TOP_RIGHT, Ports.A),
         new Pair<>(Pos.CENTER_RIGHT, Ports.B),
@@ -203,5 +203,16 @@ public class GroovyNodeFactory {
     public GroovyNode binaryBlock(double xPos, double yPos, String op) {
         var block = factory.binaryBlock(op);
         return new GroovyNode(block, xPos, yPos, 50, 50, FONT_BIG, Color.DARKRED, BINARY_PORT);
+    }
+
+    public ShrunkGroovyNode shrunkBlock(Set<GroovyNode> inner, String description) {
+        var sumX = inner.stream().map(GroovyNode::getCenterX).reduce((a, b) -> a+b);
+        var sumY = inner.stream().map(GroovyNode::getCenterY).reduce((a, b) -> a+b);
+        return
+            new ShrunkGroovyNode(
+                description,
+                sumX.get()/inner.size(), sumY.get()/inner.size(),
+                130, 130, FONT_BIG, Color.BLACK, inner
+            );
     }
 }

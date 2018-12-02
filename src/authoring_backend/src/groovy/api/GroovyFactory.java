@@ -61,7 +61,6 @@ public class GroovyFactory {
 
     public FunctionBlock functionBlock(String op, int argN) { return new FunctionBlock(op, argN); }
     public InfixBinaryBlock binaryBlock(String op) { return new InfixBinaryBlock(op); }
-    // We'll eventually remove this
     public RawGroovyBlock rawBlock(String code) { return new RawGroovyBlock(code); }
 }
 

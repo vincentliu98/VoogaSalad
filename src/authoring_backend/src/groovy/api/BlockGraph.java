@@ -23,12 +23,6 @@ public interface BlockGraph extends Graph<GroovyBlock, BlockEdge> {
     Try<String> transformToGroovy();
 
     /**
-     *  Adds copy of existing vertices and edges to the graph
-     *  and returns the newly added vertices and edges;
-     */
-    Pair<Set<GroovyBlock>, Set<BlockEdge>> addSubset(Set<GroovyBlock> vertices, Set<BlockEdge> edges);
-
-    /**
      *  Finds the target block of an edge starting from specific port of a GroovyBlock.
      *  if canBeEmpty is true, it returns an createGraph GroovyBlock.
      */
