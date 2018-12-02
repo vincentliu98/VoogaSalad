@@ -26,8 +26,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import utils.Coordinates;
 import utils.CrappyNodeInstanceController;
 import utils.NodeInstanceController;
+import utils.UnhandledCoordinatesClassException;
 
 /**
  * This class provides an createGraph skeleton window with the basic menu items, and basic editing interfaces.
@@ -130,6 +132,15 @@ public class View implements ParentView<SubView>, DraggingCanvas {
      * @param e: A DragEvent which is a DragOverEvent.
      */
     private void handleMouseDragged(DragEvent e) {
+        if (preview != null) {
+            try {
+                Coordinates.setXAndY(preview, e.getX(), e.getY());
+            } catch (UnhandledCoordinatesClassException e1) {
+                // TODO: proper error handling
+                e1.printStackTrace();
+            }
+            return;
+        }
         e.acceptTransferModes(TransferMode.ANY);
         GameObjectClass draggedClass = gameObjectManager.getGameObjectClass(e.getDragboard().getString());
         switch (draggedClass.getType()) {
@@ -138,14 +149,16 @@ public class View implements ParentView<SubView>, DraggingCanvas {
                 if (imagePaths == null || imagePaths.isEmpty()) {
                     preview = new Text(draggedClass.getClassName().getValue());
                     preview.setOpacity(PREVIEW_OPACITY);
-                    ((Text) preview).setX(e.getX());
-                    ((Text) preview).setY(e.getY());
                 } else {
                     preview = new ImageView(imagePaths.get(0));
                     preview.setOpacity(PREVIEW_OPACITY);
-                    ((ImageView) preview).setX(e.getX());
-                    ((ImageView) preview).setY(e.getY());
                 }
+        }
+        try {
+            Coordinates.setXAndY(preview, e.getX(), e.getY());
+        } catch (UnhandledCoordinatesClassException e1) {
+            // TODO: proper error handling
+            e1.printStackTrace();
         }
         rootPane.getChildren().add(preview);
     }
