@@ -45,17 +45,17 @@ public class Tile extends PropertyHolder<Tile> implements GameObject, EventHandl
      *  Adjusts the size of this tile in pixels with respect to screen dimensions
      */
     public void adjustViewSize(double screenWidth, double screenHeight) {
-        myImageView.setX((screenWidth*myCoord.getX())/GameData.gridWidth());
-        myImageView.setY((screenHeight*myCoord.getY())/GameData.gridHeight());
-        myImageView.setFitWidth((screenWidth*myWidth)/GameData.gridWidth());
-        myImageView.setFitHeight((screenHeight*myHeight)/GameData.gridHeight());
+        myImageView.setX((screenWidth*myCoord.getX())/GameMethods.gridWidth());
+        myImageView.setY((screenHeight*myCoord.getY())/GameMethods.gridHeight());
+        myImageView.setFitWidth((screenWidth*myWidth)/GameMethods.gridWidth());
+        myImageView.setFitHeight((screenHeight*myHeight)/GameMethods.gridHeight());
 
         myImages = myImagePaths.stream()
                                .map(path ->
                                    new Image(
                                        this.getClass().getClassLoader().getResourceAsStream(path),
-                                       (screenWidth*myWidth)/GameData.gridWidth(),
-                                       (screenHeight*myHeight)/GameData.gridHeight(),
+                                       (screenWidth*myWidth)/GameMethods.gridWidth(),
+                                       (screenHeight*myHeight)/GameMethods.gridHeight(),
                                        false, true
                                    )
                                ).collect(Collectors.toList());
@@ -67,9 +67,9 @@ public class Tile extends PropertyHolder<Tile> implements GameObject, EventHandl
      */
     public void updateView() {
         if(!myImageSelector.isEmpty()) {
-            GameData.shell().setVariable("$this", this);
-            GameData.shell().evaluate(myImageSelector);
-            imgIndex.set(Integer.parseInt(GameData.shell().getVariable("$return").toString()));
+            GameMethods.shell().setVariable("$this", this);
+            GameMethods.shell().evaluate(myImageSelector);
+            imgIndex.set(Integer.parseInt(GameMethods.shell().getVariable("$return").toString()));
         } else imgIndex.set(0);
     }
 
@@ -87,6 +87,6 @@ public class Tile extends PropertyHolder<Tile> implements GameObject, EventHandl
     @Override
     public void handle(MouseEvent event) {
         System.out.println("MouseEvent on tile of id " + myID);
-        GameData.addArgument(event, new ClickTag(Tile.class, myID));
+        GameMethods.addArgument(event, new ClickTag(Tile.class, myID));
     }
 }

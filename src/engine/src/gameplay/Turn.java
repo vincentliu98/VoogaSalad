@@ -31,6 +31,10 @@ public class Turn {
         playerIdx = 0;
     }
 
+    public void setCurrentPlayer(int playerID) {
+        playerIdx = playersOrder.indexOf(playerID);
+    }
+
     public void startPhase(){ GameData.getPhase(myCurrentPhaseID).startTraversal(); }
 
     public void endGame(int winnerID){

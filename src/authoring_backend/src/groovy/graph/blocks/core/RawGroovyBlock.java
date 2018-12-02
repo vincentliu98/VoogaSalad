@@ -25,5 +25,5 @@ public class RawGroovyBlock extends SimpleNode implements GroovyBlock<RawGroovyB
     public Set<Ports> ports() { return Set.of(); }
 
     @Override
-    public String name() { return "raw"; }
+    public String name() { return src; }
 }

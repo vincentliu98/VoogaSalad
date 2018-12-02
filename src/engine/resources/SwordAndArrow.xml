@@ -9,17 +9,17 @@
     <gameplay.Node>
         <myPhaseID>65</myPhaseID>
         <myID>99</myID>
-        <myExecution>GameData.moveEntity(selected, $clicked)
-            GameData.toNextPlayer()
-            GameData.goTo(&apos;A&apos;.hashCode())</myExecution>
+        <myExecution>GameMethods.moveEntity(selected, $clicked)
+            GameMethods.toNextPlayer()
+            GameMethods.goTo(&apos;A&apos;.hashCode())</myExecution>
     </gameplay.Node>
     <gameplay.Node>
         <myPhaseID>65</myPhaseID>
         <myID>100</myID>
         <myExecution>$clicked.props.hp = $clicked.props.hp - selected.props.dmg
-            if($clicked.props.hp &lt;= 0) { GameData.removeEntity($clicked) }
-            GameData.toNextPlayer()
-            GameData.goTo(&apos;A&apos;.hashCode())</myExecution>
+            if(GameMethods.getProperty($clicked, 'hp') &lt;= 0) { GameMethods.removeEntity($clicked) }
+            GameMethods.toNextPlayer()
+            GameMethods.goTo(&apos;A&apos;.hashCode())</myExecution>
     </gameplay.Node>
     <gameplay.Node>
         <myPhaseID>65</myPhaseID>
@@ -31,21 +31,14 @@
         <myStartNodeID>98</myStartNodeID>
         <myEndNodeID>99</myEndNodeID>
         <myTrigger class="phase.api.GameEvent$MouseClick"/>
-        <myGuard>if(GameData.isTile($clicked) &amp;&amp; GameData.distance($clicked, selected) &lt;= 1 &amp;&amp; GameData.hasNoEntities($clicked)) { $return = true } else { $return = false }</myGuard>
+        <myGuard>$return = GameMethods.isTile($clicked) &amp;&amp; GameMethods.distance($clicked, selected) &lt;= 1 &amp;&amp; GameMethods.hasNoEntities($clicked)</myGuard>
     </gameplay.Edge>
     <gameplay.Edge>
         <myPhaseID>65</myPhaseID>
         <myStartNodeID>65</myStartNodeID>
         <myEndNodeID>98</myEndNodeID>
         <myTrigger class="phase.api.GameEvent$MouseClick"/>
-        <myGuard>if(((GameData.isEntity($clicked)) &amp;&amp; (GameData.getCurrentPlayer().isMyEntity($clicked)))) {
-            $return = true
-
-            }
-            else {
-            $return = false
-
-            }
+        <myGuard>$return = (GameMethods.isEntity($clicked)) &amp;&amp; (GameMethods.getCurrentPlayer().isMyEntity($clicked))
         </myGuard>
     </gameplay.Edge>
     <gameplay.Edge>
@@ -53,7 +46,7 @@
         <myStartNodeID>98</myStartNodeID>
         <myEndNodeID>100</myEndNodeID>
         <myTrigger class="phase.api.GameEvent$MouseClick"/>
-        <myGuard>if(GameData.isEntity($clicked) &amp;&amp; !GameData.getCurrentPlayer().isMyEntity($clicked) &amp;&amp; GameData.distance($clicked, selected) &lt;= selected.props.attackRange ) { $return = true } else { $return = false }</myGuard>
+        <myGuard>if(GameMethods.isEntity($clicked) &amp;&amp; !GameMethods.getCurrentPlayer().isMyEntity($clicked) &amp;&amp; GameMethods.distance($clicked, selected) &lt;= selected.props.attackRange ) { $return = true } else { $return = false }</myGuard>
     </gameplay.Edge>
     <gameplay.Phase>
         <myID>65</myID>

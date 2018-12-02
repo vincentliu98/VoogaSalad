@@ -348,6 +348,11 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     }
 
     @Override
+    public Collection<GameObjectClass> getAllClasses() {
+        return gameObjectClassMapById.values();
+    }
+
+    @Override
     public Collection<GameObjectInstance> getAllInstances(String className) {
         Set<GameObjectInstance> instancesSet = new HashSet<>();
         for (Map.Entry<Integer, GameObjectInstance> entry : gameObjectInstanceMapById.entrySet()) {

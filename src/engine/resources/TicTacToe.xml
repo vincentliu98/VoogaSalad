@@ -198,18 +198,18 @@
         <myPhaseID>1</myPhaseID>
         <myID>2</myID>
         <myExecution>
-            turn = GameData.getCurrentPlayerID()
+            turn = GameMethods.getCurrentPlayerID()
             if(turn == 0) {
                 entityName = "X";
             }
             else {
                 entityName = "O";
             }
-            GameData.createEntity(entityName, $clicked.getID(), turn);
-            GameData.updateViews();
-            entities = GameData.getPlayer(turn).getMyEntities();
+            GameMethods.createEntity(entityName, $clicked.getID(), turn);
+            GameMethods.updateViews();
+            entities = GameMethods.getPlayer(turn).getMyEntities();
             def tileSet = [] as HashSet;
-            for (Integer i : entities){ tileSet.add(GameData.getEntity(i).getTile()); }
+            for (Integer i : entities){ tileSet.add(GameMethods.getEntity(i).getTileID()); }
             if ((tileSet.contains(1) &amp;&amp; tileSet.contains(2) &amp;&amp; tileSet.contains(3)) ||
                 (tileSet.contains(4) &amp;&amp; tileSet.contains(5) &amp;&amp; tileSet.contains(6)) ||
                 (tileSet.contains(7) &amp;&amp; tileSet.contains(8) &amp;&amp; tileSet.contains(9)) ||
@@ -218,11 +218,11 @@
                 (tileSet.contains(3) &amp;&amp; tileSet.contains(6) &amp;&amp; tileSet.contains(9)) ||
                 (tileSet.contains(1) &amp;&amp; tileSet.contains(5) &amp;&amp; tileSet.contains(9)) ||
                 (tileSet.contains(3) &amp;&amp; tileSet.contains(5) &amp;&amp; tileSet.contains(7))) {
-                    GameData.getTurn().endGame(turn);
+                    GameMethods.getTurn().endGame(turn);
                     return;
             }
-            GameData.goTo(1);
-            GameData.toNextPlayer();
+            GameMethods.goTo(1);
+            GameMethods.toNextPlayer();
         </myExecution>
     </gameplay.Node>
 
@@ -232,7 +232,7 @@
         <myEndNodeID>2</myEndNodeID>
         <myTrigger class="phase.api.GameEvent$MouseClick"/>
         <myGuard>
-            if($clicked.getName() == 'Box' &amp;&amp; GameData.hasNoEntities($clicked)) { $return = true }
+            if($clicked.getName() == 'Box' &amp;&amp; GameMethods.hasNoEntities($clicked)) { $return = true }
             else { $return = false }
         </myGuard>
     </gameplay.Edge>

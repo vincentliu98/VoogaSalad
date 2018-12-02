@@ -1,6 +1,7 @@
 package groovy.graph.blocks.small_factory;
 
 import frontendUtils.Try;
+import gameObjects.crud.GameObjectsCRUDInterface;
 import groovy.graph.blocks.core.LiteralBlock;
 
 import java.util.Arrays;
@@ -47,15 +48,10 @@ public class LiteralFactory {
         } else throw new ListParseException(lst);
     }
 
-    public static Try<LiteralBlock> refBlock(String value) {
-        return Try.apply(() -> validateReference(value.trim()))
-                  .map(ref -> new LiteralBlock(ref, "Ref"));
+    public static Try<LiteralBlock> refBlock(String value, GameObjectsCRUDInterface entityDB) {
+        return ValidationUtil.validateReference(value.trim(), entityDB)
+                             .map(ref -> new LiteralBlock(ref, "Ref"));
     }
-
-    private static String validateReference(String ref) {
-        return ref; // TODO: need to validate... but what?
-    }
-
 
     public static Try<LiteralBlock> mapBlock(String value) {
         return Try.apply(() -> checkMap(value.trim())).map(m -> new LiteralBlock(m, "Map"));
