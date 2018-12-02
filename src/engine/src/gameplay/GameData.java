@@ -13,19 +13,19 @@ import javafx.scene.layout.Pane;
 import java.util.*;
 
 public class GameData {
-    private static int GRID_WIDTH, GRID_HEIGHT;
-    private static Map<Integer, Player> PLAYERS;
-    private static Map<Integer, Entity> ENTITIES;
-    private static Map<String, EntityPrototype> ENTITY_PROTOTYPES;
-    private static Map<Integer, Tile> TILES;
-    private static Map<Integer, Phase> PHASES;
-    private static Map<Integer, Node> NODES;
-    private static Set<Edge> EDGES;
-    private static Turn TURN;
-    private static Pane ROOT;
-    private static List<ArgumentListener> myArgumentListeners;
+    static int GRID_WIDTH, GRID_HEIGHT;
+    static Map<Integer, Player> PLAYERS;
+    static Map<Integer, Entity> ENTITIES;
+    static Map<String, EntityPrototype> ENTITY_PROTOTYPES;
+    static Map<Integer, Tile> TILES;
+    static Map<Integer, Phase> PHASES;
+    static Map<Integer, Node> NODES;
+    static Set<Edge> EDGES;
+    static Turn TURN;
+    static Pane ROOT;
+    static List<ArgumentListener> myArgumentListeners;
 
-    private static GroovyShell shell;
+    static GroovyShell shell;
 
     public static void setGameData(
         Point grid_dimension,
@@ -49,7 +49,7 @@ public class GameData {
         myArgumentListeners = new ArrayList<>();
 
         var shared = new Binding();
-        shared.setVariable("GameData", GameData.class);
+        shared.setVariable("GameMethods", GameMethods.class);
         shell = new GroovyShell(shared);
     }
 
@@ -142,55 +142,5 @@ public class GameData {
             xmlString = xmlString + serializer.toXML(entry.getValue()) + "\n";
         }
         return xmlString;
-    }
-
-    /**
-     *  Methods that are intended to be used by the authors
-     */
-    public static int gridWidth() { return GRID_WIDTH; }
-    public static int gridHeight() { return GRID_HEIGHT; }
-    public static Entity createEntity(String entityName, int tileID, int ownerID){
-        var nextID = ENTITIES.keySet().stream().max(Comparator.comparingInt(a -> a)).orElse(0)+1;
-        var newEntity = ENTITY_PROTOTYPES.get(entityName).build(nextID, tileID);
-        newEntity.adjustViewSize(ROOT.getWidth(), ROOT.getHeight());
-        ENTITIES.put(nextID, newEntity);
-        PLAYERS.get(ownerID).addEntity(nextID);
-        newEntity.setLocation(tileID);
-        ROOT.getChildren().add(newEntity.getImageView());
-        return newEntity;
-    }
-    public static void removeEntity(Entity entity) {
-        ROOT.getChildren().remove(entity.getImageView());
-        ENTITIES.remove(entity.getID());
-    }
-    public static void moveEntity(Entity entity, Tile to) {
-        entity.setLocation(to.getID());
-    }
-    public static boolean hasNoEntities(Tile t) {
-        return ENTITIES.values().stream().noneMatch(e -> t.getID() == e.getTileID());
-    }
-    public static Entity getEntity(int entityID){
-        return ENTITIES.get(entityID);
-    }
-    public static Tile getTile(int tileID){
-        return TILES.get(tileID);
-    }
-    public static Player getCurrentPlayer() { return PLAYERS.get(TURN.getCurrentPlayerID()); }
-    public static void setCurrentPlayer(int playerID) { TURN.setCurrentPlayer(playerID);}
-    public static int getCurrentPlayerID(){ return TURN.getCurrentPlayerID(); }
-    public static int getNextPlayerID() { return TURN.nextPlayerID(); }
-    public static int toNextPlayer() { return TURN.toNextPlayer(); }
-    public static void setPlayerOrder(List<Integer> newOrder){ TURN.setPlayerOrder(newOrder); }
-    public static boolean isTile(GameObject object) {
-        return !ENTITY_PROTOTYPES.keySet().contains(object.getName());
-    }
-    public static void goTo(int nodeID) { getNode(nodeID).execute(); }
-    public static boolean isEntity(GameObject object) {
-        return ENTITY_PROTOTYPES.keySet().contains(object.getName());
-    }
-    public static double distance(GameObject a, GameObject b) {
-        double dx = a.getX() - b.getX();
-        double dy = a.getY() - b.getY();
-        return Math.sqrt(dx*dx+dy*dy);
     }
 }

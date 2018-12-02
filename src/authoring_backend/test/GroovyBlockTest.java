@@ -72,7 +72,7 @@ public class GroovyBlockTest {
         graph.addEdge(e8);
 
         // we should make this a separate thing for convenience
-        var removeInstance = factory.functionBlock("remove");
+        var removeInstance = factory.functionBlock("remove", 1);
         graph.addNode(removeInstance);
         var clicked = factory.rawBlock("$clicked");
         graph.addNode(clicked);
@@ -109,7 +109,7 @@ public class GroovyBlockTest {
         // $goto("A")
 
         // should make this a separate thing as well
-        var go2 = factory.functionBlock("$goto");
+        var go2 = factory.functionBlock("$goto", 1);
         graph.addNode(go2);
         var to = factory.stringBlock("A");
         graph.addNode(to);

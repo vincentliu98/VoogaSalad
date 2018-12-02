@@ -184,6 +184,9 @@ public class GroovyPaneFactory {
             vbox.getChildren().addAll(
                 IconLoader.loadFunctions(img -> type -> fetchArg -> draggableGroovyIcon(img, type, fetchArg))
             );
+            vbox.getChildren().addAll(
+                IconLoader.loadGameMethods(img -> type -> fetchArg -> draggableGroovyIcon(img, type, fetchArg))
+            );
 
             vbox.setSpacing(10);
             vbox.getChildren().forEach(c -> {
@@ -279,11 +282,11 @@ public class GroovyPaneFactory {
 
         private void initializeGridPane() {
             var col1 = new ColumnConstraints();
-            col1.setPercentWidth(15);
+            col1.setPercentWidth(30);
             var col2 = new ColumnConstraints();
-            col2.setPercentWidth(60);
+            col2.setPercentWidth(50);
             var col3 = new ColumnConstraints();
-            col3.setPercentWidth(25);
+            col3.setPercentWidth(20);
             root.getColumnConstraints().addAll(col1, col2, col3);
         }
 

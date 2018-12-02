@@ -59,7 +59,7 @@ public class GroovyFactory {
     public LiteralBlock stringBlock(String value) { return LiteralFactory.stringBlock(value); }
     public Try<LiteralBlock> refBlock(String value) { return LiteralFactory.refBlock(value, entityDB); }
 
-    public FunctionBlock functionBlock(String op) { return new FunctionBlock(op); }
+    public FunctionBlock functionBlock(String op, int argN) { return new FunctionBlock(op, argN); }
     public InfixBinaryBlock binaryBlock(String op) { return new InfixBinaryBlock(op); }
     // We'll eventually remove this
     public RawGroovyBlock rawBlock(String code) { return new RawGroovyBlock(code); }

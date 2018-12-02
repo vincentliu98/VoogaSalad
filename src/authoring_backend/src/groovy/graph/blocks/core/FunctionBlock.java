@@ -10,10 +10,14 @@ import java.util.Set;
 import static groovy.api.Ports.*;
 
 public class FunctionBlock extends SimpleNode implements GroovyBlock<FunctionBlock> {
+    private static final int DONT_CARE = -1;
+
     private String op;
-    public FunctionBlock(String op) {
+    private int argN;
+    public FunctionBlock(String op, int argN) {
         super();
         this.op = op;
+        this.argN = argN;
     }
 
     @Override
@@ -24,6 +28,9 @@ public class FunctionBlock extends SimpleNode implements GroovyBlock<FunctionBlo
         var tryD = graph.findTarget(this, D, true).flatMap(b -> b.toGroovy(graph));
         var tryE = graph.findTarget(this, E, true).flatMap(b -> b.toGroovy(graph));
         var tryOut = graph.findTarget(this, FLOW_OUT).flatMap(b -> b.toGroovy(graph));
+        int argCount = count(tryA, tryB, tryC, tryD, tryE);
+        if(argN != DONT_CARE && argCount != argN) return Try.failure(new ArgNumberMismatchException(argN, argCount));
+
         return tryA.flatMap(a ->
             tryB.flatMap(b ->
                 tryC.flatMap(c ->
@@ -49,8 +56,15 @@ public class FunctionBlock extends SimpleNode implements GroovyBlock<FunctionBlo
         } return sb.toString();
     }
 
+    private int count(Try... args) {
+        int cnt = 0;
+        for(var arg : args) {
+            if(!arg.get("").equals("")) cnt ++;
+        } return cnt;
+    }
+
     @Override
-    public FunctionBlock replicate() { return new FunctionBlock(op); }
+    public FunctionBlock replicate() { return new FunctionBlock(op, argN); }
 
     @Override
     public Set<Ports> ports() { return Set.of(A, B, C, D, E, FLOW_OUT); }

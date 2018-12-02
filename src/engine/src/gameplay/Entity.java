@@ -54,7 +54,7 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
         imgIndex = new SimpleIntegerProperty(-1);
         imgIndex.addListener((e, oldVal, newVal) -> myImageView.setImage(myImages.get(newVal.intValue())));
 
-        var pos = GameData.getTile(tileID);
+        var pos = GameMethods.getTile(tileID);
         xCoord = new SimpleDoubleProperty(pos.getX());
         yCoord = new SimpleDoubleProperty(pos.getY());
     }
@@ -64,26 +64,26 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
      *  TODO: test whether "addListener" replaces the old one
      */
     public void adjustViewSize(double screenWidth, double screenHeight) {
-        myImageView.setY((screenHeight * yCoord.get()) / GameData.gridHeight());
-        myImageView.setX((screenWidth * xCoord.get()) / GameData.gridWidth());
-        myImageView.setFitWidth(screenWidth/GameData.gridWidth());
-        myImageView.setFitHeight(screenHeight/GameData.gridHeight());
+        myImageView.setY((screenHeight * yCoord.get()) / GameMethods.gridHeight());
+        myImageView.setX((screenWidth * xCoord.get()) / GameMethods.gridWidth());
+        myImageView.setFitWidth(screenWidth/GameMethods.gridWidth());
+        myImageView.setFitHeight(screenHeight/GameMethods.gridHeight());
 
         myImages = myImagePaths.stream()
                                .map(path ->
                                    new Image(
                                        this.getClass().getClassLoader().getResourceAsStream(path),
-                                       screenWidth/GameData.gridWidth(), screenHeight/GameData.gridHeight(),
+                                       screenWidth/GameMethods.gridWidth(), screenHeight/GameMethods.gridHeight(),
                                        false, true
                                    )
                                ).collect(Collectors.toList());
 
         xCoord.addListener((e, oldVal, newVal) -> {
-            myImageView.setX(screenWidth * newVal.doubleValue() / GameData.gridWidth());
+            myImageView.setX(screenWidth * newVal.doubleValue() / GameMethods.gridWidth());
         });
 
         yCoord.addListener((e, oldVal, newVal) -> {
-            myImageView.setY(screenHeight * newVal.doubleValue() / GameData.gridHeight());
+            myImageView.setY(screenHeight * newVal.doubleValue() / GameMethods.gridHeight());
         });
 
     }
@@ -94,15 +94,15 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
      */
     public void updateView() {
         if(!myImageSelector.isEmpty()) {
-            GameData.shell().setVariable("$this", this);
-            GameData.shell().evaluate(myImageSelector);
-            imgIndex.set(Integer.parseInt(GameData.shell().getVariable("$return").toString()));
+            GameMethods.shell().setVariable("$this", this);
+            GameMethods.shell().evaluate(myImageSelector);
+            imgIndex.set(Integer.parseInt(GameMethods.shell().getVariable("$return").toString()));
         } else imgIndex.set(0);
     }
 
     public void setLocation(int tileID){
         this.tileID = tileID;
-        var data = GameData.getTile(tileID);
+        var data = GameMethods.getTile(tileID);
         this.xCoord.set(data.getX());
         this.yCoord.set(data.getY());
     }
@@ -117,6 +117,6 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
     @Override
     public void handle(MouseEvent event) {
         System.out.println("MouseEvent from entity of id " + myID);
-        GameData.addArgument(event, new ClickTag(Entity.class, myID));
+        GameMethods.addArgument(event, new ClickTag(Entity.class, myID));
     }
 }
