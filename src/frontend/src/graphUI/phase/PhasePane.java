@@ -28,9 +28,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Playground for testing graph function
- * <p>
- * Reference: https://stackoverflow.com/questions/46562957/define-object-position-at-runtime-with-javafx
+ * A stack pane that contains a pane on the right.
+ * It allows the user to add nodes(right side) on the graph
  *
  * @author jl729
  * @author Amy

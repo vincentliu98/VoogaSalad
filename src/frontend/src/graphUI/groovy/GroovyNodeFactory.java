@@ -10,6 +10,11 @@ import frontendUtils.Try;
 
 import java.util.List;
 
+/**
+ * A factory that reproduces a node
+ *
+ * @author Inchan Hwang
+ */
 public class GroovyNodeFactory {
     private static final int FONT_BIG = 18;
     private static final int FONT_NORMAL = 12;
