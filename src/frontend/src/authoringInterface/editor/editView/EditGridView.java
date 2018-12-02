@@ -62,11 +62,6 @@ public class EditGridView implements SubView<ScrollPane> {
                 gridScrollView.add(cell, i, j);
                 setupHoveringColorChange(cell, Color.LIGHTGREEN);
                 receiveDragFromSideView(cell);
-                cell.setOnDragDetected(e -> {
-                    System.out.println("yes");
-                    cell.startDragAndDrop(TransferMode.ANY);
-                });
-                cell.addEventFilter(DragEvent.DRAG_OVER, e -> System.out.println(e.toString()));
                 cell.setOnMouseClicked(e -> listeners.forEach(listener -> listener.setOnUpdateStatusEvent(constructStatusView(cell))));
             }
         }
