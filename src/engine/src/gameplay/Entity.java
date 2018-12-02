@@ -94,9 +94,9 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
      */
     public void updateView() {
         if(!myImageSelector.isEmpty()) {
-            GameMethods.shell().setVariable("$this", this);
-            GameMethods.shell().evaluate(myImageSelector);
-            imgIndex.set(Integer.parseInt(GameMethods.shell().getVariable("$return").toString()));
+            GameData.shell().setVariable("$this", this);
+            GameData.shell().evaluate(myImageSelector);
+            imgIndex.set(Integer.parseInt(GameData.shell().getVariable("$return").toString()));
         } else imgIndex.set(0);
     }
 
@@ -117,6 +117,6 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
     @Override
     public void handle(MouseEvent event) {
         System.out.println("MouseEvent from entity of id " + myID);
-        GameMethods.addArgument(event, new ClickTag(Entity.class, myID));
+        GameData.addArgument(event, new ClickTag(Entity.class, myID));
     }
 }

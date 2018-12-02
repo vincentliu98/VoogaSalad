@@ -67,9 +67,9 @@ public class Tile extends PropertyHolder<Tile> implements GameObject, EventHandl
      */
     public void updateView() {
         if(!myImageSelector.isEmpty()) {
-            GameMethods.shell().setVariable("$this", this);
-            GameMethods.shell().evaluate(myImageSelector);
-            imgIndex.set(Integer.parseInt(GameMethods.shell().getVariable("$return").toString()));
+            GameData.shell().setVariable("$this", this);
+            GameData.shell().evaluate(myImageSelector);
+            imgIndex.set(Integer.parseInt(GameData.shell().getVariable("$return").toString()));
         } else imgIndex.set(0);
     }
 
@@ -87,6 +87,6 @@ public class Tile extends PropertyHolder<Tile> implements GameObject, EventHandl
     @Override
     public void handle(MouseEvent event) {
         System.out.println("MouseEvent on tile of id " + myID);
-        GameMethods.addArgument(event, new ClickTag(Tile.class, myID));
+        GameData.addArgument(event, new ClickTag(Tile.class, myID));
     }
 }
