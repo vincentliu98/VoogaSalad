@@ -29,13 +29,18 @@ public interface NodeInstanceController {
      * Get the corresponding GameObjectInstance for a JavaFx Node.
      *
      * @param node: The Node whose corresponding GameObjectInstance will be queried.
+     * @return The corresponding GameObjectInstance.
+     * @throws GameObjectInstanceNotFoundException
      */
-    void getGameObjectInstance(Node node);
+    GameObjectInstance getGameObjectInstance(Node node) throws GameObjectInstanceNotFoundException;
+
 
     /**
      * Get the corresponding Node for a GameObjectInstance.
      *
      * @param gameObjectInstance: The GameObjectInstance whose corresponding Node will be queried.
+     * @return The corresponding Node.
+     * @throws NodeNotFoundException
      */
-    void getNode(GameObjectInstance gameObjectInstance);
+    Node getNode(GameObjectInstance gameObjectInstance) throws NodeNotFoundException;
 }
