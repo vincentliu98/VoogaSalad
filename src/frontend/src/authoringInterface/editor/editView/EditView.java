@@ -17,12 +17,9 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabDragPolicy;
 import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.layout.StackPane;
-import org.codehaus.groovy.runtime.metaclass.MetaMethodIndex;
 import utils.NodeInstanceController;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 
 /**
  * EditView Class (TabPane > Pane)
@@ -51,6 +48,9 @@ public class EditView implements SubView<TabPane> {
     private Tab mainTab;
     private Tab phaseNodeTab;
     private Tab gridTab;
+    private Integer index;
+    private Stage newStage;
+    private TabPane newTabPane;
 
     /**
      * This method constructs the tabView.
@@ -65,7 +65,7 @@ public class EditView implements SubView<TabPane> {
         rowNumber = row;
         colNumber = col;
         initializeTab();
-        tabPane.setTabDragPolicy(TabDragPolicy.REORDER);
+        tabPane.setTabDragPolicy(TabDragPolicy.FIXED);
         tabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
     }
 
@@ -92,17 +92,20 @@ public class EditView implements SubView<TabPane> {
         phaseNodeTab.setContent(phaseView.getView());
         tabPane.getTabs().addAll(mainTab, gridTab, phaseNodeTab);
 
-        mainLabel.setOnMouseDragged(e -> {
-            Point2D mouseLoc = new Point2D(e.getScreenX(), e.getScreenY());
-            splitTab(mouseLoc, mainTab);
-        });
+//        mainLabel.setOnMouseDragged(e -> {
+//            index = 0;
+//            Point2D mouseLoc = new Point2D(e.getScreenX(), e.getScreenY());
+//            splitTab(mouseLoc, mainTab, index);
+//        });
         gridLabel.setOnMouseDragged(e -> {
+            index = 1;
             Point2D mouseLoc = new Point2D(e.getScreenX(), e.getScreenY());
-            splitTab(mouseLoc, gridTab);
+            splitTab(mouseLoc, gridTab, index);
         });
         phaseLabel.setOnMouseDragged(e -> {
+            index = 2;
             Point2D mouseLoc = new Point2D(e.getScreenX(), e.getScreenY());
-            splitTab(mouseLoc, phaseNodeTab);
+            splitTab(mouseLoc, phaseNodeTab, index);
         });
     }
     
@@ -111,9 +114,8 @@ public class EditView implements SubView<TabPane> {
         tab.setGraphic(label);
     }
 
-    private void splitTab(Point2D mouseLoc, Tab tab) {
+    private void splitTab(Point2D mouseLoc, Tab tab, int index) {
         StackPane header = (StackPane) tabPane.lookup(".tab-header-area");
-
         if(!header.getBoundsInLocal().contains(mouseLoc)){
             openModal(tab).show();
         }
@@ -122,8 +124,8 @@ public class EditView implements SubView<TabPane> {
 
     private Stage openModal(Tab tab) {
             tabPane.getTabs().remove(tab);
-            Stage newStage = new Stage();
-            TabPane newTabPane = new TabPane();
+            newTabPane = new TabPane();
+            newStage = new Stage();
             newTabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
             newTabPane.getTabs().add(tab);
             Scene scene = new Scene(new BorderPane(newTabPane), SCREEN_WIDTH, SCREEN_HEIGHT);
