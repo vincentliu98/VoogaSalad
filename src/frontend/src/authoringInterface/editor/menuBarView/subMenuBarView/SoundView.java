@@ -27,6 +27,11 @@ public class SoundView {
     private File file;
     private Media media;
     private MediaPlayer mediaPlayer;
+    private Label label;
+    private Stage stage;
+    private VBox root;
+    private HBox audioRoot;
+    private String path;
 
     Image startImg = new Image(
             this.getClass().getClassLoader().getResourceAsStream("startAudio.png"),
@@ -37,11 +42,6 @@ public class SoundView {
             ICON_WIDTH, ICON_HEIGHT, true, true
     );
 
-    private Label label;
-    private Stage stage;
-    VBox root;
-    HBox audioRoot;
-    private String path;
 
     public SoundView() {
         root = new VBox();
@@ -90,6 +90,7 @@ public class SoundView {
             image.setOnMouseClicked(this::playMusic);
         }
         catch (Exception e){
+            audioRoot.getChildren().clear();
         }
     }
 
@@ -105,11 +106,11 @@ public class SoundView {
         mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         mediaPlayer.play();
-        stage.setOnCloseRequest(e -> mediaPlayer.stop());
-        image.setOnMouseClicked(this::stopMusic);
+        stage.setOnCloseRequest(e -> stopMusic());
+        image.setOnMouseClicked(e -> stopMusic());
     }
 
-    private void stopMusic(MouseEvent mouseEvent) {
+    private void stopMusic() {
         var image = new ImageView(startImg);
         image.setStyle("-fx-cursor: hand;");
         audioRoot.getChildren().clear();
