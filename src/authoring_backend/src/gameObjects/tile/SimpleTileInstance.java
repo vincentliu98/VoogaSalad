@@ -28,7 +28,7 @@ public class SimpleTileInstance implements TileInstance {
             Supplier<TileClass> getTileClassFunc) {
         this.className = new ReadOnlyStringWrapper();
         this.className.setValue(className);
-        this.instanceName = new SimpleStringProperty();
+        this.instanceName = new SimpleStringProperty(className);
         this.coord = new SimpleObjectProperty<>(topLeftCoord);
         this.imagePathList = imagePathList;
         this.propertiesMap = properties;

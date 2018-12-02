@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
+import utils.NodeInstanceController;
 
 /**
  * This class organizes the cell factory call back methods into a nicer format.

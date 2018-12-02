@@ -2,7 +2,6 @@ package authoringInterface.editor.editView;
 
 import api.SubView;
 import authoring.AuthoringTools;
-import authoringInterface.View;
 import authoringInterface.customEvent.UpdateStatusEventListener;
 import authoringInterface.editor.memento.Editor;
 import gameObjects.crud.GameObjectsCRUDInterface;
@@ -17,11 +16,11 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabDragPolicy;
 import javafx.scene.control.TabPane.TabClosingPolicy;
+import utils.NodeInstanceController;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-
 
 /**
  * EditView Class (TabPane > Pane)
@@ -45,6 +44,7 @@ public class EditView implements SubView<TabPane> {
     private int rowNumber;
     private int colNumber;
     private EditGridView gridView;
+    private NodeInstanceController nodeInstanceController;
     private PhaseChooserPane phaseView;
     private Tab mainTab;
     private Tab phaseNodeTab;
@@ -55,9 +55,10 @@ public class EditView implements SubView<TabPane> {
      *
      * @return A tabView Node to be displayed at the left side of the createGraph window.
      */
-    public EditView(AuthoringTools authTools, GroovyPaneFactory groovyPaneFactory, int row, int col, GameObjectsCRUDInterface manager){
+    public EditView(AuthoringTools authTools, GroovyPaneFactory groovyPaneFactory, int row, int col, GameObjectsCRUDInterface manager, NodeInstanceController controller) {
         this.authTools = authTools;
         this.groovyPaneFactory = groovyPaneFactory;
+        nodeInstanceController = controller;
         objectManager = manager;
         rowNumber = row;
         colNumber = col;
@@ -75,7 +76,7 @@ public class EditView implements SubView<TabPane> {
         gridTab = new Tab();
         Label gridLabel = new Label("Grid");
         labelOnTab(gridLabel, gridTab);
-        gridView = new EditGridView(rowNumber, colNumber, objectManager);
+        gridView = new EditGridView(rowNumber, colNumber, objectManager, nodeInstanceController);
         gridTab.setContent(gridView.getView());
 
         phaseNodeTab = new Tab();

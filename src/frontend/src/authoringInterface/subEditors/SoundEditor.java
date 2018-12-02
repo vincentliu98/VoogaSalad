@@ -3,6 +3,7 @@ package authoringInterface.subEditors;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.sound.SoundClass;
 import gameObjects.sound.SoundInstance;
+import utils.NodeInstanceController;
 
 /**
  * This class provides an editor for sound files used in the editor.
