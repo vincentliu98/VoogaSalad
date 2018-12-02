@@ -5,10 +5,8 @@ import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.gameObject.GameObjectClass;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import utils.NodeInstanceController;
 
@@ -48,7 +46,12 @@ public class CustomTreeCellImpl extends TreeCell<String> {
             }
         });
         addMenu.getItems().add(addMenuItem);
-        setOnDragDetected(e -> startFullDrag());
+        setOnDragDetected(e -> {
+            Dragboard db = startDragAndDrop(TransferMode.ANY);
+            ClipboardContent cc = new ClipboardContent();
+            cc.putString(getString());
+            db.setContent(cc);
+        });
         MenuItem editMenuItem = new MenuItem("Edit this GameObject");
         MenuItem deleteMenuItem = new MenuItem("Delete this GameObject");
         editMenuItem.setOnAction(e -> {

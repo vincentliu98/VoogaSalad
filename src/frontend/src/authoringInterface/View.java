@@ -10,7 +10,10 @@ import authoringInterface.sidebar.SideView;
 import authoringInterface.sidebar.StatusView;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.crud.SimpleGameObjectsCRUD;
+import gameObjects.entity.EntityClass;
+import gameObjects.gameObject.GameObjectClass;
 import graphUI.groovy.GroovyPaneFactory;
+import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
@@ -18,6 +21,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
@@ -51,6 +55,7 @@ public class View implements ParentView<SubView>, DraggingCanvas {
     private static final double SIDEBAR_WIDTH = 247;
     private static final int ROW_NUMBER = 10;
     private static final int COL_NUMBER = 7;
+    private static final double PREVIEW_OPACITY = 0.5;
 
     /**
      * Constructor for an createGraph window, with an AnchorPane as the root Node, and the AnchorPane constraints on top, left and right are 0.
@@ -120,57 +125,90 @@ public class View implements ParentView<SubView>, DraggingCanvas {
     }
 
     /**
+     * This method handles the dragging preview when the user drags some TreeItem somewhere.
+     *
+     * @param e: A DragEvent which is a DragOverEvent.
+     */
+    private void handleMouseDragged(DragEvent e) {
+        if (preview != null) {
+            if (preview instanceof ImageView) {
+                ((ImageView) preview).setX(e.getX());
+                ((ImageView) preview).setY(e.getY());
+            }
+        }
+        e.acceptTransferModes(TransferMode.ANY);
+        GameObjectClass draggedClass = gameObjectManager.getGameObjectClass(e.getDragboard().getString());
+        switch (draggedClass.getType()) {
+            case ENTITY:
+                ObservableList<String> imagePaths = ((EntityClass) draggedClass).getImagePathList();
+                if (imagePaths == null || imagePaths.isEmpty()) {
+                    preview = new Text(draggedClass.getClassName().getValue());
+                    preview.setOpacity(PREVIEW_OPACITY);
+                    ((Text) preview).setX(e.getX());
+                    ((Text) preview).setY(e.getY());
+                } else {
+                    preview = new ImageView(imagePaths.get(0));
+                    preview.setOpacity(PREVIEW_OPACITY);
+                    ((ImageView) preview).setX(e.getX());
+                    ((ImageView) preview).setY(e.getY());
+                }
+        }
+        rootPane.getChildren().add(preview);
+    }
+
+    /**
      * Setup the dragging canvas event filters.
      */
     @Override
     public void setupDraggingCanvas() {
-        rootPane.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
-            if (e.getTarget() instanceof TreeCell) {
-                //noinspection unchecked
-                TreeItem<String> item = (TreeItem<String>) ((TreeCell) e.getTarget()).getTreeItem();
-                if (item == null || !item.isLeaf()) {
-                    return;
-                }
-                if (item.getGraphic() != null) {
-                    ImageView graphic = (ImageView) item.getGraphic();
-                    preview = new ImageView(graphic.getImage());
-                    preview.setOpacity(0.5);
-                    ((ImageView) preview).setX(e.getX());
-                    ((ImageView) preview).setY(e.getY());
-                    preview.setMouseTransparent(true);
-                } else {
-                    preview = new Text(item.getValue());
-                    ((Text) preview).setX(e.getX());
-                    ((Text) preview).setY(e.getY());
-                    preview.setMouseTransparent(true);
-                }
-            }
-        });
-        rootPane.addEventFilter(MouseDragEvent.MOUSE_DRAG_OVER, e -> {
-            if (preview == null) {
-                return;
-            }
-            if (!rootPane.getChildren().contains(preview)) {
-                rootPane.getChildren().add(preview);
-            }
-            preview.setMouseTransparent(true);
-            if (preview != null) {
-                if (preview instanceof ImageView) {
-                    ((ImageView) preview).setX(e.getX());
-                    ((ImageView) preview).setY(e.getY());
-                } else if (preview instanceof Text) {
-                    ((Text) preview).setX(e.getX());
-                    ((Text) preview).setY(e.getY());
-                }
-            }
-        });
-
-        rootPane.addEventFilter(MouseDragEvent.MOUSE_DRAG_RELEASED, e -> {
-            if (preview == null) {
-                return;
-            }
-            rootPane.getChildren().remove(preview);
-            preview = null;
-        });
+        rootPane.setOnDragOver(this::handleMouseDragged);
+//        rootPane.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
+//            if (e.getTarget() instanceof TreeCell) {
+//                //noinspection unchecked
+//                TreeItem<String> item = (TreeItem<String>) ((TreeCell) e.getTarget()).getTreeItem();
+//                if (item == null || !item.isLeaf()) {
+//                    return;
+//                }
+//                if (item.getGraphic() != null) {
+//                    ImageView graphic = (ImageView) item.getGraphic();
+//                    preview = new ImageView(graphic.getImage());
+//                    preview.setOpacity(0.5);
+//                    ((ImageView) preview).setX(e.getX());
+//                    ((ImageView) preview).setY(e.getY());
+//                    preview.setMouseTransparent(true);
+//                } else {
+//                    preview = new Text(item.getValue());
+//                    ((Text) preview).setX(e.getX());
+//                    ((Text) preview).setY(e.getY());
+//                    preview.setMouseTransparent(true);
+//                }
+//            }
+//        });
+//        rootPane.addEventFilter(MouseDragEvent.MOUSE_DRAG_OVER, e -> {
+//            if (preview == null) {
+//                return;
+//            }
+//            if (!rootPane.getChildren().contains(preview)) {
+//                rootPane.getChildren().add(preview);
+//            }
+//            preview.setMouseTransparent(true);
+//            if (preview != null) {
+//                if (preview instanceof ImageView) {
+//                    ((ImageView) preview).setX(e.getX());
+//                    ((ImageView) preview).setY(e.getY());
+//                } else if (preview instanceof Text) {
+//                    ((Text) preview).setX(e.getX());
+//                    ((Text) preview).setY(e.getY());
+//                }
+//            }
+//        });
+//
+//        rootPane.addEventFilter(MouseDragEvent.MOUSE_DRAG_RELEASED, e -> {
+//            if (preview == null) {
+//                return;
+//            }
+//            rootPane.getChildren().remove(preview);
+//            preview = null;
+//        });
     }
 }
