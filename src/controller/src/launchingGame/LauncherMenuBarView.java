@@ -68,7 +68,6 @@ public class LauncherMenuBarView {
 //        if (file != null) {
 //            try {
 //                gameLoader.loadGame(file);
-//                // TODO
 //            } catch (IllegalSavedGameException e) {
 //                Alert alert = new Alert(Alert.AlertType.ERROR);
 //                alert.setTitle("Something went wrong...");

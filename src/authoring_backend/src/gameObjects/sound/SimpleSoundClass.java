@@ -1,17 +1,51 @@
 package gameObjects.sound;
 
 import gameObjects.gameObject.GameObjectInstance;
-import javafx.beans.property.ReadOnlyIntegerProperty;
-import javafx.beans.property.ReadOnlyStringProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
+import gameObjects.gameObject.GameObjectType;
+import javafx.beans.property.*;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import javafx.collections.ObservableSet;
 
+import java.util.Collection;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class SimpleSoundClass implements SoundClass {
+    private ReadOnlyStringWrapper className;
+    private ReadOnlyIntegerWrapper classId;
+    private SimpleStringProperty mediaPath;
+    private ObservableMap<String, String> propertiesMap;
+
+    private SoundInstanceFactory myFactory;
+    private BiConsumer<String, String> changeSoundClassNameFunc;
+    private Function<String, Collection<GameObjectInstance>> getAllSoundInstancesFunc;
+    private Function<Integer, Boolean> deleteSoundInstanceFunc;
+
+    public SimpleSoundClass(String className) {
+        this.className = new ReadOnlyStringWrapper(className);
+        classId = new ReadOnlyIntegerWrapper();
+        mediaPath = new SimpleStringProperty();
+        propertiesMap = FXCollections.observableHashMap();
+    }
+
+    public SimpleSoundClass(
+            String className,
+            SoundInstanceFactory soundInstanceFactory,
+            BiConsumer<String, String> changeSoundClassNameFunc,
+            Function<String, Collection<GameObjectInstance>> getAllSoundInstancesFunc,
+            Function<Integer, Boolean> deleteSoundInstanceFunc) {
+        this(className);
+        this.myFactory = soundInstanceFactory;
+        this.changeSoundClassNameFunc = changeSoundClassNameFunc;
+        this.getAllSoundInstancesFunc = getAllSoundInstancesFunc;
+        this.deleteSoundInstanceFunc = deleteSoundInstanceFunc;
+    }
+
+
     /**
      * This method sets the id of the GameObject Class.
      *
@@ -19,7 +53,7 @@ public class SimpleSoundClass implements SoundClass {
      */
     @Override
     public ReadOnlyIntegerProperty getClassId() {
-        return null;
+        return classId.getReadOnlyProperty();
     }
 
     /**
@@ -30,7 +64,7 @@ public class SimpleSoundClass implements SoundClass {
      */
     @Override
     public void setClassId(Consumer<SimpleIntegerProperty> setFunc) {
-
+        setFunc.accept(classId);
     }
 
     /**
@@ -40,18 +74,17 @@ public class SimpleSoundClass implements SoundClass {
      */
     @Override
     public ReadOnlyStringProperty getClassName() {
-        return null;
+        return className.getReadOnlyProperty();
     }
 
-    /**
-     * This method receives a function that sets the name of the GameObject Class.
-     * The name of the GameObject Class is set by the received function.
-     *
-     * @param setFunc the function that sets the class name
-     */
     @Override
-    public void setClassName(Consumer<SimpleStringProperty> setFunc) {
+    public void changeClassName(String newClassName) {
+        changeSoundClassNameFunc.accept(className.getValue(), newClassName);
+    }
 
+    @Override
+    public void setClassName(String newClassName) {
+        className.setValue(newClassName);
     }
 
     /**
@@ -61,7 +94,7 @@ public class SimpleSoundClass implements SoundClass {
      */
     @Override
     public ObservableMap<String, String> getPropertiesMap() {
-        return null;
+        return propertiesMap;
     }
 
     /**
@@ -73,7 +106,15 @@ public class SimpleSoundClass implements SoundClass {
      */
     @Override
     public boolean addProperty(String propertyName, String defaultValue) {
-        return false;
+        if (propertiesMap.containsKey(propertyName)) {
+            return false;
+        }
+        propertiesMap.put(propertyName, defaultValue);
+        Collection<SoundInstance> soundInstances = getAllInstances();
+        for (SoundInstance s : soundInstances) {
+            s.addProperty(propertyName, defaultValue);
+        }
+        return true;
     }
 
     /**
@@ -84,58 +125,15 @@ public class SimpleSoundClass implements SoundClass {
      */
     @Override
     public boolean removeProperty(String propertyName) {
-        return false;
-    }
-
-    /**
-     * This method adds the image path to the GameObject Class and to all instances of the class.
-     *
-     * @param path file path of the image
-     */
-    @Override
-    public void addImagePath(String path) {
-
-    }
-
-    /**
-     * This method gets the image path list of the GameObject Class.
-     *
-     * @return a list of the file paths of the images
-     */
-    @Override
-    public ObservableList<String> getImagePathList() {
-        return null;
-    }
-
-    /**
-     * This method removes the image path from the Entity Class and from all instances of the class.
-     *
-     * @param index index of the image file path in the list
-     * @return true if the image file path successfully removed
-     */
-    @Override
-    public boolean removeImagePath(int index) {
-        return false;
-    }
-
-    /**
-     * This method sets the GroovyCode for choosing the image to display from the list of images.
-     *
-     * @param blockCode GroovyCode
-     */
-    @Override
-    public void setImageSelector(String blockCode) {
-
-    }
-
-    /**
-     * This method gets the image selector code.
-     *
-     * @return image selector code
-     */
-    @Override
-    public String getImageSelectorCode() {
-        return null;
+        if (!propertiesMap.containsKey(propertyName)) {
+            return false;
+        }
+        propertiesMap.remove(propertyName);
+        Collection<SoundInstance> soundInstances = getAllInstances();
+        for (SoundInstance s : soundInstances) {
+            s.removeProperty(propertyName);
+        }
+        return true;
     }
 
     /**
@@ -144,18 +142,40 @@ public class SimpleSoundClass implements SoundClass {
      * @return the set of all instances of the class
      */
     @Override
-    public Set<GameObjectInstance> getInstances() {
-        return null;
+    public Collection<SoundInstance> getAllInstances() {
+        ObservableSet<SoundInstance> s = FXCollections.observableSet();
+        Collection<GameObjectInstance> instances = getAllSoundInstancesFunc.apply(getClassName().getValue());
+        for (GameObjectInstance i : instances) {
+            if (i.getType() == GameObjectType.SOUND) {
+                s.add((SoundInstance) i);
+            }
+        }
+        return s;
     }
 
     /**
      * This method removes the instance with the specified instance id
      *
-     * @param id id of the instance
+     * @param soundInstanceId id of the instance
      * @return true if the instance exists
      */
     @Override
-    public boolean deleteInstance(int id) {
-        return false;
+    public boolean deleteInstance(int soundInstanceId) {
+        return deleteSoundInstanceFunc.apply(soundInstanceId);
+    }
+
+    @Override
+    public SoundInstance createInstance() {
+        return myFactory.createInstance(this);
+    }
+
+    @Override
+    public SimpleStringProperty getMediaFilePath() {
+        return mediaPath;
+    }
+
+    @Override
+    public void setMediaFilePath(String mediaFilePath) {
+
     }
 }

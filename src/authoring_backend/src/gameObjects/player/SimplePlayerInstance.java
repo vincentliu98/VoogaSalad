@@ -3,35 +3,31 @@ package gameObjects.player;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
-import gameObjects.gameObject.GameObjectInstance;
 import javafx.collections.ObservableSet;
 
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.function.Consumer;
 
 public class SimplePlayerInstance implements PlayerInstance {
     private ReadOnlyStringWrapper className;
+    private SimpleStringProperty instanceName;
     private ReadOnlyIntegerWrapper instanceId;
-    private SimpleIntegerProperty playerId;
+    private SimpleStringProperty imagePath;
     private ObservableMap<String, String> propertiesMap;
     private ObservableSet<Integer> entitiesSet;
-    private Consumer<GameObjectInstance> returnInstanceIdFunc;
+//    Supplier<PlayerClass> getPlayerClassFunc;
 
 
-    SimplePlayerInstance(String className, int playerId,
-                         ObservableMap<String, String> properties,
-                         Consumer<GameObjectInstance> returnInstanceIdFunc
-                         ) {
+    public SimplePlayerInstance(
+            String className) {
         this.className = new ReadOnlyStringWrapper(className);
-        this.playerId = new ReadOnlyIntegerWrapper();
-        this.playerId.setValue(playerId);
-        this.propertiesMap = properties;
+        this.instanceName = new SimpleStringProperty();
+        this.imagePath = new SimpleStringProperty();
+        this.propertiesMap = FXCollections.observableHashMap();
         this.entitiesSet = FXCollections.observableSet();
-        this.returnInstanceIdFunc = returnInstanceIdFunc;
+//        this.getPlayerClassFunc = getPlayerClassFunc;
         instanceId = new ReadOnlyIntegerWrapper();
-    }
-
-    public void setClassName(String name) {
-
     }
 
     @Override
@@ -47,20 +43,43 @@ public class SimplePlayerInstance implements PlayerInstance {
     @Override
     public ReadOnlyStringProperty getClassName() { return className; }
 
-    public Consumer<GameObjectInstance> getReturnInstanceIdFunc() {
-        return returnInstanceIdFunc;
+    @Override
+    public SimpleStringProperty getInstanceName() {
+        return instanceName;
     }
 
     @Override
-    public boolean addProperty(String propertyName, String defaultValue) {
-        if (!propertiesMap.containsKey(propertyName)) {
-            propertiesMap.put(propertyName, defaultValue);
-            return true;
-        }
-        return false;
+    public void setInstanceName(String newInstanceName) {
+        instanceName.setValue(newInstanceName);
     }
 
-    public boolean addEntity(int entityId){
+    @Override
+    public ObservableMap<String, String> getPropertiesMap() { return propertiesMap; }
+
+
+    @Override
+    public void addProperty(String propertyName, String defaultValue) {
+        propertiesMap.put(propertyName, defaultValue);
+    }
+
+    @Override
+    public void removeProperty(String propertyName) {
+        propertiesMap.remove(propertyName);
+    }
+
+    @Override
+    public boolean changePropertyValue(String propertyName, String newValue) {
+        if (!propertiesMap.containsKey(propertyName)) {
+            return false;
+        }
+        propertiesMap.put(propertyName, newValue);
+        return true;
+    }
+
+    public Set<Integer> getEntityIDs() { return new TreeSet<>(entitiesSet); }
+
+    @Override
+    public boolean addEntity(int entityId) {
         if (!entitiesSet.contains(entityId)){
             entitiesSet.add(entityId);
             return true;
@@ -68,16 +87,19 @@ public class SimplePlayerInstance implements PlayerInstance {
         else return false;
     }
 
-    public boolean removeEntity(int entityId){
+    @Override
+    public boolean removeEntity(int entityId) {
         return entitiesSet.remove(entityId);
-
     }
 
     @Override
-    public boolean removeProperty(String propertyName) {
-        return propertiesMap.remove(propertyName) != null;
+    public void removeAllEntities() {
+        entitiesSet.clear();
     }
 
-    @Override
-    public SimpleIntegerProperty getPlayerID() { return playerId; }
+//    @Override
+//    public PlayerClass getGameObjectClass() {
+//        return getPlayerClassFunc.get();
+//    }
+
 }

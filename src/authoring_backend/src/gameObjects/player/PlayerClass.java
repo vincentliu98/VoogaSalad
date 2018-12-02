@@ -1,14 +1,14 @@
 package gameObjects.player;
 
-import gameObjects.gameObject.GameObjectClass;
-import gameObjects.gameObject.GameObjectType;
+        import gameObjects.gameObject.GameObjectClass;
+        import gameObjects.gameObject.GameObjectType;
 
-public interface PlayerClass extends GameObjectClass {
+public interface PlayerClass {
 
-    @Override
+
     default GameObjectType getType() {
         return GameObjectType.PLAYER;
     }
 
-    PlayerInstance createInstance(int playerId);
+    PlayerInstance createInstance();
 }

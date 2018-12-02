@@ -30,6 +30,7 @@ import java.util.function.BiConsumer;
  *
  * @author Haotian
  * @author Amy
+ * @author jl729
  */
 public class EditorMenuBarView implements SubView<MenuBar> {
     private MenuBar menuBar;
@@ -106,7 +107,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
     }
 
     void handleSave(ActionEvent event) {
-        // TODO: 11/17/18 Enable and Disable the undo and redo button
+        // TODO: 11/17/18 Enable and Disable the undo and redo button (handleUndo + handleRedo function)
         editorCaretaker.addMemento(editor.save());
         editor.setState(editorCaretaker.getMemento(currentMemento++).getSavedState());
     }
@@ -128,12 +129,10 @@ public class EditorMenuBarView implements SubView<MenuBar> {
     void handleUndo(ActionEvent event) {
         if (currentMemento < 2) return;
         editor.restoreToState(editorCaretaker.getMemento(--currentMemento));
-        // TODO: 11/17/18 Redisplay content
         // need to scan through the map and find out which ones need update
     }
     void handleRedo(ActionEvent event) {
         editor.restoreToState(editorCaretaker.getMemento(++currentMemento));
-        // TODO: 11/17/18 Redisplay content
         // need to scan through the map and find out which ones need update
     }
     void handleRunProject(ActionEvent event) {

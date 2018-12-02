@@ -1,14 +1,16 @@
 package gameObjects.crud;
 
-import gameObjects.category.CategoryClass;
-import gameObjects.entity.EntityClass;
-import gameObjects.entity.EntityInstance;
-import gameObjects.exception.DuplicateClassException;
-import gameObjects.exception.NoEntityClassException;
-import gameObjects.exception.NoTileClassException;
-import gameObjects.gameObject.GameObjectClass;
-import gameObjects.tile.TileClass;
-import gameObjects.tile.TileInstance;
+import gameObjects.category.*;
+import gameObjects.entity.*;
+import gameObjects.exception.*;
+import gameObjects.gameObject.*;
+import gameObjects.player.PlayerInstance;
+import gameObjects.tile.*;
+import gameObjects.sound.*;
+import gameObjects.turn.Turn;
+import grids.Point;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
 
 import java.util.Collection;
 
@@ -20,66 +22,139 @@ import java.util.Collection;
  */
 public interface GameObjectsCRUDInterface {
 
+
     /**
      * This method creates a Tile Class and adds it to the map.
-     * @param name the name of the Tile Class to be created
+     * @param className the name of the Tile Class to be created
      * @return the Tile Class if there is no name collision and the method is successful
      * @throws DuplicateClassException if a class with the same name exists
      */
-    TileClass createTileClass(String name);
+    TileClass createTileClass(String className);
 
     /**
      * This method gets the Tile Class from the map.
-     * @param name the name of the Tile Class to be retrieved
+     * @param className the name of the Tile Class to be retrieved
      * @return the Tile Class with the name
      * @throws NoTileClassException if there is no such Tile Class
      */
-    TileClass getTileClass(String name);
-
-    /**
-     * This method deletes the specified Tile Class.
-     * @param name the name of the Tile Class to be deleted
-     * @return True if the Tile Class exists
-     */
-    boolean deleteTileClass(String name);
-
-    /**
-     * This method deletes the specified Tile Instance.
-     * @param instanceId the id of the instance
-     * @return True if the Tile Instance with the instanceId exists
-     */
-    boolean deleteTileInstance(int instanceId);
-
-    /**
-     * This method creates an Entity Class and adds it to the map.
-     * @param name the name of the Entity Class to be created
-     * @return the Entity Class if there is no name collision and the method is successful
-     * @throws DuplicateClassException if a class with the same name exists
-     */
-    EntityClass createEntityClass(String name);
-
-    /**
-     * This method gets the Entity Class from the map.
-     * @param name the name of the Entity Class to be retrieved
-     * @return the Entity Class with the name
-     * @throws NoEntityClassException if there is no such Entity Class
-     */
-    EntityClass getEntityClass(String name);
-
-    /**
-     * This method deletes the specified Entity Class.
-     * @param name the name of the Entity Class to be deleted
-     * @return True if the Entity Class exists
-     */
-    boolean deleteEntityClass(String name);
+    TileClass getTileClass(String className);
 
     /**
      *
-     * This method deletes the specified Entity Instance.
-     * @param instanceId the id of the instance
-     * @return True if the Entity Instance with the instanceId exists
+     * @param className
+     * @return
      */
-    boolean deleteEntityInstance(int instanceId);
+    TileInstance createTileInstance(String className, Point topLeftCoord);
+
+
+    /**
+     *
+     * @param tileClass
+     * @return
+     */
+    TileInstance createTileInstance(TileClass tileClass, Point topLeftCoord);
+
+    /**
+     * This method creates an Entity Class and adds it to the map.
+     * @param className the name of the Entity Class to be created
+     * @return the Entity Class if there is no name collision and the method is successful
+     * @throws DuplicateClassException if a class with the same name exists
+     */
+    EntityClass createEntityClass(String className);
+
+    /**
+     * This method gets the Entity Class from the map.
+     * @param className the name of the Entity Class to be retrieved
+     * @return the Entity Class with the name
+     * @throws NoEntityClassException if there is no such Entity Class
+     */
+    EntityClass getEntityClass(String className);
+
+    /**
+     *
+     * @param className
+     * @return
+     */
+    EntityInstance createEntityInstance(String className, int tileId, int playerID);
+
+    /**
+     *
+     * @param entityClass
+     * @return
+     */
+    EntityInstance createEntityInstance(EntityClass entityClass, int tileId, int playerID);
+
+
+    /**
+     * This method creates an Category Class and adds it to the map.
+     * @param className the name of the Class to be created
+     * @return the Category Class if there is no name collision and the method is successful
+     * @throws DuplicateClassException if a class with the same name exists
+     */
+    CategoryClass createCategoryClass(String className);
+
+    /**
+     * This method gets the Class from the map.
+     * @param className the name of the Class to be retrieved
+     * @return the Category Class with the name
+     * @throws NoCategoryClassException if there is no such Category Class
+     */
+    CategoryClass getCategoryClass(String className);
+
+    /**
+     *
+     * @param className
+     * @return
+     */
+    CategoryInstance createCategoryInstance(String className);
+
+    /**
+     *
+     * @param categoryClass
+     * @return
+     */
+    CategoryInstance createCategoryInstance(CategoryClass categoryClass);
+
+    /**
+     * This method creates an Sound Class and adds it to the map.
+     * @param className the name of the Class to be created
+     * @return the Sound Class if there is no name collision and the method is successful
+     * @throws DuplicateClassException if a class with the same name exists
+     */
+    SoundClass createSoundClass(String className);
+
+    /**
+     * This method gets the Sound Class from the map.
+     * @param className the name of the Class to be retrieved
+     * @return the Sound Class with the name
+     * @throws NoSoundClassException if there is no such Sound Class
+     */
+    SoundClass getSoundClass(String className);
+
+    /**
+     *
+     * @param className
+     * @return
+     */
+    SoundInstance createSoundInstance(String className);
+
+    /**
+     *
+     * @param soundClass
+     * @return
+     */
+    SoundInstance createSoundInstance(SoundClass soundClass);
+
+
+    PlayerInstance createPlayerInstance(String playerName);
+
+    Turn createTurn(String phaseName);
+
+    Turn getTurn(String phaseName);
+
+
+    boolean deleteTurn(String phaseName);
+
 
     /**
      *  Sets the dimension of the entire grid
@@ -88,29 +163,106 @@ public interface GameObjectsCRUDInterface {
      */
     void setDimension(int width, int height);
 
+
+
+    /*
+        New methods!!!
+     */
+
     /**
-     *
+     * Returns the GameObject Class with the specified name
      * @param className
      * @return
      */
     GameObjectClass getGameObjectClass(String className);
 
-    boolean changeGameObjectClassName(String oldName, String newName);
+    /**
+     * Returns the GameObject Instance with the specified name
+     * @param instanceId
+     * @return
+     */
+    GameObjectInstance getGameObjectInstance(int instanceId);
 
-    CategoryClass createCategoryClass(String name);
+    /**
+     *
+     * @param className
+     * @return
+     */
+    Collection<GameObjectInstance> getAllInstances(String className);
 
-    CategoryClass getCategoryClass(String name);
+    /**
+     *
+     * @param gameObjectClass
+     * @return
+     */
+    Collection<GameObjectInstance> getAllInstances(GameObjectClass gameObjectClass);
 
-    boolean deleteCategoryClass(String name);
+    /**
+     *
+     * @param x
+     * @param y
+     * @return
+     */
+    Collection<GameObjectInstance> getAllInstancesAtPoint(int x, int y);
+
+
+    /**
+     *
+     * @param point
+     * @return
+     */
+    Collection<GameObjectInstance> getAllInstancesAtPoint(Point point);
+
+    /**
+     *
+     * @param oldClassName
+     * @param newClassName
+     * @return
+     */
+    boolean changeGameObjectClassName(String oldClassName, String newClassName);
+
 
     /**
      * This method deletes the GameObjectClasses with the input String name. It scans through all possible maps of the String -> GameObjectClass.
      *
-     * @param name: The name of the GameObjectClass to be deleted.
+     * @param className: The name of the GameObjectClass to be deleted.
      * @return: true if the GameObjectClass is successfully deleted and false otherwise.
      */
-    boolean deleteGameObjectClass(String name);
+    boolean deleteGameObjectClass(String className);
 
-    Collection<TileInstance> getTileInstances();
-    Collection<EntityInstance> getEntityInstances();
+    boolean deleteGameObjectClass(int classId);
+
+    /**
+     *
+     * @param gameObjectClass
+     */
+    boolean deleteGameObjectClass(GameObjectClass gameObjectClass);
+
+
+    boolean deleteGameObjectInstance(int instanceId);
+
+
+    /**
+     * Delete all instances currently in the CRUD.
+     */
+    void deleteAllInstances();
+
+
+    /**
+     * Getters
+     *
+     * @return ObservableList of things
+     */
+    ObservableList<EntityClass> getEntityClasses();
+    ObservableList<TileClass> getTileClasses();
+    ObservableList<CategoryClass> getCategoryClasses();
+    ObservableList<SoundClass> getSoundClasses();
+
+    ObservableList<EntityInstance> getEntityInstances();
+    ObservableList<TileInstance> getTileInstances();
+    ObservableList<CategoryInstance> getCategoryInstances();
+    ObservableList<SoundInstance> getSoundInstances();
+    ObservableList<PlayerInstance> getPlayerInstances();
+
+    int getDefaultPlayerID();
 }

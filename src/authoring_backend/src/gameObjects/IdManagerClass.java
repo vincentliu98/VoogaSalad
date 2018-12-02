@@ -1,8 +1,10 @@
 package gameObjects;
 
-import gameObjects.exception.DuplicateIdException;
+
+import gameObjects.exception.InvalidIdException;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
+import gameObjects.gameObject.GameObjectType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,112 +21,107 @@ import java.util.function.Function;
 
 public class IdManagerClass implements IdManager {
     private List<Integer> returnedClassIds;
-    private List<Integer> returnedTileInstanceIds;
-    private List<Integer> returnedEntityInstanceIds;
+    private List<Integer> returnedInstanceIds;
     private List<Integer> returnedPlayerInstanceIds;
 
+    Function<Integer, GameObjectClass> getClassFromMapFunc;
+    Function<Integer, GameObjectInstance> getInstanceFromMapFunc;
+
+
     private int classCount;
-    private int tileInstanceCount;
-    private int entityInstanceCount;
+    private int instanceCount;
     private int playerInstanceCount;
 
-    public IdManagerClass() {
-        classCount = 0;
-        tileInstanceCount = 0;
-        entityInstanceCount = 0;
+    public IdManagerClass(
+            Function<Integer, GameObjectClass> getClassFromMapFunc,
+            Function<Integer, GameObjectInstance> getInstanceFromMapFunc) {
+        classCount = 1;
+        instanceCount = 1;
         playerInstanceCount = 0;
         returnedClassIds = new ArrayList<>();
-        returnedTileInstanceIds = new ArrayList<>();
-        returnedEntityInstanceIds = new ArrayList<>();
+        returnedInstanceIds = new ArrayList<>();
         returnedPlayerInstanceIds = new ArrayList<>();
+
+        this.getClassFromMapFunc = getClassFromMapFunc;
+        this.getInstanceFromMapFunc = getInstanceFromMapFunc;
     }
 
     @Override
     public Consumer<GameObjectClass> requestClassIdFunc() {
-        int id;
-        if (!returnedClassIds.isEmpty()) {
-            id = returnedClassIds.remove(0);
-        } else {
-            id = classCount;
-            classCount++;
-        }
-        return gameObjectClass -> gameObjectClass.setClassId(simpleIntegerProperty -> simpleIntegerProperty.setValue(id));
-    }
-
-    @Override
-    public Consumer<GameObjectInstance> requestTileInstanceIdFunc() {
-        return tileInstance -> tileInstance.setInstanceId(simpleIntegerProperty -> {
-            int id;
-            if (!returnedTileInstanceIds.isEmpty()) {
-                id = returnedTileInstanceIds.remove(0);
-            } else {
-                id = tileInstanceCount;
-                tileInstanceCount++;
+        return gameObjectClass -> {
+            // Only set Ids for Classes without Ids
+            if (gameObjectClass.getClassId().getValue() == 0) {
+                int id;
+                if (!returnedClassIds.isEmpty()) {
+                    id = returnedClassIds.remove(0);
+                } else {
+                    id = classCount;
+                    classCount++;
+                }
+                gameObjectClass.setClassId(simpleIntegerProperty -> simpleIntegerProperty.setValue(id));
             }
-            simpleIntegerProperty.setValue(id);
-        });
-    }
-
-    @Override
-    public Consumer<GameObjectInstance> requestEntityInstanceIdFunc() {
-        return entityInstance -> entityInstance.setInstanceId(simpleIntegerProperty -> {
-            int id;
-            if (!returnedEntityInstanceIds.isEmpty()) {
-                id = returnedEntityInstanceIds.remove(0);
-            } else {
-                id = entityInstanceCount;
-                entityInstanceCount++;
-            }
-            simpleIntegerProperty.setValue(id);
-        });
+        };
     }
 
     @Override
     public Consumer<GameObjectClass> returnClassIdFunc() {
 
-        return (gameObjectClass) -> {
+        return gameObjectClass -> {
             int returnedId = gameObjectClass.getClassId().getValue();
-            if (classCount < returnedId || returnedClassIds.contains(returnedId)) {
-                throw new DuplicateIdException();
+            if (returnedId != 0) {
+                if (classCount < returnedId || returnedId < 0 || returnedClassIds.contains(returnedId)) {
+                    throw new InvalidIdException();
+                }
+                returnedClassIds.add(returnedId);
             }
-            returnedClassIds.add(returnedId);
+        };
+    }
+
+
+
+
+    @Override
+    public Consumer<GameObjectInstance> requestInstanceIdFunc() {
+        return gameObjectInstance -> {
+            // Only set Ids for Instances without Ids
+            if (gameObjectInstance.getInstanceId().getValue() == 0) {
+                int id;
+                if (!returnedInstanceIds.isEmpty()) {
+                    id = returnedInstanceIds.remove(0);
+                } else {
+                    id = instanceCount;
+                    instanceCount++;
+                }
+                gameObjectInstance.setInstanceId(simpleIntegerProperty -> simpleIntegerProperty.setValue(id));
+            }
         };
     }
 
     @Override
-    public Consumer<GameObjectInstance> returnTileInstanceIdFunc() {
-        return (tileInstance) -> {
-            int returnedId = tileInstance.getInstanceId().getValue();
-            if (tileInstanceCount < returnedId || returnedTileInstanceIds.contains(returnedId)) {
-                throw new DuplicateIdException();
-            }
-            returnedTileInstanceIds.add(returnedId);
-        };
-    }
+    public Consumer<GameObjectInstance> returnInstanceIdFunc() {
 
-    @Override
-    public Consumer<GameObjectInstance> returnEntityInstanceIdFunc() {
-        return (entityInstance) -> {
-            int returnedId = entityInstance.getInstanceId().getValue();
-            if (entityInstanceCount < returnedId || returnedEntityInstanceIds.contains(returnedId)) {
-                throw new DuplicateIdException();
+        return gameObjectInstance -> {
+            int returnedId = gameObjectInstance.getInstanceId().getValue();
+            if (returnedId != 0) {
+                if (instanceCount < returnedId || returnedId < 0 || returnedInstanceIds.contains(returnedId)) {
+                    throw new InvalidIdException();
+                }
+                returnedInstanceIds.add(returnedId);
             }
-            returnedEntityInstanceIds.add(returnedId);
         };
     }
 
     @Override
     public Function<Integer, Boolean> verifyClassIdFunc() {
-        return (i) -> classCount >= i && !returnedClassIds.contains(i);
+        return i -> getClassFromMapFunc.apply(i) != null;
     }
 
     @Override
     public Function<Integer, Boolean> verifyTileInstanceIdFunc() {
-        return (i) -> tileInstanceCount >= i && !returnedTileInstanceIds.contains(i);
-    }
-
-    @Override
-    public Function<Integer, Boolean> verifyEntityInstanceIdFunc() {
-        return (i) -> entityInstanceCount >= i && !returnedEntityInstanceIds.contains(i);
+        return i -> {
+//            GameObjectInstance g = getInstanceFromMapFunc.apply(i);
+//            return g != null && g.getType() == GameObjectType.TILE;
+            return true;
+        };
     }
 }
