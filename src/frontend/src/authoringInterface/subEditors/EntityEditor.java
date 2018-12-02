@@ -17,6 +17,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import utils.ErrorWindow;
 import utils.NodeInstanceController;
+import utils.NodeNotFoundException;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
             }
         });
         confirm.setOnAction(e -> {
-            if (nameField.getText().trim().isEmpty()) {
+            if (nameField.getText() == null || nameField.getText().trim().isEmpty()) {
                 new ErrorWindow("Empty name", "You must give your entity a non-empty name").showAndWait();
             } else {
                 ((Stage) rootPane.getScene().getWindow()).close();
@@ -71,20 +72,19 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                     case NONE:
                         return;
                     case EDIT_NODE:
-//                        if (nodeEdited instanceof ImageView) {
-//                            ((ImageView) nodeEdited).setImage(new Image(imagePaths.get(0)));
-//                        } else if (nodeEdited instanceof Text) {
-//                            ((Text) nodeEdited).setText(nameField.getText());
-//                        }
-
-                        // TODO: Improve this unnecessary cast
-                        Pane parent = (Pane) nodeEdited.getParent();
-                        parent.getChildren().remove(nodeEdited);
+                        Node temp;
                         if (!imagePaths.isEmpty()) {
-                            nodeEdited = new ImageView(imagePaths.get(0));
+                            temp = new ImageView(imagePaths.get(0));
                         } else {
-                            nodeEdited = new Text(nameField.getText());
+                            temp = new Text(nameField.getText());
                         }
+                        try {
+                            nodeInstanceController.changeNode(nodeEdited, temp);
+                        } catch (NodeNotFoundException e1) {
+                            // TODO: proper error handling
+                            e1.printStackTrace();
+                        }
+                        System.out.println(gameObjectInstance);
                         gameObjectInstance.setInstanceName(nameField.getText());
                         gameObjectInstance.getImagePathList().clear();
                         gameObjectInstance.getImagePathList().addAll(imagePaths);
