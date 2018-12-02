@@ -16,6 +16,8 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabDragPolicy;
 import javafx.scene.control.TabPane.TabClosingPolicy;
+import javafx.scene.layout.StackPane;
+import org.codehaus.groovy.runtime.metaclass.MetaMethodIndex;
 import utils.NodeInstanceController;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -90,15 +92,15 @@ public class EditView implements SubView<TabPane> {
         phaseNodeTab.setContent(phaseView.getView());
         tabPane.getTabs().addAll(mainTab, gridTab, phaseNodeTab);
 
-        mainLabel.setOnMouseReleased(e -> {
+        mainLabel.setOnMouseDragged(e -> {
             Point2D mouseLoc = new Point2D(e.getScreenX(), e.getScreenY());
             splitTab(mouseLoc, mainTab);
         });
-        gridLabel.setOnMouseReleased(e -> {
+        gridLabel.setOnMouseDragged(e -> {
             Point2D mouseLoc = new Point2D(e.getScreenX(), e.getScreenY());
             splitTab(mouseLoc, gridTab);
         });
-        phaseLabel.setOnMouseReleased(e -> {
+        phaseLabel.setOnMouseDragged(e -> {
             Point2D mouseLoc = new Point2D(e.getScreenX(), e.getScreenY());
             splitTab(mouseLoc, phaseNodeTab);
         });
@@ -110,11 +112,9 @@ public class EditView implements SubView<TabPane> {
     }
 
     private void splitTab(Point2D mouseLoc, Tab tab) {
-        Window window = tabPane.getScene().getWindow();
-        Rectangle2D windowBounds
-                = new Rectangle2D(window.getX(), window.getY(),
-                window.getWidth(), window.getHeight());
-        if (!windowBounds.contains(mouseLoc)) {
+        StackPane header = (StackPane) tabPane.lookup(".tab-header-area");
+
+        if(!header.getBoundsInLocal().contains(mouseLoc)){
             openModal(tab).show();
         }
     }
