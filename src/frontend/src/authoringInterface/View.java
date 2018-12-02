@@ -21,6 +21,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import utils.CrappyNodeInstanceController;
+import utils.NodeInstanceController;
 
 /**
  * This class provides an createGraph skeleton window with the basic menu items, and basic editing interfaces.
@@ -40,6 +42,7 @@ public class View implements ParentView<SubView>, DraggingCanvas {
     private Node preview;
     private StatusView statusView;
     private GridPane sidebar;
+    private NodeInstanceController nodeInstanceController;
     private GameObjectsCRUDInterface gameObjectManager;
     public static final double MENU_BAR_HEIGHT = 30;
     public static final double GAME_WIDTH = 700;
@@ -57,7 +60,7 @@ public class View implements ParentView<SubView>, DraggingCanvas {
         tools = new AuthoringTools(COL_NUMBER, ROW_NUMBER);
         gameObjectManager = tools.entityDB();
         groovyPaneFactory = new GroovyPaneFactory(primaryStage, tools.factory());
-
+        nodeInstanceController = new CrappyNodeInstanceController();
         initializeElements();
         setElements();
         addElements();
@@ -67,8 +70,8 @@ public class View implements ParentView<SubView>, DraggingCanvas {
     private void initializeElements() {
         sidebar = new GridPane();
         menuBar = new EditorMenuBarView(tools, primaryStage::close, this::updateGridDimension);
-        sideView = new SideView(gameObjectManager);
-        editView = new EditView(tools, groovyPaneFactory, ROW_NUMBER, COL_NUMBER, gameObjectManager);
+        sideView = new SideView(gameObjectManager, nodeInstanceController);
+        editView = new EditView(tools, groovyPaneFactory, ROW_NUMBER, COL_NUMBER, gameObjectManager, nodeInstanceController);
         statusView = new StatusView(gameObjectManager);
         editView.addUpdateStatusEventListener(statusView);
         sidebar.addColumn(0, sideView.getView(), statusView.getView());

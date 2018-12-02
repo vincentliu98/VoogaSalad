@@ -32,6 +32,7 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
     T gameObjectClass;
     V gameObjectInstance;
     ObservableList<String> imagePaths;
+    String singleMediaFilePath;
 
     public AbstractGameObjectEditor(GameObjectsCRUDInterface manager) {
         imagePaths = FXCollections.observableArrayList();

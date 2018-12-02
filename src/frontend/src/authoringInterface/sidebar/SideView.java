@@ -8,6 +8,7 @@ import gameObjects.gameObject.GameObjectType;
 import gameObjects.tile.SimpleTileClass;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
+import utils.NodeInstanceController;
 
 import java.util.*;
 
@@ -19,10 +20,12 @@ import java.util.*;
 public class SideView implements SubView<StackPane> {
     private StackPane sidePane;
     private GameObjectsCRUDInterface gameObjectsManager;
+    private NodeInstanceController nodeInstanceController;
     private static final String ROOT_NAME = "Game Objects";
 
-    public SideView(GameObjectsCRUDInterface manager) {
+    public SideView(GameObjectsCRUDInterface manager, NodeInstanceController controller) {
         gameObjectsManager = manager;
+        nodeInstanceController = controller;
         sidePane = new StackPane();
         TreeItem<String> rootNode = new TreeItem<>(ROOT_NAME);
         gameObjectsManager.createCategoryClass(ROOT_NAME);
