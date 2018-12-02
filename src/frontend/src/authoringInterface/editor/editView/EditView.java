@@ -90,17 +90,37 @@ public class EditView implements SubView<TabPane> {
         phaseNodeTab.setContent(phaseView.getView());
         tabPane.getTabs().addAll(mainTab, gridTab, phaseNodeTab);
 
-        mainLabel.setOnMouseReleased(this::detachMain);
-        gridLabel.setOnMouseReleased(this::detachGrid);
-        phaseLabel.setOnMouseReleased(this::detachPhase);
+        mainLabel.setOnMouseReleased(e -> {
+            Point2D mouseLoc = new Point2D(e.getScreenX(), e.getScreenY());
+            splitTab(mouseLoc, mainTab);
+        });
+        gridLabel.setOnMouseReleased(e -> {
+            Point2D mouseLoc = new Point2D(e.getScreenX(), e.getScreenY());
+            splitTab(mouseLoc, gridTab);
+        });
+        phaseLabel.setOnMouseReleased(e -> {
+            Point2D mouseLoc = new Point2D(e.getScreenX(), e.getScreenY());
+            splitTab(mouseLoc, phaseNodeTab);
+        });
     }
-
+    
     private void labelOnTab(Label label, Tab tab) {
         label.getStyleClass().add("tablabel");
         tab.setGraphic(label);
     }
 
-    private Stage splitTab(Tab tab) {
+    private void splitTab(Point2D mouseLoc, Tab tab) {
+        Window window = tabPane.getScene().getWindow();
+        Rectangle2D windowBounds
+                = new Rectangle2D(window.getX(), window.getY(),
+                window.getWidth(), window.getHeight());
+        if (!windowBounds.contains(mouseLoc)) {
+            openModal(tab).show();
+        }
+    }
+
+
+    private Stage openModal(Tab tab) {
             tabPane.getTabs().remove(tab);
             Stage newStage = new Stage();
             TabPane newTabPane = new TabPane();
@@ -117,38 +137,6 @@ public class EditView implements SubView<TabPane> {
         tabPane.getTabs().add(tab);
     }
 
-    private void detachMain(MouseEvent e) {
-        Point2D mouseLoc = new Point2D(e.getScreenX(), e.getScreenY());
-        Window window = tabPane.getScene().getWindow();
-        Rectangle2D windowBounds
-                = new Rectangle2D(window.getX(), window.getY(),
-                window.getWidth(), window.getHeight());
-        if (!windowBounds.contains(mouseLoc)) {
-            splitTab(mainTab).show();
-        }
-    }
-
-    private void detachGrid(MouseEvent e) {
-        Point2D mouseLoc = new Point2D(e.getScreenX(), e.getScreenY());
-        Window window = tabPane.getScene().getWindow();
-        Rectangle2D windowBounds
-                = new Rectangle2D(window.getX(), window.getY(),
-                window.getWidth(), window.getHeight());
-        if (!windowBounds.contains(mouseLoc)) {
-            splitTab(gridTab).show();
-        }
-    }
-
-    private void detachPhase(MouseEvent e) {
-        Point2D mouseLoc = new Point2D(e.getScreenX(), e.getScreenY());
-        Window window = tabPane.getScene().getWindow();
-        Rectangle2D windowBounds
-                = new Rectangle2D(window.getX(), window.getY(),
-                window.getWidth(), window.getHeight());
-        if (!windowBounds.contains(mouseLoc)) {
-            splitTab(phaseNodeTab).show();
-        }
-    }
 
     public void updateDimension(int width, int height) {
         gridView.updateDimension(width, height);
