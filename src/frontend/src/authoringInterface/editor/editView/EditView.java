@@ -17,12 +17,9 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabDragPolicy;
 import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.layout.StackPane;
-import org.codehaus.groovy.runtime.metaclass.MetaMethodIndex;
 import utils.NodeInstanceController;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 
 /**
  * EditView Class (TabPane > Pane)
@@ -113,7 +110,6 @@ public class EditView implements SubView<TabPane> {
 
     private void splitTab(Point2D mouseLoc, Tab tab) {
         StackPane header = (StackPane) tabPane.lookup(".tab-header-area");
-
         if(!header.getBoundsInLocal().contains(mouseLoc)){
             openModal(tab).show();
         }
