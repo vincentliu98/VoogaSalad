@@ -9,16 +9,24 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Label;
+import javafx.scene.media.MediaView;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import java.io.File;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.Media;
 
 public class SoundView {
-    public final int HEIGHT = 200;
-    public final int WIDTH = 400;
+    public static final int HEIGHT = 200;
+    public static final int WIDTH = 280;
     public static final Double ICON_WIDTH = 50.0;
     public static final Double ICON_HEIGHT = 50.0;
+
+    private File file;
+    private Media media;
+    private MediaPlayer mediaPlayer;
+
     Image startImg = new Image(
             this.getClass().getClassLoader().getResourceAsStream("startAudio.png"),
             ICON_WIDTH, ICON_HEIGHT, true, true
@@ -32,20 +40,25 @@ public class SoundView {
     private Stage stage;
     VBox root;
     HBox audioRoot;
+    private String path;
 
     public SoundView() {
         root = new VBox();
         audioRoot = new HBox();
         audioRoot.setSpacing(10);
         root.setSpacing(10);
-        root.setPadding(new Insets(50, 0, 0, 135));
+        root.setPadding(new Insets(50, 0, 0, 75));
 
         this.label = new Label();
+        label.getStyleClass().add("labelAudio");
+        label.setStyle("-fx-font-size: 14px;"
+                + "-fx-text-fill: dimgrey;"
+                + "-fx-padding: 10");
         stage = new Stage();
 
         Button button = new Button("Select audio file");
         button.setStyle("-fx-font-size: 15px;"
-                + "-fx-background-color:  #80cbc4;"
+                + "-fx-background-color:  #80bba1;"
                 + "-fx-text-fill: white;"
                 + "-fx-cursor: hand;");
         button.setOnMouseClicked(this::musicChooser);
@@ -55,7 +68,6 @@ public class SoundView {
         Scene scene = new Scene(root, WIDTH, HEIGHT);
         stage.setTitle("Select Background Music");
         stage.setScene(scene);
-
     }
 
     public void show() {
@@ -68,7 +80,7 @@ public class SoundView {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(filter);
         fileChooser.setTitle("Select Background Music");
-        File file = fileChooser.showOpenDialog(new Stage());
+        file = fileChooser.showOpenDialog(new Stage());
         try{
             this.label.setText(file.getName());
             var image = new ImageView(startImg);
@@ -85,6 +97,14 @@ public class SoundView {
         image.setStyle("-fx-cursor: hand;");
         audioRoot.getChildren().clear();
         audioRoot.getChildren().addAll(image, label);
+
+        path = file.getAbsolutePath();
+        path = path.replace("\\", "/");
+        media = new Media(new File(path).toURI().toString());
+        mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        mediaPlayer.play();
+        stage.setOnCloseRequest(e -> mediaPlayer.stop());
         image.setOnMouseClicked(this::stopMusic);
     }
 
@@ -93,6 +113,8 @@ public class SoundView {
         image.setStyle("-fx-cursor: hand;");
         audioRoot.getChildren().clear();
         audioRoot.getChildren().addAll(image, label);
+        mediaPlayer.stop();
+
         image.setOnMouseClicked(this::playMusic);
     }
 
