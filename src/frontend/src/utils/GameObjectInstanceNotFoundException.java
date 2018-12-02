@@ -1,7 +1,5 @@
 package utils;
 
-import java.awt.event.FocusEvent;
-
 /**
  * This exception gets thrown when the NodeInstanceController tries to get a corresponding GameObjectInstance that is not there.
  *
