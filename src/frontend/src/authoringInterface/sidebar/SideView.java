@@ -20,12 +20,10 @@ import java.util.*;
 public class SideView implements SubView<StackPane> {
     private StackPane sidePane;
     private GameObjectsCRUDInterface gameObjectsManager;
-    private NodeInstanceController nodeInstanceController;
     private static final String ROOT_NAME = "Game Objects";
 
-    public SideView(GameObjectsCRUDInterface manager, NodeInstanceController controller) {
+    public SideView(GameObjectsCRUDInterface manager) {
         gameObjectsManager = manager;
-        nodeInstanceController = controller;
         sidePane = new StackPane();
         TreeItem<String> rootNode = new TreeItem<>(ROOT_NAME);
         gameObjectsManager.createCategoryClass(ROOT_NAME);
