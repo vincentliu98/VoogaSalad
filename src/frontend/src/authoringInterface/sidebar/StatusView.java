@@ -20,9 +20,7 @@ public class StatusView implements SubView<AnchorPane>, UpdateStatusEventListene
     private AnchorPane rootPane = new AnchorPane();
     private GameObjectsCRUDInterface objectsManager;
 
-    public StatusView(GameObjectsCRUDInterface manager) {
-        objectsManager = manager;
-    }
+    public StatusView(GameObjectsCRUDInterface manager) { objectsManager = manager; }
 
     /**
      * This method returns the responsible JavaFx Node responsible to be added or deleted from other graphical elements.

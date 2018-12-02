@@ -31,8 +31,6 @@ public class CustomTreeCellImpl extends TreeCell<String> {
                     dialogStage.show();
                     editor.addTreeItem(getTreeItem());
                     break;
-                case "SOUND":
-                    break;
                 case "TILE":
                     Stage dialogTileStage = new Stage();
                     TileEditor tileEditor = new TileEditor(manager);
@@ -54,9 +52,6 @@ public class CustomTreeCellImpl extends TreeCell<String> {
             switch (objectClass.getType()) {
                 case ENTITY:
                     editor = new EntityEditor(objectManager);
-                    break;
-                case SOUND:
-                    // TODO
                     break;
                 case CATEGORY:
                     // TODO

@@ -47,6 +47,7 @@ public class EditView implements SubView<TabPane> {
         initializeTab();
         tabPane.setTabDragPolicy(TabDragPolicy.REORDER);
         tabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
+        tabPane.setOnDragDetected(e -> System.out.println("draggedOver"));
     }
 
     private void initializeTab(){
