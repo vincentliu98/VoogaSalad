@@ -12,6 +12,9 @@ import frontendUtils.Try;
 
 import java.util.function.Supplier;
 
+/**
+ * @author Inchan Hwang
+ */
 public class PhaseNodeFactory {
     private PhaseDB db;
     private Supplier<GroovyPane> genGroovyPane;

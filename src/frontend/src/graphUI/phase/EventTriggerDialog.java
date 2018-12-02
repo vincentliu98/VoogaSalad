@@ -7,6 +7,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import phase.api.GameEvent;
 
+/**
+ * @author Inchan Hwang
+ */
 public class EventTriggerDialog extends Dialog<GameEvent> {
     private static final double WIDTH = 200;
     private static final double HEIGHT = 400;

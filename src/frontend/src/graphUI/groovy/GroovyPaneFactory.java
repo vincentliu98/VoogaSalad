@@ -32,7 +32,7 @@ import java.util.Set;
  * <p>
  * Reference: https://stackoverflow.com/questions/46562957/define-object-position-at-runtime-with-javafx
  *
- * @author jl729
+ * @author Inchan Hwang
  */
 
 public class GroovyPaneFactory {

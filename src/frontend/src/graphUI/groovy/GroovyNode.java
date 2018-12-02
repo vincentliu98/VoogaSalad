@@ -20,6 +20,7 @@ import java.util.List;
  * <p>
  * Reference: https://stackoverflow.com/questions/46562957/define-object-position-at-runtime-with-javafx
  *
+ * @author Inchan Hwang
  * @author jl729
  */
 public class GroovyNode extends StackPane {

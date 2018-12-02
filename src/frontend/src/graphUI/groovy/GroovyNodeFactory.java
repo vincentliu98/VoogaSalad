@@ -10,6 +10,9 @@ import frontendUtils.Try;
 
 import java.util.List;
 
+/**
+ * @author Inchan Hwang
+ */
 public class GroovyNodeFactory {
     private static final int FONT_BIG = 18;
     private static final int FONT_NORMAL = 12;
