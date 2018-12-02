@@ -9,11 +9,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Label;
-import javafx.scene.media.MediaView;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import java.io.File;
+import java.nio.file.Path;
+
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.Media;
 
