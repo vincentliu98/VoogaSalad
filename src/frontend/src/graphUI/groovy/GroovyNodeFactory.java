@@ -1,5 +1,6 @@
 package graphUI.groovy;
 
+import frontendUtils.Try;
 import groovy.api.GroovyFactory;
 import groovy.api.Ports;
 import groovy.graph.blocks.core.FunctionBlock;
@@ -7,9 +8,7 @@ import groovy.graph.blocks.core.GroovyBlock;
 import javafx.geometry.Pos;
 import javafx.scene.paint.Color;
 import javafx.util.Pair;
-import frontendUtils.Try;
 
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 

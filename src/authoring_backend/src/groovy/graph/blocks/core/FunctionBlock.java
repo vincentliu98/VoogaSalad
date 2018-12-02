@@ -5,6 +5,8 @@ import groovy.api.BlockGraph;
 import groovy.api.Ports;
 import frontendUtils.Try;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static groovy.api.Ports.*;
@@ -67,7 +69,13 @@ public class FunctionBlock extends SimpleNode implements GroovyBlock<FunctionBlo
     public FunctionBlock replicate() { return new FunctionBlock(op, argN); }
 
     @Override
-    public Set<Ports> ports() { return Set.of(A, B, C, D, E, FLOW_OUT); }
+    public Set<Ports> ports() {
+        var ports = List.of(A, B, C, D, E);
+        var ret = new HashSet<Ports>();
+        for(int i = 0 ; i < argN ; i ++) ret.add(ports.get(i));
+        ret.add(FLOW_OUT);
+        return ret;
+    }
 
     @Override
     public String name() {

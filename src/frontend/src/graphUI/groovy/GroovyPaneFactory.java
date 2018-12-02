@@ -188,6 +188,8 @@ public class GroovyPaneFactory {
                 IconLoader.loadGameMethods(img -> type -> fetchArg -> draggableGroovyIcon(img, type, fetchArg))
             );
 
+            
+
             vbox.setSpacing(10);
             vbox.getChildren().forEach(c -> {
                 if (c instanceof HBox) ((HBox) c).setSpacing(5);

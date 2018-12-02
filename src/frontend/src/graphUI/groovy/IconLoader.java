@@ -16,12 +16,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class IconLoader {
-    private static final int ICONS_IN_ROW = 8;
+    private static final int ICONS_IN_ROW = 9;
 
     private static List<Node> loadIcons(
         String category,
