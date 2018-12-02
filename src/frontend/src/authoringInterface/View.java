@@ -57,6 +57,7 @@ public class View implements ParentView<SubView>, DraggingCanvas {
     public View(Stage primaryStage) {
         this.primaryStage = primaryStage;
         rootPane = new AnchorPane();
+        rootPane.getStyleClass().add("mainPane");
         tools = new AuthoringTools(COL_NUMBER, ROW_NUMBER);
         gameObjectManager = tools.entityDB();
         groovyPaneFactory = new GroovyPaneFactory(primaryStage, tools.factory());
@@ -124,6 +125,7 @@ public class View implements ParentView<SubView>, DraggingCanvas {
     public void setupDraggingCanvas() {
         rootPane.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
             if (e.getTarget() instanceof TreeCell) {
+                //noinspection unchecked
                 TreeItem<String> item = (TreeItem<String>) ((TreeCell) e.getTarget()).getTreeItem();
                 if (item == null || !item.isLeaf()) {
                     return;

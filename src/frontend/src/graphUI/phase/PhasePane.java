@@ -36,8 +36,8 @@ import java.util.stream.Stream;
  */
 
 public class PhasePane implements SubView<StackPane> {
-    public static final Double ICON_WIDTH = 90.0;
-    public static final Double ICON_HEIGHT = 90.0;
+    public static final Double ICON_WIDTH = 95.0;
+    public static final Double ICON_HEIGHT = 95.0;
 
     private enum DRAG_PURPOSE {
         NOTHING,
@@ -84,7 +84,7 @@ public class PhasePane implements SubView<StackPane> {
             if(o != null && lines.contains(o)) o.setColor(Color.BLACK);
             if(n != null) {
                 if(selectedNode.get() != null) selectedNode.set(null);
-                n.setColor(Color.RED);
+                n.setColor(Color.CORAL);
             }
         });
 
@@ -94,7 +94,7 @@ public class PhasePane implements SubView<StackPane> {
                 if(selectedEdge.get() != null) selectedEdge.set(null);
                 n.setBorder(
                     new Border(
-                        new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, null, new BorderWidths(3))
+                        new BorderStroke(Color.CORAL, BorderStrokeStyle.SOLID, null, new BorderWidths(3))
                     )
                 );
             }
