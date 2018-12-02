@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 /**
  * Pop-up window for adding settings for nodes
  *
+ * @author Inchan Hwang
  * @author jl729
  */
 
