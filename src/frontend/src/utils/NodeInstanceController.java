@@ -2,6 +2,9 @@ package utils;
 
 import gameObjects.gameObject.GameObjectInstance;
 import javafx.scene.Node;
+import javafx.scene.input.MouseEvent;
+
+import java.util.function.BiConsumer;
 
 /**
  * This interface controls the relationship between a Node on the editing panels and a GameObjectInstance it potentially refers to.
@@ -49,4 +52,11 @@ public interface NodeInstanceController {
      * This method clears all the relationships between all Nodes and GameObjectInstances.
      */
     void clearAllLinks();
+
+    /**
+     * Set the private field biconsumer from an external place.
+     *
+     * @param biConsumer: A BiConsumer
+     */
+    void setBiConsumer(BiConsumer<MouseEvent, Node> biConsumer);
 }

@@ -27,7 +27,7 @@ public class SimpleEntityInstance implements EntityInstance {
             Supplier<EntityClass> getEntityClassFunc) {
         this.className = new ReadOnlyStringWrapper();
         this.className.setValue(className);
-        this.instanceName = new SimpleStringProperty();
+        this.instanceName = new SimpleStringProperty(className);
         this.tileId = new SimpleIntegerProperty();
         this.tileId.setValue(tileId);
         this.imagePathList = imagePathList;

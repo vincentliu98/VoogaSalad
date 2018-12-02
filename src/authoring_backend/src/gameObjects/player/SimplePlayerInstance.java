@@ -22,7 +22,7 @@ public class SimplePlayerInstance implements PlayerInstance {
     public SimplePlayerInstance(
             String className) {
         this.className = new ReadOnlyStringWrapper(className);
-        this.instanceName = new SimpleStringProperty();
+        this.instanceName = new SimpleStringProperty(className);
         this.imagePath = new SimpleStringProperty();
         this.propertiesMap = FXCollections.observableHashMap();
         this.entitiesSet = FXCollections.observableSet();

@@ -2,10 +2,11 @@ package utils;
 
 import gameObjects.gameObject.GameObjectInstance;
 import javafx.scene.Node;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 /**
  * This is a crappy implementation of NodeInstanceController interface. It will be used to manage the relationship between a Node and a GameObjectInstance.
@@ -15,6 +16,7 @@ import java.util.Map;
 public class CrappyNodeInstanceController implements NodeInstanceController {
     private Map<GameObjectInstance, Node> instanceNodeMap;
     private Map<Node, GameObjectInstance> nodeInstanceMap;
+    private BiConsumer<MouseEvent, Node> mouseDoubleClickOpenEditor;
 
     public CrappyNodeInstanceController() {
         instanceNodeMap = new HashMap<>();
@@ -49,6 +51,9 @@ public class CrappyNodeInstanceController implements NodeInstanceController {
         if (parent != null) {
             parent.getChildren().add(newNode);
             parent.getChildren().remove(oldNode);
+        }
+        if (mouseDoubleClickOpenEditor != null) {
+            newNode.setOnMouseClicked(e -> mouseDoubleClickOpenEditor.accept(e, newNode));
         }
         nodeInstanceMap.put(newNode, nodeInstanceMap.get(oldNode));
         nodeInstanceMap.remove(oldNode);
@@ -92,5 +97,15 @@ public class CrappyNodeInstanceController implements NodeInstanceController {
     public void clearAllLinks() {
         instanceNodeMap.clear();
         nodeInstanceMap.clear();
+    }
+
+    /**
+     * Set the private field biconsumer from an external place.
+     *
+     * @param biConsumer : A BiConsumer
+     */
+    @Override
+    public void setBiConsumer(BiConsumer<MouseEvent, Node> biConsumer) {
+        mouseDoubleClickOpenEditor = biConsumer;
     }
 }

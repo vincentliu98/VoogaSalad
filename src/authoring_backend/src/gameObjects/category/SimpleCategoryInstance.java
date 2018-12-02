@@ -27,7 +27,7 @@ public class SimpleCategoryInstance implements CategoryInstance {
             Supplier<CategoryClass> getCategoryClassFunc) {
         this.className = new ReadOnlyStringWrapper();
         this.className.setValue(className);
-        this.instanceName = new SimpleStringProperty();
+        this.instanceName = new SimpleStringProperty(className);
         this.imagePath = imagePath;
         this.propertiesMap = properties;
         this.getCategoryClassFunc = getCategoryClassFunc;
