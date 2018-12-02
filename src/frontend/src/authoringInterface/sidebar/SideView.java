@@ -67,7 +67,6 @@ public class SideView implements SubView<StackPane> {
         sidePane.getChildren().add(treeView);
         treeView.getStyleClass().add("myTree");
         sidePane.getStyleClass().add("mySide");
-        sidePane.setOnDragOver(e -> System.out.println("yes"));
     }
 
     /**

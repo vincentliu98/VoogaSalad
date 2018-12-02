@@ -48,10 +48,7 @@ public class CustomTreeCellImpl extends TreeCell<String> {
             }
         });
         addMenu.getItems().add(addMenuItem);
-        setOnDragDetected(e -> {
-            startDragAndDrop(TransferMode.ANY);
-        });
-        setOnDragOver(e -> System.out.println("yes"));
+        setOnDragDetected(e -> startFullDrag());
         MenuItem editMenuItem = new MenuItem("Edit this GameObject");
         MenuItem deleteMenuItem = new MenuItem("Delete this GameObject");
         editMenuItem.setOnAction(e -> {

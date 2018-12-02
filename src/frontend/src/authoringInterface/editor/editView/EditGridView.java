@@ -19,10 +19,7 @@ import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseDragEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -69,10 +66,7 @@ public class EditGridView implements SubView<ScrollPane> {
                     System.out.println("yes");
                     cell.startDragAndDrop(TransferMode.ANY);
                 });
-                cell.setOnDragEntered(e -> {
-                    e.acceptTransferModes(TransferMode.ANY);
-                    System.out.println(e.toString());
-                });
+                cell.addEventFilter(DragEvent.DRAG_OVER, e -> System.out.println(e.toString()));
                 cell.setOnMouseClicked(e -> listeners.forEach(listener -> listener.setOnUpdateStatusEvent(constructStatusView(cell))));
             }
         }
@@ -207,7 +201,7 @@ public class EditGridView implements SubView<ScrollPane> {
      * @param cell: A region where the event handler will be set up.
      */
     private void receiveDragFromSideView(Pane cell) {
-        cell.setOnDragDropped( e -> {
+        cell.setOnMouseDragReleased(e -> {
             if (e.getGestureSource() instanceof TreeCell) {
                 TreeItem<String> item;
                 //noinspection unchecked
