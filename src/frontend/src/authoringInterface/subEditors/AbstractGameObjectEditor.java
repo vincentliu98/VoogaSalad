@@ -14,6 +14,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import utils.NodeInstanceController;
+import utils.NodeNotFoundException;
 
 /**
  * This abstract class provides a boiler plate for different editors because they are pretty similar.
@@ -36,10 +37,9 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
     ObservableList<String> imagePaths;
     String singleMediaFilePath;
 
-    public AbstractGameObjectEditor(GameObjectsCRUDInterface manager, NodeInstanceController controller) {
+    public AbstractGameObjectEditor(GameObjectsCRUDInterface manager) {
         imagePaths = FXCollections.observableArrayList();
         editingMode = EditingMode.NONE;
-        nodeInstanceController = controller;
         gameObjectManager = manager;
         rootPane = new AnchorPane();
         nameLabel = new Label();
@@ -106,12 +106,19 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
      * Register the node to Object map.
      *
      * @param node: The node that is to be altered.
-     * @param gameObjectInstance: The GameObjectInstance that is associated with the Node on the rootPane.
+     * @param controller: The NodeInstanceController that controls the relationship between a Node and a GameObjectInstance.
      */
-    public void editNode(Node node, V gameObjectInstance) {
+    public void editNode(Node node, NodeInstanceController controller) {
         this.nodeEdited = node;
         editingMode = EditingMode.EDIT_NODE;
-        this.gameObjectInstance = gameObjectInstance;
+        nodeInstanceController = controller;
+        try {
+            //noinspection unchecked
+            this.gameObjectInstance = (V) controller.getGameObjectInstance(node);
+        } catch (NodeNotFoundException e) {
+            // TODO: proper error handling
+            e.printStackTrace();
+        }
         readGameObjectInstance();
     }
 

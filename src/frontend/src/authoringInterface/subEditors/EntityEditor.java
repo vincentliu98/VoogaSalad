@@ -6,15 +6,12 @@ import gameObjects.entity.EntityInstance;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -35,8 +32,8 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     private Button chooseImage;
     private HBox imagePanel;
 
-    public EntityEditor(GameObjectsCRUDInterface manager, NodeInstanceController controller) {
-        super(manager, controller);
+    public EntityEditor(GameObjectsCRUDInterface manager) {
+        super(manager);
         nameLabel.setText("Your entity name:");
         imageText = new Label("Add an image to your entity");
         chooseImage = new Button("Choose image");

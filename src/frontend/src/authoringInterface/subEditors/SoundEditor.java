@@ -11,8 +11,8 @@ import utils.NodeInstanceController;
  * @author Haotian Wang
  */
 public class SoundEditor extends AbstractGameObjectEditor<SoundClass, SoundInstance> {
-    public SoundEditor(GameObjectsCRUDInterface manager, NodeInstanceController controller) {
-        super(manager, controller);
+    public SoundEditor(GameObjectsCRUDInterface manager) {
+        super(manager);
     }
 
     /**

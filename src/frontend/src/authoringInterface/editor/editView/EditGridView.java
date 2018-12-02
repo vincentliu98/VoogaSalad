@@ -131,19 +131,19 @@ public class EditGridView implements SubView<ScrollPane> {
             AbstractGameObjectEditor editor = null;
             switch (type) {
                 case ENTITY:
-                    editor = new EntityEditor(gameObjectManager, nodeInstanceController);
+                    editor = new EntityEditor(gameObjectManager);
                     break;
                 case SOUND:
-                    editor = new SoundEditor(gameObjectManager, nodeInstanceController);
+                    editor = new SoundEditor(gameObjectManager);
                     break;
                 case TILE:
-                    editor = new TileEditor(gameObjectManager, nodeInstanceController);
+                    editor = new TileEditor(gameObjectManager);
                     break;
                 case CATEGORY:
-                    editor = new CategoryEditor(gameObjectManager, nodeInstanceController);
+                    editor = new CategoryEditor(gameObjectManager);
                     break;
             }
-            editor.editNode(targetNode, userObject);
+            editor.editNode(targetNode, nodeInstanceController);
             dialogStage.setScene(new Scene(editor.getView(), 500, 500));
             dialogStage.show();
         }

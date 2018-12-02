@@ -11,8 +11,8 @@ import utils.NodeInstanceController;
  * @author Haotian Wang
  */
 public class CategoryEditor extends AbstractGameObjectEditor<CategoryClass, CategoryInstance> {
-    public CategoryEditor(GameObjectsCRUDInterface manager, NodeInstanceController controller) {
-        super(manager, controller);
+    public CategoryEditor(GameObjectsCRUDInterface manager) {
+        super(manager);
     }
 
     /**

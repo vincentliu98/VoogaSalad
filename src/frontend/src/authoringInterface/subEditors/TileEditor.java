@@ -37,8 +37,8 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
     private Label imageLabel = new Label("Add an image to your tile class");
     private Button chooseButton = new Button("Choose image");
 
-    public TileEditor(GameObjectsCRUDInterface manager, NodeInstanceController controller) {
-        super(manager, controller);
+    public TileEditor(GameObjectsCRUDInterface manager) {
+        super(manager);
         Label widthLabel = new Label("Width");
         Label heightLabel = new Label("Height");
         nameLabel.setText("Your tile name");
