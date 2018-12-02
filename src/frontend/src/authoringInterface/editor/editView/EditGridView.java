@@ -96,18 +96,27 @@ public class EditGridView implements SubView<ScrollPane> {
     private GridPane constructStatusView(Region cell) {
         GridPane listView = new GridPane();
         listView.setGridLinesVisible(true);
-        listView.addRow(0, new Label("GameObjectInstance"), new Label("Instance ID"));
-        // TODO: wait for updates in GameObjectInstance
+        listView.addRow(0, new Label("Instance ID"), new Label("Instance Name"), new Label("Class Name"));
         cell.getChildrenUnmodifiable().forEach(node -> {
+            GameObjectInstance instance = null;
             try {
-                listView.addRow(
-                        listView.getRowCount(),
-                        new Text(nodeInstanceController.getGameObjectInstance(node).getClassName().getValue()),
-                        new Text(nodeInstanceController.getGameObjectInstance(node).getInstanceId().getValue().toString()));
+                instance = nodeInstanceController.getGameObjectInstance(node);
             } catch (NodeNotFoundException e) {
                 // TODO: Proper error handling.
                 e.printStackTrace();
             }
+            Text instanceID = new Text(instance.getInstanceId().getValue().toString());
+            Text instanceName = new Text(instance.getInstanceName().getValue());
+            Text className = new Text(instance.getClassName().getValue());
+            instanceID.setOnMouseClicked(e -> handleDoubleClick(e, node));
+            instanceName.setOnMouseClicked(e -> handleDoubleClick(e, node));
+            className.setOnMouseClicked(e -> handleDoubleClick(e, node));
+            listView.addRow(
+                    listView.getRowCount(),
+                    instanceID,
+                    instanceName,
+                    className
+            );
         });
         return listView;
     }
