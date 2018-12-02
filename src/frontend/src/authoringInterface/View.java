@@ -129,7 +129,7 @@ public class View implements ParentView<SubView>, DraggingCanvas {
     /**
      * This method handles the dragging preview when the user drags some TreeItem somewhere.
      *
-     * @param e: A DragEvent which is a DragOverEvent.
+     * @param e: A DragEvent which is a DragOver.
      */
     private void handleMouseDragged(DragEvent e) {
         if (preview != null) {
@@ -164,58 +164,21 @@ public class View implements ParentView<SubView>, DraggingCanvas {
     }
 
     /**
+     * This method handles the removal of preview once the drag is completed.
+     *
+     * @param dragEvent: a DragEvent which should be DragDropped.
+     */
+    private void handleDragFinished(DragEvent dragEvent) {
+        rootPane.getChildren().remove(preview);
+        preview = null;
+    }
+
+    /**
      * Setup the dragging canvas event filters.
      */
     @Override
     public void setupDraggingCanvas() {
         rootPane.setOnDragOver(this::handleMouseDragged);
-//        rootPane.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
-//            if (e.getTarget() instanceof TreeCell) {
-//                //noinspection unchecked
-//                TreeItem<String> item = (TreeItem<String>) ((TreeCell) e.getTarget()).getTreeItem();
-//                if (item == null || !item.isLeaf()) {
-//                    return;
-//                }
-//                if (item.getGraphic() != null) {
-//                    ImageView graphic = (ImageView) item.getGraphic();
-//                    preview = new ImageView(graphic.getImage());
-//                    preview.setOpacity(0.5);
-//                    ((ImageView) preview).setX(e.getX());
-//                    ((ImageView) preview).setY(e.getY());
-//                    preview.setMouseTransparent(true);
-//                } else {
-//                    preview = new Text(item.getValue());
-//                    ((Text) preview).setX(e.getX());
-//                    ((Text) preview).setY(e.getY());
-//                    preview.setMouseTransparent(true);
-//                }
-//            }
-//        });
-//        rootPane.addEventFilter(MouseDragEvent.MOUSE_DRAG_OVER, e -> {
-//            if (preview == null) {
-//                return;
-//            }
-//            if (!rootPane.getChildren().contains(preview)) {
-//                rootPane.getChildren().add(preview);
-//            }
-//            preview.setMouseTransparent(true);
-//            if (preview != null) {
-//                if (preview instanceof ImageView) {
-//                    ((ImageView) preview).setX(e.getX());
-//                    ((ImageView) preview).setY(e.getY());
-//                } else if (preview instanceof Text) {
-//                    ((Text) preview).setX(e.getX());
-//                    ((Text) preview).setY(e.getY());
-//                }
-//            }
-//        });
-//
-//        rootPane.addEventFilter(MouseDragEvent.MOUSE_DRAG_RELEASED, e -> {
-//            if (preview == null) {
-//                return;
-//            }
-//            rootPane.getChildren().remove(preview);
-//            preview = null;
-//        });
+        rootPane.setOnDragDone(this::handleDragFinished);
     }
 }
