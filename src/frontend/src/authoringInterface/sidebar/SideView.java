@@ -68,7 +68,7 @@ public class SideView implements SubView<StackPane> {
         }
         TreeView<String> treeView = new TreeView<>(rootNode);
         treeView.setEditable(true);
-        treeView.setCellFactory(e -> new CustomTreeCellImpl(gameObjectsManager));
+        treeView.setCellFactory(e -> new CustomTreeCellImpl(gameObjectsManager, nodeInstanceController));
         sidePane.getChildren().add(treeView);
         treeView.getStyleClass().add("myTree");
         sidePane.getStyleClass().add("mySide");

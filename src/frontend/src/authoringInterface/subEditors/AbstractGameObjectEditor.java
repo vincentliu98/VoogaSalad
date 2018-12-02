@@ -13,6 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import utils.NodeInstanceController;
 
 /**
  * This abstract class provides a boiler plate for different editors because they are pretty similar.
@@ -27,6 +28,7 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
     Button cancel;
     TreeItem<String> treeItem;
     GameObjectsCRUDInterface gameObjectManager;
+    NodeInstanceController nodeInstanceController;
     EditingMode editingMode;
     Node nodeEdited;
     T gameObjectClass;
@@ -34,9 +36,10 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
     ObservableList<String> imagePaths;
     String singleMediaFilePath;
 
-    public AbstractGameObjectEditor(GameObjectsCRUDInterface manager) {
+    public AbstractGameObjectEditor(GameObjectsCRUDInterface manager, NodeInstanceController controller) {
         imagePaths = FXCollections.observableArrayList();
         editingMode = EditingMode.NONE;
+        nodeInstanceController = controller;
         gameObjectManager = manager;
         rootPane = new AnchorPane();
         nameLabel = new Label();

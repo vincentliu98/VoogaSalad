@@ -19,6 +19,7 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import utils.ErrorWindow;
+import utils.NodeInstanceController;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -34,8 +35,8 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     private Button chooseImage;
     private HBox imagePanel;
 
-    public EntityEditor(GameObjectsCRUDInterface manager) {
-        super(manager);
+    public EntityEditor(GameObjectsCRUDInterface manager, NodeInstanceController controller) {
+        super(manager, controller);
         nameLabel.setText("Your entity name:");
         imageText = new Label("Add an image to your entity");
         chooseImage = new Button("Choose image");
@@ -78,6 +79,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
 //                        } else if (nodeEdited instanceof Text) {
 //                            ((Text) nodeEdited).setText(nameField.getText());
 //                        }
+
                         // TODO: Improve this unnecessary cast
                         Pane parent = (Pane) nodeEdited.getParent();
                         parent.getChildren().remove(nodeEdited);

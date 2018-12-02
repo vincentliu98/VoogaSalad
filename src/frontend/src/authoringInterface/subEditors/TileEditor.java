@@ -15,6 +15,7 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import utils.ErrorWindow;
+import utils.NodeInstanceController;
 
 import java.io.File;
 
@@ -36,8 +37,8 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
     private Label imageLabel = new Label("Add an image to your tile class");
     private Button chooseButton = new Button("Choose image");
 
-    public TileEditor(GameObjectsCRUDInterface manager) {
-        super(manager);
+    public TileEditor(GameObjectsCRUDInterface manager, NodeInstanceController controller) {
+        super(manager, controller);
         Label widthLabel = new Label("Width");
         Label heightLabel = new Label("Height");
         nameLabel.setText("Your tile name");

@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
+import utils.NodeInstanceController;
 
 /**
  * This class organizes the cell factory call back methods into a nicer format.
@@ -18,15 +19,17 @@ public class CustomTreeCellImpl extends TreeCell<String> {
     private ContextMenu addMenu = new ContextMenu();
     private ContextMenu editMenu = new ContextMenu();
     private GameObjectsCRUDInterface objectManager;
+    private NodeInstanceController nodeInstanceController;
 
-    public CustomTreeCellImpl(GameObjectsCRUDInterface manager) {
+    public CustomTreeCellImpl(GameObjectsCRUDInterface manager, NodeInstanceController controller) {
+        nodeInstanceController = controller;
         objectManager = manager;
         MenuItem addMenuItem = new MenuItem("Add an entry");
         addMenuItem.setOnAction(e -> {
             switch (getItem()) {
                 case "ENTITY":
                     Stage dialogStage = new Stage();
-                    EntityEditor editor = new EntityEditor(manager);
+                    EntityEditor editor = new EntityEditor(manager, nodeInstanceController);
                     dialogStage.setScene(new Scene(editor.getView(), 500, 500));
                     dialogStage.show();
                     editor.addTreeItem(getTreeItem());
@@ -35,7 +38,7 @@ public class CustomTreeCellImpl extends TreeCell<String> {
                     break;
                 case "TILE":
                     Stage dialogTileStage = new Stage();
-                    TileEditor tileEditor = new TileEditor(manager);
+                    TileEditor tileEditor = new TileEditor(manager, nodeInstanceController);
                     dialogTileStage.setScene(new Scene(tileEditor.getView(), 500, 500));
                     dialogTileStage.show();
                     tileEditor.addTreeItem(getTreeItem());
@@ -53,7 +56,7 @@ public class CustomTreeCellImpl extends TreeCell<String> {
             AbstractGameObjectEditor editor = null;
             switch (objectClass.getType()) {
                 case ENTITY:
-                    editor = new EntityEditor(objectManager);
+                    editor = new EntityEditor(objectManager, nodeInstanceController);
                     break;
                 case SOUND:
                     // TODO
@@ -63,7 +66,7 @@ public class CustomTreeCellImpl extends TreeCell<String> {
                     break;
                 case TILE:
                     // TODO: 11/30/18 Finish TileEditor
-                    editor = new TileEditor(objectManager);
+                    editor = new TileEditor(objectManager, nodeInstanceController);
                     break;
             }
             dialogStage.setScene(new Scene(editor.getView(), 500, 500));
