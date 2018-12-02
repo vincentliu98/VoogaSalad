@@ -25,6 +25,14 @@
     -fx-text-fill: #80cbc4;
 }
 
+.tablabel{
+    -fx-text-fill: #b4c3cb;
+}
+
+.tab:selected .tablabel {
+    -fx-text-fill: #80cbc4;
+}
+
 .tab-pane:focused > .tab-header-area > .headers-region > .tab:selected .focus-indicator {
     -fx-border-color: transparent;
 }
@@ -86,7 +94,7 @@
 .phaseBtn {
     -fx-cursor: hand;
     -fx-background-color: #343a40;
-    -fx-text-fill: #80cbc4;
+    -fx-text-fill: white;
 }
 
 .vboxPhase {
@@ -112,5 +120,8 @@
 }
 
 .phasePane {
-    -fx-background-color: #F6F0F0;
+    -fx-background-color: lightgray;
+}
+.mainPane {
+    -fx-background-color: #868c87;
 }

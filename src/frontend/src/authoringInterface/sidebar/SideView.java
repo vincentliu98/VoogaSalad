@@ -44,9 +44,6 @@ public class SideView implements SubView<StackPane> {
                 case TILE:
                     gameObjectsManager.createTileClass(item.getClassName().getValue());
                     break;
-                case SOUND:
-                    // TODO
-                    break;
             }
             TreeItem<String> objectLeaf = new TreeItem<>(item.getClassName().getValue());
             boolean found = false;
