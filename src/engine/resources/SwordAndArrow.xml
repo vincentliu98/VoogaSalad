@@ -31,21 +31,14 @@
         <myStartNodeID>98</myStartNodeID>
         <myEndNodeID>99</myEndNodeID>
         <myTrigger class="phase.api.GameEvent$MouseClick"/>
-        <myGuard>if(GameData.isTile($clicked) &amp;&amp; GameData.distance($clicked, selected) &lt;= 1 &amp;&amp; GameData.hasNoEntities($clicked)) { $return = true } else { $return = false }</myGuard>
+        <myGuard>$return = GameData.isTile($clicked) &amp;&amp; GameData.distance($clicked, selected) &lt;= 1 &amp;&amp; GameData.hasNoEntities($clicked)</myGuard>
     </gameplay.Edge>
     <gameplay.Edge>
         <myPhaseID>65</myPhaseID>
         <myStartNodeID>65</myStartNodeID>
         <myEndNodeID>98</myEndNodeID>
         <myTrigger class="phase.api.GameEvent$MouseClick"/>
-        <myGuard>if(((GameData.isEntity($clicked)) &amp;&amp; (GameData.getCurrentPlayer().isMyEntity($clicked)))) {
-            $return = true
-
-            }
-            else {
-            $return = false
-
-            }
+        <myGuard>$return = (GameData.isEntity($clicked)) &amp;&amp; (GameData.getCurrentPlayer().isMyEntity($clicked))
         </myGuard>
     </gameplay.Edge>
     <gameplay.Edge>

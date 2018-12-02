@@ -176,6 +176,8 @@ public interface GameObjectsCRUDInterface {
      */
     GameObjectClass getGameObjectClass(String className);
 
+    Collection<GameObjectClass> getAllClasses();
+
     /**
      * Returns the GameObject Instance with the specified name
      * @param instanceId

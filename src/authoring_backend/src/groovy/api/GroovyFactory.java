@@ -1,16 +1,20 @@
 package groovy.api;
 
+import frontendUtils.Try;
+import gameObjects.crud.GameObjectsCRUDInterface;
 import groovy.graph.BlockEdgeImpl;
 import groovy.graph.BlockGraphImpl;
 import groovy.graph.blocks.core.*;
 import groovy.graph.blocks.small_factory.LiteralFactory;
-import frontendUtils.Try;
 
 /**
  *  A Factory that can generate Graph/Node/Edge that represents Groovy code.
  */
 public class GroovyFactory {
-    public GroovyFactory() { }
+    private GameObjectsCRUDInterface entityDB;
+    public GroovyFactory(GameObjectsCRUDInterface entityDB) {
+        this.entityDB = entityDB;
+    }
 
     /**
      *  Makes an createGraph BlockGraph with one source node
@@ -53,9 +57,7 @@ public class GroovyFactory {
     public Try<LiteralBlock> listBlock(String value) { return LiteralFactory.listBlock(value); }
     public Try<LiteralBlock> mapBlock(String value) { return LiteralFactory.mapBlock(value); }
     public LiteralBlock stringBlock(String value) { return LiteralFactory.stringBlock(value); }
-    public Try<LiteralBlock> refBlock(String value) {
-        return LiteralFactory.refBlock(value);
-    }
+    public Try<LiteralBlock> refBlock(String value) { return LiteralFactory.refBlock(value, entityDB); }
 
     public FunctionBlock functionBlock(String op) { return new FunctionBlock(op); }
     public InfixBinaryBlock binaryBlock(String op) { return new InfixBinaryBlock(op); }

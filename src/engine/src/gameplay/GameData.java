@@ -55,81 +55,18 @@ public class GameData {
 
     public static GroovyShell shell() { return shell; }
 
-    public static int gridWidth() { return GRID_WIDTH; }
-
-    public static int gridHeight() { return GRID_HEIGHT; }
-
-    public static Map<Integer, Entity> getEntities(){ // TODO: Get rid of this
-        return ENTITIES;
-    }
-
-    public static Entity createEntity(String entityName, int tileID, int ownerID){
-        var nextID = ENTITIES.keySet().stream().max(Comparator.comparingInt(a -> a)).orElse(0)+1;
-        var newEntity = ENTITY_PROTOTYPES.get(entityName).build(nextID, tileID);
-        newEntity.adjustViewSize(ROOT.getWidth(), ROOT.getHeight());
-        ENTITIES.put(nextID, newEntity);
-        PLAYERS.get(ownerID).addEntity(nextID);
-        newEntity.setLocation(tileID);
-        ROOT.getChildren().add(newEntity.getImageView());
-        return newEntity;
-    }
-
-    public static void removeEntity(Entity entity) {
-        ROOT.getChildren().remove(entity.getImageView());
-        ENTITIES.remove(entity.getID());
-    }
-
-    public static void moveEntity(Entity entity, Tile to) {
-        entity.setLocation(to.getID());
-    }
-
-    public static boolean hasNoEntities(Tile t) {
-        return ENTITIES.values().stream().noneMatch(e -> t.getID() == e.getTileID());
-    }
-
-    public static Player getPlayer(int playerID){
-        return PLAYERS.get(playerID);
-    }
-
-    public static Entity getEntity(int entityID){
-        return ENTITIES.get(entityID);
-    }
+    public static Map<Integer, Entity> getEntities() { return ENTITIES; }
 
     public static Phase getPhase(int phaseID){
         return PHASES.get(phaseID);
     }
-
     public static Node getNode(int nodeID){
         return NODES.get(nodeID);
     }
-
     public static Map<Integer, Tile> getTiles() { return TILES; }
-    public static Tile getTile(int tileID){
-        return TILES.get(tileID);
-    }
 
-    public static Player getCurrentPlayer() { return PLAYERS.get(TURN.getCurrentPlayerID()); }
-    public static int getCurrentPlayerID(){ return TURN.getCurrentPlayerID(); }
-    public static int getNextPlayerID() { return TURN.nextPlayerID(); }
-    public static int toNextPlayer() { return TURN.toNextPlayer(); }
-    public static void setPlayerOrder(List<Integer> newOrder){ TURN.setPlayerOrder(newOrder); }
-
-    public static Turn getTurn(){ return TURN; }
-
-    public static boolean isTile(GameObject object) {
-        return !ENTITY_PROTOTYPES.keySet().contains(object.getName());
-    }
-
-    public static void goTo(int nodeID) { getNode(nodeID).execute(); }
-
-    public static boolean isEntity(GameObject object) {
-        return ENTITY_PROTOTYPES.keySet().contains(object.getName());
-    }
-
-    public static double distance(GameObject a, GameObject b) {
-        double dx = a.getX() - b.getX();
-        double dy = a.getY() - b.getY();
-        return Math.sqrt(dx*dx+dy*dy);
+    public static Player getPlayer(int playerID){
+        return PLAYERS.get(playerID);
     }
 
     public static Pane getRoot() { return ROOT; }
@@ -150,6 +87,8 @@ public class GameData {
         ENTITIES.values().forEach(Entity::updateView);
         TILES.values().forEach(Tile::updateView);
     }
+
+    public static Turn getTurn(){ return TURN; }
 
     public static int getNextEntityID(){
         return ENTITIES.size() + 1;
@@ -203,5 +142,55 @@ public class GameData {
             xmlString = xmlString + serializer.toXML(entry.getValue()) + "\n";
         }
         return xmlString;
+    }
+
+    /**
+     *  Methods that are intended to be used by the authors
+     */
+    public static int gridWidth() { return GRID_WIDTH; }
+    public static int gridHeight() { return GRID_HEIGHT; }
+    public static Entity createEntity(String entityName, int tileID, int ownerID){
+        var nextID = ENTITIES.keySet().stream().max(Comparator.comparingInt(a -> a)).orElse(0)+1;
+        var newEntity = ENTITY_PROTOTYPES.get(entityName).build(nextID, tileID);
+        newEntity.adjustViewSize(ROOT.getWidth(), ROOT.getHeight());
+        ENTITIES.put(nextID, newEntity);
+        PLAYERS.get(ownerID).addEntity(nextID);
+        newEntity.setLocation(tileID);
+        ROOT.getChildren().add(newEntity.getImageView());
+        return newEntity;
+    }
+    public static void removeEntity(Entity entity) {
+        ROOT.getChildren().remove(entity.getImageView());
+        ENTITIES.remove(entity.getID());
+    }
+    public static void moveEntity(Entity entity, Tile to) {
+        entity.setLocation(to.getID());
+    }
+    public static boolean hasNoEntities(Tile t) {
+        return ENTITIES.values().stream().noneMatch(e -> t.getID() == e.getTileID());
+    }
+    public static Entity getEntity(int entityID){
+        return ENTITIES.get(entityID);
+    }
+    public static Tile getTile(int tileID){
+        return TILES.get(tileID);
+    }
+    public static Player getCurrentPlayer() { return PLAYERS.get(TURN.getCurrentPlayerID()); }
+    public static void setCurrentPlayer(int playerID) { TURN.setCurrentPlayer(playerID);}
+    public static int getCurrentPlayerID(){ return TURN.getCurrentPlayerID(); }
+    public static int getNextPlayerID() { return TURN.nextPlayerID(); }
+    public static int toNextPlayer() { return TURN.toNextPlayer(); }
+    public static void setPlayerOrder(List<Integer> newOrder){ TURN.setPlayerOrder(newOrder); }
+    public static boolean isTile(GameObject object) {
+        return !ENTITY_PROTOTYPES.keySet().contains(object.getName());
+    }
+    public static void goTo(int nodeID) { getNode(nodeID).execute(); }
+    public static boolean isEntity(GameObject object) {
+        return ENTITY_PROTOTYPES.keySet().contains(object.getName());
+    }
+    public static double distance(GameObject a, GameObject b) {
+        double dx = a.getX() - b.getX();
+        double dy = a.getY() - b.getY();
+        return Math.sqrt(dx*dx+dy*dy);
     }
 }

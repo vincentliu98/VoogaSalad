@@ -9,7 +9,6 @@ import frontendUtils.Try;
 import groovy.graph.blocks.core.GroovyBlock;
 import groovy.graph.blocks.core.RawGroovyBlock;
 import groovy.graph.blocks.core.SourceBlock;
-import groovy.graph.blocks.core.bumper.Bumper;
 import javafx.util.Pair;
 
 import java.util.HashSet;
@@ -34,11 +33,8 @@ public class BlockGraphImpl extends SimpleGraph<GroovyBlock, BlockEdge> implemen
      */
     @Override
     public void addEdge(BlockEdge edge) throws Throwable {
-        var typeCheck = Try.apply(() -> Bumper.typeCheck(edge, this));
-        if(typeCheck.isSuccess()) {
-            if(get(edge.from()).stream().noneMatch(p -> p.fromPort() == edge.fromPort())) super.addEdge(edge);
-            else throw new PortAlreadyFilledException(edge.from(), edge.fromPort());
-        } else typeCheck.get();
+        if(get(edge.from()).stream().noneMatch(p -> p.fromPort() == edge.fromPort())) super.addEdge(edge);
+        else throw new PortAlreadyFilledException(edge.from(), edge.fromPort());
     }
 
     /**

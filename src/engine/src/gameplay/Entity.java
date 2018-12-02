@@ -100,10 +100,6 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
         } else imgIndex.set(0);
     }
 
-    public int getTile(){
-        return tileID;
-    }
-
     public void setLocation(int tileID){
         this.tileID = tileID;
         var data = GameData.getTile(tileID);
