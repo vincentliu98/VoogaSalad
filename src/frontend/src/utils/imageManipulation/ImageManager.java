@@ -5,6 +5,8 @@ import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import javafx.collections.ObservableList;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.text.Text;
 import utils.exception.PreviewUnavailableException;
@@ -21,6 +23,8 @@ import java.util.List;
 public class ImageManager {
     private static final double IMAGE_WIDTH = 100;
     private static final double IMAGE_HEIGHT = 100;
+    private static final double X_OFFSET = 10;
+    private static final double Y_OFFSET = 10;
 
     /**
      * This method gets a preview Image for the input GameObjectClass.
@@ -68,6 +72,20 @@ public class ImageManager {
      * @return A resultant Image representing the stack of images.
      */
     private static Image stackImageFromMultipleImages(List<Image> images) {
+        double width = (images.size()-1) * X_OFFSET + IMAGE_WIDTH;
+        double height = (images.size()-1) * Y_OFFSET + IMAGE_HEIGHT;
+        Canvas canvas = new Canvas();
+        canvas.setWidth(width);
+        canvas.setHeight(height);
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        gc.clearRect(0, 0, width, height);
+        for (int i = 0, size = images.size(); i < size; i++) {
+            double x = i * X_OFFSET;
+            double y = i * Y_OFFSET;
+            gc.fillRect(x, y, IMAGE_WIDTH, IMAGE_HEIGHT);
+            gc.drawImage(images.get(i), x, y, IMAGE_WIDTH, IMAGE_HEIGHT);
+        }
+        return canvas.snapshot(null, null);
     }
 
     /**
