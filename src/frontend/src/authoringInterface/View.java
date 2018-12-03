@@ -38,7 +38,7 @@ import utils.UnhandledCoordinatesClassException;
  * @author jl729
  * @author Amy
  */
-public class View implements ParentView<SubView>, DraggingCanvas {
+public class View implements ParentView<SubView> {
     private AnchorPane rootPane;
     private EditorMenuBarView menuBar;
     private SideView sideView;
@@ -57,7 +57,6 @@ public class View implements ParentView<SubView>, DraggingCanvas {
     private static final double SIDEBAR_WIDTH = 247;
     private static final int ROW_NUMBER = 10;
     private static final int COL_NUMBER = 7;
-    private static final double PREVIEW_OPACITY = 0.5;
 
     /**
      * Constructor for an createGraph window, with an AnchorPane as the root Node, and the AnchorPane constraints on top, left and right are 0.
@@ -73,7 +72,6 @@ public class View implements ParentView<SubView>, DraggingCanvas {
         initializeElements();
         setElements();
         addElements();
-        setupDraggingCanvas();
     }
 
     private void initializeElements() {
@@ -124,61 +122,5 @@ public class View implements ParentView<SubView>, DraggingCanvas {
 
     public AnchorPane getRootPane() {
         return rootPane;
-    }
-
-    /**
-     * This method handles the dragging preview when the user drags some TreeItem somewhere.
-     *
-     * @param e: A DragEvent which is a DragOver.
-     */
-    private void handleMouseDragged(DragEvent e) {
-        if (preview != null) {
-            try {
-                Coordinates.setXAndY(preview, e.getX(), e.getY());
-            } catch (UnhandledCoordinatesClassException e1) {
-                // TODO: proper error handling
-                e1.printStackTrace();
-            }
-            return;
-        }
-        e.acceptTransferModes(TransferMode.ANY);
-        GameObjectClass draggedClass = gameObjectManager.getGameObjectClass(e.getDragboard().getString());
-        switch (draggedClass.getType()) {
-            case ENTITY:
-                ObservableList<String> imagePaths = ((EntityClass) draggedClass).getImagePathList();
-                if (imagePaths == null || imagePaths.isEmpty()) {
-                    preview = new Text(draggedClass.getClassName().getValue());
-                    preview.setOpacity(PREVIEW_OPACITY);
-                } else {
-                    preview = new ImageView(imagePaths.get(0));
-                    preview.setOpacity(PREVIEW_OPACITY);
-                }
-        }
-        try {
-            Coordinates.setXAndY(preview, e.getX(), e.getY());
-        } catch (UnhandledCoordinatesClassException e1) {
-            // TODO: proper error handling
-            e1.printStackTrace();
-        }
-        rootPane.getChildren().add(preview);
-    }
-
-    /**
-     * This method handles the removal of preview once the drag is completed.
-     *
-     * @param dragEvent: a DragEvent which should be DragDropped.
-     */
-    private void handleDragFinished(DragEvent dragEvent) {
-        rootPane.getChildren().remove(preview);
-        preview = null;
-    }
-
-    /**
-     * Setup the dragging canvas event filters.
-     */
-    @Override
-    public void setupDraggingCanvas() {
-        rootPane.setOnDragOver(this::handleMouseDragged);
-        rootPane.setOnDragDone(this::handleDragFinished);
     }
 }
