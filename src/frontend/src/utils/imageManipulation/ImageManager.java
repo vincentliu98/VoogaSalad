@@ -19,7 +19,10 @@ public class ImageManager {
      * @return An Image object.
      */
     public static Image getPreView(GameObjectClass gameObjectClass) {
-        
+        GameObjectType type = gameObjectClass.getType();
+        switch (type) {
+            case UNSPECIFIED:
+        }
     }
 
     /**
