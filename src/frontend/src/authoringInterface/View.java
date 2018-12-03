@@ -1,6 +1,5 @@
 package authoringInterface;
 
-import api.DraggingCanvas;
 import api.ParentView;
 import api.SubView;
 import authoring.AuthoringTools;
@@ -9,27 +8,13 @@ import authoringInterface.editor.menuBarView.EditorMenuBarView;
 import authoringInterface.sidebar.SideView;
 import authoringInterface.sidebar.StatusView;
 import gameObjects.crud.GameObjectsCRUDInterface;
-import gameObjects.crud.SimpleGameObjectsCRUD;
-import gameObjects.entity.EntityClass;
-import gameObjects.gameObject.GameObjectClass;
 import graphUI.groovy.GroovyPaneFactory;
-import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.control.TreeCell;
-import javafx.scene.control.TreeItem;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.MouseDragEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import utils.Coordinates;
-import utils.CrappyNodeInstanceController;
-import utils.NodeInstanceController;
-import utils.UnhandledCoordinatesClassException;
+import utils.nodeInstance.CrappyNodeInstanceController;
+import utils.nodeInstance.NodeInstanceController;
 
 /**
  * This class provides an createGraph skeleton window with the basic menu items, and basic editing interfaces.

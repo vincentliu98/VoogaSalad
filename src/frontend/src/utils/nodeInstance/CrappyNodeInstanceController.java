@@ -1,9 +1,12 @@
-package utils;
+package utils.nodeInstance;
 
 import gameObjects.gameObject.GameObjectInstance;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import utils.exception.GameObjectInstanceNotFoundException;
+import utils.exception.NodeNotFoundException;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -16,7 +19,6 @@ import java.util.function.BiConsumer;
 public class CrappyNodeInstanceController implements NodeInstanceController {
     private Map<GameObjectInstance, Node> instanceNodeMap;
     private Map<Node, GameObjectInstance> nodeInstanceMap;
-    private BiConsumer<MouseEvent, Node> mouseDoubleClickOpenEditor;
 
     public CrappyNodeInstanceController() {
         instanceNodeMap = new HashMap<>();
@@ -52,9 +54,6 @@ public class CrappyNodeInstanceController implements NodeInstanceController {
             parent.getChildren().add(newNode);
             parent.getChildren().remove(oldNode);
         }
-        if (mouseDoubleClickOpenEditor != null) {
-            newNode.setOnMouseClicked(e -> mouseDoubleClickOpenEditor.accept(e, newNode));
-        }
         nodeInstanceMap.put(newNode, nodeInstanceMap.get(oldNode));
         nodeInstanceMap.remove(oldNode);
         instanceNodeMap.put(nodeInstanceMap.get(newNode), newNode);
@@ -80,12 +79,12 @@ public class CrappyNodeInstanceController implements NodeInstanceController {
      *
      * @param gameObjectInstance : The GameObjectInstance whose corresponding Node will be queried.
      * @return The corresponding Node.
-     * @throws NodeNotFoundException
+     * @throws GameObjectInstanceNotFoundException
      */
     @Override
     public Node getNode(GameObjectInstance gameObjectInstance) throws GameObjectInstanceNotFoundException {
         if (!instanceNodeMap.containsKey(gameObjectInstance)) {
-            throw new GameObjectInstanceNotFoundException("The input GameObjectInstance is not defined in the NodeInstanceController");
+            throw new GameObjectInstanceNotFoundException(String.format("The input GameObjectInstance %s is not defined in the NodeInstanceController", gameObjectInstance.getInstanceName().getValue()));
         }
         return instanceNodeMap.get(gameObjectInstance);
     }
@@ -97,15 +96,5 @@ public class CrappyNodeInstanceController implements NodeInstanceController {
     public void clearAllLinks() {
         instanceNodeMap.clear();
         nodeInstanceMap.clear();
-    }
-
-    /**
-     * Set the private field biconsumer from an external place.
-     *
-     * @param biConsumer : A BiConsumer
-     */
-    @Override
-    public void setBiConsumer(BiConsumer<MouseEvent, Node> biConsumer) {
-        mouseDoubleClickOpenEditor = biConsumer;
     }
 }

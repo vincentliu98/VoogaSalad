@@ -8,11 +8,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.*;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import utils.NodeInstanceController;
-
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
+import utils.exception.PreviewUnavailableException;
+import utils.imageManipulation.ImageManager;
 
 /**
  * This class organizes the cell factory call back methods into a nicer format.
@@ -24,7 +22,6 @@ public class CustomTreeCellImpl extends TreeCell<String> {
     private ContextMenu addMenu = new ContextMenu();
     private ContextMenu editMenu = new ContextMenu();
     private GameObjectsCRUDInterface objectManager;
-    private static final String IMAGE_NOT_FOUND = "image-not-found.png";
 
     public CustomTreeCellImpl(GameObjectsCRUDInterface manager) {
         objectManager = manager;
@@ -55,13 +52,11 @@ public class CustomTreeCellImpl extends TreeCell<String> {
             cc.putString(getString());
             db.setContent(cc);
             GameObjectClass draggedClass = objectManager.getGameObjectClass(getString());
-            switch (draggedClass.getType()) {
-                case ENTITY:
-                    if (((EntityClass) draggedClass).getImagePathList() == null || ((EntityClass) draggedClass).getImagePathList().isEmpty()) {
-                        db.setDragView(new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_NOT_FOUND)));
-                    } else {
-                        db.setDragView(new Image(((EntityClass) draggedClass).getImagePathList().get(0)));
-                    }
+            try {
+                db.setDragView(ImageManager.getPreview(draggedClass));
+            } catch (PreviewUnavailableException e1) {
+                // TODO: proper error handling.
+                e1.printStackTrace();
             }
         });
         MenuItem editMenuItem = new MenuItem("Edit this GameObject");

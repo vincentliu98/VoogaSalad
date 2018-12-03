@@ -3,7 +3,6 @@ package authoringInterface.subEditors;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.category.CategoryClass;
 import gameObjects.category.CategoryInstance;
-import utils.NodeInstanceController;
 
 /**
  * This class handles the addition and editing of category entries.

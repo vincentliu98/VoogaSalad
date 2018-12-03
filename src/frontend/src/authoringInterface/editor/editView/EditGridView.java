@@ -1,6 +1,5 @@
 package authoringInterface.editor.editView;
 
-import api.DraggingCanvas;
 import api.SubView;
 import authoringInterface.customEvent.UpdateStatusEventListener;
 import authoringInterface.subEditors.*;
@@ -10,14 +9,15 @@ import gameObjects.entity.EntityInstance;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
+import gameObjects.tile.TileClass;
+import gameObjects.tile.TileInstance;
+import grids.PointImpl;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TreeCell;
-import javafx.scene.control.TreeItem;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
@@ -25,13 +25,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import utils.NodeInstanceController;
-import utils.NodeNotFoundException;
+import utils.exception.PreviewUnavailableException;
+import utils.imageManipulation.Coordinates;
+import utils.imageManipulation.ImageManager;
+import utils.nodeInstance.NodeInstanceController;
+import utils.exception.NodeNotFoundException;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * EditGridView Class (ScrollPane)
@@ -47,6 +48,8 @@ public class EditGridView implements SubView<ScrollPane> {
     private GameObjectsCRUDInterface gameObjectManager;
     private NodeInstanceController nodeInstanceController;
     private List<UpdateStatusEventListener<Node>> listeners;
+    private static final double NODE_HEIGHT = 75;
+    private static final double NODE_WIDTH = 75;
 
     public EditGridView(int row, int col, GameObjectsCRUDInterface manager, NodeInstanceController controller) {
         gameObjectManager = manager;
@@ -68,7 +71,6 @@ public class EditGridView implements SubView<ScrollPane> {
         }
         gridScrollView.setGridLinesVisible(true);
         scrollPane = new ScrollPane(gridScrollView);
-        nodeInstanceController.setBiConsumer(this::handleDoubleClick);
     }
 
     public void updateDimension(int width, int height) {
@@ -212,30 +214,32 @@ public class EditGridView implements SubView<ScrollPane> {
         if (dragEvent.getGestureSource() instanceof TreeCell) {
             dragEvent.acceptTransferModes(TransferMode.ANY);
             GameObjectClass objectClass = gameObjectManager.getGameObjectClass(dragEvent.getDragboard().getString());
-            GameObjectType type = objectClass.getType();
-            switch (type) {
+            ImageView nodeOnGrid = null;
+            try {
+                nodeOnGrid = new ImageView(ImageManager.getPreview(objectClass));
+            } catch (PreviewUnavailableException e) {
+                // TODO: proper error handling
+                e.printStackTrace();
+            }
+            // TODO: smarter resizing
+            nodeOnGrid.setFitHeight(NODE_HEIGHT);
+            nodeOnGrid.setFitWidth(NODE_WIDTH);
+            ImageView finalNodeOnGrid = nodeOnGrid;
+            nodeOnGrid.setOnMouseClicked(e -> handleDoubleClick(e, finalNodeOnGrid));
+            cell.getChildren().add(nodeOnGrid);
+            switch (objectClass.getType()) {
                 case ENTITY:
-                    if (((EntityClass) objectClass).getImagePathList().isEmpty()) {
-                        Text deploy = new Text(objectClass.getClassName().getValue());
-                        deploy.setOnMouseClicked(e1 -> handleDoubleClick(e1, deploy));
-                        cell.getChildren().add(deploy);
-                        // TODO: get tile id, (player id or we can have a "global" player to take care of entities without player)
-                        EntityInstance objectInstance = ((EntityClass) objectClass).createInstance(0, gameObjectManager.getDefaultPlayerID());
-                        nodeInstanceController.addLink(deploy, objectInstance);
-                    } else {
-                        ImageView deploy = new ImageView(((EntityClass) objectClass).getImagePathList().get(0));
-                        deploy.setOnMouseClicked(e1 -> handleDoubleClick(e1, deploy));
-                        cell.getChildren().add(deploy);
-                        // TODO: get tile id, player id
-                        EntityInstance objectInstance = ((EntityClass) objectClass).createInstance(0, gameObjectManager.getDefaultPlayerID());
-                        nodeInstanceController.addLink(deploy, objectInstance);
-                    }
+                    // TODO: solve the TileID thing, and player ID thing
+                    EntityInstance entityInstance = ((EntityClass) objectClass).createInstance(0, gameObjectManager.getDefaultPlayerID());
+                    nodeInstanceController.addLink(nodeOnGrid, entityInstance);
                     break;
                 case SOUND:
                     // TODO
                     break;
                 case TILE:
-                    // TODO
+                    // TODO: solve point
+                    TileInstance tileInstance = ((TileClass) objectClass).createInstance(new PointImpl(GridPane.getColumnIndex(cell), GridPane.getRowIndex(cell)));
+                    nodeInstanceController.addLink(nodeOnGrid, tileInstance);
                     break;
             }
         }

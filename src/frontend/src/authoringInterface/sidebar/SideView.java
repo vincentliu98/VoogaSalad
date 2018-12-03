@@ -4,11 +4,9 @@ import api.SubView;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.entity.SimpleEntityClass;
 import gameObjects.gameObject.GameObjectClass;
-import gameObjects.gameObject.GameObjectType;
 import gameObjects.tile.SimpleTileClass;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
-import utils.NodeInstanceController;
 
 import java.util.*;
 
