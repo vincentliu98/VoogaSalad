@@ -22,7 +22,6 @@ public class CustomTreeCellImpl extends TreeCell<String> {
     private ContextMenu addMenu = new ContextMenu();
     private ContextMenu editMenu = new ContextMenu();
     private GameObjectsCRUDInterface objectManager;
-    private static final String IMAGE_NOT_FOUND = "image-not-found.png";
 
     public CustomTreeCellImpl(GameObjectsCRUDInterface manager) {
         objectManager = manager;

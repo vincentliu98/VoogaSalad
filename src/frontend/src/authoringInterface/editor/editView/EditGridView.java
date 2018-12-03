@@ -71,7 +71,6 @@ public class EditGridView implements SubView<ScrollPane> {
         }
         gridScrollView.setGridLinesVisible(true);
         scrollPane = new ScrollPane(gridScrollView);
-        nodeInstanceController.setBiConsumer(this::handleDoubleClick);
     }
 
     public void updateDimension(int width, int height) {
