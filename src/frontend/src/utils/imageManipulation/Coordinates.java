@@ -30,4 +30,16 @@ public class Coordinates {
             throw new UnhandledCoordinatesClassException("The setXAndY method is not defined for this particular JavaFx Node class.");
         }
     }
+
+    /**
+     * This method sets the width and height of an ImageView.
+     *
+     * @param imageView: The ImageView object whose height and width to be changed.
+     * @param width: The width to be set.
+     * @param height: The height to be set.
+     */
+    public static void setWidthAndHeight(ImageView imageView, double width, double height) {
+        imageView.setFitWidth(width);
+        imageView.setFitHeight(height);
+    }
 }

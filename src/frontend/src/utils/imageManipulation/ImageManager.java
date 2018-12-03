@@ -9,10 +9,14 @@ import gameObjects.tile.TileClass;
 import gameObjects.tile.TileInstance;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.collections.ObservableList;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.image.WritableImage;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.scene.transform.Transform;
 import utils.exception.PreviewUnavailableException;
 
 import java.util.ArrayList;
@@ -102,7 +106,10 @@ public class ImageManager {
             gc.fillRect(x, y, IMAGE_WIDTH, IMAGE_HEIGHT);
             gc.drawImage(images.get(i), x, y, IMAGE_WIDTH, IMAGE_HEIGHT);
         }
-        return canvas.snapshot(null, null);
+        SnapshotParameters sp =  new SnapshotParameters();
+        sp.setTransform(Transform.scale(IMAGE_WIDTH, IMAGE_HEIGHT));
+        sp.setFill(Color.TRANSPARENT);
+        return canvas.snapshot(sp, null);
     }
 
     /**
@@ -112,7 +119,10 @@ public class ImageManager {
      * @return An Image that has the input String as content.
      */
     private static Image composeImageFromString(String value) {
-        return new Text(value).snapshot(null, null);
+        SnapshotParameters sp =  new SnapshotParameters();
+        sp.setTransform(Transform.scale(IMAGE_WIDTH, IMAGE_HEIGHT));
+        sp.setFill(Color.TRANSPARENT);
+        return new Text(value).snapshot(sp, null);
     }
 
     /**

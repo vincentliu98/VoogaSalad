@@ -54,11 +54,4 @@ public interface NodeInstanceController {
      * This method clears all the relationships between all Nodes and GameObjectInstances.
      */
     void clearAllLinks();
-
-    /**
-     * Set the private field biconsumer from an external place.
-     *
-     * @param biConsumer: A BiConsumer
-     */
-    void setBiConsumer(BiConsumer<MouseEvent, Node> biConsumer);
 }
