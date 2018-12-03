@@ -225,6 +225,8 @@ public class EditGridView implements SubView<ScrollPane> {
             // TODO: smarter resizing
             nodeOnGrid.setFitHeight(NODE_HEIGHT);
             nodeOnGrid.setFitWidth(NODE_WIDTH);
+            ImageView finalNodeOnGrid = nodeOnGrid;
+            nodeOnGrid.setOnMouseClicked(e -> handleDoubleClick(e, finalNodeOnGrid));
             cell.getChildren().add(nodeOnGrid);
             switch (objectClass.getType()) {
                 case ENTITY:
