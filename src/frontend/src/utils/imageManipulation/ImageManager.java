@@ -106,7 +106,10 @@ public class ImageManager {
             gc.fillRect(x, y, IMAGE_WIDTH, IMAGE_HEIGHT);
             gc.drawImage(images.get(i), x, y, IMAGE_WIDTH, IMAGE_HEIGHT);
         }
-        return canvas.snapshot(null, null);
+        SnapshotParameters sp =  new SnapshotParameters();
+        sp.setTransform(Transform.scale(IMAGE_WIDTH, IMAGE_HEIGHT));
+        sp.setFill(Color.TRANSPARENT);
+        return canvas.snapshot(sp, null);
     }
 
     /**
@@ -118,6 +121,7 @@ public class ImageManager {
     private static Image composeImageFromString(String value) {
         SnapshotParameters sp =  new SnapshotParameters();
         sp.setTransform(Transform.scale(IMAGE_WIDTH, IMAGE_HEIGHT));
+        sp.setFill(Color.TRANSPARENT);
         return new Text(value).snapshot(sp, null);
     }
 
