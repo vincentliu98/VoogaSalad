@@ -1,8 +1,10 @@
-package utils;
+package utils.nodeInstance;
 
 import gameObjects.gameObject.GameObjectInstance;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
+import utils.exception.GameObjectInstanceNotFoundException;
+import utils.exception.NodeNotFoundException;
 
 import java.util.function.BiConsumer;
 

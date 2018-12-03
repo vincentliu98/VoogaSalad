@@ -1,4 +1,4 @@
-package utils;
+package utils.exception;
 
 /**
  * This exception gets thrown when the NodeInstanceController tries to get a corresponding Node that is not there.

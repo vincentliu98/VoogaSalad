@@ -1,4 +1,4 @@
-package utils;
+package utils.exception;
 
 /**
  * This Exception is thrown when the developer attempts to use the convenient methods in Coordiates class to process some Nodes whose logic has not been defined yet.
