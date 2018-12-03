@@ -60,7 +60,8 @@ public class EditGridView implements SubView<ScrollPane> {
                 cell.setPrefWidth(100);
                 cell.setPrefHeight(100);
                 gridScrollView.add(cell, i, j);
-                setupHoveringColorChange(cell, Color.LIGHTGREEN);
+                cell.setOnDragOver(e -> setUpHoveringColorDraggedOver(e, Color.LIGHTGREEN, cell));
+                cell.setOnDragExited(e -> setUpDragExit(e, cell));
                 receiveDragFromSideView(cell);
                 cell.setOnMouseClicked(e -> listeners.forEach(listener -> listener.setOnUpdateStatusEvent(constructStatusView(cell))));
             }
@@ -78,7 +79,8 @@ public class EditGridView implements SubView<ScrollPane> {
                 cell.setPrefWidth(100);
                 cell.setPrefHeight(100);
                 gridScrollView.add(cell, i, j);
-                setupHoveringColorChange(cell, Color.LIGHTGREEN);
+                cell.setOnDragOver(e -> setUpHoveringColorDraggedOver(e, Color.LIGHTGREEN, cell));
+                cell.setOnDragExited(e -> setUpDragExit(e, cell));
                 receiveDragFromSideView(cell);
                 cell.setOnMouseClicked(e -> listeners.forEach(listener -> listener.setOnUpdateStatusEvent(constructStatusView(cell))));
             }
@@ -174,20 +176,26 @@ public class EditGridView implements SubView<ScrollPane> {
     /**
      * This method accepts a Region as input and another Paint variable as input to set up a hovering coloring scheme. The region that is inputted will change to the defined color when hovered over.
      *
-     * @param cell: The input Region where a pair of EventHandlers will be set.
-     * @param hoveringColor: The JavaFx Color scheme applied to the hovering.
+     * @param dragEvent: A DragEvent which should be DraggedOver
+     * @param hoveringFill: The JavaFx Color scheme applied to the hovering.
+     * @param cell: The Pane where the hovering occurs.
      */
-    private void setupHoveringColorChange(Region cell, Paint hoveringColor) {
-        cell.setOnMouseDragEntered(e -> {
-            if (e.getGestureSource() instanceof TreeCell) {
-                cell.setBackground(new Background(new BackgroundFill(hoveringColor, CornerRadii.EMPTY, Insets.EMPTY)));
-            }
-        });
-        cell.setOnMouseDragExited(e -> {
-            if (e.getGestureSource() instanceof TreeCell) {
-                cell.setBackground(Background.EMPTY);
-            }
-        });
+    private void setUpHoveringColorDraggedOver(DragEvent dragEvent, Paint hoveringFill, Pane cell) {
+        if (dragEvent.getGestureSource() instanceof TreeCell) {
+            cell.setBackground(new Background(new BackgroundFill(hoveringFill, CornerRadii.EMPTY, Insets.EMPTY)));
+        }
+    }
+
+    /**
+     * This method sets the Background of a cell back to empty once the hovering exits the cell.
+     *
+     * @param dragEvent: A DragEvent which should be DragExited.
+     * @param cell: The Pane where the hovering exits.
+     */
+    private void setUpDragExit(DragEvent dragEvent, Pane cell) {
+        if (dragEvent.getGestureSource() instanceof TreeCell) {
+            cell.setBackground(Background.EMPTY);
+        }
     }
 
     /**
