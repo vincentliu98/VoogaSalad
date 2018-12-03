@@ -1,9 +1,13 @@
 package utils.imageManipulation;
 
 import gameObjects.entity.EntityClass;
+import gameObjects.entity.EntityInstance;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
+import gameObjects.tile.TileClass;
+import gameObjects.tile.TileInstance;
+import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -37,22 +41,16 @@ public class ImageManager {
         switch (type) {
             case UNSPECIFIED:
                 throw new PreviewUnavailableException(String.format("The class %s does not support getPreview operation.", gameObjectClass.getClassName().getValue()));
-            case ENTITY:
-                ObservableList<String> imagePaths = ((EntityClass) gameObjectClass).getImagePathList();
-                if (imagePaths == null || imagePaths.isEmpty()) {
-                    return composeImageFromString(gameObjectClass.getClassName().getValue());
-                } else if (imagePaths.size() == 1) {
-                    return new Image(imagePaths.get(0));
-                } else {
-                    List<Image> images = new ArrayList<>();
-                    imagePaths.forEach(uri -> images.add(new Image(uri)));
-                    return stackImageFromMultipleImages(images);
-                }
-                break;
-            case CATEGORY:
-                // TODO
-                break;
             case TILE:
+            case ENTITY:
+                ObservableList<String> imagePaths;
+                if (gameObjectClass instanceof EntityClass) {
+                    imagePaths = ((EntityClass) gameObjectClass).getImagePathList();
+                } else {
+                    imagePaths = ((TileClass) gameObjectClass).getImagePathList();
+                }
+                return getImage(imagePaths, gameObjectClass.getClassName());
+            case CATEGORY:
                 // TODO
                 break;
             case SOUND:
@@ -63,6 +61,25 @@ public class ImageManager {
                 break;
         }
         return null;
+    }
+
+    /**
+     * Refactored code to remove duplicates.
+     *
+     * @param imagePaths: A List of String that contains file paths to images.
+     * @param textToDisplay: The input String if image file is not available.
+     * @return An Image for this GameObject Instance or Class.
+     */
+    private static Image getImage(ObservableList<String> imagePaths, ReadOnlyStringProperty textToDisplay) {
+        if (imagePaths == null || imagePaths.isEmpty()) {
+            return composeImageFromString(textToDisplay.getValue());
+        } else if (imagePaths.size() == 1) {
+            return new Image(imagePaths.get(0));
+        } else {
+            List<Image> images = new ArrayList<>();
+            imagePaths.forEach(uri -> images.add(new Image(uri)));
+            return stackImageFromMultipleImages(images);
+        }
     }
 
     /**
@@ -104,7 +121,30 @@ public class ImageManager {
      * @param gameObjectInstance: A GameObjectInstance whose preview will be returned.
      * @return An Image object.
      */
-    public static Image getPreview(GameObjectInstance gameObjectInstance) {
-
+    public static Image getPreview(GameObjectInstance gameObjectInstance) throws PreviewUnavailableException {
+        GameObjectType type = gameObjectInstance.getType();
+        switch (type) {
+            case UNSPECIFIED:
+                throw new PreviewUnavailableException(String.format("The instance %s does not support getPreview operation.", gameObjectInstance.getInstanceName().getValue()));
+            case TILE:
+            case ENTITY:
+                ObservableList<String> imagePaths;
+                if (gameObjectInstance instanceof EntityInstance) {
+                    imagePaths = ((EntityInstance) gameObjectInstance).getImagePathList();
+                } else {
+                    imagePaths = ((TileInstance) gameObjectInstance).getImagePathList();
+                }
+                return getImage(imagePaths, gameObjectInstance.getInstanceName());
+            case CATEGORY:
+                // TODO
+                break;
+            case SOUND:
+                // TODO
+                break;
+            case PLAYER:
+                // TODO
+                break;
+        }
+        return null;
     }
 }
