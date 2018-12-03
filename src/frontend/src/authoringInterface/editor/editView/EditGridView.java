@@ -1,6 +1,5 @@
 package authoringInterface.editor.editView;
 
-import api.DraggingCanvas;
 import api.SubView;
 import authoringInterface.customEvent.UpdateStatusEventListener;
 import authoringInterface.subEditors.*;
@@ -16,8 +15,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TreeCell;
-import javafx.scene.control.TreeItem;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
@@ -25,13 +22,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import utils.NodeInstanceController;
-import utils.NodeNotFoundException;
+import utils.nodeInstance.NodeInstanceController;
+import utils.exception.NodeNotFoundException;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * EditGridView Class (ScrollPane)

@@ -8,7 +8,6 @@ import gameObjects.crud.GameObjectsCRUDInterface;
 import graphUI.groovy.GroovyPaneFactory;
 import graphUI.phase.PhaseChooserPane;
 import javafx.geometry.Point2D;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -17,7 +16,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabDragPolicy;
 import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.layout.StackPane;
-import utils.NodeInstanceController;
+import utils.nodeInstance.NodeInstanceController;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 

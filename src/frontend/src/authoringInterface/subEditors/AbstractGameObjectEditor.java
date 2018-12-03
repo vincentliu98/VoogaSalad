@@ -13,8 +13,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import utils.NodeInstanceController;
-import utils.NodeNotFoundException;
+import utils.nodeInstance.NodeInstanceController;
+import utils.exception.NodeNotFoundException;
 
 /**
  * This abstract class provides a boiler plate for different editors because they are pretty similar.

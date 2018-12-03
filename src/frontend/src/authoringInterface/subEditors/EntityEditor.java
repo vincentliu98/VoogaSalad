@@ -11,13 +11,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import utils.ErrorWindow;
-import utils.NodeInstanceController;
-import utils.NodeNotFoundException;
+import utils.exception.NodeNotFoundException;
 
 import java.io.File;
 import java.util.ArrayList;

@@ -1,8 +1,9 @@
-package utils;
+package utils.imageManipulation;
 
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
+import utils.exception.UnhandledCoordinatesClassException;
 
 /**
  * This class provides convenient methods to set the coordinates of some JavaFx Nodes.

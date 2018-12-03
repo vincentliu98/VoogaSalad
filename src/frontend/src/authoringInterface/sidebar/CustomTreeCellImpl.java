@@ -8,11 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.*;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import utils.NodeInstanceController;
-
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 
 /**
  * This class organizes the cell factory call back methods into a nicer format.
