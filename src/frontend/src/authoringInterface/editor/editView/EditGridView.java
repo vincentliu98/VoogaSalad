@@ -62,7 +62,7 @@ public class EditGridView implements SubView<ScrollPane> {
                 gridScrollView.add(cell, i, j);
                 cell.setOnDragOver(e -> setUpHoveringColorDraggedOver(e, Color.LIGHTGREEN, cell));
                 cell.setOnDragExited(e -> setUpDragExit(e, cell));
-                receiveDragFromSideView(cell);
+                cell.setOnDragDropped(e -> handleDragFromSideView(e, cell));
                 cell.setOnMouseClicked(e -> listeners.forEach(listener -> listener.setOnUpdateStatusEvent(constructStatusView(cell))));
             }
         }
@@ -81,10 +81,11 @@ public class EditGridView implements SubView<ScrollPane> {
                 gridScrollView.add(cell, i, j);
                 cell.setOnDragOver(e -> setUpHoveringColorDraggedOver(e, Color.LIGHTGREEN, cell));
                 cell.setOnDragExited(e -> setUpDragExit(e, cell));
-                receiveDragFromSideView(cell);
+                cell.setOnDragDropped(e -> handleDragFromSideView(e, cell));
                 cell.setOnMouseClicked(e -> listeners.forEach(listener -> listener.setOnUpdateStatusEvent(constructStatusView(cell))));
             }
         }
+        nodeInstanceController.clearAllLinks();
         gameObjectManager.deleteAllInstances();
     }
 
@@ -181,9 +182,11 @@ public class EditGridView implements SubView<ScrollPane> {
      * @param cell: The Pane where the hovering occurs.
      */
     private void setUpHoveringColorDraggedOver(DragEvent dragEvent, Paint hoveringFill, Pane cell) {
+        dragEvent.acceptTransferModes(TransferMode.ANY);
         if (dragEvent.getGestureSource() instanceof TreeCell) {
             cell.setBackground(new Background(new BackgroundFill(hoveringFill, CornerRadii.EMPTY, Insets.EMPTY)));
         }
+        dragEvent.consume();
     }
 
     /**
@@ -196,49 +199,45 @@ public class EditGridView implements SubView<ScrollPane> {
         if (dragEvent.getGestureSource() instanceof TreeCell) {
             cell.setBackground(Background.EMPTY);
         }
+        dragEvent.consume();
     }
 
     /**
      * This method sets up a region so that it accepts a MouseDragEvent Released event from the sideview. The Release event will create an instance according to the GameObjectClass from which the drag is initiated.
      *
-     * @param cell: A region where the event handler will be set up.
+     * @param dragEvent: A DragEvent that should be DragDropped.
+     * @param cell: The region where the event handler will be set up.
      */
-    private void receiveDragFromSideView(Pane cell) {
-        cell.setOnMouseDragReleased(e -> {
-            if (e.getGestureSource() instanceof TreeCell) {
-                TreeItem<String> item;
-                //noinspection unchecked
-                item = ((TreeCell<String>) e.getGestureSource()).getTreeItem();
-                if (!item.isLeaf()) {
-                    return;
-                }
-                GameObjectClass objectClass = gameObjectManager.getGameObjectClass(item.getValue());
-                GameObjectType type = objectClass.getType();
-                switch (type) {
-                    case ENTITY:
-                        if (((EntityClass) objectClass).getImagePathList().isEmpty()) {
-                            Text deploy = new Text(objectClass.getClassName().getValue());
-                            deploy.setOnMouseClicked(e1 -> handleDoubleClick(e1, deploy));
-                            cell.getChildren().add(deploy);
-                            // TODO: get tile id, (player id or we can have a "global" player to take care of entities without player)
-                            EntityInstance objectInstance = ((EntityClass) objectClass).createInstance(0, gameObjectManager.getDefaultPlayerID());
-                            nodeInstanceController.addLink(deploy, objectInstance);
-                        } else {
-                            ImageView deploy = new ImageView(((EntityClass) objectClass).getImagePathList().get(0));
-                            deploy.setOnMouseClicked(e1 -> handleDoubleClick(e1, deploy));
-                            cell.getChildren().add(deploy);
-                            // TODO: get tile id, player id
-                            EntityInstance objectInstance = ((EntityClass) objectClass).createInstance(0, gameObjectManager.getDefaultPlayerID());
-                            nodeInstanceController.addLink(deploy, objectInstance);
-                        }
-                        break;
-                    case SOUND:
-                        // TODO
-                        break;
-                    case TILE:
-                        break;
-                }
+    private void handleDragFromSideView(DragEvent dragEvent, Pane cell) {
+        if (dragEvent.getGestureSource() instanceof TreeCell) {
+            dragEvent.acceptTransferModes(TransferMode.ANY);
+            GameObjectClass objectClass = gameObjectManager.getGameObjectClass(dragEvent.getDragboard().getString());
+            GameObjectType type = objectClass.getType();
+            switch (type) {
+                case ENTITY:
+                    if (((EntityClass) objectClass).getImagePathList().isEmpty()) {
+                        Text deploy = new Text(objectClass.getClassName().getValue());
+                        deploy.setOnMouseClicked(e1 -> handleDoubleClick(e1, deploy));
+                        cell.getChildren().add(deploy);
+                        // TODO: get tile id, (player id or we can have a "global" player to take care of entities without player)
+                        EntityInstance objectInstance = ((EntityClass) objectClass).createInstance(0, gameObjectManager.getDefaultPlayerID());
+                        nodeInstanceController.addLink(deploy, objectInstance);
+                    } else {
+                        ImageView deploy = new ImageView(((EntityClass) objectClass).getImagePathList().get(0));
+                        deploy.setOnMouseClicked(e1 -> handleDoubleClick(e1, deploy));
+                        cell.getChildren().add(deploy);
+                        // TODO: get tile id, player id
+                        EntityInstance objectInstance = ((EntityClass) objectClass).createInstance(0, gameObjectManager.getDefaultPlayerID());
+                        nodeInstanceController.addLink(deploy, objectInstance);
+                    }
+                    break;
+                case SOUND:
+                    // TODO
+                    break;
+                case TILE:
+                    // TODO
+                    break;
             }
-        });
+        }
     }
 }
