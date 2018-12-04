@@ -1,5 +1,8 @@
 package gameObjects.category;
 
+import authoringUtils.exception.InvalidIdException;
+import authoringUtils.exception.InvalidOperationException;
+import gameObjects.ThrowingBiConsumer;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import javafx.beans.property.*;
@@ -24,7 +27,7 @@ public class SimpleCategoryClass implements CategoryClass {
     private ObservableMap<String, String> propertiesMap;
 
     private CategoryInstanceFactory myFactory;
-    private BiConsumer<String, String> changeCategoryClassNameFunc;
+    private ThrowingBiConsumer<String, String, InvalidOperationException> changeCategoryClassNameFunc;
     private Function<String, Collection<GameObjectInstance>> getAllCategoryInstancesFunc;
     private Function<Integer, Boolean> deleteCategoryInstanceFunc;
 
@@ -38,7 +41,7 @@ public class SimpleCategoryClass implements CategoryClass {
     public SimpleCategoryClass(
             String className,
             CategoryInstanceFactory categoryInstanceFactory,
-            BiConsumer<String, String> changeCategoryClassNameFunc,
+            ThrowingBiConsumer<String, String, InvalidOperationException> changeCategoryClassNameFunc,
             Function<String, Collection<GameObjectInstance>> getAllCategoryInstancesFunc,
             Function<Integer, Boolean> deleteCategoryInstanceFunc) {
         this(className);
@@ -79,7 +82,8 @@ public class SimpleCategoryClass implements CategoryClass {
     }
 
     @Override
-    public void changeClassName(String newClassName) {
+    public void changeClassName(String newClassName)
+            throws InvalidOperationException {
         changeCategoryClassNameFunc.accept(className.getValue(), newClassName);
     }
 
@@ -169,7 +173,7 @@ public class SimpleCategoryClass implements CategoryClass {
 
     @Override
     public CategoryInstance createInstance()
-            throws GameObjectTypeException {
+            throws GameObjectTypeException, InvalidIdException {
         return myFactory.createInstance(this);
     }
 

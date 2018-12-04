@@ -13,6 +13,7 @@ import gameObjects.crud.SimpleGameObjectsCRUD;
 import phase.api.PhaseDB;
 
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 public class AuthoringToolsConverter implements Converter {
     private Mapper mapper;
@@ -38,7 +39,7 @@ public class AuthoringToolsConverter implements Converter {
         writer.endNode();
 
         writer.startNode("playersOrder");
-        var playerIDs = authTools.entityDB().getPlayerInstances().stream()
+        var playerIDs = StreamSupport.stream(authTools.entityDB().getPlayerInstances().spliterator(),true)
                                  .map(e -> e.getInstanceId().get())
                                  .collect(Collectors.toList());
         new CollectionConverter(mapper).marshal(playerIDs, writer, ctx);

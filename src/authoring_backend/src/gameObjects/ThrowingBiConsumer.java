@@ -1,6 +1,5 @@
 package gameObjects;
 
-import java.util.function.Consumer;
 
 @FunctionalInterface
 public interface ThrowingBiConsumer<T, U, E extends Exception> {

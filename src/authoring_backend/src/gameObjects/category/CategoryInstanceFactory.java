@@ -1,6 +1,8 @@
 package gameObjects.category;
 
 import authoringUtils.exception.GameObjectTypeException;
+import authoringUtils.exception.InvalidIdException;
+import gameObjects.ThrowingConsumer;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import javafx.beans.property.SimpleStringProperty;
@@ -12,19 +14,19 @@ import java.util.function.Supplier;
 
 public class CategoryInstanceFactory {
     private Consumer<GameObjectInstance> requestInstanceIdFunc;
-    private Consumer<GameObjectInstance> addInstanceToMapFunc;
+    private ThrowingConsumer<GameObjectInstance, InvalidIdException> addInstanceToMapFunc;
 
 
     public CategoryInstanceFactory(
             Consumer<GameObjectInstance> requestInstanceIdFunc,
-            Consumer<GameObjectInstance> addInstanceToMapFunc) {
+            ThrowingConsumer<GameObjectInstance, InvalidIdException> addInstanceToMapFunc) {
 
         this.requestInstanceIdFunc = requestInstanceIdFunc;
         this.addInstanceToMapFunc = addInstanceToMapFunc;
     }
 
     public CategoryInstance createInstance(CategoryClass categoryPrototype)
-            throws GameObjectTypeException {
+            throws GameObjectTypeException, InvalidIdException {
         // TODO locality
         if (categoryPrototype.getType() != GameObjectType.CATEGORY) {
             throw new GameObjectTypeException("categoryPrototype is not of Category Type");

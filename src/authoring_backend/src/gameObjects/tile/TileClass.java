@@ -1,5 +1,6 @@
 package gameObjects.tile;
 
+import authoringUtils.exception.InvalidIdException;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectType;
 import grids.Point;
@@ -50,7 +51,7 @@ public interface TileClass extends GameObjectClass {
      */
     String getImageSelectorCode();
 
-    TileInstance createInstance(Point topLeftCoord) throws GameObjectTypeException;
+    TileInstance createInstance(Point topLeftCoord) throws GameObjectTypeException, InvalidIdException;
 
     @Override
     default GameObjectType getType() {
