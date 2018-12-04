@@ -1,23 +1,25 @@
 package conversion.engine;
 
-import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
-import com.thoughtworks.xstream.converters.reflection.ReflectionConverter;
-import com.thoughtworks.xstream.converters.reflection.ReflectionProvider;
+import com.thoughtworks.xstream.converters.collections.MapConverter;
+import com.thoughtworks.xstream.converters.collections.TreeSetConverter;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.thoughtworks.xstream.mapper.Mapper;
 import gameObjects.crud.SimpleGameObjectsCRUD;
-import grids.PointImpl;
+import gameObjects.entity.EntityClass;
+import gameObjects.tile.TileClass;
 import groovy.lang.GroovyShell;
+import authoringUtils.exception.GameObjectClassNotFoundException;
 
-import java.util.LinkedHashMap;
+import java.util.Map;
 
-public class GameObjectsCRUDConverter extends ReflectionConverter {
-    public GameObjectsCRUDConverter(Mapper mapper, ReflectionProvider reflectionProvider) {
-        super(mapper, reflectionProvider);
+public class GameObjectsCRUDConverter implements Converter {
+    private Mapper mapper;
+    public GameObjectsCRUDConverter(Mapper mapper) {
+       this.mapper = mapper;
     }
 
     @Override
@@ -42,19 +44,10 @@ public class GameObjectsCRUDConverter extends ReflectionConverter {
             writer.endNode();
 
             // props
-            String toEval = "[";
-            boolean first = true;
-            for(var entry: entityClass.getPropertiesMap().entrySet()) {
-                if(!first) toEval += ", ";
-                else first = false;
-                toEval += String.format("%s:%s", entry.getKey(), entry.getValue());
-            }
-            if(first) toEval += ":";
-            toEval += "]";
-
-            var rawSerial = new XStream(new DomDriver());
-            rawSerial.alias("props", LinkedHashMap.class);
-            writer.setValue(rawSerial.toXML(shell.evaluate(toEval)));
+            var toEval = mapToString(entityClass.getPropertiesMap());
+            writer.startNode("props");
+            new MapConverter(mapper).marshal(shell.evaluate(toEval), writer, ctx);
+            writer.endNode();
 
             // imagePaths
             writer.startNode("myImagePaths");
@@ -74,7 +67,12 @@ public class GameObjectsCRUDConverter extends ReflectionConverter {
         }
 
         for(var entityInstance : db.getEntityInstances()) {
-            var entityClass = db.getEntityClass(entityInstance.getClassName().get());
+            EntityClass entityClass = null;
+            try {
+                entityClass = db.getEntityClass(entityInstance.getClassName().get());
+            } catch (GameObjectClassNotFoundException e) {
+                e.printStackTrace();
+            }
 
             writer.startNode("gameplay.Entity");
 
@@ -94,19 +92,10 @@ public class GameObjectsCRUDConverter extends ReflectionConverter {
             writer.endNode();
 
             // props
-            String toEval = "[";
-            boolean first = true;
-            for(var entry: entityClass.getPropertiesMap().entrySet()) {
-                if(!first) toEval += ", ";
-                else first = false;
-                toEval += String.format("%s:%s", entry.getKey(), entry.getValue());
-            }
-            if(first) toEval += ":";
-            toEval += "]";
-
-            var rawSerial = new XStream(new DomDriver());
-            rawSerial.alias("props", LinkedHashMap.class);
-            writer.setValue(rawSerial.toXML(shell.evaluate(toEval)));
+            var toEval = mapToString(entityInstance.getPropertiesMap());
+            writer.startNode("props");
+            new MapConverter(mapper).marshal(shell.evaluate(toEval), writer, ctx);
+            writer.endNode();
 
             // imagePaths
             writer.startNode("myImagePaths");
@@ -126,7 +115,12 @@ public class GameObjectsCRUDConverter extends ReflectionConverter {
         }
 
         for(var tileInstance : db.getTileInstances()) {
-            var tileClass = db.getTileClass(tileInstance.getClassName().get());
+            TileClass tileClass = null;
+            try {
+                tileClass = db.getTileClass(tileInstance.getClassName().get());
+            } catch (GameObjectClassNotFoundException e) {
+                e.printStackTrace();
+            }
             writer.startNode("gameplay.Tile");
 
             // myID
@@ -140,19 +134,10 @@ public class GameObjectsCRUDConverter extends ReflectionConverter {
             writer.endNode();
 
             // props
-            String toEval = "[";
-            boolean first = true;
-            for(var entry: tileClass.getPropertiesMap().entrySet()) {
-                if(!first) toEval += ", ";
-                else first = false;
-                toEval += String.format("%s:%s", entry.getKey(), entry.getValue());
-            }
-            if(first) toEval += ":";
-            toEval += "]";
-
-            var rawSerial = new XStream(new DomDriver());
-            rawSerial.alias("props", LinkedHashMap.class);
-            writer.setValue(rawSerial.toXML(shell.evaluate(toEval)));
+            var toEval = mapToString(tileClass.getPropertiesMap()); // should be instance tho...
+            writer.startNode("props");
+            new MapConverter(mapper).marshal(shell.evaluate(toEval), writer, ctx);
+            writer.endNode();
 
             // myWidth
             writer.startNode("myWidth");
@@ -164,8 +149,14 @@ public class GameObjectsCRUDConverter extends ReflectionConverter {
             writer.setValue(String.valueOf(tileClass.getHeight().get()));
             writer.endNode();
 
-            rawSerial.alias("myCoord", PointImpl.class);
-            writer.setValue(rawSerial.toXML(tileInstance.getCoord()));
+            writer.startNode("myCoord");
+            writer.startNode("x");
+            writer.setValue(String.valueOf(tileInstance.getCoord().getX()));
+            writer.endNode();
+            writer.startNode("y");
+            writer.setValue(String.valueOf(tileInstance.getCoord().getY()));
+            writer.endNode();
+            writer.endNode();
 
             //myImagePaths
             writer.startNode("myImagePaths");
@@ -183,6 +174,38 @@ public class GameObjectsCRUDConverter extends ReflectionConverter {
 
             writer.endNode();
         }
+
+        for(var player : db.getPlayerInstances()) {
+            writer.startNode("gameplay.Player");
+
+            writer.startNode("myID");
+            writer.setValue(String.valueOf(player.getInstanceId().get()));
+            writer.endNode();
+
+            writer.startNode("myStats");
+            var toEval = mapToString(player.getPropertiesMap());
+            new MapConverter(mapper).marshal(shell.evaluate(toEval), writer, ctx);
+            writer.endNode();
+
+            writer.startNode("myEntityIDs");
+            new TreeSetConverter(mapper).marshal(player.getEntityIDs(), writer, ctx);
+            writer.endNode();
+
+            writer.endNode();
+        }
+    }
+
+    private <K, V> String mapToString(Map<K, V> map) {
+        String toEval = "[";
+        boolean first = true;
+        for(var entry: map.entrySet()) {
+            if(!first) toEval += ", ";
+            else first = false;
+            toEval += String.format("%s:%s", entry.getKey(), entry.getValue());
+        }
+        if(first) toEval += ":";
+        toEval += "]";
+        return toEval;
     }
 
     @Override

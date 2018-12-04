@@ -8,10 +8,15 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import phase.api.Phase;
 import phase.api.PhaseDB;
-import frontendUtils.Try;
+import authoringUtils.frontendUtils.Try;
 
 import java.util.function.Supplier;
 
+/**
+ * A factory that produces a node in a phase graph
+ *
+ * @author Inchan Hwang
+ */
 public class PhaseNodeFactory {
     private PhaseDB db;
     private Supplier<GroovyPane> genGroovyPane;
@@ -39,10 +44,10 @@ public class PhaseNodeFactory {
         public PhaseNode(double xPos, double yPos, Phase model, boolean isSource) {
             this.model = model;
             circle = new Circle(xPos, yPos, NODE_RADIUS);
-            circle.setFill(isSource ? Color.BLUE : Color.LIGHTBLUE);
+            circle.setFill(isSource ? Color.GRAY : Color.DIMGRAY);
 
             inner = new Circle(NODE_RADIUS, NODE_RADIUS, NODE_RADIUS-PADDING);
-            inner.setFill((isSource ? Color.BLUE : Color.LIGHTBLUE).darker());
+            inner.setFill((isSource ? Color.BLACK : Color.WHITE).darker());
 
             text = new Label(model.name());
             text.setFont(new Font(LABEL_SIZE));

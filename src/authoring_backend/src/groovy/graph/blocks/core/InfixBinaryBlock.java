@@ -2,7 +2,7 @@ package groovy.graph.blocks.core;
 
 import graph.SimpleNode;
 import groovy.api.BlockGraph;
-import frontendUtils.Try;
+import authoringUtils.frontendUtils.Try;
 import groovy.api.Ports;
 
 import java.util.Set;
@@ -25,7 +25,7 @@ public class InfixBinaryBlock extends SimpleNode implements GroovyBlock<InfixBin
         var tryB = graph.findTarget(this, B).flatMap(b -> b.toGroovy(graph));
         return tryA.flatMap ( a ->
             tryB.map( b ->
-                String.format("((%s)%s(%s))", a, op, b)
+                String.format("((%s) %s (%s))", a, op, b)
             )
         );
     }

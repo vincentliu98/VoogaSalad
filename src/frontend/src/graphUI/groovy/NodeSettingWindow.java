@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 /**
  * Pop-up window for adding settings for nodes
  *
+ * @author Inchan Hwang
  * @author jl729
  */
 
@@ -21,7 +22,6 @@ public class NodeSettingWindow extends PopUpWindow {
 
     public NodeSettingWindow(Stage primaryStage) {
         super(primaryStage);
-        // TODO: 11/14/18 Title not working
         dialog.setTitle("Node Settings");
         root = new HBox();
         applyBtn = new Button("Apply");

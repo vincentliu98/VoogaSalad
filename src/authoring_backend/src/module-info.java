@@ -10,6 +10,8 @@ module authoring_backend {
     opens authoring to xstream;
     opens gameObjects to xstream;
     opens grids to xstream;
+    opens authoringUtils.exception to xstream;
+    opens authoringUtils.frontendUtils to xstream;
 
     requires org.codehaus.groovy;
     requires xstream;
@@ -20,12 +22,15 @@ module authoring_backend {
     exports groovy.graph.blocks.core;
     exports gameObjects;
     exports grids;
-    exports frontendUtils;
+
+    exports authoringUtils.frontendUtils;
+    exports authoringUtils.exception;
     exports gameObjects.category;
     exports gameObjects.entity;
-    exports gameObjects.exception;
     exports gameObjects.sound;
     exports gameObjects.tile;
     exports gameObjects.gameObject;
     exports gameObjects.crud;
+    exports gameObjects.player;
+    exports gameObjects.turn;
 }

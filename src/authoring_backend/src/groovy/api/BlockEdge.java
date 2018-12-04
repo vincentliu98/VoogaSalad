@@ -1,6 +1,6 @@
 package groovy.api;
 
-import frontendUtils.Replicable;
+import authoringUtils.frontendUtils.Replicable;
 import graph.Edge;
 import groovy.graph.blocks.core.GroovyBlock;
 

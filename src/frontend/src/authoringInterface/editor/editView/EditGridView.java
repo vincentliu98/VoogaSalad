@@ -1,51 +1,64 @@
 package authoringInterface.editor.editView;
 
-import api.DraggingCanvas;
 import api.SubView;
+import authoringInterface.customEvent.UpdateStatusEventListener;
 import authoringInterface.subEditors.*;
+import authoringUtils.exception.GameObjectClassNotFoundException;
+import authoringUtils.exception.GameObjectTypeException;
+import authoringUtils.exception.InvalidGameObjectInstanceException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.entity.EntityClass;
 import gameObjects.entity.EntityInstance;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
+import gameObjects.tile.TileClass;
+import gameObjects.tile.TileInstance;
+import grids.PointImpl;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TreeCell;
-import javafx.scene.control.TreeItem;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseDragEvent;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import utils.exception.PreviewUnavailableException;
+import utils.imageManipulation.Coordinates;
+import utils.imageManipulation.ImageManager;
+import utils.nodeInstance.NodeInstanceController;
+import utils.exception.NodeNotFoundException;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * EditGridView Class (ScrollPane)
  *      - Representation of the game's grid setting
  *      - It should support Zoom in and zoom out
  *
- * @author Amy Kim
  * @author Haotian Wang
+ * @author Amy Kim
  */
-public class EditGridView implements SubView<ScrollPane>, DraggingCanvas {
+public class EditGridView implements SubView<ScrollPane> {
     private GridPane gridScrollView;
     private ScrollPane scrollPane;
     private GameObjectsCRUDInterface gameObjectManager;
-    private Map<Node, GameObjectInstance> nodeToGameObjectInstanceMap;
+    private NodeInstanceController nodeInstanceController;
+    private List<UpdateStatusEventListener<Node>> listeners;
+    private static final double NODE_HEIGHT = 75;
+    private static final double NODE_WIDTH = 75;
 
-    public EditGridView(int row, int col, GameObjectsCRUDInterface manager) {
+    public EditGridView(int row, int col, GameObjectsCRUDInterface manager, NodeInstanceController controller) {
         gameObjectManager = manager;
+        nodeInstanceController = controller;
         scrollPane = new ScrollPane();
-        nodeToGameObjectInstanceMap = new HashMap<>();
+        listeners = new ArrayList<>();
         gridScrollView = new GridPane();
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
@@ -53,10 +66,13 @@ public class EditGridView implements SubView<ScrollPane>, DraggingCanvas {
                 cell.setPrefWidth(100);
                 cell.setPrefHeight(100);
                 gridScrollView.add(cell, i, j);
+                cell.setOnDragOver(e -> setUpHoveringColorDraggedOver(e, Color.LIGHTGREEN, cell));
+                cell.setOnDragExited(e -> setUpDragExit(e, cell));
+                cell.setOnDragDropped(e -> handleDragFromSideView(e, cell));
+                cell.setOnMouseClicked(e -> listeners.forEach(listener -> listener.setOnUpdateStatusEvent(constructStatusView(cell))));
             }
         }
         gridScrollView.setGridLinesVisible(true);
-        setupDraggingCanvas();
         scrollPane = new ScrollPane(gridScrollView);
     }
 
@@ -68,10 +84,47 @@ public class EditGridView implements SubView<ScrollPane>, DraggingCanvas {
                 cell.setPrefWidth(100);
                 cell.setPrefHeight(100);
                 gridScrollView.add(cell, i, j);
+                cell.setOnDragOver(e -> setUpHoveringColorDraggedOver(e, Color.LIGHTGREEN, cell));
+                cell.setOnDragExited(e -> setUpDragExit(e, cell));
+                cell.setOnDragDropped(e -> handleDragFromSideView(e, cell));
+                cell.setOnMouseClicked(e -> listeners.forEach(listener -> listener.setOnUpdateStatusEvent(constructStatusView(cell))));
             }
         }
-        gameObjectManager.getEntityInstances().clear();
-        gameObjectManager.getTileInstances().clear();
+        nodeInstanceController.clearAllLinks();
+        gameObjectManager.deleteAllInstances();
+    }
+
+    /**
+     * This method returns a GridPane listing as entries the GameObjectInstances together with their JavaFx Nodes to be shown in the UpdateStatusEventListener.
+     *
+     * @return GridPane: The GridPane that contains information about the GameObjectInstances and JavaFx nodes at this cell.
+     */
+    private GridPane constructStatusView(Region cell) {
+        GridPane listView = new GridPane();
+        listView.setGridLinesVisible(true);
+        listView.addRow(0, new Label("Instance ID"), new Label("Instance Name"), new Label("Class Name"));
+        cell.getChildrenUnmodifiable().forEach(node -> {
+            GameObjectInstance instance = null;
+            try {
+                instance = nodeInstanceController.getGameObjectInstance(node);
+            } catch (NodeNotFoundException e) {
+                // TODO: Proper error handling.
+                e.printStackTrace();
+            }
+            Text instanceID = new Text(instance.getInstanceId().getValue().toString());
+            Text instanceName = new Text(instance.getInstanceName().getValue());
+            Text className = new Text(instance.getClassName().getValue());
+            instanceID.setOnMouseClicked(e -> handleDoubleClick(e, node));
+            instanceName.setOnMouseClicked(e -> handleDoubleClick(e, node));
+            className.setOnMouseClicked(e -> handleDoubleClick(e, node));
+            listView.addRow(
+                    listView.getRowCount(),
+                    instanceID,
+                    instanceName,
+                    className
+            );
+        });
+        return listView;
     }
 
     /**
@@ -82,7 +135,13 @@ public class EditGridView implements SubView<ScrollPane>, DraggingCanvas {
      */
     private void handleDoubleClick(MouseEvent event, Node targetNode) {
         if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) {
-            GameObjectInstance userObject = nodeToGameObjectInstanceMap.get(targetNode);
+            GameObjectInstance userObject = null;
+            try {
+                userObject = nodeInstanceController.getGameObjectInstance(targetNode);
+            } catch (NodeNotFoundException e) {
+                // TODO: proper error handling
+                e.printStackTrace();
+            }
             GameObjectType type = userObject.getType();
             Stage dialogStage = new Stage();
             AbstractGameObjectEditor editor = null;
@@ -100,10 +159,19 @@ public class EditGridView implements SubView<ScrollPane>, DraggingCanvas {
                     editor = new CategoryEditor(gameObjectManager);
                     break;
             }
-            editor.editNode(targetNode, userObject);
+            editor.editNode(targetNode, nodeInstanceController);
             dialogStage.setScene(new Scene(editor.getView(), 500, 500));
             dialogStage.show();
         }
+    }
+
+    /**
+     * Register the EditGridView with some listener to listen for StatusUpdateEvent changes.
+     *
+     * @param listener: A listener that listens for UpdateStatusEvents.
+     */
+    public void addUpdateStatusEventListener(UpdateStatusEventListener<Node> listener) {
+        listeners.add(listener);
     }
 
     @Override
@@ -112,54 +180,92 @@ public class EditGridView implements SubView<ScrollPane>, DraggingCanvas {
     }
 
     /**
-     * Setup the dragging canvas event filters.
+     * This method accepts a Region as input and another Paint variable as input to set up a hovering coloring scheme. The region that is inputted will change to the defined color when hovered over.
+     *
+     * @param dragEvent: A DragEvent which should be DraggedOver
+     * @param hoveringFill: The JavaFx Color scheme applied to the hovering.
+     * @param cell: The Pane where the hovering occurs.
      */
-    @Override
-    public void setupDraggingCanvas() {
-        gridScrollView.addEventFilter(MouseDragEvent.MOUSE_DRAG_OVER, e -> {
-            if (!(e.getTarget() instanceof StackPane)) {
-                return;
+    private void setUpHoveringColorDraggedOver(DragEvent dragEvent, Paint hoveringFill, Pane cell) {
+        dragEvent.acceptTransferModes(TransferMode.ANY);
+        if (dragEvent.getGestureSource() instanceof TreeCell) {
+            cell.setBackground(new Background(new BackgroundFill(hoveringFill, CornerRadii.EMPTY, Insets.EMPTY)));
+        }
+        dragEvent.consume();
+    }
+
+    /**
+     * This method sets the Background of a cell back to empty once the hovering exits the cell.
+     *
+     * @param dragEvent: A DragEvent which should be DragExited.
+     * @param cell: The Pane where the hovering exits.
+     */
+    private void setUpDragExit(DragEvent dragEvent, Pane cell) {
+        if (dragEvent.getGestureSource() instanceof TreeCell) {
+            cell.setBackground(Background.EMPTY);
+        }
+        dragEvent.consume();
+    }
+
+    /**
+     * This method sets up a region so that it accepts a MouseDragEvent Released event from the sideview. The Release event will create an instance according to the GameObjectClass from which the drag is initiated.
+     *
+     * @param dragEvent: A DragEvent that should be DragDropped.
+     * @param cell: The region where the event handler will be set up.
+     */
+    private void handleDragFromSideView(DragEvent dragEvent, Pane cell) {
+        if (dragEvent.getGestureSource() instanceof TreeCell) {
+            dragEvent.acceptTransferModes(TransferMode.ANY);
+            GameObjectClass objectClass = null;
+            try {
+                objectClass = gameObjectManager.getGameObjectClass(dragEvent.getDragboard().getString());
+            } catch (GameObjectClassNotFoundException e) {
+                // TODO
+                e.printStackTrace();
             }
-            System.out.println();
-            ((StackPane) e.getTarget()).setBackground(new Background(new BackgroundFill(Color.WHITESMOKE, CornerRadii.EMPTY, Insets.EMPTY)));
-        });
-        gridScrollView.addEventFilter(MouseDragEvent.MOUSE_DRAG_RELEASED, e -> {
-            if (e.getGestureSource() instanceof TreeCell) {
-                TreeItem<String> item = ((TreeCell<String>) e.getGestureSource()).getTreeItem();
-                if (!item.isLeaf()) {
-                    return;
-                }
-                if (!(e.getTarget() instanceof StackPane)) {
-                    return;
-                }
-                StackPane intersected = (StackPane) e.getTarget();
-                GameObjectClass objectClass = gameObjectManager.getGameObjectClass(item.getValue());
-                GameObjectType type = objectClass.getType();
-                switch (type) {
-                    case ENTITY:
-                        if (objectClass.getImagePathList().isEmpty()) {
-                            Text deploy = new Text(objectClass.getClassName().getValue());
-                            deploy.setOnMouseClicked(e1 -> handleDoubleClick(e1, deploy));
-                            intersected.getChildren().add(deploy);
-                            // TODO: get tile id
-                            EntityInstance objectInstance = ((EntityClass) objectClass).createInstance(0);
-                            nodeToGameObjectInstanceMap.put(deploy, objectInstance);
-                        } else {
-                            ImageView deploy = new ImageView(new Image(objectClass.getImagePathList().get(0)));
-                            deploy.setOnMouseClicked(e1 -> handleDoubleClick(e1, deploy));
-                            intersected.getChildren().add(deploy);
-                            // TODO: get tile id
-                            EntityInstance objectInstance = ((EntityClass) objectClass).createInstance(0);
-                            nodeToGameObjectInstanceMap.put(deploy, objectInstance);
-                        }
-                        break;
-                    case SOUND:
+            ImageView nodeOnGrid = null;
+            try {
+                nodeOnGrid = new ImageView(ImageManager.getPreview(objectClass));
+            } catch (PreviewUnavailableException e) {
+                // TODO: proper error handling
+                e.printStackTrace();
+            }
+            // TODO: smarter resizing
+            nodeOnGrid.setFitHeight(NODE_HEIGHT);
+            nodeOnGrid.setFitWidth(NODE_WIDTH);
+            ImageView finalNodeOnGrid = nodeOnGrid;
+            nodeOnGrid.setOnMouseClicked(e -> handleDoubleClick(e, finalNodeOnGrid));
+            cell.getChildren().add(nodeOnGrid);
+            switch (objectClass.getType()) {
+                case ENTITY:
+                    // TODO: solve the TileID thing, and player ID thing
+                    EntityInstance entityInstance = null;
+                    try {
+                        entityInstance = ((EntityClass) objectClass).createInstance(0, gameObjectManager.getDefaultPlayerID());
+                    } catch (InvalidGameObjectInstanceException e) {
                         // TODO
-                        break;
-                    case TILE:
-                        break;
-                }
+                        e.printStackTrace();
+                    } catch (GameObjectTypeException e) {
+                        // TODO
+                        e.printStackTrace();
+                    }
+                    nodeInstanceController.addLink(nodeOnGrid, entityInstance);
+                    break;
+                case SOUND:
+                    // TODO
+                    break;
+                case TILE:
+                    // TODO: solve point
+                    TileInstance tileInstance = null;
+                    try {
+                        tileInstance = ((TileClass) objectClass).createInstance(new PointImpl(GridPane.getColumnIndex(cell), GridPane.getRowIndex(cell)));
+                    } catch (GameObjectTypeException e) {
+                        // TODO
+                        e.printStackTrace();
+                    }
+                    nodeInstanceController.addLink(nodeOnGrid, tileInstance);
+                    break;
             }
-        });
+        }
     }
 }

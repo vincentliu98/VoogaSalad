@@ -45,17 +45,17 @@ public class Tile extends PropertyHolder<Tile> implements GameObject, EventHandl
      *  Adjusts the size of this tile in pixels with respect to screen dimensions
      */
     public void adjustViewSize(double screenWidth, double screenHeight) {
-        myImageView.setX((screenWidth*myCoord.getX())/GameData.gridWidth());
-        myImageView.setY((screenHeight*myCoord.getY())/GameData.gridHeight());
-        myImageView.setFitWidth((screenWidth*myWidth)/GameData.gridWidth());
-        myImageView.setFitHeight((screenHeight*myHeight)/GameData.gridHeight());
+        myImageView.setX((screenWidth*myCoord.getX())/GameMethods.gridWidth());
+        myImageView.setY((screenHeight*myCoord.getY())/GameMethods.gridHeight());
+        myImageView.setFitWidth((screenWidth*myWidth)/GameMethods.gridWidth());
+        myImageView.setFitHeight((screenHeight*myHeight)/GameMethods.gridHeight());
 
         myImages = myImagePaths.stream()
                                .map(path ->
                                    new Image(
                                        this.getClass().getClassLoader().getResourceAsStream(path),
-                                       (screenWidth*myWidth)/GameData.gridWidth(),
-                                       (screenHeight*myHeight)/GameData.gridHeight(),
+                                       (screenWidth*myWidth)/GameMethods.gridWidth(),
+                                       (screenHeight*myHeight)/GameMethods.gridHeight(),
                                        false, true
                                    )
                                ).collect(Collectors.toList());

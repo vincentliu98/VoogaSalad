@@ -61,4 +61,13 @@ public class PointImpl implements Point {
     public String toString() {
         return "Point " + "(" + x + ", " + y + ")";
     }
+
+    private boolean outOfBoundsForOneSide(int x, int numCellsOfOneSide) {
+        return x < 0 || x >= numCellsOfOneSide;
+    }
+
+
+    public boolean outOfBounds(int numRows, int numCols) {
+        return outOfBoundsForOneSide(this.getX(), numCols) || outOfBoundsForOneSide(this.getY(), numRows);
+    }
 }

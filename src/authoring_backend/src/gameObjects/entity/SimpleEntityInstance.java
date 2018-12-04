@@ -1,24 +1,36 @@
 package gameObjects.entity;
 
 import gameObjects.gameObject.GameObjectInstance;
+import grids.Point;
 import javafx.beans.property.*;
+import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class SimpleEntityInstance implements EntityInstance {
     private ReadOnlyStringWrapper className;
+    private SimpleStringProperty instanceName;
     private ReadOnlyIntegerWrapper instanceId;
     private SimpleIntegerProperty tileId;
+    private ObservableList<String> imagePathList;
+    private String imageSelector;
     private ObservableMap<String, String> propertiesMap;
-    private Consumer<GameObjectInstance> returnInstanceIdFunc;
+    private Supplier<EntityClass> getEntityClassFunc;
 
-    SimpleEntityInstance(String className, int tileId, ObservableMap<String, String> properties, Consumer<GameObjectInstance> returnInstanceIdFunc) {
-        this.className = new ReadOnlyStringWrapper(className);
-        this.tileId = new ReadOnlyIntegerWrapper();
-        this.tileId.setValue(tileId);
+    SimpleEntityInstance(
+            String className,
+            ObservableList<String> imagePathList,
+            ObservableMap<String, String> properties,
+            Supplier<EntityClass> getEntityClassFunc) {
+        this.className = new ReadOnlyStringWrapper();
+        this.className.setValue(className);
+        this.instanceName = new SimpleStringProperty(className);
+        this.tileId = new SimpleIntegerProperty();
+        this.imagePathList = imagePathList;
         this.propertiesMap = properties;
-        this.returnInstanceIdFunc = returnInstanceIdFunc;
+        this.getEntityClassFunc = getEntityClassFunc;
         instanceId = new ReadOnlyIntegerWrapper();
     }
 
@@ -33,28 +45,86 @@ public class SimpleEntityInstance implements EntityInstance {
     }
 
     @Override
-    public ReadOnlyStringProperty getClassName() { return className; }
+    public ReadOnlyStringProperty getClassName() {
+        return className.getReadOnlyProperty();
+    }
 
     public void setClassName(String name) {
-        className.set(name);
-    }
-
-    public Consumer<GameObjectInstance> getReturnInstanceIdFunc() {
-        return returnInstanceIdFunc;
+        className.setValue(name);
     }
 
     @Override
-    public boolean addProperty(String propertyName, String defaultValue) {
+    public SimpleStringProperty getInstanceName() {
+        return instanceName;
+    }
+
+    @Override
+    public void setInstanceName(String newInstanceName) {
+        instanceName.setValue(newInstanceName);
+    }
+
+    @Override
+    public ObservableMap<String, String> getPropertiesMap() { return propertiesMap; }
+
+    @Override
+    public void addProperty(String propertyName, String defaultValue) {
+        propertiesMap.put(propertyName, defaultValue);
+    }
+
+    @Override
+    public void removeProperty(String propertyName) {
+        propertiesMap.remove(propertyName);
+    }
+
+    @Override
+    public boolean changePropertyValue(String propertyName, String newValue) {
         if (!propertiesMap.containsKey(propertyName)) {
-            propertiesMap.put(propertyName, defaultValue);
+            return false;
+        }
+        propertiesMap.put(propertyName, newValue);
+        return true;
+    }
+
+    @Override
+    public ObservableList getImagePathList() {
+        return imagePathList;
+    }
+
+    @Override
+    public void addImagePath(String path) {
+        imagePathList.add(path);
+    }
+
+
+    @Override
+    public boolean removeImagePath(int index) {
+        try {
+            imagePathList.remove(index);
             return true;
         }
-        return false;
+        catch (IndexOutOfBoundsException e) {
+            return false;
+        }
     }
 
     @Override
-    public boolean removeProperty(String propertyName) {
-        return propertiesMap.remove(propertyName) != null;
+    public void setImageSelector(String blockCode) {
+        imageSelector = blockCode;
+    }
+
+    @Override
+    public String getImageSelectorCode() {
+        return imageSelector;
+    }
+
+    @Override
+    public EntityClass getGameObjectClass() {
+        return getEntityClassFunc.get();
+    }
+
+    @Override
+    public void setTileId(int newTileId) {
+        tileId.setValue(newTileId);
     }
 
     @Override

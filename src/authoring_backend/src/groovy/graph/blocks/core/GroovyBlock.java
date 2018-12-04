@@ -1,10 +1,10 @@
 package groovy.graph.blocks.core;
 
-import frontendUtils.Replicable;
+import authoringUtils.frontendUtils.Replicable;
 import graph.Node;
 import groovy.api.BlockGraph;
 import groovy.api.Ports;
-import frontendUtils.Try;
+import authoringUtils.frontendUtils.Try;
 
 import java.util.Set;
 

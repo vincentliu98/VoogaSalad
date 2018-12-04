@@ -1,12 +1,18 @@
 package authoringInterface.sidebar;
 
 import authoringInterface.subEditors.*;
+import authoringUtils.exception.GameObjectClassNotFoundException;
+import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
+import gameObjects.entity.EntityClass;
 import gameObjects.gameObject.GameObjectClass;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyCode;
+import javafx.scene.image.Image;
+import javafx.scene.input.*;
 import javafx.stage.Stage;
+import utils.exception.PreviewUnavailableException;
+import utils.imageManipulation.ImageManager;
 
 /**
  * This class organizes the cell factory call back methods into a nicer format.
@@ -31,8 +37,6 @@ public class CustomTreeCellImpl extends TreeCell<String> {
                     dialogStage.show();
                     editor.addTreeItem(getTreeItem());
                     break;
-                case "SOUND":
-                    break;
                 case "TILE":
                     Stage dialogTileStage = new Stage();
                     TileEditor tileEditor = new TileEditor(manager);
@@ -44,26 +48,47 @@ public class CustomTreeCellImpl extends TreeCell<String> {
             }
         });
         addMenu.getItems().add(addMenuItem);
-        setOnDragDetected(e -> startFullDrag());
+        setOnDragDetected(e -> {
+            Dragboard db = startDragAndDrop(TransferMode.ANY);
+            ClipboardContent cc = new ClipboardContent();
+            cc.putString(getString());
+            db.setContent(cc);
+            GameObjectClass draggedClass = null;
+            try {
+                draggedClass = objectManager.getGameObjectClass(getString());
+            } catch (GameObjectClassNotFoundException e1) {
+                // TODO
+                e1.printStackTrace();
+            }
+            try {
+                db.setDragView(ImageManager.getPreview(draggedClass));
+            } catch (PreviewUnavailableException e1) {
+                // TODO: proper error handling.
+                e1.printStackTrace();
+            }
+        });
         MenuItem editMenuItem = new MenuItem("Edit this GameObject");
         MenuItem deleteMenuItem = new MenuItem("Delete this GameObject");
         editMenuItem.setOnAction(e -> {
-            GameObjectClass objectClass = objectManager.getGameObjectClass(getItem());
+            GameObjectClass objectClass = null;
+            try {
+                objectClass = objectManager.getGameObjectClass(getItem());
+            } catch (GameObjectClassNotFoundException e1) {
+                // TODO
+                e1.printStackTrace();
+            }
             Stage dialogStage = new Stage();
             AbstractGameObjectEditor editor = null;
             switch (objectClass.getType()) {
                 case ENTITY:
                     editor = new EntityEditor(objectManager);
                     break;
-                case SOUND:
-                    // TODO
-                    break;
                 case CATEGORY:
                     // TODO
                     break;
                 case TILE:
+                    // TODO: 11/30/18 Finish TileEditor
                     editor = new TileEditor(objectManager);
-                    System.out.println("Tile is created");
                     break;
             }
             dialogStage.setScene(new Scene(editor.getView(), 500, 500));
@@ -124,7 +149,12 @@ public class CustomTreeCellImpl extends TreeCell<String> {
         textField = new TextField(getString());
         textField.setOnKeyReleased(t -> {
             if (t.getCode() == KeyCode.ENTER) {
-                objectManager.changeGameObjectClassName(getItem(), textField.getText());
+                try {
+                    objectManager.changeGameObjectClassName(getItem(), textField.getText());
+                } catch (InvalidOperationException e) {
+                    // TODO
+                    e.printStackTrace();
+                }
                 commitEdit(textField.getText());
             } else if (t.getCode() == KeyCode.ESCAPE) {
                 cancelEdit();

@@ -1,10 +1,10 @@
 package authoringInterface.sidebar;
 
 import api.SubView;
+import authoringUtils.exception.DuplicateGameObjectClassException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.entity.SimpleEntityClass;
 import gameObjects.gameObject.GameObjectClass;
-import gameObjects.gameObject.GameObjectType;
 import gameObjects.tile.SimpleTileClass;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
@@ -25,7 +25,12 @@ public class SideView implements SubView<StackPane> {
         gameObjectsManager = manager;
         sidePane = new StackPane();
         TreeItem<String> rootNode = new TreeItem<>(ROOT_NAME);
-        gameObjectsManager.createCategoryClass(ROOT_NAME);
+        try {
+            gameObjectsManager.createCategoryClass(ROOT_NAME);
+        } catch (DuplicateGameObjectClassException e) {
+            // TODO
+            e.printStackTrace();
+        }
         rootNode.setExpanded(true);
         List<GameObjectClass> defaultList = new ArrayList<>(Arrays.asList(
                 new SimpleEntityClass("O"),
@@ -36,16 +41,28 @@ public class SideView implements SubView<StackPane> {
         for (GameObjectClass item : defaultList) {
             switch (item.getType()) {
                 case CATEGORY:
-                    gameObjectsManager.createCategoryClass(item.getClassName().getValue());
+                    try {
+                        gameObjectsManager.createCategoryClass(item.getClassName().getValue());
+                    } catch (DuplicateGameObjectClassException e) {
+                        // TODO
+                        e.printStackTrace();
+                    }
                     break;
                 case ENTITY:
-                    gameObjectsManager.createEntityClass(item.getClassName().getValue());
+                    try {
+                        gameObjectsManager.createEntityClass(item.getClassName().getValue());
+                    } catch (DuplicateGameObjectClassException e) {
+                        // TODO
+                        e.printStackTrace();
+                    }
                     break;
                 case TILE:
-                    gameObjectsManager.createTileClass(item.getClassName().getValue());
-                    break;
-                case SOUND:
-                    // TODO
+                    try {
+                        gameObjectsManager.createTileClass(item.getClassName().getValue());
+                    } catch (DuplicateGameObjectClassException e) {
+                        // TODO
+                        e.printStackTrace();
+                    }
                     break;
             }
             TreeItem<String> objectLeaf = new TreeItem<>(item.getClassName().getValue());

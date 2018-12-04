@@ -1,7 +1,9 @@
 package graphUI.groovy;
 
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -9,14 +11,19 @@ import javafx.scene.text.Text;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.lang.reflect.Parameter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * @author Inchan Hwang
+ */
 public class IconLoader {
-    private static final int ICONS_IN_ROW = 5;
+    private static final int ICONS_IN_ROW = 9;
 
     private static List<Node> loadIcons(
         String category,
@@ -47,9 +54,13 @@ public class IconLoader {
                 lst.clear();
             }
             var val = Boolean.parseBoolean(map.get(key));
-            lst.add(draggableIcon.apply(new Image(
-                IconLoader.class.getClassLoader().getResourceAsStream(key + ".png"))).apply(key).apply(val));
+            var icon = draggableIcon.apply(new Image(
+                IconLoader.class.getClassLoader().getResourceAsStream(key + ".png"))).apply(key).apply(val);
+            var tooltip = new Tooltip(key);
+            Tooltip.install(icon, tooltip);
+            lst.add(icon);
         }
+
         if (lst.size() > 0) {
             var hbox = new HBox();
             lst.forEach(n -> hbox.getChildren().add(n));
@@ -81,5 +92,35 @@ public class IconLoader {
         Function<Image, Function<String, Function<Boolean, ImageView>>> draggableIcon
     ) {
         return loadIcons("function", draggableIcon);
+    }
+
+    public static List<Node> loadGameMethods(
+        Function<Image, Function<String, Function<Boolean, ImageView>>> draggableIcon
+    ) {
+        try {
+            var c = Class.forName("gameplay.GameMethods");
+            var list = new ArrayList<Node>();
+            list.add(new Text("GameMethods"));
+            list.add(new Separator());
+            for(var method : c.getDeclaredMethods()) {
+                if(method.getName().contains("lambda")) continue; // no lambdas!
+
+                var icon = draggableIcon.apply(new Image(
+                    IconLoader.class.getClassLoader().getResourceAsStream("AutoGen.png")))
+                                        .apply("GameMethods."+method.getName()+"("+method.getParameters().length+")")
+                                        .apply(false);
+                var label = new Label(
+                    method.getReturnType().getSimpleName() + " " +
+                    method.getName() +
+                    formatParameters(method.getParameters())
+                );
+                list.add(new HBox(icon, label));
+            } return list;
+        } catch (ClassNotFoundException ignored) { return List.of(); }
+    }
+
+    private static String formatParameters(Parameter[] params) {
+        var paramTypes =  Arrays.stream(params).map(p -> p.getType().getSimpleName()).collect(Collectors.toList());
+        return "(" + String.join(",", paramTypes) + ")";
     }
 }

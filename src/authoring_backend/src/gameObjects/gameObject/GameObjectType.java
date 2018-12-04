@@ -1,5 +1,10 @@
 package gameObjects.gameObject;
 
 public enum GameObjectType {
-    ENTITY, SOUND, TILE, CATEGORY, PLAYER
+    TILE,
+    ENTITY,
+    CATEGORY,
+    SOUND,
+    PLAYER,
+    UNSPECIFIED
 }

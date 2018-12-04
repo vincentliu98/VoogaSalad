@@ -11,8 +11,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import utils.nodeInstance.NodeInstanceController;
+import utils.exception.NodeNotFoundException;
 
 /**
  * This abstract class provides a boiler plate for different editors because they are pretty similar.
@@ -27,11 +30,13 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
     Button cancel;
     TreeItem<String> treeItem;
     GameObjectsCRUDInterface gameObjectManager;
+    NodeInstanceController nodeInstanceController;
     EditingMode editingMode;
     Node nodeEdited;
     T gameObjectClass;
     V gameObjectInstance;
     ObservableList<String> imagePaths;
+    String singleMediaFilePath;
 
     public AbstractGameObjectEditor(GameObjectsCRUDInterface manager) {
         imagePaths = FXCollections.observableArrayList();
@@ -102,12 +107,19 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
      * Register the node to Object map.
      *
      * @param node: The node that is to be altered.
-     * @param gameObjectInstance: The GameObjectInstance that is associated with the Node on the rootPane.
+     * @param controller: The NodeInstanceController that controls the relationship between a Node and a GameObjectInstance.
      */
-    public void editNode(Node node, V gameObjectInstance) {
+    public void editNode(Node node, NodeInstanceController controller) {
         this.nodeEdited = node;
         editingMode = EditingMode.EDIT_NODE;
-        this.gameObjectInstance = gameObjectInstance;
+        nodeInstanceController = controller;
+        try {
+            //noinspection unchecked
+            this.gameObjectInstance = (V) controller.getGameObjectInstance(node);
+        } catch (NodeNotFoundException e) {
+            // TODO: proper error handling
+            e.printStackTrace();
+        }
         readGameObjectInstance();
     }
 

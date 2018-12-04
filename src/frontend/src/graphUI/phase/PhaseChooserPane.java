@@ -25,6 +25,8 @@ import java.util.function.Supplier;
  * PhaseChooserPane
  *  - Parent Pane of PhasePane.
  *
+ * It is the entire tab that contains the listView of all the Phase on the right and the pane of nodes on the right
+ *
  * @author Amy
  */
 
@@ -47,6 +49,7 @@ public class PhaseChooserPane implements SubView<GridPane> {
 
     private void initializeView() {
         view = new GridPane();
+        view.getStyleClass().add("phasePane");
         var col1 = new ColumnConstraints();
         col1.setPercentWidth(15);
         var col2 = new ColumnConstraints();

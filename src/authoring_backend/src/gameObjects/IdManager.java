@@ -13,19 +13,15 @@ public interface IdManager {
 
     Consumer<GameObjectClass> requestClassIdFunc();
 
-    Consumer<GameObjectInstance> requestTileInstanceIdFunc();
+    Consumer<GameObjectInstance> requestInstanceIdFunc();
 
-    Consumer<GameObjectInstance> requestEntityInstanceIdFunc();
 
     Consumer<GameObjectClass> returnClassIdFunc();
 
-    Consumer<GameObjectInstance> returnTileInstanceIdFunc();
+    Consumer<GameObjectInstance> returnInstanceIdFunc();
 
-    Consumer<GameObjectInstance> returnEntityInstanceIdFunc();
 
     Function<Integer, Boolean> verifyClassIdFunc();
 
     Function<Integer, Boolean> verifyTileInstanceIdFunc();
-
-    Function<Integer, Boolean> verifyEntityInstanceIdFunc();
 }

@@ -16,10 +16,11 @@ import javafx.util.Pair;
 import java.util.List;
 
 /**
- * Draggable circle Nodes
- * <p>
+ * A StackPane that contains a single groovy block (rectangular shape).
+ *
  * Reference: https://stackoverflow.com/questions/46562957/define-object-position-at-runtime-with-javafx
  *
+ * @author Inchan Hwang
  * @author jl729
  */
 public class GroovyNode extends StackPane {
@@ -44,7 +45,9 @@ public class GroovyNode extends StackPane {
     ) {
         text = new Label(block.name());
         text.setFont(new Font(labelSize));
+        text.setMaxWidth(width);
         text.setWrapText(true);
+        text.setAlignment(Pos.CENTER);
 
         text.setTextFill(
             color.getRed()*0.299 +
@@ -133,4 +136,12 @@ public class GroovyNode extends StackPane {
     public Rectangle inner() { return inner; }
     public double getCenterX() { return getLayoutX() + getTranslateX() + rectangle.getWidth()/2; }
     public double getCenterY() { return getLayoutY() + getTranslateY() + rectangle.getHeight()/2; }
+    public void setCenterX(double x) {
+        setLayoutX(x-rectangle.getWidth()/2);
+        setTranslateX(0);
+    }
+    public void setCenterY(double y) {
+        setLayoutY(y-rectangle.getHeight()/2);
+        setTranslateY(0);
+    }
 }

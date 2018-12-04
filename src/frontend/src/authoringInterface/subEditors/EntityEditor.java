@@ -1,22 +1,27 @@
 package authoringInterface.subEditors;
 
+import authoringUtils.exception.DuplicateGameObjectClassException;
+import authoringUtils.exception.GameObjectClassNotFoundException;
+import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.entity.EntityClass;
 import gameObjects.entity.EntityInstance;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import utils.ErrorWindow;
+import utils.exception.NodeNotFoundException;
+import utils.exception.PreviewUnavailableException;
+import utils.imageManipulation.Coordinates;
+import utils.imageManipulation.ImageManager;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -31,6 +36,8 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     private Label imageText;
     private Button chooseImage;
     private HBox imagePanel;
+    private static final double ICON_WIDTH = 50;
+    private static final double ICON_HEIGHT = 50;
 
     public EntityEditor(GameObjectsCRUDInterface manager) {
         super(manager);
@@ -50,45 +57,70 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
             }
         });
         confirm.setOnAction(e -> {
-            if (nameField.getText().trim().isEmpty()) {
+            if (nameField.getText() == null || nameField.getText().trim().isEmpty()) {
                 new ErrorWindow("Empty name", "You must give your entity a non-empty name").showAndWait();
             } else {
                 ((Stage) rootPane.getScene().getWindow()).close();
                 switch (editingMode) {
                     case ADD_TREEITEM:
-                        gameObjectManager.createEntityClass(nameField.getText().trim());
-                        EntityClass entityClass = gameObjectManager.getEntityClass(nameField.getText().trim());
+                        try {
+                            gameObjectManager.createEntityClass(nameField.getText().trim());
+                        } catch (DuplicateGameObjectClassException e1) {
+                            // TODO
+                            e1.printStackTrace();
+                        }
+                        EntityClass entityClass = null;
+                        try {
+                            entityClass = gameObjectManager.getEntityClass(nameField.getText().trim());
+                        } catch (GameObjectClassNotFoundException e1) {
+                            // TODO
+                            e1.printStackTrace();
+                        }
                         TreeItem<String> newItem = new TreeItem<>(entityClass.getClassName().getValue());
                         entityClass.getImagePathList().addAll(imagePaths);
-                        if (!imagePaths.isEmpty()) {
-                            ImageView icon = new ImageView(imagePaths.get(0));
-                            icon.setFitWidth(50);
-                            icon.setFitHeight(50);
-                            newItem.setGraphic(icon);
+                        ImageView icon = null;
+                        try {
+                            icon = new ImageView(ImageManager.getPreview(entityClass));
+                        } catch (PreviewUnavailableException e1) {
+                            // TODO: proper error handling
+                            e1.printStackTrace();
                         }
+                        Coordinates.setWidthAndHeight(icon, ICON_WIDTH, ICON_HEIGHT);
+                        newItem.setGraphic(icon);
                         treeItem.getChildren().add(newItem);
                         break;
                     case NONE:
                         return;
                     case EDIT_NODE:
-                        if (nodeEdited instanceof ImageView) {
-                            ((ImageView) nodeEdited).setImage(new Image(imagePaths.get(0)));
-                        } else if (nodeEdited instanceof Text) {
-                            ((Text) nodeEdited).setText(nameField.getText());
+                        gameObjectInstance.setInstanceName(nameField.getText());
+                        gameObjectInstance.getImagePathList().clear();
+                        gameObjectInstance.getImagePathList().addAll(imagePaths);
+                        try {
+                            ((ImageView) nodeEdited).setImage(ImageManager.getPreview(gameObjectInstance));
+                        } catch (PreviewUnavailableException e1) {
+                            // TODO: proper error handling
+                            e1.printStackTrace();
                         }
-                        // TODO make changes to the GameObjectInstance as well. Waiting for changes at JC's side.
                         break;
                     case EDIT_TREEITEM:
                         gameObjectClass.getImagePathList().clear();
                         gameObjectClass.getImagePathList().addAll(imagePaths);
-                        gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName().getValue(), nameField.getText());
-                        if (!imagePaths.isEmpty()) {
-                            ImageView icon1 = new ImageView(imagePaths.get(0));
-                            icon1.setFitWidth(50);
-                            icon1.setFitHeight(50);
-                            treeItem.setGraphic(icon1);
+                        try {
+                            gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName().getValue(), nameField.getText());
+                        } catch (InvalidOperationException e1) {
+                            // TODO
+                            e1.printStackTrace();
                         }
+                        ImageView icon2 = null;
+                        try {
+                            icon2 = new ImageView(ImageManager.getPreview(gameObjectClass));
+                        } catch (PreviewUnavailableException e1) {
+                            // TODO: proper error handling
+                            e1.printStackTrace();
+                        }
+                        Coordinates.setWidthAndHeight(icon2, ICON_WIDTH, ICON_HEIGHT);
                         treeItem.setValue(nameField.getText());
+                        treeItem.setGraphic(icon2);
                         break;
                 }
             }
@@ -117,9 +149,8 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
      */
     @Override
     public void readGameObjectInstance() {
-        nameField.setText(gameObjectInstance.getClassName().getValue());
-        // TODO: REmove this disgusting shite
-        imagePaths.addAll(gameObjectManager.getEntityClass(gameObjectInstance.getClassName().getValue()).getImagePathList());
+        nameField.setText(gameObjectInstance.getInstanceName().getValue());
+        imagePaths.addAll(gameObjectInstance.getImagePathList());
     }
 
     /**
@@ -128,7 +159,6 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     @Override
     public void readGameObjectClass() {
         nameField.setText(gameObjectClass.getClassName().getValue());
-        // TODO: REmove this disgusting shite
         imagePaths.addAll(gameObjectClass.getImagePathList());
     }
 

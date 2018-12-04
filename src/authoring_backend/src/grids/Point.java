@@ -1,7 +1,5 @@
 package grids;
 
-import gameObjects.TriFunction;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,9 +10,18 @@ import java.util.Set;
  */
 public interface Point {
 
-    static TriFunction<Point, Integer, Integer, Boolean> verifyPointsFunc() {
-        return Point::outOfBounds;
-    }
+//    static TriFunction<Point, Integer, Integer, Boolean> verifyPointsFunc() {
+//        return Point::outOfBounds;
+//    }
+
+
+    /**
+     *
+     * @param numRows
+     * @param numCols
+     * @return
+     */
+    boolean outOfBounds(int numRows, int numCols);
 
     /**
      *
@@ -47,30 +54,11 @@ public interface Point {
         Set<Point> neighbors = new HashSet<>();
             for (Directions.EightDirections d : Directions.EightDirections.values()) {
                 Point newPoint = p.add(d.getDirection());
-                if (!outOfBounds(newPoint, numRow, numCol)) {
+                if (!newPoint.outOfBounds(numRow, numCol)) {
                     neighbors.add(newPoint);
                 }
             }
         return neighbors;
-    }
-
-
-    /**
-     *
-     * @param x
-     * @param numColumns
-     * @return
-     */
-    static boolean outOfXBounds(int x, int numColumns) {
-        return x < 0 || x >= numColumns;
-    }
-
-    static boolean outOfYBounds(int y, int numRows) {
-        return y < 0 || y >= numRows;
-    }
-
-    static boolean outOfBounds(Point position, int numRow, int numCol) {
-        return outOfXBounds(position.getX(), numCol) || outOfYBounds(position.getY(), numRow);
     }
 
     /**
