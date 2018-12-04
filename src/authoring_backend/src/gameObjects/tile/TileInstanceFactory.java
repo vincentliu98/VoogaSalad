@@ -1,7 +1,7 @@
 package gameObjects.tile;
 
-import gameObjects.exception.InvalidClassException;
-import gameObjects.exception.InvalidPointsException;
+import authoringUtils.exception.GameObjectTypeException;
+import authoringUtils.exception.InvalidPointsException;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import grids.Point;
@@ -31,13 +31,14 @@ public class TileInstanceFactory {
         this.addInstanceToMapFunc = addInstanceToMapFunc;
     }
 
-    public TileInstance createInstance(TileClass tilePrototype, Point topLeftCoord) {
+    public TileInstance createInstance(TileClass tilePrototype, Point topLeftCoord)
+            throws GameObjectTypeException {
         // TODO locality
         if (topLeftCoord.outOfBounds(numRows, numCols)) {
             throw new InvalidPointsException();
         }
         if (tilePrototype.getType() != GameObjectType.TILE) {
-            throw new InvalidClassException();
+            throw new GameObjectTypeException("tilePrototype is not of Tile Class");
         }
         ObservableList imagePathListCopy = FXCollections.observableArrayList();
         ObservableMap propertiesMapCopy = FXCollections.observableHashMap();

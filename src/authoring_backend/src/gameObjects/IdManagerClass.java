@@ -1,10 +1,8 @@
 package gameObjects;
 
 
-import gameObjects.exception.InvalidIdException;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
-import gameObjects.gameObject.GameObjectType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,9 +67,9 @@ public class IdManagerClass implements IdManager {
         return gameObjectClass -> {
             int returnedId = gameObjectClass.getClassId().getValue();
             if (returnedId != 0) {
-                if (classCount < returnedId || returnedId < 0 || returnedClassIds.contains(returnedId)) {
-                    throw new InvalidIdException();
-                }
+//                if (classCount < returnedId || returnedId < 0 || returnedClassIds.contains(returnedId)) {
+//                    throw new InvalidIdException("Deleted class contains invalid Id");
+//                }
                 returnedClassIds.add(returnedId);
             }
         };
@@ -103,9 +101,9 @@ public class IdManagerClass implements IdManager {
         return gameObjectInstance -> {
             int returnedId = gameObjectInstance.getInstanceId().getValue();
             if (returnedId != 0) {
-                if (instanceCount < returnedId || returnedId < 0 || returnedInstanceIds.contains(returnedId)) {
-                    throw new InvalidIdException();
-                }
+//                if (instanceCount < returnedId || returnedId < 0 || returnedInstanceIds.contains(returnedId)) {
+//                    throw new InvalidIdException("Deleted instance contains invalid Id");
+//                }
                 returnedInstanceIds.add(returnedId);
             }
         };

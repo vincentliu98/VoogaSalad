@@ -8,7 +8,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import phase.api.Phase;
 import phase.api.PhaseDB;
-import frontendUtils.Try;
+import authoringUtils.frontendUtils.Try;
 
 import java.util.function.Supplier;
 

@@ -9,6 +9,7 @@ public class SimpleTurn implements Turn {
 
     public SimpleTurn(String phaseName) {
         myPhaseName = new SimpleStringProperty(phaseName);
+        myPlayerId = new SimpleIntegerProperty();
     }
 
     @Override

@@ -1,8 +1,11 @@
 import authoring.AuthoringTools;
 import grids.PointImpl;
+import authoringUtils.exception.DuplicateGameObjectClassException;
+import authoringUtils.exception.GameObjectTypeException;
+import authoringUtils.exception.InvalidGameObjectInstanceException;
 
 public class ValidationTest {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws DuplicateGameObjectClassException, GameObjectTypeException, InvalidGameObjectInstanceException {
         var authTools = new AuthoringTools(5, 5);
 
         var entityDB = authTools.entityDB();

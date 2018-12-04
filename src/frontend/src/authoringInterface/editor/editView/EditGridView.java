@@ -3,6 +3,9 @@ package authoringInterface.editor.editView;
 import api.SubView;
 import authoringInterface.customEvent.UpdateStatusEventListener;
 import authoringInterface.subEditors.*;
+import authoringUtils.exception.GameObjectClassNotFoundException;
+import authoringUtils.exception.GameObjectTypeException;
+import authoringUtils.exception.InvalidGameObjectInstanceException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.entity.EntityClass;
 import gameObjects.entity.EntityInstance;
@@ -213,7 +216,13 @@ public class EditGridView implements SubView<ScrollPane> {
     private void handleDragFromSideView(DragEvent dragEvent, Pane cell) {
         if (dragEvent.getGestureSource() instanceof TreeCell) {
             dragEvent.acceptTransferModes(TransferMode.ANY);
-            GameObjectClass objectClass = gameObjectManager.getGameObjectClass(dragEvent.getDragboard().getString());
+            GameObjectClass objectClass = null;
+            try {
+                objectClass = gameObjectManager.getGameObjectClass(dragEvent.getDragboard().getString());
+            } catch (GameObjectClassNotFoundException e) {
+                // TODO
+                e.printStackTrace();
+            }
             ImageView nodeOnGrid = null;
             try {
                 nodeOnGrid = new ImageView(ImageManager.getPreview(objectClass));
@@ -230,7 +239,16 @@ public class EditGridView implements SubView<ScrollPane> {
             switch (objectClass.getType()) {
                 case ENTITY:
                     // TODO: solve the TileID thing, and player ID thing
-                    EntityInstance entityInstance = ((EntityClass) objectClass).createInstance(0, gameObjectManager.getDefaultPlayerID());
+                    EntityInstance entityInstance = null;
+                    try {
+                        entityInstance = ((EntityClass) objectClass).createInstance(0, gameObjectManager.getDefaultPlayerID());
+                    } catch (InvalidGameObjectInstanceException e) {
+                        // TODO
+                        e.printStackTrace();
+                    } catch (GameObjectTypeException e) {
+                        // TODO
+                        e.printStackTrace();
+                    }
                     nodeInstanceController.addLink(nodeOnGrid, entityInstance);
                     break;
                 case SOUND:
@@ -238,7 +256,13 @@ public class EditGridView implements SubView<ScrollPane> {
                     break;
                 case TILE:
                     // TODO: solve point
-                    TileInstance tileInstance = ((TileClass) objectClass).createInstance(new PointImpl(GridPane.getColumnIndex(cell), GridPane.getRowIndex(cell)));
+                    TileInstance tileInstance = null;
+                    try {
+                        tileInstance = ((TileClass) objectClass).createInstance(new PointImpl(GridPane.getColumnIndex(cell), GridPane.getRowIndex(cell)));
+                    } catch (GameObjectTypeException e) {
+                        // TODO
+                        e.printStackTrace();
+                    }
                     nodeInstanceController.addLink(nodeOnGrid, tileInstance);
                     break;
             }

@@ -1,7 +1,7 @@
 package graphUI.groovy;
 
 import authoringInterface.spritechoosingwindow.PopUpWindow;
-import frontendUtils.Try;
+import authoringUtils.frontendUtils.Try;
 import groovy.api.BlockGraph;
 import groovy.api.GroovyFactory;
 import groovy.api.Ports;

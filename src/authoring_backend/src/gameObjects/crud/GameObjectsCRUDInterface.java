@@ -1,8 +1,8 @@
 package gameObjects.crud;
 
+import authoringUtils.exception.*;
 import gameObjects.category.*;
 import gameObjects.entity.*;
-import gameObjects.exception.*;
 import gameObjects.gameObject.*;
 import gameObjects.player.PlayerInstance;
 import gameObjects.tile.*;
@@ -10,7 +10,7 @@ import gameObjects.sound.*;
 import gameObjects.turn.Turn;
 import grids.Point;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableSet;
+
 
 import java.util.Collection;
 
@@ -27,24 +27,27 @@ public interface GameObjectsCRUDInterface {
      * This method creates a Tile Class and adds it to the map.
      * @param className the name of the Tile Class to be created
      * @return the Tile Class if there is no name collision and the method is successful
-     * @throws DuplicateClassException if a class with the same name exists
+     * @throws DuplicateGameObjectClassException if a class with the same name exists
      */
-    TileClass createTileClass(String className);
+    TileClass createTileClass(String className)
+            throws DuplicateGameObjectClassException;
 
     /**
      * This method gets the Tile Class from the map.
      * @param className the name of the Tile Class to be retrieved
      * @return the Tile Class with the name
-     * @throws NoTileClassException if there is no such Tile Class
+     * @throws GameObjectClassNotFoundException if there is no such Tile Class
      */
-    TileClass getTileClass(String className);
+    TileClass getTileClass(String className)
+            throws GameObjectClassNotFoundException;
 
     /**
      *
      * @param className
      * @return
      */
-    TileInstance createTileInstance(String className, Point topLeftCoord);
+    TileInstance createTileInstance(String className, Point topLeftCoord)
+            throws GameObjectClassNotFoundException, GameObjectTypeException;
 
 
     /**
@@ -52,105 +55,111 @@ public interface GameObjectsCRUDInterface {
      * @param tileClass
      * @return
      */
-    TileInstance createTileInstance(TileClass tileClass, Point topLeftCoord);
+    TileInstance createTileInstance(TileClass tileClass, Point topLeftCoord)
+            throws GameObjectTypeException;
 
     /**
      * This method creates an Entity Class and adds it to the map.
      * @param className the name of the Entity Class to be created
      * @return the Entity Class if there is no name collision and the method is successful
-     * @throws DuplicateClassException if a class with the same name exists
+     * @throws DuplicateGameObjectClassException if a class with the same name exists
      */
-    EntityClass createEntityClass(String className);
+    EntityClass createEntityClass(String className)
+            throws DuplicateGameObjectClassException;
 
     /**
      * This method gets the Entity Class from the map.
      * @param className the name of the Entity Class to be retrieved
      * @return the Entity Class with the name
-     * @throws NoEntityClassException if there is no such Entity Class
+     * @throws GameObjectClassNotFoundException if there is no such Entity Class
      */
-    EntityClass getEntityClass(String className);
+    EntityClass getEntityClass(String className)
+            throws GameObjectClassNotFoundException;
 
     /**
      *
      * @param className
      * @return
      */
-    EntityInstance createEntityInstance(String className, int tileId, int playerID);
+    EntityInstance createEntityInstance(String className, int playerID)
+            throws GameObjectClassNotFoundException, GameObjectTypeException;
 
     /**
      *
      * @param entityClass
      * @return
      */
-    EntityInstance createEntityInstance(EntityClass entityClass, int tileId, int playerID);
+    EntityInstance createEntityInstance(EntityClass entityClass, int playerID)
+            throws GameObjectTypeException;
 
 
     /**
      * This method creates an Category Class and adds it to the map.
      * @param className the name of the Class to be created
      * @return the Category Class if there is no name collision and the method is successful
-     * @throws DuplicateClassException if a class with the same name exists
+     * @throws DuplicateGameObjectClassException if a class with the same name exists
      */
-    CategoryClass createCategoryClass(String className);
+    CategoryClass createCategoryClass(String className)
+            throws DuplicateGameObjectClassException;
 
     /**
      * This method gets the Class from the map.
      * @param className the name of the Class to be retrieved
      * @return the Category Class with the name
-     * @throws NoCategoryClassException if there is no such Category Class
+     * @throws GameObjectClassNotFoundException if there is no such Category Class
      */
-    CategoryClass getCategoryClass(String className);
+    CategoryClass getCategoryClass(String className) throws GameObjectClassNotFoundException;
 
     /**
      *
      * @param className
      * @return
      */
-    CategoryInstance createCategoryInstance(String className);
+    CategoryInstance createCategoryInstance(String className) throws GameObjectClassNotFoundException, GameObjectTypeException;
 
     /**
      *
      * @param categoryClass
      * @return
      */
-    CategoryInstance createCategoryInstance(CategoryClass categoryClass);
+    CategoryInstance createCategoryInstance(CategoryClass categoryClass) throws GameObjectTypeException;
 
     /**
      * This method creates an Sound Class and adds it to the map.
      * @param className the name of the Class to be created
      * @return the Sound Class if there is no name collision and the method is successful
-     * @throws DuplicateClassException if a class with the same name exists
+     * @throws DuplicateGameObjectClassException if a class with the same name exists
      */
-    SoundClass createSoundClass(String className);
+    SoundClass createSoundClass(String className) throws DuplicateGameObjectClassException;
 
     /**
      * This method gets the Sound Class from the map.
      * @param className the name of the Class to be retrieved
      * @return the Sound Class with the name
-     * @throws NoSoundClassException if there is no such Sound Class
+     * @throws GameObjectClassNotFoundException if there is no such Sound Class
      */
-    SoundClass getSoundClass(String className);
+    SoundClass getSoundClass(String className) throws GameObjectClassNotFoundException;
 
     /**
      *
      * @param className
      * @return
      */
-    SoundInstance createSoundInstance(String className);
+    SoundInstance createSoundInstance(String className) throws GameObjectClassNotFoundException, GameObjectTypeException;
 
     /**
      *
      * @param soundClass
      * @return
      */
-    SoundInstance createSoundInstance(SoundClass soundClass);
+    SoundInstance createSoundInstance(SoundClass soundClass) throws GameObjectTypeException;
 
 
     PlayerInstance createPlayerInstance(String playerName);
 
     Turn createTurn(String phaseName);
 
-    Turn getTurn(String phaseName);
+    Turn getTurn(String phaseName) throws TurnNotFoundException;
 
 
     boolean deleteTurn(String phaseName);
@@ -174,7 +183,7 @@ public interface GameObjectsCRUDInterface {
      * @param className
      * @return
      */
-    GameObjectClass getGameObjectClass(String className);
+    GameObjectClass getGameObjectClass(String className) throws GameObjectClassNotFoundException;
 
     Collection<GameObjectClass> getAllClasses();
 
@@ -183,7 +192,7 @@ public interface GameObjectsCRUDInterface {
      * @param instanceId
      * @return
      */
-    GameObjectInstance getGameObjectInstance(int instanceId);
+    GameObjectInstance getGameObjectInstance(int instanceId) throws GameObjectInstanceNotFoundException;
 
     /**
      *
@@ -221,7 +230,7 @@ public interface GameObjectsCRUDInterface {
      * @param newClassName
      * @return
      */
-    boolean changeGameObjectClassName(String oldClassName, String newClassName);
+    boolean changeGameObjectClassName(String oldClassName, String newClassName) throws InvalidOperationException;
 
 
     /**

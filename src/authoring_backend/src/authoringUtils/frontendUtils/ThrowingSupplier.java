@@ -1,4 +1,4 @@
-package frontendUtils;
+package authoringUtils.frontendUtils;
 
 @FunctionalInterface
 public interface ThrowingSupplier<T> {

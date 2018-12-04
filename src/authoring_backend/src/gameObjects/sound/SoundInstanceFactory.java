@@ -1,6 +1,6 @@
 package gameObjects.sound;
 
-import gameObjects.exception.InvalidClassException;
+import authoringUtils.exception.GameObjectTypeException;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import javafx.beans.property.SimpleStringProperty;
@@ -23,10 +23,11 @@ public class SoundInstanceFactory {
         this.addInstanceToMapFunc = addInstanceToMapFunc;
     }
 
-    public SoundInstance createInstance(SoundClass soundPrototype) {
+    public SoundInstance createInstance(SoundClass soundPrototype)
+            throws GameObjectTypeException {
 
         if (soundPrototype.getType() != GameObjectType.SOUND) {
-            throw new InvalidClassException();
+            throw new GameObjectTypeException("soundPrototype is not of Sound Class");
         }
         SimpleStringProperty mediaFilePathCopy = new SimpleStringProperty();
         ObservableMap propertiesMapCopy = FXCollections.observableHashMap();

@@ -4,12 +4,11 @@ import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
+import authoringUtils.exception.GameObjectTypeException;
 
 import java.util.Collection;
-import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -165,7 +164,8 @@ public class SimpleSoundClass implements SoundClass {
     }
 
     @Override
-    public SoundInstance createInstance() {
+    public SoundInstance createInstance()
+            throws GameObjectTypeException {
         return myFactory.createInstance(this);
     }
 

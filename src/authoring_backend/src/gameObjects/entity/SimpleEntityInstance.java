@@ -21,7 +21,6 @@ public class SimpleEntityInstance implements EntityInstance {
 
     SimpleEntityInstance(
             String className,
-            int tileId,
             ObservableList<String> imagePathList,
             ObservableMap<String, String> properties,
             Supplier<EntityClass> getEntityClassFunc) {
@@ -29,7 +28,6 @@ public class SimpleEntityInstance implements EntityInstance {
         this.className.setValue(className);
         this.instanceName = new SimpleStringProperty(className);
         this.tileId = new SimpleIntegerProperty();
-        this.tileId.setValue(tileId);
         this.imagePathList = imagePathList;
         this.propertiesMap = properties;
         this.getEntityClassFunc = getEntityClassFunc;
@@ -122,6 +120,11 @@ public class SimpleEntityInstance implements EntityInstance {
     @Override
     public EntityClass getGameObjectClass() {
         return getEntityClassFunc.get();
+    }
+
+    @Override
+    public void setTileId(int newTileId) {
+        tileId.setValue(newTileId);
     }
 
     @Override

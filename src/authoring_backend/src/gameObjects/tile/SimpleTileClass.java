@@ -8,9 +8,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
+import authoringUtils.exception.GameObjectTypeException;
 
 import java.util.Collection;
-import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -151,7 +151,8 @@ public class SimpleTileClass implements TileClass {
 
 
     @Override
-    public TileInstance createInstance(Point topLeftCoord) {
+    public TileInstance createInstance(Point topLeftCoord)
+            throws GameObjectTypeException {
         return myFactory.createInstance(this, topLeftCoord);
 
     }

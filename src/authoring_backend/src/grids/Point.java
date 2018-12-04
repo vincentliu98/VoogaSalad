@@ -1,7 +1,5 @@
 package grids;
 
-import gameObjects.TriFunction;
-
 import java.util.HashSet;
 import java.util.Set;
 

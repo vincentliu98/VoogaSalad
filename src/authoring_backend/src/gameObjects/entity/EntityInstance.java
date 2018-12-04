@@ -8,6 +8,8 @@ import javafx.collections.ObservableList;
 public interface EntityInstance extends GameObjectInstance {
 
 
+    void setTileId(int newTileId);
+
     SimpleIntegerProperty getTileID();
 
     /**

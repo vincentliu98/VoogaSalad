@@ -1,6 +1,6 @@
 package groovy.graph.blocks.small_factory;
 
-import frontendUtils.Try;
+import authoringUtils.frontendUtils.Try;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import groovy.graph.blocks.core.LiteralBlock;
 

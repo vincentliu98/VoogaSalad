@@ -1,6 +1,6 @@
 package groovy.api;
 
-import frontendUtils.Try;
+import authoringUtils.frontendUtils.Try;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import groovy.graph.BlockEdgeImpl;
 import groovy.graph.BlockGraphImpl;
