@@ -1,7 +1,9 @@
 package gameObjects.tile;
 
 import authoringUtils.exception.GameObjectTypeException;
+import authoringUtils.exception.InvalidIdException;
 import authoringUtils.exception.InvalidPointsException;
+import gameObjects.ThrowingConsumer;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import grids.Point;
@@ -16,14 +18,14 @@ public class TileInstanceFactory {
     private int numRows;
     private int numCols;
     private Consumer<GameObjectInstance> requestInstanceIdFunc;
-    private Consumer<GameObjectInstance> addInstanceToMapFunc;
+    private ThrowingConsumer<GameObjectInstance, InvalidIdException> addInstanceToMapFunc;
 
 
     public TileInstanceFactory(
             int gridHeight,
             int gridWidth,
             Consumer<GameObjectInstance> requestInstanceIdFunc,
-            Consumer<GameObjectInstance> addInstanceToMapFunc) {
+            ThrowingConsumer<GameObjectInstance, InvalidIdException> addInstanceToMapFunc) {
 
         numRows = gridHeight;
         numCols = gridWidth;
@@ -32,7 +34,7 @@ public class TileInstanceFactory {
     }
 
     public TileInstance createInstance(TileClass tilePrototype, Point topLeftCoord)
-            throws GameObjectTypeException {
+            throws GameObjectTypeException, InvalidIdException {
         // TODO locality
         if (topLeftCoord.outOfBounds(numRows, numCols)) {
             throw new InvalidPointsException();

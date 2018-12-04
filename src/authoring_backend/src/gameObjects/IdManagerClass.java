@@ -1,6 +1,7 @@
 package gameObjects;
 
 
+import authoringUtils.exception.InvalidIdException;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
 
@@ -62,14 +63,14 @@ public class IdManagerClass implements IdManager {
     }
 
     @Override
-    public Consumer<GameObjectClass> returnClassIdFunc() {
+    public ThrowingConsumer<GameObjectClass, InvalidIdException> returnClassIdFunc() {
 
         return gameObjectClass -> {
             int returnedId = gameObjectClass.getClassId().getValue();
             if (returnedId != 0) {
-//                if (classCount < returnedId || returnedId < 0 || returnedClassIds.contains(returnedId)) {
-//                    throw new InvalidIdException("Deleted class contains invalid Id");
-//                }
+                if (classCount < returnedId || returnedId < 0 || returnedClassIds.contains(returnedId)) {
+                    throw new InvalidIdException("Deleted class contains invalid Id");
+                }
                 returnedClassIds.add(returnedId);
             }
         };
@@ -96,14 +97,14 @@ public class IdManagerClass implements IdManager {
     }
 
     @Override
-    public Consumer<GameObjectInstance> returnInstanceIdFunc() {
+    public ThrowingConsumer<GameObjectInstance, InvalidIdException> returnInstanceIdFunc() {
 
         return gameObjectInstance -> {
             int returnedId = gameObjectInstance.getInstanceId().getValue();
             if (returnedId != 0) {
-//                if (instanceCount < returnedId || returnedId < 0 || returnedInstanceIds.contains(returnedId)) {
-//                    throw new InvalidIdException("Deleted instance contains invalid Id");
-//                }
+                if (instanceCount < returnedId || returnedId < 0 || returnedInstanceIds.contains(returnedId)) {
+                    throw new InvalidIdException("Deleted instance contains invalid Id");
+                }
                 returnedInstanceIds.add(returnedId);
             }
         };

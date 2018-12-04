@@ -1,5 +1,6 @@
 package gameObjects.category;
 
+import authoringUtils.exception.InvalidIdException;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectType;
 import javafx.beans.property.SimpleStringProperty;
@@ -10,7 +11,7 @@ import authoringUtils.exception.GameObjectTypeException;
  */
 public interface CategoryClass extends GameObjectClass {
 
-    CategoryInstance createInstance() throws GameObjectTypeException;
+    CategoryInstance createInstance() throws GameObjectTypeException, InvalidIdException;
 
     SimpleStringProperty getImagePath();
 

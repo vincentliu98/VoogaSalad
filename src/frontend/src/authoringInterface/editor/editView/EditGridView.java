@@ -6,6 +6,7 @@ import authoringInterface.subEditors.*;
 import authoringUtils.exception.GameObjectClassNotFoundException;
 import authoringUtils.exception.GameObjectTypeException;
 import authoringUtils.exception.InvalidGameObjectInstanceException;
+import authoringUtils.exception.InvalidIdException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.entity.EntityClass;
 import gameObjects.entity.EntityInstance;
@@ -15,6 +16,7 @@ import gameObjects.gameObject.GameObjectType;
 import gameObjects.tile.TileClass;
 import gameObjects.tile.TileInstance;
 import grids.PointImpl;
+import javafx.beans.InvalidationListener;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -245,7 +247,7 @@ public class EditGridView implements SubView<ScrollPane> {
                     } catch (InvalidGameObjectInstanceException e) {
                         // TODO
                         e.printStackTrace();
-                    } catch (GameObjectTypeException e) {
+                    } catch (GameObjectTypeException | InvalidIdException e) {
                         // TODO
                         e.printStackTrace();
                     }
@@ -259,7 +261,7 @@ public class EditGridView implements SubView<ScrollPane> {
                     TileInstance tileInstance = null;
                     try {
                         tileInstance = ((TileClass) objectClass).createInstance(new PointImpl(GridPane.getColumnIndex(cell), GridPane.getRowIndex(cell)));
-                    } catch (GameObjectTypeException e) {
+                    } catch (GameObjectTypeException | InvalidIdException e) {
                         // TODO
                         e.printStackTrace();
                     }

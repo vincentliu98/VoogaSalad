@@ -1,5 +1,6 @@
 package gameObjects.sound;
 
+import authoringUtils.exception.InvalidIdException;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectType;
 import javafx.beans.property.SimpleStringProperty;
@@ -10,7 +11,7 @@ import authoringUtils.exception.GameObjectTypeException;
  */
 public interface SoundClass extends GameObjectClass {
 
-    SoundInstance createInstance() throws GameObjectTypeException;
+    SoundInstance createInstance() throws GameObjectTypeException, InvalidIdException;
 
     SimpleStringProperty getMediaFilePath();
 
