@@ -1,5 +1,8 @@
 package authoringInterface.subEditors;
 
+import authoringUtils.exception.DuplicateGameObjectClassException;
+import authoringUtils.exception.GameObjectClassNotFoundException;
+import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.entity.EntityClass;
 import gameObjects.entity.EntityInstance;
@@ -60,8 +63,19 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                 ((Stage) rootPane.getScene().getWindow()).close();
                 switch (editingMode) {
                     case ADD_TREEITEM:
-                        gameObjectManager.createEntityClass(nameField.getText().trim());
-                        EntityClass entityClass = gameObjectManager.getEntityClass(nameField.getText().trim());
+                        try {
+                            gameObjectManager.createEntityClass(nameField.getText().trim());
+                        } catch (DuplicateGameObjectClassException e1) {
+                            // TODO
+                            e1.printStackTrace();
+                        }
+                        EntityClass entityClass = null;
+                        try {
+                            entityClass = gameObjectManager.getEntityClass(nameField.getText().trim());
+                        } catch (GameObjectClassNotFoundException e1) {
+                            // TODO
+                            e1.printStackTrace();
+                        }
                         TreeItem<String> newItem = new TreeItem<>(entityClass.getClassName().getValue());
                         entityClass.getImagePathList().addAll(imagePaths);
                         ImageView icon = null;
@@ -91,7 +105,12 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                     case EDIT_TREEITEM:
                         gameObjectClass.getImagePathList().clear();
                         gameObjectClass.getImagePathList().addAll(imagePaths);
-                        gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName().getValue(), nameField.getText());
+                        try {
+                            gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName().getValue(), nameField.getText());
+                        } catch (InvalidOperationException e1) {
+                            // TODO
+                            e1.printStackTrace();
+                        }
                         ImageView icon2 = null;
                         try {
                             icon2 = new ImageView(ImageManager.getPreview(gameObjectClass));

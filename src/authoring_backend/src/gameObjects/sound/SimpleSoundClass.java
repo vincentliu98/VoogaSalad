@@ -1,15 +1,17 @@
 package gameObjects.sound;
 
+import authoringUtils.exception.InvalidIdException;
+import authoringUtils.exception.InvalidOperationException;
+import gameObjects.ThrowingBiConsumer;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
+import authoringUtils.exception.GameObjectTypeException;
 
 import java.util.Collection;
-import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -21,7 +23,7 @@ public class SimpleSoundClass implements SoundClass {
     private ObservableMap<String, String> propertiesMap;
 
     private SoundInstanceFactory myFactory;
-    private BiConsumer<String, String> changeSoundClassNameFunc;
+    private ThrowingBiConsumer<String, String, InvalidOperationException> changeSoundClassNameFunc;
     private Function<String, Collection<GameObjectInstance>> getAllSoundInstancesFunc;
     private Function<Integer, Boolean> deleteSoundInstanceFunc;
 
@@ -35,7 +37,7 @@ public class SimpleSoundClass implements SoundClass {
     public SimpleSoundClass(
             String className,
             SoundInstanceFactory soundInstanceFactory,
-            BiConsumer<String, String> changeSoundClassNameFunc,
+            ThrowingBiConsumer<String, String, InvalidOperationException> changeSoundClassNameFunc,
             Function<String, Collection<GameObjectInstance>> getAllSoundInstancesFunc,
             Function<Integer, Boolean> deleteSoundInstanceFunc) {
         this(className);
@@ -78,7 +80,8 @@ public class SimpleSoundClass implements SoundClass {
     }
 
     @Override
-    public void changeClassName(String newClassName) {
+    public void changeClassName(String newClassName)
+            throws InvalidOperationException {
         changeSoundClassNameFunc.accept(className.getValue(), newClassName);
     }
 
@@ -165,7 +168,8 @@ public class SimpleSoundClass implements SoundClass {
     }
 
     @Override
-    public SoundInstance createInstance() {
+    public SoundInstance createInstance()
+            throws GameObjectTypeException, InvalidIdException {
         return myFactory.createInstance(this);
     }
 

@@ -1,17 +1,17 @@
 package gameObjects.category;
 
-import gameObjects.entity.EntityInstance;
-import gameObjects.entity.EntityInstanceFactory;
+import authoringUtils.exception.InvalidIdException;
+import authoringUtils.exception.InvalidOperationException;
+import gameObjects.ThrowingBiConsumer;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
+import authoringUtils.exception.GameObjectTypeException;
 
 import java.util.Collection;
-import java.util.Locale;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -27,7 +27,7 @@ public class SimpleCategoryClass implements CategoryClass {
     private ObservableMap<String, String> propertiesMap;
 
     private CategoryInstanceFactory myFactory;
-    private BiConsumer<String, String> changeCategoryClassNameFunc;
+    private ThrowingBiConsumer<String, String, InvalidOperationException> changeCategoryClassNameFunc;
     private Function<String, Collection<GameObjectInstance>> getAllCategoryInstancesFunc;
     private Function<Integer, Boolean> deleteCategoryInstanceFunc;
 
@@ -41,7 +41,7 @@ public class SimpleCategoryClass implements CategoryClass {
     public SimpleCategoryClass(
             String className,
             CategoryInstanceFactory categoryInstanceFactory,
-            BiConsumer<String, String> changeCategoryClassNameFunc,
+            ThrowingBiConsumer<String, String, InvalidOperationException> changeCategoryClassNameFunc,
             Function<String, Collection<GameObjectInstance>> getAllCategoryInstancesFunc,
             Function<Integer, Boolean> deleteCategoryInstanceFunc) {
         this(className);
@@ -82,7 +82,8 @@ public class SimpleCategoryClass implements CategoryClass {
     }
 
     @Override
-    public void changeClassName(String newClassName) {
+    public void changeClassName(String newClassName)
+            throws InvalidOperationException {
         changeCategoryClassNameFunc.accept(className.getValue(), newClassName);
     }
 
@@ -171,7 +172,8 @@ public class SimpleCategoryClass implements CategoryClass {
     }
 
     @Override
-    public CategoryInstance createInstance() {
+    public CategoryInstance createInstance()
+            throws GameObjectTypeException, InvalidIdException {
         return myFactory.createInstance(this);
     }
 

@@ -1,6 +1,6 @@
 package groovy.graph;
 
-import frontendUtils.Try;
+import authoringUtils.frontendUtils.Try;
 import graph.Edge;
 import graph.SimpleGraph;
 import groovy.api.BlockEdge;

@@ -1,7 +1,8 @@
 package gameObjects.entity;
 
-import gameObjects.exception.InvalidClassException;
-import gameObjects.exception.InvalidTileException;
+import authoringUtils.exception.GameObjectTypeException;
+import authoringUtils.exception.InvalidIdException;
+import gameObjects.ThrowingConsumer;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import javafx.collections.FXCollections;
@@ -17,14 +18,14 @@ public class EntityInstanceFactory {
 
     private Function<Integer, Boolean> verifyEntityInstanceIdFunc;
     private Consumer<GameObjectInstance> requestInstanceIdFunc;
-    private Consumer<GameObjectInstance> addInstanceToMapFunc;
+    private ThrowingConsumer<GameObjectInstance, InvalidIdException> addInstanceToMapFunc;
     private BiConsumer<Integer, Integer> addInstanceToPlayer;
 
 
     public EntityInstanceFactory(
             Function<Integer, Boolean> verifyEntityInstanceIdFunc,
             Consumer<GameObjectInstance> requestInstanceIdFunc,
-            Consumer<GameObjectInstance> addInstanceToMapFunc,
+            ThrowingConsumer<GameObjectInstance, InvalidIdException> addInstanceToMapFunc,
             BiConsumer<Integer, Integer> addInstanceToPlayer
     ) {
 
@@ -34,20 +35,21 @@ public class EntityInstanceFactory {
         this.addInstanceToPlayer = addInstanceToPlayer;
     }
 
-    public EntityInstance createInstance(EntityClass entityPrototype, int tileId, int playerID) {
+    public EntityInstance createInstance(EntityClass entityPrototype, int playerID)
+            throws GameObjectTypeException, InvalidIdException {
         // TODO locality
-        if (!verifyEntityInstanceIdFunc.apply(tileId)) {
-            throw new InvalidTileException();
-        }
+//        if (!verifyEntityInstanceIdFunc.apply(tileId)) {
+//            throw new InvalidGameObjectInstanceException("Entity cannot be created on Tile Instance with invalid Tile Id");
+//        }
         if (entityPrototype.getType() != GameObjectType.ENTITY) {
-            throw new InvalidClassException();
+            throw new GameObjectTypeException("entityPrototype is not of Entity Class");
         }
         ObservableList imagePathListCopy = FXCollections.observableArrayList();
         ObservableMap propertiesMapCopy = FXCollections.observableHashMap();
         imagePathListCopy.addAll(entityPrototype.getImagePathList());
         propertiesMapCopy.putAll(entityPrototype.getPropertiesMap());
         Supplier<EntityClass> getEntityClassFunc = () -> entityPrototype;
-        EntityInstance entityInstance = new SimpleEntityInstance(entityPrototype.getClassName().getValue(), tileId, imagePathListCopy, propertiesMapCopy, getEntityClassFunc);
+        EntityInstance entityInstance = new SimpleEntityInstance(entityPrototype.getClassName().getValue(), imagePathListCopy, propertiesMapCopy, getEntityClassFunc);
         requestInstanceIdFunc.accept(entityInstance);
         addInstanceToMapFunc.accept(entityInstance);
         addInstanceToPlayer.accept(entityInstance.getInstanceId().get(), playerID);

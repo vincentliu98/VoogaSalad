@@ -1,12 +1,13 @@
 package gameObjects.tile;
 
+import authoringUtils.exception.InvalidIdException;
 import gameObjects.gameObject.GameObjectClass;
-import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import grids.Point;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
+import authoringUtils.exception.GameObjectTypeException;
 
 public interface TileClass extends GameObjectClass {
 
@@ -50,7 +51,7 @@ public interface TileClass extends GameObjectClass {
      */
     String getImageSelectorCode();
 
-    TileInstance createInstance(Point topLeftCoord);
+    TileInstance createInstance(Point topLeftCoord) throws GameObjectTypeException, InvalidIdException;
 
     @Override
     default GameObjectType getType() {

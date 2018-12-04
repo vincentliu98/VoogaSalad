@@ -1,11 +1,12 @@
 package gameObjects.category;
 
-import gameObjects.exception.InvalidClassException;
+import authoringUtils.exception.GameObjectTypeException;
+import authoringUtils.exception.InvalidIdException;
+import gameObjects.ThrowingConsumer;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 
 import java.util.function.Consumer;
@@ -13,21 +14,22 @@ import java.util.function.Supplier;
 
 public class CategoryInstanceFactory {
     private Consumer<GameObjectInstance> requestInstanceIdFunc;
-    private Consumer<GameObjectInstance> addInstanceToMapFunc;
+    private ThrowingConsumer<GameObjectInstance, InvalidIdException> addInstanceToMapFunc;
 
 
     public CategoryInstanceFactory(
             Consumer<GameObjectInstance> requestInstanceIdFunc,
-            Consumer<GameObjectInstance> addInstanceToMapFunc) {
+            ThrowingConsumer<GameObjectInstance, InvalidIdException> addInstanceToMapFunc) {
 
         this.requestInstanceIdFunc = requestInstanceIdFunc;
         this.addInstanceToMapFunc = addInstanceToMapFunc;
     }
 
-    public CategoryInstance createInstance(CategoryClass categoryPrototype) {
+    public CategoryInstance createInstance(CategoryClass categoryPrototype)
+            throws GameObjectTypeException, InvalidIdException {
         // TODO locality
         if (categoryPrototype.getType() != GameObjectType.CATEGORY) {
-            throw new InvalidClassException();
+            throw new GameObjectTypeException("categoryPrototype is not of Category Type");
         }
         SimpleStringProperty imagePathCopy = new SimpleStringProperty();
         ObservableMap propertiesMapCopy = FXCollections.observableHashMap();

@@ -5,7 +5,7 @@ import phase.NamespaceException;
 import phase.PhaseGraphImpl;
 import phase.PhaseImpl;
 import phase.TransitionImpl;
-import frontendUtils.Try;
+import authoringUtils.frontendUtils.Try;
 
 import java.util.ArrayList;
 import java.util.HashSet;

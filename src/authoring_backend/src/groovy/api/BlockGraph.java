@@ -3,10 +3,7 @@ package groovy.api;
 import graph.Graph;
 import groovy.graph.blocks.core.GroovyBlock;
 import groovy.graph.blocks.core.SourceBlock;
-import javafx.util.Pair;
-import frontendUtils.Try;
-
-import java.util.Set;
+import authoringUtils.frontendUtils.Try;
 
 /**
  *  A basic graph of GroovyBlocks and BlockEdges representing some groovy code.

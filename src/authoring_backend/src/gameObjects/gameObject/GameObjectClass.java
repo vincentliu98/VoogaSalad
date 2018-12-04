@@ -1,5 +1,6 @@
 package gameObjects.gameObject;
 
+import authoringUtils.exception.InvalidOperationException;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -41,7 +42,7 @@ public interface GameObjectClass {
 
 
 
-    void changeClassName(String newClassName);
+    void changeClassName(String newClassName) throws InvalidOperationException;
 
 
     /**

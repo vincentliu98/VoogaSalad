@@ -1,5 +1,8 @@
 package authoringInterface.subEditors;
 
+import authoringUtils.exception.DuplicateGameObjectClassException;
+import authoringUtils.exception.GameObjectClassNotFoundException;
+import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.tile.TileClass;
 import gameObjects.tile.TileInstance;
@@ -81,8 +84,19 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
                 ((Stage) rootPane.getScene().getWindow()).close();
                 switch (editingMode) {
                     case ADD_TREEITEM:
-                        gameObjectManager.createTileClass(nameField.getText().trim());
-                        TileClass TileClass = gameObjectManager.getTileClass(nameField.getText().trim());
+                        try {
+                            gameObjectManager.createTileClass(nameField.getText().trim());
+                        } catch (DuplicateGameObjectClassException e1) {
+                            // TODO
+                            e1.printStackTrace();
+                        }
+                        TileClass TileClass = null;
+                        try {
+                            TileClass = gameObjectManager.getTileClass(nameField.getText().trim());
+                        } catch (GameObjectClassNotFoundException e1) {
+                            // TODO
+                            e1.printStackTrace();
+                        }
                         TreeItem<String> newItem = new TreeItem<>(TileClass.getClassName().getValue());
                         TileClass.getImagePathList().addAll(imagePaths);
                         ImageView icon = new ImageView(imagePaths.get(0));
@@ -104,7 +118,12 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
                     case EDIT_TREEITEM:
                         gameObjectClass.getImagePathList().clear();
                         gameObjectClass.getImagePathList().addAll(imagePaths);
-                        gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName().getValue(), nameField.getText());
+                        try {
+                            gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName().getValue(), nameField.getText());
+                        } catch (InvalidOperationException e1) {
+                            // TODO
+                            e1.printStackTrace();
+                        }
                         if (!imagePaths.isEmpty()) {
                             ImageView icon1 = new ImageView(imagePaths.get(0));
                             icon1.setFitWidth(50);
@@ -126,7 +145,12 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
     public void readGameObjectInstance() {
         nameField.setText(gameObjectInstance.getClassName().getValue());
         // TODO: REmove this disgusting shite
-        imagePaths.addAll(gameObjectManager.getTileClass(gameObjectInstance.getClassName().getValue()).getImagePathList());
+        try {
+            imagePaths.addAll(gameObjectManager.getTileClass(gameObjectInstance.getClassName().getValue()).getImagePathList());
+        } catch (GameObjectClassNotFoundException e) {
+            // TODO
+            e.printStackTrace();
+        }
     }
 
     /**
