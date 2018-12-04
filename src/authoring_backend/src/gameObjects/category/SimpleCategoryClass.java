@@ -1,17 +1,14 @@
 package gameObjects.category;
 
-import gameObjects.entity.EntityInstance;
-import gameObjects.entity.EntityInstanceFactory;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
+import authoringUtils.exception.GameObjectTypeException;
 
 import java.util.Collection;
-import java.util.Locale;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -171,7 +168,8 @@ public class SimpleCategoryClass implements CategoryClass {
     }
 
     @Override
-    public CategoryInstance createInstance() {
+    public CategoryInstance createInstance()
+            throws GameObjectTypeException {
         return myFactory.createInstance(this);
     }
 

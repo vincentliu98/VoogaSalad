@@ -1,6 +1,6 @@
 package graphUI.groovy;
 
-import frontendUtils.Try;
+import authoringUtils.frontendUtils.Try;
 import groovy.api.GroovyFactory;
 import groovy.api.Ports;
 import groovy.graph.blocks.core.FunctionBlock;

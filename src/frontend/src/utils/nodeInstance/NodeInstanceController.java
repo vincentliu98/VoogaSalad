@@ -2,11 +2,8 @@ package utils.nodeInstance;
 
 import gameObjects.gameObject.GameObjectInstance;
 import javafx.scene.Node;
-import javafx.scene.input.MouseEvent;
-import utils.exception.GameObjectInstanceNotFoundException;
+import authoringUtils.exception.GameObjectInstanceNotFoundException;
 import utils.exception.NodeNotFoundException;
-
-import java.util.function.BiConsumer;
 
 /**
  * This interface controls the relationship between a Node on the editing panels and a GameObjectInstance it potentially refers to.

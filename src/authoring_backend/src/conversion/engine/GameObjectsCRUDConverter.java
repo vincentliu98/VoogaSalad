@@ -9,7 +9,10 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.mapper.Mapper;
 import gameObjects.crud.SimpleGameObjectsCRUD;
+import gameObjects.entity.EntityClass;
+import gameObjects.tile.TileClass;
 import groovy.lang.GroovyShell;
+import authoringUtils.exception.GameObjectClassNotFoundException;
 
 import java.util.Map;
 
@@ -64,7 +67,12 @@ public class GameObjectsCRUDConverter implements Converter {
         }
 
         for(var entityInstance : db.getEntityInstances()) {
-            var entityClass = db.getEntityClass(entityInstance.getClassName().get());
+            EntityClass entityClass = null;
+            try {
+                entityClass = db.getEntityClass(entityInstance.getClassName().get());
+            } catch (GameObjectClassNotFoundException e) {
+                e.printStackTrace();
+            }
 
             writer.startNode("gameplay.Entity");
 
@@ -107,7 +115,12 @@ public class GameObjectsCRUDConverter implements Converter {
         }
 
         for(var tileInstance : db.getTileInstances()) {
-            var tileClass = db.getTileClass(tileInstance.getClassName().get());
+            TileClass tileClass = null;
+            try {
+                tileClass = db.getTileClass(tileInstance.getClassName().get());
+            } catch (GameObjectClassNotFoundException e) {
+                e.printStackTrace();
+            }
             writer.startNode("gameplay.Tile");
 
             // myID

@@ -1,7 +1,7 @@
 //package gameObjects.player;
 //
 //import gameObjects.gameObject.GameObjectInstance;
-//import gameObjects.exception.InvalidIdException;
+//import InvalidIdException;
 //
 //import javafx.beans.property.*;
 //import javafx.collections.FXCollections;

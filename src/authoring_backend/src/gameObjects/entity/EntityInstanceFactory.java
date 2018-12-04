@@ -1,7 +1,6 @@
 package gameObjects.entity;
 
-import gameObjects.exception.InvalidClassException;
-import gameObjects.exception.InvalidTileException;
+import authoringUtils.exception.GameObjectTypeException;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import javafx.collections.FXCollections;
@@ -34,20 +33,21 @@ public class EntityInstanceFactory {
         this.addInstanceToPlayer = addInstanceToPlayer;
     }
 
-    public EntityInstance createInstance(EntityClass entityPrototype, int tileId, int playerID) {
+    public EntityInstance createInstance(EntityClass entityPrototype, int playerID)
+            throws GameObjectTypeException {
         // TODO locality
-        if (!verifyEntityInstanceIdFunc.apply(tileId)) {
-            throw new InvalidTileException();
-        }
+//        if (!verifyEntityInstanceIdFunc.apply(tileId)) {
+//            throw new InvalidGameObjectInstanceException("Entity cannot be created on Tile Instance with invalid Tile Id");
+//        }
         if (entityPrototype.getType() != GameObjectType.ENTITY) {
-            throw new InvalidClassException();
+            throw new GameObjectTypeException("entityPrototype is not of Entity Class");
         }
         ObservableList imagePathListCopy = FXCollections.observableArrayList();
         ObservableMap propertiesMapCopy = FXCollections.observableHashMap();
         imagePathListCopy.addAll(entityPrototype.getImagePathList());
         propertiesMapCopy.putAll(entityPrototype.getPropertiesMap());
         Supplier<EntityClass> getEntityClassFunc = () -> entityPrototype;
-        EntityInstance entityInstance = new SimpleEntityInstance(entityPrototype.getClassName().getValue(), tileId, imagePathListCopy, propertiesMapCopy, getEntityClassFunc);
+        EntityInstance entityInstance = new SimpleEntityInstance(entityPrototype.getClassName().getValue(), imagePathListCopy, propertiesMapCopy, getEntityClassFunc);
         requestInstanceIdFunc.accept(entityInstance);
         addInstanceToMapFunc.accept(entityInstance);
         addInstanceToPlayer.accept(entityInstance.getInstanceId().get(), playerID);

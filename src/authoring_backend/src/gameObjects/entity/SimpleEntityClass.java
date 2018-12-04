@@ -7,6 +7,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
+import authoringUtils.exception.GameObjectTypeException;
+import authoringUtils.exception.InvalidGameObjectInstanceException;
 
 import java.util.Collection;
 import java.util.function.BiConsumer;
@@ -145,8 +147,8 @@ public class SimpleEntityClass implements EntityClass {
     }
 
     @Override
-    public EntityInstance createInstance(int tileId, int playerID) {
-        return myFactory.createInstance(this, tileId, playerID);
+    public EntityInstance createInstance(int tileId, int playerID) throws InvalidGameObjectInstanceException, GameObjectTypeException {
+        return myFactory.createInstance(this, playerID);
 
     }
 

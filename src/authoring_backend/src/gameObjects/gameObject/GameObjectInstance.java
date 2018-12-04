@@ -5,8 +5,8 @@ import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableMap;
+import authoringUtils.exception.InvalidOperationException;
 
-import java.util.Collection;
 import java.util.function.Consumer;
 
 /**
@@ -38,7 +38,7 @@ public interface GameObjectInstance {
      *
      * @param name
      */
-    void setClassName(String name);
+    void setClassName(String name) throws InvalidOperationException;
 
     /**
      *

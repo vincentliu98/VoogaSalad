@@ -1,6 +1,8 @@
 package authoringInterface.sidebar;
 
 import authoringInterface.subEditors.*;
+import authoringUtils.exception.GameObjectClassNotFoundException;
+import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.entity.EntityClass;
 import gameObjects.gameObject.GameObjectClass;
@@ -51,7 +53,13 @@ public class CustomTreeCellImpl extends TreeCell<String> {
             ClipboardContent cc = new ClipboardContent();
             cc.putString(getString());
             db.setContent(cc);
-            GameObjectClass draggedClass = objectManager.getGameObjectClass(getString());
+            GameObjectClass draggedClass = null;
+            try {
+                draggedClass = objectManager.getGameObjectClass(getString());
+            } catch (GameObjectClassNotFoundException e1) {
+                // TODO
+                e1.printStackTrace();
+            }
             try {
                 db.setDragView(ImageManager.getPreview(draggedClass));
             } catch (PreviewUnavailableException e1) {
@@ -62,7 +70,13 @@ public class CustomTreeCellImpl extends TreeCell<String> {
         MenuItem editMenuItem = new MenuItem("Edit this GameObject");
         MenuItem deleteMenuItem = new MenuItem("Delete this GameObject");
         editMenuItem.setOnAction(e -> {
-            GameObjectClass objectClass = objectManager.getGameObjectClass(getItem());
+            GameObjectClass objectClass = null;
+            try {
+                objectClass = objectManager.getGameObjectClass(getItem());
+            } catch (GameObjectClassNotFoundException e1) {
+                // TODO
+                e1.printStackTrace();
+            }
             Stage dialogStage = new Stage();
             AbstractGameObjectEditor editor = null;
             switch (objectClass.getType()) {
@@ -135,7 +149,12 @@ public class CustomTreeCellImpl extends TreeCell<String> {
         textField = new TextField(getString());
         textField.setOnKeyReleased(t -> {
             if (t.getCode() == KeyCode.ENTER) {
-                objectManager.changeGameObjectClassName(getItem(), textField.getText());
+                try {
+                    objectManager.changeGameObjectClassName(getItem(), textField.getText());
+                } catch (InvalidOperationException e) {
+                    // TODO
+                    e.printStackTrace();
+                }
                 commitEdit(textField.getText());
             } else if (t.getCode() == KeyCode.ESCAPE) {
                 cancelEdit();
