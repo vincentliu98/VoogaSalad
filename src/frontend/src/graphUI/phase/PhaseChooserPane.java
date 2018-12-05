@@ -1,10 +1,10 @@
 package graphUI.phase;
 
 import api.SubView;
+import graphUI.graphData.SinglePhaseData;
 import graphUI.groovy.GroovyPaneFactory.GroovyPane;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -18,7 +18,9 @@ import javafx.scene.layout.VBox;
 import phase.api.PhaseDB;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 /**
@@ -38,11 +40,20 @@ public class PhaseChooserPane implements SubView<GridPane> {
     private ListView<String> phaseListView;
     private List<PhasePane> phasePanes;
 
+    public void setPhaseDataMap(Map<String, SinglePhaseData> phaseDataMap) {
+        this.phaseDataMap = phaseDataMap;
+    }
+
+    private Map<String, SinglePhaseData> phaseDataMap;
+
     public PhaseChooserPane(PhaseDB phaseDB, Supplier<GroovyPane> genGroovyPane) {
         this.phaseDB = phaseDB;
         this.genGroovyPane = genGroovyPane;
         phaseList = FXCollections.observableArrayList();
         phasePanes = new ArrayList<>();
+
+        phaseDataMap = new HashMap<>();
+
         initializeView();
         setupLeft();
     }
@@ -86,7 +97,6 @@ public class PhaseChooserPane implements SubView<GridPane> {
         view.getChildren().removeAll(toRemove);
     }
 
-
     private void handlePhaseCreation(MouseEvent e) {
         TextInputDialog dialog = new TextInputDialog("");
         dialog.setContentText("Please enter the name of this phase graph:");
@@ -95,7 +105,12 @@ public class PhaseChooserPane implements SubView<GridPane> {
             if(tryGraph.isSuccess()) {
                 try {
                     var graph = tryGraph.get();
-                    var phasePane = new PhasePane(phaseDB, genGroovyPane, graph);
+
+                    var singlePhaseData = new SinglePhaseData(name);
+                    phaseDataMap.put(name, singlePhaseData);
+                    System.out.println(phaseDataMap);
+
+                    var phasePane = new PhasePane(phaseDB, genGroovyPane, graph, singlePhaseData, this);
                     phaseList.add(name);
                     phasePanes.add(phasePane);
                     phaseListView.getSelectionModel().select(phaseList.size()-1);
@@ -113,6 +128,10 @@ public class PhaseChooserPane implements SubView<GridPane> {
         alert.setHeaderText("Something's wrong");
         alert.setContentText(msg);
         alert.showAndWait();
+    }
+
+    public void checkMapUpdate(){
+        System.out.println("After adding an initial node" + phaseDataMap);
     }
 
 

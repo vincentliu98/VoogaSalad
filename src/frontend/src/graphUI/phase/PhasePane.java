@@ -1,6 +1,7 @@
 package graphUI.phase;
 
 import api.SubView;
+import graphUI.graphData.SinglePhaseData;
 import graphUI.groovy.GroovyPaneFactory.GroovyPane;
 import graphUI.phase.PhaseNodeFactory.PhaseNode;
 import graphUI.phase.TransitionLineFactory.TransitionLine;
@@ -17,10 +18,12 @@ import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.util.Pair;
 import phase.api.GameEvent;
 import phase.api.PhaseDB;
 import phase.api.PhaseGraph;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -38,6 +41,8 @@ import java.util.stream.Stream;
 public class PhasePane implements SubView<StackPane> {
     public static final Double ICON_WIDTH = 95.0;
     public static final Double ICON_HEIGHT = 95.0;
+    public static final Double INIT_X_POS = 100.0;
+    public static final Double INIT_Y_POS = 50.0;
 
     private enum DRAG_PURPOSE {
         NOTHING,
@@ -58,6 +63,8 @@ public class PhasePane implements SubView<StackPane> {
     private PhaseDB phaseDB;
     private PhaseNodeFactory factory;
     private TransitionLineFactory trFactory;
+    private SinglePhaseData singlePhaseData;
+    private PhaseChooserPane phaseChooserPane;
 
     private Set<TransitionLine> lines;
     private Set<PhaseNode> nodes;
@@ -68,9 +75,12 @@ public class PhasePane implements SubView<StackPane> {
     private Line tmpLine;
     private PhaseGraph graph;
 
-    public PhasePane(PhaseDB phaseDB, Supplier<GroovyPane> genGroovyPane, PhaseGraph graph) {
+    public PhasePane(PhaseDB phaseDB, Supplier<GroovyPane> genGroovyPane, PhaseGraph graph,  SinglePhaseData singlePhaseData, PhaseChooserPane phaseChooserPane) {
         this.graph = graph;
         this.phaseDB = phaseDB;
+        this.singlePhaseData = singlePhaseData;
+        this.phaseChooserPane = phaseChooserPane;
+
         factory = new PhaseNodeFactory(phaseDB, genGroovyPane);
         trFactory = new TransitionLineFactory(genGroovyPane, group.getChildren()::add, group.getChildren()::remove);
 
@@ -111,7 +121,7 @@ public class PhasePane implements SubView<StackPane> {
         });
 
         initializeUI();
-        createNode(factory.source(graph.source(), 100, 50));
+        createNode(factory.source(graph.source(), INIT_X_POS, INIT_Y_POS));
     }
 
     private void initializeUI() {
@@ -239,6 +249,9 @@ public class PhasePane implements SubView<StackPane> {
         try {
             graph.addNode(node.model());
             nodes.add(node);
+
+            updateFrontEndData(node);
+
             node.getStyleClass().add("cursorImage");
             // Add mouseEvent to the GroovyNode to update position
             node.setOnMousePressed(this::nodeMousePressedHandler);
@@ -254,6 +267,17 @@ public class PhasePane implements SubView<StackPane> {
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
+    }
+
+    private void updateFrontEndData(PhaseNode node) {
+        var nodeName = node.getName();
+        singlePhaseData.addNode(nodeName);
+        singlePhaseData.addPos(nodeName, new Pair<>(node.getX(), node.getY()));
+        // TODO: 12/4/18 make an observableMap
+        phaseChooserPane.setPhaseDataMap(new HashMap<>(){{
+            put(nodeName, singlePhaseData);
+        }});
+        phaseChooserPane.checkMapUpdate();
     }
 
     private void nodeMousePressedHandler(MouseEvent t) {
