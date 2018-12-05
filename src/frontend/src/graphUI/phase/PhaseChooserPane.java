@@ -131,7 +131,7 @@ public class PhaseChooserPane implements SubView<GridPane> {
     }
 
     public void checkMapUpdate(){
-        System.out.println("After adding an initial node" + phaseDataMap);
+        System.out.println("Updated map" + phaseDataMap);
     }
 
 

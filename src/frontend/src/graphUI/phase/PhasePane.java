@@ -75,7 +75,7 @@ public class PhasePane implements SubView<StackPane> {
     private Line tmpLine;
     private PhaseGraph graph;
 
-    public PhasePane(PhaseDB phaseDB, Supplier<GroovyPane> genGroovyPane, PhaseGraph graph,  SinglePhaseData singlePhaseData, PhaseChooserPane phaseChooserPane) {
+    public PhasePane(PhaseDB phaseDB, Supplier<GroovyPane> genGroovyPane, PhaseGraph graph, SinglePhaseData singlePhaseData, PhaseChooserPane phaseChooserPane) {
         this.graph = graph;
         this.phaseDB = phaseDB;
         this.singlePhaseData = singlePhaseData;
@@ -91,30 +91,30 @@ public class PhasePane implements SubView<StackPane> {
         selectedNode = new SimpleObjectProperty<>();
 
         selectedEdge.addListener((e, o, n) -> {
-            if(o != null && lines.contains(o)) o.setColor(Color.BLACK);
-            if(n != null) {
-                if(selectedNode.get() != null) selectedNode.set(null);
+            if (o != null && lines.contains(o)) o.setColor(Color.BLACK);
+            if (n != null) {
+                if (selectedNode.get() != null) selectedNode.set(null);
                 n.setColor(Color.CORAL);
             }
         });
 
         selectedNode.addListener((e, o, n) -> {
-            if(o != null) o.setBorder(new Border(new BorderStroke(null, null, null, null)));
-            if(n != null) {
-                if(selectedEdge.get() != null) selectedEdge.set(null);
+            if (o != null) o.setBorder(new Border(new BorderStroke(null, null, null, null)));
+            if (n != null) {
+                if (selectedEdge.get() != null) selectedEdge.set(null);
                 n.setBorder(
-                    new Border(
-                        new BorderStroke(Color.CORAL, BorderStrokeStyle.SOLID, null, new BorderWidths(3))
-                    )
+                        new Border(
+                                new BorderStroke(Color.CORAL, BorderStrokeStyle.SOLID, null, new BorderWidths(3))
+                        )
                 );
             }
         });
 
         root.addEventFilter(KeyEvent.KEY_RELEASED, e -> {
-            if((e.getCode() == KeyCode.BACK_SPACE) || (e.getCode() == KeyCode.DELETE)) {
+            if ((e.getCode() == KeyCode.BACK_SPACE) || (e.getCode() == KeyCode.DELETE)) {
                 deleteSelected();
             }
-            if(e.getCode() == KeyCode.ESCAPE) {
+            if (e.getCode() == KeyCode.ESCAPE) {
                 selectedNode.set(null);
                 selectedEdge.set(null);
             }
@@ -161,6 +161,7 @@ public class PhasePane implements SubView<StackPane> {
         graphBox.setOnDragOver(this::graphBoxDragOverHandler);
         graphBox.setOnDragDropped(this::graphBoxDragDropHandler);
     }
+
     private void graphBoxDragOverHandler(DragEvent event) {
         if (event.getGestureSource() != graphBox && event.getDragboard().hasImage()) {
             event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
@@ -180,25 +181,27 @@ public class PhasePane implements SubView<StackPane> {
                 dialog.setHeaderText("Name of the phase");
                 String name = dialog.showAndWait().get();
                 createNode(factory.gen(newNodeX, newNodeY, name).get());
-            } catch (Throwable t) { displayError(t.toString()); }
+            } catch (Throwable t) {
+                displayError(t.toString());
+            }
         }
         event.setDropCompleted(success);
         event.consume();
     }
 
     private void deleteSelected() {
-        if(selectedEdge.get() != null) {
+        if (selectedEdge.get() != null) {
             selectedEdge.get().removeFromScreen();
             lines.remove(selectedEdge.get());
             graph.removeEdge(phaseDB.createTransition(
-                selectedEdge.get().start().model(), selectedEdge.get().trigger(), null
+                    selectedEdge.get().start().model(), selectedEdge.get().trigger(), null
             ));
         }
-        if(selectedNode.get() != null && selectedNode.get().model() != graph.source()) {
+        if (selectedNode.get() != null && selectedNode.get().model() != graph.source()) {
             nodes.remove(selectedNode.get());
             var toRemove = new HashSet<TransitionLine>();
-            for(var l : lines) {
-                if(l.start() == selectedNode.get() || l.end() == selectedNode.get()) {
+            for (var l : lines) {
+                if (l.start() == selectedNode.get() || l.end() == selectedNode.get()) {
                     toRemove.add(l);
                     l.removeFromScreen();
                 }
@@ -211,38 +214,43 @@ public class PhasePane implements SubView<StackPane> {
     }
 
 
-
     private void connectNodes(PhaseNode node1, GameEvent event, PhaseNode node2) {
         try {
             var cnts = lines.stream()
-                 .filter(p -> p.start() == node1 && p.end() == node2)
-                 .map(TransitionLine::cnt)
-                 .collect(Collectors.toSet());
+                    .filter(p -> p.start() == node1 && p.end() == node2)
+                    .map(TransitionLine::cnt)
+                    .collect(Collectors.toSet());
 
             var edgeLine = trFactory.gen(
-                node1.getCenterX(), node1.getCenterY(), node2.getCenterX(), node2.getCenterY(),
-                Stream.iterate(0, x -> x+1).dropWhile(cnts::contains).findFirst().get(),
-                node1, event, node2
+                    node1.getCenterX(), node1.getCenterY(), node2.getCenterX(), node2.getCenterY(),
+                    Stream.iterate(0, x -> x + 1).dropWhile(cnts::contains).findFirst().get(),
+                    node1, event, node2
             );
             edgeLine.setStrokeWidth(3);
             edgeLine.setOnMouseEntered(e -> root.setCursor(Cursor.HAND));
             edgeLine.setOnMouseExited(e -> root.setCursor(Cursor.DEFAULT));
             edgeLine.setOnMouseClicked(e -> {
-                if(e.getClickCount() == 1) selectedEdge.set(edgeLine);
+                if (e.getClickCount() == 1) selectedEdge.set(edgeLine);
                 else selectedEdge.get().showGraph();
             });
             edgeLine.label().setOnMouseEntered(e -> root.setCursor(Cursor.HAND));
             edgeLine.label().setOnMouseExited(e -> root.setCursor(Cursor.DEFAULT));
             edgeLine.label().setOnMouseClicked(e -> {
-                if(e.getClickCount() == 1) selectedEdge.set(edgeLine);
+                if (e.getClickCount() == 1) selectedEdge.set(edgeLine);
                 else selectedEdge.get().showGraph();
             });
 
             graph.addEdge(phaseDB.createTransition(node1.model(), event, node2.model()));
             lines.add(edgeLine);
+
+            singlePhaseData.addConnect(new Pair<>(node1.getName(), node2.getName()), event);
+            phaseChooserPane.checkMapUpdate();
+
             edgeLine.getStyleClass().add("cursorImage");
             edgeLine.toBack();
-        } catch (Throwable t) { displayError(t.toString());}
+        } catch (Throwable t) {
+            displayError(t.toString());
+        }
     }
 
     private void createNode(PhaseNode node) {
@@ -260,7 +268,7 @@ public class PhasePane implements SubView<StackPane> {
             node.inner().setOnMouseEntered(e -> root.setCursor(Cursor.MOVE));
             node.inner().setOnMouseExited(e -> root.setCursor(Cursor.DEFAULT));
             node.setOnMouseClicked(e -> {
-                if(e.getClickCount() == 1) selectedNode.set(node);
+                if (e.getClickCount() == 1) selectedNode.set(node);
                 else node.showGraph();
             });
             group.getChildren().add(node);
@@ -274,7 +282,7 @@ public class PhasePane implements SubView<StackPane> {
         singlePhaseData.addNode(nodeName);
         singlePhaseData.addPos(nodeName, new Pair<>(node.getX(), node.getY()));
         // TODO: 12/4/18 make an observableMap
-        phaseChooserPane.setPhaseDataMap(new HashMap<>(){{
+        phaseChooserPane.setPhaseDataMap(new HashMap<>() {{
             put(nodeName, singlePhaseData);
         }});
         phaseChooserPane.checkMapUpdate();
@@ -285,14 +293,14 @@ public class PhasePane implements SubView<StackPane> {
 
         orgSceneX = t.getSceneX();
         orgSceneY = t.getSceneY();
-        if(node.inner().contains(t.getX(), t.getY())) {
+        if (node.inner().contains(t.getX(), t.getY())) {
             draggingPurpose = DRAG_PURPOSE.CHANGE_POS;
             orgTranslateX = node.getTranslateX();
             orgTranslateY = node.getTranslateY();
-        } else if(node.contains(t.getX(), t.getY())) {
+        } else if (node.contains(t.getX(), t.getY())) {
             draggingPurpose = DRAG_PURPOSE.CONNECT_LINE;
             edgeFrom = node;
-            tmpLine = new Line(node.getX()+t.getX(), node.getY()+t.getY(), node.getX()+t.getX(), node.getY()+t.getY());
+            tmpLine = new Line(node.getX() + t.getX(), node.getY() + t.getY(), node.getX() + t.getX(), node.getY() + t.getY());
             tmpLine.setStrokeWidth(3);
             tmpLine.getStrokeDashArray().addAll(20d, 20d);
             group.getChildren().add(tmpLine);
@@ -300,15 +308,16 @@ public class PhasePane implements SubView<StackPane> {
     }
 
     private void nodeMouseReleasedHandler(MouseEvent t) {
-        if(draggingPurpose == DRAG_PURPOSE.CONNECT_LINE) {
+        if (draggingPurpose == DRAG_PURPOSE.CONNECT_LINE) {
             for (var n : nodes) {
-                if(n.localToScreen(n.getBoundsInLocal()).contains(t.getScreenX(), t.getScreenY())) {
-                    if(edgeFrom == n) continue;
+                if (n.localToScreen(n.getBoundsInLocal()).contains(t.getScreenX(), t.getScreenY())) {
+                    if (edgeFrom == n) continue;
                     var res = new EventTriggerDialog().showAndWait();
                     res.ifPresent(gameEvent -> connectNodes(edgeFrom, gameEvent, n));
                     break;
                 }
-            } group.getChildren().remove(tmpLine);
+            }
+            group.getChildren().remove(tmpLine);
         }
         draggingPurpose = DRAG_PURPOSE.NOTHING;
     }
@@ -317,7 +326,7 @@ public class PhasePane implements SubView<StackPane> {
         double offsetX = t.getSceneX() - orgSceneX;
         double offsetY = t.getSceneY() - orgSceneY;
 
-        if(draggingPurpose == DRAG_PURPOSE.CHANGE_POS) {
+        if (draggingPurpose == DRAG_PURPOSE.CHANGE_POS) {
             double newTranslateX = orgTranslateX + offsetX;
             double newTranslateY = orgTranslateY + offsetY;
 
@@ -326,10 +335,13 @@ public class PhasePane implements SubView<StackPane> {
             node.setTranslateX(newTranslateX);
             node.setTranslateY(newTranslateY);
 
+            updateFrontEndData(node);
+            phaseChooserPane.checkMapUpdate();
+
             updateLocations(node);
-        } else if(draggingPurpose == DRAG_PURPOSE.CONNECT_LINE) {
-            tmpLine.setEndX(tmpLine.getStartX()+offsetX);
-            tmpLine.setEndY(tmpLine.getStartY()+offsetY);
+        } else if (draggingPurpose == DRAG_PURPOSE.CONNECT_LINE) {
+            tmpLine.setEndX(tmpLine.getStartX() + offsetX);
+            tmpLine.setEndY(tmpLine.getStartY() + offsetY);
         }
     }
 
@@ -343,12 +355,12 @@ public class PhasePane implements SubView<StackPane> {
 
 
     private void updateLocations(PhaseNode n) {
-        for(var l : lines) {
+        for (var l : lines) {
             if (l.start() == n) {
                 l.setStartX(n.getCenterX());
                 l.setStartY(n.getCenterY());
             }
-            if(l.end() == n) {
+            if (l.end() == n) {
                 l.setEndX(n.getCenterX());
                 l.setEndY(n.getCenterY());
             }
