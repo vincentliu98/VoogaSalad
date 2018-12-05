@@ -24,7 +24,7 @@ import java.io.File;
 /**
  * Editor to change the Tile settings. Need to work on it. Low priority
  *
- * @author jl729, Haotian Wang
+ * @author jl729, Haotian Wang, Amy
  */
 
 public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance> {
@@ -37,7 +37,10 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
     private double height = DEFAULT_WIDTH;
     private HBox imagePanel = new HBox();
     private Label imageLabel = new Label("Add an image to your tile class");
+    private Label propLabel = new Label("Properties");
     private Button chooseButton = new Button("Choose image");
+    private Button addProperties = new Button("Add");
+
 
     public TileEditor(GameObjectsCRUDInterface manager) {
         super(manager);
@@ -47,7 +50,7 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
         widthText.setPromptText("Width");
         heightText.setPromptText("Height");
         nameField.setPromptText("Tile name");
-        geometry.setHgap(30);
+        geometry.setHgap(70);
         geometry.addRow(0, widthLabel, widthText);
         geometry.addRow(1, heightLabel, heightText);
         chooseButton.setOnAction(e -> {
@@ -59,7 +62,7 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
             }
         });
 
-        rootPane.getChildren().addAll(geometry, chooseButton, imageLabel, imagePanel);
+        rootPane.getChildren().addAll(geometry, chooseButton, propLabel, addProperties, imageLabel, imagePanel);
 
         confirm.setOnAction(e -> {
             if (nameField.getText().trim().isEmpty()) {
@@ -170,7 +173,11 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
         imagePanel.setLayoutY(350);
         imageLabel.setLayoutX(50);
         imageLabel.setLayoutY(300);
+        propLabel.setLayoutX(50);
+        propLabel.setLayoutY(250);
         chooseButton.setLayoutX(350);
         chooseButton.setLayoutY(300);
+        addProperties.setLayoutX(350);
+        addProperties.setLayoutY(250);
     }
 }
