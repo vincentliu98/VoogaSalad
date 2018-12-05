@@ -53,6 +53,10 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
         geometry.setHgap(70);
         geometry.addRow(0, widthLabel, widthText);
         geometry.addRow(1, heightLabel, heightText);
+        addProperties.setOnAction(e -> {
+
+        });
+
         chooseButton.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
             File file = fileChooser.showOpenDialog(new Stage());
