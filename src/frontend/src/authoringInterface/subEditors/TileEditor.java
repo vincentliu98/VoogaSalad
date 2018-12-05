@@ -6,10 +6,7 @@ import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.tile.TileClass;
 import gameObjects.tile.TileInstance;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TreeItem;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -17,14 +14,18 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 import utils.ErrorWindow;
+import utils.exception.PreviewUnavailableException;
+import utils.imageManipulation.Coordinates;
+import utils.imageManipulation.ImageManager;
 
 import java.io.File;
 
 /**
  * Editor to change the Tile settings. Need to work on it. Low priority
  *
- * @author jl729, Haotian Wang, Amy
+ * @author jl729, Haotian Wang
  */
 
 public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance> {
@@ -37,9 +38,9 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
     private double height = DEFAULT_WIDTH;
     private HBox imagePanel = new HBox();
     private Label imageLabel = new Label("Add an image to your tile class");
-    private Label propLabel = new Label("Properties");
+    private static final double ICON_WIDTH = 50;
+    private static final double ICON_HEIGHT = 50;
     private Button chooseButton = new Button("Choose image");
-    private Button addProperties = new Button("Add");
 
 
     public TileEditor(GameObjectsCRUDInterface manager) {
@@ -48,15 +49,13 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
         Label heightLabel = new Label("Height");
         nameLabel.setText("Your tile name");
         widthText.setPromptText("Width");
+        widthText.setText(String.valueOf(DEFAULT_WIDTH));
         heightText.setPromptText("Height");
+        heightText.setText(String.valueOf(DEFAULT_HEIGHT));
         nameField.setPromptText("Tile name");
         geometry.setHgap(70);
         geometry.addRow(0, widthLabel, widthText);
         geometry.addRow(1, heightLabel, heightText);
-        addProperties.setOnAction(e -> {
-
-        });
-
         chooseButton.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
             File file = fileChooser.showOpenDialog(new Stage());
@@ -66,7 +65,7 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
             }
         });
 
-        rootPane.getChildren().addAll(geometry, chooseButton, propLabel, addProperties, imageLabel, imagePanel);
+        rootPane.getChildren().addAll(geometry, chooseButton, imageLabel, imagePanel);
 
         confirm.setOnAction(e -> {
             if (nameField.getText().trim().isEmpty()) {
@@ -97,30 +96,38 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
                             // TODO
                             e1.printStackTrace();
                         }
-                        TileClass TileClass = null;
+                        TileClass tileClass = null;
                         try {
-                            TileClass = gameObjectManager.getTileClass(nameField.getText().trim());
+                            tileClass = gameObjectManager.getTileClass(nameField.getText().trim());
                         } catch (GameObjectClassNotFoundException e1) {
                             // TODO
                             e1.printStackTrace();
                         }
-                        TreeItem<String> newItem = new TreeItem<>(TileClass.getClassName().getValue());
-                        TileClass.getImagePathList().addAll(imagePaths);
-                        ImageView icon = new ImageView(imagePaths.get(0));
-                        icon.setFitWidth(50);
-                        icon.setFitHeight(50);
+                        TreeItem<String> newItem = new TreeItem<>(tileClass.getClassName().getValue());
+                        tileClass.getImagePathList().addAll(imagePaths);
+                        ImageView icon = null;
+                        try {
+                            icon = new ImageView(ImageManager.getPreview(tileClass));
+                        } catch (PreviewUnavailableException e1) {
+                            // TODO: proper error handling
+                            e1.printStackTrace();
+                        }
+                        Coordinates.setWidthAndHeight(icon, ICON_WIDTH, ICON_HEIGHT);
                         newItem.setGraphic(icon);
                         treeItem.getChildren().add(newItem);
                         break;
                     case NONE:
                         return;
                     case EDIT_NODE:
-                        if (nodeEdited instanceof ImageView) {
-                            ((ImageView) nodeEdited).setImage(new Image(imagePaths.get(0)));
-                        } else if (nodeEdited instanceof Text) {
-                            ((Text) nodeEdited).setText(nameField.getText());
+                        gameObjectInstance.setInstanceName(nameField.getText());
+                        gameObjectInstance.getImagePathList().clear();
+                        gameObjectInstance.getImagePathList().addAll(imagePaths);
+                        try {
+                            ((ImageView) nodeEdited).setImage(ImageManager.getPreview(gameObjectInstance));
+                        } catch (PreviewUnavailableException e1) {
+                            // TODO: proper error handling
+                            e1.printStackTrace();
                         }
-                        // TODO make changes to the GameObjectInstance as well. Waiting for changes at JC's side.
                         break;
                     case EDIT_TREEITEM:
                         gameObjectClass.getImagePathList().clear();
@@ -131,13 +138,16 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
                             // TODO
                             e1.printStackTrace();
                         }
-                        if (!imagePaths.isEmpty()) {
-                            ImageView icon1 = new ImageView(imagePaths.get(0));
-                            icon1.setFitWidth(50);
-                            icon1.setFitHeight(50);
-                            treeItem.setGraphic(icon1);
+                        ImageView icon2 = null;
+                        try {
+                            icon2 = new ImageView(ImageManager.getPreview(gameObjectClass));
+                        } catch (PreviewUnavailableException e1) {
+                            // TODO: proper error handling
+                            e1.printStackTrace();
                         }
+                        Coordinates.setWidthAndHeight(icon2, ICON_WIDTH, ICON_HEIGHT);
                         treeItem.setValue(nameField.getText());
+                        treeItem.setGraphic(icon2);
                         break;
                 }
             }
@@ -177,11 +187,7 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
         imagePanel.setLayoutY(350);
         imageLabel.setLayoutX(50);
         imageLabel.setLayoutY(300);
-        propLabel.setLayoutX(50);
-        propLabel.setLayoutY(250);
         chooseButton.setLayoutX(350);
         chooseButton.setLayoutY(300);
-        addProperties.setLayoutX(350);
-        addProperties.setLayoutY(250);
     }
 }
