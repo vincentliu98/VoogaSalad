@@ -6,10 +6,7 @@ import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.tile.TileClass;
 import gameObjects.tile.TileInstance;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TreeItem;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -17,6 +14,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 import utils.ErrorWindow;
 import utils.exception.PreviewUnavailableException;
 import utils.imageManipulation.Coordinates;
@@ -42,8 +40,8 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
     private Label imageLabel = new Label("Add an image to your tile class");
     private static final double ICON_WIDTH = 50;
     private static final double ICON_HEIGHT = 50;
-
     private Button chooseButton = new Button("Choose image");
+
 
     public TileEditor(GameObjectsCRUDInterface manager) {
         super(manager);
@@ -55,7 +53,7 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
         heightText.setPromptText("Height");
         heightText.setText(String.valueOf(DEFAULT_HEIGHT));
         nameField.setPromptText("Tile name");
-        geometry.setHgap(30);
+        geometry.setHgap(70);
         geometry.addRow(0, widthLabel, widthText);
         geometry.addRow(1, heightLabel, heightText);
         chooseButton.setOnAction(e -> {
