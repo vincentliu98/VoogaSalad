@@ -205,22 +205,13 @@ public class EditGridView implements SubView<ScrollPane> {
             // TODO: proper error handling
             e.printStackTrace();
         }
-        GameObjectType type = userObject.getType();
         Stage dialogStage = new Stage();
         AbstractGameObjectEditor editor = null;
-        switch (type) {
-            case ENTITY:
-                editor = new EntityEditor(gameObjectManager);
-                break;
-            case SOUND:
-                editor = new SoundEditor(gameObjectManager);
-                break;
-            case TILE:
-                editor = new TileEditor(gameObjectManager);
-                break;
-            case CATEGORY:
-                editor = new CategoryEditor(gameObjectManager);
-                break;
+        try {
+            editor = EditorFactory.makeEditor(userObject.getType(), gameObjectManager);
+        } catch (MissingEditorForTypeException e) {
+            // TODO
+            e.printStackTrace();
         }
         editor.editNode(targetNode, nodeInstanceController);
         dialogStage.setScene(new Scene(editor.getView(), 500, 500));

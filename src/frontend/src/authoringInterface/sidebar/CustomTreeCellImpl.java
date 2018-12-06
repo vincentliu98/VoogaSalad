@@ -2,13 +2,11 @@ package authoringInterface.sidebar;
 
 import authoringInterface.subEditors.*;
 import authoringUtils.exception.GameObjectClassNotFoundException;
+import authoringUtils.exception.GameObjectTypeException;
 import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.entity.EntityClass;
 import gameObjects.gameObject.GameObjectClass;
-import gameObjects.gameObject.GameObjectType;
-import gameplay.GameObject;
-import gameplay.Tile;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -33,13 +31,18 @@ public class CustomTreeCellImpl extends TreeCell<String> {
         MenuItem addMenuItem = new MenuItem("Add an entry");
         addMenuItem.setOnAction(e -> {
             try {
-                GameObjectType gameObjectType = GameObjectType.valueOf(getItem());
                 Stage dialogStage = new Stage();
-                AbstractGameObjectEditor editor = EditorFactory.makeEditor(gameObjectType, manager);
+                AbstractGameObjectEditor editor = EditorFactory.makeEditor(getItem(), manager);
                 dialogStage.setScene(new Scene(editor.getView(), 500, 500));
                 dialogStage.show();
                 editor.addTreeItem(getTreeItem());
-            } catch (Exception e1) {}
+
+            } catch (GameObjectTypeException e1) {
+                // TODO
+            } catch (MissingEditorForTypeException e1) {
+                // TODO
+                e1.printStackTrace();
+            }
         });
         addMenu.getItems().add(addMenuItem);
         setOnDragDetected(e -> {
@@ -72,7 +75,13 @@ public class CustomTreeCellImpl extends TreeCell<String> {
                 e1.printStackTrace();
             }
             Stage dialogStage = new Stage();
-            AbstractGameObjectEditor editor = EditorFactory.makeEditor(objectClass.getType(), objectManager);
+            AbstractGameObjectEditor editor = null;
+            try {
+                editor = EditorFactory.makeEditor(objectClass.getType(), manager);
+            } catch (MissingEditorForTypeException e1) {
+                // TODO
+                e1.printStackTrace();
+            }
             dialogStage.setScene(new Scene(editor.getView(), 500, 500));
             dialogStage.show();
             editor.editTreeItem(getTreeItem(), objectClass);
