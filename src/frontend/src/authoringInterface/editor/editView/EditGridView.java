@@ -151,7 +151,7 @@ public class EditGridView implements SubView<ScrollPane> {
     private GridPane constructStatusView(Region cell) {
         GridPane listView = new GridPane();
         listView.setGridLinesVisible(true);
-        listView.addRow(0, new Label("Instance ID"), new Label("Instance Name"), new Label("Class Name"));
+        listView.addRow(0, new Label("ID"), new Label("Instance"), new Label("Class"));
         cell.getChildrenUnmodifiable().forEach(node -> {
             GameObjectInstance instance = null;
             try {
@@ -175,6 +175,7 @@ public class EditGridView implements SubView<ScrollPane> {
                     className,
                     edit
             );
+            listView.getChildrenUnmodifiable().forEach(node1 -> GridPane.setHgrow(node1, Priority.ALWAYS));
         });
         return listView;
     }

@@ -41,5 +41,7 @@ public class StatusView implements SubView<AnchorPane>, UpdateStatusEventListene
     public void setOnUpdateStatusEvent(Node view) {
         rootPane.getChildren().clear();
         rootPane.getChildren().add(view);
+        AnchorPane.setLeftAnchor(view, 0.0);
+        AnchorPane.setRightAnchor(view, 0.0);
     }
 }
