@@ -232,8 +232,56 @@ public class EditGridView implements SubView<ScrollPane> {
         dragEvent.consume();
     }
 
+    /**
+     * Create an instance at a specific Grid cell, which is a Pane from a GameObjectClass
+     *
+     * @param gameObjectClass: A GameObjectClass whose instances will be created on the grid.
+     * @param cell: The Pane where an instance will be created.
+     */
     private void createInstanceAtGridCell(GameObjectClass gameObjectClass, Pane cell) {
-
+        ImageView nodeOnGrid = null;
+        try {
+            nodeOnGrid = new ImageView(ImageManager.getPreview(gameObjectClass));
+        } catch (PreviewUnavailableException e) {
+            // TODO: proper error handling
+            e.printStackTrace();
+        }
+        // TODO: smarter resizing
+        nodeOnGrid.setFitHeight(NODE_HEIGHT);
+        nodeOnGrid.setFitWidth(NODE_WIDTH);
+        ImageView finalNodeOnGrid = nodeOnGrid;
+        nodeOnGrid.setOnMouseClicked(e -> handleDoubleClick(e, finalNodeOnGrid));
+        cell.getChildren().add(nodeOnGrid);
+        switch (gameObjectClass.getType()) {
+            case ENTITY:
+                // TODO: solve the TileID thing, and player ID thing
+                EntityInstance entityInstance = null;
+                try {
+                    entityInstance = ((EntityClass) gameObjectClass).createInstance(0, gameObjectManager.getDefaultPlayerID());
+                } catch (InvalidGameObjectInstanceException e) {
+                    e.printStackTrace();
+                } catch (GameObjectTypeException e) {
+                    e.printStackTrace();
+                } catch (InvalidIdException e) {
+                    e.printStackTrace();
+                }
+                nodeInstanceController.addLink(nodeOnGrid, entityInstance);
+                break;
+            case SOUND:
+                // TODO
+                break;
+            case TILE:
+                // TODO: solve point
+                TileInstance tileInstance = null;
+                try {
+                    tileInstance = ((TileClass) gameObjectClass).createInstance(new PointImpl(GridPane.getColumnIndex(cell), GridPane.getRowIndex(cell)));
+                } catch (GameObjectTypeException | InvalidIdException e) {
+                    // TODO
+                    e.printStackTrace();
+                }
+                nodeInstanceController.addLink(nodeOnGrid, tileInstance);
+                break;
+        }
     }
 
     /**
@@ -252,49 +300,7 @@ public class EditGridView implements SubView<ScrollPane> {
                 // TODO
                 e.printStackTrace();
             }
-            ImageView nodeOnGrid = null;
-            try {
-                nodeOnGrid = new ImageView(ImageManager.getPreview(objectClass));
-            } catch (PreviewUnavailableException e) {
-                // TODO: proper error handling
-                e.printStackTrace();
-            }
-            // TODO: smarter resizing
-            nodeOnGrid.setFitHeight(NODE_HEIGHT);
-            nodeOnGrid.setFitWidth(NODE_WIDTH);
-            ImageView finalNodeOnGrid = nodeOnGrid;
-            nodeOnGrid.setOnMouseClicked(e -> handleDoubleClick(e, finalNodeOnGrid));
-            cell.getChildren().add(nodeOnGrid);
-            switch (objectClass.getType()) {
-                case ENTITY:
-                    // TODO: solve the TileID thing, and player ID thing
-                    EntityInstance entityInstance = null;
-                    try {
-                        entityInstance = ((EntityClass) objectClass).createInstance(0, gameObjectManager.getDefaultPlayerID());
-                    } catch (InvalidGameObjectInstanceException e) {
-                        e.printStackTrace();
-                    } catch (GameObjectTypeException e) {
-                        e.printStackTrace();
-                    } catch (InvalidIdException e) {
-                        e.printStackTrace();
-                    }
-                    nodeInstanceController.addLink(nodeOnGrid, entityInstance);
-                    break;
-                case SOUND:
-                    // TODO
-                    break;
-                case TILE:
-                    // TODO: solve point
-                    TileInstance tileInstance = null;
-                    try {
-                        tileInstance = ((TileClass) objectClass).createInstance(new PointImpl(GridPane.getColumnIndex(cell), GridPane.getRowIndex(cell)));
-                    } catch (GameObjectTypeException | InvalidIdException e) {
-                        // TODO
-                        e.printStackTrace();
-                    }
-                    nodeInstanceController.addLink(nodeOnGrid, tileInstance);
-                    break;
-            }
+            createInstanceAtGridCell(objectClass, cell);
         }
         dragEvent.consume();
     }
