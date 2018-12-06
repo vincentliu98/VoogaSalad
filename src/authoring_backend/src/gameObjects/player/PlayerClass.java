@@ -1,7 +1,6 @@
 package gameObjects.player;
 
-        import gameObjects.gameObject.GameObjectClass;
-        import gameObjects.gameObject.GameObjectType;
+import gameObjects.gameObject.GameObjectType;
 
 public interface PlayerClass {
 

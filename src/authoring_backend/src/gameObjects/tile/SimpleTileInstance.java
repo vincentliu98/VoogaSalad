@@ -1,10 +1,8 @@
 package gameObjects.tile;
 
-import gameObjects.gameObject.GameObjectInstance;
 import grids.Point;
 import javafx.beans.property.*;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
+import javafx.collections.*;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -93,7 +91,7 @@ public class SimpleTileInstance implements TileInstance {
     }
 
     @Override
-    public ObservableList getImagePathList() {
+    public ObservableList<String> getImagePathList() {
         return imagePathList;
     }
 

@@ -80,7 +80,7 @@ public class SimpleEntityClass implements EntityClass {
     }
 
     @Override
-    public ObservableMap getPropertiesMap() {
+    public ObservableMap<String, String> getPropertiesMap() {
         return propertiesMap;
     }
 

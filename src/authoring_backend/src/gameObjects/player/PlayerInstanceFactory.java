@@ -5,8 +5,6 @@ import gameObjects.ThrowingConsumer;
 import gameObjects.gameObject.GameObjectInstance;
 
 import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class PlayerInstanceFactory {
     String CLASSNAME = "Player";
