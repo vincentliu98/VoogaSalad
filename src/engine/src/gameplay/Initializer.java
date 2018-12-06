@@ -7,19 +7,22 @@ import java.io.File;
 public class Initializer {
     XMLParser myXMLParser;
     Pane myRoot;
+    File myFile;
 
     public Initializer(File file){
+        myFile = file;
         myXMLParser = new XMLParser();
         myRoot = new Pane();
-        initGameData(file);
+        initGameData();
     }
 
-    public void initGameData(File file){
-        myXMLParser.loadFile(file);
+    public void initGameData(){
+        myXMLParser.loadFile(myFile);
         GameData.setGameData(
             myXMLParser.getDimension(), myXMLParser.getPlayers(), myXMLParser.getEntities(),
             myXMLParser.getEntityPrototypes(), myXMLParser.getTiles(),
-            myXMLParser.getPhases(), myXMLParser.getNodes(), myXMLParser.getEdges(), myXMLParser.getTurn(), myRoot);
+            myXMLParser.getPhases(), myXMLParser.getNodes(), myXMLParser.getEdges(), myXMLParser.getTurn(), myRoot,
+                this);
         for (Tile tile : GameData.getTiles().values()){
             tile.setupView();
             myRoot.getChildren().add(tile.getImageView());
@@ -40,6 +43,8 @@ public class Initializer {
         GameData.getEntities().values().forEach(e -> e.adjustViewSize(screenWidth, screenHeight));
         GameData.updateViews();
     }
+
+    public void resetRoot() { myRoot = new Pane(); }
 
     public void startGame(){
         myXMLParser.getTurn().startPhase();
