@@ -7,14 +7,11 @@ import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.tile.TileClass;
 import gameObjects.tile.TileInstance;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.util.Pair;
 import utils.ErrorWindow;
 import utils.exception.PreviewUnavailableException;
 import utils.imageManipulation.Coordinates;
@@ -56,6 +53,8 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
         geometry.setHgap(70);
         geometry.addRow(0, widthLabel, widthText);
         geometry.addRow(1, heightLabel, heightText);
+        chooseButton.setStyle("-fx-text-fill: white;"
+                            + "-fx-background-color: #343a40;");
         chooseButton.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
             File file = fileChooser.showOpenDialog(new Stage());

@@ -59,6 +59,8 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         nameLabel.setText("Your entity name:");
         imageText = new Label("Add an image to your entity");
         chooseImage = new Button("Choose image");
+        chooseImage.setStyle("-fx-text-fill: white;"
+                            + "-fx-background-color: #343a40;");
         imagePanel = new HBox(10);
         listProp = new GridPane();
         list = new VBox();
@@ -75,11 +77,14 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
             }
         });
         setupProp();
+        addProperties.setStyle("-fx-text-fill: white;"
+                                + "-fx-background-color: #343a40;");
         addProperties.setOnAction(e -> {
             dialog.showAndWait().ifPresent(prop -> manageList(prop.getKey(), prop.getValue()));
         });
 
-
+        confirm.setStyle("-fx-text-fill: white;"
+                        + "-fx-background-color: #343a40;");
         confirm.setOnAction(e -> {
             if (nameField.getText() == null || nameField.getText().trim().isEmpty()) {
                 new ErrorWindow("Empty name", "You must give your entity a non-empty name").showAndWait();
@@ -189,15 +194,15 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     private void setupLayout() {
         imageText.setLayoutX(36);
         imageText.setLayoutY(106);
-        propLabel.setLayoutX(40);
-        propLabel.setLayoutY(230);
-        addProperties.setLayoutX(261);
-        addProperties.setLayoutY(230);
         chooseImage.setLayoutX(261);
         chooseImage.setLayoutY(106);
         imagePanel.setLayoutX(40);
         imagePanel.setLayoutY(156);
-        listProp.setLayoutX(40);
+        propLabel.setLayoutX(40);
+        propLabel.setLayoutY(230);
+        addProperties.setLayoutX(261);
+        addProperties.setLayoutY(230);
+        listProp.setLayoutX(100);
         listProp.setLayoutY(250);
     }
 
@@ -233,7 +238,10 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
 
     private void manageList(String key, String value) {
         HBox prop = new HBox();
-        delete = new Button("Delete");
+        delete = new Button("X");
+        delete.setStyle("-fx-font-size: 8px;"
+                + "-fx-text-fill: white;"
+                + "-fx-background-color: black;");
         Text keyText = new Text(key);
         Text valueText = new Text(value);
         list.setSpacing(10);

@@ -59,7 +59,7 @@ public class SoundView {
 
         Button button = new Button("Select audio file");
         button.setStyle("-fx-font-size: 15px;"
-                + "-fx-background-color:  #80bba1;"
+                + "-fx-background-color: #343a40;"
                 + "-fx-text-fill: white;"
                 + "-fx-cursor: hand;");
         button.setOnMouseClicked(this::musicChooser);
