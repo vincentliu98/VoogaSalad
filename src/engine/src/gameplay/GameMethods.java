@@ -76,6 +76,7 @@ public class GameMethods {
     public static int getNextPlayerID() { return TURN.nextPlayerID(); }
     public static int toNextPlayer() { return TURN.toNextPlayer(); }
     public static void setPlayerOrder(List<Integer> newOrder){ TURN.setPlayerOrder(newOrder); }
+    public static void endGame(int playerID){ TURN.endGame(playerID);}
 
     /**
      *  Phase
