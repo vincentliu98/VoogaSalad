@@ -133,6 +133,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                         gameObjectInstance.setInstanceName(nameField.getText());
                         gameObjectInstance.getImagePathList().clear();
                         gameObjectInstance.getImagePathList().addAll(imagePaths);
+
                         try {
                             ((ImageView) nodeEdited).setImage(ImageManager.getPreview(gameObjectInstance));
                         } catch (PreviewUnavailableException e1) {
@@ -264,7 +265,6 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
             listview.getChildren().add(prop);
             list.put(key, value);
         }
-        System.out.print(list);
         delete.setOnMouseClicked(e -> {
             listview.getChildren().remove(prop);
             list.remove(key, value);
