@@ -13,6 +13,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import utils.ErrorWindow;
+import utils.exception.GameObjectInstanceNotFoundException;
 import utils.exception.PreviewUnavailableException;
 import utils.imageManipulation.Coordinates;
 import utils.imageManipulation.ImageManager;
@@ -118,6 +119,7 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
                     case NONE:
                         return;
                     case EDIT_NODE:
+                        try { ImageManager.removeInstanceImage(gameObjectInstance); } catch (GameObjectInstanceNotFoundException e1) {}
                         gameObjectInstance.setInstanceName(nameField.getText());
                         gameObjectInstance.getImagePathList().clear();
                         gameObjectInstance.getImagePathList().addAll(imagePaths);
@@ -129,6 +131,7 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
                         }
                         break;
                     case EDIT_TREEITEM:
+                        try { ImageManager.removeClassImage(gameObjectClass); } catch (utils.exception.GameObjectClassNotFoundException e1) {}
                         gameObjectClass.getImagePathList().clear();
                         gameObjectClass.getImagePathList().addAll(imagePaths);
                         try {
