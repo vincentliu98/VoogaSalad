@@ -75,30 +75,45 @@ public class EditGridView implements SubView<ScrollPane> {
                 cell.setOnDragExited(e -> setUpDragExit(e, cell));
                 cell.setOnDragDropped(e -> handleDragFromSideView(e, cell));
                 cell.setOnMouseClicked(e -> listeners.forEach(listener -> listener.setOnUpdateStatusEvent(constructStatusView(cell))));
+                cell.setOnDragEntered(e -> setUpBatchInstanceDrag(e, cell));
             }
         }
         gridScrollView.setGridLinesVisible(true);
         scrollPane = new ScrollPane(gridScrollView);
         scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
             if (e.getCode() == KeyCode.CONTROL) {
-                isControlDown = true;
+                isControlDown = !isControlDown;
             }
         });
         scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
             if (e.getCode() == KeyCode.SHIFT) {
-                isShiftDown = true;
+                isShiftDown = !isShiftDown;
+                System.out.println(isShiftDown);
             }
         });
-        scrollPane.addEventFilter(KeyEvent.KEY_RELEASED, e -> {
-            if (e.getCode() == KeyCode.CONTROL) {
-                isControlDown = false;
+    }
+
+    /**
+     * This method creates many sequences on the Grid if the user drag a GameObjectClass while Shift is being pressed down.
+     *
+     * @param dragEvent: A DragEvent that should be DragEntered.
+     * @param cell: A Pane where the GameObjectInstance will be created.
+     */
+    private void setUpBatchInstanceDrag(DragEvent dragEvent, Pane cell) {
+        if (isShiftDown) {
+            if (dragEvent.getGestureSource() instanceof TreeCell) {
+                dragEvent.acceptTransferModes(TransferMode.ANY);
+                GameObjectClass objectClass = null;
+                try {
+                    objectClass = gameObjectManager.getGameObjectClass(dragEvent.getDragboard().getString());
+                } catch (GameObjectClassNotFoundException e) {
+                    // TODO
+                    e.printStackTrace();
+                }
+                createInstanceAtGridCell(objectClass, cell);
             }
-        });
-        scrollPane.addEventFilter(KeyEvent.KEY_RELEASED, e -> {
-            if (e.getCode() == KeyCode.SHIFT) {
-                isShiftDown = false;
-            }
-        });
+            dragEvent.consume();
+        }
     }
 
     public void updateDimension(int width, int height) {
