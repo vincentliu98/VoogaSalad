@@ -1,11 +1,6 @@
 package gameObjects.category;
 
-import gameObjects.entity.EntityClass;
-import gameObjects.gameObject.GameObjectClass;
-import gameObjects.gameObject.GameObjectInstance;
-import gameObjects.gameObject.GameObjectType;
 import javafx.beans.property.*;
-import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 
 import java.util.function.Consumer;
