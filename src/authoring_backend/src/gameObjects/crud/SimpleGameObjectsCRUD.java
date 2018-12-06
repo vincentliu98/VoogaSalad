@@ -272,10 +272,9 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
 
 
     private SoundInstanceFactory instantiateSoundInstanceFactory() {
-        SoundInstanceFactory f = new SoundInstanceFactory(
+        return new SoundInstanceFactory(
                 myIdManager.requestInstanceIdFunc(),
                 addGameObjectInstanceToMapFunc());
-        return f;
     }
 
     @Override
