@@ -34,12 +34,12 @@ public class View implements ParentView<SubView> {
     private Node preview;
     private StatusView statusView;
     private GridPane sidebar;
+    private GridPane mainView;
     private NodeInstanceController nodeInstanceController;
     private GameObjectsCRUDInterface gameObjectManager;
     public static final double MENU_BAR_HEIGHT = 30;
     public static final double GAME_WIDTH = 700;
     public static final double GAME_HEIGHT = 500;
-    private static final double SIDEBAR_WIDTH = 247;
     private static final int ROW_NUMBER = 10;
     private static final int COL_NUMBER = 7;
 
@@ -48,6 +48,7 @@ public class View implements ParentView<SubView> {
      */
     public View(Stage primaryStage) {
         this.primaryStage = primaryStage;
+        mainView = new GridPane();
         rootPane = new AnchorPane();
         rootPane.getStyleClass().add("mainPane");
         tools = new AuthoringTools(COL_NUMBER, ROW_NUMBER);
@@ -67,6 +68,7 @@ public class View implements ParentView<SubView> {
         statusView = new StatusView(gameObjectManager);
         editView.addUpdateStatusEventListener(statusView);
         sidebar.addColumn(0, sideView.getView(), statusView.getView());
+        mainView.addRow(0, editView.getView(), sidebar);
     }
 
     private void updateGridDimension(Integer width, Integer height) {
@@ -81,18 +83,14 @@ public class View implements ParentView<SubView> {
         AnchorPane.setLeftAnchor(menuBar.getView(), 0.0);
         AnchorPane.setRightAnchor(menuBar.getView(), 0.0);
         AnchorPane.setTopAnchor(menuBar.getView(), 0.0);
-        AnchorPane.setRightAnchor(sidebar, 0.0);
-        AnchorPane.setTopAnchor(sidebar, MENU_BAR_HEIGHT);
-        AnchorPane.setBottomAnchor(sidebar, 0.0);
-        AnchorPane.setLeftAnchor(editView.getView(), 0.0);
-        AnchorPane.setRightAnchor(editView.getView(), SIDEBAR_WIDTH);
-        AnchorPane.setTopAnchor(editView.getView(), MENU_BAR_HEIGHT);
-        AnchorPane.setBottomAnchor(editView.getView(), 0.0);
-
+        AnchorPane.setLeftAnchor(mainView, 0.0);
+        AnchorPane.setTopAnchor(mainView, MENU_BAR_HEIGHT);
+        AnchorPane.setRightAnchor(mainView, 0.0);
+        AnchorPane.setBottomAnchor(mainView, 0.0);
     }
 
     private void addElements() {
-        rootPane.getChildren().addAll(menuBar.getView(), editView.getView(), sidebar);
+        rootPane.getChildren().addAll(menuBar.getView(), mainView);
     }
 
     /**
