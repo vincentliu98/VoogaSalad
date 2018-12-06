@@ -17,10 +17,14 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Transform;
+import utils.exception.GameObjectClassNotFoundException;
+import utils.exception.GameObjectInstanceNotFoundException;
 import utils.exception.PreviewUnavailableException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This ImageManager will provide an Image that is a "preview" of a GameObjectClass. This Image is a JavaFx Image regardless of whether the actual thing being presented is a String.
@@ -33,6 +37,12 @@ public class ImageManager {
     private static final double IMAGE_HEIGHT = 100;
     private static final double X_OFFSET = 10;
     private static final double Y_OFFSET = 10;
+    private static Map<GameObjectClass, Image> classImageMap;
+    private static Map<GameObjectInstance, Image> instanceImageMap;
+    static {
+        classImageMap = new HashMap<>();
+        instanceImageMap = new HashMap<>();
+    }
 
     /**
      * This method gets a preview Image for the input GameObjectClass.
@@ -41,10 +51,14 @@ public class ImageManager {
      * @return An Image object.
      */
     public static Image getPreview(GameObjectClass gameObjectClass) throws PreviewUnavailableException {
+        if (classImageMap.containsKey(gameObjectClass)) {
+            return classImageMap.get(gameObjectClass);
+        }
         GameObjectType type = gameObjectClass.getType();
+        Image ret = null;
         switch (type) {
             case UNSPECIFIED:
-                throw new PreviewUnavailableException(String.format("The class %s does not support getPreview operation.", gameObjectClass.getClassName().getValue()));
+                throw new PreviewUnavailableException(String.format("The GameObjectClass %s does not support getPreview operation.", gameObjectClass.getClassName().getValue()));
             case TILE:
             case ENTITY:
                 ObservableList<String> imagePaths;
@@ -53,7 +67,7 @@ public class ImageManager {
                 } else {
                     imagePaths = ((TileClass) gameObjectClass).getImagePathList();
                 }
-                return getImage(imagePaths, gameObjectClass.getClassName());
+                ret = getImage(imagePaths, gameObjectClass.getClassName());
             case CATEGORY:
                 // TODO
                 break;
@@ -64,7 +78,8 @@ public class ImageManager {
                 // TODO
                 break;
         }
-        return null;
+        classImageMap.put(gameObjectClass, ret);
+        return ret;
     }
 
     /**
@@ -132,6 +147,10 @@ public class ImageManager {
      * @return An Image object.
      */
     public static Image getPreview(GameObjectInstance gameObjectInstance) throws PreviewUnavailableException {
+        if (instanceImageMap.containsKey(gameObjectInstance)) {
+            return instanceImageMap.get(gameObjectInstance);
+        }
+        Image ret = null;
         GameObjectType type = gameObjectInstance.getType();
         switch (type) {
             case UNSPECIFIED:
@@ -144,7 +163,7 @@ public class ImageManager {
                 } else {
                     imagePaths = ((TileInstance) gameObjectInstance).getImagePathList();
                 }
-                return getImage(imagePaths, gameObjectInstance.getInstanceName());
+                ret = getImage(imagePaths, gameObjectInstance.getInstanceName());
             case CATEGORY:
                 // TODO
                 break;
@@ -155,6 +174,33 @@ public class ImageManager {
                 // TODO
                 break;
         }
-        return null;
+        instanceImageMap.put(gameObjectInstance, ret);
+        return ret;
+    }
+
+    /**
+     * Remove a (GameObjectInstance, Image) pair from the internal repository of this class.
+     *
+     * @param gameObjectInstance: A GameObjectInstance whose images will be removed.
+     * @throws GameObjectInstanceNotFoundException
+     */
+    public static void removeInstanceImage(GameObjectInstance gameObjectInstance) throws GameObjectInstanceNotFoundException {
+        if (!instanceImageMap.containsKey(gameObjectInstance)) {
+            throw new GameObjectInstanceNotFoundException(String.format("The Image preview for the GameObjectInstance %s is not found", gameObjectInstance.getInstanceName().getValue()));
+        }
+        instanceImageMap.remove(gameObjectInstance);
+    }
+
+    /**
+     * Remove a (GameObjectClass, Image) pair from the internal repository of this class.
+     *
+     * @param gameObjectClass: A GameObjectInstance who together with its image will be removed.
+     * @throws GameObjectClassNotFoundException
+     */
+    public static void removeClassImage(GameObjectClass gameObjectClass) throws GameObjectClassNotFoundException {
+        if (!classImageMap.containsKey(gameObjectClass)) {
+            throw new GameObjectClassNotFoundException(String.format("The Image preview for the GameObjectClass %s is not found", gameObjectClass.getClassName().getValue()));
+        }
+        classImageMap.remove(gameObjectClass);
     }
 }

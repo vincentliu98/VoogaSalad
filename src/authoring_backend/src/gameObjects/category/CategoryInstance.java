@@ -1,8 +1,6 @@
 package gameObjects.category;
 
-import gameObjects.gameObject.GameObjectClass;
-import gameObjects.gameObject.GameObjectInstance;
-import gameObjects.gameObject.GameObjectType;
+import gameObjects.gameObject.*;
 import javafx.beans.property.SimpleStringProperty;
 
 /**

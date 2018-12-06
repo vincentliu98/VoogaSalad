@@ -21,6 +21,7 @@ import javafx.beans.InvalidationListener;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TreeCell;
@@ -88,6 +89,7 @@ public class EditGridView implements SubView<ScrollPane> {
         }
         gridScrollView.setGridLinesVisible(true);
         gridScrollView.add(batchMode, 0, 0, 3, 2);
+        SingleNodeFade.getNodeFadeOut(batchMode, 10000).playFromStart();
         scrollPane = new ScrollPane(gridScrollView);
         scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, this::setUpControl);
         scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, this::setUpShift);
@@ -149,7 +151,7 @@ public class EditGridView implements SubView<ScrollPane> {
     private GridPane constructStatusView(Region cell) {
         GridPane listView = new GridPane();
         listView.setGridLinesVisible(true);
-        listView.addRow(0, new Label("Instance ID"), new Label("Instance Name"), new Label("Class Name"));
+        listView.addRow(0, new Label("ID"), new Label("Instance"), new Label("Class"));
         cell.getChildrenUnmodifiable().forEach(node -> {
             GameObjectInstance instance = null;
             try {
@@ -161,15 +163,19 @@ public class EditGridView implements SubView<ScrollPane> {
             Text instanceID = new Text(instance.getInstanceId().getValue().toString());
             Text instanceName = new Text(instance.getInstanceName().getValue());
             Text className = new Text(instance.getClassName().getValue());
+            Button edit = new Button("Edit");
             instanceID.setOnMouseClicked(e -> handleDoubleClick(e, node));
             instanceName.setOnMouseClicked(e -> handleDoubleClick(e, node));
             className.setOnMouseClicked(e -> handleDoubleClick(e, node));
+            edit.setOnMouseClicked(e -> handleNodeEditing(node));
             listView.addRow(
                     listView.getRowCount(),
                     instanceID,
                     instanceName,
-                    className
+                    className,
+                    edit
             );
+            listView.getChildrenUnmodifiable().forEach(node1 -> GridPane.setHgrow(node1, Priority.ALWAYS));
         });
         return listView;
     }
@@ -182,34 +188,34 @@ public class EditGridView implements SubView<ScrollPane> {
      */
     private void handleDoubleClick(MouseEvent event, Node targetNode) {
         if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) {
-            GameObjectInstance userObject = null;
-            try {
-                userObject = nodeInstanceController.getGameObjectInstance(targetNode);
-            } catch (NodeNotFoundException e) {
-                // TODO: proper error handling
-                e.printStackTrace();
-            }
-            GameObjectType type = userObject.getType();
-            Stage dialogStage = new Stage();
-            AbstractGameObjectEditor editor = null;
-            switch (type) {
-                case ENTITY:
-                    editor = new EntityEditor(gameObjectManager);
-                    break;
-                case SOUND:
-                    editor = new SoundEditor(gameObjectManager);
-                    break;
-                case TILE:
-                    editor = new TileEditor(gameObjectManager);
-                    break;
-                case CATEGORY:
-                    editor = new CategoryEditor(gameObjectManager);
-                    break;
-            }
-            editor.editNode(targetNode, nodeInstanceController);
-            dialogStage.setScene(new Scene(editor.getView(), 500, 500));
-            dialogStage.show();
+            handleNodeEditing(targetNode);
         }
+    }
+
+    /**
+     * This method opens the respective editor depending on the GameObjectInstance Type. It also reads in the data from the existing GameObjectInstance.
+     *
+     * @param targetNode: A JavaFx Node that represents a GameObjectInstance.
+     */
+    private void handleNodeEditing(Node targetNode) {
+        GameObjectInstance userObject = null;
+        try {
+            userObject = nodeInstanceController.getGameObjectInstance(targetNode);
+        } catch (NodeNotFoundException e) {
+            // TODO: proper error handling
+            e.printStackTrace();
+        }
+        Stage dialogStage = new Stage();
+        AbstractGameObjectEditor editor = null;
+        try {
+            editor = EditorFactory.makeEditor(userObject.getType(), gameObjectManager);
+        } catch (MissingEditorForTypeException e) {
+            // TODO
+            e.printStackTrace();
+        }
+        editor.editNode(targetNode, nodeInstanceController);
+        dialogStage.setScene(new Scene(editor.getView(), 500, 500));
+        dialogStage.show();
     }
 
     /**

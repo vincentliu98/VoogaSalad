@@ -2,6 +2,7 @@ package authoringInterface.sidebar;
 
 import authoringInterface.subEditors.*;
 import authoringUtils.exception.GameObjectClassNotFoundException;
+import authoringUtils.exception.GameObjectTypeException;
 import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.entity.EntityClass;
@@ -29,22 +30,18 @@ public class CustomTreeCellImpl extends TreeCell<String> {
         objectManager = manager;
         MenuItem addMenuItem = new MenuItem("Add an entry");
         addMenuItem.setOnAction(e -> {
-            switch (getItem()) {
-                case "ENTITY":
-                    Stage dialogStage = new Stage();
-                    EntityEditor editor = new EntityEditor(manager);
-                    dialogStage.setScene(new Scene(editor.getView(), 500, 500));
-                    dialogStage.show();
-                    editor.addTreeItem(getTreeItem());
-                    break;
-                case "TILE":
-                    Stage dialogTileStage = new Stage();
-                    TileEditor tileEditor = new TileEditor(manager);
-                    dialogTileStage.setScene(new Scene(tileEditor.getView(), 500, 500));
-                    dialogTileStage.show();
-                    tileEditor.addTreeItem(getTreeItem());
-                case "User Settings":
-                    break;
+            try {
+                Stage dialogStage = new Stage();
+                AbstractGameObjectEditor editor = EditorFactory.makeEditor(getItem(), manager);
+                dialogStage.setScene(new Scene(editor.getView(), 500, 500));
+                dialogStage.show();
+                editor.addTreeItem(getTreeItem());
+
+            } catch (GameObjectTypeException e1) {
+                // TODO
+            } catch (MissingEditorForTypeException e1) {
+                // TODO
+                e1.printStackTrace();
             }
         });
         addMenu.getItems().add(addMenuItem);
@@ -79,17 +76,11 @@ public class CustomTreeCellImpl extends TreeCell<String> {
             }
             Stage dialogStage = new Stage();
             AbstractGameObjectEditor editor = null;
-            switch (objectClass.getType()) {
-                case ENTITY:
-                    editor = new EntityEditor(objectManager);
-                    break;
-                case CATEGORY:
-                    // TODO
-                    break;
-                case TILE:
-                    // TODO: 11/30/18 Finish TileEditor
-                    editor = new TileEditor(objectManager);
-                    break;
+            try {
+                editor = EditorFactory.makeEditor(objectClass.getType(), manager);
+            } catch (MissingEditorForTypeException e1) {
+                // TODO
+                e1.printStackTrace();
             }
             dialogStage.setScene(new Scene(editor.getView(), 500, 500));
             dialogStage.show();

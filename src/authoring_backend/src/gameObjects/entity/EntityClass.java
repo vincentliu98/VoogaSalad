@@ -1,12 +1,9 @@
 package gameObjects.entity;
 
-import authoringUtils.exception.InvalidIdException;
-import gameObjects.gameObject.GameObjectClass;
-import gameObjects.gameObject.GameObjectType;
+import authoringUtils.exception.*;
+import gameObjects.gameObject.*;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.ObservableList;
-import authoringUtils.exception.GameObjectTypeException;
-import authoringUtils.exception.InvalidGameObjectInstanceException;
 
 public interface EntityClass extends GameObjectClass {
 

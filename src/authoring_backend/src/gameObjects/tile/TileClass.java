@@ -1,13 +1,10 @@
 package gameObjects.tile;
 
-import authoringUtils.exception.InvalidIdException;
-import gameObjects.gameObject.GameObjectClass;
-import gameObjects.gameObject.GameObjectType;
+import authoringUtils.exception.*;
+import gameObjects.gameObject.*;
 import grids.Point;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.*;
 import javafx.collections.ObservableList;
-import authoringUtils.exception.GameObjectTypeException;
 
 public interface TileClass extends GameObjectClass {
 
