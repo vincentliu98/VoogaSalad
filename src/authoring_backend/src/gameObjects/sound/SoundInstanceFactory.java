@@ -1,6 +1,7 @@
 package gameObjects.sound;
 
 import authoringUtils.exception.*;
+import authoringUtils.exception.InvalidIdException;
 import gameObjects.ThrowingConsumer;
 import gameObjects.gameObject.*;
 import javafx.beans.property.SimpleStringProperty;
