@@ -51,10 +51,14 @@ public class ImageManager {
      * @return An Image object.
      */
     public static Image getPreview(GameObjectClass gameObjectClass) throws PreviewUnavailableException {
+        if (classImageMap.containsKey(gameObjectClass)) {
+            return classImageMap.get(gameObjectClass);
+        }
         GameObjectType type = gameObjectClass.getType();
+        Image ret = null;
         switch (type) {
             case UNSPECIFIED:
-                throw new PreviewUnavailableException(String.format("The class %s does not support getPreview operation.", gameObjectClass.getClassName().getValue()));
+                throw new PreviewUnavailableException(String.format("The GameObjectClass %s does not support getPreview operation.", gameObjectClass.getClassName().getValue()));
             case TILE:
             case ENTITY:
                 ObservableList<String> imagePaths;
@@ -63,7 +67,7 @@ public class ImageManager {
                 } else {
                     imagePaths = ((TileClass) gameObjectClass).getImagePathList();
                 }
-                return getImage(imagePaths, gameObjectClass.getClassName());
+                ret = getImage(imagePaths, gameObjectClass.getClassName());
             case CATEGORY:
                 // TODO
                 break;
@@ -74,7 +78,8 @@ public class ImageManager {
                 // TODO
                 break;
         }
-        return null;
+        classImageMap.put(gameObjectClass, ret);
+        return ret;
     }
 
     /**
@@ -142,6 +147,10 @@ public class ImageManager {
      * @return An Image object.
      */
     public static Image getPreview(GameObjectInstance gameObjectInstance) throws PreviewUnavailableException {
+        if (instanceImageMap.containsKey(gameObjectInstance)) {
+            return instanceImageMap.get(gameObjectInstance);
+        }
+        Image ret = null;
         GameObjectType type = gameObjectInstance.getType();
         switch (type) {
             case UNSPECIFIED:
@@ -154,7 +163,7 @@ public class ImageManager {
                 } else {
                     imagePaths = ((TileInstance) gameObjectInstance).getImagePathList();
                 }
-                return getImage(imagePaths, gameObjectInstance.getInstanceName());
+                ret = getImage(imagePaths, gameObjectInstance.getInstanceName());
             case CATEGORY:
                 // TODO
                 break;
@@ -165,7 +174,8 @@ public class ImageManager {
                 // TODO
                 break;
         }
-        return null;
+        instanceImageMap.put(gameObjectInstance, ret);
+        return ret;
     }
 
     /**
