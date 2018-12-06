@@ -2,7 +2,7 @@ package authoringUtils.exception;
 
 public class GameObjectClassNotFoundException extends GameObjectClassException {
     public GameObjectClassNotFoundException(String message) {
-        super(message);
+        super(message + "Class Not Found");
     }
 
     public GameObjectClassNotFoundException(Throwable e) {

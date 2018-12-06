@@ -266,6 +266,9 @@ public interface GameObjectsCRUDInterface {
      * @return ObservableList of things
      */
     Iterable<EntityClass> getEntityClasses();
+
+
+
     Iterable<TileClass> getTileClasses();
     Iterable<CategoryClass> getCategoryClasses();
     Iterable<SoundClass> getSoundClasses();
