@@ -43,6 +43,8 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
         editingMode = EditingMode.NONE;
         gameObjectManager = manager;
         rootPane = new AnchorPane();
+        rootPane.setStyle("-fx-text-fill: white;"
+                + "-fx-background-color: #868c87;");
         nameLabel = new Label();
         nameField = new TextField();
         confirm = new Button("Apply");
