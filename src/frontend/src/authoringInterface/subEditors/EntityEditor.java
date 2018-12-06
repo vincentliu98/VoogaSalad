@@ -192,17 +192,17 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     }
 
     private void setupLayout() {
-        imageText.setLayoutX(36);
+        imageText.setLayoutX(50);
         imageText.setLayoutY(106);
         chooseImage.setLayoutX(261);
         chooseImage.setLayoutY(106);
-        imagePanel.setLayoutX(40);
+        imagePanel.setLayoutX(45);
         imagePanel.setLayoutY(156);
-        propLabel.setLayoutX(40);
+        propLabel.setLayoutX(50);
         propLabel.setLayoutY(230);
         addProperties.setLayoutX(261);
         addProperties.setLayoutY(230);
-        listProp.setLayoutX(100);
+        listProp.setLayoutX(50);
         listProp.setLayoutY(250);
     }
 
@@ -246,6 +246,8 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         Text valueText = new Text(value);
         list.setSpacing(10);
         prop.setSpacing(20);
+        prop.setStyle("-fx-padding: 5;"
+                    +"-fx-border-style: dashed");
         prop.getChildren().addAll(delete, keyText, valueText);
         list.getChildren().add(prop);
 
