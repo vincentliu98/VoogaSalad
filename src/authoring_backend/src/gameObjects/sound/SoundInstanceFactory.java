@@ -27,7 +27,7 @@ public class SoundInstanceFactory {
             throws GameObjectTypeException, InvalidIdException {
 
         if (soundPrototype.getType() != GameObjectType.SOUND) {
-            throw new GameObjectTypeException("soundPrototype is not of Sound Class");
+            throw new GameObjectTypeException("soundPrototype", "Sound");
         }
         SimpleStringProperty mediaFilePathCopy = new SimpleStringProperty();
         ObservableMap propertiesMapCopy = FXCollections.observableHashMap();
