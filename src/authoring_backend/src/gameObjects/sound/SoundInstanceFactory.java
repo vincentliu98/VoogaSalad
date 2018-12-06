@@ -1,13 +1,10 @@
 package gameObjects.sound;
 
-import authoringUtils.exception.GameObjectTypeException;
-import authoringUtils.exception.InvalidIdException;
+import authoringUtils.exception.*;
 import gameObjects.ThrowingConsumer;
-import gameObjects.gameObject.GameObjectInstance;
-import gameObjects.gameObject.GameObjectType;
+import gameObjects.gameObject.*;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableMap;
+import javafx.collections.*;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
