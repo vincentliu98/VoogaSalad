@@ -16,6 +16,7 @@ import gameObjects.gameObject.GameObjectType;
 import gameObjects.tile.TileClass;
 import gameObjects.tile.TileInstance;
 import grids.PointImpl;
+import javafx.animation.FadeTransition;
 import javafx.beans.InvalidationListener;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -28,6 +29,7 @@ import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import utils.exception.PreviewUnavailableException;
@@ -35,6 +37,7 @@ import utils.imageManipulation.Coordinates;
 import utils.imageManipulation.ImageManager;
 import utils.nodeInstance.NodeInstanceController;
 import utils.exception.NodeNotFoundException;
+import utils.simpleAnimation.SingleNodeFade;
 
 import java.security.Key;
 import java.util.ArrayList;
@@ -59,13 +62,16 @@ public class EditGridView implements SubView<ScrollPane> {
     private boolean isControlDown;
     private boolean isShiftDown;
     private Label batchMode;
+    private static final double INDICATOR_FADE_TIME = 3000;
 
     public EditGridView(int row, int col, GameObjectsCRUDInterface manager, NodeInstanceController controller) {
         gameObjectManager = manager;
         nodeInstanceController = controller;
         scrollPane = new ScrollPane();
         listeners = new ArrayList<>();
-        batchMode = new Label("Batch Mode: Off");
+        batchMode = new Label("Batch Mode: Off\nPress Shift to Toggle");
+        batchMode.setFont(Font.font(20));
+        batchMode.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, null, null)));
         gridScrollView = new GridPane();
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
@@ -81,7 +87,7 @@ public class EditGridView implements SubView<ScrollPane> {
             }
         }
         gridScrollView.setGridLinesVisible(true);
-        gridScrollView.add(batchMode, 0, 0);
+        gridScrollView.add(batchMode, 0, 0, 3, 2);
         scrollPane = new ScrollPane(gridScrollView);
         scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, this::setUpControl);
         scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, this::setUpShift);
@@ -108,9 +114,12 @@ public class EditGridView implements SubView<ScrollPane> {
             isShiftDown = !isShiftDown;
             if (isShiftDown) {
                 batchMode.setText("Batch Mode: On");
+                batchMode.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, null, null)));
             } else {
                 batchMode.setText("Batch Mode: Off");
+                batchMode.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, null, null)));
             }
+            SingleNodeFade.getNodeFadeInAndOut(batchMode, INDICATOR_FADE_TIME).playFromStart();
         }
     }
 

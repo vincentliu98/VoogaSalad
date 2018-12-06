@@ -43,4 +43,21 @@ public class SingleNodeFade {
         fadeOut.setAutoReverse(false);
         return fadeOut;
     }
+
+    /**
+     * This method returns a FadeTransition that represents fading in and out animation for a specific Node, that lasts a predefined amount of time.
+     *
+     * @param node: A JavaFx Node where the fading occurs.
+     * @param timeInMilliSeconds: A double, time in milliseconds for the Node to fully enter and disappear.
+     * @return A FadeTransition object representing the fading in and out animation.
+     */
+    public static FadeTransition getNodeFadeInAndOut(Node node, double timeInMilliSeconds) {
+        FadeTransition fadeInAndOUt = new FadeTransition(Duration.millis(timeInMilliSeconds));
+        fadeInAndOUt.setNode(node);
+        fadeInAndOUt.setFromValue(0.0);
+        fadeInAndOUt.setToValue(1.0);
+        fadeInAndOUt.setCycleCount(2);
+        fadeInAndOUt.setAutoReverse(true);
+        return fadeInAndOUt;
+    }
 }
