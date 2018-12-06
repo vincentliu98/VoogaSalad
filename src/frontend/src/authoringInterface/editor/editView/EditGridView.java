@@ -58,12 +58,14 @@ public class EditGridView implements SubView<ScrollPane> {
     private static final double NODE_WIDTH = 75;
     private boolean isControlDown;
     private boolean isShiftDown;
+    private Label batchMode;
 
     public EditGridView(int row, int col, GameObjectsCRUDInterface manager, NodeInstanceController controller) {
         gameObjectManager = manager;
         nodeInstanceController = controller;
         scrollPane = new ScrollPane();
         listeners = new ArrayList<>();
+        batchMode = new Label("Batch Mode: Off");
         gridScrollView = new GridPane();
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
@@ -79,6 +81,7 @@ public class EditGridView implements SubView<ScrollPane> {
             }
         }
         gridScrollView.setGridLinesVisible(true);
+        gridScrollView.add(batchMode, 0, 0);
         scrollPane = new ScrollPane(gridScrollView);
         scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, this::setUpControl);
         scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, this::setUpShift);
@@ -103,29 +106,11 @@ public class EditGridView implements SubView<ScrollPane> {
     private void setUpShift(KeyEvent keyEvent) {
         if (keyEvent.getCode() == KeyCode.SHIFT) {
             isShiftDown = !isShiftDown;
-        }
-    }
-
-    /**
-     * This method creates many sequences on the Grid if the user drag a GameObjectClass while Shift is being pressed down.
-     *
-     * @param dragEvent: A DragEvent that should be DragEntered.
-     * @param cell: A Pane where the GameObjectInstance will be created.
-     */
-    private void setUpBatchInstanceDrag(DragEvent dragEvent, Pane cell) {
-        if (isShiftDown) {
-            if (dragEvent.getGestureSource() instanceof TreeCell) {
-                dragEvent.acceptTransferModes(TransferMode.ANY);
-                GameObjectClass objectClass = null;
-                try {
-                    objectClass = gameObjectManager.getGameObjectClass(dragEvent.getDragboard().getString());
-                } catch (GameObjectClassNotFoundException e) {
-                    // TODO
-                    e.printStackTrace();
-                }
-                createInstanceAtGridCell(objectClass, cell);
+            if (isShiftDown) {
+                batchMode.setText("Batch Mode: On");
+            } else {
+                batchMode.setText("Batch Mode: Off");
             }
-            dragEvent.consume();
         }
     }
 
@@ -331,5 +316,17 @@ public class EditGridView implements SubView<ScrollPane> {
             createInstanceAtGridCell(objectClass, cell);
         }
         dragEvent.consume();
+    }
+
+    /**
+     * This method creates many sequences on the Grid if the user drag a GameObjectClass while Shift is being pressed down.
+     *
+     * @param dragEvent: A DragEvent that should be DragEntered.
+     * @param cell: A Pane where the GameObjectInstance will be created.
+     */
+    private void setUpBatchInstanceDrag(DragEvent dragEvent, Pane cell) {
+        if (isShiftDown) {
+            handleDragFromSideView(dragEvent, cell);
+        }
     }
 }
