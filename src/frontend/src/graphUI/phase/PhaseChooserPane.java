@@ -16,6 +16,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import phase.api.PhaseDB;
+import utils.ErrorWindow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,19 +101,10 @@ public class PhaseChooserPane implements SubView<GridPane> {
                     phasePanes.add(phasePane);
                     phaseListView.getSelectionModel().select(phaseList.size()-1);
                 } catch (Throwable t) {
-                    displayError(t.toString());
+                    new ErrorWindow("Error", "t.toString()").showAndWait();
                 }
             }
         });
-    }
-
-    //TODO: Make Utilities Package; Move displayError methods to it.
-    private void displayError(String msg) {
-        var alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText("Something's wrong");
-        alert.setContentText(msg);
-        alert.showAndWait();
     }
 
 
