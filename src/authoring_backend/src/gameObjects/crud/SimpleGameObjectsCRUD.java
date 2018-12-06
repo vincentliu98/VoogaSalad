@@ -1,10 +1,7 @@
 package gameObjects.crud;
 
 import authoringUtils.exception.*;
-import gameObjects.IdManager;
-import gameObjects.IdManagerClass;
-import gameObjects.ThrowingBiConsumer;
-import gameObjects.ThrowingConsumer;
+import gameObjects.*;
 import gameObjects.category.*;
 import gameObjects.entity.*;
 import gameObjects.gameObject.*;
@@ -13,15 +10,10 @@ import gameObjects.sound.*;
 import gameObjects.tile.*;
 import gameObjects.turn.*;
 import grids.Point;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
+import javafx.collections.*;
 
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 
 
@@ -72,12 +64,11 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
 
 
     private TileInstanceFactory instantiateTileInstanceFactory() {
-        TileInstanceFactory f = new TileInstanceFactory(
+        return new TileInstanceFactory(
                 numRows,
                 numCols,
                 myIdManager.requestInstanceIdFunc(),
                 addGameObjectInstanceToMapFunc());
-        return f;
     }
 
     @Override
@@ -138,15 +129,14 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
 
 
     private EntityInstanceFactory instantiateEntityInstanceFactory() {
-        EntityInstanceFactory f = new EntityInstanceFactory(
-            // TODO
-            myIdManager.verifyTileInstanceIdFunc(),
-            myIdManager.requestInstanceIdFunc(),
-            addGameObjectInstanceToMapFunc(),
-            // TODO: separate function with error checking and handling
-            (entityID, playerID) -> ((PlayerInstance) gameObjectInstanceMapById.get(playerID)).addEntity(entityID)
+        return new EntityInstanceFactory(
+                // TODO
+                myIdManager.verifyTileInstanceIdFunc(),
+                myIdManager.requestInstanceIdFunc(),
+                addGameObjectInstanceToMapFunc(),
+                // TODO: separate function with error checking and handling
+                (entityID, playerID) -> ((PlayerInstance) gameObjectInstanceMapById.get(playerID)).addEntity(entityID)
         );
-        return f;
     }
 
     @Override
@@ -207,10 +197,9 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
 
 
     private CategoryInstanceFactory instantiateCategoryInstanceFactory() {
-        CategoryInstanceFactory f = new CategoryInstanceFactory(
+        return new CategoryInstanceFactory(
                 myIdManager.requestInstanceIdFunc(),
                 addGameObjectInstanceToMapFunc());
-        return f;
     }
 
 
@@ -437,7 +426,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
      * This method deletes the GameObjectClasses with the input String name. It scans through all possible maps of the String -> GameObjectClass.
      *
      * @param className : The name of the GameObjectClass to be deleted.
-     * @return: true if the GameObjectClass is successfully deleted and false otherwise.
+     * @return true if the GameObjectClass is successfully deleted and false otherwise.
      */
     @Override
     public boolean deleteGameObjectClass(String className) {
