@@ -11,6 +11,7 @@ import gameObjects.crud.GameObjectsCRUDInterface;
 import graphUI.groovy.GroovyPaneFactory;
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import utils.nodeInstance.CrappyNodeInstanceController;
@@ -42,6 +43,7 @@ public class View implements ParentView<SubView> {
     public static final double GAME_HEIGHT = 500;
     private static final int ROW_NUMBER = 10;
     private static final int COL_NUMBER = 7;
+    private static final double SIDEBAR_WIDTH = 250;
 
     /**
      * Constructor for an createGraph window, with an AnchorPane as the root Node, and the AnchorPane constraints on top, left and right are 0.
@@ -68,7 +70,9 @@ public class View implements ParentView<SubView> {
         statusView = new StatusView(gameObjectManager);
         editView.addUpdateStatusEventListener(statusView);
         sidebar.addColumn(0, sideView.getView(), statusView.getView());
-        mainView.addRow(0, editView.getView(), sidebar);
+        mainView.getColumnConstraints().addAll(new ColumnConstraints(MainAuthoringProgram.SCREEN_WIDTH - SIDEBAR_WIDTH), new ColumnConstraints(SIDEBAR_WIDTH));
+        mainView.addColumn(0, editView.getView());
+        mainView.addColumn(1, sidebar);
     }
 
     private void updateGridDimension(Integer width, Integer height) {
