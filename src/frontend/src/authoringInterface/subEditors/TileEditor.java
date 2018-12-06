@@ -23,7 +23,7 @@ import java.io.File;
 /**
  * Editor to change the Tile settings. Need to work on it. Low priority
  *
- * @author jl729, Haotian Wang
+ * @author Haotian Wang, jl729
  */
 
 public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance> {
