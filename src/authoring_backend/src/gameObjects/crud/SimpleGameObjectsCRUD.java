@@ -135,7 +135,10 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
                 myIdManager.requestInstanceIdFunc(),
                 addGameObjectInstanceToMapFunc(),
                 // TODO: separate function with error checking and handling
-                (entityID, playerID) -> ((PlayerInstance) gameObjectInstanceMapById.get(playerID)).addEntity(entityID)
+                (entityID, playerID) ->
+                {
+//                        ((PlayerInstance) gameObjectInstanceMapById.get(playerID)).addEntity(entityID);
+                }
         );
     }
 

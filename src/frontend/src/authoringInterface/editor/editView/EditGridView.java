@@ -137,6 +137,7 @@ public class EditGridView implements SubView<ScrollPane> {
                 cell.setOnDragExited(e -> setUpDragExit(e, cell));
                 cell.setOnDragDropped(e -> handleDragFromSideView(e, cell));
                 cell.setOnMouseClicked(e -> listeners.forEach(listener -> listener.setOnUpdateStatusEvent(constructStatusView(cell))));
+                cell.setOnDragEntered(e -> setUpBatchInstanceDrag(e, cell));
             }
         }
         nodeInstanceController.clearAllLinks();
