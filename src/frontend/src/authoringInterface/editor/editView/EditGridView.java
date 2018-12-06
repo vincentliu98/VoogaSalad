@@ -80,17 +80,30 @@ public class EditGridView implements SubView<ScrollPane> {
         }
         gridScrollView.setGridLinesVisible(true);
         scrollPane = new ScrollPane(gridScrollView);
-        scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
-            if (e.getCode() == KeyCode.CONTROL) {
-                isControlDown = !isControlDown;
-            }
-        });
-        scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
-            if (e.getCode() == KeyCode.SHIFT) {
-                isShiftDown = !isShiftDown;
-                System.out.println(isShiftDown);
-            }
-        });
+        scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, this::setUpControl);
+        scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, this::setUpShift);
+    }
+
+    /**
+     * Set up a key toggle and attach the this boolean toggle to some boolean variable of this class.
+     *
+     * @param keyEvent: The KeyEvent that encodes the pressed key.
+     */
+    private void setUpControl(KeyEvent keyEvent) {
+        if (keyEvent.getCode() == KeyCode.CONTROL) {
+            isControlDown = !isControlDown;
+        }
+    }
+
+    /**
+     * Set up a key toggle for toggling for the Shift key.
+     *
+     * @param keyEvent: The KeyEvent that encodes the pressed key.
+     */
+    private void setUpShift(KeyEvent keyEvent) {
+        if (keyEvent.getCode() == KeyCode.SHIFT) {
+            isShiftDown = !isShiftDown;
+        }
     }
 
     /**
