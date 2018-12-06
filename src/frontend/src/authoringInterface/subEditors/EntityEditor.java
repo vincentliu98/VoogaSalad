@@ -23,6 +23,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import utils.ErrorWindow;
+import utils.exception.GameObjectInstanceNotFoundException;
 import utils.exception.NodeNotFoundException;
 import utils.exception.PreviewUnavailableException;
 import utils.imageManipulation.Coordinates;
@@ -115,7 +116,6 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                         for(var key : list.keySet()){
                             entityClass.getPropertiesMap().put(key, list.get(key));
                         }
-                        System.out.print(entityClass.getPropertiesMap());
                         ImageView icon = null;
                         try {
                             icon = new ImageView(ImageManager.getPreview(entityClass));
@@ -130,10 +130,10 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                     case NONE:
                         return;
                     case EDIT_NODE:
+                        try { ImageManager.removeInstanceImage(gameObjectInstance); } catch (GameObjectInstanceNotFoundException e1) {}
                         gameObjectInstance.setInstanceName(nameField.getText());
                         gameObjectInstance.getImagePathList().clear();
                         gameObjectInstance.getImagePathList().addAll(imagePaths);
-
                         try {
                             ((ImageView) nodeEdited).setImage(ImageManager.getPreview(gameObjectInstance));
                         } catch (PreviewUnavailableException e1) {
