@@ -1,7 +1,9 @@
 package authoringInterface.subEditors;
 
+import authoringUtils.exception.GameObjectTypeException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.gameObject.GameObjectType;
+import gameplay.GameObject;
 
 /**
  * This Factory class is responsible for creating respective AbstractGameObjectEditors by taking in some arguments.
@@ -15,8 +17,9 @@ public class EditorFactory {
      * @param gameObjectType: The GameObjectType that we wants to open an editor for.
      * @param gameObjectManager: The CRUD manager.
      * @return A concrete implementation for AbstractGameObjectEditor.
+     * @throws MissingEditorForTypeException
      */
-    public static AbstractGameObjectEditor makeEditor(GameObjectType gameObjectType, GameObjectsCRUDInterface gameObjectManager) {
+    public static AbstractGameObjectEditor makeEditor(GameObjectType gameObjectType, GameObjectsCRUDInterface gameObjectManager) throws MissingEditorForTypeException {
         switch (gameObjectType) {
             case ENTITY:
                 return new EntityEditor(gameObjectManager);
@@ -33,6 +36,25 @@ public class EditorFactory {
             case CATEGORY:
                 return new CategoryEditor(gameObjectManager);
         }
-        return null;
+        throw new MissingEditorForTypeException(String.format("An editor is not implemented for the type %s", gameObjectType.toString()));
+    }
+
+    /**
+     * This is another creation method for the factory, that takes in the String of the GameObjectType rather than the Enum object itself.
+     *
+     * @param gameObjectType: A String representation for the GameObjectType.
+     * @param gameObjectManager: A CRUD manager for integration with backend.
+     * @return An AbstractGameObjectEditor corresponding to the specific type of GameObjects.
+     * @throws GameObjectTypeException
+     * @throws MissingEditorForTypeException
+     */
+    public static AbstractGameObjectEditor makeEditor(String gameObjectType, GameObjectsCRUDInterface gameObjectManager) throws GameObjectTypeException, MissingEditorForTypeException {
+        GameObjectType type = null;
+        try {
+            type = GameObjectType.valueOf(gameObjectType);
+        } catch (IllegalArgumentException e) {
+            throw new GameObjectTypeException(String.format("%s is not a valid GameObjectType", gameObjectType), e);
+        }
+        return makeEditor(type, gameObjectManager);
     }
 }
