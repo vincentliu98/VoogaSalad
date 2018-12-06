@@ -36,6 +36,7 @@ import utils.imageManipulation.ImageManager;
 import utils.nodeInstance.NodeInstanceController;
 import utils.exception.NodeNotFoundException;
 
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,6 +56,8 @@ public class EditGridView implements SubView<ScrollPane> {
     private List<UpdateStatusEventListener<Node>> listeners;
     private static final double NODE_HEIGHT = 75;
     private static final double NODE_WIDTH = 75;
+    private boolean isControlDown;
+    private boolean isShiftDown;
 
     public EditGridView(int row, int col, GameObjectsCRUDInterface manager, NodeInstanceController controller) {
         gameObjectManager = manager;
@@ -76,6 +79,26 @@ public class EditGridView implements SubView<ScrollPane> {
         }
         gridScrollView.setGridLinesVisible(true);
         scrollPane = new ScrollPane(gridScrollView);
+        scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
+            if (e.getCode() == KeyCode.CONTROL) {
+                isControlDown = true;
+            }
+        });
+        scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
+            if (e.getCode() == KeyCode.SHIFT) {
+                isShiftDown = true;
+            }
+        });
+        scrollPane.addEventFilter(KeyEvent.KEY_RELEASED, e -> {
+            if (e.getCode() == KeyCode.CONTROL) {
+                isControlDown = false;
+            }
+        });
+        scrollPane.addEventFilter(KeyEvent.KEY_RELEASED, e -> {
+            if (e.getCode() == KeyCode.SHIFT) {
+                isShiftDown = false;
+            }
+        });
     }
 
     public void updateDimension(int width, int height) {
@@ -209,6 +232,10 @@ public class EditGridView implements SubView<ScrollPane> {
         dragEvent.consume();
     }
 
+    private void createInstanceAtGridCell(GameObjectClass gameObjectClass, Pane cell) {
+
+    }
+
     /**
      * This method sets up a region so that it accepts a MouseDragEvent Released event from the sideview. The Release event will create an instance according to the GameObjectClass from which the drag is initiated.
      *
@@ -245,10 +272,10 @@ public class EditGridView implements SubView<ScrollPane> {
                     try {
                         entityInstance = ((EntityClass) objectClass).createInstance(0, gameObjectManager.getDefaultPlayerID());
                     } catch (InvalidGameObjectInstanceException e) {
-                        // TODO
                         e.printStackTrace();
-                    } catch (GameObjectTypeException | InvalidIdException e) {
-                        // TODO
+                    } catch (GameObjectTypeException e) {
+                        e.printStackTrace();
+                    } catch (InvalidIdException e) {
                         e.printStackTrace();
                     }
                     nodeInstanceController.addLink(nodeOnGrid, entityInstance);
@@ -269,5 +296,6 @@ public class EditGridView implements SubView<ScrollPane> {
                     break;
             }
         }
+        dragEvent.consume();
     }
 }
