@@ -58,7 +58,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     private TextField value;
     private Button delete;
 
-    public EntityEditor(GameObjectsCRUDInterface manager) {
+    EntityEditor(GameObjectsCRUDInterface manager) {
         super(manager);
         nameLabel.setText("Your entity name:");
         imageText = new Label("Add an image to your entity");

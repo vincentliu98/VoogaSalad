@@ -10,7 +10,7 @@ import gameObjects.sound.SoundInstance;
  * @author Haotian Wang
  */
 public class SoundEditor extends AbstractGameObjectEditor<SoundClass, SoundInstance> {
-    public SoundEditor(GameObjectsCRUDInterface manager) {
+    SoundEditor(GameObjectsCRUDInterface manager) {
         super(manager);
     }
 

@@ -41,7 +41,7 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
     private Button chooseButton = new Button("Choose image");
 
 
-    public TileEditor(GameObjectsCRUDInterface manager) {
+    TileEditor(GameObjectsCRUDInterface manager) {
         super(manager);
         Label widthLabel = new Label("Width");
         Label heightLabel = new Label("Height");

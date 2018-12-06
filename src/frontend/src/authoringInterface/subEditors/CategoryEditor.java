@@ -10,7 +10,7 @@ import gameObjects.category.CategoryInstance;
  * @author Haotian Wang
  */
 public class CategoryEditor extends AbstractGameObjectEditor<CategoryClass, CategoryInstance> {
-    public CategoryEditor(GameObjectsCRUDInterface manager) {
+    CategoryEditor(GameObjectsCRUDInterface manager) {
         super(manager);
     }
 
