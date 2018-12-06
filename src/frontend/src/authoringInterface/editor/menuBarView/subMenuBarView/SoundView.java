@@ -45,6 +45,8 @@ public class SoundView {
 
     public SoundView() {
         root = new VBox();
+        root.setStyle("-fx-text-fill: white;"
+                + "-fx-background-color: #868c87;");
         audioRoot = new HBox();
         audioRoot.setSpacing(10);
         root.setSpacing(10);

@@ -8,6 +8,8 @@ import gameObjects.entity.EntityClass;
 import gameObjects.entity.EntityInstance;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -49,9 +51,10 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     private Dialog<Pair<String, String>> dialog = new Dialog<>();
     private GridPane grid = new GridPane();
     private GridPane listProp;
-    private VBox list;
-    private TextField name = new TextField();
-    private TextField value = new TextField();
+    private VBox listview;
+    private ObservableMap<String, String> list;
+    private TextField name;
+    private TextField value;
     private Button delete;
 
     public EntityEditor(GameObjectsCRUDInterface manager) {
@@ -63,8 +66,10 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                             + "-fx-background-color: #343a40;");
         imagePanel = new HBox(10);
         listProp = new GridPane();
-        list = new VBox();
-        listProp.getChildren().add(list);
+        listview = new VBox();
+        listview.setSpacing(10);
+        list = FXCollections.observableHashMap();
+        listProp.getChildren().add(listview);
         nameField.setPromptText("Your entity name");
         imagePaths = FXCollections.observableArrayList();
         imagePaths.addListener((ListChangeListener<String>) c -> presentImages());
@@ -107,6 +112,10 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                         }
                         TreeItem<String> newItem = new TreeItem<>(entityClass.getClassName().getValue());
                         entityClass.getImagePathList().addAll(imagePaths);
+                        for(var key : list.keySet()){
+                            entityClass.getPropertiesMap().put(key, list.get(key));
+                        }
+                        System.out.print(entityClass.getPropertiesMap());
                         ImageView icon = null;
                         try {
                             icon = new ImageView(ImageManager.getPreview(entityClass));
@@ -124,6 +133,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                         gameObjectInstance.setInstanceName(nameField.getText());
                         gameObjectInstance.getImagePathList().clear();
                         gameObjectInstance.getImagePathList().addAll(imagePaths);
+
                         try {
                             ((ImageView) nodeEdited).setImage(ImageManager.getPreview(gameObjectInstance));
                         } catch (PreviewUnavailableException e1) {
@@ -224,7 +234,8 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         grid.setHgap(10);
         grid.setVgap(10);
         grid.setPadding(new Insets(20, 150, 10, 10));
-
+        name = new TextField();
+        value = new TextField();
         name.setPromptText("i.e) hp");
         value.setPromptText("i.e) 5");
 
@@ -244,13 +255,19 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                 + "-fx-background-color: black;");
         Text keyText = new Text(key);
         Text valueText = new Text(value);
-        list.setSpacing(10);
         prop.setSpacing(20);
         prop.setStyle("-fx-padding: 5;"
                     +"-fx-border-style: dashed");
-        prop.getChildren().addAll(delete, keyText, valueText);
-        list.getChildren().add(prop);
-
-        delete.setOnMouseClicked(e -> list.getChildren().remove(prop));
+        if (list.keySet().contains(key)){
+            new ErrorWindow("Error", "This is already existed name of property.").showAndWait();
+        }else {
+            prop.getChildren().addAll(delete, keyText, valueText);
+            listview.getChildren().add(prop);
+            list.put(key, value);
+        }
+        delete.setOnMouseClicked(e -> {
+            listview.getChildren().remove(prop);
+            list.remove(key, value);
+        });
     }
 }
