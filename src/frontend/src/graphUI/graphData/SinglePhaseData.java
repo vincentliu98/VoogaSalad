@@ -39,10 +39,6 @@ public class SinglePhaseData {
         nodesConnect = new HashMap<>();
     }
 
-    public boolean nodeExists(String phaseName) {
-        return nodesName.contains(phaseName);
-    }
-
     public void addNode(String name) {
         if (!nodesName.contains(name)) nodesName.add(name);
     }
@@ -57,6 +53,20 @@ public class SinglePhaseData {
 
     public void addConnect(Pair<String, String> pair, GameEvent gameEventType) {
         nodesConnect.put(pair, gameEventType);
+    }
+
+    public void removeNode(String nodeName){
+        // delete the node first
+        // then delete all pairs of connections containing this node
+        nodesName.remove(nodeName);
+        nodesPos.remove(nodeName);
+        for (Pair<String, String> key: nodesConnect.keySet()) {
+            var k = key.getKey();
+            var v = key.getValue();
+            if (k.equals(nodeName)  || v.equals(nodeName)){
+                removeConnect(key);
+            }
+        }
     }
 
     public void removeConnect(Pair<String, String> pair){

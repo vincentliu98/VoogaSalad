@@ -199,6 +199,10 @@ public class PhasePane implements SubView<StackPane> {
         }
         if (selectedNode.get() != null && selectedNode.get().model() != graph.source()) {
             nodes.remove(selectedNode.get());
+
+            singlePhaseData.removeNode(selectedNode.get().getName());
+            phaseChooserPane.checkMapUpdate();
+
             var toRemove = new HashSet<TransitionLine>();
             for (var l : lines) {
                 if (l.start() == selectedNode.get() || l.end() == selectedNode.get()) {
@@ -258,7 +262,7 @@ public class PhasePane implements SubView<StackPane> {
             graph.addNode(node.model());
             nodes.add(node);
 
-            updateFrontEndData(node);
+            addFrontEndData(node);
 
             node.getStyleClass().add("cursorImage");
             // Add mouseEvent to the GroovyNode to update position
@@ -277,7 +281,7 @@ public class PhasePane implements SubView<StackPane> {
         }
     }
 
-    private void updateFrontEndData(PhaseNode node) {
+    private void addFrontEndData(PhaseNode node) {
         var nodeName = node.getName();
         singlePhaseData.addNode(nodeName);
         singlePhaseData.addPos(nodeName, new Pair<>(node.getX(), node.getY()));
@@ -334,11 +338,11 @@ public class PhasePane implements SubView<StackPane> {
 
             node.setTranslateX(newTranslateX);
             node.setTranslateY(newTranslateY);
+            updateLocations(node);
 
-            updateFrontEndData(node);
+            addFrontEndData(node);
             phaseChooserPane.checkMapUpdate();
 
-            updateLocations(node);
         } else if (draggingPurpose == DRAG_PURPOSE.CONNECT_LINE) {
             tmpLine.setEndX(tmpLine.getStartX() + offsetX);
             tmpLine.setEndY(tmpLine.getStartY() + offsetY);

@@ -39,11 +39,6 @@ public class PhaseChooserPane implements SubView<GridPane> {
     private ObservableList<String> phaseList;
     private ListView<String> phaseListView;
     private List<PhasePane> phasePanes;
-
-    public void setPhaseDataMap(Map<String, SinglePhaseData> phaseDataMap) {
-        this.phaseDataMap = phaseDataMap;
-    }
-
     private Map<String, SinglePhaseData> phaseDataMap;
 
     public PhaseChooserPane(PhaseDB phaseDB, Supplier<GroovyPane> genGroovyPane) {
@@ -56,6 +51,10 @@ public class PhaseChooserPane implements SubView<GridPane> {
 
         initializeView();
         setupLeft();
+    }
+
+    public void setPhaseDataMap(Map<String, SinglePhaseData> phaseDataMap) {
+        this.phaseDataMap = phaseDataMap;
     }
 
     private void initializeView() {
