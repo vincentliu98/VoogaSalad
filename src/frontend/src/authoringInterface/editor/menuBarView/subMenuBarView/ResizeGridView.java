@@ -17,7 +17,6 @@ public class ResizeGridView{
 
     public ResizeGridView() {
         GridPane grid = setUpGridPane();
-
         TextField col = new TextField();
         col.setPromptText("Column");
         TextField row = new TextField();
@@ -34,7 +33,6 @@ public class ResizeGridView{
         dialog.setHeaderText("This action will remove all entities on the grid.");
         ButtonType resizeBtn = new ButtonType("Resize", ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(resizeBtn, ButtonType.CANCEL);
-
         dialog.getDialogPane().setContent(grid);
 
         dialog.setResultConverter(dialogButton -> {

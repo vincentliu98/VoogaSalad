@@ -1,7 +1,6 @@
 package gameObjects.tile;
 
-import gameObjects.gameObject.GameObjectInstance;
-import gameObjects.gameObject.GameObjectType;
+import gameObjects.gameObject.*;
 import grids.Point;
 import javafx.collections.ObservableList;
 

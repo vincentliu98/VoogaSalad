@@ -1,5 +1,6 @@
 package gameObjects;
 
+import authoringUtils.exception.InvalidIdException;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
 
@@ -16,9 +17,9 @@ public interface IdManager {
     Consumer<GameObjectInstance> requestInstanceIdFunc();
 
 
-    Consumer<GameObjectClass> returnClassIdFunc();
+    ThrowingConsumer<GameObjectClass, InvalidIdException> returnClassIdFunc();
 
-    Consumer<GameObjectInstance> returnInstanceIdFunc();
+    ThrowingConsumer<GameObjectInstance, InvalidIdException> returnInstanceIdFunc();
 
 
     Function<Integer, Boolean> verifyClassIdFunc();

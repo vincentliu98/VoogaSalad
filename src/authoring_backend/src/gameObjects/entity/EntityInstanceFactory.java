@@ -1,6 +1,8 @@
 package gameObjects.entity;
 
 import authoringUtils.exception.GameObjectTypeException;
+import authoringUtils.exception.InvalidIdException;
+import gameObjects.ThrowingConsumer;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import javafx.collections.FXCollections;
@@ -16,14 +18,14 @@ public class EntityInstanceFactory {
 
     private Function<Integer, Boolean> verifyEntityInstanceIdFunc;
     private Consumer<GameObjectInstance> requestInstanceIdFunc;
-    private Consumer<GameObjectInstance> addInstanceToMapFunc;
+    private ThrowingConsumer<GameObjectInstance, InvalidIdException> addInstanceToMapFunc;
     private BiConsumer<Integer, Integer> addInstanceToPlayer;
 
 
     public EntityInstanceFactory(
             Function<Integer, Boolean> verifyEntityInstanceIdFunc,
             Consumer<GameObjectInstance> requestInstanceIdFunc,
-            Consumer<GameObjectInstance> addInstanceToMapFunc,
+            ThrowingConsumer<GameObjectInstance, InvalidIdException> addInstanceToMapFunc,
             BiConsumer<Integer, Integer> addInstanceToPlayer
     ) {
 
@@ -34,7 +36,7 @@ public class EntityInstanceFactory {
     }
 
     public EntityInstance createInstance(EntityClass entityPrototype, int playerID)
-            throws GameObjectTypeException {
+            throws GameObjectTypeException, InvalidIdException {
         // TODO locality
 //        if (!verifyEntityInstanceIdFunc.apply(tileId)) {
 //            throw new InvalidGameObjectInstanceException("Entity cannot be created on Tile Instance with invalid Tile Id");

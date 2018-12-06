@@ -1,13 +1,10 @@
 package gameObjects.tile;
 
-import authoringUtils.exception.GameObjectTypeException;
-import authoringUtils.exception.InvalidPointsException;
-import gameObjects.gameObject.GameObjectInstance;
-import gameObjects.gameObject.GameObjectType;
+import authoringUtils.exception.*;
+import gameObjects.ThrowingConsumer;
+import gameObjects.gameObject.*;
 import grids.Point;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
+import javafx.collections.*;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -16,14 +13,14 @@ public class TileInstanceFactory {
     private int numRows;
     private int numCols;
     private Consumer<GameObjectInstance> requestInstanceIdFunc;
-    private Consumer<GameObjectInstance> addInstanceToMapFunc;
+    private ThrowingConsumer<GameObjectInstance, InvalidIdException> addInstanceToMapFunc;
 
 
     public TileInstanceFactory(
             int gridHeight,
             int gridWidth,
             Consumer<GameObjectInstance> requestInstanceIdFunc,
-            Consumer<GameObjectInstance> addInstanceToMapFunc) {
+            ThrowingConsumer<GameObjectInstance, InvalidIdException> addInstanceToMapFunc) {
 
         numRows = gridHeight;
         numCols = gridWidth;
@@ -32,7 +29,7 @@ public class TileInstanceFactory {
     }
 
     public TileInstance createInstance(TileClass tilePrototype, Point topLeftCoord)
-            throws GameObjectTypeException {
+            throws GameObjectTypeException, InvalidIdException {
         // TODO locality
         if (topLeftCoord.outOfBounds(numRows, numCols)) {
             throw new InvalidPointsException();

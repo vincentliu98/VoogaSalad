@@ -1,11 +1,9 @@
 package gameObjects.entity;
 
-import gameObjects.gameObject.GameObjectClass;
-import gameObjects.gameObject.GameObjectType;
+import authoringUtils.exception.*;
+import gameObjects.gameObject.*;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.ObservableList;
-import authoringUtils.exception.GameObjectTypeException;
-import authoringUtils.exception.InvalidGameObjectInstanceException;
 
 public interface EntityClass extends GameObjectClass {
 
@@ -13,7 +11,7 @@ public interface EntityClass extends GameObjectClass {
 
     void setMovable(boolean move);
 
-    EntityInstance createInstance(int tileId, int playerID) throws InvalidGameObjectInstanceException, GameObjectTypeException;
+    EntityInstance createInstance(int tileId, int playerID) throws InvalidGameObjectInstanceException, GameObjectTypeException, InvalidIdException;
 
     /**
      * This method adds the image path to the GameObject Class and to all instances of the class.

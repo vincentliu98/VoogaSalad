@@ -9,7 +9,6 @@ import gameObjects.tile.*;
 import gameObjects.sound.*;
 import gameObjects.turn.Turn;
 import grids.Point;
-import javafx.collections.ObservableList;
 
 
 import java.util.Collection;
@@ -259,21 +258,23 @@ public interface GameObjectsCRUDInterface {
     void deleteAllInstances();
 
 
+
+
     /**
      * Getters
      *
      * @return ObservableList of things
      */
-    ObservableList<EntityClass> getEntityClasses();
-    ObservableList<TileClass> getTileClasses();
-    ObservableList<CategoryClass> getCategoryClasses();
-    ObservableList<SoundClass> getSoundClasses();
+    Iterable<EntityClass> getEntityClasses();
+    Iterable<TileClass> getTileClasses();
+    Iterable<CategoryClass> getCategoryClasses();
+    Iterable<SoundClass> getSoundClasses();
 
-    ObservableList<EntityInstance> getEntityInstances();
-    ObservableList<TileInstance> getTileInstances();
-    ObservableList<CategoryInstance> getCategoryInstances();
-    ObservableList<SoundInstance> getSoundInstances();
-    ObservableList<PlayerInstance> getPlayerInstances();
+    Iterable<EntityInstance> getEntityInstances();
+    Iterable<TileInstance> getTileInstances();
+    Iterable<CategoryInstance> getCategoryInstances();
+    Iterable<SoundInstance> getSoundInstances();
+    Iterable<PlayerInstance> getPlayerInstances();
 
     int getDefaultPlayerID();
 }

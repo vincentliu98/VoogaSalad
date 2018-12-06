@@ -1,8 +1,5 @@
 package gameObjects.sound;
 
-import gameObjects.category.CategoryClass;
-import gameObjects.gameObject.GameObjectInstance;
-import gameObjects.gameObject.GameObjectType;
 import javafx.beans.property.*;
 import javafx.collections.ObservableMap;
 

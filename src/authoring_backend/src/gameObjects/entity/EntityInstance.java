@@ -1,7 +1,6 @@
 package gameObjects.entity;
 
-import gameObjects.gameObject.GameObjectInstance;
-import gameObjects.gameObject.GameObjectType;
+import gameObjects.gameObject.*;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
 

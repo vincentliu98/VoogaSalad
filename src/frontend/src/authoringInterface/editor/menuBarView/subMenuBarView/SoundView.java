@@ -45,6 +45,8 @@ public class SoundView {
 
     public SoundView() {
         root = new VBox();
+        root.setStyle("-fx-text-fill: white;"
+                + "-fx-background-color: #868c87;");
         audioRoot = new HBox();
         audioRoot.setSpacing(10);
         root.setSpacing(10);
@@ -59,7 +61,7 @@ public class SoundView {
 
         Button button = new Button("Select audio file");
         button.setStyle("-fx-font-size: 15px;"
-                + "-fx-background-color:  #80bba1;"
+                + "-fx-background-color: #343a40;"
                 + "-fx-text-fill: white;"
                 + "-fx-cursor: hand;");
         button.setOnMouseClicked(this::musicChooser);

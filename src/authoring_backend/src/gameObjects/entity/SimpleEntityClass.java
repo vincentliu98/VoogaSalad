@@ -1,17 +1,12 @@
 package gameObjects.entity;
 
-import gameObjects.gameObject.GameObjectInstance;
-import gameObjects.gameObject.GameObjectType;
+import authoringUtils.exception.*;
+import gameObjects.ThrowingBiConsumer;
+import gameObjects.gameObject.*;
 import javafx.beans.property.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
-import javafx.collections.ObservableSet;
-import authoringUtils.exception.GameObjectTypeException;
-import authoringUtils.exception.InvalidGameObjectInstanceException;
+import javafx.collections.*;
 
 import java.util.Collection;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -29,7 +24,7 @@ public class SimpleEntityClass implements EntityClass {
     private String imageSelector;
 
     private EntityInstanceFactory myFactory;
-    private BiConsumer<String, String> changeEntityClassNameFunc;
+    private ThrowingBiConsumer<String, String, InvalidOperationException> changeEntityClassNameFunc;
     private Function<String, Collection<GameObjectInstance>> getAllEntityInstancesFunc;
     private Function<Integer, Boolean> deleteEntityInstanceFunc;
 
@@ -46,7 +41,7 @@ public class SimpleEntityClass implements EntityClass {
     public SimpleEntityClass(
             String className,
             EntityInstanceFactory entityInstanceFactory,
-            BiConsumer<String, String> changeEntityClassNameFunc,
+            ThrowingBiConsumer<String, String, InvalidOperationException> changeEntityClassNameFunc,
             Function<String, Collection<GameObjectInstance>> getAllEntityInstancesFunc,
             Function<Integer, Boolean> deleteEntityInstanceFunc) {
         this(className);
@@ -74,7 +69,8 @@ public class SimpleEntityClass implements EntityClass {
 
 
     @Override
-    public void changeClassName(String newClassName) {
+    public void changeClassName(String newClassName)
+            throws InvalidOperationException {
         changeEntityClassNameFunc.accept(className.getValue(), newClassName);
     }
 
@@ -84,7 +80,7 @@ public class SimpleEntityClass implements EntityClass {
     }
 
     @Override
-    public ObservableMap getPropertiesMap() {
+    public ObservableMap<String, String> getPropertiesMap() {
         return propertiesMap;
     }
 
@@ -147,7 +143,8 @@ public class SimpleEntityClass implements EntityClass {
     }
 
     @Override
-    public EntityInstance createInstance(int tileId, int playerID) throws InvalidGameObjectInstanceException, GameObjectTypeException {
+    public EntityInstance createInstance(int tileId, int playerID)
+            throws GameObjectTypeException, InvalidIdException {
         return myFactory.createInstance(this, playerID);
 
     }
