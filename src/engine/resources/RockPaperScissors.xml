@@ -108,37 +108,38 @@
         <myPhaseID>1</myPhaseID>
         <myID>2</myID>
         <myExecution>
-            turn = GameMethods.getCurrentPlayerID()
-            if($clicked.getID() == 1) {
-            entityName = "RockEntity";
-            } else if ($clicked.getID() == 2){
-            entityName = "PaperEntity";
-            } else {
-            entityName = "ScissorsEntity";
-            }
-            GameMethods.createEntity(entityName, $clicked.getID(), turn);
-            if (turn == 1){
-            def firstTileSet = [] as HashSet;
-            for (Integer i : GameMethods.getPlayer(1-turn).getMyEntities()){ firstTileSet.add(GameMethods.getEntity(i).getTileID()); }
-            def secondTileSet = [] as HashSet;
-            for (Integer i : GameMethods.getPlayer(turn).getMyEntities()){ secondTileSet.add(GameMethods.getEntity(i).getTileID()); }
-            if ((firstTileSet.contains(1) &amp;&amp; secondTileSet.contains(3)) ||
-            (firstTileSet.contains(2) &amp;&amp; secondTileSet.contains(1)) ||
-            (firstTileSet.contains(3) &amp;&amp; secondTileSet.contains(2))) {
-            GameMethods.getTurn().endGame(1-turn);
-            return;
-            }
-            if ((firstTileSet.contains(3) &amp;&amp; secondTileSet.contains(1)) ||
-            (firstTileSet.contains(1) &amp;&amp; secondTileSet.contains(2)) ||
-            (firstTileSet.contains(2) &amp;&amp; secondTileSet.contains(3))) {
-            GameMethods.getTurn().endGame(turn);
-            return;
-            }
-            GameMethods.getPlayer(GameMethods.getNextPlayerID()).clearMyEntities();
-            GameMethods.getPlayer(GameMethods.getNextPlayerID()).clearMyEntities();
-            }
-            GameMethods.toNextPlayer();
-            GameMethods.goTo(1);
+            GameMethods.endGame(1);
+            <!--turn = GameMethods.getCurrentPlayerID()-->
+            <!--if($clicked.getID() == 1) {-->
+            <!--entityName = "RockEntity";-->
+            <!--} else if ($clicked.getID() == 2){-->
+            <!--entityName = "PaperEntity";-->
+            <!--} else {-->
+            <!--entityName = "ScissorsEntity";-->
+            <!--}-->
+            <!--GameMethods.createEntity(entityName, $clicked.getID(), turn);-->
+            <!--if (turn == 1){-->
+            <!--def firstTileSet = [] as HashSet;-->
+            <!--for (Integer i : GameMethods.getPlayer(1-turn).getMyEntities()){ firstTileSet.add(GameMethods.getEntity(i).getTileID()); }-->
+            <!--def secondTileSet = [] as HashSet;-->
+            <!--for (Integer i : GameMethods.getPlayer(turn).getMyEntities()){ secondTileSet.add(GameMethods.getEntity(i).getTileID()); }-->
+            <!--if ((firstTileSet.contains(1) &amp;&amp; secondTileSet.contains(3)) ||-->
+            <!--(firstTileSet.contains(2) &amp;&amp; secondTileSet.contains(1)) ||-->
+            <!--(firstTileSet.contains(3) &amp;&amp; secondTileSet.contains(2))) {-->
+            <!--GameMethods.getTurn().endGame(1-turn);-->
+            <!--return;-->
+            <!--}-->
+            <!--if ((firstTileSet.contains(3) &amp;&amp; secondTileSet.contains(1)) ||-->
+            <!--(firstTileSet.contains(1) &amp;&amp; secondTileSet.contains(2)) ||-->
+            <!--(firstTileSet.contains(2) &amp;&amp; secondTileSet.contains(3))) {-->
+            <!--GameMethods.getTurn().endGame(turn);-->
+            <!--return;-->
+            <!--}-->
+            <!--GameMethods.getPlayer(GameMethods.getNextPlayerID()).clearMyEntities();-->
+            <!--GameMethods.getPlayer(GameMethods.getNextPlayerID()).clearMyEntities();-->
+            <!--}-->
+            <!--GameMethods.toNextPlayer();-->
+            <!--GameMethods.goTo(1);-->
         </myExecution>
     </gameplay.Node>
 
