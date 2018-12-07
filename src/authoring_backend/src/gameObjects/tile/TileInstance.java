@@ -2,6 +2,7 @@ package gameObjects.tile;
 
 import gameObjects.gameObject.*;
 import grids.Point;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
 
 public interface TileInstance extends GameObjectInstance {
@@ -38,6 +39,18 @@ public interface TileInstance extends GameObjectInstance {
     String getImageSelectorCode();
 
     Point getCoord();
+
+    public void setCoord(Point coord);
+
+    SimpleIntegerProperty getHeight();
+
+    SimpleIntegerProperty getWidth();
+
+
+    void setHeight(int newHeight);
+
+    void setWidth(int newWidth);
+
 
     TileClass getGameObjectClass();
 
