@@ -2,6 +2,7 @@ package authoringInterface.subEditors;
 
 import authoringUtils.exception.DuplicateGameObjectClassException;
 import authoringUtils.exception.GameObjectClassNotFoundException;
+import authoringUtils.exception.GameObjectInstanceNotFoundException;
 import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.tile.TileClass;
@@ -13,7 +14,6 @@ import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import utils.ErrorWindow;
-import utils.exception.GameObjectInstanceNotFoundException;
 import utils.exception.PreviewUnavailableException;
 import utils.imageManipulation.JavaFxOperation;
 import utils.imageManipulation.ImageManager;
@@ -131,7 +131,7 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
                         }
                         break;
                     case EDIT_TREEITEM:
-                        try { ImageManager.removeClassImage(gameObjectClass); } catch (utils.exception.GameObjectClassNotFoundException e1) {}
+                        try { ImageManager.removeClassImage(gameObjectClass); } catch (GameObjectClassNotFoundException e1) {}
                         gameObjectClass.getImagePathList().clear();
                         gameObjectClass.getImagePathList().addAll(imagePaths);
                         try {

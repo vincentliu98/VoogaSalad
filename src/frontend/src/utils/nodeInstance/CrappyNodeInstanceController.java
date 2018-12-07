@@ -62,14 +62,15 @@ public class CrappyNodeInstanceController implements NodeInstanceController {
      *
      * @param node : The Node whose corresponding GameObjectInstance will be queried.
      * @return The corresponding GameObjectInstance.
-     * @throws GameObjectInstanceNotFoundException
+     * @throws NodeNotFoundException
      */
+    @SuppressWarnings("unchecked")
     @Override
-    public GameObjectInstance getGameObjectInstance(Node node) throws NodeNotFoundException {
+    public <T extends GameObjectInstance> T getGameObjectInstance(Node node) throws NodeNotFoundException {
         if (!nodeInstanceMap.containsKey(node)) {
             throw new NodeNotFoundException("The input Node is not defined in the NodeInstanceController");
         }
-        return nodeInstanceMap.get(node);
+        return (T) nodeInstanceMap.get(node);
     }
 
     /**
@@ -94,5 +95,35 @@ public class CrappyNodeInstanceController implements NodeInstanceController {
     public void clearAllLinks() {
         instanceNodeMap.clear();
         nodeInstanceMap.clear();
+    }
+
+    /**
+     * This method removes the GameObjectInstance and the associated Node from the controller.
+     *
+     * @param gameObjectInstance : A GameObjectInstance who and its Node will be removed.
+     * @throws GameObjectInstanceNotFoundException
+     */
+    @Override
+    public void removeGameObjectInstance(GameObjectInstance gameObjectInstance) throws GameObjectInstanceNotFoundException {
+        if (!instanceNodeMap.containsKey(gameObjectInstance)) {
+            throw new GameObjectInstanceNotFoundException(String.format("The GameObjectInstance %s is not defined in the controller", gameObjectInstance.getInstanceName().getValue()));
+        }
+        nodeInstanceMap.remove(instanceNodeMap.get(gameObjectInstance));
+        instanceNodeMap.remove(gameObjectInstance);
+    }
+
+    /**
+     * This method removes the Node and its associated GameObjectInstance from the controller.
+     *
+     * @param node : A Node who and its GameObjectInstance will be removed.
+     * @throws NodeNotFoundException
+     */
+    @Override
+    public void removeNode(Node node) throws NodeNotFoundException {
+        if (!nodeInstanceMap.containsKey(node)) {
+            throw new NodeNotFoundException("The node is not defined in the controller");
+        }
+        instanceNodeMap.remove(nodeInstanceMap.get(node));
+        nodeInstanceMap.remove(node);
     }
 }

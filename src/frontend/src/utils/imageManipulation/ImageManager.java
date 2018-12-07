@@ -1,5 +1,7 @@
 package utils.imageManipulation;
 
+import authoringUtils.exception.GameObjectClassNotFoundException;
+import authoringUtils.exception.GameObjectInstanceNotFoundException;
 import gameObjects.entity.EntityClass;
 import gameObjects.entity.EntityInstance;
 import gameObjects.gameObject.GameObjectClass;
@@ -13,12 +15,9 @@ import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Transform;
-import utils.exception.GameObjectClassNotFoundException;
-import utils.exception.GameObjectInstanceNotFoundException;
 import utils.exception.PreviewUnavailableException;
 
 import java.util.ArrayList;

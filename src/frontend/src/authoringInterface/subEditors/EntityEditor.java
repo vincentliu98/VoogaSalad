@@ -2,6 +2,7 @@ package authoringInterface.subEditors;
 
 import authoringUtils.exception.DuplicateGameObjectClassException;
 import authoringUtils.exception.GameObjectClassNotFoundException;
+import authoringUtils.exception.GameObjectInstanceNotFoundException;
 import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.entity.EntityClass;
@@ -21,7 +22,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import utils.ErrorWindow;
-import utils.exception.GameObjectInstanceNotFoundException;
 import utils.exception.PreviewUnavailableException;
 import utils.imageManipulation.JavaFxOperation;
 import utils.imageManipulation.ImageManager;
@@ -139,7 +139,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                         }
                         break;
                     case EDIT_TREEITEM:
-                        try { ImageManager.removeClassImage(gameObjectClass); } catch (utils.exception.GameObjectClassNotFoundException e1) {}
+                        try { ImageManager.removeClassImage(gameObjectClass); } catch (GameObjectClassNotFoundException e1) {}
                         gameObjectClass.getImagePathList().clear();
                         gameObjectClass.getImagePathList().addAll(imagePaths);
                         try {
