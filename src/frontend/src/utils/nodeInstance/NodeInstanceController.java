@@ -35,7 +35,7 @@ public interface NodeInstanceController {
      * @return The corresponding GameObjectInstance.
      * @throws NodeNotFoundException
      */
-    GameObjectInstance getGameObjectInstance(Node node) throws NodeNotFoundException;
+    <T extends GameObjectInstance> T getGameObjectInstance(Node node) throws NodeNotFoundException;
 
 
     /**
@@ -51,4 +51,20 @@ public interface NodeInstanceController {
      * This method clears all the relationships between all Nodes and GameObjectInstances.
      */
     void clearAllLinks();
+
+    /**
+     * This method removes the GameObjectInstance and the associated Node from the controller.
+     *
+     * @param gameObjectInstance: A GameObjectInstance who and its Node will be removed.
+     * @throws GameObjectInstanceNotFoundException
+     */
+    void removeGameObjectInstance(GameObjectInstance gameObjectInstance) throws GameObjectInstanceNotFoundException;
+
+    /**
+     * This method removes the Node and its associated GameObjectInstance from the controller.
+     *
+     * @param node: A Node who and its GameObjectInstance will be removed.
+     * @throws NodeNotFoundException
+     */
+    void removeNode(Node node) throws NodeNotFoundException;
 }

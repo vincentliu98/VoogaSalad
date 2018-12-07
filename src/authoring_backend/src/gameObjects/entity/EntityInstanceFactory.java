@@ -42,7 +42,7 @@ public class EntityInstanceFactory {
 //            throw new InvalidGameObjectInstanceException("Entity cannot be created on Tile Instance with invalid Tile Id");
 //        }
         if (entityPrototype.getType() != GameObjectType.ENTITY) {
-            throw new GameObjectTypeException("entityPrototype is not of Entity Class");
+            throw new GameObjectTypeException("entityPrototype","Entity");
         }
         ObservableList imagePathListCopy = FXCollections.observableArrayList();
         ObservableMap propertiesMapCopy = FXCollections.observableHashMap();

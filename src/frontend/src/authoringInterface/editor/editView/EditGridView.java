@@ -12,12 +12,9 @@ import gameObjects.entity.EntityClass;
 import gameObjects.entity.EntityInstance;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
-import gameObjects.gameObject.GameObjectType;
 import gameObjects.tile.TileClass;
 import gameObjects.tile.TileInstance;
 import grids.PointImpl;
-import javafx.animation.FadeTransition;
-import javafx.beans.InvalidationListener;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -34,13 +31,11 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import utils.exception.PreviewUnavailableException;
-import utils.imageManipulation.Coordinates;
 import utils.imageManipulation.ImageManager;
 import utils.nodeInstance.NodeInstanceController;
 import utils.exception.NodeNotFoundException;
 import utils.simpleAnimation.SingleNodeFade;
 
-import java.security.Key;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -137,6 +132,7 @@ public class EditGridView implements SubView<ScrollPane> {
                 cell.setOnDragExited(e -> setUpDragExit(e, cell));
                 cell.setOnDragDropped(e -> handleDragFromSideView(e, cell));
                 cell.setOnMouseClicked(e -> listeners.forEach(listener -> listener.setOnUpdateStatusEvent(constructStatusView(cell))));
+                cell.setOnDragEntered(e -> setUpBatchInstanceDrag(e, cell));
             }
         }
         nodeInstanceController.clearAllLinks();
@@ -278,38 +274,16 @@ public class EditGridView implements SubView<ScrollPane> {
         nodeOnGrid.setFitHeight(NODE_HEIGHT);
         nodeOnGrid.setFitWidth(NODE_WIDTH);
         ImageView finalNodeOnGrid = nodeOnGrid;
-        nodeOnGrid.setOnMouseClicked(e -> handleDoubleClick(e, finalNodeOnGrid));
-        cell.getChildren().add(nodeOnGrid);
-        switch (gameObjectClass.getType()) {
-            case ENTITY:
-                // TODO: solve the TileID thing, and player ID thing
-                EntityInstance entityInstance = null;
-                try {
-                    entityInstance = ((EntityClass) gameObjectClass).createInstance(0, gameObjectManager.getDefaultPlayerID());
-                } catch (InvalidGameObjectInstanceException e) {
-                    e.printStackTrace();
-                } catch (GameObjectTypeException e) {
-                    e.printStackTrace();
-                } catch (InvalidIdException e) {
-                    e.printStackTrace();
-                }
-                nodeInstanceController.addLink(nodeOnGrid, entityInstance);
-                break;
-            case SOUND:
-                // TODO
-                break;
-            case TILE:
-                // TODO: solve point
-                TileInstance tileInstance = null;
-                try {
-                    tileInstance = ((TileClass) gameObjectClass).createInstance(new PointImpl(GridPane.getColumnIndex(cell), GridPane.getRowIndex(cell)));
-                } catch (GameObjectTypeException | InvalidIdException e) {
-                    // TODO
-                    e.printStackTrace();
-                }
-                nodeInstanceController.addLink(nodeOnGrid, tileInstance);
-                break;
+        finalNodeOnGrid.setOnMouseClicked(e -> handleDoubleClick(e, finalNodeOnGrid));
+        cell.getChildren().add(finalNodeOnGrid);
+        GameObjectInstance gameObjectInstance = null;
+        try {
+            gameObjectInstance = gameObjectManager.createGameObjectInstance(gameObjectClass, gameObjectManager.getDefaultPlayerID(), new PointImpl(GridPane.getColumnIndex(cell), GridPane.getRowIndex(cell)));
+        } catch (GameObjectTypeException e) {
+            // TODO: proper error handling
+            e.printStackTrace();
         }
+        nodeInstanceController.addLink(finalNodeOnGrid, gameObjectInstance);
     }
 
     /**

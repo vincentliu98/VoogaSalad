@@ -1,5 +1,6 @@
 package gameObjects.entity;
 
+import grids.Point;
 import javafx.beans.property.*;
 import javafx.collections.*;
 
@@ -11,6 +12,9 @@ public class SimpleEntityInstance implements EntityInstance {
     private SimpleStringProperty instanceName;
     private ReadOnlyIntegerWrapper instanceId;
     private SimpleIntegerProperty tileId;
+    private SimpleObjectProperty<Point> coord;
+    private SimpleIntegerProperty height;
+    private SimpleIntegerProperty width;
     private ObservableList<String> imagePathList;
     private String imageSelector;
     private ObservableMap<String, String> propertiesMap;
@@ -117,6 +121,36 @@ public class SimpleEntityInstance implements EntityInstance {
     @Override
     public EntityClass getGameObjectClass() {
         return getEntityClassFunc.get();
+    }
+
+
+    @Override
+    public SimpleIntegerProperty getHeight() {
+        return height;
+    }
+
+    @Override
+    public SimpleIntegerProperty getWidth() {
+        return width;
+    }
+
+    @Override
+    public void setHeight(int newHeight) {
+        height.setValue(newHeight);
+    }
+
+    @Override
+    public void setWidth(int newWidth) {
+        height.setValue(newWidth);
+    }
+
+
+    @Override
+    public Point getCoord() { return coord.get(); }
+
+    @Override
+    public void setCoord(Point coord) {
+        this.coord.set(coord);
     }
 
     @Override

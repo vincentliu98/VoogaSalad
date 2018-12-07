@@ -41,3 +41,4 @@ public class MainAuthoringProgram extends Application {
         launch(args);
     }
 }
+

@@ -25,7 +25,7 @@ public class CategoryInstanceFactory {
             throws GameObjectTypeException, InvalidIdException {
         // TODO locality
         if (categoryPrototype.getType() != GameObjectType.CATEGORY) {
-            throw new GameObjectTypeException("categoryPrototype is not of Category Type");
+            throw new GameObjectTypeException("CategoryPrototype", "Category");
         }
         SimpleStringProperty imagePathCopy = new SimpleStringProperty();
         ObservableMap propertiesMapCopy = FXCollections.observableHashMap();

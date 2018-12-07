@@ -18,6 +18,7 @@ import java.util.Collection;
  * This class encapsulates the Game Data for the GameObjects (Tiles and Entities). It provides methods to create, edit, and delete the Tile and Entity Classes.
  * It holds maps of GameObject Classes and GameObject Instances.
  * @author Jason Zhou
+ * @author Haotian Wang
  */
 public interface GameObjectsCRUDInterface {
 
@@ -182,7 +183,7 @@ public interface GameObjectsCRUDInterface {
      * @param className
      * @return
      */
-    GameObjectClass getGameObjectClass(String className) throws GameObjectClassNotFoundException;
+    <T extends GameObjectClass> T getGameObjectClass(String className) throws GameObjectClassNotFoundException;
 
     Collection<GameObjectClass> getAllClasses();
 
@@ -191,7 +192,7 @@ public interface GameObjectsCRUDInterface {
      * @param instanceId
      * @return
      */
-    GameObjectInstance getGameObjectInstance(int instanceId) throws GameObjectInstanceNotFoundException;
+    <T extends GameObjectInstance> T getGameObjectInstance(int instanceId) throws GameObjectInstanceNotFoundException;
 
     /**
      *
@@ -257,15 +258,51 @@ public interface GameObjectsCRUDInterface {
      */
     void deleteAllInstances();
 
+    /**
+     * This method is a convenient method that creates different GameObjectClasses, depending on the class name and the gameObjectType.
+     *
+     * @param <E>
+     * @param gameObjectType : The GameObjectType that determines the type of GameObjectClass that is to be created.
+     * @param name : The name of the GameObjectClass to be created.
+     * @return A Subclass of GameObjectClass depending on the String name and the GameObjectType.
+     * @throws DuplicateGameObjectClassException
+     */
+    <E extends GameObjectClass> E createGameObjectClass(GameObjectType gameObjectType, String name) throws DuplicateGameObjectClassException;
 
+    /**
+     * This method is a convenient method that creates concrete GameObjectInstances, depending on the type of GameObjectClass that is passed in or inferred from class name.
+     *
+     * @param name: The String class name of the input GameObjectClass.
+     * @param playerID: The int value representing the Player owner of this GameObjectInstance.
+     * @param topleft: A Point representing the topleft of the GameObjectInstance deployed.
+     * @param <E>: A subclass of GameObjectInstance.
+     * @return A concrete GameObjectInstance inferred from input.
+     * @throws GameObjectClassNotFoundException
+     * @throws GameObjectTypeException
+     */
+    <E extends GameObjectInstance> E createGameObjectInstance(String name, int playerID, Point topleft) throws GameObjectClassNotFoundException, GameObjectTypeException;
 
+    /**
+     * This method is a convenient method that creates concrete GameObjectInstances, depending on the type of GameObjectClass that is passed in or inferred from class name.
+     *
+     * @param gameObjectClass: The input GameObjectClass.
+     * @param playerID: The int value representing the Player owner of this GameObjectInstance.
+     * @param topleft: A Point representing the topleft of the GameObjectInstance deployed.
+     * @param <E>: A subclass of GameObjectInstance.
+     * @return A concrete GameObjectInstance inferred from input.
+     * @throws GameObjectTypeException
+     */
+    <E extends GameObjectInstance> E createGameObjectInstance(GameObjectClass gameObjectClass, int playerID, Point topleft) throws GameObjectTypeException;
 
     /**
      * Getters
      *
-     * @return ObservableList of things
+     * @return Iterable of things
      */
     Iterable<EntityClass> getEntityClasses();
+
+
+
     Iterable<TileClass> getTileClasses();
     Iterable<CategoryClass> getCategoryClasses();
     Iterable<SoundClass> getSoundClasses();
