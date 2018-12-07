@@ -5,9 +5,11 @@ import authoringUtils.exception.InvalidIdException;
 import gameObjects.ThrowingConsumer;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
+import grids.Point;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import javafx.scene.effect.Light;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -35,7 +37,7 @@ public class EntityInstanceFactory {
         this.addInstanceToPlayer = addInstanceToPlayer;
     }
 
-    public EntityInstance createInstance(EntityClass entityPrototype, int playerID)
+    public EntityInstance createInstance(EntityClass entityPrototype, int playerID, Point point)
             throws GameObjectTypeException, InvalidIdException {
         // TODO locality
 //        if (!verifyEntityInstanceIdFunc.apply(tileId)) {
@@ -50,6 +52,7 @@ public class EntityInstanceFactory {
         propertiesMapCopy.putAll(entityPrototype.getPropertiesMap());
         Supplier<EntityClass> getEntityClassFunc = () -> entityPrototype;
         EntityInstance entityInstance = new SimpleEntityInstance(entityPrototype.getClassName().getValue(), imagePathListCopy, propertiesMapCopy, getEntityClassFunc);
+        entityInstance.setCoord(point);
         requestInstanceIdFunc.accept(entityInstance);
         addInstanceToMapFunc.accept(entityInstance);
         addInstanceToPlayer.accept(entityInstance.getInstanceId().get(), playerID);

@@ -154,7 +154,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     }
 
     @Override
-    public EntityInstance createEntityInstance(String className, int playerID)
+    public EntityInstance createEntityInstance(String className, int playerID, Point point)
             throws GameObjectClassNotFoundException, GameObjectTypeException {
         if (!gameObjectClassMapByName.containsKey(className) ) {
             throw new GameObjectClassNotFoundException("Entity");
@@ -164,7 +164,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
             throw new GameObjectTypeException("className", "Entity");
         }
         try {
-            return myEntityInstanceFactory.createInstance((EntityClass) t, playerID);
+            return myEntityInstanceFactory.createInstance((EntityClass) t, playerID, point);
         } catch (InvalidIdException e) {
             // TODO
             e.printStackTrace();
@@ -173,10 +173,10 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     }
 
     @Override
-    public EntityInstance createEntityInstance(EntityClass entityClass, int playerID)
+    public EntityInstance createEntityInstance(EntityClass entityClass, int playerID, Point point)
             throws GameObjectTypeException {
         try {
-            return myEntityInstanceFactory.createInstance(entityClass, playerID);
+            return myEntityInstanceFactory.createInstance(entityClass, playerID, point);
         } catch (InvalidIdException e) {
             // TODO
             e.printStackTrace();
@@ -572,7 +572,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     public <E extends GameObjectInstance> E createGameObjectInstance(GameObjectClass gameObjectClass, int playerID, Point topleft) throws GameObjectTypeException {
         switch (gameObjectClass.getType()) {
             case ENTITY:
-                return (E) createEntityInstance((EntityClass) gameObjectClass, playerID);
+                return (E) createEntityInstance((EntityClass) gameObjectClass, playerID, topleft);
             case PLAYER:
                 // TODO: confirm Player API
                 return (E) createPlayerInstance(gameObjectClass.getClassName().getValue());
