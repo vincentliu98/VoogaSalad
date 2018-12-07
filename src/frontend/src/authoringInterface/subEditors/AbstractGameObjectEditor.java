@@ -35,11 +35,8 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
     Node nodeEdited;
     T gameObjectClass;
     V gameObjectInstance;
-    ObservableList<String> imagePaths;
-    String singleMediaFilePath;
 
     public AbstractGameObjectEditor(GameObjectsCRUDInterface manager) {
-        imagePaths = FXCollections.observableArrayList();
         editingMode = EditingMode.NONE;
         gameObjectManager = manager;
         rootPane = new AnchorPane();

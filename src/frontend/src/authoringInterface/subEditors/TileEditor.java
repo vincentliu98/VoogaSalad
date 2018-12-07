@@ -7,6 +7,8 @@ import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.tile.TileClass;
 import gameObjects.tile.TileInstance;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -39,12 +41,14 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
     private static final double ICON_WIDTH = 50;
     private static final double ICON_HEIGHT = 50;
     private Button chooseButton = new Button("Choose image");
+    private ObservableList<String> imagePaths;
 
 
     TileEditor(GameObjectsCRUDInterface manager) {
         super(manager);
         Label widthLabel = new Label("Width");
         Label heightLabel = new Label("Height");
+        imagePaths = FXCollections.observableArrayList();
         nameLabel.setText("Your tile name");
         widthText.setPromptText("Width");
         widthText.setText(String.valueOf(DEFAULT_WIDTH));

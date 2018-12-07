@@ -9,6 +9,7 @@ import gameObjects.entity.EntityClass;
 import gameObjects.entity.EntityInstance;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -54,6 +55,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     private TextField name;
     private TextField value;
     private Button delete;
+    ObservableList<String> imagePaths;
 
     EntityEditor(GameObjectsCRUDInterface manager) {
         super(manager);
