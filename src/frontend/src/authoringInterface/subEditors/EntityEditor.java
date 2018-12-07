@@ -30,7 +30,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Integer.parseInt;
 
 /**
  * This is the editor for an "Entity" object that is opened when the user clicks on an existing entity or tries to add an entity to the game authoring library.
