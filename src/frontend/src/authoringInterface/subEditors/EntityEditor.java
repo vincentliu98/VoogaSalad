@@ -15,6 +15,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -55,10 +56,12 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     private TextField name;
     private TextField value;
     private Button delete;
-    ObservableList<String> imagePaths;
+    private ObservableList<String> imagePaths;
+    private GridPane layout;
 
     EntityEditor(GameObjectsCRUDInterface manager) {
         super(manager);
+        layout = new GridPane();
         nameLabel.setText("Your entity name:");
         imageText = new Label("Add an image to your entity");
         chooseImage = new Button("Choose image");
@@ -168,7 +171,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
             }
         });
         setupLayout();
-        rootPane.getChildren().addAll(propLabel, addProperties, imageText, chooseImage, imagePanel, listProp);
+        rootPane.getChildren().add(layout);
     }
 
     /**
@@ -208,18 +211,16 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     }
 
     private void setupLayout() {
-        imageText.setLayoutX(50);
-        imageText.setLayoutY(106);
-        chooseImage.setLayoutX(261);
-        chooseImage.setLayoutY(106);
-        imagePanel.setLayoutX(45);
-        imagePanel.setLayoutY(156);
-        propLabel.setLayoutX(50);
-        propLabel.setLayoutY(230);
-        addProperties.setLayoutX(261);
-        addProperties.setLayoutY(230);
-        listProp.setLayoutX(50);
-        listProp.setLayoutY(250);
+        layout.addRow(0, imageText, chooseImage);
+        layout.addRow(1, imagePanel);
+        layout.addRow(2, propLabel, addProperties);
+        layout.addRow(3, listProp);
+        layout.setVgap(50);
+        layout.setHgap(50);
+        AnchorPane.setTopAnchor(layout, 100.0);
+        AnchorPane.setRightAnchor(layout, 0.0);
+        AnchorPane.setLeftAnchor(layout, 50.0);
+        AnchorPane.setBottomAnchor(layout, 50.0);
     }
 
     private void setupProp() {
