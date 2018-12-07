@@ -157,6 +157,7 @@ public class GameData {
     public static void restartGame(){
         myInitializer.resetRoot();
         myInitializer.initGameData();
+        myInitializer.setScreenSize(700, 500);
     }
 
 }

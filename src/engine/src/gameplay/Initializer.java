@@ -44,7 +44,7 @@ public class Initializer {
         GameData.updateViews();
     }
 
-    public void resetRoot() { myRoot = new Pane(); }
+    public void resetRoot() { myRoot.getChildren().clear(); }
 
     public void startGame(){
         myXMLParser.getTurn().startPhase();
