@@ -1,8 +1,13 @@
-package authoringUtils.exception;
+package utils.exception;
 
-public class GameObjectClassNotFoundException extends GameObjectClassException {
+/**
+ * This Exception is thrown when a GameObjectClass is queried in some map but is not found as an entry.
+ *
+ * @author Haotian Wang
+ */
+public class GameObjectClassNotFoundException extends Exception {
     public GameObjectClassNotFoundException(String message) {
-        super(message + "Class Not Found");
+        super(message);
     }
 
     public GameObjectClassNotFoundException(Throwable e) {

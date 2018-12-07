@@ -1,21 +1,13 @@
 package gameObjects.category;
 
-import authoringUtils.exception.InvalidIdException;
-import authoringUtils.exception.InvalidOperationException;
+import authoringUtils.exception.*;
 import gameObjects.ThrowingBiConsumer;
-import gameObjects.gameObject.GameObjectInstance;
-import gameObjects.gameObject.GameObjectType;
+import gameObjects.gameObject.*;
 import javafx.beans.property.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableMap;
-import javafx.collections.ObservableSet;
-import authoringUtils.exception.GameObjectTypeException;
+import javafx.collections.*;
 
-import java.util.Collection;
-import java.util.Set;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Function;
+import java.util.*;
+import java.util.function.*;
 
 /**
  * @author Haotian Wang

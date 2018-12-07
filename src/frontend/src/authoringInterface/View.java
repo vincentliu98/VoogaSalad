@@ -11,6 +11,7 @@ import gameObjects.crud.GameObjectsCRUDInterface;
 import graphUI.groovy.GroovyPaneFactory;
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import utils.nodeInstance.CrappyNodeInstanceController;
@@ -34,20 +35,22 @@ public class View implements ParentView<SubView> {
     private Node preview;
     private StatusView statusView;
     private GridPane sidebar;
+    private GridPane mainView;
     private NodeInstanceController nodeInstanceController;
     private GameObjectsCRUDInterface gameObjectManager;
     public static final double MENU_BAR_HEIGHT = 30;
     public static final double GAME_WIDTH = 700;
     public static final double GAME_HEIGHT = 500;
-    private static final double SIDEBAR_WIDTH = 247;
     private static final int ROW_NUMBER = 10;
     private static final int COL_NUMBER = 7;
+    private static final double SIDEBAR_WIDTH = 250;
 
     /**
      * Constructor for an createGraph window, with an AnchorPane as the root Node, and the AnchorPane constraints on top, left and right are 0.
      */
     public View(Stage primaryStage) {
         this.primaryStage = primaryStage;
+        mainView = new GridPane();
         rootPane = new AnchorPane();
         rootPane.getStyleClass().add("mainPane");
         tools = new AuthoringTools(COL_NUMBER, ROW_NUMBER);
@@ -67,6 +70,9 @@ public class View implements ParentView<SubView> {
         statusView = new StatusView(gameObjectManager);
         editView.addUpdateStatusEventListener(statusView);
         sidebar.addColumn(0, sideView.getView(), statusView.getView());
+        mainView.getColumnConstraints().addAll(new ColumnConstraints(MainAuthoringProgram.SCREEN_WIDTH - SIDEBAR_WIDTH), new ColumnConstraints(SIDEBAR_WIDTH));
+        mainView.addColumn(0, editView.getView());
+        mainView.addColumn(1, sidebar);
     }
 
     private void updateGridDimension(Integer width, Integer height) {
@@ -81,18 +87,14 @@ public class View implements ParentView<SubView> {
         AnchorPane.setLeftAnchor(menuBar.getView(), 0.0);
         AnchorPane.setRightAnchor(menuBar.getView(), 0.0);
         AnchorPane.setTopAnchor(menuBar.getView(), 0.0);
-        AnchorPane.setRightAnchor(sidebar, 0.0);
-        AnchorPane.setTopAnchor(sidebar, MENU_BAR_HEIGHT);
-        AnchorPane.setBottomAnchor(sidebar, 0.0);
-        AnchorPane.setLeftAnchor(editView.getView(), 0.0);
-        AnchorPane.setRightAnchor(editView.getView(), SIDEBAR_WIDTH);
-        AnchorPane.setTopAnchor(editView.getView(), MENU_BAR_HEIGHT);
-        AnchorPane.setBottomAnchor(editView.getView(), 0.0);
-
+        AnchorPane.setLeftAnchor(mainView, 0.0);
+        AnchorPane.setTopAnchor(mainView, MENU_BAR_HEIGHT);
+        AnchorPane.setRightAnchor(mainView, 0.0);
+        AnchorPane.setBottomAnchor(mainView, 0.0);
     }
 
     private void addElements() {
-        rootPane.getChildren().addAll(menuBar.getView(), editView.getView(), sidebar);
+        rootPane.getChildren().addAll(menuBar.getView(), mainView);
     }
 
     /**

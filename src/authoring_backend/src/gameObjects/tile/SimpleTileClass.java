@@ -1,20 +1,13 @@
 package gameObjects.tile;
 
-import authoringUtils.exception.InvalidIdException;
-import authoringUtils.exception.InvalidOperationException;
+import authoringUtils.exception.*;
 import gameObjects.ThrowingBiConsumer;
-import gameObjects.gameObject.GameObjectInstance;
-import gameObjects.gameObject.GameObjectType;
+import gameObjects.gameObject.*;
 import grids.Point;
 import javafx.beans.property.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
-import javafx.collections.ObservableSet;
-import authoringUtils.exception.GameObjectTypeException;
+import javafx.collections.*;
 
 import java.util.Collection;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -90,7 +83,7 @@ public class SimpleTileClass implements TileClass {
     }
 
     @Override
-    public ObservableMap getPropertiesMap() {
+    public ObservableMap<String, String> getPropertiesMap() {
         return propertiesMap;
     }
 
@@ -122,7 +115,7 @@ public class SimpleTileClass implements TileClass {
 
 
     @Override
-    public ObservableList getImagePathList() {
+    public ObservableList<String> getImagePathList() {
         return imagePathList;
     }
 

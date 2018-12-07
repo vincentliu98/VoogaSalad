@@ -1,13 +1,10 @@
 package gameObjects.category;
 
-import authoringUtils.exception.GameObjectTypeException;
-import authoringUtils.exception.InvalidIdException;
+import authoringUtils.exception.*;
 import gameObjects.ThrowingConsumer;
-import gameObjects.gameObject.GameObjectInstance;
-import gameObjects.gameObject.GameObjectType;
+import gameObjects.gameObject.*;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableMap;
+import javafx.collections.*;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -15,7 +12,6 @@ import java.util.function.Supplier;
 public class CategoryInstanceFactory {
     private Consumer<GameObjectInstance> requestInstanceIdFunc;
     private ThrowingConsumer<GameObjectInstance, InvalidIdException> addInstanceToMapFunc;
-
 
     public CategoryInstanceFactory(
             Consumer<GameObjectInstance> requestInstanceIdFunc,
@@ -29,7 +25,7 @@ public class CategoryInstanceFactory {
             throws GameObjectTypeException, InvalidIdException {
         // TODO locality
         if (categoryPrototype.getType() != GameObjectType.CATEGORY) {
-            throw new GameObjectTypeException("categoryPrototype is not of Category Type");
+            throw new GameObjectTypeException("CategoryPrototype", "Category");
         }
         SimpleStringProperty imagePathCopy = new SimpleStringProperty();
         ObservableMap propertiesMapCopy = FXCollections.observableHashMap();

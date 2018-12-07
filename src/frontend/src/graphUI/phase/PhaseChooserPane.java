@@ -124,6 +124,7 @@ public class PhaseChooserPane implements SubView<GridPane> {
         });
     }
 
+
     @Override
     public GridPane getView() {
         return view;

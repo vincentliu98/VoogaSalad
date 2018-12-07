@@ -16,10 +16,12 @@ import gameObjects.gameObject.GameObjectType;
 import gameObjects.tile.TileClass;
 import gameObjects.tile.TileInstance;
 import grids.PointImpl;
+import javafx.animation.FadeTransition;
 import javafx.beans.InvalidationListener;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TreeCell;
@@ -28,6 +30,7 @@ import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import utils.exception.PreviewUnavailableException;
@@ -35,7 +38,9 @@ import utils.imageManipulation.Coordinates;
 import utils.imageManipulation.ImageManager;
 import utils.nodeInstance.NodeInstanceController;
 import utils.exception.NodeNotFoundException;
+import utils.simpleAnimation.SingleNodeFade;
 
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,12 +60,19 @@ public class EditGridView implements SubView<ScrollPane> {
     private List<UpdateStatusEventListener<Node>> listeners;
     private static final double NODE_HEIGHT = 75;
     private static final double NODE_WIDTH = 75;
+    private boolean isControlDown;
+    private boolean isShiftDown;
+    private Label batchMode;
+    private static final double INDICATOR_FADE_TIME = 3000;
 
     public EditGridView(int row, int col, GameObjectsCRUDInterface manager, NodeInstanceController controller) {
         gameObjectManager = manager;
         nodeInstanceController = controller;
         scrollPane = new ScrollPane();
         listeners = new ArrayList<>();
+        batchMode = new Label("Batch Mode: Off\nPress Shift to Toggle");
+        batchMode.setFont(Font.font(20));
+        batchMode.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, null, null)));
         gridScrollView = new GridPane();
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
@@ -72,10 +84,45 @@ public class EditGridView implements SubView<ScrollPane> {
                 cell.setOnDragExited(e -> setUpDragExit(e, cell));
                 cell.setOnDragDropped(e -> handleDragFromSideView(e, cell));
                 cell.setOnMouseClicked(e -> listeners.forEach(listener -> listener.setOnUpdateStatusEvent(constructStatusView(cell))));
+                cell.setOnDragEntered(e -> setUpBatchInstanceDrag(e, cell));
             }
         }
         gridScrollView.setGridLinesVisible(true);
+        gridScrollView.add(batchMode, 0, 0, 3, 2);
+        SingleNodeFade.getNodeFadeOut(batchMode, 10000).playFromStart();
         scrollPane = new ScrollPane(gridScrollView);
+        scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, this::setUpControl);
+        scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, this::setUpShift);
+    }
+
+    /**
+     * Set up a key toggle and attach the this boolean toggle to some boolean variable of this class.
+     *
+     * @param keyEvent: The KeyEvent that encodes the pressed key.
+     */
+    private void setUpControl(KeyEvent keyEvent) {
+        if (keyEvent.getCode() == KeyCode.CONTROL) {
+            isControlDown = !isControlDown;
+        }
+    }
+
+    /**
+     * Set up a key toggle for toggling for the Shift key.
+     *
+     * @param keyEvent: The KeyEvent that encodes the pressed key.
+     */
+    private void setUpShift(KeyEvent keyEvent) {
+        if (keyEvent.getCode() == KeyCode.SHIFT) {
+            isShiftDown = !isShiftDown;
+            if (isShiftDown) {
+                batchMode.setText("Batch Mode: On");
+                batchMode.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, null, null)));
+            } else {
+                batchMode.setText("Batch Mode: Off");
+                batchMode.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, null, null)));
+            }
+            SingleNodeFade.getNodeFadeInAndOut(batchMode, INDICATOR_FADE_TIME).playFromStart();
+        }
     }
 
     public void updateDimension(int width, int height) {
@@ -104,7 +151,7 @@ public class EditGridView implements SubView<ScrollPane> {
     private GridPane constructStatusView(Region cell) {
         GridPane listView = new GridPane();
         listView.setGridLinesVisible(true);
-        listView.addRow(0, new Label("Instance ID"), new Label("Instance Name"), new Label("Class Name"));
+        listView.addRow(0, new Label("ID"), new Label("Instance"), new Label("Class"));
         cell.getChildrenUnmodifiable().forEach(node -> {
             GameObjectInstance instance = null;
             try {
@@ -116,15 +163,19 @@ public class EditGridView implements SubView<ScrollPane> {
             Text instanceID = new Text(instance.getInstanceId().getValue().toString());
             Text instanceName = new Text(instance.getInstanceName().getValue());
             Text className = new Text(instance.getClassName().getValue());
+            Button edit = new Button("Edit");
             instanceID.setOnMouseClicked(e -> handleDoubleClick(e, node));
             instanceName.setOnMouseClicked(e -> handleDoubleClick(e, node));
             className.setOnMouseClicked(e -> handleDoubleClick(e, node));
+            edit.setOnMouseClicked(e -> handleNodeEditing(node));
             listView.addRow(
                     listView.getRowCount(),
                     instanceID,
                     instanceName,
-                    className
+                    className,
+                    edit
             );
+            listView.getChildrenUnmodifiable().forEach(node1 -> GridPane.setHgrow(node1, Priority.ALWAYS));
         });
         return listView;
     }
@@ -137,34 +188,34 @@ public class EditGridView implements SubView<ScrollPane> {
      */
     private void handleDoubleClick(MouseEvent event, Node targetNode) {
         if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) {
-            GameObjectInstance userObject = null;
-            try {
-                userObject = nodeInstanceController.getGameObjectInstance(targetNode);
-            } catch (NodeNotFoundException e) {
-                // TODO: proper error handling
-                e.printStackTrace();
-            }
-            GameObjectType type = userObject.getType();
-            Stage dialogStage = new Stage();
-            AbstractGameObjectEditor editor = null;
-            switch (type) {
-                case ENTITY:
-                    editor = new EntityEditor(gameObjectManager);
-                    break;
-                case SOUND:
-                    editor = new SoundEditor(gameObjectManager);
-                    break;
-                case TILE:
-                    editor = new TileEditor(gameObjectManager);
-                    break;
-                case CATEGORY:
-                    editor = new CategoryEditor(gameObjectManager);
-                    break;
-            }
-            editor.editNode(targetNode, nodeInstanceController);
-            dialogStage.setScene(new Scene(editor.getView(), 500, 500));
-            dialogStage.show();
+            handleNodeEditing(targetNode);
         }
+    }
+
+    /**
+     * This method opens the respective editor depending on the GameObjectInstance Type. It also reads in the data from the existing GameObjectInstance.
+     *
+     * @param targetNode: A JavaFx Node that represents a GameObjectInstance.
+     */
+    private void handleNodeEditing(Node targetNode) {
+        GameObjectInstance userObject = null;
+        try {
+            userObject = nodeInstanceController.getGameObjectInstance(targetNode);
+        } catch (NodeNotFoundException e) {
+            // TODO: proper error handling
+            e.printStackTrace();
+        }
+        Stage dialogStage = new Stage();
+        AbstractGameObjectEditor editor = null;
+        try {
+            editor = EditorFactory.makeEditor(userObject.getType(), gameObjectManager);
+        } catch (MissingEditorForTypeException e) {
+            // TODO
+            e.printStackTrace();
+        }
+        editor.editNode(targetNode, nodeInstanceController);
+        dialogStage.setScene(new Scene(editor.getView(), 500, 500));
+        dialogStage.show();
     }
 
     /**
@@ -210,6 +261,58 @@ public class EditGridView implements SubView<ScrollPane> {
     }
 
     /**
+     * Create an instance at a specific Grid cell, which is a Pane from a GameObjectClass
+     *
+     * @param gameObjectClass: A GameObjectClass whose instances will be created on the grid.
+     * @param cell: The Pane where an instance will be created.
+     */
+    private void createInstanceAtGridCell(GameObjectClass gameObjectClass, Pane cell) {
+        ImageView nodeOnGrid = null;
+        try {
+            nodeOnGrid = new ImageView(ImageManager.getPreview(gameObjectClass));
+        } catch (PreviewUnavailableException e) {
+            // TODO: proper error handling
+            e.printStackTrace();
+        }
+        // TODO: smarter resizing
+        nodeOnGrid.setFitHeight(NODE_HEIGHT);
+        nodeOnGrid.setFitWidth(NODE_WIDTH);
+        ImageView finalNodeOnGrid = nodeOnGrid;
+        nodeOnGrid.setOnMouseClicked(e -> handleDoubleClick(e, finalNodeOnGrid));
+        cell.getChildren().add(nodeOnGrid);
+        switch (gameObjectClass.getType()) {
+            case ENTITY:
+                // TODO: solve the TileID thing, and player ID thing
+                EntityInstance entityInstance = null;
+                try {
+                    entityInstance = ((EntityClass) gameObjectClass).createInstance(0, gameObjectManager.getDefaultPlayerID());
+                } catch (InvalidGameObjectInstanceException e) {
+                    e.printStackTrace();
+                } catch (GameObjectTypeException e) {
+                    e.printStackTrace();
+                } catch (InvalidIdException e) {
+                    e.printStackTrace();
+                }
+                nodeInstanceController.addLink(nodeOnGrid, entityInstance);
+                break;
+            case SOUND:
+                // TODO
+                break;
+            case TILE:
+                // TODO: solve point
+                TileInstance tileInstance = null;
+                try {
+                    tileInstance = ((TileClass) gameObjectClass).createInstance(new PointImpl(GridPane.getColumnIndex(cell), GridPane.getRowIndex(cell)));
+                } catch (GameObjectTypeException | InvalidIdException e) {
+                    // TODO
+                    e.printStackTrace();
+                }
+                nodeInstanceController.addLink(nodeOnGrid, tileInstance);
+                break;
+        }
+    }
+
+    /**
      * This method sets up a region so that it accepts a MouseDragEvent Released event from the sideview. The Release event will create an instance according to the GameObjectClass from which the drag is initiated.
      *
      * @param dragEvent: A DragEvent that should be DragDropped.
@@ -225,49 +328,20 @@ public class EditGridView implements SubView<ScrollPane> {
                 // TODO
                 e.printStackTrace();
             }
-            ImageView nodeOnGrid = null;
-            try {
-                nodeOnGrid = new ImageView(ImageManager.getPreview(objectClass));
-            } catch (PreviewUnavailableException e) {
-                // TODO: proper error handling
-                e.printStackTrace();
-            }
-            // TODO: smarter resizing
-            nodeOnGrid.setFitHeight(NODE_HEIGHT);
-            nodeOnGrid.setFitWidth(NODE_WIDTH);
-            ImageView finalNodeOnGrid = nodeOnGrid;
-            nodeOnGrid.setOnMouseClicked(e -> handleDoubleClick(e, finalNodeOnGrid));
-            cell.getChildren().add(nodeOnGrid);
-            switch (objectClass.getType()) {
-                case ENTITY:
-                    // TODO: solve the TileID thing, and player ID thing
-                    EntityInstance entityInstance = null;
-                    try {
-                        entityInstance = ((EntityClass) objectClass).createInstance(0, gameObjectManager.getDefaultPlayerID());
-                    } catch (InvalidGameObjectInstanceException e) {
-                        // TODO
-                        e.printStackTrace();
-                    } catch (GameObjectTypeException | InvalidIdException e) {
-                        // TODO
-                        e.printStackTrace();
-                    }
-                    nodeInstanceController.addLink(nodeOnGrid, entityInstance);
-                    break;
-                case SOUND:
-                    // TODO
-                    break;
-                case TILE:
-                    // TODO: solve point
-                    TileInstance tileInstance = null;
-                    try {
-                        tileInstance = ((TileClass) objectClass).createInstance(new PointImpl(GridPane.getColumnIndex(cell), GridPane.getRowIndex(cell)));
-                    } catch (GameObjectTypeException | InvalidIdException e) {
-                        // TODO
-                        e.printStackTrace();
-                    }
-                    nodeInstanceController.addLink(nodeOnGrid, tileInstance);
-                    break;
-            }
+            createInstanceAtGridCell(objectClass, cell);
+        }
+        dragEvent.consume();
+    }
+
+    /**
+     * This method creates many sequences on the Grid if the user drag a GameObjectClass while Shift is being pressed down.
+     *
+     * @param dragEvent: A DragEvent that should be DragEntered.
+     * @param cell: A Pane where the GameObjectInstance will be created.
+     */
+    private void setUpBatchInstanceDrag(DragEvent dragEvent, Pane cell) {
+        if (isShiftDown) {
+            handleDragFromSideView(dragEvent, cell);
         }
     }
 }

@@ -1,17 +1,10 @@
 package gameObjects.entity;
 
-import authoringUtils.exception.InvalidIdException;
-import authoringUtils.exception.InvalidOperationException;
+import authoringUtils.exception.*;
 import gameObjects.ThrowingBiConsumer;
-import gameObjects.gameObject.GameObjectInstance;
-import gameObjects.gameObject.GameObjectType;
+import gameObjects.gameObject.*;
 import javafx.beans.property.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
-import javafx.collections.ObservableSet;
-import authoringUtils.exception.GameObjectTypeException;
-import authoringUtils.exception.InvalidGameObjectInstanceException;
+import javafx.collections.*;
 
 import java.util.Collection;
 import java.util.function.Consumer;
@@ -87,7 +80,7 @@ public class SimpleEntityClass implements EntityClass {
     }
 
     @Override
-    public ObservableMap getPropertiesMap() {
+    public ObservableMap<String, String> getPropertiesMap() {
         return propertiesMap;
     }
 
@@ -150,9 +143,9 @@ public class SimpleEntityClass implements EntityClass {
     }
 
     @Override
-    public EntityInstance createInstance(int tileId, int playerID)
+    public EntityInstance createInstance(int playerId)
             throws GameObjectTypeException, InvalidIdException {
-        return myFactory.createInstance(this, playerID);
+        return myFactory.createInstance(this, playerId);
 
     }
 

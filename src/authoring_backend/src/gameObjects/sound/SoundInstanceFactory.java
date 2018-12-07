@@ -1,13 +1,11 @@
 package gameObjects.sound;
 
-import authoringUtils.exception.GameObjectTypeException;
+import authoringUtils.exception.*;
 import authoringUtils.exception.InvalidIdException;
 import gameObjects.ThrowingConsumer;
-import gameObjects.gameObject.GameObjectInstance;
-import gameObjects.gameObject.GameObjectType;
+import gameObjects.gameObject.*;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableMap;
+import javafx.collections.*;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -29,7 +27,7 @@ public class SoundInstanceFactory {
             throws GameObjectTypeException, InvalidIdException {
 
         if (soundPrototype.getType() != GameObjectType.SOUND) {
-            throw new GameObjectTypeException("soundPrototype is not of Sound Class");
+            throw new GameObjectTypeException("soundPrototype", "Sound");
         }
         SimpleStringProperty mediaFilePathCopy = new SimpleStringProperty();
         ObservableMap propertiesMapCopy = FXCollections.observableHashMap();
