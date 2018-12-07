@@ -3,13 +3,8 @@ package authoringInterface.sidebar;
 import api.SubView;
 import authoringInterface.customEvent.UpdateStatusEventListener;
 import gameObjects.crud.GameObjectsCRUDInterface;
-import javafx.event.Event;
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-
-import java.awt.event.MouseEvent;
 
 /**
  * This class is the status window when the user clicks on some element on the editing grid. It shows basic stats when the user clicks on some GUI element.

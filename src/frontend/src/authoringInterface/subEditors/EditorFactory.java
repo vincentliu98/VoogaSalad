@@ -3,7 +3,6 @@ package authoringInterface.subEditors;
 import authoringUtils.exception.GameObjectTypeException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.gameObject.GameObjectType;
-import gameplay.GameObject;
 
 /**
  * This Factory class is responsible for creating respective AbstractGameObjectEditors by taking in some arguments.
