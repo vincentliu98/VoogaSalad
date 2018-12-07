@@ -386,9 +386,10 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
 
     @Override
     public Collection<GameObjectInstance> getAllInstances(String className) {
+
         Set<GameObjectInstance> instancesSet = new HashSet<>();
         for (Map.Entry<Integer, GameObjectInstance> entry : gameObjectInstanceMapById.entrySet()) {
-            if (entry.getValue().getClassName().getName().equals(className)) {
+            if (entry.getValue().getClassName().getValue().equals(className)) {
                 instancesSet.add(entry.getValue());
             }
         }
