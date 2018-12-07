@@ -109,7 +109,12 @@ public class CustomTreeCellImpl extends TreeCell<String> {
                         // TODO: proper error handling
                         e1.printStackTrace();
                     }
-
+                    try {
+                        nodeInstanceController.removeGameObjectInstance(gameObjectInstance);
+                    } catch (GameObjectInstanceNotFoundException e1) {
+                        // TODO: proper error handling
+                        e1.printStackTrace();
+                    }
                 });
             } catch (GameObjectClassNotFoundException e1) {
                 // TODO: proper error handling
