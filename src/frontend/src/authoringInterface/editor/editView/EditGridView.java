@@ -312,7 +312,6 @@ public class EditGridView implements SubView<ScrollPane> {
         nodeOnGrid.setFitHeight(NODE_HEIGHT);
         nodeOnGrid.setFitWidth(NODE_WIDTH);
         ImageView finalNodeOnGrid = nodeOnGrid;
-        finalNodeOnGrid.setOnMouseClicked(e -> handleDoubleClick(e, finalNodeOnGrid));
         cell.getChildren().add(finalNodeOnGrid);
         GameObjectInstance gameObjectInstance = null;
         try {
@@ -322,7 +321,13 @@ public class EditGridView implements SubView<ScrollPane> {
             e.printStackTrace();
         }
         nodeInstanceController.addLink(finalNodeOnGrid, gameObjectInstance);
-        nodeOnGrid.setOnMouseClicked(e -> setUpRightClickMenu(e, finalNodeOnGrid));
+        nodeOnGrid.setOnMouseClicked(e -> {
+            if (e.getButton() == MouseButton.SECONDARY) {
+                setUpRightClickMenu(e, finalNodeOnGrid);
+            } else {
+                handleDoubleClick(e, finalNodeOnGrid);
+            }
+        });
     }
 
     /**
