@@ -24,6 +24,7 @@ public class GameData {
     static Turn TURN;
     static Pane ROOT;
     static List<ArgumentListener> myArgumentListeners;
+    static Initializer myInitializer;
 
     static GroovyShell shell;
 
@@ -32,7 +33,7 @@ public class GameData {
         Map<Integer, Player> players, Map<Integer, Entity> entities,
         Map<String, EntityPrototype> entityPrototypes,
         Map<Integer, Tile> tiles, Map<Integer, Phase> phases, Map<Integer, Node> nodes,
-        Set<Edge> edges, Turn turn, Pane root
+        Set<Edge> edges, Turn turn, Pane root, Initializer initializer
     ){
         GameData.GRID_WIDTH = grid_dimension.getX();
         GameData.GRID_HEIGHT = grid_dimension.getY();
@@ -47,6 +48,7 @@ public class GameData {
         TURN = turn;
         ROOT = root;
         myArgumentListeners = new ArrayList<>();
+        myInitializer = initializer;
 
         var shared = new Binding();
         shared.setVariable("GameMethods", GameMethods.class);
@@ -143,4 +145,11 @@ public class GameData {
         }
         return xmlString;
     }
+
+    public static void restartGame(){
+        myInitializer.resetRoot();
+        myInitializer.initGameData();
+        myInitializer.setScreenSize(700, 500);
+    }
+
 }

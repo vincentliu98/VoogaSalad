@@ -45,7 +45,7 @@ public class Turn {
         alert.setContentText("Restart?");
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK){
-            // TODO: Figure out how to restart within window
+            GameData.restartGame();
         } else { }
     }
 }
