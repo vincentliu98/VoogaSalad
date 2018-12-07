@@ -5,6 +5,7 @@ import authoringUtils.exception.DuplicateGameObjectClassException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.entity.SimpleEntityClass;
 import gameObjects.gameObject.GameObjectClass;
+import gameObjects.sound.SimpleSoundClass;
 import gameObjects.tile.SimpleTileClass;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
@@ -35,8 +36,8 @@ public class SideView implements SubView<StackPane> {
         List<GameObjectClass> defaultList = new ArrayList<>(Arrays.asList(
                 new SimpleEntityClass("O"),
                 new SimpleEntityClass("X"),
-                new SimpleTileClass("Default Grid")
-                // TODO: new SimpleSoundClass("Sound file")
+                new SimpleTileClass("Default Grid"),
+                new SimpleSoundClass("Sound file")
         ));
         for (GameObjectClass item : defaultList) {
             switch (item.getType()) {
