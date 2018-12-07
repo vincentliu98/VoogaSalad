@@ -64,7 +64,7 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
         heightText.setPromptText("Height");
         heightText.setText(String.valueOf(DEFAULT_HEIGHT));
         nameField.setPromptText("Tile name");
-        geometry.setHgap(70);
+        geometry.setHgap(20);
         geometry.addRow(0, widthLabel, widthText);
         geometry.addRow(1, heightLabel, heightText);
         chooseButton.setStyle("-fx-text-fill: white;"
@@ -200,13 +200,9 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
     @Override
     public void readGameObjectInstance() {
         nameField.setText(gameObjectInstance.getClassName().getValue());
-        // TODO: REmove this disgusting shite
-        try {
-            imagePaths.addAll(gameObjectManager.getTileClass(gameObjectInstance.getClassName().getValue()).getImagePathList());
-        } catch (GameObjectClassNotFoundException e) {
-            // TODO
-            e.printStackTrace();
-        }
+        imagePaths.addAll(gameObjectInstance.getImagePathList());
+        widthText.setText(String.valueOf(gameObjectInstance.getWidth().getValue()));
+        heightText.setText(String.valueOf(gameObjectInstance.getHeight().getValue()));
     }
 
     /**
@@ -215,8 +211,9 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
     @Override
     public void readGameObjectClass() {
         nameField.setText(gameObjectClass.getClassName().getValue());
-        // TODO: REmove this disgusting shite
         imagePaths.addAll(gameObjectClass.getImagePathList());
+        widthText.setText(String.valueOf(gameObjectClass.getWidth().getValue()));
+        heightText.setText(String.valueOf(gameObjectClass.getHeight().getValue()));
     }
 
     private void setupLayout() {
