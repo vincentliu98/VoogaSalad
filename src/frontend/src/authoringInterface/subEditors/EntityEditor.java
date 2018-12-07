@@ -15,6 +15,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -29,8 +30,7 @@ import utils.imageManipulation.JavaFxOperation;
 import utils.imageManipulation.ImageManager;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static java.lang.Integer.parseInt;
 
@@ -57,9 +57,13 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     private TextField value;
     private Button delete;
     private ObservableList<String> imagePaths;
+    private Set<ImageView> toRemove;
+    private Set<String> toRemovePath;
 
     EntityEditor(GameObjectsCRUDInterface manager) {
         super(manager);
+        toRemove = new HashSet<>();
+        toRemovePath = new HashSet<>();
         nameLabel.setText("Your entity name:");
         imageText = new Label("Add an image to your entity");
         chooseImage = new Button("Choose image");
@@ -122,6 +126,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                             // TODO: proper error handling
                             e1.printStackTrace();
                         }
+                        assert icon != null;
                         JavaFxOperation.setWidthAndHeight(icon, ICON_WIDTH, ICON_HEIGHT);
                         newItem.setGraphic(icon);
                         treeItem.getChildren().add(newItem);
@@ -143,7 +148,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                         }
                         break;
                     case EDIT_TREEITEM:
-                        try { ImageManager.removeClassImage(gameObjectClass); } catch (GameObjectClassNotFoundException e1) {}
+                        try { ImageManager.removeClassImage(gameObjectClass); } catch (GameObjectClassNotFoundException ignored) {}
                         gameObjectClass.getImagePathList().clear();
                         gameObjectClass.getImagePathList().addAll(imagePaths);
                         gameObjectClass.getPropertiesMap().clear();
@@ -161,6 +166,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                             // TODO: proper error handling
                             e1.printStackTrace();
                         }
+                        assert icon2 != null;
                         JavaFxOperation.setWidthAndHeight(icon2, ICON_WIDTH, ICON_HEIGHT);
                         treeItem.setValue(nameField.getText());
                         treeItem.setGraphic(icon2);
@@ -170,6 +176,11 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         });
         setupLayout();
         rootPane.getChildren().add(layout);
+        rootPane.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.DELETE) {
+                toRemovePath.forEach(path -> imagePaths.remove(path));
+            }
+        });
     }
 
     /**
@@ -182,6 +193,16 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
             preview.setFitWidth(ICON_WIDTH);
             preview.setFitHeight(ICON_HEIGHT);
             imagePanel.getChildren().add(preview);
+            preview.setOnMouseClicked(e -> {
+                if (!toRemove.remove(preview)) {
+                    toRemove.add(preview);
+                    toRemovePath.add(path);
+                    preview.setOpacity(0.5);
+                } else {
+                    toRemovePath.remove(path);
+                    preview.setOpacity(1);
+                }
+            });
         });
     }
 
@@ -202,7 +223,6 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     public void readGameObjectClass() {
         nameField.setText(gameObjectClass.getClassName().getValue());
         imagePaths.addAll(gameObjectClass.getImagePathList());
-        System.out.println(gameObjectClass.getPropertiesMap());
         list.putAll(gameObjectClass.getPropertiesMap());
     }
 

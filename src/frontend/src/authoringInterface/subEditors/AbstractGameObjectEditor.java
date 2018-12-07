@@ -53,9 +53,7 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
                          + "-fx-background-color: #343a40;");
         cancel.setStyle("-fx-text-fill: white;"
                          + "-fx-background-color: #343a40;");
-        cancel.setOnAction(e -> {
-            ((Stage) rootPane.getScene().getWindow()).close();
-        });
+        cancel.setOnAction(e -> ((Stage) rootPane.getScene().getWindow()).close());
         rootPane.getChildren().addAll(nameLabel, nameField, confirm, cancel);
         setupBasicLayout();
     }
