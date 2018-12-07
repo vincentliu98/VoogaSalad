@@ -57,11 +57,9 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     private TextField value;
     private Button delete;
     private ObservableList<String> imagePaths;
-    private GridPane layout;
 
     EntityEditor(GameObjectsCRUDInterface manager) {
         super(manager);
-        layout = new GridPane();
         nameLabel.setText("Your entity name:");
         imageText = new Label("Add an image to your entity");
         chooseImage = new Button("Choose image");
@@ -215,12 +213,6 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         layout.addRow(1, imagePanel);
         layout.addRow(2, propLabel, addProperties);
         layout.addRow(3, listProp);
-        layout.setVgap(50);
-        layout.setHgap(50);
-        AnchorPane.setTopAnchor(layout, 100.0);
-        AnchorPane.setRightAnchor(layout, 0.0);
-        AnchorPane.setLeftAnchor(layout, 50.0);
-        AnchorPane.setBottomAnchor(layout, 50.0);
     }
 
     private void setupProp() {

@@ -13,6 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import utils.nodeInstance.NodeInstanceController;
 import utils.exception.NodeNotFoundException;
@@ -35,9 +36,11 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
     Node nodeEdited;
     T gameObjectClass;
     V gameObjectInstance;
+    GridPane layout;
 
     public AbstractGameObjectEditor(GameObjectsCRUDInterface manager) {
         editingMode = EditingMode.NONE;
+        layout = new GridPane();
         gameObjectManager = manager;
         rootPane = new AnchorPane();
         rootPane.setStyle("-fx-text-fill: white;"
@@ -71,6 +74,12 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
         confirm.setLayoutY(480);
         cancel.setLayoutX(391);
         cancel.setLayoutY(480);
+        layout.setVgap(50);
+        layout.setHgap(50);
+        AnchorPane.setTopAnchor(layout, 100.0);
+        AnchorPane.setRightAnchor(layout, 0.0);
+        AnchorPane.setLeftAnchor(layout, 50.0);
+        AnchorPane.setBottomAnchor(layout, 50.0);
     }
 
     /**

@@ -11,6 +11,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
@@ -44,6 +45,7 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
     private ObservableList<String> imagePaths;
 
 
+
     TileEditor(GameObjectsCRUDInterface manager) {
         super(manager);
         Label widthLabel = new Label("Width");
@@ -69,7 +71,7 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
             }
         });
 
-        rootPane.getChildren().addAll(geometry, chooseButton, imageLabel, imagePanel);
+        rootPane.getChildren().addAll(layout);
 
         confirm.setOnAction(e -> {
             if (nameField.getText().trim().isEmpty()) {
@@ -187,13 +189,8 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
     }
 
     private void setupLayout() {
-        geometry.setLayoutX(50);
-        geometry.setLayoutY(100);
-        imagePanel.setLayoutX(50);
-        imagePanel.setLayoutY(350);
-        imageLabel.setLayoutX(50);
-        imageLabel.setLayoutY(300);
-        chooseButton.setLayoutX(350);
-        chooseButton.setLayoutY(300);
+        layout.addRow(0, geometry);
+        layout.addRow(1, imageLabel, chooseButton);
+        layout.addRow(2, imagePanel);
     }
 }
