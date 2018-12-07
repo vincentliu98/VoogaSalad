@@ -33,6 +33,9 @@ public class SimpleEntityInstance implements EntityInstance {
         this.propertiesMap = properties;
         this.getEntityClassFunc = getEntityClassFunc;
         instanceId = new ReadOnlyIntegerWrapper();
+        this.width = new SimpleIntegerProperty();
+        this.height = new SimpleIntegerProperty();
+        this.coord = new SimpleObjectProperty<>();
     }
 
     @Override
@@ -87,7 +90,7 @@ public class SimpleEntityInstance implements EntityInstance {
     }
 
     @Override
-    public ObservableList getImagePathList() {
+    public ObservableList<String> getImagePathList() {
         return imagePathList;
     }
 
