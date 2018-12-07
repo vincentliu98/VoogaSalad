@@ -18,6 +18,7 @@ import java.util.Collection;
  * This class encapsulates the Game Data for the GameObjects (Tiles and Entities). It provides methods to create, edit, and delete the Tile and Entity Classes.
  * It holds maps of GameObject Classes and GameObject Instances.
  * @author Jason Zhou
+ * @author Haotian Wang
  */
 public interface GameObjectsCRUDInterface {
 
@@ -268,6 +269,30 @@ public interface GameObjectsCRUDInterface {
      */
     <E extends GameObjectClass> E createGameObjectClass(GameObjectType gameObjectType, String name) throws DuplicateGameObjectClassException;
 
+    /**
+     * This method is a convenient method that creates concrete GameObjectInstances, depending on the type of GameObjectClass that is passed in or inferred from class name.
+     *
+     * @param name: The String class name of the input GameObjectClass.
+     * @param playerID: The int value representing the Player owner of this GameObjectInstance.
+     * @param topleft: A Point representing the topleft of the GameObjectInstance deployed.
+     * @param <E>: A subclass of GameObjectInstance.
+     * @return A concrete GameObjectInstance inferred from input.
+     * @throws GameObjectClassNotFoundException
+     * @throws GameObjectTypeException
+     */
+    <E extends GameObjectInstance> E createGameObjectInstance(String name, int playerID, Point topleft) throws GameObjectClassNotFoundException, GameObjectTypeException;
+
+    /**
+     * This method is a convenient method that creates concrete GameObjectInstances, depending on the type of GameObjectClass that is passed in or inferred from class name.
+     *
+     * @param gameObjectClass: The input GameObjectClass.
+     * @param playerID: The int value representing the Player owner of this GameObjectInstance.
+     * @param topleft: A Point representing the topleft of the GameObjectInstance deployed.
+     * @param <E>: A subclass of GameObjectInstance.
+     * @return A concrete GameObjectInstance inferred from input.
+     * @throws GameObjectTypeException
+     */
+    <E extends GameObjectInstance> E createGameObjectInstance(GameObjectClass gameObjectClass, int playerID, Point topleft) throws GameObjectTypeException;
 
     /**
      * Getters

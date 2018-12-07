@@ -120,8 +120,7 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
         editingMode = EditingMode.EDIT_NODE;
         nodeInstanceController = controller;
         try {
-            //noinspection unchecked
-            this.gameObjectInstance = (V) controller.getGameObjectInstance(node);
+            this.gameObjectInstance = controller.getGameObjectInstance(node);
         } catch (NodeNotFoundException e) {
             // TODO: proper error handling
             e.printStackTrace();

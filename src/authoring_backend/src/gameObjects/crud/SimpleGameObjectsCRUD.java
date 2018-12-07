@@ -538,6 +538,56 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         return null;
     }
 
+    /**
+     * This method is a convenient method that creates concrete GameObjectInstances, depending on the type of GameObjectClass that is passed in or inferred from class name.
+     *
+     * @param name     : The String class name of the input GameObjectClass.
+     * @param playerID : The int value representing the Player owner of this GameObjectInstance.
+     * @param topleft  : A Point representing the topleft of the GameObjectInstance deployed.
+     * @return A concrete GameObjectInstance inferred from input.
+     * @throws GameObjectTypeException
+     * @throws GameObjectClassNotFoundException
+     */
+    @Override
+    public <E extends GameObjectInstance> E createGameObjectInstance(String name, int playerID, Point topleft) throws GameObjectClassNotFoundException, GameObjectTypeException {
+        if (!gameObjectClassMapByName.containsKey(name)) {
+            throw new GameObjectClassNotFoundException(String.format("%s is not a valid GameObjectClass", name));
+        }
+        GameObjectClass gameObjectClass = gameObjectClassMapByName.get(name);
+        return createGameObjectInstance(gameObjectClass, playerID, topleft);
+    }
+
+    /**
+     * This method is a convenient method that creates concrete GameObjectInstances, depending on the type of GameObjectClass that is passed in or inferred from class name.
+     *
+     * @param gameObjectClass : The input GameObjectClass.
+     * @param playerID        : The int value representing the Player owner of this GameObjectInstance.
+     * @param topleft         : A Point representing the topleft of the GameObjectInstance deployed.
+     * @return A concrete GameObjectInstance inferred from input.
+     * @throws GameObjectTypeException
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <E extends GameObjectInstance> E createGameObjectInstance(GameObjectClass gameObjectClass, int playerID, Point topleft) throws GameObjectTypeException {
+        switch (gameObjectClass.getType()) {
+            case ENTITY:
+                return (E) createEntityInstance((EntityClass) gameObjectClass, playerID);
+            case PLAYER:
+                // TODO: confirm Player API
+                return (E) createPlayerInstance(gameObjectClass.getClassName().getValue());
+            case UNSPECIFIED:
+                // TODO
+                break;
+            case TILE:
+                return (E) createTileInstance((TileClass) gameObjectClass, topleft);
+            case SOUND:
+                return (E) createSoundInstance((SoundClass) gameObjectClass);
+            case CATEGORY:
+                return (E) createCategoryInstance((CategoryClass) gameObjectClass);
+        }
+        return null;
+    }
+
     @Override
     public boolean changeGameObjectClassName(String oldClassName, String newClassName)
             throws InvalidOperationException {

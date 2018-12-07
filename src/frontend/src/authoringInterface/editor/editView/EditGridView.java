@@ -274,38 +274,16 @@ public class EditGridView implements SubView<ScrollPane> {
         nodeOnGrid.setFitHeight(NODE_HEIGHT);
         nodeOnGrid.setFitWidth(NODE_WIDTH);
         ImageView finalNodeOnGrid = nodeOnGrid;
-        nodeOnGrid.setOnMouseClicked(e -> handleDoubleClick(e, finalNodeOnGrid));
-        cell.getChildren().add(nodeOnGrid);
-        switch (gameObjectClass.getType()) {
-            case ENTITY:
-                // TODO: solve the TileID thing, and player ID thing
-                EntityInstance entityInstance = null;
-                try {
-                    entityInstance = ((EntityClass) gameObjectClass).createInstance(gameObjectManager.getDefaultPlayerID());
-                } catch (InvalidGameObjectInstanceException e) {
-                    e.printStackTrace();
-                } catch (GameObjectTypeException e) {
-                    e.printStackTrace();
-                } catch (InvalidIdException e) {
-                    e.printStackTrace();
-                }
-                nodeInstanceController.addLink(nodeOnGrid, entityInstance);
-                break;
-            case SOUND:
-                // TODO
-                break;
-            case TILE:
-                // TODO: solve point
-                TileInstance tileInstance = null;
-                try {
-                    tileInstance = ((TileClass) gameObjectClass).createInstance(new PointImpl(GridPane.getColumnIndex(cell), GridPane.getRowIndex(cell)));
-                } catch (GameObjectTypeException | InvalidIdException e) {
-                    // TODO
-                    e.printStackTrace();
-                }
-                nodeInstanceController.addLink(nodeOnGrid, tileInstance);
-                break;
+        finalNodeOnGrid.setOnMouseClicked(e -> handleDoubleClick(e, finalNodeOnGrid));
+        cell.getChildren().add(finalNodeOnGrid);
+        GameObjectInstance gameObjectInstance = null;
+        try {
+            gameObjectInstance = gameObjectManager.createGameObjectInstance(gameObjectClass, gameObjectManager.getDefaultPlayerID(), new PointImpl(GridPane.getColumnIndex(cell), GridPane.getRowIndex(cell)));
+        } catch (GameObjectTypeException e) {
+            // TODO: proper error handling
+            e.printStackTrace();
         }
+        nodeInstanceController.addLink(finalNodeOnGrid, gameObjectInstance);
     }
 
     /**
