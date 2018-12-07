@@ -7,6 +7,7 @@ import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.entity.EntityClass;
 import gameObjects.entity.EntityInstance;
+import grids.Point;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -43,6 +44,8 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     private Label imageText;
     private Button chooseImage;
     private HBox imagePanel;
+    private TextField widthInput;
+    private TextField heightInput;
     private static final double ICON_WIDTH = 50;
     private static final double ICON_HEIGHT = 50;
     private Label propLabel = new Label("Properties");
@@ -58,13 +61,26 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     private ObservableList<String> imagePaths;
     private Set<ImageView> toRemove;
     private Set<String> toRemovePath;
+    private GridPane size;
     private static final double REMOVE_OPACITY = 0.5;
+    private GridPane position;
 
     EntityEditor(GameObjectsCRUDInterface manager) {
         super(manager);
         toRemove = new HashSet<>();
         toRemovePath = new HashSet<>();
         nameLabel.setText("Your entity name:");
+
+        size = new GridPane();
+        Label widthLabel = new Label("Width of entity");
+        Label heightLabel = new Label("Height of entity");
+        widthInput = new TextField();
+        widthInput.setPromptText("width of entity");
+        heightInput = new TextField();
+        heightInput.setPromptText("height of entity");
+        size.addRow(0, widthLabel, widthInput);
+        size.addRow(1, heightLabel, heightInput);
+
         imageText = new Label("Add an image to your entity");
         chooseImage = new Button("Choose image");
         chooseImage.setStyle("-fx-text-fill: white;"
@@ -213,6 +229,16 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         nameField.setText(gameObjectInstance.getInstanceName().getValue());
         imagePaths.addAll(gameObjectInstance.getImagePathList());
         list.putAll(gameObjectInstance.getPropertiesMap());
+        widthInput.setText(String.valueOf(gameObjectInstance.getWidth().getValue()));
+        heightInput.setText(String.valueOf(gameObjectInstance.getHeight().getValue()));
+        Label xLabel = new Label("x");
+        Label yLabel = new Label("y");
+        TextField xInput = new TextField(String.valueOf(gameObjectInstance.getCoord().getX()));
+        TextField yInput = new TextField(String.valueOf(gameObjectInstance.getCoord().getY()));
+        position = new GridPane();
+        position.addRow(0, xLabel, xInput);
+        position.addRow(1, yLabel, yInput);
+        layout.addRow(5, position);
     }
 
     /**
@@ -223,13 +249,16 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         nameField.setText(gameObjectClass.getClassName().getValue());
         imagePaths.addAll(gameObjectClass.getImagePathList());
         list.putAll(gameObjectClass.getPropertiesMap());
+        widthInput.setText(String.valueOf(gameObjectClass.getWidth().getValue()));
+        heightInput.setText(String.valueOf(gameObjectClass.getHeight().getValue()));
     }
 
     private void setupLayout() {
-        layout.addRow(0, imageText, chooseImage);
-        layout.addRow(1, imagePanel);
-        layout.addRow(2, propLabel, addProperties);
-        layout.addRow(3, listProp);
+        layout.addRow(0, size);
+        layout.addRow(1, imageText, chooseImage);
+        layout.addRow(2, imagePanel);
+        layout.addRow(3, propLabel, addProperties);
+        layout.addRow(4, listProp);
     }
 
     private void setupProp() {

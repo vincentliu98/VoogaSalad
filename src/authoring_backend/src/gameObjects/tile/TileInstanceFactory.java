@@ -45,6 +45,8 @@ public class TileInstanceFactory {
         TileInstance tileInstance = new SimpleTileInstance(tilePrototype.getClassName().getValue(), topLeftCoord, imagePathListCopy, propertiesMapCopy, getTileClassFunc);
         requestInstanceIdFunc.accept(tileInstance);
         addInstanceToMapFunc.accept(tileInstance);
+        tileInstance.setHeight(tilePrototype.getHeight().getValue());
+        tileInstance.setWidth(tileInstance.getWidth().getValue());
         return tileInstance;
 
     }

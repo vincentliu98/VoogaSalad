@@ -14,9 +14,11 @@ import java.util.function.Function;
 public class SimpleTileClass implements TileClass {
     private int numRow, numCol;
 
-    private String CONST_CLASSNAME = "className";
-    private String CONST_ID = "id";
-    private String CONST_ENTITYCONTAINABLE = "entityContainable";
+    private static final String CONST_CLASSNAME = "className";
+    private static final String CONST_ID = "id";
+    private static final String CONST_ENTITYCONTAINABLE = "entityContainable";
+    private static final int DEFAULT_WIDTH = 1;
+    private static final int DEFAULT_HEIGHT = 1;
 
     private ReadOnlyStringWrapper className;
     private ReadOnlyIntegerWrapper classId;
@@ -38,8 +40,8 @@ public class SimpleTileClass implements TileClass {
         imagePathList = FXCollections.observableArrayList();
         propertiesMap = FXCollections.observableHashMap();
         imageSelector = "";
-        width = new SimpleIntegerProperty(1);
-        height = new SimpleIntegerProperty(1);
+        width = new SimpleIntegerProperty(DEFAULT_WIDTH);
+        height = new SimpleIntegerProperty(DEFAULT_HEIGHT);
     }
 
     public SimpleTileClass(

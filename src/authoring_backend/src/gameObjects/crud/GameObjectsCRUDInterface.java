@@ -81,7 +81,7 @@ public interface GameObjectsCRUDInterface {
      * @param className
      * @return
      */
-    EntityInstance createEntityInstance(String className, int playerID)
+    EntityInstance createEntityInstance(String className, int playerID, Point point)
             throws GameObjectClassNotFoundException, GameObjectTypeException;
 
     /**
@@ -89,7 +89,7 @@ public interface GameObjectsCRUDInterface {
      * @param entityClass
      * @return
      */
-    EntityInstance createEntityInstance(EntityClass entityClass, int playerID)
+    EntityInstance createEntityInstance(EntityClass entityClass, int playerID, Point point)
             throws GameObjectTypeException;
 
 
