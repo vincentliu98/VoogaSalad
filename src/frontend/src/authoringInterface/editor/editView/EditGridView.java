@@ -285,7 +285,7 @@ public class EditGridView implements SubView<ScrollPane> {
                 // TODO: solve the TileID thing, and player ID thing
                 EntityInstance entityInstance = null;
                 try {
-                    entityInstance = ((EntityClass) gameObjectClass).createInstance(0, gameObjectManager.getDefaultPlayerID());
+                    entityInstance = ((EntityClass) gameObjectClass).createInstance(gameObjectManager.getDefaultPlayerID());
                 } catch (InvalidGameObjectInstanceException e) {
                     e.printStackTrace();
                 } catch (GameObjectTypeException e) {
