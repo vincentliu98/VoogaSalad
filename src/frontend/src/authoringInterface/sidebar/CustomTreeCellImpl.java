@@ -7,10 +7,12 @@ import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.entity.EntityClass;
 import gameObjects.gameObject.GameObjectClass;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.*;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import utils.exception.PreviewUnavailableException;
 import utils.imageManipulation.ImageManager;
@@ -92,7 +94,7 @@ public class CustomTreeCellImpl extends TreeCell<String> {
         deleteMenuItem.setOnAction(e -> {
             try {
                 objectManager.getGameObjectClass(getItem()).getAllInstances().forEach(gameObjectInstance -> {
-//                    nodeInstanceController.getNode()
+                    Node node = game
                 });
             } catch (GameObjectClassNotFoundException e1) {
                 // TODO: proper error handling

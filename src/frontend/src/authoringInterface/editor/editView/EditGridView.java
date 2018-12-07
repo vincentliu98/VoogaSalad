@@ -12,12 +12,9 @@ import gameObjects.entity.EntityClass;
 import gameObjects.entity.EntityInstance;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
-import gameObjects.gameObject.GameObjectType;
 import gameObjects.tile.TileClass;
 import gameObjects.tile.TileInstance;
 import grids.PointImpl;
-import javafx.animation.FadeTransition;
-import javafx.beans.InvalidationListener;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -34,13 +31,11 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import utils.exception.PreviewUnavailableException;
-import utils.imageManipulation.Coordinates;
 import utils.imageManipulation.ImageManager;
 import utils.nodeInstance.NodeInstanceController;
 import utils.exception.NodeNotFoundException;
 import utils.simpleAnimation.SingleNodeFade;
 
-import java.security.Key;
 import java.util.ArrayList;
 import java.util.List;
 

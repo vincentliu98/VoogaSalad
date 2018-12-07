@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 import utils.ErrorWindow;
 import utils.exception.GameObjectInstanceNotFoundException;
 import utils.exception.PreviewUnavailableException;
-import utils.imageManipulation.Coordinates;
+import utils.imageManipulation.JavaFxOperation;
 import utils.imageManipulation.ImageManager;
 
 import java.io.File;
@@ -112,7 +112,7 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
                             // TODO: proper error handling
                             e1.printStackTrace();
                         }
-                        Coordinates.setWidthAndHeight(icon, ICON_WIDTH, ICON_HEIGHT);
+                        JavaFxOperation.setWidthAndHeight(icon, ICON_WIDTH, ICON_HEIGHT);
                         newItem.setGraphic(icon);
                         treeItem.getChildren().add(newItem);
                         break;
@@ -147,7 +147,7 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
                             // TODO: proper error handling
                             e1.printStackTrace();
                         }
-                        Coordinates.setWidthAndHeight(icon2, ICON_WIDTH, ICON_HEIGHT);
+                        JavaFxOperation.setWidthAndHeight(icon2, ICON_WIDTH, ICON_HEIGHT);
                         treeItem.setValue(nameField.getText());
                         treeItem.setGraphic(icon2);
                         break;
