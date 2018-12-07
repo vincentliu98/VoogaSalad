@@ -46,7 +46,7 @@ public class TileInstanceFactory {
         requestInstanceIdFunc.accept(tileInstance);
         addInstanceToMapFunc.accept(tileInstance);
         tileInstance.setHeight(tilePrototype.getHeight().getValue());
-        tileInstance.setWidth(tileInstance.getWidth().getValue());
+        tileInstance.setWidth(tilePrototype.getWidth().getValue());
         return tileInstance;
 
     }
