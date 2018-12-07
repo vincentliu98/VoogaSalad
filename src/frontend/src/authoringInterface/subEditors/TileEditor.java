@@ -12,6 +12,7 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -23,6 +24,8 @@ import utils.imageManipulation.JavaFxOperation;
 import utils.imageManipulation.ImageManager;
 
 import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Editor to change the Tile settings. Need to work on it. Low priority
@@ -44,11 +47,14 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
     private static final double ICON_HEIGHT = 50;
     private Button chooseButton = new Button("Choose image");
     private ObservableList<String> imagePaths;
-
-
+    private Set<String> toRemovePath;
+    private Set<ImageView> toRemoveImageView;
+    private static final double REMOVE_OPACITY = 0.5;
 
     TileEditor(GameObjectsCRUDInterface manager) {
         super(manager);
+        toRemovePath = new HashSet<>();
+        toRemoveImageView = new HashSet<>();
         Label widthLabel = new Label("Width");
         Label heightLabel = new Label("Height");
         imagePaths = FXCollections.observableArrayList();
@@ -78,7 +84,24 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
                 preview.setFitHeight(ICON_HEIGHT);
                 preview.setFitWidth(ICON_WIDTH);
                 imagePanel.getChildren().add(preview);
+                preview.setOnMouseClicked(e -> {
+                    if (!toRemoveImageView.remove(preview)) {
+                        toRemoveImageView.add(preview);
+                        toRemovePath.add(string);
+                        preview.setOpacity(REMOVE_OPACITY);
+                    } else {
+                        toRemoveImageView.remove(preview);
+                        toRemovePath.remove(string);
+                        preview.setOpacity(1);
+                    }
+                });
             });
+        });
+
+        rootPane.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.DELETE) {
+                imagePaths.removeAll(toRemovePath);
+            }
         });
 
         confirm.setOnAction(e -> {

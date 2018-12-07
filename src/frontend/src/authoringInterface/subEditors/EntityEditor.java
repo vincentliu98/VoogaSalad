@@ -58,6 +58,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     private ObservableList<String> imagePaths;
     private Set<ImageView> toRemove;
     private Set<String> toRemovePath;
+    private static final double REMOVE_OPACITY = 0.5;
 
     EntityEditor(GameObjectsCRUDInterface manager) {
         super(manager);
@@ -195,7 +196,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                 if (!toRemove.remove(preview)) {
                     toRemove.add(preview);
                     toRemovePath.add(path);
-                    preview.setOpacity(0.5);
+                    preview.setOpacity(REMOVE_OPACITY);
                 } else {
                     toRemovePath.remove(path);
                     preview.setOpacity(1);
