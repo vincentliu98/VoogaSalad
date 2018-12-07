@@ -182,7 +182,7 @@ public interface GameObjectsCRUDInterface {
      * @param className
      * @return
      */
-    GameObjectClass getGameObjectClass(String className) throws GameObjectClassNotFoundException;
+    <T extends GameObjectClass> T getGameObjectClass(String className) throws GameObjectClassNotFoundException;
 
     Collection<GameObjectClass> getAllClasses();
 
@@ -191,7 +191,7 @@ public interface GameObjectsCRUDInterface {
      * @param instanceId
      * @return
      */
-    GameObjectInstance getGameObjectInstance(int instanceId) throws GameObjectInstanceNotFoundException;
+    <T extends GameObjectInstance> T getGameObjectInstance(int instanceId) throws GameObjectInstanceNotFoundException;
 
     /**
      *
@@ -260,13 +260,13 @@ public interface GameObjectsCRUDInterface {
     /**
      * This method is a convenient method that creates different GameObjectClasses, depending on the class name and the gameObjectType.
      *
-     * @param name: The name of the GameObjectClass to be created.
-     * @param gameObjectType: The GameObjectType that determines the type of GameObjectClass that is to be created.
      * @param <E>
+     * @param gameObjectType : The GameObjectType that determines the type of GameObjectClass that is to be created.
+     * @param name : The name of the GameObjectClass to be created.
      * @return A Subclass of GameObjectClass depending on the String name and the GameObjectType.
      * @throws DuplicateGameObjectClassException
      */
-    <E extends GameObjectClass> E createGameObjectClass(String name, GameObjectType gameObjectType) throws DuplicateGameObjectClassException;
+    <E extends GameObjectClass> E createGameObjectClass(GameObjectType gameObjectType, String name) throws DuplicateGameObjectClassException;
 
 
     /**

@@ -359,22 +359,24 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     }
 
 
+    @SuppressWarnings("unchecked")
     @Override
-    public GameObjectClass getGameObjectClass(String className)
+    public <T extends GameObjectClass> T getGameObjectClass(String className)
             throws GameObjectClassNotFoundException {
         if (!gameObjectClassMapByName.containsKey(className)) {
             throw new GameObjectClassNotFoundException("GameObject");
         }
-        return gameObjectClassMapByName.get(className);
+        return (T) gameObjectClassMapByName.get(className);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public GameObjectInstance getGameObjectInstance(int instanceId)
+    public <T extends GameObjectInstance> T getGameObjectInstance(int instanceId)
             throws GameObjectInstanceNotFoundException {
         if (!gameObjectInstanceMapById.containsKey(instanceId)) {
             throw new GameObjectInstanceNotFoundException("GameObject");
         }
-        return gameObjectInstanceMapById.get(instanceId);
+        return (T) gameObjectInstanceMapById.get(instanceId);
     }
 
     @Override
@@ -510,14 +512,14 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     /**
      * This method is a convenient method that creates different GameObjectClasses, depending on the class name and the gameObjectType.
      *
-     * @param name           : The name of the GameObjectClass to be created.
      * @param gameObjectType : The GameObjectType that determines the type of GameObjectClass that is to be created.
+     * @param name           : The name of the GameObjectClass to be created.
      * @return A Subclass of GameObjectClass depending on the String name and the GameObjectType.
      * @throws DuplicateGameObjectClassException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <E extends GameObjectClass> E createGameObjectClass(String name, GameObjectType gameObjectType) throws DuplicateGameObjectClassException {
+    public <E extends GameObjectClass> E createGameObjectClass(GameObjectType gameObjectType, String name) throws DuplicateGameObjectClassException {
         switch (gameObjectType) {
             case CATEGORY:
                 return (E) createCategoryClass(name);
