@@ -36,6 +36,7 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
     T gameObjectClass;
     V gameObjectInstance;
     GridPane layout;
+    GridPane gridPane;
 
     AbstractGameObjectEditor(GameObjectsCRUDInterface manager) {
         editingMode = EditingMode.NONE;
@@ -120,9 +121,11 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
      *
      * @param node: The node that is to be altered.
      * @param controller: The NodeInstanceController that controls the relationship between a Node and a GameObjectInstance.
+     * @param gridPane: The GridPane that is the parent of the Node edited. This is needed because sometimes the editor wishes to make changes regarding the coordinates and sizes of the Nodes.
      */
-    public void editNode(Node node, NodeInstanceController controller) {
+    public void editNode(Node node, NodeInstanceController controller, GridPane gridPane) {
         this.nodeEdited = node;
+        this.gridPane = gridPane;
         editingMode = EditingMode.EDIT_NODE;
         nodeInstanceController = controller;
         try {

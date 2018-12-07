@@ -7,6 +7,7 @@ import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.entity.EntityClass;
 import gameObjects.entity.EntityInstance;
+import grids.Point;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -43,6 +44,9 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     private Label imageText;
     private Button chooseImage;
     private HBox imagePanel;
+    private int logicHeight;
+    private int logicWidth;
+    private Point topleft;
     private static final double ICON_WIDTH = 50;
     private static final double ICON_HEIGHT = 50;
     private Label propLabel = new Label("Properties");
@@ -213,6 +217,8 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         nameField.setText(gameObjectInstance.getInstanceName().getValue());
         imagePaths.addAll(gameObjectInstance.getImagePathList());
         list.putAll(gameObjectInstance.getPropertiesMap());
+        logicWidth = gameObjectInstance.getWidth().getValue();
+        logicHeight = gameObjectInstance.getHeight().getValue();
     }
 
     /**
