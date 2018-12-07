@@ -32,6 +32,9 @@ public class SimpleEntityInstance implements EntityInstance {
         this.imagePathList = imagePathList;
         this.propertiesMap = properties;
         this.getEntityClassFunc = getEntityClassFunc;
+        this.coord = new SimpleObjectProperty<>();
+        this.height = new SimpleIntegerProperty();
+        this.width = new SimpleIntegerProperty();
         instanceId = new ReadOnlyIntegerWrapper();
     }
 

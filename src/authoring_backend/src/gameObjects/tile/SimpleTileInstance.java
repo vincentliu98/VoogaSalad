@@ -33,6 +33,8 @@ public class SimpleTileInstance implements TileInstance {
         this.imagePathList = imagePathList;
         this.propertiesMap = properties;
         this.getTileClassFunc = getTileClassFunc;
+        this.height = new SimpleIntegerProperty();
+        this.width = new SimpleIntegerProperty();
         instanceId = new ReadOnlyIntegerWrapper();
     }
 

@@ -24,7 +24,7 @@ public class ValidationTest {
         goblinClass.getPropertiesMap().put("hp", "1");
 
         var goblinInstance =
-            goblinClass.createInstance(playerA.getInstanceId().get());
+            goblinClass.createInstance(playerA.getInstanceId().get(), PointImpl.ZERO);
 
         var source = phaseDB.createGraph("A").get(null).source();
 
