@@ -37,10 +37,6 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
     private TextField widthText = new TextField();
     private TextField heightText = new TextField();
     private GridPane geometry = new GridPane();
-    private double DEFAULT_HEIGHT = 50;
-    private double DEFAULT_WIDTH = 50;
-    private double width = DEFAULT_HEIGHT;
-    private double height = DEFAULT_WIDTH;
     private HBox imagePanel = new HBox();
     private Label imageLabel = new Label("Add an image to your tile class");
     private static final double ICON_WIDTH = 50;
@@ -50,6 +46,8 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
     private Set<String> toRemovePath;
     private Set<ImageView> toRemoveImageView;
     private static final double REMOVE_OPACITY = 0.5;
+    private static final int DEFAULT_WIDTH = 1;
+    private static final int DEFAULT_HEIGHT = 1;
 
     TileEditor(GameObjectsCRUDInterface manager) {
         super(manager);
@@ -108,18 +106,20 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
             if (nameField.getText().trim().isEmpty()) {
                 new ErrorWindow("Empty name", "You must give your tile a non-empty name").showAndWait();
             } else if (widthText.getText().trim().isEmpty()) {
-                new ErrorWindow("Empty width", "You must specify a width for this tile class").showAndWait();
+                new ErrorWindow("Empty width", "You must specify a width for this tile").showAndWait();
             } else if (heightText.getText().trim().isEmpty()) {
-                new ErrorWindow("Empty height", "You must specify a height for this tile class").showAndWait();
+                new ErrorWindow("Empty height", "You must specify a height for this tile").showAndWait();
             } else {
+                int width = DEFAULT_WIDTH;
+                int height = DEFAULT_HEIGHT;
                 try {
-                    width = Double.parseDouble(widthText.getText());
+                    width = Integer.parseInt(widthText.getText());
                 } catch (NumberFormatException e1) {
                     new ErrorWindow("Incorrect width", "The input width is in an unsupported format").showAndWait();
                     return;
                 }
                 try {
-                    height = Double.parseDouble(heightText.getText());
+                    height = Integer.parseInt(heightText.getText());
                 } catch (NumberFormatException e1) {
                     new ErrorWindow("Incorrect height", "The input height is in an unsupported format").showAndWait();
                     return;

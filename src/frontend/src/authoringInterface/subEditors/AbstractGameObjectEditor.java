@@ -72,9 +72,9 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
         nameField.setLayoutX(208);
         nameField.setLayoutY(35);
         confirm.setLayoutX(296);
-        confirm.setLayoutY(460);
+        confirm.setLayoutY(950);
         cancel.setLayoutX(391);
-        cancel.setLayoutY(460);
+        cancel.setLayoutY(950);
         layout.setVgap(50);
         layout.setHgap(50);
         AnchorPane.setTopAnchor(layout, 100.0);

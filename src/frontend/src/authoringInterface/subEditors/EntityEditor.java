@@ -64,6 +64,8 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     private GridPane size;
     private static final double REMOVE_OPACITY = 0.5;
     private GridPane position;
+    private static final int DEFAULT_HEIGHT = 1;
+    private static final int DEFAULT_WIDTH = 1;
 
     EntityEditor(GameObjectsCRUDInterface manager) {
         super(manager);
@@ -75,9 +77,9 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         size.setHgap(20);
         Label widthLabel = new Label("Width of entity");
         Label heightLabel = new Label("Height of entity");
-        widthInput = new TextField();
+        widthInput = new TextField(String.valueOf(DEFAULT_WIDTH));
         widthInput.setPromptText("width of entity");
-        heightInput = new TextField();
+        heightInput = new TextField(String.valueOf(DEFAULT_HEIGHT));
         heightInput.setPromptText("height of entity");
         size.addRow(0, widthLabel, widthInput);
         size.addRow(1, heightLabel, heightInput);
@@ -115,7 +117,25 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         confirm.setOnAction(e -> {
             if (nameField.getText() == null || nameField.getText().trim().isEmpty()) {
                 new ErrorWindow("Empty name", "You must give your entity a non-empty name").showAndWait();
+            } else if (widthInput.getText().trim().isEmpty()) {
+                new ErrorWindow("Empty width", "You must specify a width for this entity").showAndWait();
+            } else if (heightInput.getText().trim().isEmpty()) {
+                new ErrorWindow("Empty height", "You must specify a height for this entity").showAndWait();
             } else {
+                int width = DEFAULT_WIDTH;
+                int height = DEFAULT_HEIGHT;
+                try {
+                    width = Integer.parseInt(widthInput.getText());
+                } catch (NumberFormatException e1) {
+                    new ErrorWindow("Incorrect width", "The input width is in an unsupported format").showAndWait();
+                    return;
+                }
+                try {
+                    height = Integer.parseInt(heightInput.getText());
+                } catch (NumberFormatException e1) {
+                    new ErrorWindow("Incorrect height", "The input height is in an unsupported format").showAndWait();
+                    return;
+                }
                 ((Stage) rootPane.getScene().getWindow()).close();
                 switch (editingMode) {
                     case ADD_TREEITEM:
@@ -136,6 +156,8 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                         TreeItem<String> newItem = new TreeItem<>(entityClass.getClassName().getValue());
                         entityClass.getImagePathList().addAll(imagePaths);
                         entityClass.getPropertiesMap().putAll(list);
+                        entityClass.setHeight(height);
+                        entityClass.setWidth(width);
                         ImageView icon = null;
                         try {
                             icon = new ImageView(ImageManager.getPreview(entityClass));
@@ -157,12 +179,16 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                         gameObjectInstance.getImagePathList().addAll(imagePaths);
                         gameObjectInstance.getPropertiesMap().clear();
                         gameObjectInstance.getPropertiesMap().putAll(list);
+                        gameObjectInstance.setWidth(width);
+                        gameObjectInstance.setHeight(height);
                         try {
                             ((ImageView) nodeEdited).setImage(ImageManager.getPreview(gameObjectInstance));
                         } catch (PreviewUnavailableException e1) {
                             // TODO: proper error handling
                             e1.printStackTrace();
                         }
+                        GridPane.setColumnSpan(nodeEdited, width);
+                        GridPane.setRowSpan(nodeEdited, height);
                         break;
                     case EDIT_TREEITEM:
                         try { ImageManager.removeClassImage(gameObjectClass); } catch (GameObjectClassNotFoundException ignored) {}
@@ -170,6 +196,8 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                         gameObjectClass.getImagePathList().addAll(imagePaths);
                         gameObjectClass.getPropertiesMap().clear();
                         gameObjectClass.getPropertiesMap().putAll(list);
+                        gameObjectClass.setWidth(width);
+                        gameObjectClass.setHeight(height);
                         try {
                             gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName().getValue(), nameField.getText());
                         } catch (InvalidOperationException e1) {
