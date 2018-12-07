@@ -110,11 +110,10 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                             // TODO
                             e1.printStackTrace();
                         }
+                        assert entityClass != null;
                         TreeItem<String> newItem = new TreeItem<>(entityClass.getClassName().getValue());
                         entityClass.getImagePathList().addAll(imagePaths);
-                        for(var key : list.keySet()){
-                            entityClass.getPropertiesMap().put(key, list.get(key));
-                        }
+                        entityClass.getPropertiesMap().putAll(list);
                         ImageView icon = null;
                         try {
                             icon = new ImageView(ImageManager.getPreview(entityClass));
@@ -129,10 +128,12 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                     case NONE:
                         return;
                     case EDIT_NODE:
-                        try { ImageManager.removeInstanceImage(gameObjectInstance); } catch (GameObjectInstanceNotFoundException e1) {}
+                        try { ImageManager.removeInstanceImage(gameObjectInstance); } catch (GameObjectInstanceNotFoundException ignored) {}
                         gameObjectInstance.setInstanceName(nameField.getText());
                         gameObjectInstance.getImagePathList().clear();
                         gameObjectInstance.getImagePathList().addAll(imagePaths);
+                        gameObjectInstance.getPropertiesMap().clear();
+                        gameObjectInstance.getPropertiesMap().putAll(list);
                         try {
                             ((ImageView) nodeEdited).setImage(ImageManager.getPreview(gameObjectInstance));
                         } catch (PreviewUnavailableException e1) {
@@ -144,6 +145,8 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                         try { ImageManager.removeClassImage(gameObjectClass); } catch (GameObjectClassNotFoundException e1) {}
                         gameObjectClass.getImagePathList().clear();
                         gameObjectClass.getImagePathList().addAll(imagePaths);
+                        gameObjectClass.getPropertiesMap().clear();
+                        gameObjectClass.getPropertiesMap().putAll(list);
                         try {
                             gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName().getValue(), nameField.getText());
                         } catch (InvalidOperationException e1) {
@@ -190,6 +193,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     public void readGameObjectInstance() {
         nameField.setText(gameObjectInstance.getInstanceName().getValue());
         imagePaths.addAll(gameObjectInstance.getImagePathList());
+        list.putAll(gameObjectInstance.getPropertiesMap());
     }
 
     /**
@@ -199,6 +203,8 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     public void readGameObjectClass() {
         nameField.setText(gameObjectClass.getClassName().getValue());
         imagePaths.addAll(gameObjectClass.getImagePathList());
+        System.out.println(gameObjectClass.getPropertiesMap());
+        list.putAll(gameObjectClass.getPropertiesMap());
     }
 
     private void setupLayout() {
