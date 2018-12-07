@@ -2,15 +2,17 @@ package utils.imageManipulation;
 
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import utils.exception.UnhandledCoordinatesClassException;
+import utils.exception.UnremovableNodeException;
 
 /**
  * This class provides convenient methods to set the coordinates of some JavaFx Nodes.
  *
  * @author Haotian Wang
  */
-public class Coordinates {
+public class JavaFxOperation {
     /**
      * This method sets the coordinates for an unknown type of JavaFx Node.
      *
@@ -41,5 +43,16 @@ public class Coordinates {
     public static void setWidthAndHeight(ImageView imageView, double width, double height) {
         imageView.setFitWidth(width);
         imageView.setFitHeight(height);
+    }
+
+    /**
+     * This method removes a child Node from its Parent in JavaFx.
+     *
+     * @param node: The Node which is to be removed from its Parent.
+     * @throws UnremovableNodeException
+     */
+    public static void removeFromParent(Node node) throws UnremovableNodeException {
+        if (!(node.getParent() instanceof Pane)) { throw new UnremovableNodeException("The node could not be removed from its parent because its Parent is not Pane, and therefore it does not have a modifiable ObservableList of children Nodes"); }
+        ((Pane) node.getParent()).getChildren().remove(node);
     }
 }

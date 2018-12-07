@@ -2,6 +2,7 @@ package authoringInterface.subEditors;
 
 import authoringUtils.exception.DuplicateGameObjectClassException;
 import authoringUtils.exception.GameObjectClassNotFoundException;
+import authoringUtils.exception.GameObjectInstanceNotFoundException;
 import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.tile.TileClass;
@@ -13,9 +14,8 @@ import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import utils.ErrorWindow;
-import utils.exception.GameObjectInstanceNotFoundException;
 import utils.exception.PreviewUnavailableException;
-import utils.imageManipulation.Coordinates;
+import utils.imageManipulation.JavaFxOperation;
 import utils.imageManipulation.ImageManager;
 
 import java.io.File;
@@ -112,7 +112,7 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
                             // TODO: proper error handling
                             e1.printStackTrace();
                         }
-                        Coordinates.setWidthAndHeight(icon, ICON_WIDTH, ICON_HEIGHT);
+                        JavaFxOperation.setWidthAndHeight(icon, ICON_WIDTH, ICON_HEIGHT);
                         newItem.setGraphic(icon);
                         treeItem.getChildren().add(newItem);
                         break;
@@ -131,7 +131,7 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
                         }
                         break;
                     case EDIT_TREEITEM:
-                        try { ImageManager.removeClassImage(gameObjectClass); } catch (utils.exception.GameObjectClassNotFoundException e1) {}
+                        try { ImageManager.removeClassImage(gameObjectClass); } catch (GameObjectClassNotFoundException e1) {}
                         gameObjectClass.getImagePathList().clear();
                         gameObjectClass.getImagePathList().addAll(imagePaths);
                         try {
@@ -147,7 +147,7 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
                             // TODO: proper error handling
                             e1.printStackTrace();
                         }
-                        Coordinates.setWidthAndHeight(icon2, ICON_WIDTH, ICON_HEIGHT);
+                        JavaFxOperation.setWidthAndHeight(icon2, ICON_WIDTH, ICON_HEIGHT);
                         treeItem.setValue(nameField.getText());
                         treeItem.setGraphic(icon2);
                         break;

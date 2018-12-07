@@ -2,18 +2,22 @@ package authoringInterface.sidebar;
 
 import authoringInterface.subEditors.*;
 import authoringUtils.exception.GameObjectClassNotFoundException;
+import authoringUtils.exception.GameObjectInstanceNotFoundException;
 import authoringUtils.exception.GameObjectTypeException;
 import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.entity.EntityClass;
 import gameObjects.gameObject.GameObjectClass;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.*;
 import javafx.stage.Stage;
 import utils.exception.PreviewUnavailableException;
+import utils.exception.UnremovableNodeException;
 import utils.imageManipulation.ImageManager;
+import utils.imageManipulation.JavaFxOperation;
 import utils.nodeInstance.NodeInstanceController;
 
 /**
@@ -92,7 +96,25 @@ public class CustomTreeCellImpl extends TreeCell<String> {
         deleteMenuItem.setOnAction(e -> {
             try {
                 objectManager.getGameObjectClass(getItem()).getAllInstances().forEach(gameObjectInstance -> {
-//                    nodeInstanceController.getNode()
+                    Node node = null;
+                    try {
+                        node = nodeInstanceController.getNode(gameObjectInstance);
+                    } catch (GameObjectInstanceNotFoundException e1) {
+                        // TODO: proper error handling
+                        e1.printStackTrace();
+                    }
+                    try {
+                        JavaFxOperation.removeFromParent(node);
+                    } catch (UnremovableNodeException e1) {
+                        // TODO: proper error handling
+                        e1.printStackTrace();
+                    }
+                    try {
+                        nodeInstanceController.removeGameObjectInstance(gameObjectInstance);
+                    } catch (GameObjectInstanceNotFoundException e1) {
+                        // TODO: proper error handling
+                        e1.printStackTrace();
+                    }
                 });
             } catch (GameObjectClassNotFoundException e1) {
                 // TODO: proper error handling
