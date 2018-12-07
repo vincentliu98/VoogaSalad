@@ -144,7 +144,7 @@ public class SimpleEntityInstance implements EntityInstance {
 
     @Override
     public void setWidth(int newWidth) {
-        height.setValue(newWidth);
+        width.setValue(newWidth);
     }
 
 

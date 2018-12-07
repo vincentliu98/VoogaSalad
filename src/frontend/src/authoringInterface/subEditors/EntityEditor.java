@@ -72,6 +72,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         nameLabel.setText("Your entity name:");
 
         size = new GridPane();
+        size.setHgap(20);
         Label widthLabel = new Label("Width of entity");
         Label heightLabel = new Label("Height of entity");
         widthInput = new TextField();
@@ -229,6 +230,8 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         nameField.setText(gameObjectInstance.getInstanceName().getValue());
         imagePaths.addAll(gameObjectInstance.getImagePathList());
         list.putAll(gameObjectInstance.getPropertiesMap());
+        System.out.println(gameObjectInstance.getWidth().getValue());
+        System.out.println(gameObjectInstance.getHeight().getValue());
         widthInput.setText(String.valueOf(gameObjectInstance.getWidth().getValue()));
         heightInput.setText(String.valueOf(gameObjectInstance.getHeight().getValue()));
         Label xLabel = new Label("x");
@@ -238,6 +241,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         position = new GridPane();
         position.addRow(0, xLabel, xInput);
         position.addRow(1, yLabel, yInput);
+        position.setHgap(20);
         layout.addRow(5, position);
     }
 
