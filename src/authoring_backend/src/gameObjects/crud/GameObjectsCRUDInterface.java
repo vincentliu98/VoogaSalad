@@ -257,7 +257,16 @@ public interface GameObjectsCRUDInterface {
      */
     void deleteAllInstances();
 
-
+    /**
+     * This method is a convenient method that creates different GameObjectClasses, depending on the class name and the gameObjectType.
+     *
+     * @param name: The name of the GameObjectClass to be created.
+     * @param gameObjectType: The GameObjectType that determines the type of GameObjectClass that is to be created.
+     * @param <E>
+     * @return A Subclass of GameObjectClass depending on the String name and the GameObjectType.
+     * @throws DuplicateGameObjectClassException
+     */
+    <E extends GameObjectClass> E createGameObjectClass(String name, GameObjectType gameObjectType) throws DuplicateGameObjectClassException;
 
 
     /**

@@ -507,6 +507,35 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         }
     }
 
+    /**
+     * This method is a convenient method that creates different GameObjectClasses, depending on the class name and the gameObjectType.
+     *
+     * @param name           : The name of the GameObjectClass to be created.
+     * @param gameObjectType : The GameObjectType that determines the type of GameObjectClass that is to be created.
+     * @return A Subclass of GameObjectClass depending on the String name and the GameObjectType.
+     * @throws DuplicateGameObjectClassException
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <E extends GameObjectClass> E createGameObjectClass(String name, GameObjectType gameObjectType) throws DuplicateGameObjectClassException {
+        switch (gameObjectType) {
+            case CATEGORY:
+                return (E) createCategoryClass(name);
+            case SOUND:
+                return (E) createSoundClass(name);
+            case TILE:
+                return (E) createTileClass(name);
+            case ENTITY:
+                return (E) createEntityClass(name);
+            case UNSPECIFIED:
+                // TODO
+                break;
+            case PLAYER:
+                // TODO
+        }
+        return null;
+    }
+
     @Override
     public boolean changeGameObjectClassName(String oldClassName, String newClassName)
             throws InvalidOperationException {
