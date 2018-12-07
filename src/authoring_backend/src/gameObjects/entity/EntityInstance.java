@@ -1,6 +1,7 @@
 package gameObjects.entity;
 
 import gameObjects.gameObject.*;
+import grids.Point;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
 
@@ -44,6 +45,20 @@ public interface EntityInstance extends GameObjectInstance {
 
 
     EntityClass getGameObjectClass();
+
+
+    Point getCoord();
+
+    public void setCoord(Point coord);
+
+    SimpleIntegerProperty getHeight();
+
+    SimpleIntegerProperty getWidth();
+
+
+    void setHeight(int newHeight);
+
+    void setWidth(int newWidth);
 
 
     @Override
