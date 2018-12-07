@@ -66,7 +66,7 @@ public class ImageManager {
                 } else {
                     imagePaths = ((TileClass) gameObjectClass).getImagePathList();
                 }
-                ret = getImage(imagePaths, gameObjectClass.getClassName());
+                ret = new Image(imagePaths.get(0));
             case CATEGORY:
                 // TODO
                 break;
@@ -162,7 +162,7 @@ public class ImageManager {
                 } else {
                     imagePaths = ((TileInstance) gameObjectInstance).getImagePathList();
                 }
-                ret = getImage(imagePaths, gameObjectInstance.getInstanceName());
+                ret = new Image(imagePaths.get(0));
             case CATEGORY:
                 // TODO
                 break;
