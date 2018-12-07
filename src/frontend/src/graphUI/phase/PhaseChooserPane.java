@@ -6,7 +6,6 @@ import graphUI.groovy.GroovyPaneFactory.GroovyPane;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextInputDialog;
@@ -16,6 +15,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import phase.api.PhaseDB;
+import utils.ErrorWindow;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -114,25 +114,15 @@ public class PhaseChooserPane implements SubView<GridPane> {
                     phasePanes.add(phasePane);
                     phaseListView.getSelectionModel().select(phaseList.size()-1);
                 } catch (Throwable t) {
-                    displayError(t.toString());
+                    new ErrorWindow("Error", "t.toString()").showAndWait();
                 }
             }
         });
     }
 
-    //TODO: Make Utilities Package; Move displayError methods to it.
-    private void displayError(String msg) {
-        var alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText("Something's wrong");
-        alert.setContentText(msg);
-        alert.showAndWait();
-    }
-
     public void checkMapUpdate(){
         System.out.println("Updated map" + phaseDataMap);
     }
-
 
     @Override
     public GridPane getView() {
