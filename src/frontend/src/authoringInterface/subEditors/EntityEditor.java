@@ -176,15 +176,13 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
      * Present the ImageViews contained in the imagePanel according to the ObservableList of ImagePaths.
      */
     private void presentImages() {
-        List<Node> images = new ArrayList<>();
+        imagePanel.getChildren().clear();
         imagePaths.forEach(path -> {
             ImageView preview = new ImageView(path);
             preview.setFitWidth(50);
             preview.setFitHeight(50);
-            images.add(preview);
+            imagePanel.getChildren().add(preview);
         });
-        imagePanel.getChildren().clear();
-        imagePanel.getChildren().addAll(images);
     }
 
     /**

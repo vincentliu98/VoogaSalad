@@ -8,6 +8,7 @@ import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.tile.TileClass;
 import gameObjects.tile.TileInstance;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -72,6 +73,15 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
         });
 
         rootPane.getChildren().addAll(layout);
+
+        imagePaths.addListener((ListChangeListener<String>) change -> {
+            imagePaths.forEach(string -> {
+                ImageView preview = new ImageView(string);
+                preview.setFitHeight(DEFAULT_HEIGHT);
+                preview.setFitWidth(DEFAULT_WIDTH);
+                imagePanel.getChildren().add(preview);
+            });
+        });
 
         confirm.setOnAction(e -> {
             if (nameField.getText().trim().isEmpty()) {
