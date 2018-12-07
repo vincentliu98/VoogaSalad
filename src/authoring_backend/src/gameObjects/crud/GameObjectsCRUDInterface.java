@@ -263,7 +263,7 @@ public interface GameObjectsCRUDInterface {
     /**
      * Getters
      *
-     * @return ObservableList of things
+     * @return Iterable of things
      */
     Iterable<EntityClass> getEntityClasses();
 

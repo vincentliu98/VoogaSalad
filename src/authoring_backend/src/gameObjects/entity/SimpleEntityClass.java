@@ -143,7 +143,7 @@ public class SimpleEntityClass implements EntityClass {
     }
 
     @Override
-    public EntityInstance createInstance(int tileId, int playerID)
+    public EntityInstance createInstance(int playerID)
             throws GameObjectTypeException, InvalidIdException {
         return myFactory.createInstance(this, playerID);
 
