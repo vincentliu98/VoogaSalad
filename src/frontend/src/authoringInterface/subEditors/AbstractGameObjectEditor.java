@@ -56,7 +56,7 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
             System.out.println(e.toString());
             ((Stage) rootPane.getScene().getWindow()).close();
         });
-        rootPane.getChildren().addAll(nameLabel, nameField, confirm, cancel);
+        rootPane.getChildren().addAll(nameLabel, nameField, layout, confirm, cancel);
         setupBasicLayout();
     }
 

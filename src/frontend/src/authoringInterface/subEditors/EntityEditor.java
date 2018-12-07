@@ -174,7 +174,6 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
             }
         });
         setupLayout();
-        rootPane.getChildren().add(layout);
         rootPane.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.DELETE) {
                 toRemovePath.forEach(path -> imagePaths.remove(path));
