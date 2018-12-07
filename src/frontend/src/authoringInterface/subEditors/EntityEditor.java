@@ -179,8 +179,8 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         imagePanel.getChildren().clear();
         imagePaths.forEach(path -> {
             ImageView preview = new ImageView(path);
-            preview.setFitWidth(50);
-            preview.setFitHeight(50);
+            preview.setFitWidth(ICON_WIDTH);
+            preview.setFitHeight(ICON_HEIGHT);
             imagePanel.getChildren().add(preview);
         });
     }

@@ -77,8 +77,8 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
         imagePaths.addListener((ListChangeListener<String>) change -> {
             imagePaths.forEach(string -> {
                 ImageView preview = new ImageView(string);
-                preview.setFitHeight(DEFAULT_HEIGHT);
-                preview.setFitWidth(DEFAULT_WIDTH);
+                preview.setFitHeight(ICON_HEIGHT);
+                preview.setFitWidth(ICON_WIDTH);
                 imagePanel.getChildren().add(preview);
             });
         });
