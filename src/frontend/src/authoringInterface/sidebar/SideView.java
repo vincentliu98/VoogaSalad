@@ -40,31 +40,11 @@ public class SideView implements SubView<StackPane> {
                 new SimpleSoundClass("Sound file")
         ));
         for (GameObjectClass item : defaultList) {
-            switch (item.getType()) {
-                case CATEGORY:
-                    try {
-                        gameObjectsManager.createCategoryClass(item.getClassName().getValue());
-                    } catch (DuplicateGameObjectClassException e) {
-                        // TODO
-                        e.printStackTrace();
-                    }
-                    break;
-                case ENTITY:
-                    try {
-                        gameObjectsManager.createEntityClass(item.getClassName().getValue());
-                    } catch (DuplicateGameObjectClassException e) {
-                        // TODO
-                        e.printStackTrace();
-                    }
-                    break;
-                case TILE:
-                    try {
-                        gameObjectsManager.createTileClass(item.getClassName().getValue());
-                    } catch (DuplicateGameObjectClassException e) {
-                        // TODO
-                        e.printStackTrace();
-                    }
-                    break;
+            try {
+                gameObjectsManager.createGameObjectClass(item.getClassName().getValue(), item.getType());
+            } catch (DuplicateGameObjectClassException e) {
+                // TODO: proper error handling
+                e.printStackTrace();
             }
             TreeItem<String> objectLeaf = new TreeItem<>(item.getClassName().getValue());
             boolean found = false;
