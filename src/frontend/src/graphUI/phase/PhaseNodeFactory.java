@@ -39,10 +39,13 @@ public class PhaseNodeFactory {
         private Circle circle;
         private Circle inner;
         private Label text;
+        private String name;
         private GroovyPane groovyPane;
 
         public PhaseNode(double xPos, double yPos, Phase model, boolean isSource) {
             this.model = model;
+            name = model.name();
+
             circle = new Circle(xPos, yPos, NODE_RADIUS);
             circle.setFill(isSource ? Color.GRAY : Color.DIMGRAY);
 
@@ -68,6 +71,10 @@ public class PhaseNodeFactory {
 
         public Phase model() { return model; }
         public Circle inner() { return inner; }
+
+        public String getName() {
+            return name;
+        }
         public double getCenterX() { return getLayoutX() + getTranslateX() + NODE_RADIUS; }
         public double getCenterY() { return getLayoutY() + getTranslateY() + NODE_RADIUS; }
         public double getX() { return getLayoutX() + getTranslateX(); }
