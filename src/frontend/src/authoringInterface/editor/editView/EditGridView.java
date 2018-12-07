@@ -209,7 +209,7 @@ public class EditGridView implements SubView<ScrollPane> {
         }
         assert editor != null;
         editor.editNode(targetNode, nodeInstanceController, gridScrollView);
-        dialogStage.setScene(new Scene(editor.getView(), 500, 500));
+        dialogStage.setScene(new Scene(editor.getView(), 500, 1000));
         dialogStage.show();
     }
 

@@ -237,7 +237,8 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         TextField yInput = new TextField(String.valueOf(gameObjectInstance.getCoord().getY()));
         position = new GridPane();
         position.addRow(0, xLabel, xInput);
-        position.addColumn(0, yLabel, yInput);
+        position.addRow(1, yLabel, yInput);
+        layout.addRow(5, position);
     }
 
     /**
@@ -258,9 +259,6 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         layout.addRow(2, imagePanel);
         layout.addRow(3, propLabel, addProperties);
         layout.addRow(4, listProp);
-        if (position != null) {
-            layout.addRow(0, position);
-        }
     }
 
     private void setupProp() {

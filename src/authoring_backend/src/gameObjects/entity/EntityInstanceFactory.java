@@ -54,7 +54,7 @@ public class EntityInstanceFactory {
         EntityInstance entityInstance = new SimpleEntityInstance(entityPrototype.getClassName().getValue(), imagePathListCopy, propertiesMapCopy, getEntityClassFunc);
         entityInstance.setCoord(point);
         entityInstance.setHeight(entityPrototype.getHeight().getValue());
-        entityInstance.setWidth(entityInstance.getWidth().getValue());
+        entityInstance.setWidth(entityPrototype.getWidth().getValue());
         requestInstanceIdFunc.accept(entityInstance);
         addInstanceToMapFunc.accept(entityInstance);
         addInstanceToPlayer.accept(entityInstance.getInstanceId().get(), playerID);
