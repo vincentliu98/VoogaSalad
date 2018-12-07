@@ -57,6 +57,10 @@ public class PhaseChooserPane implements SubView<GridPane> {
         this.phaseDataMap = phaseDataMap;
     }
 
+    public void checkMapUpdate(){
+        System.out.println("Updated map" + phaseDataMap);
+    }
+
     private void initializeView() {
         view = new GridPane();
         view.getStyleClass().add("phasePane");
@@ -118,10 +122,6 @@ public class PhaseChooserPane implements SubView<GridPane> {
                 }
             }
         });
-    }
-
-    public void checkMapUpdate(){
-        System.out.println("Updated map" + phaseDataMap);
     }
 
     @Override
