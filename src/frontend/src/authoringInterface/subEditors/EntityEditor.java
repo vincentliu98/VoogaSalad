@@ -9,11 +9,14 @@ import gameObjects.entity.EntityClass;
 import gameObjects.entity.EntityInstance;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -27,8 +30,7 @@ import utils.imageManipulation.JavaFxOperation;
 import utils.imageManipulation.ImageManager;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -53,9 +55,15 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     private TextField name;
     private TextField value;
     private Button delete;
+    private ObservableList<String> imagePaths;
+    private Set<ImageView> toRemove;
+    private Set<String> toRemovePath;
+    private static final double REMOVE_OPACITY = 0.5;
 
     EntityEditor(GameObjectsCRUDInterface manager) {
         super(manager);
+        toRemove = new HashSet<>();
+        toRemovePath = new HashSet<>();
         nameLabel.setText("Your entity name:");
         imageText = new Label("Add an image to your entity");
         chooseImage = new Button("Choose image");
@@ -107,11 +115,10 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                             // TODO
                             e1.printStackTrace();
                         }
+                        assert entityClass != null;
                         TreeItem<String> newItem = new TreeItem<>(entityClass.getClassName().getValue());
                         entityClass.getImagePathList().addAll(imagePaths);
-                        for(var key : list.keySet()){
-                            entityClass.getPropertiesMap().put(key, list.get(key));
-                        }
+                        entityClass.getPropertiesMap().putAll(list);
                         ImageView icon = null;
                         try {
                             icon = new ImageView(ImageManager.getPreview(entityClass));
@@ -119,6 +126,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                             // TODO: proper error handling
                             e1.printStackTrace();
                         }
+                        assert icon != null;
                         JavaFxOperation.setWidthAndHeight(icon, ICON_WIDTH, ICON_HEIGHT);
                         newItem.setGraphic(icon);
                         treeItem.getChildren().add(newItem);
@@ -126,10 +134,12 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                     case NONE:
                         return;
                     case EDIT_NODE:
-                        try { ImageManager.removeInstanceImage(gameObjectInstance); } catch (GameObjectInstanceNotFoundException e1) {}
+                        try { ImageManager.removeInstanceImage(gameObjectInstance); } catch (GameObjectInstanceNotFoundException ignored) {}
                         gameObjectInstance.setInstanceName(nameField.getText());
                         gameObjectInstance.getImagePathList().clear();
                         gameObjectInstance.getImagePathList().addAll(imagePaths);
+                        gameObjectInstance.getPropertiesMap().clear();
+                        gameObjectInstance.getPropertiesMap().putAll(list);
                         try {
                             ((ImageView) nodeEdited).setImage(ImageManager.getPreview(gameObjectInstance));
                         } catch (PreviewUnavailableException e1) {
@@ -138,9 +148,11 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                         }
                         break;
                     case EDIT_TREEITEM:
-                        try { ImageManager.removeClassImage(gameObjectClass); } catch (GameObjectClassNotFoundException e1) {}
+                        try { ImageManager.removeClassImage(gameObjectClass); } catch (GameObjectClassNotFoundException ignored) {}
                         gameObjectClass.getImagePathList().clear();
                         gameObjectClass.getImagePathList().addAll(imagePaths);
+                        gameObjectClass.getPropertiesMap().clear();
+                        gameObjectClass.getPropertiesMap().putAll(list);
                         try {
                             gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName().getValue(), nameField.getText());
                         } catch (InvalidOperationException e1) {
@@ -154,6 +166,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                             // TODO: proper error handling
                             e1.printStackTrace();
                         }
+                        assert icon2 != null;
                         JavaFxOperation.setWidthAndHeight(icon2, ICON_WIDTH, ICON_HEIGHT);
                         treeItem.setValue(nameField.getText());
                         treeItem.setGraphic(icon2);
@@ -162,22 +175,34 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
             }
         });
         setupLayout();
-        rootPane.getChildren().addAll(propLabel, addProperties, imageText, chooseImage, imagePanel, listProp);
+        rootPane.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.DELETE) {
+                toRemovePath.forEach(path -> imagePaths.remove(path));
+            }
+        });
     }
 
     /**
      * Present the ImageViews contained in the imagePanel according to the ObservableList of ImagePaths.
      */
     private void presentImages() {
-        List<Node> images = new ArrayList<>();
+        imagePanel.getChildren().clear();
         imagePaths.forEach(path -> {
             ImageView preview = new ImageView(path);
-            preview.setFitWidth(50);
-            preview.setFitHeight(50);
-            images.add(preview);
+            preview.setFitWidth(ICON_WIDTH);
+            preview.setFitHeight(ICON_HEIGHT);
+            imagePanel.getChildren().add(preview);
+            preview.setOnMouseClicked(e -> {
+                if (!toRemove.remove(preview)) {
+                    toRemove.add(preview);
+                    toRemovePath.add(path);
+                    preview.setOpacity(REMOVE_OPACITY);
+                } else {
+                    toRemovePath.remove(path);
+                    preview.setOpacity(1);
+                }
+            });
         });
-        imagePanel.getChildren().clear();
-        imagePanel.getChildren().addAll(images);
     }
 
     /**
@@ -187,6 +212,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     public void readGameObjectInstance() {
         nameField.setText(gameObjectInstance.getInstanceName().getValue());
         imagePaths.addAll(gameObjectInstance.getImagePathList());
+        list.putAll(gameObjectInstance.getPropertiesMap());
     }
 
     /**
@@ -196,21 +222,14 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     public void readGameObjectClass() {
         nameField.setText(gameObjectClass.getClassName().getValue());
         imagePaths.addAll(gameObjectClass.getImagePathList());
+        list.putAll(gameObjectClass.getPropertiesMap());
     }
 
     private void setupLayout() {
-        imageText.setLayoutX(50);
-        imageText.setLayoutY(106);
-        chooseImage.setLayoutX(261);
-        chooseImage.setLayoutY(106);
-        imagePanel.setLayoutX(45);
-        imagePanel.setLayoutY(156);
-        propLabel.setLayoutX(50);
-        propLabel.setLayoutY(230);
-        addProperties.setLayoutX(261);
-        addProperties.setLayoutY(230);
-        listProp.setLayoutX(50);
-        listProp.setLayoutY(250);
+        layout.addRow(0, imageText, chooseImage);
+        layout.addRow(1, imagePanel);
+        layout.addRow(2, propLabel, addProperties);
+        layout.addRow(3, listProp);
     }
 
     private void setupProp() {

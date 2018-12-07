@@ -77,7 +77,7 @@ public class EditGridView implements SubView<ScrollPane> {
         }
         gridScrollView.setGridLinesVisible(true);
         gridScrollView.add(batchMode, 0, 0, 3, 2);
-        SingleNodeFade.getNodeFadeOut(batchMode, 10000).playFromStart();
+        SingleNodeFade.getNodeFadeOut(batchMode, 20000).playFromStart();
         scrollPane = new ScrollPane(gridScrollView);
         scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, this::setUpControl);
         scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, this::setUpShift);
@@ -312,7 +312,6 @@ public class EditGridView implements SubView<ScrollPane> {
         nodeOnGrid.setFitHeight(NODE_HEIGHT);
         nodeOnGrid.setFitWidth(NODE_WIDTH);
         ImageView finalNodeOnGrid = nodeOnGrid;
-        finalNodeOnGrid.setOnMouseClicked(e -> handleDoubleClick(e, finalNodeOnGrid));
         cell.getChildren().add(finalNodeOnGrid);
         GameObjectInstance gameObjectInstance = null;
         try {
@@ -322,7 +321,13 @@ public class EditGridView implements SubView<ScrollPane> {
             e.printStackTrace();
         }
         nodeInstanceController.addLink(finalNodeOnGrid, gameObjectInstance);
-        finalNodeOnGrid.setOnMouseClicked(e -> setUpRightClickMenu(e, finalNodeOnGrid));
+        nodeOnGrid.setOnMouseClicked(e -> {
+            if (e.getButton() == MouseButton.SECONDARY) {
+                setUpRightClickMenu(e, finalNodeOnGrid);
+            } else {
+                handleDoubleClick(e, finalNodeOnGrid);
+            }
+        });
     }
 
     /**

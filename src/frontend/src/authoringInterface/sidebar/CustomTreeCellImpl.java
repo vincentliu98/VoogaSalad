@@ -7,6 +7,7 @@ import authoringUtils.exception.GameObjectTypeException;
 import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.gameObject.GameObjectClass;
+import gameObjects.gameObject.GameObjectType;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -158,11 +159,13 @@ public class CustomTreeCellImpl extends TreeCell<String> {
             } else {
                 setText(getString());
                 setGraphic(getTreeItem().getGraphic());
-                if (!getTreeItem().isLeaf()) {
-                    setContextMenu(addMenu);
-                } else {
-                    setContextMenu(editMenu);
-                }
+                try {
+                    if (objectManager.getGameObjectClass(getString()).getType() == GameObjectType.CATEGORY) {
+                        setContextMenu(addMenu);
+                    } else {
+                        setContextMenu(editMenu);
+                    }
+                } catch (GameObjectClassNotFoundException ignored) {}
             }
         }
     }

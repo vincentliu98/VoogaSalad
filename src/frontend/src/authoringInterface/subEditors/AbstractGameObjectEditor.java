@@ -12,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import utils.nodeInstance.NodeInstanceController;
 import utils.exception.NodeNotFoundException;
@@ -34,12 +35,11 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
     Node nodeEdited;
     T gameObjectClass;
     V gameObjectInstance;
-    ObservableList<String> imagePaths;
-    String singleMediaFilePath;
+    GridPane layout;
 
-    public AbstractGameObjectEditor(GameObjectsCRUDInterface manager) {
-        imagePaths = FXCollections.observableArrayList();
+    AbstractGameObjectEditor(GameObjectsCRUDInterface manager) {
         editingMode = EditingMode.NONE;
+        layout = new GridPane();
         gameObjectManager = manager;
         rootPane = new AnchorPane();
         rootPane.setStyle("-fx-text-fill: white;"
@@ -53,9 +53,10 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
         cancel.setStyle("-fx-text-fill: white;"
                          + "-fx-background-color: #343a40;");
         cancel.setOnAction(e -> {
+            System.out.println(e.toString());
             ((Stage) rootPane.getScene().getWindow()).close();
         });
-        rootPane.getChildren().addAll(nameLabel, nameField, confirm, cancel);
+        rootPane.getChildren().addAll(nameLabel, nameField, layout, confirm, cancel);
         setupBasicLayout();
     }
 
@@ -66,13 +67,19 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
         AnchorPane.setLeftAnchor(nameLabel, 50.0);
         AnchorPane.setTopAnchor(nameLabel, 50.0);
         nameLabel.setLayoutX(14);
-        nameLabel.setLayoutY(37);
+        nameLabel.setLayoutY(30);
         nameField.setLayoutX(208);
-        nameField.setLayoutY(37);
+        nameField.setLayoutY(35);
         confirm.setLayoutX(296);
-        confirm.setLayoutY(436);
+        confirm.setLayoutY(460);
         cancel.setLayoutX(391);
-        cancel.setLayoutY(436);
+        cancel.setLayoutY(460);
+        layout.setVgap(50);
+        layout.setHgap(50);
+        AnchorPane.setTopAnchor(layout, 100.0);
+        AnchorPane.setRightAnchor(layout, 0.0);
+        AnchorPane.setLeftAnchor(layout, 50.0);
+        AnchorPane.setBottomAnchor(layout, 100.0);
     }
 
     /**

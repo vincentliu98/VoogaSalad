@@ -7,8 +7,13 @@ import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.tile.TileClass;
 import gameObjects.tile.TileInstance;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
@@ -19,6 +24,8 @@ import utils.imageManipulation.JavaFxOperation;
 import utils.imageManipulation.ImageManager;
 
 import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Editor to change the Tile settings. Need to work on it. Low priority
@@ -39,12 +46,18 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
     private static final double ICON_WIDTH = 50;
     private static final double ICON_HEIGHT = 50;
     private Button chooseButton = new Button("Choose image");
-
+    private ObservableList<String> imagePaths;
+    private Set<String> toRemovePath;
+    private Set<ImageView> toRemoveImageView;
+    private static final double REMOVE_OPACITY = 0.5;
 
     TileEditor(GameObjectsCRUDInterface manager) {
         super(manager);
+        toRemovePath = new HashSet<>();
+        toRemoveImageView = new HashSet<>();
         Label widthLabel = new Label("Width");
         Label heightLabel = new Label("Height");
+        imagePaths = FXCollections.observableArrayList();
         nameLabel.setText("Your tile name");
         widthText.setPromptText("Width");
         widthText.setText(String.valueOf(DEFAULT_WIDTH));
@@ -65,7 +78,31 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
             }
         });
 
-        rootPane.getChildren().addAll(geometry, chooseButton, imageLabel, imagePanel);
+        imagePaths.addListener((ListChangeListener<String>) change -> {
+            imagePaths.forEach(string -> {
+                ImageView preview = new ImageView(string);
+                preview.setFitHeight(ICON_HEIGHT);
+                preview.setFitWidth(ICON_WIDTH);
+                imagePanel.getChildren().add(preview);
+                preview.setOnMouseClicked(e -> {
+                    if (!toRemoveImageView.remove(preview)) {
+                        toRemoveImageView.add(preview);
+                        toRemovePath.add(string);
+                        preview.setOpacity(REMOVE_OPACITY);
+                    } else {
+                        toRemoveImageView.remove(preview);
+                        toRemovePath.remove(string);
+                        preview.setOpacity(1);
+                    }
+                });
+            });
+        });
+
+        rootPane.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.DELETE) {
+                imagePaths.removeAll(toRemovePath);
+            }
+        });
 
         confirm.setOnAction(e -> {
             if (nameField.getText().trim().isEmpty()) {
@@ -183,13 +220,8 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
     }
 
     private void setupLayout() {
-        geometry.setLayoutX(50);
-        geometry.setLayoutY(100);
-        imagePanel.setLayoutX(50);
-        imagePanel.setLayoutY(350);
-        imageLabel.setLayoutX(50);
-        imageLabel.setLayoutY(300);
-        chooseButton.setLayoutX(350);
-        chooseButton.setLayoutY(300);
+        layout.addRow(0, geometry);
+        layout.addRow(1, imageLabel, chooseButton);
+        layout.addRow(2, imagePanel);
     }
 }

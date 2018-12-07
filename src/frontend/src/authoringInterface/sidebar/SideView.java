@@ -36,6 +36,15 @@ public class SideView implements SubView<StackPane> {
             e.printStackTrace();
         }
         rootNode.setExpanded(true);
+        try {
+            gameObjectsManager.createCategoryClass("ENTITY");
+            gameObjectsManager.createCategoryClass("TILE");
+            gameObjectsManager.createCategoryClass("SOUND");
+            gameObjectsManager.createCategoryClass("PLAYER");
+        } catch (DuplicateGameObjectClassException e) {
+            // TODO: proper error handling
+            e.printStackTrace();
+        }
         List<GameObjectClass> defaultList = new ArrayList<>(Arrays.asList(
                 new SimpleEntityClass("O"),
                 new SimpleEntityClass("X"),
