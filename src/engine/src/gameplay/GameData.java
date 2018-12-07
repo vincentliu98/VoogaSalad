@@ -53,14 +53,6 @@ public class GameData {
         var shared = new Binding();
         shared.setVariable("GameMethods", GameMethods.class);
         shell = new GroovyShell(shared);
-
-        printMaps(TILES);
-    }
-
-    public static void printMaps(Map<?, ?> myMap){
-        for (Map.Entry k : myMap.entrySet()){
-            System.out.println(k);
-        }
     }
 
     public static GroovyShell shell() { return shell; }
