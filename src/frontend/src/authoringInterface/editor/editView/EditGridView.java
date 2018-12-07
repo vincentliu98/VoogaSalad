@@ -18,10 +18,7 @@ import grids.PointImpl;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TreeCell;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
@@ -31,7 +28,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import utils.exception.PreviewUnavailableException;
+import utils.exception.UnremovableNodeException;
 import utils.imageManipulation.ImageManager;
+import utils.imageManipulation.JavaFxOperation;
 import utils.nodeInstance.NodeInstanceController;
 import utils.exception.NodeNotFoundException;
 import utils.simpleAnimation.SingleNodeFade;
@@ -160,16 +159,20 @@ public class EditGridView implements SubView<ScrollPane> {
             Text instanceName = new Text(instance.getInstanceName().getValue());
             Text className = new Text(instance.getClassName().getValue());
             Button edit = new Button("Edit");
+            Button delete = new Button("Delete");
+            GridPane control = new GridPane();
+            control.addColumn(0, edit, delete);
             instanceID.setOnMouseClicked(e -> handleDoubleClick(e, node));
             instanceName.setOnMouseClicked(e -> handleDoubleClick(e, node));
             className.setOnMouseClicked(e -> handleDoubleClick(e, node));
             edit.setOnMouseClicked(e -> handleNodeEditing(node));
+            delete.setOnMouseClicked(e -> handleNodeDeleting(node));
             listView.addRow(
                     listView.getRowCount(),
                     instanceID,
                     instanceName,
                     className,
-                    edit
+                    control
             );
             listView.getChildrenUnmodifiable().forEach(node1 -> GridPane.setHgrow(node1, Priority.ALWAYS));
         });
@@ -204,14 +207,36 @@ public class EditGridView implements SubView<ScrollPane> {
         Stage dialogStage = new Stage();
         AbstractGameObjectEditor editor = null;
         try {
+            assert userObject != null;
             editor = EditorFactory.makeEditor(userObject.getType(), gameObjectManager);
         } catch (MissingEditorForTypeException e) {
             // TODO
             e.printStackTrace();
         }
+        assert editor != null;
         editor.editNode(targetNode, nodeInstanceController);
         dialogStage.setScene(new Scene(editor.getView(), 500, 500));
         dialogStage.show();
+    }
+
+    /**
+     * This method deletes the target node from grid and the whole editor.
+     *
+     * @param targetNode: A JavaFx Node that will be deleted.
+     */
+    private void handleNodeDeleting(Node targetNode) {
+        try {
+            JavaFxOperation.removeFromParent(targetNode);
+        } catch (UnremovableNodeException e) {
+            // TODO: proper error handling
+            e.printStackTrace();
+        }
+        try {
+            nodeInstanceController.removeNode(targetNode);
+        } catch (NodeNotFoundException e) {
+            // TODO: proper error handling
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -241,6 +266,25 @@ public class EditGridView implements SubView<ScrollPane> {
             cell.setBackground(new Background(new BackgroundFill(hoveringFill, CornerRadii.EMPTY, Insets.EMPTY)));
         }
         dragEvent.consume();
+    }
+
+    /**
+     * This method sets up a right click handler on a Node that allows the user to edit or delete this node.
+     *
+     * @param event: A MouseEvent that is RightClick.
+     * @param node: A JavaFx Node where the right-click context menu will be set up.
+     */
+    private void setUpRightClickMenu(MouseEvent event, Node node) {
+        if (event.getButton() != MouseButton.SECONDARY) {
+            return;
+        }
+        ContextMenu contextMenu = new ContextMenu();
+        MenuItem edit = new MenuItem("Edit this instance");
+        MenuItem delete = new MenuItem("Delete this instance");
+        edit.setOnAction(e -> handleNodeEditing(node));
+        delete.setOnAction(e -> handleNodeDeleting(node));
+        contextMenu.getItems().addAll(edit, delete);
+        contextMenu.show(node, event.getScreenX(), event.getScreenY());
     }
 
     /**
@@ -284,6 +328,7 @@ public class EditGridView implements SubView<ScrollPane> {
             e.printStackTrace();
         }
         nodeInstanceController.addLink(finalNodeOnGrid, gameObjectInstance);
+        finalNodeOnGrid.setOnMouseClicked(e -> setUpRightClickMenu(e, finalNodeOnGrid));
     }
 
     /**
