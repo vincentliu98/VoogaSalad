@@ -137,6 +137,7 @@ public class EditGridView implements SubView<ScrollPane> {
                 cell.setOnDragExited(e -> setUpDragExit(e, cell));
                 cell.setOnDragDropped(e -> handleDragFromSideView(e, cell));
                 cell.setOnMouseClicked(e -> listeners.forEach(listener -> listener.setOnUpdateStatusEvent(constructStatusView(cell))));
+                cell.setOnDragEntered(e -> setUpBatchInstanceDrag(e, cell));
             }
         }
         nodeInstanceController.clearAllLinks();
@@ -285,7 +286,7 @@ public class EditGridView implements SubView<ScrollPane> {
                 // TODO: solve the TileID thing, and player ID thing
                 EntityInstance entityInstance = null;
                 try {
-                    entityInstance = ((EntityClass) gameObjectClass).createInstance(0, gameObjectManager.getDefaultPlayerID());
+                    entityInstance = ((EntityClass) gameObjectClass).createInstance(gameObjectManager.getDefaultPlayerID());
                 } catch (InvalidGameObjectInstanceException e) {
                     e.printStackTrace();
                 } catch (GameObjectTypeException e) {

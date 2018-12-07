@@ -9,6 +9,7 @@ import gameObjects.sound.SimpleSoundClass;
 import gameObjects.tile.SimpleTileClass;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
+import utils.nodeInstance.NodeInstanceController;
 
 import java.util.*;
 
@@ -20,10 +21,12 @@ import java.util.*;
 public class SideView implements SubView<StackPane> {
     private StackPane sidePane;
     private GameObjectsCRUDInterface gameObjectsManager;
+    private NodeInstanceController nodeInstanceController;
     private static final String ROOT_NAME = "Game Objects";
 
-    public SideView(GameObjectsCRUDInterface manager) {
+    public SideView(GameObjectsCRUDInterface manager, NodeInstanceController controller) {
         gameObjectsManager = manager;
+        nodeInstanceController = controller;
         sidePane = new StackPane();
         TreeItem<String> rootNode = new TreeItem<>(ROOT_NAME);
         try {
@@ -41,7 +44,7 @@ public class SideView implements SubView<StackPane> {
         ));
         for (GameObjectClass item : defaultList) {
             try {
-                gameObjectsManager.createGameObjectClass(item.getClassName().getValue(), item.getType());
+                gameObjectsManager.createGameObjectClass(item.getType(), item.getClassName().getValue());
             } catch (DuplicateGameObjectClassException e) {
                 // TODO: proper error handling
                 e.printStackTrace();
@@ -63,7 +66,7 @@ public class SideView implements SubView<StackPane> {
         }
         TreeView<String> treeView = new TreeView<>(rootNode);
         treeView.setEditable(true);
-        treeView.setCellFactory(e -> new CustomTreeCellImpl(gameObjectsManager));
+        treeView.setCellFactory(e -> new CustomTreeCellImpl(gameObjectsManager, nodeInstanceController));
         sidePane.getChildren().add(treeView);
         treeView.getStyleClass().add("myTree");
         sidePane.getStyleClass().add("mySide");
