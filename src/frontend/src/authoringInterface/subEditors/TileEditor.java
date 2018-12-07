@@ -72,7 +72,7 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
             }
         });
 
-        rootPane.getChildren().addAll(layout);
+        rootPane.getChildren().add(layout);
 
         imagePaths.addListener((ListChangeListener<String>) change -> {
             imagePaths.forEach(string -> {

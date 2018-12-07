@@ -38,7 +38,7 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
     V gameObjectInstance;
     GridPane layout;
 
-    public AbstractGameObjectEditor(GameObjectsCRUDInterface manager) {
+    AbstractGameObjectEditor(GameObjectsCRUDInterface manager) {
         editingMode = EditingMode.NONE;
         layout = new GridPane();
         gameObjectManager = manager;
@@ -53,7 +53,10 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
                          + "-fx-background-color: #343a40;");
         cancel.setStyle("-fx-text-fill: white;"
                          + "-fx-background-color: #343a40;");
-        cancel.setOnAction(e -> ((Stage) rootPane.getScene().getWindow()).close());
+        cancel.setOnAction(e -> {
+            System.out.println(e.toString());
+            ((Stage) rootPane.getScene().getWindow()).close();
+        });
         rootPane.getChildren().addAll(nameLabel, nameField, confirm, cancel);
         setupBasicLayout();
     }
@@ -67,17 +70,17 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
         nameLabel.setLayoutX(14);
         nameLabel.setLayoutY(30);
         nameField.setLayoutX(208);
-        nameField.setLayoutY(30);
+        nameField.setLayoutY(35);
         confirm.setLayoutX(296);
-        confirm.setLayoutY(480);
+        confirm.setLayoutY(460);
         cancel.setLayoutX(391);
-        cancel.setLayoutY(480);
+        cancel.setLayoutY(460);
         layout.setVgap(50);
         layout.setHgap(50);
         AnchorPane.setTopAnchor(layout, 100.0);
         AnchorPane.setRightAnchor(layout, 0.0);
         AnchorPane.setLeftAnchor(layout, 50.0);
-        AnchorPane.setBottomAnchor(layout, 50.0);
+        AnchorPane.setBottomAnchor(layout, 100.0);
     }
 
     /**
