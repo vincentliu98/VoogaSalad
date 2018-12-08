@@ -1,14 +1,9 @@
 package playing;
 
-import authoringInterface.MainAuthoringProgram;
 import authoringInterface.View;
-import gameplay.Communicable;
 import gameplay.Initializer;
-import javafx.application.Application;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import playingGame.DisplayData;
 
 import java.io.File;
 

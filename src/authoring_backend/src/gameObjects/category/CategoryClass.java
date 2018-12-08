@@ -1,7 +1,9 @@
 package gameObjects.category;
 
-import authoringUtils.exception.*;
-import gameObjects.gameObject.*;
+import authoringUtils.exception.GameObjectTypeException;
+import authoringUtils.exception.InvalidIdException;
+import gameObjects.gameObject.GameObjectClass;
+import gameObjects.gameObject.GameObjectType;
 import javafx.beans.property.SimpleStringProperty;
 
 /**

@@ -1,7 +1,10 @@
 package gameObjects.entity;
 
-import authoringUtils.exception.*;
-import gameObjects.gameObject.*;
+import authoringUtils.exception.GameObjectTypeException;
+import authoringUtils.exception.InvalidGameObjectInstanceException;
+import authoringUtils.exception.InvalidIdException;
+import gameObjects.gameObject.GameObjectClass;
+import gameObjects.gameObject.GameObjectType;
 import grids.Point;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;

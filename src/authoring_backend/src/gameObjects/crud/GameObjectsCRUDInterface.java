@@ -1,15 +1,20 @@
 package gameObjects.crud;
 
 import authoringUtils.exception.*;
-import gameObjects.category.*;
-import gameObjects.entity.*;
-import gameObjects.gameObject.*;
+import gameObjects.category.CategoryClass;
+import gameObjects.category.CategoryInstance;
+import gameObjects.entity.EntityClass;
+import gameObjects.entity.EntityInstance;
+import gameObjects.gameObject.GameObjectClass;
+import gameObjects.gameObject.GameObjectInstance;
+import gameObjects.gameObject.GameObjectType;
 import gameObjects.player.PlayerInstance;
-import gameObjects.tile.*;
-import gameObjects.sound.*;
+import gameObjects.sound.SoundClass;
+import gameObjects.sound.SoundInstance;
+import gameObjects.tile.TileClass;
+import gameObjects.tile.TileInstance;
 import gameObjects.turn.Turn;
 import grids.Point;
-
 
 import java.util.Collection;
 
@@ -256,7 +261,7 @@ public interface GameObjectsCRUDInterface {
     /**
      * Delete all instances currently in the CRUD.
      */
-    void deleteAllInstances();
+    void deleteAllInstances() throws InvalidIdException;
 
     /**
      * This method is a convenient method that creates different GameObjectClasses, depending on the class name and the gameObjectType.

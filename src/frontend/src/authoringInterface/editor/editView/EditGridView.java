@@ -2,12 +2,18 @@ package authoringInterface.editor.editView;
 
 import api.SubView;
 import authoringInterface.customEvent.UpdateStatusEventListener;
-import authoringInterface.subEditors.*;
+import authoringInterface.subEditors.AbstractGameObjectEditor;
+import authoringInterface.subEditors.EditorFactory;
+import authoringInterface.subEditors.MissingEditorForTypeException;
 import authoringUtils.exception.GameObjectClassNotFoundException;
 import authoringUtils.exception.GameObjectTypeException;
+import authoringUtils.exception.InvalidIdException;
 import gameObjects.crud.GameObjectsCRUDInterface;
+import gameObjects.entity.EntityClass;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
+import gameObjects.gameObject.GameObjectType;
+import gameObjects.tile.TileClass;
 import grids.PointImpl;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -21,16 +27,18 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import utils.exception.NodeNotFoundException;
 import utils.exception.PreviewUnavailableException;
 import utils.exception.UnremovableNodeException;
 import utils.imageManipulation.ImageManager;
 import utils.imageManipulation.JavaFxOperation;
 import utils.nodeInstance.NodeInstanceController;
-import utils.exception.NodeNotFoundException;
 import utils.simpleAnimation.SingleNodeFade;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * EditGridView Class (ScrollPane)
@@ -52,10 +60,17 @@ public class EditGridView implements SubView<ScrollPane> {
     private boolean isShiftDown;
     private Label batchMode;
     private static final double INDICATOR_FADE_TIME = 3000;
+    private static final double INITIAL_INDICATOR_FADE_TIME = 15000;
+    private static final double CELL_HEIGHT = 100;
+    private static final double CELL_WIDTH = 100;
+    private Set<Node> toRemove;
+    private static final double HALF_OPACITY = 0.5;
+    private static final double FULL_OPACITY = 1;
 
     public EditGridView(int row, int col, GameObjectsCRUDInterface manager, NodeInstanceController controller) {
         gameObjectManager = manager;
         nodeInstanceController = controller;
+        toRemove = new HashSet<>();
         scrollPane = new ScrollPane();
         listeners = new ArrayList<>();
         batchMode = new Label("Batch Mode: Off\nPress Shift to Toggle");
@@ -65,8 +80,8 @@ public class EditGridView implements SubView<ScrollPane> {
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
                 StackPane cell = new StackPane();
-                cell.setPrefWidth(100);
-                cell.setPrefHeight(100);
+                cell.setPrefWidth(CELL_WIDTH);
+                cell.setPrefHeight(CELL_HEIGHT);
                 gridScrollView.add(cell, i, j);
                 cell.setOnDragOver(e -> setUpHoveringColorDraggedOver(e, Color.LIGHTGREEN, cell));
                 cell.setOnDragExited(e -> setUpDragExit(e, cell));
@@ -77,40 +92,39 @@ public class EditGridView implements SubView<ScrollPane> {
         }
         gridScrollView.setGridLinesVisible(true);
         gridScrollView.add(batchMode, 0, 0, 3, 2);
-        SingleNodeFade.getNodeFadeOut(batchMode, 20000).playFromStart();
+        SingleNodeFade.getNodeFadeOut(batchMode, INITIAL_INDICATOR_FADE_TIME).playFromStart();
         scrollPane = new ScrollPane(gridScrollView);
-        scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, this::setUpControl);
-        scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, this::setUpShift);
+        scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.CONTROL) {
+                setUpControl();
+            } else if (keyEvent.getCode() == KeyCode.SHIFT) {
+                setUpShift();
+            } else if (keyEvent.getCode() == KeyCode.DELETE || keyEvent.getCode() == KeyCode.BACK_SPACE) {
+                toRemove.forEach(this::handleNodeDeleting);
+            }
+        });
     }
 
     /**
      * Set up a key toggle and attach the this boolean toggle to some boolean variable of this class.
-     *
-     * @param keyEvent: The KeyEvent that encodes the pressed key.
      */
-    private void setUpControl(KeyEvent keyEvent) {
-        if (keyEvent.getCode() == KeyCode.CONTROL) {
-            isControlDown = !isControlDown;
-        }
+    private void setUpControl() {
+        isControlDown = !isControlDown;
     }
 
     /**
      * Set up a key toggle for toggling for the Shift key.
-     *
-     * @param keyEvent: The KeyEvent that encodes the pressed key.
      */
-    private void setUpShift(KeyEvent keyEvent) {
-        if (keyEvent.getCode() == KeyCode.SHIFT) {
-            isShiftDown = !isShiftDown;
-            if (isShiftDown) {
-                batchMode.setText("Batch Mode: On");
-                batchMode.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, null, null)));
-            } else {
-                batchMode.setText("Batch Mode: Off");
-                batchMode.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, null, null)));
-            }
-            SingleNodeFade.getNodeFadeInAndOut(batchMode, INDICATOR_FADE_TIME).playFromStart();
+    private void setUpShift() {
+        isShiftDown = !isShiftDown;
+        if (isShiftDown) {
+            batchMode.setText("Batch Mode: On");
+            batchMode.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, null, null)));
+        } else {
+            batchMode.setText("Batch Mode: Off");
+            batchMode.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, null, null)));
         }
+        SingleNodeFade.getNodeFadeInAndOut(batchMode, INDICATOR_FADE_TIME).playFromStart();
     }
 
     public void updateDimension(int width, int height) {
@@ -118,8 +132,8 @@ public class EditGridView implements SubView<ScrollPane> {
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 StackPane cell = new StackPane();
-                cell.setPrefWidth(100);
-                cell.setPrefHeight(100);
+                cell.setPrefWidth(CELL_WIDTH);
+                cell.setPrefHeight(CELL_HEIGHT);
                 gridScrollView.add(cell, i, j);
                 cell.setOnDragOver(e -> setUpHoveringColorDraggedOver(e, Color.LIGHTGREEN, cell));
                 cell.setOnDragExited(e -> setUpDragExit(e, cell));
@@ -129,7 +143,12 @@ public class EditGridView implements SubView<ScrollPane> {
             }
         }
         nodeInstanceController.clearAllLinks();
-        gameObjectManager.deleteAllInstances();
+        try {
+            gameObjectManager.deleteAllInstances();
+        } catch (InvalidIdException e) {
+            // TODO: error handling
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -208,7 +227,7 @@ public class EditGridView implements SubView<ScrollPane> {
             e.printStackTrace();
         }
         assert editor != null;
-        editor.editNode(targetNode, nodeInstanceController, gridScrollView);
+        editor.editNode(targetNode, nodeInstanceController);
         dialogStage.setScene(new Scene(editor.getView(), 500, 1000));
         dialogStage.show();
     }
@@ -309,6 +328,7 @@ public class EditGridView implements SubView<ScrollPane> {
             e.printStackTrace();
         }
         // TODO: smarter resizing
+        assert nodeOnGrid != null;
         nodeOnGrid.setFitHeight(NODE_HEIGHT);
         nodeOnGrid.setFitWidth(NODE_WIDTH);
         ImageView finalNodeOnGrid = nodeOnGrid;
@@ -324,10 +344,39 @@ public class EditGridView implements SubView<ScrollPane> {
         nodeOnGrid.setOnMouseClicked(e -> {
             if (e.getButton() == MouseButton.SECONDARY) {
                 setUpRightClickMenu(e, finalNodeOnGrid);
+            } else if (e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 1) {
+                handleClickToRemove(finalNodeOnGrid);
             } else {
                 handleDoubleClick(e, finalNodeOnGrid);
             }
         });
+        int height = 0;
+        int width = 0;
+        if (gameObjectClass.getType() == GameObjectType.ENTITY) {
+            height = ((EntityClass) gameObjectClass).getHeight().getValue();
+            width = ((EntityClass) gameObjectClass).getWidth().getValue();
+        } else if (gameObjectClass.getType() == GameObjectType.TILE) {
+            height = ((TileClass) gameObjectClass).getHeight().getValue();
+            width = ((TileClass) gameObjectClass).getWidth().getValue();
+        }
+        if (height != 0 && width != 0) {
+            assert gameObjectInstance != null;
+            Tooltip.install(finalNodeOnGrid, new Tooltip(String.format("Width: %s\nHeight: %s\nSingle Click to toggle Deletion\nDouble Click or Right Click to edit\nInstance ID: %s\nClass Name: %s", width, height, gameObjectInstance.getInstanceId().getValue(), gameObjectInstance.getClassName().getValue())));
+        }
+    }
+
+    /**
+     * This method handles the single click to toggle the to remove the status of the specified node.
+     *
+     * @param node: The JavaFx node whose status will be toggled.
+     */
+    private void handleClickToRemove(Node node) {
+        if (!toRemove.remove(node)) {
+            node.setOpacity(HALF_OPACITY);
+            toRemove.add(node);
+        } else {
+            node.setOpacity(FULL_OPACITY);
+        }
     }
 
     /**

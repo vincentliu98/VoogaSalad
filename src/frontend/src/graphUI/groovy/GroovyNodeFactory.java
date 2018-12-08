@@ -1,5 +1,6 @@
 package graphUI.groovy;
 
+import graphUI.groovy.DraggableGroovyIconFactory.DraggableGroovyIcon;
 import authoringUtils.frontendUtils.Try;
 import groovy.api.GroovyFactory;
 import groovy.api.Ports;
@@ -11,6 +12,7 @@ import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -58,10 +60,12 @@ public class GroovyNodeFactory {
     public GroovyNodeFactory(GroovyFactory factory) { this.factory = factory; }
 
     public GroovyNode source(GroovyBlock sourceBlock, double xPos, double yPos) {
-        return new GroovyNode(sourceBlock, xPos, yPos, 50, 50, FONT_NORMAL, Color.INDIGO, SOURCE_PORT);
+        return new GroovyNode(sourceBlock, xPos, yPos, 50, 50, FONT_NORMAL, Color.INDIGO, SOURCE_PORT, null);
     }
 
-    public Try<GroovyNode> toModel(String type, double xPos, double yPos, String arg) {
+    public Try<GroovyNode> toModel(DraggableGroovyIcon icon, double xPos, double yPos, String arg) {
+        String type = icon.blockType();
+
         if(type.equals("each")) return Try.success(forEachBlock(xPos, yPos, arg));
         if(type.equals("if")) return Try.success(ifBlock(xPos, yPos));
         if(type.equals("elseIf")) return Try.success(ifElseBlock(xPos, yPos));
@@ -105,9 +109,9 @@ public class GroovyNodeFactory {
         if(type.equals("ESC")) return keyBlock(xPos, yPos, "27");
         if(type.equals("space")) return keyBlock(xPos, yPos, "32");
 
-        if(type.equals("function")) return Try.success(functionBlock(xPos, yPos, arg));
+        if(type.equals("function")) return Try.success(functionBlock(xPos, yPos, arg, null));
 
-        return Try.success(functionBlock(xPos, yPos, type));
+        return Try.success(functionBlock(xPos, yPos, type, icon.getPortInfo()));
     }
 
     public GroovyNode forEachBlock(double xPos, double yPos, String loopvar) {
@@ -175,7 +179,10 @@ public class GroovyNodeFactory {
         return block.map(e -> new GroovyNode(e, xPos, yPos, 100, 50, FONT_NORMAL, Color.DARKGREEN, List.of()));
     }
 
-    public GroovyNode functionBlock(double xPos, double yPos, String op) {
+    /**
+     *  GROSS!
+     */
+    public GroovyNode functionBlock(double xPos, double yPos, String op, Map<Ports, String> portInfo) {
         var split = op.split("\\.");
         var last = split[split.length-1];
         var idx = last.indexOf("(");
@@ -183,10 +190,10 @@ public class GroovyNodeFactory {
         try {
             var argN = Integer.parseInt(last.substring(idx+1, last.length()-1));
             block = factory.functionBlock(op.substring(0, op.length()-last.length()+idx), argN);
-            return new GroovyNode(block, xPos, yPos, 120, 50, FONT_BIG, Color.PERU, functionPorts(argN));
+            return new GroovyNode(block, xPos, yPos, 120, 50, FONT_BIG, Color.PERU, functionPorts(argN), portInfo);
         } catch (Exception e) {
             block = factory.functionBlock(op, -1); // don't know
-            return new GroovyNode(block, xPos, yPos, 120, 50, FONT_BIG, Color.PERU, functionPorts(5));
+            return new GroovyNode(block, xPos, yPos, 120, 50, FONT_BIG, Color.PERU, functionPorts(5), portInfo);
         }
     }
 

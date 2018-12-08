@@ -2,7 +2,8 @@ package gameObjects.tile;
 
 import grids.Point;
 import javafx.beans.property.*;
-import javafx.collections.*;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -77,7 +78,7 @@ public class SimpleTileInstance implements TileInstance {
 
     @Override
     public void setWidth(int newWidth) {
-        height.setValue(newWidth);
+        width.setValue(newWidth);
     }
 
 

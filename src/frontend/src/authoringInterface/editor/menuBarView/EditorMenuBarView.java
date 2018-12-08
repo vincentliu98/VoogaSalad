@@ -4,9 +4,9 @@ import api.SubView;
 import authoring.AuthoringTools;
 import authoringInterface.MainAuthoringProgram;
 import authoringInterface.View;
-import authoringInterface.editor.menuBarView.subMenuBarView.*;
 import authoringInterface.editor.memento.Editor;
 import authoringInterface.editor.memento.EditorCaretaker;
+import authoringInterface.editor.menuBarView.subMenuBarView.*;
 import gameplay.Initializer;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
@@ -19,6 +19,7 @@ import javafx.scene.input.KeyCombination;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import runningGame.GameWindow;
+
 import java.io.File;
 import java.util.function.BiConsumer;
 

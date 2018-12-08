@@ -2,7 +2,6 @@ package phase;
 
 import graph.SimpleEdge;
 import groovy.api.BlockGraph;
-import groovy.api.GroovyFactory;
 import phase.api.GameEvent;
 import phase.api.Phase;
 import phase.api.Transition;

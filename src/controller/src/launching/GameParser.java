@@ -3,12 +3,10 @@ package launching;
 import launchingGame.GameIcon;
 import org.w3c.dom.Document;
 
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
 import java.io.FileInputStream;
-
 import java.util.ArrayList;
 import java.util.List;
 

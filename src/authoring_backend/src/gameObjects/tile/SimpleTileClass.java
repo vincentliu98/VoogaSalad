@@ -1,11 +1,17 @@
 package gameObjects.tile;
 
-import authoringUtils.exception.*;
+import authoringUtils.exception.GameObjectTypeException;
+import authoringUtils.exception.InvalidIdException;
+import authoringUtils.exception.InvalidOperationException;
 import gameObjects.ThrowingBiConsumer;
-import gameObjects.gameObject.*;
+import gameObjects.gameObject.GameObjectInstance;
+import gameObjects.gameObject.GameObjectType;
 import grids.Point;
 import javafx.beans.property.*;
-import javafx.collections.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
+import javafx.collections.ObservableSet;
 
 import java.util.Collection;
 import java.util.function.Consumer;
@@ -154,6 +160,16 @@ public class SimpleTileClass implements TileClass {
             throws GameObjectTypeException, InvalidIdException {
         return myFactory.createInstance(this, topLeftCoord);
 
+    }
+
+    @Override
+    public void setHeight(int height) {
+        this.height.set(height);
+    }
+
+    @Override
+    public void setWidth(int width) {
+        this.width.set(width);
     }
 
     public boolean deleteInstance(int tileInstanceId) {

@@ -16,17 +16,21 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import utils.ErrorWindow;
 import utils.exception.PreviewUnavailableException;
-import utils.imageManipulation.JavaFxOperation;
 import utils.imageManipulation.ImageManager;
+import utils.imageManipulation.JavaFxOperation;
 
 import java.io.File;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -36,13 +40,16 @@ import java.util.*;
  * @author Amy
  */
 public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityInstance> {
+    private static final double ICON_WIDTH = 50;
+    private static final double ICON_HEIGHT = 50;
+    private static final double REMOVE_OPACITY = 0.5;
+    private static final int DEFAULT_HEIGHT = 1;
+    private static final int DEFAULT_WIDTH = 1;
     private Label imageText;
     private Button chooseImage;
     private HBox imagePanel;
     private TextField widthInput;
     private TextField heightInput;
-    private static final double ICON_WIDTH = 50;
-    private static final double ICON_HEIGHT = 50;
     private Label propLabel = new Label("Properties");
     private Button addProperties = new Button("Add");
     private Dialog<Pair<String, String>> dialog = new Dialog<>();
@@ -59,10 +66,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     private Set<ImageView> toRemove;
     private Set<String> toRemovePath;
     private GridPane size;
-    private static final double REMOVE_OPACITY = 0.5;
     private GridPane position;
-    private static final int DEFAULT_HEIGHT = 1;
-    private static final int DEFAULT_WIDTH = 1;
 
     EntityEditor(GameObjectsCRUDInterface manager) {
         super(manager);
@@ -173,7 +177,10 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                     case NONE:
                         return;
                     case EDIT_NODE:
-                        try { ImageManager.removeInstanceImage(gameObjectInstance); } catch (GameObjectInstanceNotFoundException ignored) {}
+                        try {
+                            ImageManager.removeInstanceImage(gameObjectInstance);
+                        } catch (GameObjectInstanceNotFoundException ignored) {
+                        }
                         gameObjectInstance.setInstanceName(nameField.getText());
                         gameObjectInstance.getImagePathList().clear();
                         gameObjectInstance.getImagePathList().addAll(imagePaths);
@@ -190,7 +197,10 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                         Tooltip.install(nodeEdited, new Tooltip(String.format("Width: %s\nHeight: %s\nSingle Click to toggle Deletion\nDouble Click or Right Click to edit\nInstance ID: %s\nClass Name: %s", width, height, gameObjectInstance.getInstanceId().getValue(), gameObjectInstance.getClassName().getValue())));
                         break;
                     case EDIT_TREEITEM:
-                        try { ImageManager.removeClassImage(gameObjectClass); } catch (GameObjectClassNotFoundException ignored) {}
+                        try {
+                            ImageManager.removeClassImage(gameObjectClass);
+                        } catch (GameObjectClassNotFoundException ignored) {
+                        }
                         gameObjectClass.getImagePathList().clear();
                         gameObjectClass.getImagePathList().addAll(imagePaths);
                         gameObjectClass.getPropertiesMap().clear();
@@ -335,9 +345,9 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         Text valueText = new Text(value);
         prop.setStyle("-fx-padding: 5;"
                 +"-fx-border-style: dashed");
-        if (list.keySet().contains(key)){
+        if (list.keySet().contains(key)) {
             new ErrorWindow("Error", "This is already existed name of property.").showAndWait();
-        }else {
+        } else {
             prop.getChildren().addAll(delete, keyText, valueText);
             listview.getChildren().add(prop);
             list.put(key, value);

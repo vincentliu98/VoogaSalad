@@ -2,7 +2,8 @@ package gameObjects.entity;
 
 import grids.Point;
 import javafx.beans.property.*;
-import javafx.collections.*;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -144,7 +145,7 @@ public class SimpleEntityInstance implements EntityInstance {
 
     @Override
     public void setWidth(int newWidth) {
-        height.setValue(newWidth);
+        width.setValue(newWidth);
     }
 
 

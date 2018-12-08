@@ -37,11 +37,11 @@ public class Turn {
 
     public void startPhase(){ GameData.getPhase(myCurrentPhaseID).startTraversal(); }
 
-    public void endGame(int winnerID){
+    public void endGame(String message){
         // end the game
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation Dialog");
-        alert.setHeaderText(String.format("Player %d has won!", winnerID + 1));
+        alert.setHeaderText(message);
         alert.setContentText("Restart?");
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK){
