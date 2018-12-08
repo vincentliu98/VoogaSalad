@@ -149,9 +149,6 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
             } catch (IllegalGeometryException e1) {
                 new ErrorWindow("Illegal Geometry", e1.toString()).showAndWait();
                 return;
-            } catch (GameObjectClassNotFoundException e1) {
-                new ErrorWindow("GameObjectClass Not Found", e1.toString()).showAndWait();
-                return;
             } catch (InvalidOperationException e1) {
                 new ErrorWindow("Invalid Operation", e1.toString()).showAndWait();
                 return;
@@ -183,12 +180,11 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
             } catch (PreviewUnavailableException e1) {
                 new ErrorWindow("Preview Unavailable", e1.toString()).showAndWait();
                 return;
-            } catch (GameObjectClassNotFoundException e1) {
-                new ErrorWindow("GameObjectClass Not Found", e1.toString()).showAndWait();
-                return;
             } catch (IllegalGameObjectNamingException e1) {
                 new ErrorWindow("Illegal Naming", e1.toString()).showAndWait();
                 return;
+            } catch (DuplicateGameObjectClassException e1) {
+                new ErrorWindow("Duplicate GameObjectClass", e1.toString()).showAndWait();
             }
             closeEditor();
         });
@@ -271,18 +267,32 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
 
     /**
      * This method sets up the confirm logic of adding new TreeItem.
+     *
+     * @throws IllegalGameObjectNamingException
+     * @throws IllegalGeometryException
+     * @throws PreviewUnavailableException
+     * @throws DuplicateGameObjectClassException
      */
     protected abstract void confirmAddTreeItem() throws IllegalGameObjectNamingException, IllegalGeometryException, PreviewUnavailableException, DuplicateGameObjectClassException;
 
     /**
      * This method sets up the confirm logic of editing existing TreeItem.
      *
+     * @throws IllegalGameObjectNamingException
+     * @throws IllegalGeometryException
+     * @throws InvalidOperationException
+     * @throws PreviewUnavailableException
      */
     protected abstract void confirmEditTreeItem() throws IllegalGameObjectNamingException, IllegalGeometryException, InvalidOperationException, PreviewUnavailableException;
 
     /**
      * This method sets up the confirm logic of editing existing Node.
      *
+     * @throws IllegalGameObjectNamingException
+     * @throws IllegalGeometryException
+     * @throws PreviewUnavailableException
+     * @throws GridIndexOutOfBoundsException
+     * @throws UnremovableNodeException
      */
     protected abstract void confirmEditNode() throws IllegalGameObjectNamingException, IllegalGeometryException, PreviewUnavailableException, GridIndexOutOfBoundsException, UnremovableNodeException;
     /**
