@@ -100,7 +100,6 @@ public class EditGridView implements SubView<ScrollPane> {
             } else if (keyEvent.getCode() == KeyCode.SHIFT) {
                 setUpShift();
             } else if (keyEvent.getCode() == KeyCode.DELETE || keyEvent.getCode() == KeyCode.BACK_SPACE) {
-                System.out.println("test");
                 toRemove.forEach(this::handleNodeDeleting);
             }
         });
