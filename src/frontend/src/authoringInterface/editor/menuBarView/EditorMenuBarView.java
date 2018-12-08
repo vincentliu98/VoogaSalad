@@ -4,6 +4,7 @@ import api.SubView;
 import authoring.AuthoringTools;
 import authoringInterface.MainAuthoringProgram;
 import authoringInterface.View;
+import authoringInterface.editor.editView.EditView;
 import authoringInterface.editor.memento.Editor;
 import authoringInterface.editor.memento.EditorCaretaker;
 import authoringInterface.editor.menuBarView.subMenuBarView.*;
@@ -31,6 +32,7 @@ import java.util.function.BiConsumer;
  * @author jl729
  */
 public class EditorMenuBarView implements SubView<MenuBar> {
+    private EditView editView;
     private MenuBar menuBar;
     private GameWindow gameWindow;
     private AuthoringTools authTools;
@@ -46,10 +48,12 @@ public class EditorMenuBarView implements SubView<MenuBar> {
     public EditorMenuBarView(
             AuthoringTools authTools,
             Runnable closeWindow,
-            BiConsumer<Integer, Integer> updateGridDimension
+            BiConsumer<Integer, Integer> updateGridDimension,
+            EditView editView
     ) {
         this.authTools = authTools;
         this.closeWindow = closeWindow;
+        this.editView = editView;
         fileName = "TicTacToe.xml";
 
         menuBar = new MenuBar();
@@ -112,8 +116,9 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         editor.setState(editorCaretaker.getMemento(currentMemento++).getSavedState());
     }
     void handleSaveAs(ActionEvent event) {
-        new SaveFileView();
-        handleSave(event);
+//        new SaveFileView();
+        editView.getPhaseView().generateXML();
+//        handleSave(event);
     }
 
     void handleOpen(ActionEvent event) {

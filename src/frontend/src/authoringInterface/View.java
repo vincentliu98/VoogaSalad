@@ -64,11 +64,11 @@ public class View implements ParentView<SubView> {
 
     private void initializeElements() {
         sidebar = new GridPane();
-        menuBar = new EditorMenuBarView(tools, primaryStage::close, this::updateGridDimension);
         sideView = new SideView(gameObjectManager, nodeInstanceController);
         editView = new EditView(tools, groovyPaneFactory, ROW_NUMBER, COL_NUMBER, gameObjectManager, nodeInstanceController);
         statusView = new StatusView(gameObjectManager);
         editView.addUpdateStatusEventListener(statusView);
+        menuBar = new EditorMenuBarView(tools, primaryStage::close, this::updateGridDimension, editView);
         sidebar.addColumn(0, sideView.getView(), statusView.getView());
         mainView.getColumnConstraints().addAll(new ColumnConstraints(MainAuthoringProgram.SCREEN_WIDTH - SIDEBAR_WIDTH));
         mainView.addColumn(0, editView.getView());

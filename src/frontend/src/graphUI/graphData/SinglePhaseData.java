@@ -30,6 +30,23 @@ public class SinglePhaseData {
     private String phaseName;
     private List<String> nodesName;
     private Map<String, Pair<Double, Double>> nodesPos;
+
+    public String getPhaseName() {
+        return phaseName;
+    }
+
+    public List<String> getNodesName() {
+        return nodesName;
+    }
+
+    public Map<String, Pair<Double, Double>> getNodesPos() {
+        return nodesPos;
+    }
+
+    public Map<Pair<String, String>, GameEvent> getNodesConnect() {
+        return nodesConnect;
+    }
+
     private Map<Pair<String, String>, GameEvent> nodesConnect;
 
     public SinglePhaseData(String phaseName) {

@@ -1,6 +1,7 @@
 package graphUI.phase;
 
 import api.SubView;
+import graphUI.graphData.PhaseGraphXMLWriter;
 import graphUI.graphData.SinglePhaseData;
 import graphUI.groovy.GroovyPaneFactory.GroovyPane;
 import javafx.collections.FXCollections;
@@ -14,9 +15,12 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import phase.api.PhaseDB;
 import utils.ErrorWindow;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,6 +44,7 @@ public class PhaseChooserPane implements SubView<GridPane> {
     private ListView<String> phaseListView;
     private List<PhasePane> phasePanes;
     private Map<String, SinglePhaseData> phaseDataMap;
+    private PhaseGraphXMLWriter phaseGraphXMLWriter;
 
     public PhaseChooserPane(PhaseDB phaseDB, Supplier<GroovyPane> genGroovyPane) {
         this.phaseDB = phaseDB;
@@ -124,6 +129,13 @@ public class PhaseChooserPane implements SubView<GridPane> {
         });
     }
 
+    public void generateXML() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save File");
+        File file = fileChooser.showSaveDialog(new Stage());
+        phaseGraphXMLWriter = new PhaseGraphXMLWriter(phaseDataMap, file);
+        phaseGraphXMLWriter.generate();
+    }
 
     @Override
     public GridPane getView() {
