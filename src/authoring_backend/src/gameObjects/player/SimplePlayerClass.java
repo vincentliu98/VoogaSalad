@@ -10,7 +10,6 @@ import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
 
@@ -18,6 +17,7 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class SimplePlayerClass implements PlayerClass {
 
@@ -25,6 +25,7 @@ public class SimplePlayerClass implements PlayerClass {
     private ReadOnlyIntegerWrapper classId;
     private SimpleStringProperty imagePath;
     private ObservableMap<String, String> propertiesMap;
+    private ObservableSet<GameObjectInstance> gameObjectInstancesSet;
 
     private PlayerInstanceFactory myFactory;
     private ThrowingBiConsumer<String, String, InvalidOperationException> changePlayerClassNameFunc;
@@ -36,6 +37,7 @@ public class SimplePlayerClass implements PlayerClass {
         classId = new ReadOnlyIntegerWrapper();
         imagePath = new SimpleStringProperty();
         propertiesMap = FXCollections.observableHashMap();
+        gameObjectInstancesSet = FXCollections.observableSet();
     }
 
     public SimplePlayerClass(String className,
@@ -180,6 +182,35 @@ public class SimplePlayerClass implements PlayerClass {
     public PlayerInstance createInstance()
             throws GameObjectTypeException, InvalidIdException {
         return myFactory.createInstance(this);
+    }
+
+    @Override
+    public boolean addGameObjectInstances(GameObjectInstance gameObjectInstance) {
+        if (!gameObjectInstancesSet.contains(gameObjectInstance)){
+            gameObjectInstancesSet.add(gameObjectInstance);
+            return true;
+        }
+        else return false;
+    }
+
+    @Override
+    public boolean removeGameObjectInstances(GameObjectInstance gameObjectInstance) {
+        return gameObjectInstancesSet.remove(gameObjectInstance);
+    }
+
+    @Override
+    public boolean isOwnedByPlayer(GameObjectInstance gameObjectInstance) {
+        return gameObjectInstancesSet.contains(gameObjectInstance);
+    }
+
+    @Override
+    public void removeAllGameObjectInstances() {
+        gameObjectInstancesSet.clear();
+    }
+
+    @Override
+    public Set<Integer> getAllGameObjectInstanceIDs() {
+        return gameObjectInstancesSet.stream().map(i -> i.getInstanceId().get()).collect(Collectors.toSet());
     }
 
     @Override

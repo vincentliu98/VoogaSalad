@@ -1,45 +1,20 @@
 package gameObjects.crud;
 
 import authoringUtils.exception.*;
-import gameObjects.IdManager;
-import gameObjects.IdManagerClass;
-import gameObjects.ThrowingBiConsumer;
-import gameObjects.ThrowingConsumer;
-import gameObjects.category.CategoryClass;
-import gameObjects.category.CategoryInstance;
-import gameObjects.category.CategoryInstanceFactory;
-import gameObjects.category.SimpleCategoryClass;
-import gameObjects.entity.EntityClass;
-import gameObjects.entity.EntityInstance;
-import gameObjects.entity.EntityInstanceFactory;
-import gameObjects.entity.SimpleEntityClass;
-import gameObjects.gameObject.GameObjectClass;
-import gameObjects.gameObject.GameObjectInstance;
-import gameObjects.gameObject.GameObjectType;
-import gameObjects.player.PlayerClass;
-import gameObjects.player.PlayerInstance;
-import gameObjects.player.PlayerInstanceFactory;
-import gameObjects.player.SimplePlayerClass;
-import gameObjects.sound.SimpleSoundClass;
-import gameObjects.sound.SoundClass;
-import gameObjects.sound.SoundInstance;
-import gameObjects.sound.SoundInstanceFactory;
-import gameObjects.tile.SimpleTileClass;
-import gameObjects.tile.TileClass;
-import gameObjects.tile.TileInstance;
-import gameObjects.tile.TileInstanceFactory;
-import gameObjects.turn.SimpleTurn;
-import gameObjects.turn.Turn;
+import gameObjects.*;
+import gameObjects.category.*;
+import gameObjects.entity.*;
+import gameObjects.gameObject.*;
+import gameObjects.player.*;
+import gameObjects.sound.*;
+import gameObjects.tile.*;
+import gameObjects.turn.*;
 import grids.Point;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
+import javafx.collections.*;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     private static final String DEFAULT_PLAYER_CLASS = "$defaultPlayerClass$";
@@ -60,9 +35,6 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
 
     private IdManager myIdManager;
 
-    private PlayerClass defaultPlayerClass;
-    private PlayerInstance defaultPlayer;
-
     public SimpleGameObjectsCRUD(int numRows, int numCols) {
         this.numRows = numRows;
         this.numCols = numCols;
@@ -77,16 +49,6 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         myCategoryInstanceFactory = instantiateCategoryInstanceFactory();
         mySoundInstanceFactory = instantiateSoundInstanceFactory();
         myPlayerInstanceFactory = instantiatePlayerInstanceFactory();
-        try {
-            defaultPlayerClass = createPlayerClass(DEFAULT_PLAYER_CLASS);
-            defaultPlayer = createPlayerInstance(DEFAULT_PLAYER_CLASS);
-        } catch (GameObjectClassNotFoundException e) {
-            // TODO
-            e.printStackTrace();
-        } catch (GameObjectTypeException | DuplicateGameObjectClassException e) {
-            // TODO
-            e.printStackTrace();
-        }
     }
 
     private TileInstanceFactory instantiateTileInstanceFactory() {
@@ -97,12 +59,45 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
                 addGameObjectInstanceToMapFunc());
     }
 
-    @Override
-    public TileClass createTileClass(String className)
-            throws DuplicateGameObjectClassException {
+    private EntityInstanceFactory instantiateEntityInstanceFactory() {
+        return new EntityInstanceFactory(
+                // TODO
+                myIdManager.verifyTileInstanceIdFunc(),
+                myIdManager.requestInstanceIdFunc(),
+                addGameObjectInstanceToMapFunc()
+        );
+    }
+
+    private CategoryInstanceFactory instantiateCategoryInstanceFactory() {
+        return new CategoryInstanceFactory(
+                myIdManager.requestInstanceIdFunc(),
+                addGameObjectInstanceToMapFunc());
+    }
+
+    private PlayerInstanceFactory instantiatePlayerInstanceFactory() {
+        return new PlayerInstanceFactory(
+                myIdManager.requestInstanceIdFunc(),
+                addGameObjectInstanceToMapFunc());
+
+    }
+
+    private SoundInstanceFactory instantiateSoundInstanceFactory() {
+        return new SoundInstanceFactory(
+                myIdManager.requestInstanceIdFunc(),
+                addGameObjectInstanceToMapFunc());
+    }
+
+    private void checkDuplicate(String className)
+            throws DuplicateGameObjectClassException{
         if (gameObjectClassMapByName.containsKey(className)) {
             throw new DuplicateGameObjectClassException();
         }
+    }
+
+    @Override
+    public TileClass createTileClass(String className)
+            throws DuplicateGameObjectClassException {
+        checkDuplicate(className);
         TileClass newTileClass = new SimpleTileClass(
                 className,
                 myTileInstanceFactory,
@@ -114,25 +109,119 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     }
 
     @Override
-    public TileClass getTileClass(String className)
+    public CategoryClass createCategoryClass(String className)
+            throws DuplicateGameObjectClassException {
+        checkDuplicate(className);
+        CategoryClass newCategoryClass = new SimpleCategoryClass(
+                className,
+                myCategoryInstanceFactory,
+                changeGameObjectClassNameFunc(),
+                getAllInstancesFunc(),
+                deleteGameObjectInstanceFunc());
+        addGameObjectClassToMaps(newCategoryClass);
+        return newCategoryClass;
+    }
+
+    @Override
+    public SoundClass createSoundClass(String className)
+            throws DuplicateGameObjectClassException {
+        checkDuplicate(className);
+        SoundClass newSoundClass = new SimpleSoundClass(
+                className,
+                mySoundInstanceFactory,
+                changeGameObjectClassNameFunc(),
+                getAllInstancesFunc(),
+                deleteGameObjectInstanceFunc());
+        addGameObjectClassToMaps(newSoundClass);
+        return newSoundClass;
+    }
+
+    @Override
+    public EntityClass createEntityClass(String className)
+            throws DuplicateGameObjectClassException {
+        checkDuplicate(className);
+        EntityClass newEntityClass = new SimpleEntityClass(
+                className,
+                myEntityInstanceFactory,
+                changeGameObjectClassNameFunc(),
+                getAllInstancesFunc(),
+                deleteGameObjectInstanceFunc());
+        addGameObjectClassToMaps(newEntityClass);
+        return newEntityClass;
+    }
+
+    @Override
+    public PlayerClass createPlayerClass(String className)
+            throws DuplicateGameObjectClassException {
+        checkDuplicate(className);
+        PlayerClass newPlayerClass = new SimplePlayerClass(
+                className,
+                myPlayerInstanceFactory,
+                changeGameObjectClassNameFunc(),
+                getAllInstancesFunc(),
+                deleteGameObjectInstanceFunc());
+        addGameObjectClassToMaps(newPlayerClass);
+        return newPlayerClass;
+    }
+
+    /**
+     * Reformate for example TILE to Tile.
+     * @param str original string
+     * @return reformatted string
+     */
+    private String reformat(String str){
+        return str.charAt(0)+str.substring(1).toLowerCase();
+    }
+
+    private GameObjectClass getSpecificClass(String className, GameObjectType objectType)
             throws GameObjectClassNotFoundException {
         if (!gameObjectClassMapByName.containsKey(className)) {
-            throw new GameObjectClassNotFoundException("Tile");
+            throw new GameObjectClassNotFoundException(reformat(objectType.name()));
         }
-        return (TileClass) gameObjectClassMapByName.get(className);
+        return gameObjectClassMapByName.get(className);
+    }
+
+    @Override
+    public TileClass getTileClass(String className)
+            throws GameObjectClassNotFoundException {
+        return (TileClass) getSpecificClass(className, GameObjectType.TILE);
+    }
+
+    @Override
+    public EntityClass getEntityClass(String className)
+            throws GameObjectClassNotFoundException {
+        return (EntityClass) getSpecificClass(className, GameObjectType.ENTITY);
+    }
+
+    @Override
+    public SoundClass getSoundClass(String className)
+            throws GameObjectClassNotFoundException {
+        return (SoundClass) getSpecificClass(className, GameObjectType.SOUND);
+    }
+
+    @Override
+    public CategoryClass getCategoryClass(String className)
+            throws GameObjectClassNotFoundException {
+        return (CategoryClass) getSpecificClass(className, GameObjectType.CATEGORY);
+    }
+
+    private <T extends GameObjectInstance> T checkExist(String className, GameObjectType objectType)
+            throws GameObjectClassNotFoundException, GameObjectTypeException {
+        if (!gameObjectClassMapByName.containsKey(className) ) {
+            throw new GameObjectClassNotFoundException(reformat(objectType.name()));
+        }
+        GameObjectClass t = gameObjectClassMapByName.get(className);
+        if (t.getType() != objectType) {
+            throw new GameObjectTypeException(className, objectType);
+        }
+        return (T)t;
     }
 
     @Override
     public TileInstance createTileInstance(String className, Point topLeftCoord)
             throws GameObjectClassNotFoundException, GameObjectTypeException {
-        if (!gameObjectClassMapByName.containsKey(className) ) {
-            throw new GameObjectClassNotFoundException("Tile");
-        }
-        GameObjectClass t = gameObjectClassMapByName.get(className);
-        if (t.getType() != GameObjectType.TILE) {
-            throw new GameObjectTypeException(className, "Tile");
-        }
-        return createTileInstance((TileClass) t, topLeftCoord);
+        TileClass t = checkExist(className, GameObjectType.TILE);
+        return createTileInstance(t, topLeftCoord);
     }
 
     @Override
@@ -147,64 +236,19 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         }
     }
 
-
-    private EntityInstanceFactory instantiateEntityInstanceFactory() {
-        return new EntityInstanceFactory(
-                // TODO
-                myIdManager.verifyTileInstanceIdFunc(),
-                myIdManager.requestInstanceIdFunc(),
-                addGameObjectInstanceToMapFunc(),
-                // TODO: separate function with error checking and handling
-                (entityID, playerID) ->
-                {
-//                        ((PlayerInstance) gameObjectInstanceMapById.get(playerID)).addEntity(entityID);
-                }
-        );
-    }
-
     @Override
-    public EntityClass createEntityClass(String className)
-            throws DuplicateGameObjectClassException {
-        if (gameObjectClassMapByName.containsKey(className)) {
-            throw new DuplicateGameObjectClassException();
-        }
-        EntityClass newEntityClass = new SimpleEntityClass(
-                className,
-                myEntityInstanceFactory,
-                changeGameObjectClassNameFunc(),
-                getAllInstancesFunc(),
-                deleteGameObjectInstanceFunc());
-        addGameObjectClassToMaps(newEntityClass);
-        return newEntityClass;
-    }
-
-    @Override
-    public EntityClass getEntityClass(String className)
-            throws GameObjectClassNotFoundException {
-        if (!gameObjectClassMapByName.containsKey(className)) {
-            throw new GameObjectClassNotFoundException("Entity");
-        }
-        return (EntityClass) gameObjectClassMapByName.get(className);
-    }
-
-    @Override
-    public EntityInstance createEntityInstance(String className, int playerID, Point point)
+    public EntityInstance createEntityInstance(String className, Point point)
             throws GameObjectClassNotFoundException, GameObjectTypeException {
-        if (!gameObjectClassMapByName.containsKey(className) ) {
-            throw new GameObjectClassNotFoundException("Entity");
-        }
-        GameObjectClass t = gameObjectClassMapByName.get(className);
-        if (t.getType() != GameObjectType.ENTITY) {
-            throw new GameObjectTypeException("className", "Entity");
-        }
-        return createEntityInstance((EntityClass) t,playerID,point);
+
+        EntityClass t = checkExist(className, GameObjectType.ENTITY);
+        return createEntityInstance(t,point);
     }
 
     @Override
-    public EntityInstance createEntityInstance(EntityClass entityClass, int playerID, Point point)
+    public EntityInstance createEntityInstance(EntityClass entityClass, Point point)
             throws GameObjectTypeException {
         try {
-            return myEntityInstanceFactory.createInstance(entityClass, playerID, point);
+            return myEntityInstanceFactory.createInstance(entityClass, point);
         } catch (InvalidIdException e) {
             // TODO
             e.printStackTrace();
@@ -212,50 +256,11 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         }
     }
 
-
-    private CategoryInstanceFactory instantiateCategoryInstanceFactory() {
-        return new CategoryInstanceFactory(
-                myIdManager.requestInstanceIdFunc(),
-                addGameObjectInstanceToMapFunc());
-    }
-
-
-    @Override
-    public CategoryClass createCategoryClass(String className)
-            throws DuplicateGameObjectClassException {
-        if (gameObjectClassMapByName.containsKey(className)) {
-            throw new DuplicateGameObjectClassException();
-        }
-        CategoryClass newCategoryClass = new SimpleCategoryClass(
-                className,
-                myCategoryInstanceFactory,
-                changeGameObjectClassNameFunc(),
-                getAllInstancesFunc(),
-                deleteGameObjectInstanceFunc());
-        addGameObjectClassToMaps(newCategoryClass);
-        return newCategoryClass;
-    }
-
-    @Override
-    public CategoryClass getCategoryClass(String className)
-            throws GameObjectClassNotFoundException {
-        if (!gameObjectClassMapByName.containsKey(className)) {
-            throw new GameObjectClassNotFoundException("Category");
-        }
-        return (CategoryClass) gameObjectClassMapByName.get(className);
-    }
-
     @Override
     public CategoryInstance createCategoryInstance(String className)
             throws GameObjectClassNotFoundException, GameObjectTypeException {
-        if (!gameObjectClassMapByName.containsKey(className) ) {
-            throw new GameObjectClassNotFoundException("Category");
-        }
-        GameObjectClass t = gameObjectClassMapByName.get(className);
-        if (t.getType() != GameObjectType.CATEGORY) {
-            throw new GameObjectTypeException(className, "Category");
-        }
-        return createCategoryInstance((CategoryClass)t);
+        CategoryClass t = checkExist(className, GameObjectType.CATEGORY);
+        return createCategoryInstance(t);
     }
 
 
@@ -271,49 +276,11 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         }
     }
 
-
-    private SoundInstanceFactory instantiateSoundInstanceFactory() {
-        return new SoundInstanceFactory(
-                myIdManager.requestInstanceIdFunc(),
-                addGameObjectInstanceToMapFunc());
-    }
-
-    @Override
-    public SoundClass createSoundClass(String className)
-            throws DuplicateGameObjectClassException {
-        if (gameObjectClassMapByName.containsKey(className)) {
-            throw new DuplicateGameObjectClassException();
-        }
-        SoundClass newSoundClass = new SimpleSoundClass(
-                className,
-                mySoundInstanceFactory,
-                changeGameObjectClassNameFunc(),
-                getAllInstancesFunc(),
-                deleteGameObjectInstanceFunc());
-        addGameObjectClassToMaps(newSoundClass);
-        return newSoundClass;
-    }
-
-    @Override
-    public SoundClass getSoundClass(String className)
-            throws GameObjectClassNotFoundException {
-        if (!gameObjectClassMapByName.containsKey(className)) {
-            throw new GameObjectClassNotFoundException("Sound");
-        }
-        return (SoundClass) gameObjectClassMapByName.get(className);
-    }
-
     @Override
     public SoundInstance createSoundInstance(String className)
             throws GameObjectClassNotFoundException, GameObjectTypeException {
-        if (!gameObjectClassMapByName.containsKey(className) ) {
-            throw new GameObjectClassNotFoundException("Sound");
-        }
-        GameObjectClass c = gameObjectClassMapByName.get(className);
-        if (c.getType() != GameObjectType.SOUND) {
-            throw new GameObjectTypeException(className, "Sound");
-        }
-        return createSoundInstance((SoundClass) c);
+        SoundClass t = checkExist(className, GameObjectType.SOUND);
+        return createSoundInstance(t);
     }
 
     @Override
@@ -328,40 +295,11 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         }
     }
 
-    private PlayerInstanceFactory instantiatePlayerInstanceFactory() {
-        return new PlayerInstanceFactory(
-                myIdManager.requestInstanceIdFunc(),
-                addGameObjectInstanceToMapFunc());
-
-    }
-
-    @Override
-    public PlayerClass createPlayerClass(String className)
-            throws DuplicateGameObjectClassException {
-        if (gameObjectClassMapByName.containsKey(className)) {
-            throw new DuplicateGameObjectClassException();
-        }
-        PlayerClass newPlayerClass = new SimplePlayerClass(
-                className,
-                myPlayerInstanceFactory,
-                changeGameObjectClassNameFunc(),
-                getAllInstancesFunc(),
-                deleteGameObjectInstanceFunc());
-        addGameObjectClassToMaps(newPlayerClass);
-        return newPlayerClass;
-    }
-
     @Override
     public PlayerInstance createPlayerInstance(String className)
             throws GameObjectClassNotFoundException, GameObjectTypeException {
-        if (!gameObjectClassMapByName.containsKey(className) ) {
-            throw new GameObjectClassNotFoundException("Player");
-        }
-        GameObjectClass t = gameObjectClassMapByName.get(className);
-        if (t.getType() != GameObjectType.PLAYER) {
-            throw new GameObjectTypeException(className, "Player");
-        }
-        return createPlayerInstance((PlayerClass) t);
+        PlayerClass t = checkExist(className, GameObjectType.PLAYER);
+        return createPlayerInstance(t);
     }
 
     @Override
@@ -375,7 +313,6 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
             return null;
         }
     }
-
 
     @Override
     public Turn createTurn(String phaseName) {
@@ -401,7 +338,6 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         turnMap.remove(phaseName);
         return true;
     }
-
 
     @SuppressWarnings("unchecked")
     @Override
@@ -430,7 +366,6 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
 
     @Override
     public Collection<GameObjectInstance> getAllInstances(String className) {
-
         Set<GameObjectInstance> instancesSet = new HashSet<>();
         for (Map.Entry<Integer, GameObjectInstance> entry : gameObjectInstanceMapById.entrySet()) {
             if (entry.getValue().getClassName().getValue().equals(className)) {
@@ -457,7 +392,6 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     public Collection<GameObjectInstance> getAllInstancesAtPoint(Point point) {
         return null;
     }
-
 
     /**
      * This method deletes the GameObjectClasses with the input String name. It scans through all possible maps of the String -> GameObjectClass.
@@ -516,12 +450,11 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
      * Delete all instances currently in the CRUD.
      */
     @Override
-    public void deleteAllInstances() throws InvalidIdException, GameObjectClassNotFoundException, GameObjectTypeException {
+    public void deleteAllInstances() throws InvalidIdException {
         for (GameObjectInstance gameObjectInstance : gameObjectInstanceMapById.values()) {
             myIdManager.returnInstanceIdFunc().accept(gameObjectInstance);
         }
         gameObjectInstanceMapById.clear();
-        defaultPlayer = createPlayerInstance(DEFAULT_PLAYER_NAME);
     }
 
     /**
@@ -548,7 +481,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
                 // TODO
                 break;
             case PLAYER:
-                // TODO
+                return (E) createPlayerClass(name);
         }
         return null;
     }
@@ -557,36 +490,34 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
      * This method is a convenient method that creates concrete GameObjectInstances, depending on the type of GameObjectClass that is passed in or inferred from class name.
      *
      * @param name     : The String class name of the input GameObjectClass.
-     * @param playerID : The int value representing the Player owner of this GameObjectInstance.
      * @param topleft  : A Point representing the topleft of the GameObjectInstance deployed.
      * @return A concrete GameObjectInstance inferred from input.
      * @throws GameObjectTypeException
      * @throws GameObjectClassNotFoundException
      */
     @Override
-    public <E extends GameObjectInstance> E createGameObjectInstance(String name, int playerID, Point topleft) throws GameObjectClassNotFoundException, GameObjectTypeException {
+    public <E extends GameObjectInstance> E createGameObjectInstance(String name, Point topleft) throws GameObjectClassNotFoundException, GameObjectTypeException {
         if (!gameObjectClassMapByName.containsKey(name)) {
             throw new GameObjectClassNotFoundException(String.format("%s is not a valid GameObjectClass", name));
         }
         GameObjectClass gameObjectClass = gameObjectClassMapByName.get(name);
-        return createGameObjectInstance(gameObjectClass, playerID, topleft);
+        return createGameObjectInstance(gameObjectClass, topleft);
     }
 
     /**
      * This method is a convenient method that creates concrete GameObjectInstances, depending on the type of GameObjectClass that is passed in or inferred from class name.
      *
      * @param gameObjectClass : The input GameObjectClass.
-     * @param playerID        : The int value representing the Player owner of this GameObjectInstance.
      * @param topleft         : A Point representing the topleft of the GameObjectInstance deployed.
      * @return A concrete GameObjectInstance inferred from input.
      * @throws GameObjectTypeException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <E extends GameObjectInstance> E createGameObjectInstance(GameObjectClass gameObjectClass, int playerID, Point topleft) throws GameObjectTypeException {
+    public <E extends GameObjectInstance> E createGameObjectInstance(GameObjectClass gameObjectClass, Point topleft) throws GameObjectTypeException {
         switch (gameObjectClass.getType()) {
             case ENTITY:
-                return (E) createEntityInstance((EntityClass) gameObjectClass, playerID, topleft);
+                return (E) createEntityInstance((EntityClass) gameObjectClass, topleft);
             case PLAYER:
                 // TODO: confirm Player API
                 return (E) createPlayerInstance((PlayerClass) gameObjectClass);
@@ -668,17 +599,13 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         return classId -> gameObjectClassMapById.get(classId);
     }
 
-
     private Function<Integer, GameObjectInstance> getGameObjectInstanceFromMapFunc() {
         return instanceId -> gameObjectInstanceMapById.get(instanceId);
     }
 
-
     private Function<String, Collection<GameObjectInstance>> getAllInstancesFunc() {
         return this::getAllInstances;
     }
-
-
 
     private Function<Integer, Boolean> deleteGameObjectInstanceFunc() {
         return this::deleteGameObjectInstance;
@@ -692,13 +619,12 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         return gameObjectInstance -> {
             int instanceId = gameObjectInstance.getInstanceId().getValue();
             if (instanceId == 0) {
-                throw new InvalidIdException("GameObject Instance has an invalid Id");
+                throw new InvalidIdException();
             }
             gameObjectInstanceMapById.put(instanceId, gameObjectInstance);
         };
     }
 
-    // TODO: propagate changes
     @Override
     public void setDimension(int width, int height) {
         numCols = width;
@@ -707,8 +633,6 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
 
     public int getWidth() { return numCols; }
     public int getHeight() { return numRows; }
-
-
 
     /**
      * Getters
@@ -731,9 +655,10 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     }
 
     @Override
-    public Iterable<SoundClass> getSoundClasses() {
-        return getSpecificClasses(GameObjectType.SOUND);
-    }
+    public Iterable<SoundClass> getSoundClasses() { return getSpecificClasses(GameObjectType.SOUND); }
+
+    @Override
+    public Iterable<PlayerClass> getPlayerClasses() { return getSpecificClasses(GameObjectType.PLAYER); }
 
     private  <T extends GameObjectClass> Set<T> getSpecificClasses(GameObjectType objectType){
         Set<T> ret = new HashSet<>();
@@ -766,21 +691,6 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     }
 
     @Override
-    public Iterable<PlayerInstance> getPlayerInstances() {
-        ObservableList<PlayerInstance> ret = FXCollections.observableArrayList();
-        for (GameObjectInstance objectInstance : gameObjectInstanceMapById.values()) {
-            if (objectInstance.getType() == GameObjectType.PLAYER &&
-                    !objectInstance.getInstanceName().get().equals(DEFAULT_PLAYER_NAME)) {
-                ret.add((PlayerInstance) objectInstance);
-            }
-        }
-        return ret;
-    }
-
-    @Override
-    public int getDefaultPlayerID() { return defaultPlayer.getInstanceId().get(); }
-
-    @Override
     public Iterable<CategoryInstance> getCategoryInstances() {
         return getSpecificInstances(GameObjectType.CATEGORY);
     }
@@ -788,5 +698,19 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     @Override
     public Iterable<SoundInstance> getSoundInstances() {
         return getSpecificInstances(GameObjectType.SOUND);
+    }
+
+    @Override
+    public Iterable<PlayerInstance> getPlayerInstances() {
+        return null;
+    }
+
+    @Override
+    public Set<String> getPlayerNames(GameObjectInstance gameObjectInstance) {
+        return gameObjectClassMapByName.values().stream()
+                .filter(gameObjectClass -> gameObjectClass.getType() == GameObjectType.PLAYER)
+                .filter(gameObjectClass -> ((PlayerClass) gameObjectClass).isOwnedByPlayer(gameObjectInstance))
+                .map(gameObjectClass -> gameObjectClass.getClassName().getValue())
+                .collect(Collectors.toSet());
     }
 }

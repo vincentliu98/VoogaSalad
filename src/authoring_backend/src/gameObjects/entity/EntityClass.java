@@ -16,7 +16,7 @@ public interface EntityClass extends GameObjectClass {
 
     void setMovable(boolean move);
 
-    EntityInstance createInstance(int playerId, Point point)
+    EntityInstance createInstance(Point point)
             throws InvalidGameObjectInstanceException, GameObjectTypeException, InvalidIdException;
 
     /**

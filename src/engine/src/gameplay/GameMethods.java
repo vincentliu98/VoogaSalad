@@ -49,6 +49,9 @@ public class GameMethods {
     public static Entity createEntity(String entityName, int x, int y){
         return createEntity(entityName, x, y, DEFAULT_PLAYER_ID);
     }
+    public static Entity createEntity(String entityName, Tile tile) {
+        return createEntity(entityName, (int) Math.round(tile.getX()), (int) Math.round(tile.getY()));
+    }
 
     public static void removeEntity(Entity entity) {
         ROOT.getChildren().remove(entity.getImageView());
@@ -80,7 +83,7 @@ public class GameMethods {
                 (e.getX() <= tile.getX() && tile.getX() < e.getX() + e.getWidth());
             boolean verdictY =
                 (tile.getY() <= e.getY() && e.getY() < tile.getY() + tile.getHeight()) ||
-                    (e.getY() <= tile.getY() && tile.getY() < e.getY() + e.getHeight());
+                (e.getY() <= tile.getY() && tile.getY() < e.getY() + e.getHeight());
             return verdictX && verdictY;
         });
     }
@@ -95,20 +98,20 @@ public class GameMethods {
     /**
      *  Player/Turn
      */
-    public static Player getCurrentPlayer() { return PLAYERS.get(TURN.getCurrentPlayerID()); }
+    public static Player getCurrentPlayer() { return PLAYERS.get(TURN.getCurrentPlayerName()); }
     public static Double getCurrentPlayerStats(String stat) { return getCurrentPlayer().getValue(stat); }
-    public static void setCurrentPlayer(int playerID) { TURN.setCurrentPlayer(playerID);}
-    public static int getCurrentPlayerID(){ return TURN.getCurrentPlayerID(); }
-    public static int getNextPlayerID() { return TURN.nextPlayerID(); }
-    public static int toNextPlayer() { return TURN.toNextPlayer(); }
-    public static void setPlayerOrder(List<Integer> newOrder){ TURN.setPlayerOrder(newOrder); }
-    public static boolean hasNoEntities(int playerID) { return PLAYERS.get(playerID).getMyEntities().size() == 0; }
+    public static void setCurrentPlayer(String playerName) { TURN.setCurrentPlayer(playerName);}
+    public static String getCurrentPlayerName(){ return TURN.getCurrentPlayerName(); }
+    public static String getNextPlayerName() { return TURN.nextPlayerName(); }
+    public static String toNextPlayer() { return TURN.toNextPlayer(); }
+    public static void setPlayerOrder(List<String> newOrder){ TURN.setPlayerOrder(newOrder); }
+    public static boolean hasNoEntities(String playerName) { return PLAYERS.get(playerName).getMyEntities().size() == 0; }
     public static void endGame(String endingMessage){ TURN.endGame(endingMessage);}
 
     /**
      *  Phase
      */
-    public static void goTo(int nodeID) { getNode(nodeID).execute(); }
+    public static void $goto(String phaseNodeName) { getNode(phaseNodeName).execute(); }
 
     /**
      *  Meta
@@ -118,5 +121,12 @@ public class GameMethods {
         double dy = a.getY() - b.getY();
         System.out.println(Math.sqrt(dx*dx+dy*dy));
         return Math.sqrt(dx*dx+dy*dy);
+    }
+
+    public static void $return(Object retVal) {
+        GameData.shell().setVariable("$return", retVal);
+    }
+    public static GameObject $this() {
+        return (GameObject) GameData.shell().getVariable("$this");
     }
 }

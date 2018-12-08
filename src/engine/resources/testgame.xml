@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<game>
+  <gameplay.Node>
+    <myPhaseID>97</myPhaseID>
+    <myID>97</myID>
+    <myExecution></myExecution>
+  </gameplay.Node>
+  <gameplay.Node>
+    <myPhaseID>97</myPhaseID>
+    <myID>98</myID>
+    <myExecution></myExecution>
+  </gameplay.Node>
+  <gameplay.Edge>
+    <myPhaseID>97</myPhaseID>
+    <myStartNodeID>97</myStartNodeID>
+    <myEndNodeID>98</myEndNodeID>
+    <myTrigger class="phase.api.GameEvent$MouseClick"/>
+    <myGuard></myGuard>
+  </gameplay.Edge>
+  <gameplay.Phase>
+    <myID>97</myID>
+    <myStartNodeID>97</myStartNodeID>
+    <myCurrentNodeID>97</myCurrentNodeID>
+    <myNodeIDs>
+      <int>97</int>
+      <int>98</int>
+    </myNodeIDs>
+  </gameplay.Phase>
+  <end-handler></end-handler>
+  <grid-width>10</grid-width>
+  <grid-height>7</grid-height>
+  <gameplay.EntityPrototype>
+    <name>X</name>
+    <props/>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myImagePaths/>
+    <myImageSelector></myImageSelector>
+  </gameplay.EntityPrototype>
+  <gameplay.EntityPrototype>
+    <name>O</name>
+    <props/>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myImagePaths/>
+    <myImageSelector></myImageSelector>
+  </gameplay.EntityPrototype>
+  <gameplay.Turn>
+    <myCurrentPhaseID>97</myCurrentPhaseID>
+    <playersOrder/>
+  </gameplay.Turn>
+</game>
