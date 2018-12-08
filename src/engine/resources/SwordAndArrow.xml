@@ -65,7 +65,7 @@
             <string>A</string>
         </myNodeNames>
     </gameplay.Phase>
-    <heartbeat>if(GameMethods.hasNoEntities(GameMethods.getCurrentPlayerName())) {   GameMethods.endGame(&apos;Player &apos; + GameMethods.getCurrentPlayerName() + &apos; won!&apos;)}</heartbeat>
+    <heartbeat>if(GameMethods.hasNoEntities(GameMethods.getCurrentPlayerName())) {   GameMethods.endGame(GameMethods.getCurrentPlayerName() + &apos; LOST!&apos;)}</heartbeat>
     <grid-width>5</grid-width>
     <grid-height>5</grid-height>
     <gameplay.EntityPrototype>

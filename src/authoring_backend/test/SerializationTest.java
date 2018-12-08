@@ -66,7 +66,7 @@ public class SerializationTest {
         var hbSource = phaseDB.heartbeat().source();
         var hbScript = factory.rawBlock(
             "if(GameMethods.hasNoEntities(GameMethods.getCurrentPlayerName())) {" +
-            "   GameMethods.endGame('Player ' + GameMethods.getCurrentPlayerName() + ' won!')" +
+            "   GameMethods.endGame(GameMethods.getCurrentPlayerName() + ' LOST!')" +
             "}"
         );
         phaseDB.heartbeat().addEdge(factory.createEdge(hbSource, Ports.FLOW_OUT, hbScript));
