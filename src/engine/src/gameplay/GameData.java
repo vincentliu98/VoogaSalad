@@ -155,4 +155,8 @@ public class GameData {
         myInitializer.setScreenSize(700, 500);
     }
 
+    public static String getName(){
+        return myInitializer.getFileName();
+    }
+
 }

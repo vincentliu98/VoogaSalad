@@ -36,6 +36,11 @@ public class Initializer {
         startGame();
     }
 
+    public String getFileName(){
+        String filename = myFile.getName();
+        return filename.substring(0, filename.length() - 4); // .xml is 4 letters long
+    }
+
     public Pane getRoot(){ return myRoot; }
 
     public void keyFilter(KeyEvent ev) { GameData.addArgument(ev, new KeyTag(ev.getCode())); }
