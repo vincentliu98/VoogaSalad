@@ -1,9 +1,9 @@
 package utils.nodeInstance;
 
+import authoringUtils.exception.GameObjectInstanceNotFoundException;
 import gameObjects.gameObject.GameObjectInstance;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
-import authoringUtils.exception.GameObjectInstanceNotFoundException;
 import utils.exception.NodeNotFoundException;
 
 import java.util.HashMap;

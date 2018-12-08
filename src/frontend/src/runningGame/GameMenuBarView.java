@@ -1,9 +1,7 @@
 package runningGame;
 
-import api.ParentView;
 import api.SubView;
 import javafx.event.ActionEvent;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;

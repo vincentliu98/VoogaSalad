@@ -1,12 +1,9 @@
 package playing;
 
-import gameplay.Entity;
-import gameplay.GameData;
-//import gameplay.Tag;
-import gameplay.Tile;
 import gameplay.Communicable;
 import playingGame.DisplayData;
-import playingGame.EntityView;
+
+//import gameplay.Tag;
 
 public class Communicator implements Communicable {
     DisplayData myDisplayData;

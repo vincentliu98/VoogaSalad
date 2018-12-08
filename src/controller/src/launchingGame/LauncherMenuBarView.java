@@ -1,18 +1,8 @@
 package launchingGame;
 
-import javafx.event.ActionEvent;
-import javafx.scene.control.*;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
 import runningGame.GameLoader;
-import runningGame.GameWindow;
-import runningGame.IllegalSavedGameException;
-
-import java.io.File;
-import java.util.Optional;
 
 public class LauncherMenuBarView {
 

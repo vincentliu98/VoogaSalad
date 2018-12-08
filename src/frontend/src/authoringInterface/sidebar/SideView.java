@@ -7,11 +7,14 @@ import gameObjects.entity.SimpleEntityClass;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.sound.SimpleSoundClass;
 import gameObjects.tile.SimpleTileClass;
-import javafx.scene.control.*;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javafx.scene.layout.StackPane;
 import utils.nodeInstance.NodeInstanceController;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * This class represents a new SideView implementation that has a JavaFx TreeView object inside, but with cleaner implementation.

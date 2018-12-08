@@ -1,7 +1,7 @@
 package groovy.graph;
 
-import groovy.graph.blocks.core.GroovyBlock;
 import groovy.api.Ports;
+import groovy.graph.blocks.core.GroovyBlock;
 
 public class PortNotConnectedException extends Exception {
     public PortNotConnectedException(GroovyBlock from, Ports port) {

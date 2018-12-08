@@ -1,5 +1,6 @@
 package graphUI.phase;
 
+import authoringUtils.frontendUtils.Try;
 import graphUI.groovy.GroovyPaneFactory.GroovyPane;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
@@ -8,7 +9,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import phase.api.Phase;
 import phase.api.PhaseDB;
-import authoringUtils.frontendUtils.Try;
 
 import java.util.function.Supplier;
 

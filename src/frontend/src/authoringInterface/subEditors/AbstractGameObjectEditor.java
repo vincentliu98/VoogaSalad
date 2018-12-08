@@ -1,11 +1,9 @@
 package authoringInterface.subEditors;
 
 import api.SubView;
+import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
-import gameObjects.crud.GameObjectsCRUDInterface;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -14,8 +12,8 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import utils.nodeInstance.NodeInstanceController;
 import utils.exception.NodeNotFoundException;
+import utils.nodeInstance.NodeInstanceController;
 
 /**
  * This abstract class provides a boiler plate for different editors because they are pretty similar.

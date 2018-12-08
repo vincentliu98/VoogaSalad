@@ -1,6 +1,7 @@
 package gameObjects.sound;
 
-import gameObjects.gameObject.*;
+import gameObjects.gameObject.GameObjectInstance;
+import gameObjects.gameObject.GameObjectType;
 import javafx.beans.property.SimpleStringProperty;
 
 /**

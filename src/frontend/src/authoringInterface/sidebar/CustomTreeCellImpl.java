@@ -1,6 +1,8 @@
 package authoringInterface.sidebar;
 
-import authoringInterface.subEditors.*;
+import authoringInterface.subEditors.AbstractGameObjectEditor;
+import authoringInterface.subEditors.EditorFactory;
+import authoringInterface.subEditors.MissingEditorForTypeException;
 import authoringUtils.exception.GameObjectClassNotFoundException;
 import authoringUtils.exception.GameObjectInstanceNotFoundException;
 import authoringUtils.exception.GameObjectTypeException;
@@ -10,8 +12,14 @@ import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectType;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.input.*;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TreeCell;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.TransferMode;
 import javafx.stage.Stage;
 import utils.exception.PreviewUnavailableException;
 import utils.exception.UnremovableNodeException;
