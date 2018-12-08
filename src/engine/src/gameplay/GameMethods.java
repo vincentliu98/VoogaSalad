@@ -53,6 +53,7 @@ public class GameMethods {
     public static void removeEntity(Entity entity) {
         ROOT.getChildren().remove(entity.getImageView());
         ENTITIES.remove(entity.getID());
+        PLAYERS.values().forEach(p -> p.getMyEntities().remove(entity.getID()));
     }
     public static void moveEntity(Entity entity, double x, double y) {
         entity.setLocation(x, y);
@@ -101,6 +102,7 @@ public class GameMethods {
     public static int getNextPlayerID() { return TURN.nextPlayerID(); }
     public static int toNextPlayer() { return TURN.toNextPlayer(); }
     public static void setPlayerOrder(List<Integer> newOrder){ TURN.setPlayerOrder(newOrder); }
+    public static boolean hasNoEntities(int playerID) { return PLAYERS.get(playerID).getMyEntities().size() == 0; }
     public static void endGame(String endingMessage){ TURN.endGame(endingMessage);}
 
     /**

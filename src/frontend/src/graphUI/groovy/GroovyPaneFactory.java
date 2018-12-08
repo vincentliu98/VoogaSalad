@@ -45,7 +45,7 @@ public class GroovyPaneFactory {
     private GroovyNodeFactory nodeFactory;
     private GroovyFactory factory;
     private Stage primaryStage;
-    private GroovyPane endHandlerPane;
+    private GroovyPane heartbeat;
 
     private enum DRAG_PURPOSE {
         NOTHING,
@@ -53,20 +53,15 @@ public class GroovyPaneFactory {
         CONNECT_LINE
     }
 
-    public GroovyPaneFactory(Stage primaryStage, GroovyFactory factory, BlockGraph endHandler) {
+    public GroovyPaneFactory(Stage primaryStage, GroovyFactory factory, BlockGraph heartbeat) {
         this.primaryStage = primaryStage;
         this.nodeFactory = new GroovyNodeFactory(factory);
         this.factory = factory;
-        this.endHandlerPane = new GroovyPane(primaryStage, endHandler);
-    }
-
-    public GroovyPaneFactory withStage(Stage anotherStage) {
-        primaryStage = anotherStage;
-        return this;
+        this.heartbeat = new GroovyPane(primaryStage, heartbeat);
     }
 
     public GroovyPane gen() { return new GroovyPane(primaryStage); }
-    public GroovyPane endHandler() { return endHandlerPane; }
+    public GroovyPane heartbeat() { return heartbeat; }
 
     public class GroovyPane extends PopUpWindow implements SubView<GridPane> {
         private DRAG_PURPOSE draggingPurpose = DRAG_PURPOSE.NOTHING;
@@ -470,8 +465,6 @@ public class GroovyPaneFactory {
                 codePane.setText(t.toString());
             }
         }
-
-        public Try<String> toGroovy() { return graph.transformToGroovy(); }
 
         @Override
         public GridPane getView() { return root; }

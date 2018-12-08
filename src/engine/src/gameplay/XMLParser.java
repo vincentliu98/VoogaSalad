@@ -134,6 +134,11 @@ public class XMLParser {
         return turn;
     }
 
+    public String getHeartBeat() {
+        NodeList heartbeats = myDocTree.getElementsByTagName("heartbeat");
+        return heartbeats.item(0).getTextContent(); // only one heartbeat per game
+    }
+
     /**
      * Taken from https://stackoverflow.com/questions/4412848/xml-node-to-string-in-java
      */

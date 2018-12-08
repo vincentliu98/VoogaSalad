@@ -47,7 +47,7 @@ public class EditView implements SubView<TabPane> {
     private Tab mainTab;
     private Tab phaseNodeTab;
     private Tab gridTab;
-    private Tab endHandlerTab;
+    private Tab heartbeatTab;
     private Integer index;
     private Stage newStage;
     private TabPane newTabPane;
@@ -90,14 +90,14 @@ public class EditView implements SubView<TabPane> {
         );
         phaseNodeTab.setContent(phaseView.getView());
 
-        endHandlerTab = new Tab();
-        Label endHandlerLabel = new Label("Ending");
-        labelOnTab(endHandlerLabel, endHandlerTab);
-        var dialog = groovyPaneFactory.endHandler();
+        heartbeatTab = new Tab();
+        Label heartbeatLabel = new Label("Heartbeat");
+        labelOnTab(heartbeatLabel, heartbeatTab);
+        var dialog = groovyPaneFactory.heartbeat();
         dialog.closeWindow(); // we're only gonna use its view
-        endHandlerTab.setContent(dialog.getView());
+        heartbeatTab.setContent(dialog.getView());
 
-        tabPane.getTabs().addAll(mainTab, gridTab, phaseNodeTab, endHandlerTab);
+        tabPane.getTabs().addAll(mainTab, gridTab, phaseNodeTab, heartbeatTab);
 
 //        mainLabel.setOnMouseDragged(e -> {
 //            index = 0;

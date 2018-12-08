@@ -18,6 +18,9 @@ public class Node {
         if(myExecution.isEmpty()) return;
         try{
             GameData.shell().evaluate(myExecution);
+            GameData.shell().evaluate(GameData.HEARTBEAT);
+            System.out.println(GameMethods.hasNoEntities(GameMethods.getCurrentPlayerID()));
+            System.out.println(GameMethods.getCurrentPlayer().getMyEntities());
             GameData.updateViews();
         } catch (Exception e){ e.printStackTrace(); }
     }
