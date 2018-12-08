@@ -1,5 +1,7 @@
 package playing;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
@@ -15,12 +17,18 @@ import java.util.Set;
 public class User {
     private int myID;
     private Set<String> myFavoriteGames;
+    private ImageView myAvatar;
     private Twitter myTwitter;
 
     public User(int id){
         myID = id;
         myFavoriteGames = new HashSet<>();
         myTwitter = null;
+        myAvatar = new ImageView("default-avatar.png");
+    }
+
+    public void changeAvatar(Image image){
+        myAvatar = new ImageView(image);
     }
 
     /**
@@ -31,8 +39,6 @@ public class User {
         cb.setDebugEnabled(true)
                 .setOAuthConsumerKey("Djd5Tus6kdSCXWC471CrJTE7O")
                 .setOAuthConsumerSecret("qKdKyeWvbmOWTe1ZDXfLQT34p8GEmWNMoaVbLdde6V5T6MhCTo");
-        //.setOAuthAccessToken("933099551661182976-YxZvcLFYRZu2LZUOQ85GoQV4WSGGgcc")
-        //.setOAuthAccessTokenSecret("GXlrw0J49mxfDgW1HQ3oM53J09kDTL7tM4hQwh2RnBdMo");
         TwitterFactory tf = new TwitterFactory(cb.build());
         myTwitter = tf.getInstance();
         AccessToken accessToken = null;
@@ -59,7 +65,6 @@ public class User {
                     }
                 }
             }
-            tweet("Hello World.");
         } catch (Exception e) {
             e.printStackTrace();
         }
