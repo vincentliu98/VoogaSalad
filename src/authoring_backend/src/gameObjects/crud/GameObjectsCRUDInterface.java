@@ -153,6 +153,8 @@ public interface GameObjectsCRUDInterface {
      */
     SoundInstance createSoundInstance(SoundClass soundClass) throws GameObjectTypeException;
 
+    PlayerClass createPlayerClass(String className)
+            throws DuplicateGameObjectClassException;
 
     PlayerInstance createPlayerInstance(String className)
             throws GameObjectClassNotFoundException, GameObjectTypeException;

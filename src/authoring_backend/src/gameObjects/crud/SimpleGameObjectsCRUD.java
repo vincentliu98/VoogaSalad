@@ -19,6 +19,7 @@ import gameObjects.gameObject.GameObjectType;
 import gameObjects.player.PlayerClass;
 import gameObjects.player.PlayerInstance;
 import gameObjects.player.PlayerInstanceFactory;
+import gameObjects.player.SimplePlayerClass;
 import gameObjects.sound.SimpleSoundClass;
 import gameObjects.sound.SoundClass;
 import gameObjects.sound.SoundInstance;
@@ -41,6 +42,7 @@ import java.util.Set;
 import java.util.function.Function;
 
 public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
+    private static final String DEFAULT_PLAYER_CLASS = "$defaultPlayerClass$";
     private static final String DEFAULT_PLAYER_NAME = "$default$";
 
     private int numRows;
@@ -57,6 +59,8 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     private PlayerInstanceFactory myPlayerInstanceFactory;
 
     private IdManager myIdManager;
+
+    private PlayerClass defaultPlayerClass;
     private PlayerInstance defaultPlayer;
 
     public SimpleGameObjectsCRUD(int numRows, int numCols) {
@@ -73,6 +77,16 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         myCategoryInstanceFactory = instantiateCategoryInstanceFactory();
         mySoundInstanceFactory = instantiateSoundInstanceFactory();
         myPlayerInstanceFactory = instantiatePlayerInstanceFactory();
+        try {
+            defaultPlayerClass = createPlayerClass(DEFAULT_PLAYER_CLASS);
+            defaultPlayer = createPlayerInstance(DEFAULT_PLAYER_CLASS);
+        } catch (GameObjectClassNotFoundException e) {
+            // TODO
+            e.printStackTrace();
+        } catch (GameObjectTypeException | DuplicateGameObjectClassException e) {
+            // TODO
+            e.printStackTrace();
+        }
     }
 
     private TileInstanceFactory instantiateTileInstanceFactory() {
@@ -345,6 +359,22 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
                 myIdManager.requestInstanceIdFunc(),
                 addGameObjectInstanceToMapFunc());
 
+    }
+
+    @Override
+    public PlayerClass createPlayerClass(String className)
+            throws DuplicateGameObjectClassException {
+        if (gameObjectClassMapByName.containsKey(className)) {
+            throw new DuplicateGameObjectClassException();
+        }
+        PlayerClass newPlayerClass = new SimplePlayerClass(
+                className,
+                myPlayerInstanceFactory,
+                changeGameObjectClassNameFunc(),
+                getAllInstancesFunc(),
+                deleteGameObjectInstanceFunc());
+        addGameObjectClassToMaps(newPlayerClass);
+        return newPlayerClass;
     }
 
     @Override
