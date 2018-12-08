@@ -70,6 +70,11 @@ public class GameIcon {
         return false;
     }
 
+    public Boolean checkName(String name){
+        if (myName.equals(name)) return true;
+        return false;
+    }
+
     private void initPane(){
         myPane = new StackPane();
 

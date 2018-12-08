@@ -2,6 +2,7 @@ package launchingGame;
 
 import javafx.scene.layout.TilePane;
 import launching.GameParser;
+import playing.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +47,8 @@ public class LauncherGamesDisplay implements Searchable, Sortable{
 
     }
 
+
+
     @Override
     public void showByTag(String tag){
         for(GameIcon icon: myActiveGames){
@@ -69,6 +72,24 @@ public class LauncherGamesDisplay implements Searchable, Sortable{
         for(GameIcon icon: myGames){
             myActiveGames.add(icon);
             myPane.getChildren().add(icon.getView());
+        }
+    }
+
+    @Override
+    public void showFavorites() {
+        User myUser = new User(1);
+        if (myUser == null) return;
+        for(GameIcon icon: myActiveGames){
+            myPane.getChildren().remove(icon.getView());
+        }
+        myActiveGames = new ArrayList<>();
+        for (String game : myUser.getFavorites()){
+            for(GameIcon icon: myGames){
+                if(icon.checkName(game)){
+                    myActiveGames.add(icon);
+                    myPane.getChildren().add(icon.getView());
+                }
+            }
         }
     }
 

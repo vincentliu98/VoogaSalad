@@ -32,6 +32,19 @@ public class User {
         myAvatar = new ImageView(image);
     }
 
+    public void addFavorite(String gameName){
+        myFavoriteGames.add(gameName);
+    }
+
+    public void removeFavorite(String gameName){
+        if (!myFavoriteGames.contains(gameName)) return;
+        myFavoriteGames.remove(gameName);
+    }
+
+    public Set<String> getFavorites(){
+        return myFavoriteGames;
+    }
+
     /**
      * Taken from https://xmeng.wordpress.com/2011/07/10/how-to-handle-sign-in-with-twitter-using-twitter4j/
      */
