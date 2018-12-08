@@ -60,9 +60,6 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
 
     private IdManager myIdManager;
 
-    private PlayerClass defaultPlayerClass;
-    private PlayerInstance defaultPlayer;
-
     public SimpleGameObjectsCRUD(int numRows, int numCols) {
         this.numRows = numRows;
         this.numCols = numCols;
@@ -77,16 +74,6 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         myCategoryInstanceFactory = instantiateCategoryInstanceFactory();
         mySoundInstanceFactory = instantiateSoundInstanceFactory();
         myPlayerInstanceFactory = instantiatePlayerInstanceFactory();
-        try {
-            defaultPlayerClass = createPlayerClass(DEFAULT_PLAYER_CLASS);
-            defaultPlayer = createPlayerInstance(DEFAULT_PLAYER_CLASS);
-        } catch (GameObjectClassNotFoundException e) {
-            // TODO
-            e.printStackTrace();
-        } catch (GameObjectTypeException | DuplicateGameObjectClassException e) {
-            // TODO
-            e.printStackTrace();
-        }
     }
 
     private TileInstanceFactory instantiateTileInstanceFactory() {
@@ -153,12 +140,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
                 // TODO
                 myIdManager.verifyTileInstanceIdFunc(),
                 myIdManager.requestInstanceIdFunc(),
-                addGameObjectInstanceToMapFunc(),
-                // TODO: separate function with error checking and handling
-                (entityID, playerID) ->
-                {
-//                        ((PlayerInstance) gameObjectInstanceMapById.get(playerID)).addEntity(entityID);
-                }
+                addGameObjectInstanceToMapFunc()
         );
     }
 
@@ -188,7 +170,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     }
 
     @Override
-    public EntityInstance createEntityInstance(String className, int playerID, Point point)
+    public EntityInstance createEntityInstance(String className, Point point)
             throws GameObjectClassNotFoundException, GameObjectTypeException {
         if (!gameObjectClassMapByName.containsKey(className) ) {
             throw new GameObjectClassNotFoundException("Entity");
@@ -197,14 +179,14 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         if (t.getType() != GameObjectType.ENTITY) {
             throw new GameObjectTypeException("className", "Entity");
         }
-        return createEntityInstance((EntityClass) t,playerID,point);
+        return createEntityInstance((EntityClass) t,point);
     }
 
     @Override
-    public EntityInstance createEntityInstance(EntityClass entityClass, int playerID, Point point)
+    public EntityInstance createEntityInstance(EntityClass entityClass, Point point)
             throws GameObjectTypeException {
         try {
-            return myEntityInstanceFactory.createInstance(entityClass, playerID, point);
+            return myEntityInstanceFactory.createInstance(entityClass, point);
         } catch (InvalidIdException e) {
             // TODO
             e.printStackTrace();
@@ -516,12 +498,11 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
      * Delete all instances currently in the CRUD.
      */
     @Override
-    public void deleteAllInstances() throws InvalidIdException, GameObjectClassNotFoundException, GameObjectTypeException {
+    public void deleteAllInstances() throws InvalidIdException {
         for (GameObjectInstance gameObjectInstance : gameObjectInstanceMapById.values()) {
             myIdManager.returnInstanceIdFunc().accept(gameObjectInstance);
         }
         gameObjectInstanceMapById.clear();
-        defaultPlayer = createPlayerInstance(DEFAULT_PLAYER_NAME);
     }
 
     /**
@@ -548,7 +529,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
                 // TODO
                 break;
             case PLAYER:
-                // TODO
+                return (E) createPlayerClass(name);
         }
         return null;
     }
@@ -557,36 +538,34 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
      * This method is a convenient method that creates concrete GameObjectInstances, depending on the type of GameObjectClass that is passed in or inferred from class name.
      *
      * @param name     : The String class name of the input GameObjectClass.
-     * @param playerID : The int value representing the Player owner of this GameObjectInstance.
      * @param topleft  : A Point representing the topleft of the GameObjectInstance deployed.
      * @return A concrete GameObjectInstance inferred from input.
      * @throws GameObjectTypeException
      * @throws GameObjectClassNotFoundException
      */
     @Override
-    public <E extends GameObjectInstance> E createGameObjectInstance(String name, int playerID, Point topleft) throws GameObjectClassNotFoundException, GameObjectTypeException {
+    public <E extends GameObjectInstance> E createGameObjectInstance(String name, Point topleft) throws GameObjectClassNotFoundException, GameObjectTypeException {
         if (!gameObjectClassMapByName.containsKey(name)) {
             throw new GameObjectClassNotFoundException(String.format("%s is not a valid GameObjectClass", name));
         }
         GameObjectClass gameObjectClass = gameObjectClassMapByName.get(name);
-        return createGameObjectInstance(gameObjectClass, playerID, topleft);
+        return createGameObjectInstance(gameObjectClass, topleft);
     }
 
     /**
      * This method is a convenient method that creates concrete GameObjectInstances, depending on the type of GameObjectClass that is passed in or inferred from class name.
      *
      * @param gameObjectClass : The input GameObjectClass.
-     * @param playerID        : The int value representing the Player owner of this GameObjectInstance.
      * @param topleft         : A Point representing the topleft of the GameObjectInstance deployed.
      * @return A concrete GameObjectInstance inferred from input.
      * @throws GameObjectTypeException
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <E extends GameObjectInstance> E createGameObjectInstance(GameObjectClass gameObjectClass, int playerID, Point topleft) throws GameObjectTypeException {
+    public <E extends GameObjectInstance> E createGameObjectInstance(GameObjectClass gameObjectClass, Point topleft) throws GameObjectTypeException {
         switch (gameObjectClass.getType()) {
             case ENTITY:
-                return (E) createEntityInstance((EntityClass) gameObjectClass, playerID, topleft);
+                return (E) createEntityInstance((EntityClass) gameObjectClass, topleft);
             case PLAYER:
                 // TODO: confirm Player API
                 return (E) createPlayerInstance((PlayerClass) gameObjectClass);
@@ -776,9 +755,6 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         }
         return ret;
     }
-
-    @Override
-    public int getDefaultPlayerID() { return defaultPlayer.getInstanceId().get(); }
 
     @Override
     public Iterable<CategoryInstance> getCategoryInstances() {

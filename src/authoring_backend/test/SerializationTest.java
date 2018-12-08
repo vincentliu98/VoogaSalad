@@ -52,10 +52,10 @@ public class SerializationTest {
         bowmanClass.addImagePath("bowman5.png");
         bowmanClass.setImageSelector("$return = $this.props.hp-1");
 
-        swordmanClass.createInstance(playerA.getInstanceId().get(), new PointImpl(0,0));
-        swordmanClass.createInstance(playerA.getInstanceId().get(), new PointImpl(0,1));
-        bowmanClass.createInstance(playerB.getInstanceId().get(), new PointImpl(1, 3));
-        bowmanClass.createInstance(playerB.getInstanceId().get(), new PointImpl(3, 3));
+        swordmanClass.createInstance(new PointImpl(0,0));
+        swordmanClass.createInstance(new PointImpl(0,1));
+        bowmanClass.createInstance(new PointImpl(1, 3));
+        bowmanClass.createInstance(new PointImpl(3, 3));
 
         // -------------- PHASE ------------- //
 

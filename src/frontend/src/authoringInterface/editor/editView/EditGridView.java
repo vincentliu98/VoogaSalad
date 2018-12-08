@@ -355,7 +355,7 @@ public class EditGridView implements SubView<ScrollPane> {
         cell.getChildren().add(finalNodeOnGrid);
         GameObjectInstance gameObjectInstance = null;
         try {
-            gameObjectInstance = gameObjectManager.createGameObjectInstance(gameObjectClass, gameObjectManager.getDefaultPlayerID(), new PointImpl(GridPane.getColumnIndex(cell), GridPane.getRowIndex(cell)));
+            gameObjectInstance = gameObjectManager.createGameObjectInstance(gameObjectClass, new PointImpl(GridPane.getColumnIndex(cell), GridPane.getRowIndex(cell)));
         } catch (GameObjectTypeException e) {
             // TODO: proper error handling
             e.printStackTrace();

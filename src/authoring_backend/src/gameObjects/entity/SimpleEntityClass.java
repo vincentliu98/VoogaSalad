@@ -176,9 +176,9 @@ public class SimpleEntityClass implements EntityClass {
     }
 
     @Override
-    public EntityInstance createInstance(int playerId, Point point)
+    public EntityInstance createInstance(Point point)
             throws GameObjectTypeException, InvalidIdException {
-        return myFactory.createInstance(this, playerId, point);
+        return myFactory.createInstance(this, point);
     }
 
     public boolean deleteInstance(int entityInstanceId) {

@@ -80,7 +80,7 @@ public interface GameObjectsCRUDInterface {
      * @param className
      * @return
      */
-    EntityInstance createEntityInstance(String className, int playerID, Point point)
+    EntityInstance createEntityInstance(String className, Point point)
             throws GameObjectClassNotFoundException, GameObjectTypeException;
 
     /**
@@ -88,7 +88,7 @@ public interface GameObjectsCRUDInterface {
      * @param entityClass
      * @return
      */
-    EntityInstance createEntityInstance(EntityClass entityClass, int playerID, Point point)
+    EntityInstance createEntityInstance(EntityClass entityClass, Point point)
             throws GameObjectTypeException;
 
 
@@ -277,26 +277,24 @@ public interface GameObjectsCRUDInterface {
      * This method is a convenient method that creates concrete GameObjectInstances, depending on the type of GameObjectClass that is passed in or inferred from class name.
      *
      * @param name: The String class name of the input GameObjectClass.
-     * @param playerID: The int value representing the Player owner of this GameObjectInstance.
      * @param topleft: A Point representing the topleft of the GameObjectInstance deployed.
      * @param <E>: A subclass of GameObjectInstance.
      * @return A concrete GameObjectInstance inferred from input.
      * @throws GameObjectClassNotFoundException
      * @throws GameObjectTypeException
      */
-    <E extends GameObjectInstance> E createGameObjectInstance(String name, int playerID, Point topleft) throws GameObjectClassNotFoundException, GameObjectTypeException;
+    <E extends GameObjectInstance> E createGameObjectInstance(String name, Point topleft) throws GameObjectClassNotFoundException, GameObjectTypeException;
 
     /**
      * This method is a convenient method that creates concrete GameObjectInstances, depending on the type of GameObjectClass that is passed in or inferred from class name.
      *
      * @param gameObjectClass: The input GameObjectClass.
-     * @param playerID: The int value representing the Player owner of this GameObjectInstance.
      * @param topleft: A Point representing the topleft of the GameObjectInstance deployed.
      * @param <E>: A subclass of GameObjectInstance.
      * @return A concrete GameObjectInstance inferred from input.
      * @throws GameObjectTypeException
      */
-    <E extends GameObjectInstance> E createGameObjectInstance(GameObjectClass gameObjectClass, int playerID, Point topleft) throws GameObjectTypeException;
+    <E extends GameObjectInstance> E createGameObjectInstance(GameObjectClass gameObjectClass, Point topleft) throws GameObjectTypeException;
 
     /**
      * Getters
@@ -316,6 +314,4 @@ public interface GameObjectsCRUDInterface {
     Iterable<CategoryInstance> getCategoryInstances();
     Iterable<SoundInstance> getSoundInstances();
     Iterable<PlayerInstance> getPlayerInstances();
-
-    int getDefaultPlayerID();
 }
