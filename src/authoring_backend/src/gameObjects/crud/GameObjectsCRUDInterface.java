@@ -4,6 +4,7 @@ import authoringUtils.exception.*;
 import gameObjects.category.*;
 import gameObjects.entity.*;
 import gameObjects.gameObject.*;
+import gameObjects.player.PlayerClass;
 import gameObjects.player.PlayerInstance;
 import gameObjects.tile.*;
 import gameObjects.sound.*;
@@ -155,7 +156,10 @@ public interface GameObjectsCRUDInterface {
     SoundInstance createSoundInstance(SoundClass soundClass) throws GameObjectTypeException;
 
 
-    PlayerInstance createPlayerInstance(String playerName);
+    PlayerInstance createPlayerInstance(String className)
+            throws GameObjectClassNotFoundException, GameObjectTypeException;
+
+    PlayerInstance createPlayerInstance(PlayerClass playerClass) throws GameObjectTypeException;
 
     Turn createTurn(String phaseName);
 
