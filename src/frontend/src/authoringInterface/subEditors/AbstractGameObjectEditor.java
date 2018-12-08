@@ -150,13 +150,17 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
             try {
                 confirmEditTreeItem();
             } catch (IllegalGeometryException e1) {
-                e1.printStackTrace();
+                new ErrorWindow("Illegal Geometry", e1.toString()).showAndWait();
+                return;
             } catch (GameObjectClassNotFoundException e1) {
-                e1.printStackTrace();
+                new ErrorWindow("GameObjectClass Not Found", e1.toString()).showAndWait();
+                return;
             } catch (InvalidOperationException e1) {
-                e1.printStackTrace();
+                new ErrorWindow("Invalid Operation", e1.toString()).showAndWait();
+                return;
             } catch (PreviewUnavailableException e1) {
-                e1.printStackTrace();
+                new ErrorWindow("Preview Unavailable", e1.toString());
+                return;
             }
             closeEditor();
         });
@@ -174,13 +178,17 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
             try {
                 confirmAddTreeItem();
             } catch (IllegalGeometryException e1) {
-                e1.printStackTrace();
+                new ErrorWindow("Illegal Geometry", e1.toString()).showAndWait();
+                return;
             } catch (PreviewUnavailableException e1) {
-                e1.printStackTrace();
+                new ErrorWindow("Preview Unavailable", e1.toString());
+                return;
             } catch (GameObjectClassNotFoundException e1) {
-                e1.printStackTrace();
+                new ErrorWindow("GameObjectClass Not Found", e1.toString()).showAndWait();
+                return;
             } catch (DuplicateGameObjectClassException e1) {
-                e1.printStackTrace();
+                new ErrorWindow("Duplicate GameObjectClass", e1.toString()).showAndWait();
+                return;
             }
             closeEditor();
         });
@@ -207,13 +215,17 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
             try {
                 confirmEditNode();
             } catch (IllegalGeometryException e1) {
-                e1.printStackTrace();
+                new ErrorWindow("Illegal Geometry", e1.toString()).showAndWait();
+                return;
             } catch (PreviewUnavailableException e1) {
-                e1.printStackTrace();
+                new ErrorWindow("Preview Unavailable", e1.toString()).showAndWait();
+                return;
             } catch (UnremovableNodeException e1) {
-                e1.printStackTrace();
+                new ErrorWindow("Unremovable Node", e1.toString()).showAndWait();
+                return;
             } catch (GridIndexOutOfBoundsException e1) {
-                e1.printStackTrace();
+                new ErrorWindow("Grid IndexOutOfBounds", e1.toString());
+                return;
             }
             closeEditor();
         });
