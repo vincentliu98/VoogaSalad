@@ -328,8 +328,6 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         }
     }
 
-
-
     private PlayerInstanceFactory instantiatePlayerInstanceFactory() {
         return new PlayerInstanceFactory(
                 myIdManager.requestInstanceIdFunc(),
