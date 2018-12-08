@@ -7,6 +7,7 @@ import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.tile.TileClass;
 import gameObjects.tile.TileInstance;
+import grids.PointImpl;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
@@ -17,10 +18,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import utils.ErrorWindow;
+import utils.exception.GridIndexOutOfBoundsException;
 import utils.exception.PreviewUnavailableException;
+import utils.exception.UnremovableNodeException;
 import utils.imageManipulation.ImageManager;
 import utils.imageManipulation.JavaFxOperation;
 
@@ -49,6 +53,8 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
     private ObservableList<String> imagePaths;
     private Set<String> toRemovePath;
     private Set<ImageView> toRemoveImageView;
+    private TextField xInput;
+    private TextField yInput;
 
     TileEditor(GameObjectsCRUDInterface manager) {
         super(manager);
@@ -175,6 +181,24 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
                             e1.printStackTrace();
                         }
                         Tooltip.install(nodeEdited, new Tooltip(String.format("Width: %s\nHeight: %s\nSingle Click to toggle Deletion\nDouble Click or Right Click to edit\nInstance ID: %s\nClass Name: %s", width, height, gameObjectInstance.getInstanceId().getValue(), gameObjectInstance.getClassName().getValue())));
+                        StackPane target;
+                        int row = Integer.parseInt(yInput.getText());
+                        int col = Integer.parseInt(xInput.getText());
+                        try {
+                            target = JavaFxOperation.getNodeFromGridPaneByIndices(((GridPane) (nodeEdited.getParent()).getParent()), row, col);
+                        } catch (GridIndexOutOfBoundsException e1) {
+                            new ErrorWindow("GridIndexOutOfBounds error", e1.toString()).showAndWait();
+                            return;
+                        }
+                        try {
+                            JavaFxOperation.removeFromParent(nodeEdited);
+                        } catch (UnremovableNodeException e1) {
+                            // TODO: proper error handling
+                            e1.printStackTrace();
+                        }
+                        assert target != null;
+                        target.getChildren().add(nodeEdited);
+                        gameObjectInstance.setCoord(new PointImpl(col, row));
                         break;
                     case EDIT_TREEITEM:
                         try {
@@ -214,6 +238,15 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
     @Override
     public void readGameObjectInstance() {
         readCommonTileCharacteristic(gameObjectInstance.getClassName(), gameObjectInstance.getImagePathList(), gameObjectInstance.getWidth(), gameObjectInstance.getHeight());
+        Label xLabel = new Label("x");
+        Label yLabel = new Label("y");
+        xInput = new TextField(String.valueOf(gameObjectInstance.getCoord().getX()));
+        yInput = new TextField(String.valueOf(gameObjectInstance.getCoord().getY()));
+        GridPane position = new GridPane();
+        position.addRow(0, xLabel, xInput);
+        position.addRow(1, yLabel, yInput);
+        position.setHgap(20);
+        layout.addRow(3, position);
     }
 
     private void readCommonTileCharacteristic(ReadOnlyStringProperty className, ObservableList<String> imagePathList, SimpleIntegerProperty width, SimpleIntegerProperty height) {
