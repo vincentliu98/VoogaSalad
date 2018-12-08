@@ -5,6 +5,7 @@ import authoringUtils.exception.GameObjectClassNotFoundException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.player.PlayerClass;
 import gameObjects.player.PlayerInstance;
+import gameObjects.player.SimplePlayerClass;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -18,14 +19,14 @@ import javafx.stage.Stage;
 import utils.ErrorWindow;
 
 import java.io.File;
+import java.util.HashSet;
 import java.util.Set;
 
 public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerInstance> {
     private static final double ICON_WIDTH = 50;
     private static final double ICON_HEIGHT = 50;
     private static final double REMOVE_OPACITY = 0.5;
-    private static final int DEFAULT_HEIGHT = 1;
-    private static final int DEFAULT_WIDTH = 1;
+    private static final double IMAGE_PANEL_GAP = 10;
     private Label imageText;
     private Button chooseImage;
     private HBox imagePanel;
@@ -35,6 +36,8 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
 
     PlayerEditor(GameObjectsCRUDInterface manager) {
         super(manager);
+        toRemove = new HashSet<>();
+        toRemovePath = new HashSet<>();
         nameLabel.setText("Your Player Name");
         nameField.setPromptText("Player 0");
 
@@ -53,6 +56,7 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
                 imagePaths.add(imagePath);
             }
         });
+        imagePanel = new HBox(IMAGE_PANEL_GAP);
 
         confirm.setStyle("-fx-text-fill: white;"
                 + "-fx-background-color: #343a40;");
@@ -68,20 +72,12 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
                             // TODO
                             e1.printStackTrace();
                         }
-                        //TODO: if backend ready, use below
-                        PlayerClass playerClass = null;
-//                        try {
-//                            playerClass = gameObjectManager.getPlayerClass(nameField.getText().trim());
-//                        } catch (GameObjectClassNotFoundException e1) {
-//                            // TODO
-//                            e1.printStackTrace();
-//                        }
-//                        assert PlayerClass != null;
-//                        TreeItem<String> newItem = new TreeItem<>(PlayerClass.getClassName().getValue());
+
                 }
             }
         });
         layout.addRow(0, imageText, chooseImage);
+        layout.addRow(1, imagePanel);
     }
 
     private void presentImages() {
