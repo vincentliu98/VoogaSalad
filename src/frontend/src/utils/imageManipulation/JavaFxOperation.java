@@ -2,10 +2,15 @@ package utils.imageManipulation;
 
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import utils.exception.GridIndexOutOfBoundsException;
 import utils.exception.UnhandledCoordinatesClassException;
 import utils.exception.UnremovableNodeException;
+
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * This class provides convenient methods to set the coordinates of some JavaFx Nodes.
@@ -54,5 +59,13 @@ public class JavaFxOperation {
     public static void removeFromParent(Node node) throws UnremovableNodeException {
         if (!(node.getParent() instanceof Pane)) { throw new UnremovableNodeException("The node could not be removed from its parent because its Parent is not Pane, and therefore it does not have a modifiable ObservableList of children Nodes"); }
         ((Pane) node.getParent()).getChildren().remove(node);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <E extends Node> E getNodeFromGridPaneByIndices(GridPane parentGrid, int row, int col) throws GridIndexOutOfBoundsException {
+        if (row < 0 || row >= parentGrid.getRowCount() || col < 0 || col >= parentGrid.getColumnCount()) {
+            throw new GridIndexOutOfBoundsException(String.format("Either row %d or colum %d is out of the bounds of the GridPane", row, col));
+        }
+        return (E) parentGrid.getChildrenUnmodifiable().stream().filter(node -> GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row).collect(Collectors.toList()).get(0);
     }
 }

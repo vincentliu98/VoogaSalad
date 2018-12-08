@@ -49,7 +49,7 @@ public class EditorFactory {
      * @throws MissingEditorForTypeException
      */
     public static <T extends AbstractGameObjectEditor> T makeEditor(String gameObjectType, GameObjectsCRUDInterface gameObjectManager) throws GameObjectTypeException, MissingEditorForTypeException {
-        GameObjectType type = null;
+        GameObjectType type;
         try {
             type = GameObjectType.valueOf(gameObjectType);
         } catch (IllegalArgumentException e) {

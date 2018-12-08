@@ -25,10 +25,11 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
     Label nameLabel;
     TextField nameField;
     Button confirm;
-    Button cancel;
+    private Button cancel;
     TreeItem<String> treeItem;
     GameObjectsCRUDInterface gameObjectManager;
     NodeInstanceController nodeInstanceController;
+    GridPane gridPane;
     EditingMode editingMode;
     Node nodeEdited;
     T gameObjectClass;
@@ -119,7 +120,7 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
      * @param node:       The node that is to be altered.
      * @param controller: The NodeInstanceController that controls the relationship between a Node and a GameObjectInstance.
      */
-    public void editNode(Node node, NodeInstanceController controller) {
+    public void editNode(Node node, NodeInstanceController controller, GridPane gridPane) {
         this.nodeEdited = node;
         editingMode = EditingMode.EDIT_NODE;
         nodeInstanceController = controller;
@@ -129,6 +130,7 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
             // TODO: proper error handling
             e.printStackTrace();
         }
+        this.gridPane = gridPane;
         readGameObjectInstance();
     }
 
