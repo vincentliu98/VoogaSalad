@@ -151,6 +151,8 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
                         }
                         JavaFxOperation.setWidthAndHeight(icon, ICON_WIDTH, ICON_HEIGHT);
                         newItem.setGraphic(icon);
+                        tileClass.setHeight(height);
+                        tileClass.setWidth(width);
                         treeItem.getChildren().add(newItem);
                         break;
                     case NONE:
@@ -160,6 +162,8 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
                         gameObjectInstance.setInstanceName(nameField.getText());
                         gameObjectInstance.getImagePathList().clear();
                         gameObjectInstance.getImagePathList().addAll(imagePaths);
+                        gameObjectInstance.setWidth(width);
+                        gameObjectInstance.setHeight(height);
                         try {
                             ((ImageView) nodeEdited).setImage(ImageManager.getPreview(gameObjectInstance));
                         } catch (PreviewUnavailableException e1) {
@@ -171,6 +175,8 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
                         try { ImageManager.removeClassImage(gameObjectClass); } catch (GameObjectClassNotFoundException e1) {}
                         gameObjectClass.getImagePathList().clear();
                         gameObjectClass.getImagePathList().addAll(imagePaths);
+                        gameObjectClass.setWidth(width);
+                        gameObjectClass.setHeight(height);
                         try {
                             gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName().getValue(), nameField.getText());
                         } catch (InvalidOperationException e1) {
