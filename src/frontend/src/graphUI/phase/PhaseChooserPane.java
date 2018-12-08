@@ -55,12 +55,16 @@ public class PhaseChooserPane implements SubView<GridPane> {
         setupLeft();
     }
 
+    public Map<String, SinglePhaseData> getPhaseDataMap() {
+        return phaseDataMap;
+    }
+
     public void setPhaseDataMap(Map<String, SinglePhaseData> phaseDataMap) {
         this.phaseDataMap = phaseDataMap;
     }
 
-    public void checkMapUpdate(){
-        System.out.println("Updated map" + phaseDataMap);
+    public void checkMapUpdate(String message){
+        System.out.println(message + "\nPhase Data Map: " + phaseDataMap);
     }
 
     public void reset(Map<String, SinglePhaseData> phaseDataMap){
@@ -100,7 +104,6 @@ public class PhaseChooserPane implements SubView<GridPane> {
         vbox.setSpacing(15);
         vbox.getChildren().addAll(stack, phaseListView);
         phaseListView.getSelectionModel().selectedIndexProperty().addListener((e, o, n) -> {
-            System.out.println("old: " + o + "new: " + n);
             clearRightPane();
             view.add(phasePanes.get(n.intValue()).getView(), 1, 0);
         });
