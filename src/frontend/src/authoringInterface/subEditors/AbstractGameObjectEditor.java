@@ -156,10 +156,10 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
                 new ErrorWindow("Invalid Operation", e1.toString()).showAndWait();
                 return;
             } catch (PreviewUnavailableException e1) {
-                new ErrorWindow("Preview Unavailable", e1.toString());
+                new ErrorWindow("Preview Unavailable", e1.toString()).showAndWait();
                 return;
             } catch (IllegalGameObjectNamingException e1) {
-                new ErrorWindow("Illegal Naming", e1.toString());
+                new ErrorWindow("Illegal Naming", e1.toString()).showAndWait();
                 return;
             }
             closeEditor();
@@ -181,13 +181,13 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
                 new ErrorWindow("Illegal Geometry", e1.toString()).showAndWait();
                 return;
             } catch (PreviewUnavailableException e1) {
-                new ErrorWindow("Preview Unavailable", e1.toString());
+                new ErrorWindow("Preview Unavailable", e1.toString()).showAndWait();
                 return;
             } catch (GameObjectClassNotFoundException e1) {
                 new ErrorWindow("GameObjectClass Not Found", e1.toString()).showAndWait();
                 return;
             } catch (IllegalGameObjectNamingException e1) {
-                new ErrorWindow("Illegal Naming", e1.toString());
+                new ErrorWindow("Illegal Naming", e1.toString()).showAndWait();
                 return;
             }
             closeEditor();
@@ -221,10 +221,10 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
                 new ErrorWindow("Unremovable Node", e1.toString()).showAndWait();
                 return;
             } catch (GridIndexOutOfBoundsException e1) {
-                new ErrorWindow("Grid IndexOutOfBounds", e1.toString());
+                new ErrorWindow("Grid IndexOutOfBounds", e1.toString()).showAndWait();
                 return;
             } catch (IllegalGameObjectNamingException e1) {
-                new ErrorWindow("Illegal Naming", e1.toString());
+                new ErrorWindow("Illegal Naming", e1.toString()).showAndWait();
                 return;
             }
             closeEditor();
