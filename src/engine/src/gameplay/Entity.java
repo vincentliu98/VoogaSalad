@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 public class Entity extends PropertyHolder<Entity> implements GameObject, EventHandler<MouseEvent> {
     private int myID;
     private String name;
-    private int tileID;
     private List<String> myImagePaths;
     private String myImageSelector; // Groovy code
     @XStreamOmitField
@@ -28,7 +27,7 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
 
     public Entity(
             int myID,
-            int tileID,
+            int x, int y,
             String name,
             Map<String, Object> properties,
             List<String> myImagePaths,
@@ -36,7 +35,8 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
     ) {
         this.myID = myID;
         this.props = properties;
-        this.tileID = tileID;
+        this.xCoord = new SimpleDoubleProperty(x);
+        this.yCoord = new SimpleDoubleProperty(y);
         this.name = name;
         this.myImagePaths = myImagePaths;
         this.myImageSelector = myImageSelector;
@@ -53,10 +53,6 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
 
         imgIndex = new SimpleIntegerProperty(-1);
         imgIndex.addListener((e, oldVal, newVal) -> myImageView.setImage(myImages.get(newVal.intValue())));
-
-        var pos = GameMethods.getTile(tileID);
-        xCoord = new SimpleDoubleProperty(pos.getX());
-        yCoord = new SimpleDoubleProperty(pos.getY());
     }
 
     /**
@@ -100,11 +96,9 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
         } else imgIndex.set(0);
     }
 
-    public void setLocation(int tileID){
-        this.tileID = tileID;
-        var data = GameMethods.getTile(tileID);
-        this.xCoord.set(data.getX());
-        this.yCoord.set(data.getY());
+    public void setLocation(int x, int y){
+        this.xCoord.set(x);
+        this.yCoord.set(y);
     }
 
     public ImageView getImageView(){ return myImageView; }
@@ -112,7 +106,6 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
     public String getName() { return name; }
     public double getX() { return xCoord.get(); }
     public double getY() { return yCoord.get(); }
-    public int getTileID() { return tileID; }
 
     @Override
     public void handle(MouseEvent event) {

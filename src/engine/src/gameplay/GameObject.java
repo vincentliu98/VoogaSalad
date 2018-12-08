@@ -8,4 +8,6 @@ public interface GameObject {
     String getName();
     double getX();
     double getY();
+    double getWidth();
+    double getHeight();
 }

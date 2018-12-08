@@ -36,13 +36,13 @@ public class GameMethods {
     public static Entity getEntity(int entityID){
         return ENTITIES.get(entityID);
     }
-    public static Entity createEntity(String entityName, int tileID, int ownerID){
+    public static Entity createEntity(String entityName, int x, int y, int ownerID){
         var nextID = ENTITIES.keySet().stream().max(Comparator.comparingInt(a -> a)).orElse(0)+1;
-        var newEntity = ENTITY_PROTOTYPES.get(entityName).build(nextID, tileID);
+        var newEntity = ENTITY_PROTOTYPES.get(entityName).build(nextID, x, y);
         newEntity.adjustViewSize(ROOT.getWidth(), ROOT.getHeight());
         ENTITIES.put(nextID, newEntity);
         PLAYERS.get(ownerID).addEntity(nextID);
-        newEntity.setLocation(tileID);
+        newEntity.setLocation(x, y);
         ROOT.getChildren().add(newEntity.getImageView());
         return newEntity;
     }
@@ -50,8 +50,8 @@ public class GameMethods {
         ROOT.getChildren().remove(entity.getImageView());
         ENTITIES.remove(entity.getID());
     }
-    public static void moveEntity(Entity entity, Tile to) {
-        entity.setLocation(to.getID());
+    public static void moveEntity(Entity entity, int x, int y) {
+        entity.setLocation(x, y);
     }
 
     /**
@@ -63,8 +63,25 @@ public class GameMethods {
     public static Tile getTile(int tileID){
         return TILES.get(tileID);
     }
-    public static boolean hasNoEntities(Tile t) {
-        return ENTITIES.values().stream().noneMatch(e -> t.getID() == e.getTileID());
+
+    public static boolean hasIntersectingEntities(int tileID) { return hasIntersectingEntities(TILES.get(tileID)); }
+    public static boolean hasIntersectingEntities(Tile tile) {
+        return ENTITIES.values().stream().noneMatch(e -> {
+            boolean verdictX =
+                (tile.getX() <= e.getX() && e.getX() < tile.getX() + tile.getWidth()) ||
+                (e.getX() <= tile.getX() && tile.getX() < e.getX() + e.getWidth());
+            boolean verdictY =
+                (tile.getY() <= e.getY() && e.getY() < tile.getY() + tile.getHeight()) ||
+                    (e.getY() <= tile.getY() && tile.getY() < e.getY() + e.getHeight());
+            return verdictX && verdictY;
+        });
+    }
+    public static boolean hasNoEntities(int x, int y) {
+        return ENTITIES.values().stream().noneMatch(e -> {
+            boolean verdictX = (e.getX() <= x && x < e.getX() + e.getWidth());
+            boolean verdictY = (e.getY() <= y && y < e.getY() + e.getHeight());
+            return verdictX && verdictY;
+        });
     }
 
     /**
