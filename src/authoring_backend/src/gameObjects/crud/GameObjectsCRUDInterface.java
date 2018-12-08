@@ -309,6 +309,8 @@ public interface GameObjectsCRUDInterface {
     Iterable<TileClass> getTileClasses();
     Iterable<CategoryClass> getCategoryClasses();
     Iterable<SoundClass> getSoundClasses();
+    Iterable<PlayerClass> getPlayerClasses();
+
     Iterable<EntityInstance> getEntityInstances();
     Iterable<TileInstance> getTileInstances();
     Iterable<CategoryInstance> getCategoryInstances();

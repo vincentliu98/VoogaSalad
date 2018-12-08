@@ -7,7 +7,7 @@ public class Player {
     /**
      *  We should implement a HUD for this on the second sprint
      */
-    private int myID;
+    private String myName;
     private Map<String, Double> myStats;
     private Set<Integer> myEntityIDs;
 
@@ -18,5 +18,5 @@ public class Player {
     public double getValue(String key){ return myStats.get(key); }
     public Set<Integer> getMyEntities(){ return myEntityIDs; }
     public void clearMyEntities() { myEntityIDs.clear(); }
-    public int getID(){ return myID; }
+    public String getName(){ return myName; }
 }
