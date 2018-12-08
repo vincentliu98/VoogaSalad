@@ -1,6 +1,7 @@
 package utils.imageManipulation;
 
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -8,9 +9,6 @@ import javafx.scene.text.Text;
 import utils.exception.GridIndexOutOfBoundsException;
 import utils.exception.UnhandledCoordinatesClassException;
 import utils.exception.UnremovableNodeException;
-
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
  * This class provides convenient methods to set the coordinates of some JavaFx Nodes.
@@ -82,5 +80,15 @@ public class JavaFxOperation {
             }
         }
         return null;
+    }
+
+    /**
+     * This method returns the Parent of the Parent of a Node.
+     *
+     * @param node: A Node.
+     * @return The grandparent Parent of the input Node.
+     */
+    public static Parent getGrandParent(Node node) {
+        return node.getParent().getParent();
     }
 }

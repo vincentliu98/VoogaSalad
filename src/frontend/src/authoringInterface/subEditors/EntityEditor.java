@@ -199,7 +199,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                         int row = Integer.parseInt(yInput.getText());
                         int col = Integer.parseInt(xInput.getText());
                         try {
-                            target = JavaFxOperation.getNodeFromGridPaneByIndices(((GridPane) (nodeEdited.getParent()).getParent()), row, col);
+                            target = JavaFxOperation.getNodeFromGridPaneByIndices(((GridPane) JavaFxOperation.getGrandParent(nodeEdited)), row, col);
                         } catch (GridIndexOutOfBoundsException e1) {
                             new ErrorWindow("GridIndexOutOfBounds error", e1.toString()).showAndWait();
                             return;
