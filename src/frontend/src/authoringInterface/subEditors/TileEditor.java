@@ -42,12 +42,14 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
     private static final double ICON_WIDTH = 50;
     private static final double ICON_HEIGHT = 50;
     private static final double REMOVE_OPACITY = 0.5;
+    private static final double FULL_OPACITY = 1;
     private static final int DEFAULT_WIDTH = 1;
     private static final int DEFAULT_HEIGHT = 1;
+    private static final double IMAGE_PANEL_GAP = 10;
     private TextField widthText = new TextField();
     private TextField heightText = new TextField();
     private GridPane geometry = new GridPane();
-    private HBox imagePanel = new HBox();
+    private HBox imagePanel = new HBox(IMAGE_PANEL_GAP);
     private Label imageLabel = new Label("Add an image to your tile class");
     private Button chooseButton = new Button("Choose image");
     private ObservableList<String> imagePaths;
@@ -82,8 +84,8 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
                 imagePaths.add(imagePath);
             }
         });
-
         imagePaths.addListener((ListChangeListener<String>) change -> {
+            imagePanel.getChildren().clear();
             imagePaths.forEach(string -> {
                 ImageView preview = new ImageView(string);
                 preview.setFitHeight(ICON_HEIGHT);
@@ -97,7 +99,7 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
                     } else {
                         toRemoveImageView.remove(preview);
                         toRemovePath.remove(string);
-                        preview.setOpacity(1);
+                        preview.setOpacity(FULL_OPACITY);
                     }
                 });
             });
@@ -106,32 +108,6 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
         rootPane.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.DELETE) {
                 imagePaths.removeAll(toRemovePath);
-            }
-        });
-
-        confirm.setOnAction(e -> {
-            if (nameField.getText().trim().isEmpty()) {
-                new ErrorWindow("Empty name", "You must give your tile a non-empty name").showAndWait();
-            } else if (widthText.getText().trim().isEmpty()) {
-                new ErrorWindow("Empty width", "You must specify a width for this tile").showAndWait();
-            } else if (heightText.getText().trim().isEmpty()) {
-                new ErrorWindow("Empty height", "You must specify a height for this tile").showAndWait();
-            } else {
-
-                ((Stage) rootPane.getScene().getWindow()).close();
-                switch (editingMode) {
-                    case ADD_TREEITEM:
-
-                        break;
-                    case NONE:
-                        return;
-                    case EDIT_NODE:
-
-                        break;
-                    case EDIT_TREEITEM:
-
-                        break;
-                }
             }
         });
         setupLayout();
