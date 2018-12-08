@@ -21,7 +21,8 @@ public class Initializer {
         GameData.setGameData(
             myXMLParser.getDimension(), myXMLParser.getPlayers(), myXMLParser.getEntities(),
             myXMLParser.getEntityPrototypes(), myXMLParser.getTiles(),
-            myXMLParser.getPhases(), myXMLParser.getNodes(), myXMLParser.getEdges(), myXMLParser.getTurn(), myRoot,
+            myXMLParser.getPhases(), myXMLParser.getHeartBeat(),
+            myXMLParser.getNodes(), myXMLParser.getEdges(), myXMLParser.getTurn(), myRoot,
                 this);
         for (Tile tile : GameData.getTiles().values()){
             tile.setupView();

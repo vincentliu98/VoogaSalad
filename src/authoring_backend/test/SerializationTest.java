@@ -62,6 +62,15 @@ public class SerializationTest {
         var phaseDB = authTools.phaseDB();
         var factory = authTools.factory();
 
+        var hbSource = phaseDB.heartbeat().source();
+        var hbScript = factory.rawBlock(
+            "if(GameMethods.hasNoEntities(GameMethods.getCurrentPlayerID())) {" +
+            "   GameMethods.endGame('Player ' + GameMethods.getCurrentPlayerID() + ' won!')" +
+            "}"
+        );
+        phaseDB.heartbeat().addEdge(factory.createEdge(hbSource, Ports.FLOW_OUT, hbScript));
+
+
         var graph = phaseDB.createGraph("A").get(null);
 
         var node2 = phaseDB.createPhase("b").get(null);
