@@ -21,6 +21,7 @@ public class LauncherTopBarView {
     private Pane mySpacer;
     private ControlOptions myControlOptions;
     private Stage myStage;
+    private ProfileView myProfile;
 
     private double initHeight;
     private double xOffset;
@@ -41,10 +42,13 @@ public class LauncherTopBarView {
 
         myControlOptions = new ControlOptions(stage);
 
+        myProfile = new ProfileView();
+
         myBox.getChildren().add(mySearchBar.getView());
         myBox.getChildren().add(myDivider);
         myBox.getChildren().add(myTextOptions.getView());
         myBox.getChildren().add(mySpacer);
+        myBox.getChildren().add(myProfile.getView());
         myBox.getChildren().add(myControlOptions.getView());
     }
 
@@ -58,6 +62,7 @@ public class LauncherTopBarView {
 
         makeDraggable();
     }
+
 
     private void initDivider(){
         Image image = new Image(getClass().getResourceAsStream(DIVIDER_PATH));
