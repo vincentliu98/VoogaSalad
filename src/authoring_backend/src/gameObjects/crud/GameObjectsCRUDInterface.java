@@ -315,6 +315,8 @@ public interface GameObjectsCRUDInterface {
     Iterable<TileInstance> getTileInstances();
     Iterable<CategoryInstance> getCategoryInstances();
     Iterable<SoundInstance> getSoundInstances();
+
+    @Deprecated
     Iterable<PlayerInstance> getPlayerInstances();
 
     Set<String> getPlayerNames(GameObjectInstance gameObjectInstance);
