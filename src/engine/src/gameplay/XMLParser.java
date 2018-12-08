@@ -100,18 +100,18 @@ public class XMLParser {
         for (int i = 0; i < phases.getLength(); i++){
             String currentPhase = nodeToString(phases.item(i));
             Phase phase = (Phase) mySerializer.fromXML(currentPhase);
-            myPhases.put(phase.getID(), phase);
+            myPhases.put(phase.getName(), phase);
         }
         return myPhases;
     }
 
-    public Map<Integer, Node> getNodes(){
+    public Map<String, Node> getNodes(){
         NodeList nodes = myDocTree.getElementsByTagName("gameplay.Node");
-        Map<Integer, Node> myNodes = new HashMap<>();
+        Map<String, Node> myNodes = new HashMap<>();
         for (int i = 0; i < nodes.getLength(); i++){
             String currentNode = nodeToString(nodes.item(i));
             Node node = (Node) mySerializer.fromXML(currentNode);
-            myNodes.put(node.getID(), node);
+            myNodes.put(node.getName(), node);
         }
         return myNodes;
     }

@@ -14,8 +14,9 @@ public class SerializationTest {
 
         var db = authTools.entityDB();
 
-        var playerA = db.createPlayerInstance("a");
-        var playerB = db.createPlayerInstance("b");
+        var playerClass = db.createPlayerClass("standard");
+        var playerA = playerClass.createInstance();
+        var playerB = playerClass.createInstance();
 
         var box = db.createTileClass("box");
         box.getImagePathList().add("square.png");

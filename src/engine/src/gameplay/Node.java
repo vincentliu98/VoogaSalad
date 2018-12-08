@@ -2,18 +2,18 @@ package gameplay;
 
 
 public class Node {
-    private int myPhaseID;
-    private int myID;
+    private int myPhaseName;
+    private String myName;
     private String myExecution; // Groovy code
 
-    public int getID(){ return myID; }
+    public String getName(){ return myName; }
 
     public void execute(){
-        System.out.printf("On Node %d\n", myID);
+        System.out.printf("On Node %s\n", myName);
         GameData.clearArgumentListeners(); // clear previous listeners
         GameData.getEdges()
                 .stream()
-                .filter(e -> e.getMyStartNodeID() == myID)
+                .filter(e -> e.getMyStartNodeName().equals(myName))
                 .forEach(GameData::addArgumentListener); // add new ones
         if(myExecution.isEmpty()) return;
         try{

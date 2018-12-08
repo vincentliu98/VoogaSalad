@@ -108,7 +108,7 @@ public class GameMethods {
     /**
      *  Phase
      */
-    public static void goTo(int nodeID) { getNode(nodeID).execute(); }
+    public static void goTo(String nodeName) { getNode(nodeName).execute(); }
 
     /**
      *  Meta

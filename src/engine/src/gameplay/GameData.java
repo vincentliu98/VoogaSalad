@@ -19,7 +19,7 @@ public class GameData {
     static Map<String, EntityPrototype> ENTITY_PROTOTYPES;
     static Map<Integer, Tile> TILES;
     static Map<Integer, Phase> PHASES;
-    static Map<Integer, Node> NODES;
+    static Map<String, Node> NODES;
     static Set<Edge> EDGES;
     static String HEARTBEAT;
     static Turn TURN;
@@ -34,7 +34,7 @@ public class GameData {
         Map<Integer, Player> players, Map<Integer, Entity> entities,
         Map<String, EntityPrototype> entityPrototypes,
         Map<Integer, Tile> tiles, Map<Integer, Phase> phases,
-        String heartbeat, Map<Integer, Node> nodes,
+        String heartbeat, Map<String, Node> nodes,
         Set<Edge> edges, Turn turn, Pane root, Initializer initializer
     ){
         GameData.GRID_WIDTH = grid_dimension.getX();
@@ -66,8 +66,8 @@ public class GameData {
     public static Phase getPhase(int phaseID){
         return PHASES.get(phaseID);
     }
-    public static Node getNode(int nodeID){
-        return NODES.get(nodeID);
+    public static Node getNode(String nodeName){
+        return NODES.get(nodeName);
     }
     public static Map<Integer, Tile> getTiles() { return TILES; }
 
@@ -111,13 +111,13 @@ public class GameData {
     // clears/reinitialize the ArgumentListeners. That leads to ConcurrentModificationException
     // So I had to explicitly separate the validity check and execution
     private static void notifyArgumentListeners(Event event){
-        var destination = -1;
+        var destination = ArgumentListener.DONT_PASS;
         // at most one of the listeners should pass
         for (ArgumentListener argumentListener : myArgumentListeners){
             var dest = argumentListener.trigger(event);
-            if(dest != ArgumentListener.DONT_PASS) destination = dest;
+            if(!dest.equals(ArgumentListener.DONT_PASS)) destination = dest;
         }
-        if(destination != ArgumentListener.DONT_PASS) NODES.get(destination).execute();
+        if(!destination.equals(ArgumentListener.DONT_PASS)) NODES.get(destination).execute();
     }
 
     public static Collection<Edge> getEdges() { return EDGES; }
