@@ -13,6 +13,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import social.EngineEvent;
+import social.EventBus;
+import social.User;
 
 public class LoginScreen {
     public static final String LOGO_PATH = "duke_logo.png";
@@ -22,8 +25,7 @@ public class LoginScreen {
     private GridPane myPane;
     private Scene myScene;
 
-    public LoginScreen() {
-    }
+    public LoginScreen() { }
 
     public Stage launchLogin(){
         Stage myStage = new Stage();
@@ -90,6 +92,12 @@ public class LoginScreen {
         CheckBox cBox = new CheckBox("Remember me");
         Text register = new Text("Register");
         //Text forgotPassword = new Text("Forgot your password?");
+
+        btn.setOnMouseClicked(e -> {
+            // assuming a valid user was retrieved from the database (myUser)
+            User myUser = new User(1); // TODO: Remove later (just a placeholder)
+            EventBus.getInstance().sendMessage(EngineEvent.CHANGE_USER, myUser);
+        });
 
         myPane.add(usernameField, 0, 2, 4, 1);
         myPane.add(passwordField, 0, 3, 4, 1);

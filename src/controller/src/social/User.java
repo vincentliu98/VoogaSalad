@@ -27,7 +27,7 @@ public class User {
         myFavoriteGames = new HashSet<>();
         myTwitter = null;
         myAvatar = new ImageView();
-        myAvatar.setImage(new Image(getClass().getResourceAsStream("/graphics/default-avatar.png")));
+        myAvatar.setImage(new Image(getClass().getResourceAsStream("/graphics/person_logo.png")));
         //myErrors = ResourceBundle.getBundle("resources/errors/Errors");
     }
 

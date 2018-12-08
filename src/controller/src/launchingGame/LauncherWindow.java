@@ -2,6 +2,7 @@ package launchingGame;
 
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import social.User;
 
 public class LauncherWindow {
     public static final double TOP_HEIGHT = 65;
@@ -26,7 +27,6 @@ public class LauncherWindow {
         myPane.setLeft(mySide.getView());
         myPane.setCenter(myDisplay.getView());
     }
-
 
     public BorderPane getView() {
         return myPane;
