@@ -16,6 +16,7 @@ import gameObjects.entity.SimpleEntityClass;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
+import gameObjects.player.PlayerClass;
 import gameObjects.player.PlayerInstance;
 import gameObjects.player.PlayerInstanceFactory;
 import gameObjects.sound.SimpleSoundClass;
@@ -514,7 +515,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
      * Delete all instances currently in the CRUD.
      */
     @Override
-    public void deleteAllInstances() throws InvalidIdException {
+    public void deleteAllInstances() throws InvalidIdException, GameObjectClassNotFoundException, GameObjectTypeException {
         for (GameObjectInstance gameObjectInstance : gameObjectInstanceMapById.values()) {
             myIdManager.returnInstanceIdFunc().accept(gameObjectInstance);
         }

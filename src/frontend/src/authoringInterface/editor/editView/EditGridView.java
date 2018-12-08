@@ -59,6 +59,7 @@ public class EditGridView implements SubView<ScrollPane> {
     private boolean isControlDown;
     private boolean isShiftDown;
     private Label batchMode;
+    private Label deleteMode;
     private static final double INDICATOR_FADE_TIME = 3000;
     private static final double INITIAL_INDICATOR_FADE_TIME = 15000;
     private static final double CELL_HEIGHT = 100;
@@ -76,6 +77,9 @@ public class EditGridView implements SubView<ScrollPane> {
         batchMode = new Label("Batch Mode: Off\nPress Shift to Toggle");
         batchMode.setFont(Font.font(20));
         batchMode.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, null, null)));
+        deleteMode = new Label("Delete Mode: Off\nPress Control to Toggle");
+        deleteMode.setFont(Font.font(20));
+        deleteMode.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, null, null)));
         gridScrollView = new GridPane();
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
@@ -92,7 +96,9 @@ public class EditGridView implements SubView<ScrollPane> {
         }
         gridScrollView.setGridLinesVisible(true);
         gridScrollView.add(batchMode, 0, 0, 3, 2);
+        gridScrollView.add(deleteMode, 0, 1, 3, 2);
         SingleNodeFade.getNodeFadeOut(batchMode, INITIAL_INDICATOR_FADE_TIME).playFromStart();
+        SingleNodeFade.getNodeFadeOut(deleteMode, INITIAL_INDICATOR_FADE_TIME).playFromStart();
         scrollPane = new ScrollPane(gridScrollView);
         scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, keyEvent -> {
             if (keyEvent.getCode() == KeyCode.CONTROL) {
@@ -110,6 +116,14 @@ public class EditGridView implements SubView<ScrollPane> {
      */
     private void setUpControl() {
         isControlDown = !isControlDown;
+        if (isControlDown) {
+            deleteMode.setText("Delete Mode: On");
+            deleteMode.setBackground(new Background(new BackgroundFill(Color.LIGHTYELLOW, null, null)));
+        } else {
+            deleteMode.setText("Delete Mode: Off");
+            deleteMode.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, null, null)));
+        }
+        SingleNodeFade.getNodeFadeInAndOut(deleteMode, INDICATOR_FADE_TIME).playFromStart();
     }
 
     /**
@@ -146,6 +160,12 @@ public class EditGridView implements SubView<ScrollPane> {
         try {
             gameObjectManager.deleteAllInstances();
         } catch (InvalidIdException e) {
+            // TODO: error handling
+            e.printStackTrace();
+        } catch (GameObjectClassNotFoundException e) {
+            // TODO: error handling
+            e.printStackTrace();
+        } catch (GameObjectTypeException e) {
             // TODO: error handling
             e.printStackTrace();
         }
@@ -344,7 +364,7 @@ public class EditGridView implements SubView<ScrollPane> {
         nodeOnGrid.setOnMouseClicked(e -> {
             if (e.getButton() == MouseButton.SECONDARY) {
                 setUpRightClickMenu(e, finalNodeOnGrid);
-            } else if (e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 1) {
+            } else if (e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 1 && isControlDown) {
                 handleClickToRemove(finalNodeOnGrid);
             } else {
                 handleDoubleClick(e, finalNodeOnGrid);

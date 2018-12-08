@@ -25,7 +25,7 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
     Label nameLabel;
     TextField nameField;
     Button confirm;
-    Button cancel;
+    private Button cancel;
     TreeItem<String> treeItem;
     GameObjectsCRUDInterface gameObjectManager;
     NodeInstanceController nodeInstanceController;
