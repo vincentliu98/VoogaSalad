@@ -701,6 +701,11 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     }
 
     @Override
+    public Iterable<PlayerInstance> getPlayerInstances() {
+        return null;
+    }
+
+    @Override
     public Set<String> getPlayerNames(GameObjectInstance gameObjectInstance) {
         return gameObjectClassMapByName.values().stream()
                 .filter(gameObjectClass -> gameObjectClass.getType() == GameObjectType.PLAYER)

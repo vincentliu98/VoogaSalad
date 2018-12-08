@@ -30,7 +30,7 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
                             e1.printStackTrace();
                         }
                         //TODO: if backend ready, use below
-//                        PlayerClass playerClass = null;
+                        PlayerClass playerClass = null;
 //                        try {
 //                            playerClass = gameObjectManager.getPlayerClass(nameField.getText().trim());
 //                        } catch (GameObjectClassNotFoundException e1) {
