@@ -157,6 +157,9 @@ public interface GameObjectsCRUDInterface {
     PlayerClass createPlayerClass(String className)
             throws DuplicateGameObjectClassException;
 
+    PlayerClass getPlayerClass(String className)
+            throws GameObjectClassNotFoundException;
+
     PlayerInstance createPlayerInstance(String className)
             throws GameObjectClassNotFoundException, GameObjectTypeException;
 
@@ -315,6 +318,8 @@ public interface GameObjectsCRUDInterface {
     Iterable<TileInstance> getTileInstances();
     Iterable<CategoryInstance> getCategoryInstances();
     Iterable<SoundInstance> getSoundInstances();
+
+    @Deprecated
     Iterable<PlayerInstance> getPlayerInstances();
 
     Set<String> getPlayerNames(GameObjectInstance gameObjectInstance);

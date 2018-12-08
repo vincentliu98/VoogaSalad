@@ -6,6 +6,10 @@ import grids.Point;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
 
+/**
+ *
+ * @author Jason Zhou
+ */
 public interface EntityInstance extends GameObjectInstance {
 
 
@@ -45,23 +49,54 @@ public interface EntityInstance extends GameObjectInstance {
     String getImageSelectorCode();
 
 
+    /**
+     *
+     * @return
+     */
     EntityClass getGameObjectClass();
 
 
+    /**
+     *
+     * @return
+     */
     Point getCoord();
 
+    /**
+     *
+     * @param coord
+     */
     public void setCoord(Point coord);
 
+    /**
+     *
+     * @return
+     */
     SimpleIntegerProperty getHeight();
 
+    /**
+     *
+     * @return
+     */
     SimpleIntegerProperty getWidth();
 
 
+    /**
+     *
+     * @param newHeight
+     */
     void setHeight(int newHeight);
 
+    /**
+     *
+     * @param newWidth
+     */
     void setWidth(int newWidth);
 
-
+    /**
+     *
+     * @return
+     */
     @Override
     default GameObjectType getType() {
         return GameObjectType.ENTITY;

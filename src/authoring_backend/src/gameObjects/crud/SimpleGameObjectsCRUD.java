@@ -17,6 +17,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
+
     private static final String DEFAULT_PLAYER_CLASS = "$defaultPlayerClass$";
     private static final String DEFAULT_PLAYER_NAME = "$default$";
 
@@ -198,6 +199,13 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
             throws GameObjectClassNotFoundException {
         return (SoundClass) getSpecificClass(className, GameObjectType.SOUND);
     }
+
+    @Override
+    public PlayerClass getPlayerClass(String className)
+            throws GameObjectClassNotFoundException {
+        return (PlayerClass) getSpecificClass(className, GameObjectType.PLAYER);
+    }
+
 
     @Override
     public CategoryClass getCategoryClass(String className)
@@ -691,6 +699,12 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     }
 
     @Override
+    @Deprecated
+    public Iterable<PlayerInstance> getPlayerInstances() {
+        return null;
+    }
+
+    @Override
     public Iterable<CategoryInstance> getCategoryInstances() {
         return getSpecificInstances(GameObjectType.CATEGORY);
     }
@@ -698,11 +712,6 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     @Override
     public Iterable<SoundInstance> getSoundInstances() {
         return getSpecificInstances(GameObjectType.SOUND);
-    }
-
-    @Override
-    public Iterable<PlayerInstance> getPlayerInstances() {
-        return null;
     }
 
     @Override

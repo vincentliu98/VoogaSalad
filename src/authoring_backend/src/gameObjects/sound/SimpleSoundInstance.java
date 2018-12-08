@@ -11,6 +11,7 @@ public class SimpleSoundInstance implements SoundInstance {
     private SimpleStringProperty instanceName;
     private ReadOnlyIntegerWrapper instanceId;
 
+    private SimpleDoubleProperty duration;
     private SimpleStringProperty mediaFilePath;
     private ObservableMap<String, String> propertiesMap;
     private Supplier<SoundClass> getSoundClassFunc;
@@ -111,6 +112,16 @@ public class SimpleSoundInstance implements SoundInstance {
     @Override
     public void setMediaFilePath(String newMediaFilePath) {
         mediaFilePath.setValue(newMediaFilePath);
+    }
+
+    @Override
+    public SimpleDoubleProperty getDuration() {
+        return duration;
+    }
+
+    @Override
+    public void setDuration(double newDuration) {
+        duration.setValue(newDuration);
     }
 
     @Override
