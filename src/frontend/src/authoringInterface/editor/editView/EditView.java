@@ -47,8 +47,7 @@ public class EditView implements SubView<TabPane> {
     private Tab mainTab;
     private Tab phaseNodeTab;
     private Tab gridTab;
-    private Tab heartbeatTab;
-    private Integer index;
+    private Tab winConditionTab;
     private Stage newStage;
     private TabPane newTabPane;
 
@@ -94,29 +93,26 @@ public class EditView implements SubView<TabPane> {
         );
         phaseNodeTab.setContent(phaseView.getView());
 
-        heartbeatTab = new Tab();
-        Label heartbeatLabel = new Label("Heartbeat");
-        labelOnTab(heartbeatLabel, heartbeatTab);
-        var dialog = groovyPaneFactory.heartbeat();
+        winConditionTab = new Tab();
+        Label winConditionLabel = new Label("win condition");
+        labelOnTab(winConditionLabel, winConditionTab);
+        var dialog = groovyPaneFactory.winCondition();
         dialog.closeWindow(); // we're only gonna use its view
-        heartbeatTab.setContent(dialog.getView());
+        winConditionTab.setContent(dialog.getView());
 
-        tabPane.getTabs().addAll(mainTab, gridTab, phaseNodeTab, heartbeatTab);
+        tabPane.getTabs().addAll(mainTab, gridTab, phaseNodeTab, winConditionTab);
 
-//        mainLabel.setOnMouseDragged(e -> {
-//            index = 0;
-//            Point2D mouseLoc = new Point2D(e.getScreenX(), e.getScreenY());
-//            splitTab(mouseLoc, mainTab, index);
-//        });
         gridLabel.setOnMouseDragged(e -> {
-            index = 1;
             Point2D mouseLoc = new Point2D(e.getScreenX(), e.getScreenY());
-            splitTab(mouseLoc, gridTab, index);
+            splitTab(mouseLoc, gridTab);
         });
         phaseLabel.setOnMouseDragged(e -> {
-            index = 2;
             Point2D mouseLoc = new Point2D(e.getScreenX(), e.getScreenY());
-            splitTab(mouseLoc, phaseNodeTab, index);
+            splitTab(mouseLoc, phaseNodeTab);
+        });
+        winConditionLabel.setOnMouseDragged(e -> {
+            Point2D mouseLoc = new Point2D(e.getScreenX(), e.getScreenY());
+            splitTab(mouseLoc, winConditionTab);
         });
     }
     
@@ -125,7 +121,7 @@ public class EditView implements SubView<TabPane> {
         tab.setGraphic(label);
     }
 
-    private void splitTab(Point2D mouseLoc, Tab tab, int index) {
+    private void splitTab(Point2D mouseLoc, Tab tab) {
         StackPane header = (StackPane) tabPane.lookup(".tab-header-area");
         if(!header.getBoundsInLocal().contains(mouseLoc)){
             openModal(tab).show();

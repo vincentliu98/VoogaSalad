@@ -1,5 +1,6 @@
 package gameplay;
 
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 
 import java.io.File;
@@ -21,9 +22,8 @@ public class Initializer {
         GameData.setGameData(
             myXMLParser.getDimension(), myXMLParser.getPlayers(), myXMLParser.getEntities(),
             myXMLParser.getEntityPrototypes(), myXMLParser.getTiles(),
-            myXMLParser.getPhases(), myXMLParser.getHeartBeat(),
-            myXMLParser.getNodes(), myXMLParser.getEdges(), myXMLParser.getTurn(), myRoot,
-                this);
+            myXMLParser.getPhases(), myXMLParser.getWinCondition(),
+            myXMLParser.getNodes(), myXMLParser.getEdges(), myXMLParser.getTurn(), myRoot, this);
         for (Tile tile : GameData.getTiles().values()){
             tile.setupView();
             myRoot.getChildren().add(tile.getImageView());
@@ -37,6 +37,7 @@ public class Initializer {
 
     public Pane getRoot(){ return myRoot; }
 
+    public void keyFilter(KeyEvent ev) { GameData.addArgument(ev, new KeyTag(ev.getCode())); }
     public void setScreenSize(double screenWidth, double screenHeight) {
         myRoot.setPrefWidth(screenWidth);
         myRoot.setPrefHeight(screenHeight);

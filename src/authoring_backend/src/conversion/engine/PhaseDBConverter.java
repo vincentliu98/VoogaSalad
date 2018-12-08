@@ -14,8 +14,8 @@ public class PhaseDBConverter implements Converter {
         var graphConverter = new PhaseGraphConverter();
         db.phases().forEach(graph -> graphConverter.marshal(graph, writer, ctx));
         var blockGraphConverter = new BlockGraphConverter();
-        writer.startNode("heartbeat");
-        blockGraphConverter.marshal(db.heartbeat(), writer, ctx);
+        writer.startNode("winCondition");
+        blockGraphConverter.marshal(db.winCondition(), writer, ctx);
         writer.endNode();
     }
 

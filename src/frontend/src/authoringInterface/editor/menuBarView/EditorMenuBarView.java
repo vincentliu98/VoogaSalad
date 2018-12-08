@@ -19,6 +19,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.xml.sax.SAXException;
@@ -74,13 +75,13 @@ public class EditorMenuBarView implements SubView<MenuBar> {
 
         MenuItem newFile = new MenuItem("New");
         MenuItem open = new MenuItem("Open");
+        MenuItem export = new MenuItem("Export");
         MenuItem save = new MenuItem("Save");
         MenuItem saveAs = new MenuItem("Save As");
         MenuItem close = new MenuItem("Close");
         MenuItem undo = new MenuItem("Undo");
         MenuItem redo = new MenuItem("Redo");
         MenuItem runProject = new MenuItem("Run");
-        MenuItem setPlayer = new MenuItem("Players");
         MenuItem resizeGrid = new MenuItem("Resize Grid");
         MenuItem setBGM = new MenuItem("BGM");
         MenuItem helpDoc = new MenuItem("Help");
@@ -92,13 +93,13 @@ public class EditorMenuBarView implements SubView<MenuBar> {
 
         newFile.setOnAction(e -> new NewWindowView());
         open.setOnAction(this::handleOpen);
+        export.setOnAction(this::handleExport);
         save.setOnAction(this::handleSave);
         saveAs.setOnAction(this::handleSaveAs);
         close.setOnAction(e -> new CloseFileView(closeWindow));
         undo.setOnAction(this::handleUndo);
         redo.setOnAction(this::handleRedo);
         runProject.setOnAction(this::handleRunProject);
-        setPlayer.setOnAction(e -> new PlayerView().showAndwait());
         resizeGrid.setOnAction(e -> new ResizeGridView().showAndWait().ifPresent(dimension ->
                 updateGridDimension.accept(dimension.getKey(), dimension.getValue())
         ));
@@ -106,10 +107,10 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         helpDoc.setOnAction(this::handleHelpDoc);
         about.setOnAction(this::handleAbout);
 
-        file.getItems().addAll(newFile, open, save, saveAs, close);
+        file.getItems().addAll(newFile, open, export, save, saveAs, close);
         edit.getItems().addAll(undo, redo);
         run.getItems().addAll(runProject);
-        settings.getItems().addAll(resizeGrid, setPlayer, setBGM);
+        settings.getItems().addAll(resizeGrid, setBGM);
         help.getItems().addAll(helpDoc, about);
 
         menuBar.getMenus().addAll(file, edit, settings, run, help);
@@ -120,10 +121,13 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         editorCaretaker.addMemento(editor.save());
         editor.setState(editorCaretaker.getMemento(currentMemento++).getSavedState());
     }
+
     void handleSaveAs(ActionEvent event) {
-//        new SaveFileView();
         editView.getPhaseView().generateXML();
-//        handleSave(event);
+    }
+
+    void handleExport(ActionEvent event) {
+        new SaveFileView(authTools::toEngineXML);
     }
 
     void handleOpen(ActionEvent event) {
@@ -162,8 +166,9 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         gameWindow = new GameWindow();
         try{
             Initializer initializer =
-                    new Initializer(new File(getClass().getClassLoader().getResource(fileName).getFile()));
+                new Initializer(new File(getClass().getClassLoader().getResource(fileName).getFile()));
             Scene newScene = new Scene(initializer.getRoot(), View.GAME_WIDTH, View.GAME_HEIGHT);
+            newScene.addEventFilter(KeyEvent.KEY_RELEASED, initializer::keyFilter);
             newWindow.setScene(newScene);
             newWindow.setX(MainAuthoringProgram.SCREEN_WIDTH*0.5 - View.GAME_WIDTH*0.5);
             newWindow.setY(MainAuthoringProgram.SCREEN_HEIGHT*0.5 - View.GAME_HEIGHT*0.5);

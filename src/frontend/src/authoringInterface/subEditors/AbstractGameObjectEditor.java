@@ -12,6 +12,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import utils.ErrorWindow;
 import utils.exception.NodeNotFoundException;
 import utils.nodeInstance.NodeInstanceController;
 
@@ -51,8 +52,7 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
         cancel.setStyle("-fx-text-fill: white;"
                 + "-fx-background-color: #343a40;");
         cancel.setOnAction(e -> {
-            System.out.println(e.toString());
-            ((Stage) rootPane.getScene().getWindow()).close();
+            closeEditor();
         });
         rootPane.getChildren().addAll(nameLabel, nameField, layout, confirm, cancel);
         setupBasicLayout();
@@ -67,7 +67,7 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
         nameLabel.setLayoutX(14);
         nameLabel.setLayoutY(30);
         nameField.setLayoutX(208);
-        nameField.setLayoutY(35);
+        nameField.setLayoutY(45);
         confirm.setLayoutX(396);
         confirm.setLayoutY(560);
         cancel.setLayoutX(491);
@@ -101,6 +101,10 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
         editingMode = EditingMode.EDIT_TREEITEM;
         this.gameObjectClass = gameObjectClass;
         readGameObjectClass();
+        confirm.setOnAction(e -> {
+            confirmEditTreeItem();
+            closeEditor();
+        });
     }
 
     /**
@@ -111,6 +115,10 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
     public void addTreeItem(TreeItem<String> treeItem) {
         this.treeItem = treeItem;
         editingMode = EditingMode.ADD_TREEITEM;
+        confirm.setOnAction(e -> {
+            confirmAddTreeItem();
+            closeEditor();
+        });
     }
 
     /**
@@ -130,6 +138,10 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
             e.printStackTrace();
         }
         readGameObjectInstance();
+        confirm.setOnAction(e ->{
+            confirmEditNode();
+            closeEditor();
+        });
     }
 
     /**
@@ -141,4 +153,46 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
      * Read the GameObjectClass represented by this editor.
      */
     protected abstract void readGameObjectClass();
+
+    /**
+     * This method sets up the confirm logic of adding new TreeItem.
+     */
+    protected abstract void confirmAddTreeItem();
+
+    /**
+     * This method sets up the confirm logic of editing existing TreeItem.
+     */
+    protected abstract void confirmEditTreeItem();
+
+    /**
+     * This method sets up the confirm logic of editing existing Node.
+     */
+    protected abstract void confirmEditNode();
+
+    /**
+     * This method closes the editor.
+     */
+    private void closeEditor() {
+        ((Stage) rootPane.getScene().getWindow()).close();
+    }
+
+    /**
+     * This method outputs a positive integer from a TextField input and throws appropriate errors.
+     *
+     * @param intInput: A TextField input.
+     * @return An int representing the legal output.
+     * @throws IllegalGeometryException
+     */
+    protected int outputPositiveInteger(TextField intInput) throws IllegalGeometryException {
+        int ret;
+        try {
+            ret = Integer.parseInt(intInput.getText());
+        } catch (NumberFormatException e) {
+            throw new IllegalGeometryException(String.format("%s is not a positive integer", intInput.getText()), e);
+        }
+        if (ret == 0) {
+            throw new IllegalGeometryException(String.format("%s is not a positive integer", intInput.getText()));
+        }
+        return ret;
+    }
 }

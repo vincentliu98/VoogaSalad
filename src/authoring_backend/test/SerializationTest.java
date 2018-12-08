@@ -2,6 +2,7 @@ import authoring.AuthoringTools;
 import gameObjects.gameObject.GameObjectInstance;
 import grids.PointImpl;
 import groovy.api.Ports;
+import javafx.scene.input.KeyCode;
 import phase.api.GameEvent;
 
 import java.util.ArrayList;
@@ -14,8 +15,8 @@ public class SerializationTest {
 
         var db = authTools.entityDB();
 
-        var playerA = db.createPlayerInstance("a");
-        var playerB = db.createPlayerInstance("b");
+        var playerClassA = db.createPlayerClass("classA");
+        var playerClassB = db.createPlayerClass("classB");
 
         var box = db.createTileClass("box");
         box.getImagePathList().add("square.png");
@@ -52,31 +53,32 @@ public class SerializationTest {
         bowmanClass.addImagePath("bowman5.png");
         bowmanClass.setImageSelector("$return = $this.props.hp-1");
 
-        swordmanClass.createInstance(playerA.getInstanceId().get(), new PointImpl(0,0));
-        swordmanClass.createInstance(playerA.getInstanceId().get(), new PointImpl(0,1));
-        bowmanClass.createInstance(playerB.getInstanceId().get(), new PointImpl(1, 3));
-        bowmanClass.createInstance(playerB.getInstanceId().get(), new PointImpl(3, 3));
+        playerClassA.addGameObjectInstances(swordmanClass.createInstance(new PointImpl(0,0)));
+        playerClassA.addGameObjectInstances(swordmanClass.createInstance(new PointImpl(0,1)));
+        playerClassB.addGameObjectInstances(bowmanClass.createInstance(new PointImpl(1, 3)));
+        playerClassB.addGameObjectInstances(bowmanClass.createInstance(new PointImpl(3, 3)));
+
 
         // -------------- PHASE ------------- //
 
         var phaseDB = authTools.phaseDB();
         var factory = authTools.factory();
 
-        var hbSource = phaseDB.heartbeat().source();
+        var hbSource = phaseDB.winCondition().source();
         var hbScript = factory.rawBlock(
-            "if(GameMethods.hasNoEntities(GameMethods.getCurrentPlayerID())) {" +
-            "   GameMethods.endGame('Player ' + GameMethods.getCurrentPlayerID() + ' won!')" +
+            "if(GameMethods.hasNoEntities(GameMethods.getCurrentPlayerName())) {" +
+            "   GameMethods.endGame(GameMethods.getCurrentPlayerName() + ' LOST!')" +
             "}"
         );
-        phaseDB.heartbeat().addEdge(factory.createEdge(hbSource, Ports.FLOW_OUT, hbScript));
+        phaseDB.winCondition().addEdge(factory.createEdge(hbSource, Ports.FLOW_OUT, hbScript));
 
 
         var graph = phaseDB.createGraph("A").get(null);
-
         var node2 = phaseDB.createPhase("b").get(null);
         var node3 = phaseDB.createPhase("c").get(null);
         var node4 = phaseDB.createPhase("d").get(null);
 
+        var edge21 = phaseDB.createTransition(node2, GameEvent.keyPress(KeyCode.ESCAPE), graph.source());
         var edge12 = phaseDB.createTransition(graph.source(), GameEvent.mouseClick(), node2);
         var edge23 = phaseDB.createTransition(node2, GameEvent.mouseClick(), node3);
         var edge24 = phaseDB.createTransition(node2, GameEvent.mouseClick(), node4);
@@ -85,9 +87,15 @@ public class SerializationTest {
         graph.addNode(node3);
         graph.addNode(node4);
 
+        graph.addEdge(edge21);
         graph.addEdge(edge12);
         graph.addEdge(edge23);
         graph.addEdge(edge24);
+
+        var edge21graph = edge21.guard();
+        var noGuard = factory.rawBlock("GameMethods.$return(true)");
+        edge21graph.addNode(noGuard);
+        edge21graph.addEdge(factory.createEdge(edge21graph.source(), Ports.FLOW_OUT, noGuard));
 
         var edge12graph = edge12.guard();
 
@@ -130,12 +138,12 @@ public class SerializationTest {
         edge12graph.addEdge(factory.createEdge(n10, Ports.ASSIGN_RHS, n11));
 
         var edge23graph = edge23.guard();
-        var n23 = factory.rawBlock("$return = GameMethods.isTile($clicked) && GameMethods.distance($clicked, selected) <= 1");
+        var n23 = factory.rawBlock("GameMethods.$return(GameMethods.isTile($clicked) && GameMethods.distance($clicked, selected) <= 1)");
         edge23graph.addNode(n23);
         edge23graph.addEdge(factory.createEdge(edge23graph.source(), Ports.FLOW_OUT, n23));
 
         var edge24graph = edge24.guard();
-        var n24 = factory.rawBlock("$return = GameMethods.isEntity($clicked) && !GameMethods.getCurrentPlayer().isMyEntity($clicked) && GameMethods.distance($clicked, selected) <= selected.props.attackRange");
+        var n24 = factory.rawBlock("GameMethods.$return(GameMethods.isEntity($clicked) && !GameMethods.getCurrentPlayer().isMyEntity($clicked) && GameMethods.distance($clicked, selected) <= selected.props.attackRange)");
         edge24graph.addNode(n24);
         edge24graph.addEdge(factory.createEdge(edge24graph.source(), Ports.FLOW_OUT, n24));
 
@@ -146,7 +154,7 @@ public class SerializationTest {
         var exec3 = factory.rawBlock(
             "GameMethods.moveEntity(selected, $clicked)\n" +
             "GameMethods.toNextPlayer()\n" +
-            "GameMethods.goTo('A')"
+            "GameMethods.$goto('A')"
         );
         node3.exec().addNode(exec3);
         node3.exec().addEdge(factory.createEdge(node3.exec().source(), Ports.FLOW_OUT, exec3));
@@ -156,7 +164,7 @@ public class SerializationTest {
             "$clicked.props.hp = $clicked.props.hp - selected.props.dmg\n" +
             "if($clicked.props.hp <= 0) { GameMethods.removeEntity($clicked) }\n" +
             "GameMethods.toNextPlayer()\n" +
-            "GameMethods.goTo('A')"
+            "GameMethods.$goto('A')"
         );
         node4.exec().addNode(exec4);
         node4.exec().addEdge(factory.createEdge(node4.exec().source(), Ports.FLOW_OUT, exec4));

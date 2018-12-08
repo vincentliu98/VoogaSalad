@@ -17,12 +17,12 @@ public class Communicator implements Communicable {
     public void addNewEntity(Tag tag) {
         EntityView nwEntity = new EntityView();
         if(tag.getType().equals(Tile.class)){
-            Tile curTile = GameData.getTile(tag.getID());
+            Tile curTile = GameData.getTile(tag.getName());
             nwEntity.changeImage(curTile.getImagePath());
             nwEntity.changeCoordinates(curTile.getXCoord(), curTile.getYCoord());
         }
         else {
-            Entity curEntity = GameData.getEntity(tag.getID());
+            Entity curEntity = GameData.getEntity(tag.getName());
             nwEntity.changeImage(curEntity.getImagePath());
             nwEntity.changeCoordinates(curEntity.getXCoord(), curEntity.getYCoord());
         }

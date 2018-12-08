@@ -55,7 +55,7 @@ public class View implements ParentView<SubView> {
         rootPane.getStyleClass().add("mainPane");
         tools = new AuthoringTools(COL_NUMBER, ROW_NUMBER);
         gameObjectManager = tools.entityDB();
-        groovyPaneFactory = new GroovyPaneFactory(primaryStage, tools.factory(), tools.phaseDB().heartbeat());
+        groovyPaneFactory = new GroovyPaneFactory(primaryStage, tools.factory(), tools.phaseDB().winCondition());
         nodeInstanceController = new CrappyNodeInstanceController();
         initializeElements();
         setElements();

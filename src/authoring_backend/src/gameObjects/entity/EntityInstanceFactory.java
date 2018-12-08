@@ -20,30 +20,26 @@ public class EntityInstanceFactory {
     private Function<Integer, Boolean> verifyEntityInstanceIdFunc;
     private Consumer<GameObjectInstance> requestInstanceIdFunc;
     private ThrowingConsumer<GameObjectInstance, InvalidIdException> addInstanceToMapFunc;
-    private BiConsumer<Integer, Integer> addInstanceToPlayer;
-
 
     public EntityInstanceFactory(
             Function<Integer, Boolean> verifyEntityInstanceIdFunc,
             Consumer<GameObjectInstance> requestInstanceIdFunc,
-            ThrowingConsumer<GameObjectInstance, InvalidIdException> addInstanceToMapFunc,
-            BiConsumer<Integer, Integer> addInstanceToPlayer
+            ThrowingConsumer<GameObjectInstance, InvalidIdException> addInstanceToMapFunc
     ) {
 
         this.verifyEntityInstanceIdFunc = verifyEntityInstanceIdFunc;
         this.requestInstanceIdFunc = requestInstanceIdFunc;
         this.addInstanceToMapFunc = addInstanceToMapFunc;
-        this.addInstanceToPlayer = addInstanceToPlayer;
     }
 
-    public EntityInstance createInstance(EntityClass entityPrototype, int playerID, Point point)
+    public EntityInstance createInstance(EntityClass entityPrototype, Point point)
             throws GameObjectTypeException, InvalidIdException {
         // TODO locality
 //        if (!verifyEntityInstanceIdFunc.apply(tileId)) {
 //            throw new InvalidGameObjectInstanceException("Entity cannot be created on Tile Instance with invalid Tile Id");
 //        }
         if (entityPrototype.getType() != GameObjectType.ENTITY) {
-            throw new GameObjectTypeException("entityPrototype","Entity");
+            throw new GameObjectTypeException(GameObjectType.ENTITY);
         }
         ObservableList imagePathListCopy = FXCollections.observableArrayList();
         ObservableMap propertiesMapCopy = FXCollections.observableHashMap();
@@ -56,7 +52,6 @@ public class EntityInstanceFactory {
         entityInstance.setWidth(entityPrototype.getWidth().getValue());
         requestInstanceIdFunc.accept(entityInstance);
         addInstanceToMapFunc.accept(entityInstance);
-        addInstanceToPlayer.accept(entityInstance.getInstanceId().get(), playerID);
         return entityInstance;
 
     }

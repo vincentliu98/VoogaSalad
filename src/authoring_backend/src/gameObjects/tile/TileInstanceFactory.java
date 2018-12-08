@@ -40,7 +40,7 @@ public class TileInstanceFactory {
             throw new InvalidPointsException();
         }
         if (tilePrototype.getType() != GameObjectType.TILE) {
-            throw new GameObjectTypeException("tilePrototype", "Tile");
+            throw new GameObjectTypeException(GameObjectType.TILE);
         }
         ObservableList imagePathListCopy = FXCollections.observableArrayList();
         ObservableMap propertiesMapCopy = FXCollections.observableHashMap();

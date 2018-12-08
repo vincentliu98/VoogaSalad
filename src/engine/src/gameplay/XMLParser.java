@@ -50,13 +50,13 @@ public class XMLParser {
                              Integer.parseInt(myDocTree.getElementsByTagName("grid-height").item(0).getTextContent()));
     }
 
-    public Map<Integer, Player> getPlayers(){
+    public Map<String, Player> getPlayers(){
         NodeList players = myDocTree.getElementsByTagName("gameplay.Player");
-        Map<Integer, Player> myPlayers = new HashMap<>();
+        Map<String, Player> myPlayers = new HashMap<>();
         for (int i = 0; i < players.getLength(); i++){
             String currentPlayer = nodeToString(players.item(i));
             Player player = (Player) mySerializer.fromXML(currentPlayer);
-            myPlayers.put(player.getID(), player);
+            myPlayers.put(player.getName(), player);
         }
         return myPlayers;
     }
@@ -94,24 +94,24 @@ public class XMLParser {
         return myTiles;
     }
 
-    public Map<Integer, Phase> getPhases(){
+    public Map<String, Phase> getPhases(){
         NodeList phases = myDocTree.getElementsByTagName("gameplay.Phase");
-        Map<Integer, Phase> myPhases = new HashMap<>();
+        Map<String, Phase> myPhases = new HashMap<>();
         for (int i = 0; i < phases.getLength(); i++){
             String currentPhase = nodeToString(phases.item(i));
             Phase phase = (Phase) mySerializer.fromXML(currentPhase);
-            myPhases.put(phase.getID(), phase);
+            myPhases.put(phase.getName(), phase);
         }
         return myPhases;
     }
 
-    public Map<Integer, Node> getNodes(){
+    public Map<String, Node> getNodes(){
         NodeList nodes = myDocTree.getElementsByTagName("gameplay.Node");
-        Map<Integer, Node> myNodes = new HashMap<>();
+        Map<String, Node> myNodes = new HashMap<>();
         for (int i = 0; i < nodes.getLength(); i++){
             String currentNode = nodeToString(nodes.item(i));
             Node node = (Node) mySerializer.fromXML(currentNode);
-            myNodes.put(node.getID(), node);
+            myNodes.put(node.getName(), node);
         }
         return myNodes;
     }
@@ -134,9 +134,9 @@ public class XMLParser {
         return turn;
     }
 
-    public String getHeartBeat() {
-        NodeList heartbeats = myDocTree.getElementsByTagName("heartbeat");
-        return heartbeats.item(0).getTextContent(); // only one heartbeat per game
+    public String getWinCondition() {
+        NodeList winCondition = myDocTree.getElementsByTagName("winCondition");
+        return winCondition.item(0).getTextContent(); // only one winCondition per game
     }
 
     /**
