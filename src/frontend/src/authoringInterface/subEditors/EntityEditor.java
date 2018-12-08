@@ -7,6 +7,7 @@ import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.entity.EntityClass;
 import gameObjects.entity.EntityInstance;
+import grids.PointImpl;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -18,13 +19,16 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import utils.ErrorWindow;
+import utils.exception.GridIndexOutOfBoundsException;
 import utils.exception.PreviewUnavailableException;
+import utils.exception.UnremovableNodeException;
 import utils.imageManipulation.ImageManager;
 import utils.imageManipulation.JavaFxOperation;
 
@@ -65,6 +69,8 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     private Set<String> toRemovePath;
     private GridPane size;
     private GridPane position;
+    private TextField xInput;
+    private TextField yInput;
 
     EntityEditor(GameObjectsCRUDInterface manager) {
         super(manager);
@@ -190,6 +196,23 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                             e1.printStackTrace();
                         }
                         Tooltip.install(nodeEdited, new Tooltip(String.format("Width: %s\nHeight: %s\nSingle Click to toggle Deletion\nDouble Click or Right Click to edit\nInstance ID: %s\nClass Name: %s", width, height, gameObjectInstance.getInstanceId().getValue(), gameObjectInstance.getClassName().getValue())));
+                        StackPane target = null;
+                        int row = Integer.parseInt(yInput.getText());
+                        int col = Integer.parseInt(xInput.getText());
+                        try {
+                            target = JavaFxOperation.getNodeFromGridPaneByIndices(((GridPane) (nodeEdited.getParent()).getParent()), row, col);
+                        } catch (GridIndexOutOfBoundsException e1) {
+                            new ErrorWindow("GridIndexOutOfBounds error", e1.toString()).showAndWait();
+                            return;
+                        }
+                        try {
+                            JavaFxOperation.removeFromParent(nodeEdited);
+                        } catch (UnremovableNodeException e1) {
+                            // TODO: proper error handling
+                            e1.printStackTrace();
+                        }
+                        target.getChildren().add(nodeEdited);
+                        gameObjectInstance.setCoord(new PointImpl(col, row));
                         break;
                     case EDIT_TREEITEM:
                         try {
@@ -263,8 +286,8 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         readCommonEntityCharacteristics(gameObjectInstance.getImagePathList(), gameObjectInstance.getPropertiesMap(), gameObjectInstance.getWidth(), gameObjectInstance.getHeight());
         Label xLabel = new Label("x");
         Label yLabel = new Label("y");
-        TextField xInput = new TextField(String.valueOf(gameObjectInstance.getCoord().getX()));
-        TextField yInput = new TextField(String.valueOf(gameObjectInstance.getCoord().getY()));
+        xInput = new TextField(String.valueOf(gameObjectInstance.getCoord().getX()));
+        yInput = new TextField(String.valueOf(gameObjectInstance.getCoord().getY()));
         position = new GridPane();
         position.addRow(0, xLabel, xInput);
         position.addRow(1, yLabel, yInput);

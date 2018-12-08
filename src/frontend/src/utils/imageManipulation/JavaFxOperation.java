@@ -61,11 +61,25 @@ public class JavaFxOperation {
         ((Pane) node.getParent()).getChildren().remove(node);
     }
 
+    /**
+     *
+     * @param parentGrid
+     * @param row
+     * @param col
+     * @param <E>
+     * @return
+     * @throws GridIndexOutOfBoundsException
+     */
     @SuppressWarnings("unchecked")
     public static <E extends Node> E getNodeFromGridPaneByIndices(GridPane parentGrid, int row, int col) throws GridIndexOutOfBoundsException {
         if (row < 0 || row >= parentGrid.getRowCount() || col < 0 || col >= parentGrid.getColumnCount()) {
             throw new GridIndexOutOfBoundsException(String.format("Either row %d or colum %d is out of the bounds of the GridPane", row, col));
         }
-        return (E) parentGrid.getChildrenUnmodifiable().stream().filter(node -> GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row).collect(Collectors.toList()).get(0);
+        for (Node node : parentGrid.getChildrenUnmodifiable()) {
+            if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
+                return (E) node;
+            }
+        }
+        return null;
     }
 }
