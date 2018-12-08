@@ -100,13 +100,28 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         return newTileClass;
     }
 
+    /**
+     * Reformate for example TILE to Tile.
+     * @param str original string
+     * @return reformatted string
+     */
+    private String reformat(String str){
+        return str.charAt(0)+str.substring(1);
+    }
+
+    private GameObjectClass getSpecificClass(String className, GameObjectType objectType)
+            throws GameObjectClassNotFoundException {
+        if (!gameObjectClassMapByName.containsKey(className)) {
+            throw new GameObjectClassNotFoundException(reformat(objectType.name()));
+        }
+        return gameObjectClassMapByName.get(className);
+    }
+
+
     @Override
     public TileClass getTileClass(String className)
             throws GameObjectClassNotFoundException {
-        if (!gameObjectClassMapByName.containsKey(className)) {
-            throw new GameObjectClassNotFoundException("Tile");
-        }
-        return (TileClass) gameObjectClassMapByName.get(className);
+        return (TileClass) getSpecificClass(className, GameObjectType.TILE);
     }
 
     @Override
@@ -163,10 +178,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     @Override
     public EntityClass getEntityClass(String className)
             throws GameObjectClassNotFoundException {
-        if (!gameObjectClassMapByName.containsKey(className)) {
-            throw new GameObjectClassNotFoundException("Entity");
-        }
-        return (EntityClass) gameObjectClassMapByName.get(className);
+        return (EntityClass) getSpecificClass(className, GameObjectType.ENTITY);
     }
 
     @Override
@@ -221,10 +233,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     @Override
     public CategoryClass getCategoryClass(String className)
             throws GameObjectClassNotFoundException {
-        if (!gameObjectClassMapByName.containsKey(className)) {
-            throw new GameObjectClassNotFoundException("Category");
-        }
-        return (CategoryClass) gameObjectClassMapByName.get(className);
+        return (CategoryClass) getSpecificClass(className, GameObjectType.CATEGORY);
     }
 
     @Override
@@ -279,10 +288,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     @Override
     public SoundClass getSoundClass(String className)
             throws GameObjectClassNotFoundException {
-        if (!gameObjectClassMapByName.containsKey(className)) {
-            throw new GameObjectClassNotFoundException("Sound");
-        }
-        return (SoundClass) gameObjectClassMapByName.get(className);
+        return (SoundClass) getSpecificClass(className, GameObjectType.SOUND);
     }
 
     @Override
