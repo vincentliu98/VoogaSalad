@@ -62,12 +62,13 @@ public class JavaFxOperation {
     }
 
     /**
+     * This method returns the child of a GridPane at a given row and and a given column by looping through all the children of this GridPane.
      *
-     * @param parentGrid
-     * @param row
-     * @param col
-     * @param <E>
-     * @return
+     * @param parentGrid: A GridPane whose children we are going to check to match the given row index and column index.
+     * @param row: An int value representing row index.
+     * @param col: An int representing column index.
+     * @param <E>: A subclass of Node.
+     * @return A subclass of Node that is the child we want.
      * @throws GridIndexOutOfBoundsException
      */
     @SuppressWarnings("unchecked")
