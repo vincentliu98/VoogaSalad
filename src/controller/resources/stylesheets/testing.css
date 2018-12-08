@@ -67,3 +67,7 @@
 .sort-button {
     -fx-background-color: transparent;
 }
+
+.profile-button {
+    -fx-background-color: rgb(102, 106, 124);
+}
