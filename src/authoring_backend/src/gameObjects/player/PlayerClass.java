@@ -7,6 +7,8 @@ import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import javafx.beans.property.SimpleStringProperty;
 
+import java.util.Set;
+
 public interface PlayerClass extends GameObjectClass {
 
     PlayerInstance createInstance() throws GameObjectTypeException, InvalidIdException;
@@ -16,6 +18,8 @@ public interface PlayerClass extends GameObjectClass {
     boolean removeGameObjectInstances(GameObjectInstance gameObjectInstance);
 
     void removeAllGameObjectInstances();
+
+    Set<Integer> getAllGameObjectInstanceIDs();
 
     SimpleStringProperty getImagePath();
 

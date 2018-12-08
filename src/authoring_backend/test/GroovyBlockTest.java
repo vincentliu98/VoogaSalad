@@ -167,6 +167,6 @@ public class GroovyBlockTest {
         // Multi-line code evaluation
         var multiLineScript = graph2.transformToGroovy().get();
         shell.evaluate(multiLineScript);
-        assertEquals((int) shell.getVariable("sum"), 45);
+        assertEquals((int) shell.getVariable("sum"), 55);
     }
 }

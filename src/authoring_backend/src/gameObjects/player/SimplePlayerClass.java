@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class SimplePlayerClass implements PlayerClass {
 
@@ -36,6 +37,7 @@ public class SimplePlayerClass implements PlayerClass {
         classId = new ReadOnlyIntegerWrapper();
         imagePath = new SimpleStringProperty();
         propertiesMap = FXCollections.observableHashMap();
+        gameObjectInstancesSet = FXCollections.observableSet();
     }
 
     public SimplePlayerClass(String className,
@@ -199,6 +201,11 @@ public class SimplePlayerClass implements PlayerClass {
     @Override
     public void removeAllGameObjectInstances() {
         gameObjectInstancesSet.clear();
+    }
+
+    @Override
+    public Set<Integer> getAllGameObjectInstanceIDs() {
+        return gameObjectInstancesSet.stream().map(i -> i.getInstanceId().get()).collect(Collectors.toSet());
     }
 
     @Override

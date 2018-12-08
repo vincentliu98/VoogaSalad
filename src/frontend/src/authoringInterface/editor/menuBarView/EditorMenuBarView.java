@@ -66,6 +66,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
 
         MenuItem newFile = new MenuItem("New");
         MenuItem open = new MenuItem("Open");
+        MenuItem export = new MenuItem("Export");
         MenuItem save = new MenuItem("Save");
         MenuItem saveAs = new MenuItem("Save As");
         MenuItem close = new MenuItem("Close");
@@ -83,6 +84,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
 
         newFile.setOnAction(e -> new NewWindowView());
         open.setOnAction(this::handleOpen);
+        export.setOnAction(this::handleExport);
         save.setOnAction(this::handleSave);
         saveAs.setOnAction(this::handleSaveAs);
         close.setOnAction(e -> new CloseFileView(closeWindow));
@@ -96,7 +98,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         helpDoc.setOnAction(this::handleHelpDoc);
         about.setOnAction(this::handleAbout);
 
-        file.getItems().addAll(newFile, open, save, saveAs, close);
+        file.getItems().addAll(newFile, open, export, save, saveAs, close);
         edit.getItems().addAll(undo, redo);
         run.getItems().addAll(runProject);
         settings.getItems().addAll(resizeGrid, setBGM);
@@ -110,9 +112,14 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         editorCaretaker.addMemento(editor.save());
         editor.setState(editorCaretaker.getMemento(currentMemento++).getSavedState());
     }
+
     void handleSaveAs(ActionEvent event) {
-        new SaveFileView();
+        new SaveFileView(null); // for now
         handleSave(event);
+    }
+
+    void handleExport(ActionEvent event) {
+        new SaveFileView(authTools::toEngineXML);
     }
 
     void handleOpen(ActionEvent event) {
