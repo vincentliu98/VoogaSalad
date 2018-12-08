@@ -1,10 +1,17 @@
 package gameObjects.entity;
 
-import authoringUtils.exception.*;
+import authoringUtils.exception.GameObjectTypeException;
+import authoringUtils.exception.InvalidIdException;
+import authoringUtils.exception.InvalidOperationException;
 import gameObjects.ThrowingBiConsumer;
-import gameObjects.gameObject.*;
+import gameObjects.gameObject.GameObjectInstance;
+import gameObjects.gameObject.GameObjectType;
+import grids.Point;
 import javafx.beans.property.*;
-import javafx.collections.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
+import javafx.collections.ObservableSet;
 
 import java.util.Collection;
 import java.util.function.Consumer;
@@ -12,9 +19,11 @@ import java.util.function.Function;
 
 public class SimpleEntityClass implements EntityClass {
 
-    private String CONST_CLASSNAME = "className";
-    private String CONST_ID = "id";
-    private String CONST_MOVABLE = "movable";
+    private static final String CONST_CLASSNAME = "className";
+    private static final String CONST_ID = "id";
+    private static final String CONST_MOVABLE = "movable";
+    private static final int DEFAULT_HEIGHT = 1;
+    private static final int DEFAULT_WIDTH = 1;
 
     private ReadOnlyStringWrapper className;
     private ReadOnlyIntegerWrapper classId;
@@ -22,6 +31,8 @@ public class SimpleEntityClass implements EntityClass {
     private ObservableList<String> imagePathList;
     private ObservableMap<String, String> propertiesMap;
     private String imageSelector;
+    private SimpleIntegerProperty width;
+    private SimpleIntegerProperty height;
 
     private EntityInstanceFactory myFactory;
     private ThrowingBiConsumer<String, String, InvalidOperationException> changeEntityClassNameFunc;
@@ -36,6 +47,8 @@ public class SimpleEntityClass implements EntityClass {
         imagePathList = FXCollections.observableArrayList();
         propertiesMap = FXCollections.observableHashMap();
         imageSelector = "";
+        width = new SimpleIntegerProperty(DEFAULT_WIDTH);
+        height = new SimpleIntegerProperty(DEFAULT_HEIGHT);
     }
 
     public SimpleEntityClass(
@@ -143,10 +156,29 @@ public class SimpleEntityClass implements EntityClass {
     }
 
     @Override
-    public EntityInstance createInstance(int playerId)
-            throws GameObjectTypeException, InvalidIdException {
-        return myFactory.createInstance(this, playerId);
+    public SimpleIntegerProperty getHeight() {
+        return height;
+    }
 
+    @Override
+    public SimpleIntegerProperty getWidth() {
+        return width;
+    }
+
+    @Override
+    public void setHeight(int newHeight) {
+        height.set(newHeight);
+    }
+
+    @Override
+    public void setWidth(int newWidth) {
+        width.set(newWidth);
+    }
+
+    @Override
+    public EntityInstance createInstance(int playerId, Point point)
+            throws GameObjectTypeException, InvalidIdException {
+        return myFactory.createInstance(this, playerId, point);
     }
 
     public boolean deleteInstance(int entityInstanceId) {

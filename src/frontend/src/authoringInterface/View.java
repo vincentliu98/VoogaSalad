@@ -55,7 +55,7 @@ public class View implements ParentView<SubView> {
         rootPane.getStyleClass().add("mainPane");
         tools = new AuthoringTools(COL_NUMBER, ROW_NUMBER);
         gameObjectManager = tools.entityDB();
-        groovyPaneFactory = new GroovyPaneFactory(primaryStage, tools.factory());
+        groovyPaneFactory = new GroovyPaneFactory(primaryStage, tools.factory(), tools.phaseDB().heartbeat());
         nodeInstanceController = new CrappyNodeInstanceController();
         initializeElements();
         setElements();
@@ -70,7 +70,7 @@ public class View implements ParentView<SubView> {
         statusView = new StatusView(gameObjectManager);
         editView.addUpdateStatusEventListener(statusView);
         sidebar.addColumn(0, sideView.getView(), statusView.getView());
-        mainView.getColumnConstraints().addAll(new ColumnConstraints(MainAuthoringProgram.SCREEN_WIDTH - SIDEBAR_WIDTH), new ColumnConstraints(SIDEBAR_WIDTH));
+        mainView.getColumnConstraints().addAll(new ColumnConstraints(MainAuthoringProgram.SCREEN_WIDTH - SIDEBAR_WIDTH));
         mainView.addColumn(0, editView.getView());
         mainView.addColumn(1, sidebar);
     }

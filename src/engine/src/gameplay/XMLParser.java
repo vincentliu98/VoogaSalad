@@ -4,9 +4,9 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import grids.Point;
 import grids.PointImpl;
-import javafx.util.Pair;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
@@ -18,7 +18,10 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.StringWriter;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class XMLParser {
     Document myDocTree;
@@ -129,6 +132,11 @@ public class XMLParser {
         String currentTurn = nodeToString(turns.item(0)); // only one Turn per game
         Turn turn = (Turn) mySerializer.fromXML(currentTurn);
         return turn;
+    }
+
+    public String getHeartBeat() {
+        NodeList heartbeats = myDocTree.getElementsByTagName("heartbeat");
+        return heartbeats.item(0).getTextContent(); // only one heartbeat per game
     }
 
     /**

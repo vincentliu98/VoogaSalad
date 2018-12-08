@@ -1,171 +1,194 @@
-//package gameObjects.player;
-//
-//import gameObjects.gameObject.GameObjectInstance;
-//import InvalidIdException;
-//
-//import javafx.beans.property.*;
-//import javafx.collections.FXCollections;
-//import javafx.collections.ObservableList;
-//import javafx.collections.ObservableMap;
-//
-//
-//import java.util.Set;
-//import java.util.function.Consumer;
-//import java.util.function.Function;
-//
-//public class SimplePlayerClass implements PlayerClass {
-//
-//    private String CONST_CLASSNAME = "className";
-//    private String CONST_ID = "id";
-//
-//    private ReadOnlyStringWrapper className;
-//    private ReadOnlyIntegerWrapper classId;
-//    private ObservableList<String> imagePathList;
-//    private ObservableMap<String, String> propertiesMap;
-//    private String imageSelector;
-//
-//    private Function<Integer, Boolean> verifyPlayerInstanceIdFunc;
-//
-//    private Consumer<GameObjectInstance> setInstanceIdFunc;
-//    private Consumer<GameObjectInstance> returnInstanceIdFunc;
-//    private Function<String, Set<GameObjectInstance>> getPlayerInstancesFunc;
-//
-//    private Consumer<PlayerInstance> addPlayerInstanceToMapFunc;
-//
-//    private Function<Integer, Boolean> deletePlayerInstanceFromMapFunc;
-//
-//    private SimplePlayerClass(String name) {
-//        className = new ReadOnlyStringWrapper(this, CONST_CLASSNAME, name);
-//        classId = new ReadOnlyIntegerWrapper(this, CONST_ID);
-//        imagePathList = FXCollections.observableArrayList();
-//        propertiesMap = FXCollections.observableHashMap();
-//        imageSelector = "";
-//    }
-//
-//    SimplePlayerClass(String name,
-//                      Function<Integer, Boolean> verifyPlayerInstanceIdFunc,
-//                      Consumer<GameObjectInstance> setInstanceIdFunc,
-//                      Consumer<GameObjectInstance> returnInstanceIdFunc,
-//                      Consumer<PlayerInstance> addPlayerInstanceToMapFunc,
-//                      Function<Integer, Boolean> deletePlayerInstanceFromMapFunc,
-//                      Function<String, Set<GameObjectInstance>> getPlayerInstancesFunc) {
-//        this(name);
-//        this.verifyPlayerInstanceIdFunc = verifyPlayerInstanceIdFunc;
-//        this.setInstanceIdFunc = setInstanceIdFunc;
-//        this.returnInstanceIdFunc = returnInstanceIdFunc;
-//        this.addPlayerInstanceToMapFunc = addPlayerInstanceToMapFunc;
-//        this.deletePlayerInstanceFromMapFunc = deletePlayerInstanceFromMapFunc;
-//        this.getPlayerInstancesFunc = getPlayerInstancesFunc;
-//    }
-//
-//    @Override
-//    public ReadOnlyIntegerProperty getClassId() {
-//        return classId.getReadOnlyProperty();
-//    }
-//
-//    @Override
-//    public void setClassId(Consumer<SimpleIntegerProperty> setFunc) {
-//        setFunc.accept(classId);
-//    }
-//
-//    @Override
-//    public ReadOnlyStringProperty getClassName() {
-//        return className.getReadOnlyProperty();
-//    }
-//
-//    @Override
-//    public void changeClassName(String newClassName) {
-//
-//    }
-//
-//    @Override
-//    public void setClassName(String newClassName) {
-//
-//    }
-//
-//    @Override
-//    public void setClassName(Consumer<SimpleStringProperty> setFunc) {
-//        setFunc.accept(className);
-//    }
-//
-//    @Override
-//    public ObservableMap getPropertiesMap() {
-//        return propertiesMap;
-//    }
-//
-//
-//    @Override
-//    public ObservableList getImagePathList() {
-//        return imagePathList;
-//    }
-//
-//    @Override
-//    public void addImagePath(String path) {
-//        imagePathList.add(path);
-//    }
-//
-//
-//    @Override
-//    public boolean removeImagePath(int index) {
-//        try {
-//            imagePathList.remove(index);
-//            return true;
-//        }
-//        catch (IndexOutOfBoundsException e) {
-//            return false;
-//        }
-//    }
-//
-//    @Override
-//    public void setImageSelector(String blockCode) {
-//        imageSelector = blockCode;
-//    }
-//
-//    @Override
-//    public String getImageSelectorCode() {
-//        return imageSelector;
-//    }
-//
-//    @Override
-//    public PlayerInstance createInstance(int playerId) {
-//        if (!verifyPlayerInstanceIdFunc.apply(playerId)) {
-//            throw new InvalidIdException();
-//        }
-//        ObservableMap propertiesMapCopy = FXCollections.observableHashMap();
-//        propertiesMapCopy.putAll(propertiesMap);
-//        PlayerInstance playerInstance = new SimplePlayerInstance(className.get(), playerId, propertiesMapCopy, returnInstanceIdFunc);
-//        setInstanceIdFunc.accept(playerInstance);
-//        addPlayerInstanceToMapFunc.accept(playerInstance);
-//        return playerInstance;
-//
-//    }
-//
-//    public boolean deleteInstance(int playerInstanceId) {
-//        return deletePlayerInstanceFromMapFunc.apply(playerInstanceId);
-//    }
-//
-//    @Override
-//    public Set<GameObjectInstance> getAllInstances() {
-//        return getPlayerInstancesFunc.apply(getClassName().getValue());
-//    }
-//
-//    @Override
-//    public boolean addProperty(String propertyName, String defaultValue) {
-//        if (!propertiesMap.containsKey(propertyName)) {
-//            propertiesMap.put(propertyName, defaultValue);
-//            return true;
-//        }
-//        return false;
-//    }
-//
-//
-//    @Override
-//    public boolean removeProperty(String propertyName) {
-//        return propertiesMap.remove(propertyName) != null;
-//    }
-//
-//    @Override
-//    public PlayerInstance createInstance() {
-//        return null;
-//    }
-//}
+package gameObjects.player;
+
+import authoringUtils.exception.GameObjectTypeException;
+import authoringUtils.exception.InvalidIdException;
+import authoringUtils.exception.InvalidOperationException;
+import gameObjects.ThrowingBiConsumer;
+import gameObjects.gameObject.GameObjectInstance;
+
+
+import gameObjects.gameObject.GameObjectType;
+import javafx.beans.property.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
+import javafx.collections.ObservableSet;
+
+import java.util.Collection;
+import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Function;
+
+public class SimplePlayerClass implements PlayerClass {
+
+    private ReadOnlyStringWrapper className;
+    private ReadOnlyIntegerWrapper classId;
+    private SimpleStringProperty imagePath;
+    private ObservableMap<String, String> propertiesMap;
+
+    private PlayerInstanceFactory myFactory;
+    private ThrowingBiConsumer<String, String, InvalidOperationException> changePlayerClassNameFunc;
+    private Function<String, Collection<GameObjectInstance>> getAllPlayerInstancesFunc;
+    private Function<Integer, Boolean> deletePlayerInstanceFunc;
+
+    private SimplePlayerClass(String className) {
+        this.className = new ReadOnlyStringWrapper(className);
+        classId = new ReadOnlyIntegerWrapper();
+        imagePath = new SimpleStringProperty();
+        propertiesMap = FXCollections.observableHashMap();
+    }
+
+    SimplePlayerClass(String className,
+                      PlayerInstanceFactory playerInstanceFactory,
+                      ThrowingBiConsumer<String, String, InvalidOperationException> changePlayerClassNameFunc,
+                      Function<String, Collection<GameObjectInstance>> getAllPlayerInstancesFunc,
+                      Function<Integer, Boolean> deletePlayerInstanceFunc) {
+        this(className);
+        this.myFactory = playerInstanceFactory;
+        this.changePlayerClassNameFunc = changePlayerClassNameFunc;
+        this.getAllPlayerInstancesFunc = getAllPlayerInstancesFunc;
+        this.deletePlayerInstanceFunc = deletePlayerInstanceFunc;
+    }
+
+    /**
+     * This method sets the id of the GameObject Class.
+     *
+     * @return classId
+     */
+    @Override
+    public ReadOnlyIntegerProperty getClassId() {
+        return classId.getReadOnlyProperty();
+    }
+
+
+    /**
+     * This method receives a function that sets the id of the GameObject Class.
+     * The id of the GameObject Class is set by the received function.
+     *
+     * @param setFunc the function from IdManager that sets the id
+     */
+    @Override
+    public void setClassId(Consumer<SimpleIntegerProperty> setFunc) {
+        setFunc.accept(classId);
+    }
+
+    /**
+     * This method gets the name of this GameObject Class.
+     *
+     * @return class name
+     */
+    @Override
+    public ReadOnlyStringProperty getClassName() {
+        return className.getReadOnlyProperty();
+    }
+
+    @Override
+    public void changeClassName(String newClassName)
+            throws InvalidOperationException {
+        changePlayerClassNameFunc.accept(className.getValue(), newClassName);
+    }
+
+
+    @Override
+    public void setClassName(String newClassName) {
+        className.setValue(newClassName);
+    }
+
+
+    /**
+     * This method gets the properties map of the GameObject Class.
+     *
+     * @return properties map
+     */
+    @Override
+    public ObservableMap<String, String> getPropertiesMap() {
+        return propertiesMap;
+    }
+
+    /**
+     * This method adds the property to the GameObject Class and to all instances of the class.
+     *
+     * @param propertyName property name
+     * @param defaultValue default value of the property in GroovyCode
+     * @return true if property is successfully added
+     */
+    @Override
+    public boolean addProperty(String propertyName, String defaultValue) {
+        if (propertiesMap.containsKey(propertyName)) {
+            return false;
+        }
+        propertiesMap.put(propertyName, defaultValue);
+        Collection<PlayerInstance> playerInstances = getAllInstances();
+        for (PlayerInstance c : playerInstances) {
+            c.addProperty(propertyName, defaultValue);
+        }
+        return true;
+    }
+
+
+
+
+    /**
+     * This method removes the property from the GameObject Class and from all instances of the class.
+     *
+     * @param propertyName property name to be removed
+     * @return true if the property name exists in the properties map
+     */
+    @Override
+    public boolean removeProperty(String propertyName) {
+        if (!propertiesMap.containsKey(propertyName)) {
+            return false;
+        }
+        propertiesMap.remove(propertyName);
+        Collection<PlayerInstance> playerInstances = getAllInstances();
+        for (PlayerInstance c : playerInstances) {
+            c.removeProperty(propertyName);
+        }
+        return true;
+    }
+
+
+    /**
+     * This method returns all of the instance of the GameObject Class.
+     *
+     * @return the set of all instances of the class
+     */
+    @Override
+    public Set<PlayerInstance> getAllInstances() {
+        ObservableSet<PlayerInstance> s = FXCollections.observableSet();
+        Collection<GameObjectInstance> instances = getAllPlayerInstancesFunc.apply(getClassName().getValue());
+        for (GameObjectInstance i : instances) {
+            if (i.getType() == GameObjectType.PLAYER) {
+                s.add((PlayerInstance) i);
+            }
+        }
+        return s;
+    }
+
+    /**
+     * This method removes the instance with the specified instance id
+     *
+     * @param playerInstanceId of the instance
+     * @return true if the instance exists
+     */
+    @Override
+    public boolean deleteInstance(int playerInstanceId) {
+        return deletePlayerInstanceFunc.apply(playerInstanceId);
+    }
+
+    @Override
+    public PlayerInstance createInstance()
+            throws GameObjectTypeException, InvalidIdException {
+        return myFactory.createInstance(this);
+    }
+
+    @Override
+    public SimpleStringProperty getImagePath() {
+        return imagePath;
+    }
+
+    @Override
+    public void setImagePath(String newImagePath) {
+        imagePath.setValue(newImagePath);
+    }
+}

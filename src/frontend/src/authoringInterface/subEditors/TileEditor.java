@@ -7,18 +7,30 @@ import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.tile.TileClass;
 import gameObjects.tile.TileInstance;
+import grids.PointImpl;
+import javafx.beans.property.ReadOnlyStringProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import utils.ErrorWindow;
+import utils.exception.GridIndexOutOfBoundsException;
 import utils.exception.PreviewUnavailableException;
-import utils.imageManipulation.JavaFxOperation;
+import utils.exception.UnremovableNodeException;
 import utils.imageManipulation.ImageManager;
+import utils.imageManipulation.JavaFxOperation;
 
 import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Editor to change the Tile settings. Need to work on it. Low priority
@@ -27,35 +39,41 @@ import java.io.File;
  */
 
 public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance> {
+    private static final double ICON_WIDTH = 50;
+    private static final double ICON_HEIGHT = 50;
+    private static final double REMOVE_OPACITY = 0.5;
+    private static final int DEFAULT_WIDTH = 1;
+    private static final int DEFAULT_HEIGHT = 1;
     private TextField widthText = new TextField();
     private TextField heightText = new TextField();
     private GridPane geometry = new GridPane();
-    private double DEFAULT_HEIGHT = 50;
-    private double DEFAULT_WIDTH = 50;
-    private double width = DEFAULT_HEIGHT;
-    private double height = DEFAULT_WIDTH;
     private HBox imagePanel = new HBox();
     private Label imageLabel = new Label("Add an image to your tile class");
-    private static final double ICON_WIDTH = 50;
-    private static final double ICON_HEIGHT = 50;
     private Button chooseButton = new Button("Choose image");
-
+    private ObservableList<String> imagePaths;
+    private Set<String> toRemovePath;
+    private Set<ImageView> toRemoveImageView;
+    private TextField xInput;
+    private TextField yInput;
 
     TileEditor(GameObjectsCRUDInterface manager) {
         super(manager);
+        toRemovePath = new HashSet<>();
+        toRemoveImageView = new HashSet<>();
         Label widthLabel = new Label("Width");
         Label heightLabel = new Label("Height");
+        imagePaths = FXCollections.observableArrayList();
         nameLabel.setText("Your tile name");
         widthText.setPromptText("Width");
         widthText.setText(String.valueOf(DEFAULT_WIDTH));
         heightText.setPromptText("Height");
         heightText.setText(String.valueOf(DEFAULT_HEIGHT));
         nameField.setPromptText("Tile name");
-        geometry.setHgap(70);
+        geometry.setHgap(20);
         geometry.addRow(0, widthLabel, widthText);
         geometry.addRow(1, heightLabel, heightText);
         chooseButton.setStyle("-fx-text-fill: white;"
-                            + "-fx-background-color: #343a40;");
+                + "-fx-background-color: #343a40;");
         chooseButton.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
             File file = fileChooser.showOpenDialog(new Stage());
@@ -65,24 +83,50 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
             }
         });
 
-        rootPane.getChildren().addAll(geometry, chooseButton, imageLabel, imagePanel);
+        imagePaths.addListener((ListChangeListener<String>) change -> {
+            imagePaths.forEach(string -> {
+                ImageView preview = new ImageView(string);
+                preview.setFitHeight(ICON_HEIGHT);
+                preview.setFitWidth(ICON_WIDTH);
+                imagePanel.getChildren().add(preview);
+                preview.setOnMouseClicked(e -> {
+                    if (!toRemoveImageView.remove(preview)) {
+                        toRemoveImageView.add(preview);
+                        toRemovePath.add(string);
+                        preview.setOpacity(REMOVE_OPACITY);
+                    } else {
+                        toRemoveImageView.remove(preview);
+                        toRemovePath.remove(string);
+                        preview.setOpacity(1);
+                    }
+                });
+            });
+        });
+
+        rootPane.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.DELETE) {
+                imagePaths.removeAll(toRemovePath);
+            }
+        });
 
         confirm.setOnAction(e -> {
             if (nameField.getText().trim().isEmpty()) {
                 new ErrorWindow("Empty name", "You must give your tile a non-empty name").showAndWait();
             } else if (widthText.getText().trim().isEmpty()) {
-                new ErrorWindow("Empty width", "You must specify a width for this tile class").showAndWait();
+                new ErrorWindow("Empty width", "You must specify a width for this tile").showAndWait();
             } else if (heightText.getText().trim().isEmpty()) {
-                new ErrorWindow("Empty height", "You must specify a height for this tile class").showAndWait();
+                new ErrorWindow("Empty height", "You must specify a height for this tile").showAndWait();
             } else {
+                int width = DEFAULT_WIDTH;
+                int height = DEFAULT_HEIGHT;
                 try {
-                    width = Double.parseDouble(widthText.getText());
+                    width = Integer.parseInt(widthText.getText());
                 } catch (NumberFormatException e1) {
                     new ErrorWindow("Incorrect width", "The input width is in an unsupported format").showAndWait();
                     return;
                 }
                 try {
-                    height = Double.parseDouble(heightText.getText());
+                    height = Integer.parseInt(heightText.getText());
                 } catch (NumberFormatException e1) {
                     new ErrorWindow("Incorrect height", "The input height is in an unsupported format").showAndWait();
                     return;
@@ -114,26 +158,57 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
                         }
                         JavaFxOperation.setWidthAndHeight(icon, ICON_WIDTH, ICON_HEIGHT);
                         newItem.setGraphic(icon);
+                        tileClass.setHeight(height);
+                        tileClass.setWidth(width);
                         treeItem.getChildren().add(newItem);
                         break;
                     case NONE:
                         return;
                     case EDIT_NODE:
-                        try { ImageManager.removeInstanceImage(gameObjectInstance); } catch (GameObjectInstanceNotFoundException e1) {}
+                        try {
+                            ImageManager.removeInstanceImage(gameObjectInstance);
+                        } catch (GameObjectInstanceNotFoundException e1) {
+                        }
                         gameObjectInstance.setInstanceName(nameField.getText());
                         gameObjectInstance.getImagePathList().clear();
                         gameObjectInstance.getImagePathList().addAll(imagePaths);
+                        gameObjectInstance.setWidth(width);
+                        gameObjectInstance.setHeight(height);
                         try {
                             ((ImageView) nodeEdited).setImage(ImageManager.getPreview(gameObjectInstance));
                         } catch (PreviewUnavailableException e1) {
                             // TODO: proper error handling
                             e1.printStackTrace();
                         }
+                        Tooltip.install(nodeEdited, new Tooltip(String.format("Width: %s\nHeight: %s\nSingle Click to toggle Deletion\nDouble Click or Right Click to edit\nInstance ID: %s\nClass Name: %s", width, height, gameObjectInstance.getInstanceId().getValue(), gameObjectInstance.getClassName().getValue())));
+                        StackPane target;
+                        int row = Integer.parseInt(yInput.getText());
+                        int col = Integer.parseInt(xInput.getText());
+                        try {
+                            target = JavaFxOperation.getNodeFromGridPaneByIndices(((GridPane) JavaFxOperation.getGrandParent(nodeEdited)), row, col);
+                        } catch (GridIndexOutOfBoundsException e1) {
+                            new ErrorWindow("GridIndexOutOfBounds error", e1.toString()).showAndWait();
+                            return;
+                        }
+                        try {
+                            JavaFxOperation.removeFromParent(nodeEdited);
+                        } catch (UnremovableNodeException e1) {
+                            // TODO: proper error handling
+                            e1.printStackTrace();
+                        }
+                        assert target != null;
+                        target.getChildren().add(nodeEdited);
+                        gameObjectInstance.setCoord(new PointImpl(col, row));
                         break;
                     case EDIT_TREEITEM:
-                        try { ImageManager.removeClassImage(gameObjectClass); } catch (GameObjectClassNotFoundException e1) {}
+                        try {
+                            ImageManager.removeClassImage(gameObjectClass);
+                        } catch (GameObjectClassNotFoundException e1) {
+                        }
                         gameObjectClass.getImagePathList().clear();
                         gameObjectClass.getImagePathList().addAll(imagePaths);
+                        gameObjectClass.setWidth(width);
+                        gameObjectClass.setHeight(height);
                         try {
                             gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName().getValue(), nameField.getText());
                         } catch (InvalidOperationException e1) {
@@ -162,14 +237,23 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
      */
     @Override
     public void readGameObjectInstance() {
-        nameField.setText(gameObjectInstance.getClassName().getValue());
-        // TODO: REmove this disgusting shite
-        try {
-            imagePaths.addAll(gameObjectManager.getTileClass(gameObjectInstance.getClassName().getValue()).getImagePathList());
-        } catch (GameObjectClassNotFoundException e) {
-            // TODO
-            e.printStackTrace();
-        }
+        readCommonTileCharacteristic(gameObjectInstance.getClassName(), gameObjectInstance.getImagePathList(), gameObjectInstance.getWidth(), gameObjectInstance.getHeight());
+        Label xLabel = new Label("x");
+        Label yLabel = new Label("y");
+        xInput = new TextField(String.valueOf(gameObjectInstance.getCoord().getX()));
+        yInput = new TextField(String.valueOf(gameObjectInstance.getCoord().getY()));
+        GridPane position = new GridPane();
+        position.addRow(0, xLabel, xInput);
+        position.addRow(1, yLabel, yInput);
+        position.setHgap(20);
+        layout.addRow(3, position);
+    }
+
+    private void readCommonTileCharacteristic(ReadOnlyStringProperty className, ObservableList<String> imagePathList, SimpleIntegerProperty width, SimpleIntegerProperty height) {
+        nameField.setText(className.getValue());
+        imagePaths.addAll(imagePathList);
+        widthText.setText(String.valueOf(width.getValue()));
+        heightText.setText(String.valueOf(height.getValue()));
     }
 
     /**
@@ -177,19 +261,12 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
      */
     @Override
     public void readGameObjectClass() {
-        nameField.setText(gameObjectClass.getClassName().getValue());
-        // TODO: REmove this disgusting shite
-        imagePaths.addAll(gameObjectClass.getImagePathList());
+        readCommonTileCharacteristic(gameObjectClass.getClassName(), gameObjectClass.getImagePathList(), gameObjectClass.getWidth(), gameObjectClass.getHeight());
     }
 
     private void setupLayout() {
-        geometry.setLayoutX(50);
-        geometry.setLayoutY(100);
-        imagePanel.setLayoutX(50);
-        imagePanel.setLayoutY(350);
-        imageLabel.setLayoutX(50);
-        imageLabel.setLayoutY(300);
-        chooseButton.setLayoutX(350);
-        chooseButton.setLayoutY(300);
+        layout.addRow(0, geometry);
+        layout.addRow(1, imageLabel, chooseButton);
+        layout.addRow(2, imagePanel);
     }
 }

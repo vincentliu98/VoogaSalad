@@ -3,20 +3,19 @@ package authoringInterface.editor.menuBarView.subMenuBarView;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.control.Label;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
-import java.io.File;
-import java.nio.file.Path;
 
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.Media;
+import java.io.File;
 
 public class SoundView {
     public static final int HEIGHT = 200;

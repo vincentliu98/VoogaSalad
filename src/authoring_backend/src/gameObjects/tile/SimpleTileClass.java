@@ -1,11 +1,17 @@
 package gameObjects.tile;
 
-import authoringUtils.exception.*;
+import authoringUtils.exception.GameObjectTypeException;
+import authoringUtils.exception.InvalidIdException;
+import authoringUtils.exception.InvalidOperationException;
 import gameObjects.ThrowingBiConsumer;
-import gameObjects.gameObject.*;
+import gameObjects.gameObject.GameObjectInstance;
+import gameObjects.gameObject.GameObjectType;
 import grids.Point;
 import javafx.beans.property.*;
-import javafx.collections.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
+import javafx.collections.ObservableSet;
 
 import java.util.Collection;
 import java.util.function.Consumer;
@@ -14,9 +20,11 @@ import java.util.function.Function;
 public class SimpleTileClass implements TileClass {
     private int numRow, numCol;
 
-    private String CONST_CLASSNAME = "className";
-    private String CONST_ID = "id";
-    private String CONST_ENTITYCONTAINABLE = "entityContainable";
+    private static final String CONST_CLASSNAME = "className";
+    private static final String CONST_ID = "id";
+    private static final String CONST_ENTITYCONTAINABLE = "entityContainable";
+    private static final int DEFAULT_WIDTH = 1;
+    private static final int DEFAULT_HEIGHT = 1;
 
     private ReadOnlyStringWrapper className;
     private ReadOnlyIntegerWrapper classId;
@@ -38,8 +46,8 @@ public class SimpleTileClass implements TileClass {
         imagePathList = FXCollections.observableArrayList();
         propertiesMap = FXCollections.observableHashMap();
         imageSelector = "";
-        width = new SimpleIntegerProperty(1);
-        height = new SimpleIntegerProperty(1);
+        width = new SimpleIntegerProperty(DEFAULT_WIDTH);
+        height = new SimpleIntegerProperty(DEFAULT_HEIGHT);
     }
 
     public SimpleTileClass(
@@ -152,6 +160,16 @@ public class SimpleTileClass implements TileClass {
             throws GameObjectTypeException, InvalidIdException {
         return myFactory.createInstance(this, topLeftCoord);
 
+    }
+
+    @Override
+    public void setHeight(int height) {
+        this.height.set(height);
+    }
+
+    @Override
+    public void setWidth(int width) {
+        this.width.set(width);
     }
 
     public boolean deleteInstance(int tileInstanceId) {

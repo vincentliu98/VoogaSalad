@@ -1,7 +1,6 @@
 package gameplay;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
-import grids.Point;
 import grids.PointImpl;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.EventHandler;
@@ -87,6 +86,12 @@ public class Tile extends PropertyHolder<Tile> implements GameObject, EventHandl
 
     @Override
     public double getY() { return myCoord.getY(); }
+
+    @Override
+    public double getWidth() { return myWidth; }
+
+    @Override
+    public double getHeight() { return myHeight; }
 
     @Override
     public void handle(MouseEvent event) {

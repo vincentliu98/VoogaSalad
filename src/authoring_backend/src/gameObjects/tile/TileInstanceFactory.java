@@ -1,10 +1,15 @@
 package gameObjects.tile;
 
-import authoringUtils.exception.*;
+import authoringUtils.exception.GameObjectTypeException;
+import authoringUtils.exception.InvalidIdException;
+import authoringUtils.exception.InvalidPointsException;
 import gameObjects.ThrowingConsumer;
-import gameObjects.gameObject.*;
+import gameObjects.gameObject.GameObjectInstance;
+import gameObjects.gameObject.GameObjectType;
 import grids.Point;
-import javafx.collections.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -45,6 +50,8 @@ public class TileInstanceFactory {
         TileInstance tileInstance = new SimpleTileInstance(tilePrototype.getClassName().getValue(), topLeftCoord, imagePathListCopy, propertiesMapCopy, getTileClassFunc);
         requestInstanceIdFunc.accept(tileInstance);
         addInstanceToMapFunc.accept(tileInstance);
+        tileInstance.setHeight(tilePrototype.getHeight().getValue());
+        tileInstance.setWidth(tilePrototype.getWidth().getValue());
         return tileInstance;
 
     }

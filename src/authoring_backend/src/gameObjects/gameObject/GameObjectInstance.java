@@ -1,8 +1,11 @@
 package gameObjects.gameObject;
 
-import javafx.beans.property.*;
-import javafx.collections.ObservableMap;
 import authoringUtils.exception.InvalidOperationException;
+import javafx.beans.property.ReadOnlyIntegerProperty;
+import javafx.beans.property.ReadOnlyStringProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableMap;
 
 import java.util.function.Consumer;
 

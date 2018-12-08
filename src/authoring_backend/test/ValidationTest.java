@@ -1,12 +1,9 @@
 import authoring.AuthoringTools;
-import authoringUtils.exception.InvalidIdException;
+import authoringUtils.exception.*;
 import grids.PointImpl;
-import authoringUtils.exception.DuplicateGameObjectClassException;
-import authoringUtils.exception.GameObjectTypeException;
-import authoringUtils.exception.InvalidGameObjectInstanceException;
 
 public class ValidationTest {
-    public static void main(String[] args) throws DuplicateGameObjectClassException, GameObjectTypeException, InvalidGameObjectInstanceException, InvalidIdException {
+    public static void main(String[] args) throws DuplicateGameObjectClassException, GameObjectTypeException, InvalidGameObjectInstanceException, InvalidIdException, GameObjectClassNotFoundException {
         var authTools = new AuthoringTools(5, 5);
 
         var entityDB = authTools.entityDB();
@@ -24,7 +21,7 @@ public class ValidationTest {
         goblinClass.getPropertiesMap().put("hp", "1");
 
         var goblinInstance =
-            goblinClass.createInstance(playerA.getInstanceId().get());
+            goblinClass.createInstance(playerA.getInstanceId().get(), PointImpl.ZERO);
 
         var source = phaseDB.createGraph("A").get(null).source();
 

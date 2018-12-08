@@ -1,9 +1,9 @@
 package groovy.api;
 
+import authoringUtils.frontendUtils.Try;
 import graph.Graph;
 import groovy.graph.blocks.core.GroovyBlock;
 import groovy.graph.blocks.core.SourceBlock;
-import authoringUtils.frontendUtils.Try;
 
 /**
  *  A basic graph of GroovyBlocks and BlockEdges representing some groovy code.

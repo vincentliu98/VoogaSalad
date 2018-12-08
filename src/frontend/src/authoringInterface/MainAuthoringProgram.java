@@ -3,7 +3,6 @@ package authoringInterface;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 public class MainAuthoringProgram extends Application {
 

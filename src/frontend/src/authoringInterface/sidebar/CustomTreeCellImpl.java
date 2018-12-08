@@ -1,18 +1,25 @@
 package authoringInterface.sidebar;
 
-import authoringInterface.subEditors.*;
+import authoringInterface.subEditors.AbstractGameObjectEditor;
+import authoringInterface.subEditors.EditorFactory;
+import authoringInterface.subEditors.MissingEditorForTypeException;
 import authoringUtils.exception.GameObjectClassNotFoundException;
 import authoringUtils.exception.GameObjectInstanceNotFoundException;
 import authoringUtils.exception.GameObjectTypeException;
 import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
-import gameObjects.entity.EntityClass;
 import gameObjects.gameObject.GameObjectClass;
+import gameObjects.gameObject.GameObjectType;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.input.*;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TreeCell;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.TransferMode;
 import javafx.stage.Stage;
 import utils.exception.PreviewUnavailableException;
 import utils.exception.UnremovableNodeException;
@@ -40,7 +47,7 @@ public class CustomTreeCellImpl extends TreeCell<String> {
             try {
                 Stage dialogStage = new Stage();
                 AbstractGameObjectEditor editor = EditorFactory.makeEditor(getItem(), manager);
-                dialogStage.setScene(new Scene(editor.getView(), 500, 500));
+                dialogStage.setScene(new Scene(editor.getView(), 600, 620));
                 dialogStage.show();
                 editor.addTreeItem(getTreeItem());
 
@@ -89,7 +96,7 @@ public class CustomTreeCellImpl extends TreeCell<String> {
                 // TODO
                 e1.printStackTrace();
             }
-            dialogStage.setScene(new Scene(editor.getView(), 500, 500));
+            dialogStage.setScene(new Scene(editor.getView(), 600, 620));
             dialogStage.show();
             editor.editTreeItem(getTreeItem(), objectClass);
         });
@@ -160,11 +167,13 @@ public class CustomTreeCellImpl extends TreeCell<String> {
             } else {
                 setText(getString());
                 setGraphic(getTreeItem().getGraphic());
-                if (!getTreeItem().isLeaf()) {
-                    setContextMenu(addMenu);
-                } else {
-                    setContextMenu(editMenu);
-                }
+                try {
+                    if (objectManager.getGameObjectClass(getString()).getType() == GameObjectType.CATEGORY) {
+                        setContextMenu(addMenu);
+                    } else {
+                        setContextMenu(editMenu);
+                    }
+                } catch (GameObjectClassNotFoundException ignored) {}
             }
         }
     }

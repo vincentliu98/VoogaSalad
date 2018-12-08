@@ -121,7 +121,6 @@ public class ImageManager {
             gc.drawImage(images.get(i), x, y, IMAGE_WIDTH, IMAGE_HEIGHT);
         }
         SnapshotParameters sp =  new SnapshotParameters();
-        sp.setTransform(Transform.scale(IMAGE_WIDTH, IMAGE_HEIGHT));
         sp.setFill(Color.TRANSPARENT);
         return canvas.snapshot(sp, null);
     }
@@ -162,7 +161,7 @@ public class ImageManager {
                 } else {
                     imagePaths = ((TileInstance) gameObjectInstance).getImagePathList();
                 }
-                ret = getImage(imagePaths, gameObjectInstance.getInstanceName());
+                ret = getImage(imagePaths, gameObjectInstance.getClassName());
             case CATEGORY:
                 // TODO
                 break;
