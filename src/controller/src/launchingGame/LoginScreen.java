@@ -39,7 +39,7 @@ public class LoginScreen {
         return myStage;
     }
 
-    public void initPane(){
+    private void initPane(){
         myPane = new GridPane();
         myPane.setAlignment(Pos.TOP_CENTER);
         myPane.setVgap(15.0D);
@@ -54,11 +54,11 @@ public class LoginScreen {
         myPane.setGridLinesVisible(false);
     }
 
-    public void initScene(){
+    private void initScene(){
         myScene = new Scene(myPane, 400.0D, 500.0D);
     }
 
-    public void initLogo(){
+    private void initLogo(){
         Image logoStream = new Image(LOGO_PATH);
         ImageView logo = new ImageView(logoStream);
         logo.setFitWidth(100.0D);
@@ -71,7 +71,7 @@ public class LoginScreen {
         myPane.add(imageBox, 1, 0, 2, 1);
     }
 
-    public void initMoto(){
+    private void initMoto(){
         Text motoText = new Text(MOTO);
         HBox motoBox = new HBox();
         motoBox.getChildren().add(motoText);
@@ -80,7 +80,7 @@ public class LoginScreen {
         myPane.add(motoBox, 0, 1, 4, 1);
     }
 
-    public void initFields(){
+    private void initFields(){
         TextField usernameField = new TextField();
         usernameField.setPromptText("username");
         TextField passwordField = new TextField();
