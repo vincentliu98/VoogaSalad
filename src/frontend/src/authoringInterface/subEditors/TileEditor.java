@@ -13,15 +13,14 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import utils.ErrorWindow;
 import utils.exception.PreviewUnavailableException;
-import utils.imageManipulation.JavaFxOperation;
 import utils.imageManipulation.ImageManager;
+import utils.imageManipulation.JavaFxOperation;
 
 import java.io.File;
 import java.util.HashSet;
@@ -34,20 +33,20 @@ import java.util.Set;
  */
 
 public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance> {
+    private static final double ICON_WIDTH = 50;
+    private static final double ICON_HEIGHT = 50;
+    private static final double REMOVE_OPACITY = 0.5;
+    private static final int DEFAULT_WIDTH = 1;
+    private static final int DEFAULT_HEIGHT = 1;
     private TextField widthText = new TextField();
     private TextField heightText = new TextField();
     private GridPane geometry = new GridPane();
     private HBox imagePanel = new HBox();
     private Label imageLabel = new Label("Add an image to your tile class");
-    private static final double ICON_WIDTH = 50;
-    private static final double ICON_HEIGHT = 50;
     private Button chooseButton = new Button("Choose image");
     private ObservableList<String> imagePaths;
     private Set<String> toRemovePath;
     private Set<ImageView> toRemoveImageView;
-    private static final double REMOVE_OPACITY = 0.5;
-    private static final int DEFAULT_WIDTH = 1;
-    private static final int DEFAULT_HEIGHT = 1;
 
     TileEditor(GameObjectsCRUDInterface manager) {
         super(manager);
@@ -66,7 +65,7 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
         geometry.addRow(0, widthLabel, widthText);
         geometry.addRow(1, heightLabel, heightText);
         chooseButton.setStyle("-fx-text-fill: white;"
-                            + "-fx-background-color: #343a40;");
+                + "-fx-background-color: #343a40;");
         chooseButton.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
             File file = fileChooser.showOpenDialog(new Stage());
@@ -158,7 +157,10 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
                     case NONE:
                         return;
                     case EDIT_NODE:
-                        try { ImageManager.removeInstanceImage(gameObjectInstance); } catch (GameObjectInstanceNotFoundException e1) {}
+                        try {
+                            ImageManager.removeInstanceImage(gameObjectInstance);
+                        } catch (GameObjectInstanceNotFoundException e1) {
+                        }
                         gameObjectInstance.setInstanceName(nameField.getText());
                         gameObjectInstance.getImagePathList().clear();
                         gameObjectInstance.getImagePathList().addAll(imagePaths);
@@ -173,7 +175,10 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
                         Tooltip.install(nodeEdited, new Tooltip(String.format("Width: %s\nHeight: %s\nSingle Click to toggle Deletion\nDouble Click or Right Click to edit\nInstance ID: %s\nClass Name: %s", width, height, gameObjectInstance.getInstanceId().getValue(), gameObjectInstance.getClassName().getValue())));
                         break;
                     case EDIT_TREEITEM:
-                        try { ImageManager.removeClassImage(gameObjectClass); } catch (GameObjectClassNotFoundException e1) {}
+                        try {
+                            ImageManager.removeClassImage(gameObjectClass);
+                        } catch (GameObjectClassNotFoundException e1) {
+                        }
                         gameObjectClass.getImagePathList().clear();
                         gameObjectClass.getImagePathList().addAll(imagePaths);
                         gameObjectClass.setWidth(width);

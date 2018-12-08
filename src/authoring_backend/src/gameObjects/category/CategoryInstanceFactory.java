@@ -1,10 +1,13 @@
 package gameObjects.category;
 
-import authoringUtils.exception.*;
+import authoringUtils.exception.GameObjectTypeException;
+import authoringUtils.exception.InvalidIdException;
 import gameObjects.ThrowingConsumer;
-import gameObjects.gameObject.*;
+import gameObjects.gameObject.GameObjectInstance;
+import gameObjects.gameObject.GameObjectType;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableMap;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;

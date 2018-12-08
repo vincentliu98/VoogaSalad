@@ -1,9 +1,9 @@
 import authoring.AuthoringTools;
-import authoringUtils.exception.InvalidIdException;
-import grids.PointImpl;
 import authoringUtils.exception.DuplicateGameObjectClassException;
 import authoringUtils.exception.GameObjectTypeException;
 import authoringUtils.exception.InvalidGameObjectInstanceException;
+import authoringUtils.exception.InvalidIdException;
+import grids.PointImpl;
 
 public class ValidationTest {
     public static void main(String[] args) throws DuplicateGameObjectClassException, GameObjectTypeException, InvalidGameObjectInstanceException, InvalidIdException {

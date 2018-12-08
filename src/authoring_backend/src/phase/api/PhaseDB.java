@@ -1,11 +1,11 @@
 package phase.api;
 
+import authoringUtils.frontendUtils.Try;
 import groovy.api.GroovyFactory;
 import phase.NamespaceException;
 import phase.PhaseGraphImpl;
 import phase.PhaseImpl;
 import phase.TransitionImpl;
-import authoringUtils.frontendUtils.Try;
 
 import java.util.ArrayList;
 import java.util.HashSet;

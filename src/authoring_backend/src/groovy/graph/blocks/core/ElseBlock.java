@@ -1,13 +1,14 @@
 package groovy.graph.blocks.core;
 
+import authoringUtils.frontendUtils.Try;
 import graph.SimpleNode;
 import groovy.api.BlockGraph;
-import authoringUtils.frontendUtils.Try;
 import groovy.api.Ports;
 
 import java.util.Set;
 
-import static groovy.api.Ports.*;
+import static groovy.api.Ports.FLOW_OUT;
+import static groovy.api.Ports.IF_BODY;
 
 public class ElseBlock extends SimpleNode implements GroovyBlock<ElseBlock> {
     public ElseBlock() { super(); }

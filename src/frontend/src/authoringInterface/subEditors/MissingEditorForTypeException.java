@@ -6,7 +6,11 @@ package authoringInterface.subEditors;
  * @author Haotian Wang
  */
 public class MissingEditorForTypeException extends Exception {
-    public MissingEditorForTypeException(String message) { super(message); }
+    public MissingEditorForTypeException(String message) {
+        super(message);
+    }
 
-    public MissingEditorForTypeException(String message, Throwable cause) { super(message, cause); }
+    public MissingEditorForTypeException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

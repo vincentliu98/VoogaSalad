@@ -1,6 +1,7 @@
 package gameObjects.turn;
 
-import javafx.beans.property.*;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 
 public class SimpleTurn implements Turn {
     private SimpleStringProperty myPhaseName;

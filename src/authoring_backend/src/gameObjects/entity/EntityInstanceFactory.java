@@ -9,7 +9,6 @@ import grids.Point;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
-import javafx.scene.effect.Light;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;

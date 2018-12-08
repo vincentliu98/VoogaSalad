@@ -2,18 +2,18 @@ package authoringInterface.editor.editView;
 
 import api.SubView;
 import authoringInterface.customEvent.UpdateStatusEventListener;
-import authoringInterface.subEditors.*;
+import authoringInterface.subEditors.AbstractGameObjectEditor;
+import authoringInterface.subEditors.EditorFactory;
+import authoringInterface.subEditors.MissingEditorForTypeException;
 import authoringUtils.exception.GameObjectClassNotFoundException;
 import authoringUtils.exception.GameObjectTypeException;
 import authoringUtils.exception.InvalidIdException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.entity.EntityClass;
-import gameObjects.entity.EntityInstance;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import gameObjects.tile.TileClass;
-import gameObjects.tile.TileInstance;
 import grids.PointImpl;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -27,15 +27,14 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import utils.exception.NodeNotFoundException;
 import utils.exception.PreviewUnavailableException;
 import utils.exception.UnremovableNodeException;
 import utils.imageManipulation.ImageManager;
 import utils.imageManipulation.JavaFxOperation;
 import utils.nodeInstance.NodeInstanceController;
-import utils.exception.NodeNotFoundException;
 import utils.simpleAnimation.SingleNodeFade;
 
-import java.security.Key;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -61,6 +60,7 @@ public class EditGridView implements SubView<ScrollPane> {
     private boolean isShiftDown;
     private Label batchMode;
     private static final double INDICATOR_FADE_TIME = 3000;
+    private static final double INITIAL_INDICATOR_FADE_TIME = 15000;
     private static final double CELL_HEIGHT = 100;
     private static final double CELL_WIDTH = 100;
     private Set<Node> toRemove;
@@ -92,7 +92,7 @@ public class EditGridView implements SubView<ScrollPane> {
         }
         gridScrollView.setGridLinesVisible(true);
         gridScrollView.add(batchMode, 0, 0, 3, 2);
-        SingleNodeFade.getNodeFadeOut(batchMode, 20000).playFromStart();
+        SingleNodeFade.getNodeFadeOut(batchMode, INITIAL_INDICATOR_FADE_TIME).playFromStart();
         scrollPane = new ScrollPane(gridScrollView);
         scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, keyEvent -> {
             if (keyEvent.getCode() == KeyCode.CONTROL) {
@@ -100,7 +100,6 @@ public class EditGridView implements SubView<ScrollPane> {
             } else if (keyEvent.getCode() == KeyCode.SHIFT) {
                 setUpShift();
             } else if (keyEvent.getCode() == KeyCode.DELETE || keyEvent.getCode() == KeyCode.BACK_SPACE) {
-                System.out.println("test");
                 toRemove.forEach(this::handleNodeDeleting);
             }
         });

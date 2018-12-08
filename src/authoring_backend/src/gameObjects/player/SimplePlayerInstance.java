@@ -1,9 +1,12 @@
 package gameObjects.player;
 
 import javafx.beans.property.*;
-import javafx.collections.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableMap;
+import javafx.collections.ObservableSet;
 
-import java.util.*;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.function.Consumer;
 
 public class SimplePlayerInstance implements PlayerInstance {

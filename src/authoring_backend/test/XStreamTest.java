@@ -6,7 +6,6 @@ import grids.PointImpl;
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import phase.api.GameEvent;
 
 import java.util.*;
