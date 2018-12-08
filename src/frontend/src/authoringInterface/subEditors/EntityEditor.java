@@ -156,6 +156,10 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
             new ErrorWindow("Incorrect height", "The input height is in an unsupported format").showAndWait();
             return;
         }
+        if (height == 0 || width == 0) {
+            new ErrorWindow("Incorrect height or width", String.format("Either your width %d or your height %d is not a positive integer", width, height)).showAndWait();
+            return;
+        }
         try {
             gameObjectManager.createEntityClass(nameField.getText().trim());
         } catch (DuplicateGameObjectClassException e1) {
@@ -209,6 +213,10 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
             new ErrorWindow("Incorrect height", "The input height is in an unsupported format").showAndWait();
             return;
         }
+        if (height == 0 || width == 0) {
+            new ErrorWindow("Incorrect height or width", String.format("Either your width %d or your height %d is not a positive integer", width, height)).showAndWait();
+            return;
+        }
         try {
             ImageManager.removeClassImage(gameObjectClass);
         } catch (GameObjectClassNotFoundException ignored) {}
@@ -256,6 +264,10 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
             height = Integer.parseInt(heightInput.getText());
         } catch (NumberFormatException e1) {
             new ErrorWindow("Incorrect height", "The input height is in an unsupported format").showAndWait();
+            return;
+        }
+        if (height == 0 || width == 0) {
+            new ErrorWindow("Incorrect height or width", String.format("Either your width %d or your height %d is not a positive integer", width, height)).showAndWait();
             return;
         }
         try { ImageManager.removeInstanceImage(gameObjectInstance); } catch (GameObjectInstanceNotFoundException ignored) {}
