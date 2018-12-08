@@ -1,5 +1,6 @@
 package authoringInterface.subEditors;
 
+import authoringInterface.subEditors.exception.IllegalGeometryException;
 import authoringUtils.exception.DuplicateGameObjectClassException;
 import authoringUtils.exception.GameObjectClassNotFoundException;
 import authoringUtils.exception.GameObjectInstanceNotFoundException;
@@ -21,7 +22,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import utils.ErrorWindow;
 import utils.exception.GridIndexOutOfBoundsException;
 import utils.exception.PreviewUnavailableException;
 import utils.exception.UnremovableNodeException;

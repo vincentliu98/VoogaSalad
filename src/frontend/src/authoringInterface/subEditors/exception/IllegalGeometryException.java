@@ -1,4 +1,4 @@
-package authoringInterface.subEditors;
+package authoringInterface.subEditors.exception;
 
 /**
  * This exception is thrown when the user attempts to assign illegal information about the geometry of a GameObject.

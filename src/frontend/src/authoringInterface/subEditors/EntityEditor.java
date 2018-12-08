@@ -1,5 +1,6 @@
 package authoringInterface.subEditors;
 
+import authoringInterface.subEditors.exception.IllegalGeometryException;
 import authoringUtils.exception.DuplicateGameObjectClassException;
 import authoringUtils.exception.GameObjectClassNotFoundException;
 import authoringUtils.exception.GameObjectInstanceNotFoundException;
@@ -7,23 +8,18 @@ import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.entity.EntityClass;
 import gameObjects.entity.EntityInstance;
-import javafx.collections.*;
 import grids.PointImpl;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import utils.ErrorWindow;
 import utils.exception.GridIndexOutOfBoundsException;
 import utils.exception.PreviewUnavailableException;
 import utils.exception.UnremovableNodeException;
@@ -169,6 +165,9 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         try {
             ImageManager.removeInstanceImage(gameObjectInstance);
         } catch (GameObjectInstanceNotFoundException ignored) {}
+        if (nameField.getText().trim().isEmpty()) {
+            throw new
+        }
         gameObjectInstance.setInstanceName(nameField.getText());
         gameObjectInstance.getImagePathList().clear();
         gameObjectInstance.getImagePathList().addAll(imagePaths);

@@ -2,7 +2,7 @@ package authoringInterface.sidebar;
 
 import authoringInterface.subEditors.AbstractGameObjectEditor;
 import authoringInterface.subEditors.EditorFactory;
-import authoringInterface.subEditors.MissingEditorForTypeException;
+import authoringInterface.subEditors.exception.MissingEditorForTypeException;
 import authoringUtils.exception.GameObjectClassNotFoundException;
 import authoringUtils.exception.GameObjectInstanceNotFoundException;
 import authoringUtils.exception.GameObjectTypeException;

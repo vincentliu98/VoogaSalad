@@ -1,15 +1,14 @@
 package authoringInterface.subEditors;
 
 import api.SubView;
+import authoringInterface.subEditors.exception.IllegalGeometryException;
 import authoringUtils.exception.DuplicateGameObjectClassException;
 import authoringUtils.exception.GameObjectClassNotFoundException;
-import authoringUtils.exception.GameObjectInstanceNotFoundException;
 import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
 import javafx.scene.Node;
@@ -20,7 +19,6 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import utils.ErrorWindow;
 import utils.exception.GridIndexOutOfBoundsException;
@@ -28,8 +26,6 @@ import utils.exception.NodeNotFoundException;
 import utils.exception.PreviewUnavailableException;
 import utils.exception.UnremovableNodeException;
 import utils.nodeInstance.NodeInstanceController;
-
-import java.io.File;
 
 /**
  * This abstract class provides a boiler plate for different editors because they are pretty similar.
@@ -206,10 +202,7 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
         nodeInstanceController = controller;
         try {
             this.gameObjectInstance = controller.getGameObjectInstance(node);
-        } catch (NodeNotFoundException e) {
-            // TODO: proper error handling
-            e.printStackTrace();
-        }
+        } catch (NodeNotFoundException ignored) {}
         readGameObjectInstance();
         confirm.setOnAction(e -> {
             try {
