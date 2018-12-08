@@ -637,7 +637,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
 
     public int getWidth() { return numCols; }
     public int getHeight() { return numRows; }
-    
+
     /**
      * Getters
      *
