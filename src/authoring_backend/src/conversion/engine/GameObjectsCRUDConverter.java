@@ -49,6 +49,17 @@ public class GameObjectsCRUDConverter implements Converter {
             new MapConverter(mapper).marshal(shell.evaluate(toEval), writer, ctx);
             writer.endNode();
 
+            // myWidth
+            writer.startNode("myWidth");
+            writer.setValue(String.valueOf(entityClass.getWidth().get()));
+            writer.endNode();
+
+            // myHeight
+            writer.startNode("myHeight");
+            writer.setValue(String.valueOf(entityClass.getHeight().get()));
+            writer.endNode();
+
+
             // imagePaths
             writer.startNode("myImagePaths");
             entityClass.getImagePathList().forEach(path -> {
@@ -70,9 +81,7 @@ public class GameObjectsCRUDConverter implements Converter {
             EntityClass entityClass = null;
             try {
                 entityClass = db.getEntityClass(entityInstance.getClassName().get());
-            } catch (GameObjectClassNotFoundException e) {
-                e.printStackTrace();
-            }
+            } catch (GameObjectClassNotFoundException ignored) { }
 
             writer.startNode("gameplay.Entity");
 
@@ -86,15 +95,29 @@ public class GameObjectsCRUDConverter implements Converter {
             writer.setValue(entityInstance.getClassName().get());
             writer.endNode();
 
-            // tileID
-            writer.startNode("tileID");
-            writer.setValue(String.valueOf(entityInstance.getTileID().get()));
-            writer.endNode();
-
             // props
             var toEval = mapToString(entityInstance.getPropertiesMap());
             writer.startNode("props");
             new MapConverter(mapper).marshal(shell.evaluate(toEval), writer, ctx);
+            writer.endNode();
+
+            // myWidth
+            writer.startNode("myWidth");
+            writer.setValue(String.valueOf(entityClass.getWidth().get()));
+            writer.endNode();
+
+            // myHeight
+            writer.startNode("myHeight");
+            writer.setValue(String.valueOf(entityClass.getHeight().get()));
+            writer.endNode();
+
+            writer.startNode("myCoord");
+            writer.startNode("x");
+            writer.setValue(String.valueOf(entityInstance.getCoord().getX()));
+            writer.endNode();
+            writer.startNode("y");
+            writer.setValue(String.valueOf(entityInstance.getCoord().getY()));
+            writer.endNode();
             writer.endNode();
 
             // imagePaths

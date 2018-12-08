@@ -49,6 +49,7 @@ public class GameData {
         ROOT = root;
         myArgumentListeners = new ArrayList<>();
         myInitializer = initializer;
+        System.out.println(TILES);
 
         var shared = new Binding();
         shared.setVariable("GameMethods", GameMethods.class);
