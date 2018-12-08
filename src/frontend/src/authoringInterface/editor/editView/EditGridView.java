@@ -345,8 +345,7 @@ public class EditGridView implements SubView<ScrollPane> {
             width = ((TileClass) gameObjectClass).getWidth().getValue();
         }
         if (height != 0 && width != 0) {
-            Tooltip tooltip = new Tooltip(String.format("Width: %s\nHeight: %s\nDouble Click or Right Click to edit", width, height));
-            Tooltip.install(finalNodeOnGrid, tooltip);
+            Tooltip.install(finalNodeOnGrid, new Tooltip(String.format("Width: %s\nHeight: %s\nDouble Click or Right Click to edit", width, height)));
         }
     }
 
