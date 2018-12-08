@@ -18,7 +18,7 @@ public class Node {
         if(myExecution.isEmpty()) return;
         try{
             GameData.shell().evaluate(myExecution);
-            GameData.shell().evaluate(GameData.HEARTBEAT);
+            GameData.shell().evaluate(GameData.WIN_CONDITION);
             System.out.println(GameMethods.hasNoEntities(GameMethods.getCurrentPlayerName()));
             System.out.println(GameMethods.getCurrentPlayer().getMyEntities());
             GameData.updateViews();
