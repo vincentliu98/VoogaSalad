@@ -7,23 +7,14 @@ import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.player.PlayerClass;
 import gameObjects.player.PlayerInstance;
-import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tooltip;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import utils.ErrorWindow;
-import utils.exception.GridIndexOutOfBoundsException;
 import utils.exception.PreviewUnavailableException;
-import utils.exception.UnremovableNodeException;
 import utils.imageManipulation.ImageManager;
 import utils.imageManipulation.JavaFxOperation;
 
@@ -41,7 +32,7 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
     private HBox imagePanel;
     private Set<ImageView> toRemove;
     private Set<String> toRemovePath;
-    private ObservableList<String> imagePaths;
+    private String imagePath;
 
     PlayerEditor(GameObjectsCRUDInterface manager) {
         super(manager);
@@ -55,14 +46,13 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
         chooseImage.setStyle("-fx-text-fill: white;"
                 + "-fx-background-color: #343a40;");
         imagePanel = new HBox(10);
-        imagePaths = FXCollections.observableArrayList();
-        imagePaths.addListener((ListChangeListener<String>) c -> presentImages());
         chooseImage.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
             File file = fileChooser.showOpenDialog(new Stage());
             if (file != null) {
-                String imagePath = file.toURI().toString();
-                imagePaths.add(imagePath);
+                String imagefilePath = file.toURI().toString();
+                imagePath = imagefilePath;
+                presentImages();
             }
         });
         imagePanel = new HBox(IMAGE_PANEL_GAP);
@@ -75,34 +65,32 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
 
     private void presentImages() {
         imagePanel.getChildren().clear();
-        imagePaths.forEach(path -> {
-            ImageView preview = new ImageView(path);
-            preview.setFitWidth(ICON_WIDTH);
-            preview.setFitHeight(ICON_HEIGHT);
-            imagePanel.getChildren().add(preview);
-            preview.setOnMouseClicked(e -> {
-                if (!toRemove.remove(preview)) {
-                    toRemove.add(preview);
-                    toRemovePath.add(path);
-                    preview.setOpacity(REMOVE_OPACITY);
-                } else {
-                    toRemovePath.remove(path);
-                    preview.setOpacity(1);
-                }
-            });
+        ImageView preview = new ImageView(imagePath);
+        preview.setFitWidth(ICON_WIDTH);
+        preview.setFitHeight(ICON_HEIGHT);
+        imagePanel.getChildren().add(preview);
+        preview.setOnMouseClicked(e -> {
+            if (!toRemove.remove(preview)) {
+                toRemove.add(preview);
+                toRemovePath.add(imagePath);
+                preview.setOpacity(REMOVE_OPACITY);
+            } else {
+                toRemovePath.remove(imagePath);
+                preview.setOpacity(1);
+            }
         });
     }
 
     @Override
     protected void readGameObjectInstance() {
         nameField.setText(gameObjectInstance.getClassName().getValue());
-        imagePaths.addAll(gameObjectInstance.getImagePath().getName());
+        imagePath = gameObjectInstance.getImagePath().getName();
     }
 
     @Override
     protected void readGameObjectClass() {
         nameField.setText(gameObjectClass.getClassName().getValue());
-        imagePaths.addAll(gameObjectClass.getImagePath().getName());
+        imagePath = gameObjectClass.getImagePath().getName();
     }
 
     /**
@@ -125,7 +113,7 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
         }
         assert playerClass != null;
         TreeItem<String> newItem = new TreeItem<>(playerClass.getClassName().getValue());
-//        playerClass.getImagePath().add(imagePaths);
+        playerClass.setImagePath(imagePath);
 
         ImageView icon = null;
         try {
@@ -148,9 +136,7 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
         try {
             ImageManager.removeClassImage(gameObjectClass);
         } catch (GameObjectClassNotFoundException ignored) {}
-//        gameObjectClass.getImagePath().
-//        gameObjectClass.getImagePathList().clear();
-//        gameObjectClass.getImagePathList().addAll(imagePaths);
+        gameObjectClass.setImagePath(imagePath);
 
         try {
             gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName().getValue(), nameField.getText());
@@ -178,9 +164,7 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
     protected void confirmEditNode() {
         try { ImageManager.removeInstanceImage(gameObjectInstance); } catch (GameObjectInstanceNotFoundException ignored) {}
         gameObjectInstance.setInstanceName(nameField.getText());
-//        gameObjectInstance.getImagePathList().clear();
-//        gameObjectInstance.getImagePathList().addAll(imagePaths);
-
+        gameObjectInstance.setImagePath(imagePath);
         try {
             ((ImageView) nodeEdited).setImage(ImageManager.getPreview(gameObjectInstance));
         } catch (PreviewUnavailableException e1) {
