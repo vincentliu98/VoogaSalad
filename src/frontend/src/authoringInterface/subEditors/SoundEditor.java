@@ -11,8 +11,6 @@ import javafx.collections.ObservableList;
  * @author Haotian Wang
  */
 public class SoundEditor extends AbstractGameObjectEditor<SoundClass, SoundInstance> {
-    private ObservableList<String> mediaFilePaths;
-
     SoundEditor(GameObjectsCRUDInterface manager) {
         super(manager);
     }
@@ -30,6 +28,30 @@ public class SoundEditor extends AbstractGameObjectEditor<SoundClass, SoundInsta
      */
     @Override
     public void readGameObjectClass() {
+
+    }
+
+    /**
+     * This method sets up the confirm logic of adding new TreeItem.
+     */
+    @Override
+    protected void confirmAddTreeItem() {
+
+    }
+
+    /**
+     * This method sets up the confirm logic of editing existing TreeItem.
+     */
+    @Override
+    protected void confirmEditTreeItem() {
+
+    }
+
+    /**
+     * This method sets up the confirm logic of editing existing Node.
+     */
+    @Override
+    protected void confirmEditNode() {
 
     }
 }
