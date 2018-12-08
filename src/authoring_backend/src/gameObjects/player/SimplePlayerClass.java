@@ -10,7 +10,6 @@ import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
 
@@ -25,6 +24,7 @@ public class SimplePlayerClass implements PlayerClass {
     private ReadOnlyIntegerWrapper classId;
     private SimpleStringProperty imagePath;
     private ObservableMap<String, String> propertiesMap;
+    private ObservableSet<GameObjectInstance> gameObjectInstancesSet;
 
     private PlayerInstanceFactory myFactory;
     private ThrowingBiConsumer<String, String, InvalidOperationException> changePlayerClassNameFunc;
@@ -180,6 +180,25 @@ public class SimplePlayerClass implements PlayerClass {
     public PlayerInstance createInstance()
             throws GameObjectTypeException, InvalidIdException {
         return myFactory.createInstance(this);
+    }
+
+    @Override
+    public boolean addGameObjectInstances(GameObjectInstance gameObjectInstance) {
+        if (!gameObjectInstancesSet.contains(gameObjectInstance)){
+            gameObjectInstancesSet.add(gameObjectInstance);
+            return true;
+        }
+        else return false;
+    }
+
+    @Override
+    public boolean removeGameObjectInstances(GameObjectInstance gameObjectInstance) {
+        return gameObjectInstancesSet.remove(gameObjectInstance);
+    }
+
+    @Override
+    public void removeAllGameObjectInstances() {
+        gameObjectInstancesSet.clear();
     }
 
     @Override
