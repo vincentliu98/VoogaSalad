@@ -1,8 +1,8 @@
 package groovy.graph.blocks.core;
 
-import authoringUtils.frontendUtils.Try;
-import graph.SimpleNode;
 import groovy.api.BlockGraph;
+import graph.SimpleNode;
+import authoringUtils.frontendUtils.Try;
 import groovy.api.Ports;
 
 import java.util.Set;

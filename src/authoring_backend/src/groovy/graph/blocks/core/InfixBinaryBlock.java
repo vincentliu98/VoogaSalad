@@ -1,14 +1,13 @@
 package groovy.graph.blocks.core;
 
-import authoringUtils.frontendUtils.Try;
 import graph.SimpleNode;
 import groovy.api.BlockGraph;
+import authoringUtils.frontendUtils.Try;
 import groovy.api.Ports;
 
 import java.util.Set;
 
-import static groovy.api.Ports.A;
-import static groovy.api.Ports.B;
+import static groovy.api.Ports.*;
 
 /**
  *  InfixBinaryBlocks represent binary operators that are placed in between the operands
