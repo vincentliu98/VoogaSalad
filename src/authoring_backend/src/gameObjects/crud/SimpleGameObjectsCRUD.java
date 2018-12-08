@@ -426,20 +426,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         if (!gameObjectClassMapByName.containsKey(className)) {
             return false;
         }
-        GameObjectClass gameObjectClass = gameObjectClassMapByName.get(className);
-        try {
-            removeGameObjectClassFromMaps(gameObjectClass);
-        } catch (InvalidIdException e) {
-            // TODO
-            e.printStackTrace();
-        }
-        try {
-            removeAllGameObjectInstancesFromMap(className);
-        } catch (InvalidIdException e) {
-            // TODO
-            e.printStackTrace();
-        }
-        return true;
+        return deleteGameObjectClass(gameObjectClassMapByName.get(className));
     }
 
     @Override
@@ -447,20 +434,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         if (!gameObjectClassMapById.containsKey(classId)) {
             return false;
         }
-        GameObjectClass gameObjectClass = gameObjectClassMapById.get(classId);
-        try {
-            removeGameObjectClassFromMaps(gameObjectClass);
-        } catch (InvalidIdException e) {
-            // TODO
-            e.printStackTrace();
-        }
-        try {
-            removeAllGameObjectInstancesFromMap(gameObjectClass.getClassName().getValue());
-        } catch (InvalidIdException e) {
-            // TODO
-            e.printStackTrace();
-        }
-        return true;
+        return deleteGameObjectClass(gameObjectClassMapById.get(classId));
     }
 
     @Override
@@ -478,7 +452,6 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
             e.printStackTrace();
             return false;
         }
-
     }
 
     @Override
