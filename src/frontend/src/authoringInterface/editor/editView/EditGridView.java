@@ -248,7 +248,7 @@ public class EditGridView implements SubView<ScrollPane> {
         }
         assert editor != null;
         editor.editNode(targetNode, nodeInstanceController);
-        dialogStage.setScene(new Scene(editor.getView(), 500, 1000));
+        dialogStage.setScene(new Scene(editor.getView(), 600, 620));
         dialogStage.show();
     }
 

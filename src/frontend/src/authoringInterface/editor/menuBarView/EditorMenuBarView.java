@@ -22,6 +22,7 @@ import runningGame.GameWindow;
 
 import java.io.File;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 /**
  * MenuBarView class
@@ -71,7 +72,6 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         MenuItem undo = new MenuItem("Undo");
         MenuItem redo = new MenuItem("Redo");
         MenuItem runProject = new MenuItem("Run");
-        MenuItem setPlayer = new MenuItem("Players");
         MenuItem resizeGrid = new MenuItem("Resize Grid");
         MenuItem setBGM = new MenuItem("BGM");
         MenuItem helpDoc = new MenuItem("Help");
@@ -89,7 +89,6 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         undo.setOnAction(this::handleUndo);
         redo.setOnAction(this::handleRedo);
         runProject.setOnAction(this::handleRunProject);
-        setPlayer.setOnAction(e -> new PlayerView().showAndwait());
         resizeGrid.setOnAction(e -> new ResizeGridView().showAndWait().ifPresent(dimension ->
                 updateGridDimension.accept(dimension.getKey(), dimension.getValue())
         ));
@@ -100,7 +99,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         file.getItems().addAll(newFile, open, save, saveAs, close);
         edit.getItems().addAll(undo, redo);
         run.getItems().addAll(runProject);
-        settings.getItems().addAll(resizeGrid, setPlayer, setBGM);
+        settings.getItems().addAll(resizeGrid, setBGM);
         help.getItems().addAll(helpDoc, about);
 
         menuBar.getMenus().addAll(file, edit, settings, run, help);
