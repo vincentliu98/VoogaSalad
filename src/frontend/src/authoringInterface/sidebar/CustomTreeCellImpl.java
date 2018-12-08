@@ -96,7 +96,7 @@ public class CustomTreeCellImpl extends TreeCell<String> {
                 // TODO
                 e1.printStackTrace();
             }
-            dialogStage.setScene(new Scene(editor.getView(), 500, 1000));
+            dialogStage.setScene(new Scene(editor.getView(), 600, 620));
             dialogStage.show();
             editor.editTreeItem(getTreeItem(), objectClass);
         });
