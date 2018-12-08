@@ -67,7 +67,7 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
         nameLabel.setLayoutX(14);
         nameLabel.setLayoutY(30);
         nameField.setLayoutX(208);
-        nameField.setLayoutY(35);
+        nameField.setLayoutY(45);
         confirm.setLayoutX(396);
         confirm.setLayoutY(560);
         cancel.setLayoutX(491);

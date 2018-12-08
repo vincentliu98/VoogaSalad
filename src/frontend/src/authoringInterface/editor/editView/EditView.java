@@ -48,7 +48,6 @@ public class EditView implements SubView<TabPane> {
     private Tab phaseNodeTab;
     private Tab gridTab;
     private Tab heartbeatTab;
-    private Integer index;
     private Stage newStage;
     private TabPane newTabPane;
 
@@ -100,14 +99,16 @@ public class EditView implements SubView<TabPane> {
         tabPane.getTabs().addAll(mainTab, gridTab, phaseNodeTab, heartbeatTab);
 
         gridLabel.setOnMouseDragged(e -> {
-            index = 1;
             Point2D mouseLoc = new Point2D(e.getScreenX(), e.getScreenY());
-            splitTab(mouseLoc, gridTab, index);
+            splitTab(mouseLoc, gridTab);
         });
         phaseLabel.setOnMouseDragged(e -> {
-            index = 2;
             Point2D mouseLoc = new Point2D(e.getScreenX(), e.getScreenY());
-            splitTab(mouseLoc, phaseNodeTab, index);
+            splitTab(mouseLoc, phaseNodeTab);
+        });
+        heartbeatLabel.setOnMouseDragged(e -> {
+            Point2D mouseLoc = new Point2D(e.getScreenX(), e.getScreenY());
+            splitTab(mouseLoc, heartbeatTab);
         });
     }
     
@@ -116,7 +117,7 @@ public class EditView implements SubView<TabPane> {
         tab.setGraphic(label);
     }
 
-    private void splitTab(Point2D mouseLoc, Tab tab, int index) {
+    private void splitTab(Point2D mouseLoc, Tab tab) {
         StackPane header = (StackPane) tabPane.lookup(".tab-header-area");
         if(!header.getBoundsInLocal().contains(mouseLoc)){
             openModal(tab).show();
