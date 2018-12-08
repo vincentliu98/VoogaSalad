@@ -31,14 +31,14 @@ public class SimplePlayerClass implements PlayerClass {
     private Function<String, Collection<GameObjectInstance>> getAllPlayerInstancesFunc;
     private Function<Integer, Boolean> deletePlayerInstanceFunc;
 
-    private SimplePlayerClass(String className) {
+    public SimplePlayerClass(String className) {
         this.className = new ReadOnlyStringWrapper(className);
         classId = new ReadOnlyIntegerWrapper();
         imagePath = new SimpleStringProperty();
         propertiesMap = FXCollections.observableHashMap();
     }
 
-    SimplePlayerClass(String className,
+    public SimplePlayerClass(String className,
                       PlayerInstanceFactory playerInstanceFactory,
                       ThrowingBiConsumer<String, String, InvalidOperationException> changePlayerClassNameFunc,
                       Function<String, Collection<GameObjectInstance>> getAllPlayerInstancesFunc,
