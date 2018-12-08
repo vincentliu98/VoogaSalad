@@ -371,6 +371,48 @@ public class PhasePane implements SubView<StackPane> {
         }
     }
 
+    public void recoverData(){
+
+        singlePhaseData.getNodesName().forEach(node -> {
+            // recover source
+            if (node.equals(singlePhaseData.getPhaseName())) {
+                createNode(factory.source(graph.source(),singlePhaseData.getNodesPos().get(node).getKey(),
+                        singlePhaseData.getNodesPos().get(singlePhaseData.getPhaseName()).getValue()));
+            }
+            else {
+                // recover other nodes
+                try {
+                    createNode(factory.gen(singlePhaseData.getNodesPos().get(node).getKey(),
+                            singlePhaseData.getNodesPos().get(node).getValue(), node).get());
+                } catch (Throwable throwable) {
+                    throwable.printStackTrace();
+                }
+            }
+        });
+
+
+
+
+        singlePhaseData.getNodesConnect().forEach((pair, event) -> {
+            var a = pair.getKey();
+            var b = pair.getValue();
+            var ite = nodes.iterator();
+            PhaseNode from = null;
+            PhaseNode to = null;
+            while (ite.hasNext()){
+                PhaseNode temp = ite.next();
+                if (temp.getName().equals(a)){
+                    from = temp;
+                }
+                else if (temp.getName().equals(b)){
+                    to = temp;
+                }
+            }
+            connectNodes(from, event, to);
+        });
+
+    }
+
     @Override
     public StackPane getView() {
         return root;

@@ -68,6 +68,10 @@ public class EditView implements SubView<TabPane> {
         tabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
     }
 
+    public PhaseChooserPane getPhaseView() {
+        return phaseView;
+    }
+
     private void initializeTab(){
         mainTab = new Tab();
         Label mainLabel = new Label("Main");
