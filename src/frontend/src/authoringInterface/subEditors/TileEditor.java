@@ -7,6 +7,8 @@ import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.tile.TileClass;
 import gameObjects.tile.TileInstance;
+import javafx.beans.property.ReadOnlyStringProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -211,10 +213,14 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
      */
     @Override
     public void readGameObjectInstance() {
-        nameField.setText(gameObjectInstance.getClassName().getValue());
-        imagePaths.addAll(gameObjectInstance.getImagePathList());
-        widthText.setText(String.valueOf(gameObjectInstance.getWidth().getValue()));
-        heightText.setText(String.valueOf(gameObjectInstance.getHeight().getValue()));
+        readCommonTileCharacteristic(gameObjectInstance.getClassName(), gameObjectInstance.getImagePathList(), gameObjectInstance.getWidth(), gameObjectInstance.getHeight());
+    }
+
+    private void readCommonTileCharacteristic(ReadOnlyStringProperty className, ObservableList<String> imagePathList, SimpleIntegerProperty width, SimpleIntegerProperty height) {
+        nameField.setText(className.getValue());
+        imagePaths.addAll(imagePathList);
+        widthText.setText(String.valueOf(width.getValue()));
+        heightText.setText(String.valueOf(height.getValue()));
     }
 
     /**
@@ -222,10 +228,7 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
      */
     @Override
     public void readGameObjectClass() {
-        nameField.setText(gameObjectClass.getClassName().getValue());
-        imagePaths.addAll(gameObjectClass.getImagePathList());
-        widthText.setText(String.valueOf(gameObjectClass.getWidth().getValue()));
-        heightText.setText(String.valueOf(gameObjectClass.getHeight().getValue()));
+        readCommonTileCharacteristic(gameObjectClass.getClassName(), gameObjectClass.getImagePathList(), gameObjectClass.getWidth(), gameObjectClass.getHeight());
     }
 
     private void setupLayout() {

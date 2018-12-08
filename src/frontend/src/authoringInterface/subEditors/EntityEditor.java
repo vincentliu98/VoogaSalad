@@ -7,6 +7,7 @@ import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.entity.EntityClass;
 import gameObjects.entity.EntityInstance;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -120,8 +121,8 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
             } else if (heightInput.getText().trim().isEmpty()) {
                 new ErrorWindow("Empty height", "You must specify a height for this entity").showAndWait();
             } else {
-                int width = DEFAULT_WIDTH;
-                int height = DEFAULT_HEIGHT;
+                int width;
+                int height;
                 try {
                     width = Integer.parseInt(widthInput.getText());
                 } catch (NumberFormatException e1) {
@@ -259,10 +260,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     @Override
     public void readGameObjectInstance() {
         nameField.setText(gameObjectInstance.getInstanceName().getValue());
-        imagePaths.addAll(gameObjectInstance.getImagePathList());
-        list.putAll(gameObjectInstance.getPropertiesMap());
-        widthInput.setText(String.valueOf(gameObjectInstance.getWidth().getValue()));
-        heightInput.setText(String.valueOf(gameObjectInstance.getHeight().getValue()));
+        readCommonEntityCharacteristics(gameObjectInstance.getImagePathList(), gameObjectInstance.getPropertiesMap(), gameObjectInstance.getWidth(), gameObjectInstance.getHeight());
         Label xLabel = new Label("x");
         Label yLabel = new Label("y");
         TextField xInput = new TextField(String.valueOf(gameObjectInstance.getCoord().getX()));
@@ -274,16 +272,20 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         layout.addRow(5, position);
     }
 
+    private void readCommonEntityCharacteristics(ObservableList<String> imagePathList, ObservableMap<String, String> propertiesMap, SimpleIntegerProperty width, SimpleIntegerProperty height) {
+        imagePaths.addAll(imagePathList);
+        list.putAll(propertiesMap);
+        widthInput.setText(String.valueOf(width.getValue()));
+        heightInput.setText(String.valueOf(height.getValue()));
+    }
+
     /**
      * Read the GameObjectClass represented by this editor.
      */
     @Override
     public void readGameObjectClass() {
         nameField.setText(gameObjectClass.getClassName().getValue());
-        imagePaths.addAll(gameObjectClass.getImagePathList());
-        list.putAll(gameObjectClass.getPropertiesMap());
-        widthInput.setText(String.valueOf(gameObjectClass.getWidth().getValue()));
-        heightInput.setText(String.valueOf(gameObjectClass.getHeight().getValue()));
+        readCommonEntityCharacteristics(gameObjectClass.getImagePathList(), gameObjectClass.getPropertiesMap(), gameObjectClass.getWidth(), gameObjectClass.getHeight());
     }
 
     private void setupLayout() {
