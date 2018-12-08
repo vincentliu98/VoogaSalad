@@ -120,7 +120,9 @@ public class IconLoader {
     }
 
     private static String formatParameters(Parameter[] params) {
-        var paramTypes =  Arrays.stream(params).map(p -> p.getType().getSimpleName()).collect(Collectors.toList());
+        var paramTypes =  Arrays.stream(params)
+                                .map(p -> p.getType().getSimpleName() + " " + p.getName())
+                                .collect(Collectors.toList());
         return "(" + String.join(",", paramTypes) + ")";
     }
 }

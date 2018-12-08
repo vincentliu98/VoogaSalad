@@ -89,6 +89,12 @@ public class Tile extends PropertyHolder<Tile> implements GameObject, EventHandl
     public double getY() { return myCoord.getY(); }
 
     @Override
+    public double getWidth() { return myWidth; }
+
+    @Override
+    public double getHeight() { return myHeight; }
+
+    @Override
     public void handle(MouseEvent event) {
         System.out.println("MouseEvent on tile of id " + myID);
         GameData.addArgument(event, new ClickTag(Tile.class, myID));
