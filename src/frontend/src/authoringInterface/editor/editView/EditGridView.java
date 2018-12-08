@@ -61,6 +61,7 @@ public class EditGridView implements SubView<ScrollPane> {
     private boolean isShiftDown;
     private Label batchMode;
     private static final double INDICATOR_FADE_TIME = 3000;
+    private static final double INITIAL_INDICATOR_FADE_TIME = 15000;
     private static final double CELL_HEIGHT = 100;
     private static final double CELL_WIDTH = 100;
     private Set<Node> toRemove;
@@ -92,7 +93,7 @@ public class EditGridView implements SubView<ScrollPane> {
         }
         gridScrollView.setGridLinesVisible(true);
         gridScrollView.add(batchMode, 0, 0, 3, 2);
-        SingleNodeFade.getNodeFadeOut(batchMode, 20000).playFromStart();
+        SingleNodeFade.getNodeFadeOut(batchMode, INITIAL_INDICATOR_FADE_TIME).playFromStart();
         scrollPane = new ScrollPane(gridScrollView);
         scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, keyEvent -> {
             if (keyEvent.getCode() == KeyCode.CONTROL) {
