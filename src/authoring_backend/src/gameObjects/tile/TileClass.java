@@ -54,4 +54,8 @@ public interface TileClass extends GameObjectClass {
     default GameObjectType getType() {
         return GameObjectType.TILE;
     }
+
+    void setHeight(int height);
+
+    void setWidth(int width);
 }

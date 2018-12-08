@@ -77,7 +77,7 @@ public class SimpleTileInstance implements TileInstance {
 
     @Override
     public void setWidth(int newWidth) {
-        height.setValue(newWidth);
+        width.setValue(newWidth);
     }
 
 

@@ -156,6 +156,16 @@ public class SimpleTileClass implements TileClass {
 
     }
 
+    @Override
+    public void setHeight(int height) {
+        this.height.set(height);
+    }
+
+    @Override
+    public void setWidth(int width) {
+        this.width.set(width);
+    }
+
     public boolean deleteInstance(int tileInstanceId) {
         return deleteTileInstanceFunc.apply(tileInstanceId);
     }
