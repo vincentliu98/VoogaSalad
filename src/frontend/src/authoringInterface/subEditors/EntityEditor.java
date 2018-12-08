@@ -7,24 +7,22 @@ import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.entity.EntityClass;
 import gameObjects.entity.EntityInstance;
+import javafx.collections.*;
 import grids.PointImpl;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
-import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.util.Pair;
 import utils.ErrorWindow;
 import utils.exception.GridIndexOutOfBoundsException;
 import utils.exception.PreviewUnavailableException;
@@ -56,14 +54,11 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     private TextField heightInput;
     private Label propLabel = new Label("Properties");
     private Button addProperties = new Button("Add");
-    private Dialog<Pair<String, String>> dialog = new Dialog<>();
-    private GridPane grid = new GridPane();
     private GridPane listProp;
-    private VBox listview;
-    private ObservableMap<String, String> list;
-    private TextField name;
-    private TextField value;
-    private Button delete;
+    private FlowPane listview;
+    private ObservableSet<PropertyBox> propBoxes;
+    private ComboBox<String> comboBox;
+    private Label playerLabel;
     private ObservableList<String> imagePaths;
     private Set<ImageView> toRemove;
     private Set<String> toRemovePath;
@@ -88,15 +83,25 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         size.addRow(0, widthLabel, widthInput);
         size.addRow(1, heightLabel, heightInput);
 
+
+        comboBox = new ComboBox<>();
+        comboBox.setPromptText("NONE");
+        playerLabel = new Label("Choose Player");
         imageText = new Label("Add an image to your entity");
         chooseImage = new Button("Choose image");
         chooseImage.setStyle("-fx-text-fill: white;"
                 + "-fx-background-color: #343a40;");
         imagePanel = new HBox(10);
         listProp = new GridPane();
-        listview = new VBox();
-        listview.setSpacing(10);
-        list = FXCollections.observableHashMap();
+        listview = new FlowPane();
+        listview.setVgap(10);
+        listview.setHgap(10);
+        propBoxes = FXCollections.observableSet();
+        propBoxes.addListener((SetChangeListener<? super PropertyBox>) e -> {
+            if(e.wasAdded()) listview.getChildren().add(e.getElementAdded());
+            else listview.getChildren().remove(e.getElementRemoved());
+        });
+
         listProp.getChildren().add(listview);
         nameField.setPromptText("Your entity name");
         imagePaths = FXCollections.observableArrayList();
@@ -109,11 +114,20 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                 imagePaths.add(imagePath);
             }
         });
-        setupProp();
+
         addProperties.setStyle("-fx-text-fill: white;"
                 + "-fx-background-color: #343a40;");
         addProperties.setOnAction(e -> {
-            dialog.showAndWait().ifPresent(prop -> manageList(prop.getKey(), prop.getValue()));
+            new PropertyInputDialog().showAndWait().ifPresent(prop -> {
+                boolean added = false;
+                for(var box : propBoxes) {
+                    if(box.getKey().equals(prop.getKey())) {
+                        box.setValue(prop.getValue());
+                        added = true;
+                    }
+                }
+                if(!added) propBoxes.add(new PropertyBox(prop.getKey(), prop.getValue(), propBoxes::remove));
+            });
         });
 
         confirm.setStyle("-fx-text-fill: white;"
@@ -159,7 +173,9 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                         assert entityClass != null;
                         TreeItem<String> newItem = new TreeItem<>(entityClass.getClassName().getValue());
                         entityClass.getImagePathList().addAll(imagePaths);
-                        entityClass.getPropertiesMap().putAll(list);
+                        for(var box : propBoxes) {
+                            entityClass.getPropertiesMap().put(box.getKey(), box.getValue());
+                        }
                         entityClass.setHeight(height);
                         entityClass.setWidth(width);
                         ImageView icon = null;
@@ -185,7 +201,9 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                         gameObjectInstance.getImagePathList().clear();
                         gameObjectInstance.getImagePathList().addAll(imagePaths);
                         gameObjectInstance.getPropertiesMap().clear();
-                        gameObjectInstance.getPropertiesMap().putAll(list);
+                        for(var box : propBoxes) {
+                            gameObjectInstance.getPropertiesMap().put(box.getKey(), box.getValue());
+                        }
                         gameObjectInstance.setWidth(width);
                         gameObjectInstance.setHeight(height);
                         try {
@@ -222,7 +240,9 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                         gameObjectClass.getImagePathList().clear();
                         gameObjectClass.getImagePathList().addAll(imagePaths);
                         gameObjectClass.getPropertiesMap().clear();
-                        gameObjectClass.getPropertiesMap().putAll(list);
+                        for(var box : propBoxes) {
+                            gameObjectClass.getPropertiesMap().put(box.getKey(), box.getValue());
+                        }
                         gameObjectClass.setWidth(width);
                         gameObjectClass.setHeight(height);
                         try {
@@ -292,12 +312,12 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         position.addRow(0, xLabel, xInput);
         position.addRow(1, yLabel, yInput);
         position.setHgap(20);
-        layout.addRow(5, position);
+        layout.addRow(6, position);
     }
 
     private void readCommonEntityCharacteristics(ObservableList<String> imagePathList, ObservableMap<String, String> propertiesMap, SimpleIntegerProperty width, SimpleIntegerProperty height) {
         imagePaths.addAll(imagePathList);
-        list.putAll(propertiesMap);
+        propertiesMap.forEach((k, v) -> propBoxes.add(new PropertyBox(k, v, propBoxes::remove)));
         widthInput.setText(String.valueOf(width.getValue()));
         heightInput.setText(String.valueOf(height.getValue()));
     }
@@ -313,64 +333,16 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
 
     private void setupLayout() {
         layout.addRow(0, size);
-        layout.addRow(1, imageText, chooseImage);
-        layout.addRow(2, imagePanel);
-        layout.addRow(3, propLabel, addProperties);
-        layout.addRow(4, listProp);
+        layout.addRow(1, playerLabel, comboBox);
+        layout.addRow(2, imageText, chooseImage);
+        layout.addRow(3, imagePanel);
+        layout.addRow(4, propLabel, addProperties);
+        layout.addRow(5, listProp);
     }
 
-    private void setupProp() {
-        dialog.setTitle("Property of Entity");
-        dialog.setHeaderText("This action will add new property of the entity.");
-        ButtonType propConfirm = new ButtonType("Add", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(propConfirm, ButtonType.CANCEL);
-        dialog.getDialogPane().setContent(setPropkeys());
-        dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == propConfirm) {
-                return new Pair<>(name.getText(), value.getText());
-            }
-            return null;
-        });
-    }
-
-    private GridPane setPropkeys() {
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(20, 150, 10, 10));
-        name = new TextField();
-        value = new TextField();
-        name.setPromptText("i.e) hp");
-        value.setPromptText("i.e) 5");
-
-        grid.add(new Label("Name:"), 0, 0);
-        grid.add(name, 1, 0);
-        grid.add(new Label("Value:"), 0, 1);
-        grid.add(value, 1, 1);
-
-        return grid;
-    }
-
-    private void manageList(String key, String value) {
-        HBox prop = new HBox();
-        delete = new Button("X");
-        delete.setStyle("-fx-font-size: 8px;"
-                + "-fx-text-fill: white;"
-                + "-fx-background-color: black;");
-        Text keyText = new Text(key);
-        Text valueText = new Text(value);
-        prop.setSpacing(20);
-        prop.setStyle("-fx-padding: 5;"
-                + "-fx-border-style: dashed");
-        if (list.keySet().contains(key)) {
-            new ErrorWindow("Error", "This is already existed name of property.").showAndWait();
-        } else {
-            prop.getChildren().addAll(delete, keyText, valueText);
-            listview.getChildren().add(prop);
-            list.put(key, value);
-        }
-        delete.setOnMouseClicked(e -> {
-            listview.getChildren().remove(prop);
-            list.remove(key, value);
-        });
+    private void addPlayers() {
+        //TODO
+        comboBox.getItems().addAll(
+        );
     }
 }
