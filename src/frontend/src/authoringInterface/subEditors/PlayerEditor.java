@@ -2,21 +2,30 @@ package authoringInterface.subEditors;
 
 import authoringUtils.exception.DuplicateGameObjectClassException;
 import authoringUtils.exception.GameObjectClassNotFoundException;
+import authoringUtils.exception.GameObjectInstanceNotFoundException;
+import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.player.PlayerClass;
 import gameObjects.player.PlayerInstance;
-import gameObjects.player.SimplePlayerClass;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import utils.ErrorWindow;
+import utils.exception.GridIndexOutOfBoundsException;
+import utils.exception.PreviewUnavailableException;
+import utils.exception.UnremovableNodeException;
+import utils.imageManipulation.ImageManager;
+import utils.imageManipulation.JavaFxOperation;
 
 import java.io.File;
 import java.util.HashSet;
@@ -30,9 +39,9 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
     private Label imageText;
     private Button chooseImage;
     private HBox imagePanel;
-    private ObservableList<String> imagePaths;
     private Set<ImageView> toRemove;
     private Set<String> toRemovePath;
+    private ObservableList<String> imagePaths;
 
     PlayerEditor(GameObjectsCRUDInterface manager) {
         super(manager);
@@ -59,23 +68,7 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
         imagePanel = new HBox(IMAGE_PANEL_GAP);
 
         confirm.setStyle("-fx-text-fill: white;"
-//                + "-fx-background-color: #343a40;");
-//        confirm.setOnAction(e -> {
-//            if (nameField.getText().trim().isEmpty()) {
-//                new ErrorWindow("Empty name", "You must give your player a non-empty name").showAndWait();
-//            } else {
-//                switch (editingMode) {
-//                    case ADD_TREEITEM:
-//                        try {
-//                            gameObjectManager.createPlayerClass(nameField.getText().trim());
-//                        } catch (DuplicateGameObjectClassException e1) {
-//                            // TODO
-//                            e1.printStackTrace();
-//                        }
-//
-//                }
-//            }
-//        });
+                + "-fx-background-color: #343a40;");
         layout.addRow(0, imageText, chooseImage);
         layout.addRow(1, imagePanel);
     }
@@ -103,13 +96,13 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
     @Override
     protected void readGameObjectInstance() {
         nameField.setText(gameObjectInstance.getClassName().getValue());
-//        imagePaths.addAll(gameObjectInstance.getImagePathList());
+        imagePaths.addAll(gameObjectInstance.getImagePath().getName());
     }
 
     @Override
     protected void readGameObjectClass() {
         nameField.setText(gameObjectClass.getClassName().getValue());
-//        imagePaths.addAll(gameObjectClass.getImagePath());
+        imagePaths.addAll(gameObjectClass.getImagePath().getName());
     }
 
     /**
@@ -117,7 +110,34 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
      */
     @Override
     protected void confirmAddTreeItem() {
+        try {
+            gameObjectManager.createPlayerClass(nameField.getText().trim());
+        } catch (DuplicateGameObjectClassException e1) {
+            // TODO
+            e1.printStackTrace();
+        }
+        PlayerClass playerClass = null;
+        try {
+            playerClass = gameObjectManager.getPlayerClass((nameField.getText().trim()));
+        } catch (GameObjectClassNotFoundException e1) {
+            // TODO
+            e1.printStackTrace();
+        }
+        assert playerClass != null;
+        TreeItem<String> newItem = new TreeItem<>(playerClass.getClassName().getValue());
+//        playerClass.getImagePath().add(imagePaths);
 
+        ImageView icon = null;
+        try {
+            icon = new ImageView(ImageManager.getPreview(playerClass));
+        } catch (PreviewUnavailableException e1) {
+            // TODO: proper error handling
+            e1.printStackTrace();
+        }
+        assert icon != null;
+
+        newItem.setGraphic(icon);
+        treeItem.getChildren().add(newItem);
     }
 
     /**
@@ -125,7 +145,30 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
      */
     @Override
     protected void confirmEditTreeItem() {
+        try {
+            ImageManager.removeClassImage(gameObjectClass);
+        } catch (GameObjectClassNotFoundException ignored) {}
+//        gameObjectClass.getImagePath().
+//        gameObjectClass.getImagePathList().clear();
+//        gameObjectClass.getImagePathList().addAll(imagePaths);
 
+        try {
+            gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName().getValue(), nameField.getText());
+        } catch (InvalidOperationException e1) {
+            // TODO
+            e1.printStackTrace();
+        }
+        ImageView icon2 = null;
+        try {
+            icon2 = new ImageView(ImageManager.getPreview(gameObjectClass));
+        } catch (PreviewUnavailableException e1) {
+            // TODO: proper error handling
+            e1.printStackTrace();
+        }
+        assert icon2 != null;
+        JavaFxOperation.setWidthAndHeight(icon2, ICON_WIDTH, ICON_HEIGHT);
+        treeItem.setValue(nameField.getText());
+        treeItem.setGraphic(icon2);
     }
 
     /**
@@ -133,6 +176,16 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
      */
     @Override
     protected void confirmEditNode() {
+        try { ImageManager.removeInstanceImage(gameObjectInstance); } catch (GameObjectInstanceNotFoundException ignored) {}
+        gameObjectInstance.setInstanceName(nameField.getText());
+//        gameObjectInstance.getImagePathList().clear();
+//        gameObjectInstance.getImagePathList().addAll(imagePaths);
 
+        try {
+            ((ImageView) nodeEdited).setImage(ImageManager.getPreview(gameObjectInstance));
+        } catch (PreviewUnavailableException e1) {
+            // TODO: proper error handling
+            e1.printStackTrace();
+        }
     }
 }
