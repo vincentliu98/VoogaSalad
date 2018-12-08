@@ -199,6 +199,11 @@ public class SimplePlayerClass implements PlayerClass {
     }
 
     @Override
+    public boolean isOwnedByPlayer(GameObjectInstance gameObjectInstance) {
+        return gameObjectInstancesSet.contains(gameObjectInstance);
+    }
+
+    @Override
     public void removeAllGameObjectInstances() {
         gameObjectInstancesSet.clear();
     }
