@@ -162,6 +162,12 @@ public class EditGridView implements SubView<ScrollPane> {
         } catch (InvalidIdException e) {
             // TODO: error handling
             e.printStackTrace();
+        } catch (GameObjectClassNotFoundException e) {
+            // TODO: error handling
+            e.printStackTrace();
+        } catch (GameObjectTypeException e) {
+            // TODO: error handling
+            e.printStackTrace();
         }
     }
 

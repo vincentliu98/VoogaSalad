@@ -258,7 +258,7 @@ public interface GameObjectsCRUDInterface {
     /**
      * Delete all instances currently in the CRUD.
      */
-    void deleteAllInstances() throws InvalidIdException;
+    void deleteAllInstances() throws InvalidIdException, GameObjectClassNotFoundException, GameObjectTypeException;
 
     /**
      * This method is a convenient method that creates different GameObjectClasses, depending on the class name and the gameObjectType.
