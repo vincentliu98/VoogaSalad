@@ -51,8 +51,7 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
         cancel.setStyle("-fx-text-fill: white;"
                 + "-fx-background-color: #343a40;");
         cancel.setOnAction(e -> {
-            System.out.println(e.toString());
-            ((Stage) rootPane.getScene().getWindow()).close();
+            closeEditor();
         });
         rootPane.getChildren().addAll(nameLabel, nameField, layout, confirm, cancel);
         setupBasicLayout();
@@ -101,6 +100,10 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
         editingMode = EditingMode.EDIT_TREEITEM;
         this.gameObjectClass = gameObjectClass;
         readGameObjectClass();
+        confirm.setOnAction(e -> {
+            confirmEditTreeItem();
+            closeEditor();
+        });
     }
 
     /**
@@ -111,6 +114,10 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
     public void addTreeItem(TreeItem<String> treeItem) {
         this.treeItem = treeItem;
         editingMode = EditingMode.ADD_TREEITEM;
+        confirm.setOnAction(e -> {
+            confirmAddTreeItem();
+            closeEditor();
+        });
     }
 
     /**
@@ -130,6 +137,10 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
             e.printStackTrace();
         }
         readGameObjectInstance();
+        confirm.setOnAction(e ->{
+            confirmEditNode();
+            closeEditor();
+        });
     }
 
     /**
@@ -141,4 +152,26 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
      * Read the GameObjectClass represented by this editor.
      */
     protected abstract void readGameObjectClass();
+
+    /**
+     * This method sets up the confirm logic of adding new TreeItem.
+     */
+    protected abstract void confirmAddTreeItem();
+
+    /**
+     * This method sets up the confirm logic of editing existing TreeItem.
+     */
+    protected abstract void confirmEditTreeItem();
+
+    /**
+     * This method sets up the confirm logic of editing existing Node.
+     */
+    protected abstract void confirmEditNode();
+
+    /**
+     * This method closes the editor.
+     */
+    private void closeEditor() {
+        ((Stage) rootPane.getScene().getWindow()).close();
+    }
 }

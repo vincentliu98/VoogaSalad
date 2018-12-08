@@ -63,8 +63,8 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     private Set<ImageView> toRemove;
     private Set<String> toRemovePath;
     private GridPane size;
-    private TextField xInput;
-    private TextField yInput;
+    private TextField rowInput;
+    private TextField colInput;
 
     EntityEditor(GameObjectsCRUDInterface manager) {
         super(manager);
@@ -129,149 +129,170 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                 if(!added) propBoxes.add(new PropertyBox(prop.getKey(), prop.getValue(), propBoxes::remove));
             });
         });
-
-        confirm.setStyle("-fx-text-fill: white;"
-                + "-fx-background-color: #343a40;");
-        confirm.setOnAction(e -> {
-            if (nameField.getText() == null || nameField.getText().trim().isEmpty()) {
-                new ErrorWindow("Empty name", "You must give your entity a non-empty name").showAndWait();
-            } else if (widthInput.getText().trim().isEmpty()) {
-                new ErrorWindow("Empty width", "You must specify a width for this entity").showAndWait();
-            } else if (heightInput.getText().trim().isEmpty()) {
-                new ErrorWindow("Empty height", "You must specify a height for this entity").showAndWait();
-            } else {
-                int width;
-                int height;
-                try {
-                    width = Integer.parseInt(widthInput.getText());
-                } catch (NumberFormatException e1) {
-                    new ErrorWindow("Incorrect width", "The input width is in an unsupported format").showAndWait();
-                    return;
-                }
-                try {
-                    height = Integer.parseInt(heightInput.getText());
-                } catch (NumberFormatException e1) {
-                    new ErrorWindow("Incorrect height", "The input height is in an unsupported format").showAndWait();
-                    return;
-                }
-                ((Stage) rootPane.getScene().getWindow()).close();
-                switch (editingMode) {
-                    case ADD_TREEITEM:
-                        try {
-                            gameObjectManager.createEntityClass(nameField.getText().trim());
-                        } catch (DuplicateGameObjectClassException e1) {
-                            // TODO
-                            e1.printStackTrace();
-                        }
-                        EntityClass entityClass = null;
-                        try {
-                            entityClass = gameObjectManager.getEntityClass(nameField.getText().trim());
-                        } catch (GameObjectClassNotFoundException e1) {
-                            // TODO
-                            e1.printStackTrace();
-                        }
-                        assert entityClass != null;
-                        TreeItem<String> newItem = new TreeItem<>(entityClass.getClassName().getValue());
-                        entityClass.getImagePathList().addAll(imagePaths);
-                        for(var box : propBoxes) {
-                            entityClass.getPropertiesMap().put(box.getKey(), box.getValue());
-                        }
-                        entityClass.setHeight(height);
-                        entityClass.setWidth(width);
-                        ImageView icon = null;
-                        try {
-                            icon = new ImageView(ImageManager.getPreview(entityClass));
-                        } catch (PreviewUnavailableException e1) {
-                            // TODO: proper error handling
-                            e1.printStackTrace();
-                        }
-                        assert icon != null;
-                        JavaFxOperation.setWidthAndHeight(icon, ICON_WIDTH, ICON_HEIGHT);
-                        newItem.setGraphic(icon);
-                        treeItem.getChildren().add(newItem);
-                        break;
-                    case NONE:
-                        return;
-                    case EDIT_NODE:
-                        try {
-                            ImageManager.removeInstanceImage(gameObjectInstance);
-                        } catch (GameObjectInstanceNotFoundException ignored) {
-                        }
-                        gameObjectInstance.setInstanceName(nameField.getText());
-                        gameObjectInstance.getImagePathList().clear();
-                        gameObjectInstance.getImagePathList().addAll(imagePaths);
-                        gameObjectInstance.getPropertiesMap().clear();
-                        for(var box : propBoxes) {
-                            gameObjectInstance.getPropertiesMap().put(box.getKey(), box.getValue());
-                        }
-                        gameObjectInstance.setWidth(width);
-                        gameObjectInstance.setHeight(height);
-                        try {
-                            ((ImageView) nodeEdited).setImage(ImageManager.getPreview(gameObjectInstance));
-                        } catch (PreviewUnavailableException e1) {
-                            // TODO: proper error handling
-                            e1.printStackTrace();
-                        }
-                        Tooltip.install(nodeEdited, new Tooltip(String.format("Width: %s\nHeight: %s\nSingle Click to toggle Deletion\nDouble Click or Right Click to edit\nInstance ID: %s\nClass Name: %s", width, height, gameObjectInstance.getInstanceId().getValue(), gameObjectInstance.getClassName().getValue())));
-                        StackPane target;
-                        int row = Integer.parseInt(yInput.getText());
-                        int col = Integer.parseInt(xInput.getText());
-                        try {
-                            target = JavaFxOperation.getNodeFromGridPaneByIndices(((GridPane) JavaFxOperation.getGrandParent(nodeEdited)), row, col);
-                        } catch (GridIndexOutOfBoundsException e1) {
-                            new ErrorWindow("GridIndexOutOfBounds error", e1.toString()).showAndWait();
-                            return;
-                        }
-                        try {
-                            JavaFxOperation.removeFromParent(nodeEdited);
-                        } catch (UnremovableNodeException e1) {
-                            // TODO: proper error handling
-                            e1.printStackTrace();
-                        }
-                        assert target != null;
-                        target.getChildren().add(nodeEdited);
-                        gameObjectInstance.setCoord(new PointImpl(col, row));
-                        break;
-                    case EDIT_TREEITEM:
-                        try {
-                            ImageManager.removeClassImage(gameObjectClass);
-                        } catch (GameObjectClassNotFoundException ignored) {
-                        }
-                        gameObjectClass.getImagePathList().clear();
-                        gameObjectClass.getImagePathList().addAll(imagePaths);
-                        gameObjectClass.getPropertiesMap().clear();
-                        for(var box : propBoxes) {
-                            gameObjectClass.getPropertiesMap().put(box.getKey(), box.getValue());
-                        }
-                        gameObjectClass.setWidth(width);
-                        gameObjectClass.setHeight(height);
-                        try {
-                            gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName().getValue(), nameField.getText());
-                        } catch (InvalidOperationException e1) {
-                            // TODO
-                            e1.printStackTrace();
-                        }
-                        ImageView icon2 = null;
-                        try {
-                            icon2 = new ImageView(ImageManager.getPreview(gameObjectClass));
-                        } catch (PreviewUnavailableException e1) {
-                            // TODO: proper error handling
-                            e1.printStackTrace();
-                        }
-                        assert icon2 != null;
-                        JavaFxOperation.setWidthAndHeight(icon2, ICON_WIDTH, ICON_HEIGHT);
-                        treeItem.setValue(nameField.getText());
-                        treeItem.setGraphic(icon2);
-                        break;
-                }
-            }
-        });
         setupLayout();
         rootPane.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.DELETE || e.getCode() == KeyCode.BACK_SPACE) {
                 toRemovePath.forEach(path -> imagePaths.remove(path));
             }
         });
+    }
+
+    /**
+     * This method sets up the confirm logic for adding new TreeItems.
+     */
+    @Override
+    protected void confirmAddTreeItem() {
+        int width;
+        int height;
+        try {
+            width = Integer.parseInt(widthInput.getText());
+        } catch (NumberFormatException e1) {
+            new ErrorWindow("Incorrect width", "The input width is in an unsupported format").showAndWait();
+            return;
+        }
+        try {
+            height = Integer.parseInt(heightInput.getText());
+        } catch (NumberFormatException e1) {
+            new ErrorWindow("Incorrect height", "The input height is in an unsupported format").showAndWait();
+            return;
+        }
+        try {
+            gameObjectManager.createEntityClass(nameField.getText().trim());
+        } catch (DuplicateGameObjectClassException e1) {
+            // TODO
+            e1.printStackTrace();
+        }
+        EntityClass entityClass = null;
+        try {
+            entityClass = gameObjectManager.getEntityClass(nameField.getText().trim());
+        } catch (GameObjectClassNotFoundException e1) {
+            // TODO
+            e1.printStackTrace();
+        }
+        assert entityClass != null;
+        TreeItem<String> newItem = new TreeItem<>(entityClass.getClassName().getValue());
+        entityClass.getImagePathList().addAll(imagePaths);
+        for(var box : propBoxes) {
+            entityClass.getPropertiesMap().put(box.getKey(), box.getValue());
+        }
+        entityClass.setHeight(height);
+        entityClass.setWidth(width);
+        ImageView icon = null;
+        try {
+            icon = new ImageView(ImageManager.getPreview(entityClass));
+        } catch (PreviewUnavailableException e1) {
+            // TODO: proper error handling
+            e1.printStackTrace();
+        }
+        assert icon != null;
+        JavaFxOperation.setWidthAndHeight(icon, ICON_WIDTH, ICON_HEIGHT);
+        newItem.setGraphic(icon);
+        treeItem.getChildren().add(newItem);
+    }
+
+    /**
+     * This method sets up the confirm logic of editing existing TreeItem.
+     */
+    @Override
+    protected void confirmEditTreeItem() {
+        int width;
+        int height;
+        try {
+            width = Integer.parseInt(widthInput.getText());
+        } catch (NumberFormatException e1) {
+            new ErrorWindow("Incorrect width", "The input width is in an unsupported format").showAndWait();
+            return;
+        }
+        try {
+            height = Integer.parseInt(heightInput.getText());
+        } catch (NumberFormatException e1) {
+            new ErrorWindow("Incorrect height", "The input height is in an unsupported format").showAndWait();
+            return;
+        }
+        try {
+            ImageManager.removeClassImage(gameObjectClass);
+        } catch (GameObjectClassNotFoundException ignored) {}
+        gameObjectClass.getImagePathList().clear();
+        gameObjectClass.getImagePathList().addAll(imagePaths);
+        gameObjectClass.getPropertiesMap().clear();
+        for(var box : propBoxes) {
+            gameObjectClass.getPropertiesMap().put(box.getKey(), box.getValue());
+        }
+        gameObjectClass.setWidth(width);
+        gameObjectClass.setHeight(height);
+        try {
+            gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName().getValue(), nameField.getText());
+        } catch (InvalidOperationException e1) {
+            // TODO
+            e1.printStackTrace();
+        }
+        ImageView icon2 = null;
+        try {
+            icon2 = new ImageView(ImageManager.getPreview(gameObjectClass));
+        } catch (PreviewUnavailableException e1) {
+            // TODO: proper error handling
+            e1.printStackTrace();
+        }
+        assert icon2 != null;
+        JavaFxOperation.setWidthAndHeight(icon2, ICON_WIDTH, ICON_HEIGHT);
+        treeItem.setValue(nameField.getText());
+        treeItem.setGraphic(icon2);
+    }
+
+    /**
+     * This method sets up the confirm logic of editing existing Node.
+     */
+    @Override
+    protected void confirmEditNode() {
+        int width;
+        int height;
+        try {
+            width = Integer.parseInt(widthInput.getText());
+        } catch (NumberFormatException e1) {
+            new ErrorWindow("Incorrect width", "The input width is in an unsupported format").showAndWait();
+            return;
+        }
+        try {
+            height = Integer.parseInt(heightInput.getText());
+        } catch (NumberFormatException e1) {
+            new ErrorWindow("Incorrect height", "The input height is in an unsupported format").showAndWait();
+            return;
+        }
+        try { ImageManager.removeInstanceImage(gameObjectInstance); } catch (GameObjectInstanceNotFoundException ignored) {}
+        gameObjectInstance.setInstanceName(nameField.getText());
+        gameObjectInstance.getImagePathList().clear();
+        gameObjectInstance.getImagePathList().addAll(imagePaths);
+        gameObjectInstance.getPropertiesMap().clear();
+        for(var box : propBoxes) {
+            gameObjectInstance.getPropertiesMap().put(box.getKey(), box.getValue());
+        }
+        gameObjectInstance.setWidth(width);
+        gameObjectInstance.setHeight(height);
+        try {
+            ((ImageView) nodeEdited).setImage(ImageManager.getPreview(gameObjectInstance));
+        } catch (PreviewUnavailableException e1) {
+            // TODO: proper error handling
+            e1.printStackTrace();
+        }
+        Tooltip.install(nodeEdited, new Tooltip(String.format("Width: %s\nHeight: %s\nSingle Click to toggle Deletion\nDouble Click or Right Click to edit\nInstance ID: %s\nClass Name: %s", width, height, gameObjectInstance.getInstanceId().getValue(), gameObjectInstance.getClassName().getValue())));
+        StackPane target;
+        int row = Integer.parseInt(rowInput.getText());
+        int col = Integer.parseInt(colInput.getText());
+        try {
+            target = JavaFxOperation.getNodeFromGridPaneByIndices(((GridPane) JavaFxOperation.getGrandParent(nodeEdited)), row, col);
+        } catch (GridIndexOutOfBoundsException e1) {
+            new ErrorWindow("GridIndexOutOfBounds error", e1.toString()).showAndWait();
+            return;
+        }
+        try {
+            JavaFxOperation.removeFromParent(nodeEdited);
+        } catch (UnremovableNodeException e1) {
+            // TODO: proper error handling
+            e1.printStackTrace();
+        }
+        assert target != null;
+        target.getChildren().add(nodeEdited);
+        gameObjectInstance.setCoord(new PointImpl(col, row));
     }
 
     /**
@@ -303,23 +324,19 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     @Override
     public void readGameObjectInstance() {
         nameField.setText(gameObjectInstance.getInstanceName().getValue());
-        readCommonEntityCharacteristics(gameObjectInstance.getImagePathList(), gameObjectInstance.getPropertiesMap(), gameObjectInstance.getWidth(), gameObjectInstance.getHeight());
-        Label xLabel = new Label("x");
-        Label yLabel = new Label("y");
-        xInput = new TextField(String.valueOf(gameObjectInstance.getCoord().getX()));
-        yInput = new TextField(String.valueOf(gameObjectInstance.getCoord().getY()));
+        imagePaths.addAll(gameObjectInstance.getImagePathList());
+        gameObjectInstance.getPropertiesMap().forEach((k, v) -> propBoxes.add(new PropertyBox(k, v, propBoxes::remove)));
+        widthInput.setText(String.valueOf(gameObjectInstance.getWidth().getValue()));
+        heightInput.setText(String.valueOf(gameObjectInstance.getHeight().getValue()));
+        Label xLabel = new Label("x, col index");
+        Label yLabel = new Label("y, row index");
+        colInput = new TextField(String.valueOf(gameObjectInstance.getCoord().getX()));
+        rowInput = new TextField(String.valueOf(gameObjectInstance.getCoord().getY()));
         GridPane position = new GridPane();
-        position.addRow(0, xLabel, xInput);
-        position.addRow(1, yLabel, yInput);
+        position.addRow(0, xLabel, colInput);
+        position.addRow(1, yLabel, rowInput);
         position.setHgap(20);
         layout.addRow(6, position);
-    }
-
-    private void readCommonEntityCharacteristics(ObservableList<String> imagePathList, ObservableMap<String, String> propertiesMap, SimpleIntegerProperty width, SimpleIntegerProperty height) {
-        imagePaths.addAll(imagePathList);
-        propertiesMap.forEach((k, v) -> propBoxes.add(new PropertyBox(k, v, propBoxes::remove)));
-        widthInput.setText(String.valueOf(width.getValue()));
-        heightInput.setText(String.valueOf(height.getValue()));
     }
 
     /**
@@ -328,7 +345,10 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     @Override
     public void readGameObjectClass() {
         nameField.setText(gameObjectClass.getClassName().getValue());
-        readCommonEntityCharacteristics(gameObjectClass.getImagePathList(), gameObjectClass.getPropertiesMap(), gameObjectClass.getWidth(), gameObjectClass.getHeight());
+        imagePaths.addAll(gameObjectClass.getImagePathList());
+        gameObjectClass.getPropertiesMap().forEach((k, v) -> propBoxes.add(new PropertyBox(k, v, propBoxes::remove)));
+        widthInput.setText(String.valueOf(gameObjectClass.getWidth().getValue()));
+        heightInput.setText(String.valueOf(gameObjectClass.getHeight().getValue()));
     }
 
     private void setupLayout() {
@@ -338,11 +358,5 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         layout.addRow(3, imagePanel);
         layout.addRow(4, propLabel, addProperties);
         layout.addRow(5, listProp);
-    }
-
-    private void addPlayers() {
-        //TODO
-        comboBox.getItems().addAll(
-        );
     }
 }
