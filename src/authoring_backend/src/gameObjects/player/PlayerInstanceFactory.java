@@ -28,7 +28,7 @@ public class PlayerInstanceFactory {
             throws GameObjectTypeException, InvalidIdException {
         // TODO locality
         if (playerPrototype.getType() != GameObjectType.PLAYER) {
-            throw new GameObjectTypeException("PlayerPrototype", "Player");
+            throw new GameObjectTypeException(GameObjectType.PLAYER);
         }
         SimpleStringProperty imagePathCopy = new SimpleStringProperty();
         ObservableMap propertiesMapCopy = FXCollections.observableHashMap();
