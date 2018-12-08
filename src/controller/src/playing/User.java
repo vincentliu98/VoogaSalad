@@ -24,7 +24,8 @@ public class User {
         myID = id;
         myFavoriteGames = new HashSet<>();
         myTwitter = null;
-        myAvatar = new ImageView("default-avatar.png");
+        myAvatar = new ImageView();
+        myAvatar.setImage(new Image(getClass().getResourceAsStream("/graphics/default-avatar.png")));
     }
 
     public void changeAvatar(Image image){
