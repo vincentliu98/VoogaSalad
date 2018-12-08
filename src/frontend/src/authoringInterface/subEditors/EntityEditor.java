@@ -142,9 +142,20 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
      */
     @Override
     protected void confirmAddTreeItem() {
-        int width = 0;
-        int height = 0;
-        checkWidthAndHeightInput(height, width, heightInput, widthInput);
+        int width;
+        try {
+            width = outputPositiveInteger(widthInput);
+        } catch (IllegalGeometryException e) {
+            new ErrorWindow("Illegal Width", e.toString()).showAndWait();
+            return;
+        }
+        int height;
+        try {
+            height = outputPositiveInteger(heightInput);
+        } catch (IllegalGeometryException e) {
+            new ErrorWindow("Illegal Height", e.toString()).showAndWait();
+            return;
+        }
         try {
             gameObjectManager.createEntityClass(nameField.getText().trim());
         } catch (DuplicateGameObjectClassException e1) {
@@ -184,9 +195,20 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
      */
     @Override
     protected void confirmEditTreeItem() {
-        int width = 0;
-        int height = 0;
-        checkWidthAndHeightInput(height, width, heightInput, widthInput);
+        int width;
+        try {
+            width = outputPositiveInteger(widthInput);
+        } catch (IllegalGeometryException e) {
+            new ErrorWindow("Illegal Width", e.toString()).showAndWait();
+            return;
+        }
+        int height;
+        try {
+            height = outputPositiveInteger(heightInput);
+        } catch (IllegalGeometryException e) {
+            new ErrorWindow("Illegal Height", e.toString()).showAndWait();
+            return;
+        }
         try {
             ImageManager.removeClassImage(gameObjectClass);
         } catch (GameObjectClassNotFoundException ignored) {}
@@ -222,9 +244,20 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
      */
     @Override
     protected void confirmEditNode() {
-        int width = 0;
-        int height = 0;
-        checkWidthAndHeightInput(height, width, heightInput, widthInput);
+        int width;
+        try {
+            width = outputPositiveInteger(widthInput);
+        } catch (IllegalGeometryException e) {
+            new ErrorWindow("Illegal Width", e.toString()).showAndWait();
+            return;
+        }
+        int height;
+        try {
+            height = outputPositiveInteger(heightInput);
+        } catch (IllegalGeometryException e) {
+            new ErrorWindow("Illegal Height", e.toString()).showAndWait();
+            return;
+        }
         try { ImageManager.removeInstanceImage(gameObjectInstance); } catch (GameObjectInstanceNotFoundException ignored) {}
         gameObjectInstance.setInstanceName(nameField.getText());
         gameObjectInstance.getImagePathList().clear();

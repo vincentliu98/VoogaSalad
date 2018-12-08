@@ -174,9 +174,20 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
      */
     @Override
     protected void confirmAddTreeItem() {
-        int width = 0;
-        int height = 0;
-        checkWidthAndHeightInput(height, width, heightText, widthText);
+        int width;
+        try {
+            width = outputPositiveInteger(widthText);
+        } catch (IllegalGeometryException e) {
+            new ErrorWindow("Illegal Width", e.toString());
+            return;
+        }
+        int height;
+        try {
+            height = outputPositiveInteger(heightText);
+        } catch (IllegalGeometryException e) {
+            new ErrorWindow("Illegal Height", e.toString());
+            return;
+        }
         try {
             gameObjectManager.createTileClass(nameField.getText().trim());
         } catch (DuplicateGameObjectClassException e1) {
@@ -211,9 +222,20 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
      */
     @Override
     protected void confirmEditTreeItem() {
-        int width = 0;
-        int height = 0;
-        checkWidthAndHeightInput(height, width, heightText, widthText);
+        int width;
+        try {
+            width = outputPositiveInteger(widthText);
+        } catch (IllegalGeometryException e) {
+            new ErrorWindow("Illegal Width", e.toString());
+            return;
+        }
+        int height;
+        try {
+            height = outputPositiveInteger(heightText);
+        } catch (IllegalGeometryException e) {
+            new ErrorWindow("Illegal Height", e.toString());
+            return;
+        }
         try {
             ImageManager.removeClassImage(gameObjectClass);
         } catch (GameObjectClassNotFoundException e1) {
@@ -245,9 +267,20 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
      */
     @Override
     protected void confirmEditNode() {
-        int width = 0;
-        int height = 0;
-        checkWidthAndHeightInput(height, width, heightText, widthText);
+        int width;
+        try {
+            width = outputPositiveInteger(widthText);
+        } catch (IllegalGeometryException e) {
+            new ErrorWindow("Illegal Width", e.toString());
+            return;
+        }
+        int height;
+        try {
+            height = outputPositiveInteger(heightText);
+        } catch (IllegalGeometryException e) {
+            new ErrorWindow("Illegal Height", e.toString());
+            return;
+        }
         try {
             ImageManager.removeInstanceImage(gameObjectInstance);
         } catch (GameObjectInstanceNotFoundException e1) {
