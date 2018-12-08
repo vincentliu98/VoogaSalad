@@ -147,10 +147,12 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
      * This method sets up the confirm logic of editing existing Node.
      */
     @Override
-    protected void confirmEditNode() throws IllegalGeometryException, PreviewUnavailableException, UnremovableNodeException, GridIndexOutOfBoundsException, GameObjectInstanceNotFoundException {
+    protected void confirmEditNode() throws IllegalGeometryException, PreviewUnavailableException, UnremovableNodeException, GridIndexOutOfBoundsException {
         int width = outputPositiveInteger(widthInput);
         int height = outputPositiveInteger(heightInput);
-        ImageManager.removeInstanceImage(gameObjectInstance);
+        try {
+            ImageManager.removeInstanceImage(gameObjectInstance);
+        } catch (GameObjectInstanceNotFoundException ignored) {}
         gameObjectInstance.setInstanceName(nameField.getText());
         gameObjectInstance.getImagePathList().clear();
         gameObjectInstance.getImagePathList().addAll(imagePaths);

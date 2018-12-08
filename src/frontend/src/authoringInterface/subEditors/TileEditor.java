@@ -190,10 +190,12 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
      * This method sets up the confirm logic of editing existing Node.
      */
     @Override
-    protected void confirmEditNode() throws IllegalGeometryException, UnremovableNodeException, GridIndexOutOfBoundsException, PreviewUnavailableException, GameObjectInstanceNotFoundException {
+    protected void confirmEditNode() throws IllegalGeometryException, UnremovableNodeException, GridIndexOutOfBoundsException, PreviewUnavailableException {
         int width = outputPositiveInteger(widthText);
         int height = outputPositiveInteger(heightText);
-        ImageManager.removeInstanceImage(gameObjectInstance);
+        try {
+            ImageManager.removeInstanceImage(gameObjectInstance);
+        } catch (GameObjectInstanceNotFoundException ignored) {}
         gameObjectInstance.setInstanceName(nameField.getText());
         gameObjectInstance.getImagePathList().clear();
         gameObjectInstance.getImagePathList().addAll(imagePaths);

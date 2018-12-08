@@ -147,7 +147,17 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
         this.gameObjectClass = gameObjectClass;
         readGameObjectClass();
         confirm.setOnAction(e -> {
-            confirmEditTreeItem();
+            try {
+                confirmEditTreeItem();
+            } catch (IllegalGeometryException e1) {
+                e1.printStackTrace();
+            } catch (GameObjectClassNotFoundException e1) {
+                e1.printStackTrace();
+            } catch (InvalidOperationException e1) {
+                e1.printStackTrace();
+            } catch (PreviewUnavailableException e1) {
+                e1.printStackTrace();
+            }
             closeEditor();
         });
     }
@@ -161,7 +171,17 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
         this.treeItem = treeItem;
         editingMode = EditingMode.ADD_TREEITEM;
         confirm.setOnAction(e -> {
-            confirmAddTreeItem();
+            try {
+                confirmAddTreeItem();
+            } catch (IllegalGeometryException e1) {
+                e1.printStackTrace();
+            } catch (PreviewUnavailableException e1) {
+                e1.printStackTrace();
+            } catch (GameObjectClassNotFoundException e1) {
+                e1.printStackTrace();
+            } catch (DuplicateGameObjectClassException e1) {
+                e1.printStackTrace();
+            }
             closeEditor();
         });
     }
@@ -184,7 +204,17 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
         }
         readGameObjectInstance();
         confirm.setOnAction(e -> {
-            confirmEditNode();
+            try {
+                confirmEditNode();
+            } catch (IllegalGeometryException e1) {
+                e1.printStackTrace();
+            } catch (PreviewUnavailableException e1) {
+                e1.printStackTrace();
+            } catch (UnremovableNodeException e1) {
+                e1.printStackTrace();
+            } catch (GridIndexOutOfBoundsException e1) {
+                e1.printStackTrace();
+            }
             closeEditor();
         });
     }
@@ -220,7 +250,7 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
     /**
      * This method sets up the confirm logic of editing existing Node.
      */
-    protected void confirmEditNode() throws IllegalGeometryException, PreviewUnavailableException, UnremovableNodeException, GridIndexOutOfBoundsException, GameObjectInstanceNotFoundException {
+    protected void confirmEditNode() throws IllegalGeometryException, PreviewUnavailableException, UnremovableNodeException, GridIndexOutOfBoundsException {
         propBoxes.forEach(box -> gameObjectInstance.getPropertiesMap().put(box.getKey(), box.getValue()));
     }
 
