@@ -89,7 +89,7 @@ public class PhaseGraphXMLWriter<T> {
         var nodes = doc.createElement("nodes");
         singlePhaseData.getNodesName().forEach(n -> {
             var node = doc.createElement("node");
-            var nodeName = doc.createElement("name");
+            var nodeName = doc.createElement("nodeName");
             var nodeX = doc.createElement("X");
             var nodeY = doc.createElement("Y");
             nodeName.appendChild(doc.createTextNode(n));

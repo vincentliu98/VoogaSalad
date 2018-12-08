@@ -30,6 +30,7 @@ public class SinglePhaseData {
     private String phaseName;
     private List<String> nodesName;
     private Map<String, Pair<Double, Double>> nodesPos;
+    private Map<Pair<String, String>, GameEvent> nodesConnect;
 
     public String getPhaseName() {
         return phaseName;
@@ -47,13 +48,19 @@ public class SinglePhaseData {
         return nodesConnect;
     }
 
-    private Map<Pair<String, String>, GameEvent> nodesConnect;
-
     public SinglePhaseData(String phaseName) {
         this.phaseName = phaseName;
         nodesName = new ArrayList<>();
         nodesPos = new HashMap<>();
         nodesConnect = new HashMap<>();
+    }
+
+    public SinglePhaseData(String phaseName, List<String> nodesName, Map<String, Pair<Double, Double>> nodesPos,
+                           Map<Pair<String, String>, GameEvent> nodesConnect){
+        this.phaseName = phaseName;
+        this.nodesName = nodesName;
+        this.nodesPos = nodesPos;
+        this.nodesConnect = nodesConnect;
     }
 
     public void addNode(String name) {
