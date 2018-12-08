@@ -54,8 +54,11 @@ public class GameMethods {
         ROOT.getChildren().remove(entity.getImageView());
         ENTITIES.remove(entity.getID());
     }
-    public static void moveEntity(Entity entity, int x, int y) {
+    public static void moveEntity(Entity entity, double x, double y) {
         entity.setLocation(x, y);
+    }
+    public static void moveEntity(Entity entity, Tile tile) {
+        moveEntity(entity, tile.getX(), tile.getY());
     }
 
     /**
@@ -68,8 +71,8 @@ public class GameMethods {
         return TILES.get(tileID);
     }
 
-    public static boolean hasIntersectingEntities(int tileID) { return hasIntersectingEntities(TILES.get(tileID)); }
-    public static boolean hasIntersectingEntities(Tile tile) {
+    public static boolean hasNoIntersectingEntities(int tileID) { return hasNoIntersectingEntities(TILES.get(tileID)); }
+    public static boolean hasNoIntersectingEntities(Tile tile) {
         return ENTITIES.values().stream().noneMatch(e -> {
             boolean verdictX =
                 (tile.getX() <= e.getX() && e.getX() < tile.getX() + tile.getWidth()) ||
@@ -110,6 +113,7 @@ public class GameMethods {
     public static double distance(GameObject a, GameObject b) {
         double dx = a.getX() - b.getX();
         double dy = a.getY() - b.getY();
+        System.out.println(Math.sqrt(dx*dx+dy*dy));
         return Math.sqrt(dx*dx+dy*dy);
     }
 }

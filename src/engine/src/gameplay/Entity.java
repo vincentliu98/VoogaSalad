@@ -1,6 +1,7 @@
 package gameplay;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
+import grids.PointImpl;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.EventHandler;
@@ -17,7 +18,9 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
     private String name;
     private List<String> myImagePaths;
     private String myImageSelector; // Groovy code
-    private int width, height;
+    private int myWidth, myHeight;
+    private PointImpl myCoord; // ugh interfaces are hard to use with XStream
+
     @XStreamOmitField
     private transient SimpleIntegerProperty imgIndex;
     private transient SimpleDoubleProperty xCoord, yCoord;
@@ -37,10 +40,9 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
     ) {
         this.myID = myID;
         this.props = properties;
-        this.xCoord = new SimpleDoubleProperty(x);
-        this.yCoord = new SimpleDoubleProperty(y);
-        this.width = width;
-        this.height = height;
+        this.myCoord = new PointImpl(x, y);
+        this.myWidth = width;
+        this.myHeight = height;
         this.name = name;
         this.myImagePaths = myImagePaths;
         this.myImageSelector = myImageSelector;
@@ -57,6 +59,9 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
 
         imgIndex = new SimpleIntegerProperty(-1);
         imgIndex.addListener((e, oldVal, newVal) -> myImageView.setImage(myImages.get(newVal.intValue())));
+
+        this.xCoord = new SimpleDoubleProperty(myCoord.getX());
+        this.yCoord = new SimpleDoubleProperty(myCoord.getY());
     }
 
     /**
@@ -66,8 +71,8 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
     public void adjustViewSize(double screenWidth, double screenHeight) {
         myImageView.setY((screenHeight * yCoord.get()) / GameMethods.gridHeight());
         myImageView.setX((screenWidth * xCoord.get()) / GameMethods.gridWidth());
-        myImageView.setFitWidth(screenWidth * width /GameMethods.gridWidth());
-        myImageView.setFitHeight(screenHeight * height /GameMethods.gridHeight());
+        myImageView.setFitWidth(screenWidth * myWidth /GameMethods.gridWidth());
+        myImageView.setFitHeight(screenHeight * myHeight /GameMethods.gridHeight());
 
         myImages = myImagePaths.stream()
                                .map(path ->
@@ -100,7 +105,7 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
         } else imgIndex.set(0);
     }
 
-    public void setLocation(int x, int y){
+    public void setLocation(double x, double y){
         this.xCoord.set(x);
         this.yCoord.set(y);
     }
@@ -112,10 +117,10 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
     public double getY() { return yCoord.get(); }
 
     @Override
-    public double getWidth() { return width; }
+    public double getWidth() { return myWidth; }
 
     @Override
-    public double getHeight() { return height; }
+    public double getHeight() { return myHeight; }
 
     @Override
     public void handle(MouseEvent event) {

@@ -42,7 +42,7 @@ public class PhaseGraphConverter implements Converter {
 
             writer.startNode("myExecution");
             String execStr = node.exec().transformToGroovy().get("");
-            writer.setValue(execStr.replaceAll("GameData.goTo\\(('.*')\\)", "GameData.goTo\\($1.hashCode()\\)"));
+            writer.setValue(execStr.replaceAll("GameMethods.goTo\\(('.*')\\)", "GameMethods.goTo\\($1.hashCode()\\)"));
             writer.endNode();
 
             writer.endNode();

@@ -21,10 +21,10 @@ public class EntityPrototype extends PropertyHolder<EntityPrototype> {
     private String name;
     private List<String> myImagePaths;
     private String myImageSelector; // Groovy codee
-    private int width, height;
+    private int myWidth, myHeight;
 
     public Entity build(int id, int x, int y) {
-        return new Entity(id, x, y, width, height, name, freshMap(), myImagePaths, myImageSelector);
+        return new Entity(id, x, y, myWidth, myHeight, name, freshMap(), myImagePaths, myImageSelector);
     }
 
     public Map<String, Object> freshMap() {
