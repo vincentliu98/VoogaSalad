@@ -21,10 +21,7 @@ import phase.api.PhaseDB;
 import utils.ErrorWindow;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
 
 /**
@@ -72,9 +69,12 @@ public class PhaseChooserPane implements SubView<GridPane> {
         phaseList.clear();
         phasePanes.clear();
 
-        phaseList.addAll(phaseDataMap.keySet());
+        phaseDataMap.keySet().forEach(a -> {
+            phaseList.add(a);
+            recoverPhasePane(a, phaseDataMap);
+        });
+
         System.out.println("map" + phaseDataMap);
-        phaseList.forEach(name -> recoverPhasePane(name, phaseDataMap));
         phaseListView.setItems(phaseList);
     }
 
@@ -156,8 +156,10 @@ public class PhaseChooserPane implements SubView<GridPane> {
                 phaseDataMap.put(name, singlePhaseData);
 
                 var phasePane = new PhasePane(phaseDB, genGroovyPane, graph, singlePhaseData, this);
-                phaseList.add(name);
                 phasePanes.add(phasePane);
+
+                phasePane.recoverData();
+
                 phaseListView.getSelectionModel().select(phaseList.size()-1);
             } catch (Throwable t) {
                 new ErrorWindow("Error", "t.toString()").showAndWait();
