@@ -53,4 +53,28 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
     protected void readGameObjectClass() {
         nameField.setText(gameObjectClass.getClassName().getValue());
     }
+
+    /**
+     * This method sets up the confirm logic of adding new TreeItem.
+     */
+    @Override
+    protected void confirmAddTreeItem() {
+
+    }
+
+    /**
+     * This method sets up the confirm logic of editing existing TreeItem.
+     */
+    @Override
+    protected void confirmEditTreeItem() {
+
+    }
+
+    /**
+     * This method sets up the confirm logic of editing existing Node.
+     */
+    @Override
+    protected void confirmEditNode() {
+
+    }
 }

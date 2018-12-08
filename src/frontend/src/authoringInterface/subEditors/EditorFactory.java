@@ -1,6 +1,5 @@
 package authoringInterface.subEditors;
 
-import authoringInterface.sidebar.treeItemEntries.Player;
 import authoringUtils.exception.GameObjectTypeException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.gameObject.GameObjectType;

@@ -117,114 +117,19 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
             } else if (heightText.getText().trim().isEmpty()) {
                 new ErrorWindow("Empty height", "You must specify a height for this tile").showAndWait();
             } else {
-                int width = DEFAULT_WIDTH;
-                int height = DEFAULT_HEIGHT;
-                try {
-                    width = Integer.parseInt(widthText.getText());
-                } catch (NumberFormatException e1) {
-                    new ErrorWindow("Incorrect width", "The input width is in an unsupported format").showAndWait();
-                    return;
-                }
-                try {
-                    height = Integer.parseInt(heightText.getText());
-                } catch (NumberFormatException e1) {
-                    new ErrorWindow("Incorrect height", "The input height is in an unsupported format").showAndWait();
-                    return;
-                }
+
                 ((Stage) rootPane.getScene().getWindow()).close();
                 switch (editingMode) {
                     case ADD_TREEITEM:
-                        try {
-                            gameObjectManager.createTileClass(nameField.getText().trim());
-                        } catch (DuplicateGameObjectClassException e1) {
-                            // TODO
-                            e1.printStackTrace();
-                        }
-                        TileClass tileClass = null;
-                        try {
-                            tileClass = gameObjectManager.getTileClass(nameField.getText().trim());
-                        } catch (GameObjectClassNotFoundException e1) {
-                            // TODO
-                            e1.printStackTrace();
-                        }
-                        TreeItem<String> newItem = new TreeItem<>(tileClass.getClassName().getValue());
-                        tileClass.getImagePathList().addAll(imagePaths);
-                        ImageView icon = null;
-                        try {
-                            icon = new ImageView(ImageManager.getPreview(tileClass));
-                        } catch (PreviewUnavailableException e1) {
-                            // TODO: proper error handling
-                            e1.printStackTrace();
-                        }
-                        JavaFxOperation.setWidthAndHeight(icon, ICON_WIDTH, ICON_HEIGHT);
-                        newItem.setGraphic(icon);
-                        tileClass.setHeight(height);
-                        tileClass.setWidth(width);
-                        treeItem.getChildren().add(newItem);
+
                         break;
                     case NONE:
                         return;
                     case EDIT_NODE:
-                        try {
-                            ImageManager.removeInstanceImage(gameObjectInstance);
-                        } catch (GameObjectInstanceNotFoundException e1) {
-                        }
-                        gameObjectInstance.setInstanceName(nameField.getText());
-                        gameObjectInstance.getImagePathList().clear();
-                        gameObjectInstance.getImagePathList().addAll(imagePaths);
-                        gameObjectInstance.setWidth(width);
-                        gameObjectInstance.setHeight(height);
-                        try {
-                            ((ImageView) nodeEdited).setImage(ImageManager.getPreview(gameObjectInstance));
-                        } catch (PreviewUnavailableException e1) {
-                            // TODO: proper error handling
-                            e1.printStackTrace();
-                        }
-                        Tooltip.install(nodeEdited, new Tooltip(String.format("Width: %s\nHeight: %s\nSingle Click to toggle Deletion\nDouble Click or Right Click to edit\nInstance ID: %s\nClass Name: %s", width, height, gameObjectInstance.getInstanceId().getValue(), gameObjectInstance.getClassName().getValue())));
-                        StackPane target;
-                        int row = Integer.parseInt(yInput.getText());
-                        int col = Integer.parseInt(xInput.getText());
-                        try {
-                            target = JavaFxOperation.getNodeFromGridPaneByIndices(((GridPane) JavaFxOperation.getGrandParent(nodeEdited)), row, col);
-                        } catch (GridIndexOutOfBoundsException e1) {
-                            new ErrorWindow("GridIndexOutOfBounds error", e1.toString()).showAndWait();
-                            return;
-                        }
-                        try {
-                            JavaFxOperation.removeFromParent(nodeEdited);
-                        } catch (UnremovableNodeException e1) {
-                            // TODO: proper error handling
-                            e1.printStackTrace();
-                        }
-                        assert target != null;
-                        target.getChildren().add(nodeEdited);
-                        gameObjectInstance.setCoord(new PointImpl(col, row));
+
                         break;
                     case EDIT_TREEITEM:
-                        try {
-                            ImageManager.removeClassImage(gameObjectClass);
-                        } catch (GameObjectClassNotFoundException e1) {
-                        }
-                        gameObjectClass.getImagePathList().clear();
-                        gameObjectClass.getImagePathList().addAll(imagePaths);
-                        gameObjectClass.setWidth(width);
-                        gameObjectClass.setHeight(height);
-                        try {
-                            gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName().getValue(), nameField.getText());
-                        } catch (InvalidOperationException e1) {
-                            // TODO
-                            e1.printStackTrace();
-                        }
-                        ImageView icon2 = null;
-                        try {
-                            icon2 = new ImageView(ImageManager.getPreview(gameObjectClass));
-                        } catch (PreviewUnavailableException e1) {
-                            // TODO: proper error handling
-                            e1.printStackTrace();
-                        }
-                        JavaFxOperation.setWidthAndHeight(icon2, ICON_WIDTH, ICON_HEIGHT);
-                        treeItem.setValue(nameField.getText());
-                        treeItem.setGraphic(icon2);
+
                         break;
                 }
             }
@@ -262,6 +167,155 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
     @Override
     public void readGameObjectClass() {
         readCommonTileCharacteristic(gameObjectClass.getClassName(), gameObjectClass.getImagePathList(), gameObjectClass.getWidth(), gameObjectClass.getHeight());
+    }
+
+    /**
+     * This method sets up the confirm logic of adding new TreeItem.
+     */
+    @Override
+    protected void confirmAddTreeItem() {
+        int width;
+        try {
+            width = outputPositiveInteger(widthText);
+        } catch (IllegalGeometryException e) {
+            new ErrorWindow("Illegal Width", e.toString()).showAndWait();
+            return;
+        }
+        int height;
+        try {
+            height = outputPositiveInteger(heightText);
+        } catch (IllegalGeometryException e) {
+            new ErrorWindow("Illegal Height", e.toString()).showAndWait();
+            return;
+        }
+        try {
+            gameObjectManager.createTileClass(nameField.getText().trim());
+        } catch (DuplicateGameObjectClassException e1) {
+            // TODO
+            e1.printStackTrace();
+        }
+        TileClass tileClass = null;
+        try {
+            tileClass = gameObjectManager.getTileClass(nameField.getText().trim());
+        } catch (GameObjectClassNotFoundException e1) {
+            // TODO
+            e1.printStackTrace();
+        }
+        TreeItem<String> newItem = new TreeItem<>(tileClass.getClassName().getValue());
+        tileClass.getImagePathList().addAll(imagePaths);
+        ImageView icon = null;
+        try {
+            icon = new ImageView(ImageManager.getPreview(tileClass));
+        } catch (PreviewUnavailableException e1) {
+            // TODO: proper error handling
+            e1.printStackTrace();
+        }
+        JavaFxOperation.setWidthAndHeight(icon, ICON_WIDTH, ICON_HEIGHT);
+        newItem.setGraphic(icon);
+        tileClass.setHeight(height);
+        tileClass.setWidth(width);
+        treeItem.getChildren().add(newItem);
+    }
+
+    /**
+     * This method sets up the confirm logic of editing existing TreeItem.
+     */
+    @Override
+    protected void confirmEditTreeItem() {
+        int width;
+        try {
+            width = outputPositiveInteger(widthText);
+        } catch (IllegalGeometryException e) {
+            new ErrorWindow("Illegal Width", e.toString()).showAndWait();
+            return;
+        }
+        int height;
+        try {
+            height = outputPositiveInteger(heightText);
+        } catch (IllegalGeometryException e) {
+            new ErrorWindow("Illegal Height", e.toString()).showAndWait();
+            return;
+        }
+        try {
+            ImageManager.removeClassImage(gameObjectClass);
+        } catch (GameObjectClassNotFoundException e1) {
+        }
+        gameObjectClass.getImagePathList().clear();
+        gameObjectClass.getImagePathList().addAll(imagePaths);
+        gameObjectClass.setWidth(width);
+        gameObjectClass.setHeight(height);
+        try {
+            gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName().getValue(), nameField.getText());
+        } catch (InvalidOperationException e1) {
+            // TODO
+            e1.printStackTrace();
+        }
+        ImageView icon2 = null;
+        try {
+            icon2 = new ImageView(ImageManager.getPreview(gameObjectClass));
+        } catch (PreviewUnavailableException e1) {
+            // TODO: proper error handling
+            e1.printStackTrace();
+        }
+        JavaFxOperation.setWidthAndHeight(icon2, ICON_WIDTH, ICON_HEIGHT);
+        treeItem.setValue(nameField.getText());
+        treeItem.setGraphic(icon2);
+    }
+
+    /**
+     * This method sets up the confirm logic of editing existing Node.
+     */
+    @Override
+    protected void confirmEditNode() {
+        int width;
+        try {
+            width = outputPositiveInteger(widthText);
+        } catch (IllegalGeometryException e) {
+            new ErrorWindow("Illegal Width", e.toString()).showAndWait();
+            return;
+        }
+        int height;
+        try {
+            height = outputPositiveInteger(heightText);
+        } catch (IllegalGeometryException e) {
+            new ErrorWindow("Illegal Height", e.toString()).showAndWait();
+            return;
+        }
+        try {
+            ImageManager.removeInstanceImage(gameObjectInstance);
+        } catch (GameObjectInstanceNotFoundException e1) {
+        }
+        gameObjectInstance.setInstanceName(nameField.getText());
+        gameObjectInstance.getImagePathList().clear();
+        gameObjectInstance.getImagePathList().addAll(imagePaths);
+        gameObjectInstance.setWidth(width);
+        gameObjectInstance.setHeight(height);
+        try {
+            ((ImageView) nodeEdited).setImage(ImageManager.getPreview(gameObjectInstance));
+        } catch (PreviewUnavailableException e1) {
+            // TODO: proper error handling
+            e1.printStackTrace();
+        }
+        Tooltip.install(nodeEdited, new Tooltip(String.format("Width: %s\nHeight: %s\nSingle Click to toggle Deletion\nDouble Click or Right Click to edit\nInstance ID: %s\nClass Name: %s", width, height, gameObjectInstance.getInstanceId().getValue(), gameObjectInstance.getClassName().getValue())));
+        StackPane target;
+        int row = Integer.parseInt(yInput.getText());
+        int col = Integer.parseInt(xInput.getText());
+        try {
+            target = JavaFxOperation.getNodeFromGridPaneByIndices(((GridPane) JavaFxOperation.getGrandParent(nodeEdited)), row, col);
+        } catch (GridIndexOutOfBoundsException e1) {
+            new ErrorWindow("GridIndexOutOfBounds error", e1.toString()).showAndWait();
+            return;
+        }
+        try {
+            JavaFxOperation.removeFromParent(nodeEdited);
+        } catch (UnremovableNodeException e1) {
+            // TODO: proper error handling
+            e1.printStackTrace();
+        }
+        assert target != null;
+        target.getChildren().add(nodeEdited);
+        gameObjectInstance.setCoord(new PointImpl(col, row));
+
     }
 
     private void setupLayout() {
