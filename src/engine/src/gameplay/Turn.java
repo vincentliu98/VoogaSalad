@@ -7,18 +7,18 @@ import java.util.List;
 import java.util.Optional;
 
 public class Turn {
-    private int myCurrentPhaseID;
+    private String myCurrentPhaseName;
     private int playerIdx;
     private List<Integer> playersOrder;
 
-    public Turn(int phaseID, List<Integer> playersOrder){
-        myCurrentPhaseID = phaseID;
+    public Turn(String phaseID, List<Integer> playersOrder){
+        myCurrentPhaseName = phaseID;
         this.playersOrder = playersOrder;
         this.playerIdx = 0;
     }
 
     public int getCurrentPlayerID(){ return playersOrder.get(playerIdx); }
-    public void setPhase(int phaseID){ myCurrentPhaseID = phaseID; }
+    public void setPhase(String phaseName){ myCurrentPhaseName = phaseName; }
     public int nextPlayerID() {
         return playersOrder.get((playerIdx+1)%playersOrder.size());
     }
@@ -35,7 +35,7 @@ public class Turn {
         playerIdx = playersOrder.indexOf(playerID);
     }
 
-    public void startPhase(){ GameData.getPhase(myCurrentPhaseID).startTraversal(); }
+    public void startPhase(){ GameData.getPhase(myCurrentPhaseName).startTraversal(); }
 
     public void endGame(String message){
         // end the game

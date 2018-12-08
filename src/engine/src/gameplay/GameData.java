@@ -18,7 +18,7 @@ public class GameData {
     static Map<Integer, Entity> ENTITIES;
     static Map<String, EntityPrototype> ENTITY_PROTOTYPES;
     static Map<Integer, Tile> TILES;
-    static Map<Integer, Phase> PHASES;
+    static Map<String, Phase> PHASES;
     static Map<String, Node> NODES;
     static Set<Edge> EDGES;
     static String HEARTBEAT;
@@ -33,7 +33,7 @@ public class GameData {
         Point grid_dimension,
         Map<Integer, Player> players, Map<Integer, Entity> entities,
         Map<String, EntityPrototype> entityPrototypes,
-        Map<Integer, Tile> tiles, Map<Integer, Phase> phases,
+        Map<Integer, Tile> tiles, Map<String, Phase> phases,
         String heartbeat, Map<String, Node> nodes,
         Set<Edge> edges, Turn turn, Pane root, Initializer initializer
     ){
@@ -63,8 +63,8 @@ public class GameData {
 
     public static Map<Integer, Entity> getEntities() { return ENTITIES; }
 
-    public static Phase getPhase(int phaseID){
-        return PHASES.get(phaseID);
+    public static Phase getPhase(String phaseName){
+        return PHASES.get(phaseName);
     }
     public static Node getNode(String nodeName){
         return NODES.get(nodeName);

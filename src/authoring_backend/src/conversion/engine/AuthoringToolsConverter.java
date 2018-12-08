@@ -10,6 +10,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.mapper.Mapper;
 import gameObjects.crud.SimpleGameObjectsCRUD;
+import gameObjects.gameObject.GameObjectInstance;
 import phase.api.PhaseDB;
 
 import java.util.stream.Collectors;
@@ -34,15 +35,15 @@ public class AuthoringToolsConverter implements Converter {
 
         writer.startNode("gameplay.Turn");
 
-        writer.startNode("myCurrentPhaseID");
-        writer.setValue(String.valueOf(authTools.phaseDB().getStartingPhase().hashCode()));
+        writer.startNode("myCurrentPhaseName");
+        writer.setValue(authTools.phaseDB().getStartingPhase());
         writer.endNode();
 
         writer.startNode("playersOrder");
-        var playerIDs = StreamSupport.stream(authTools.entityDB().getPlayerInstances().spliterator(),true)
-                                 .map(e -> e.getInstanceId().get())
+        var playerNames = StreamSupport.stream(authTools.entityDB().getPlayerInstances().spliterator(),true)
+                                 .map(e -> e.getClassName().get())
                                  .collect(Collectors.toList());
-        new CollectionConverter(mapper).marshal(playerIDs, writer, ctx);
+        new CollectionConverter(mapper).marshal(playerNames, writer, ctx);
 
         writer.endNode();
 

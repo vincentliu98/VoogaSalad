@@ -94,9 +94,9 @@ public class XMLParser {
         return myTiles;
     }
 
-    public Map<Integer, Phase> getPhases(){
+    public Map<String, Phase> getPhases(){
         NodeList phases = myDocTree.getElementsByTagName("gameplay.Phase");
-        Map<Integer, Phase> myPhases = new HashMap<>();
+        Map<String, Phase> myPhases = new HashMap<>();
         for (int i = 0; i < phases.getLength(); i++){
             String currentPhase = nodeToString(phases.item(i));
             Phase phase = (Phase) mySerializer.fromXML(currentPhase);
