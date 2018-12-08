@@ -47,6 +47,7 @@ public class EditView implements SubView<TabPane> {
     private Tab mainTab;
     private Tab phaseNodeTab;
     private Tab gridTab;
+    private Tab endHandlerTab;
     private Integer index;
     private Stage newStage;
     private TabPane newTabPane;
@@ -87,9 +88,16 @@ public class EditView implements SubView<TabPane> {
                 authTools.phaseDB(),
                 groovyPaneFactory::gen
         );
-
         phaseNodeTab.setContent(phaseView.getView());
-        tabPane.getTabs().addAll(mainTab, gridTab, phaseNodeTab);
+
+        endHandlerTab = new Tab();
+        Label endHandlerLabel = new Label("Ending");
+        labelOnTab(endHandlerLabel, endHandlerTab);
+        var dialog = groovyPaneFactory.endHandler();
+        dialog.closeWindow(); // we're only gonna use its view
+        endHandlerTab.setContent(dialog.getView());
+
+        tabPane.getTabs().addAll(mainTab, gridTab, phaseNodeTab, endHandlerTab);
 
 //        mainLabel.setOnMouseDragged(e -> {
 //            index = 0;

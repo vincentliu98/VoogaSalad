@@ -95,12 +95,13 @@ public class GameMethods {
      *  Player/Turn
      */
     public static Player getCurrentPlayer() { return PLAYERS.get(TURN.getCurrentPlayerID()); }
+    public static Double getCurrentPlayerStats(String stat) { return getCurrentPlayer().getValue(stat); }
     public static void setCurrentPlayer(int playerID) { TURN.setCurrentPlayer(playerID);}
     public static int getCurrentPlayerID(){ return TURN.getCurrentPlayerID(); }
     public static int getNextPlayerID() { return TURN.nextPlayerID(); }
     public static int toNextPlayer() { return TURN.toNextPlayer(); }
     public static void setPlayerOrder(List<Integer> newOrder){ TURN.setPlayerOrder(newOrder); }
-    public static void endGame(int playerID){ TURN.endGame(playerID);}
+    public static void endGame(String endingMessage){ TURN.endGame(endingMessage);}
 
     /**
      *  Phase

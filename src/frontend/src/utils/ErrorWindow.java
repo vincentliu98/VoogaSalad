@@ -13,4 +13,11 @@ public class ErrorWindow extends Alert {
         setTitle(alertName);
         setContentText(content);
     }
+
+    public static void display(String alertName, String content) {
+        var alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(alertName);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
 }
