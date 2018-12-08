@@ -174,24 +174,9 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
      */
     @Override
     protected void confirmAddTreeItem() {
-        int width;
-        int height;
-        try {
-            width = Integer.parseInt(widthText.getText());
-        } catch (NumberFormatException e1) {
-            new ErrorWindow("Incorrect width", "The input width is in an unsupported format").showAndWait();
-            return;
-        }
-        try {
-            height = Integer.parseInt(heightText.getText());
-        } catch (NumberFormatException e1) {
-            new ErrorWindow("Incorrect height", "The input height is in an unsupported format").showAndWait();
-            return;
-        }
-        if (height == 0 || width == 0) {
-            new ErrorWindow("Incorrect height or width", String.format("Either your width %d or your height %d is not a positive integer", width, height)).showAndWait();
-            return;
-        }
+        int width = 0;
+        int height = 0;
+        checkWidthAndHeightInput(height, width, heightText, widthText);
         try {
             gameObjectManager.createTileClass(nameField.getText().trim());
         } catch (DuplicateGameObjectClassException e1) {
@@ -226,24 +211,9 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
      */
     @Override
     protected void confirmEditTreeItem() {
-        int width;
-        int height;
-        try {
-            width = Integer.parseInt(widthText.getText());
-        } catch (NumberFormatException e1) {
-            new ErrorWindow("Incorrect width", "The input width is in an unsupported format").showAndWait();
-            return;
-        }
-        try {
-            height = Integer.parseInt(heightText.getText());
-        } catch (NumberFormatException e1) {
-            new ErrorWindow("Incorrect height", "The input height is in an unsupported format").showAndWait();
-            return;
-        }
-        if (height == 0 || width == 0) {
-            new ErrorWindow("Incorrect height or width", String.format("Either your width %d or your height %d is not a positive integer", width, height)).showAndWait();
-            return;
-        }
+        int width = 0;
+        int height = 0;
+        checkWidthAndHeightInput(height, width, heightText, widthText);
         try {
             ImageManager.removeClassImage(gameObjectClass);
         } catch (GameObjectClassNotFoundException e1) {
@@ -275,24 +245,9 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
      */
     @Override
     protected void confirmEditNode() {
-        int width;
-        int height;
-        try {
-            width = Integer.parseInt(widthText.getText());
-        } catch (NumberFormatException e1) {
-            new ErrorWindow("Incorrect width", "The input width is in an unsupported format").showAndWait();
-            return;
-        }
-        try {
-            height = Integer.parseInt(heightText.getText());
-        } catch (NumberFormatException e1) {
-            new ErrorWindow("Incorrect height", "The input height is in an unsupported format").showAndWait();
-            return;
-        }
-        if (height == 0 || width == 0) {
-            new ErrorWindow("Incorrect height or width", String.format("Either your width %d or your height %d is not a positive integer", width, height)).showAndWait();
-            return;
-        }
+        int width = 0;
+        int height = 0;
+        checkWidthAndHeightInput(height, width, heightText, widthText);
         try {
             ImageManager.removeInstanceImage(gameObjectInstance);
         } catch (GameObjectInstanceNotFoundException e1) {

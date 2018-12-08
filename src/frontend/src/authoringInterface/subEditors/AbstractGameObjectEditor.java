@@ -12,6 +12,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import utils.ErrorWindow;
 import utils.exception.NodeNotFoundException;
 import utils.nodeInstance.NodeInstanceController;
 
@@ -173,5 +174,9 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
      */
     private void closeEditor() {
         ((Stage) rootPane.getScene().getWindow()).close();
+    }
+
+    protected int outputPositiveInteger(TextField intInput) {
+
     }
 }
