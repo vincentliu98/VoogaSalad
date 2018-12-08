@@ -1,5 +1,6 @@
 package authoringInterface.subEditors;
 
+import authoringInterface.subEditors.exception.IllegalGameObjectNamingException;
 import authoringInterface.subEditors.exception.IllegalGeometryException;
 import authoringUtils.exception.DuplicateGameObjectClassException;
 import authoringUtils.exception.GameObjectClassNotFoundException;
@@ -104,13 +105,13 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
      * @throws IllegalGeometryException
      * @throws PreviewUnavailableException
      * @throws GameObjectClassNotFoundException
-     * @throws DuplicateGameObjectClassException
+     * @throws IllegalGameObjectNamingException
      */
     @Override
-    protected void confirmAddTreeItem() throws IllegalGeometryException, PreviewUnavailableException, GameObjectClassNotFoundException, DuplicateGameObjectClassException {
+    protected void confirmAddTreeItem() throws IllegalGeometryException, PreviewUnavailableException, GameObjectClassNotFoundException, IllegalGameObjectNamingException {
+        setClassName();
         int width = outputPositiveInteger(widthInput);
         int height = outputPositiveInteger(heightInput);
-        gameObjectManager.createEntityClass(nameField.getText().trim());
         EntityClass entityClass = gameObjectManager.getEntityClass(nameField.getText().trim());
         assert entityClass != null;
         TreeItem<String> newItem = new TreeItem<>(entityClass.getClassName().getValue());
@@ -131,9 +132,11 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
      * @throws GameObjectClassNotFoundException
      * @throws InvalidOperationException
      * @throws PreviewUnavailableException
+     * @throws IllegalGameObjectNamingException
      */
     @Override
-    protected void confirmEditTreeItem() throws IllegalGeometryException, GameObjectClassNotFoundException, InvalidOperationException, PreviewUnavailableException {
+    protected void confirmEditTreeItem() throws IllegalGeometryException, GameObjectClassNotFoundException, InvalidOperationException, PreviewUnavailableException, IllegalGameObjectNamingException {
+        setClassName();
         int width = outputPositiveInteger(widthInput);
         int height = outputPositiveInteger(heightInput);
         ImageManager.removeClassImage(gameObjectClass);
@@ -157,18 +160,16 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
      * @throws PreviewUnavailableException
      * @throws UnremovableNodeException
      * @throws GridIndexOutOfBoundsException
+     * @throws IllegalGameObjectNamingException
      */
     @Override
-    protected void confirmEditNode() throws IllegalGeometryException, PreviewUnavailableException, UnremovableNodeException, GridIndexOutOfBoundsException {
+    protected void confirmEditNode() throws IllegalGeometryException, PreviewUnavailableException, UnremovableNodeException, GridIndexOutOfBoundsException, IllegalGameObjectNamingException {
+        setInstanceName();
         int width = outputPositiveInteger(widthInput);
         int height = outputPositiveInteger(heightInput);
         try {
             ImageManager.removeInstanceImage(gameObjectInstance);
         } catch (GameObjectInstanceNotFoundException ignored) {}
-        if (nameField.getText().trim().isEmpty()) {
-            throw new
-        }
-        gameObjectInstance.setInstanceName(nameField.getText());
         gameObjectInstance.getImagePathList().clear();
         gameObjectInstance.getImagePathList().addAll(imagePaths);
         gameObjectInstance.getPropertiesMap().clear();

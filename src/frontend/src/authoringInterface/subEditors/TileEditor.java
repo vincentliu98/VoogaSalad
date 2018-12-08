@@ -1,5 +1,6 @@
 package authoringInterface.subEditors;
 
+import authoringInterface.subEditors.exception.IllegalGameObjectNamingException;
 import authoringInterface.subEditors.exception.IllegalGeometryException;
 import authoringUtils.exception.DuplicateGameObjectClassException;
 import authoringUtils.exception.GameObjectClassNotFoundException;
@@ -154,13 +155,13 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
      * @throws IllegalGeometryException
      * @throws PreviewUnavailableException
      * @throws GameObjectClassNotFoundException
-     * @throws DuplicateGameObjectClassException
+     * @throws IllegalGameObjectNamingException
      */
     @Override
-    protected void confirmAddTreeItem() throws IllegalGeometryException, PreviewUnavailableException, GameObjectClassNotFoundException, DuplicateGameObjectClassException {
+    protected void confirmAddTreeItem() throws IllegalGeometryException, PreviewUnavailableException, GameObjectClassNotFoundException, IllegalGameObjectNamingException {
+        setClassName();
         int width = outputPositiveInteger(widthText);
         int height = outputPositiveInteger(heightText);
-        gameObjectManager.createTileClass(nameField.getText().trim());
         TileClass tileClass = gameObjectManager.getTileClass(nameField.getText().trim());
         TreeItem<String> newItem = new TreeItem<>(tileClass.getClassName().getValue());
         tileClass.getImagePathList().addAll(imagePaths);
@@ -180,9 +181,11 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
      * @throws InvalidOperationException
      * @throws PreviewUnavailableException
      * @throws GameObjectClassNotFoundException
+     * @throws IllegalGameObjectNamingException
      */
     @Override
-    protected void confirmEditTreeItem() throws IllegalGeometryException, InvalidOperationException, PreviewUnavailableException, GameObjectClassNotFoundException {
+    protected void confirmEditTreeItem() throws IllegalGeometryException, InvalidOperationException, PreviewUnavailableException, GameObjectClassNotFoundException, IllegalGameObjectNamingException {
+        setClassName();
         int width = outputPositiveInteger(widthText);
         int height = outputPositiveInteger(heightText);
         ImageManager.removeClassImage(gameObjectClass);
@@ -205,15 +208,16 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
      * @throws UnremovableNodeException
      * @throws GridIndexOutOfBoundsException
      * @throws PreviewUnavailableException
+     * @throws IllegalGameObjectNamingException
      */
     @Override
-    protected void confirmEditNode() throws IllegalGeometryException, UnremovableNodeException, GridIndexOutOfBoundsException, PreviewUnavailableException {
+    protected void confirmEditNode() throws IllegalGeometryException, UnremovableNodeException, GridIndexOutOfBoundsException, PreviewUnavailableException, IllegalGameObjectNamingException {
+        setInstanceName();
         int width = outputPositiveInteger(widthText);
         int height = outputPositiveInteger(heightText);
         try {
             ImageManager.removeInstanceImage(gameObjectInstance);
         } catch (GameObjectInstanceNotFoundException ignored) {}
-        gameObjectInstance.setInstanceName(nameField.getText());
         gameObjectInstance.getImagePathList().clear();
         gameObjectInstance.getImagePathList().addAll(imagePaths);
         gameObjectInstance.setWidth(width);
@@ -228,7 +232,6 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
         target.getChildren().add(nodeEdited);
         gameObjectInstance.setCoord(new PointImpl(col, row));
         writeInstanceProperties();
-
     }
 
     private void setupLayout() {
