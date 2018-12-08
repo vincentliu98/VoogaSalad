@@ -10,8 +10,13 @@ import phase.api.PhaseDB;
 public class PhaseDBConverter implements Converter {
     @Override
     public void marshal(Object o, HierarchicalStreamWriter writer, MarshallingContext ctx) {
+        var db = (PhaseDB) o;
         var graphConverter = new PhaseGraphConverter();
-        ((PhaseDB) o).phases().forEach(graph -> graphConverter.marshal(graph, writer, ctx));
+        db.phases().forEach(graph -> graphConverter.marshal(graph, writer, ctx));
+        var blockGraphConverter = new BlockGraphConverter();
+        writer.startNode("end-handler");
+        blockGraphConverter.marshal(db.endHandler(), writer, ctx);
+        writer.endNode();
     }
 
     @Override
