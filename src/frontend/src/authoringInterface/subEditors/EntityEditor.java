@@ -47,6 +47,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     private static final double REMOVE_OPACITY = 0.5;
     private static final int DEFAULT_HEIGHT = 1;
     private static final int DEFAULT_WIDTH = 1;
+    private static final double IMAGE_PANEL_GAP = 10;
     private Label imageText;
     private Button chooseImage;
     private HBox imagePanel;
@@ -85,7 +86,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         chooseImage = new Button("Choose image");
         chooseImage.setStyle("-fx-text-fill: white;"
                 + "-fx-background-color: #343a40;");
-        imagePanel = new HBox(10);
+        imagePanel = new HBox(IMAGE_PANEL_GAP);
         listProp = new GridPane();
         listview = new FlowPane();
         listview.setVgap(10);
@@ -111,18 +112,16 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
 
         addProperties.setStyle("-fx-text-fill: white;"
                 + "-fx-background-color: #343a40;");
-        addProperties.setOnAction(e -> {
-            new PropertyInputDialog().showAndWait().ifPresent(prop -> {
-                boolean added = false;
-                for(var box : propBoxes) {
-                    if(box.getKey().equals(prop.getKey())) {
-                        box.setValue(prop.getValue());
-                        added = true;
-                    }
+        addProperties.setOnAction(e -> new PropertyInputDialog().showAndWait().ifPresent(prop -> {
+            boolean added = false;
+            for(var box : propBoxes) {
+                if(box.getKey().equals(prop.getKey())) {
+                    box.setValue(prop.getValue());
+                    added = true;
                 }
-                if(!added) propBoxes.add(new PropertyBox(prop.getKey(), prop.getValue(), propBoxes::remove));
-            });
-        });
+            }
+            if(!added) propBoxes.add(new PropertyBox(prop.getKey(), prop.getValue(), propBoxes::remove));
+        }));
         setupLayout();
         rootPane.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.DELETE || e.getCode() == KeyCode.BACK_SPACE) {

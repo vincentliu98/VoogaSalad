@@ -63,5 +63,5 @@ public class PhaseDB {
     public void setStartingPhase(String phaseName) { startingPhase = phaseName; }
     public String getStartingPhase() { return startingPhase; }
 
-    public BlockGraph heartbeat() { return endHandler; }
+    public BlockGraph winCondition() { return endHandler; }
 }

@@ -21,7 +21,7 @@ public class GameData {
     static Map<String, Phase> PHASES;
     static Map<String, Node> NODES;
     static Set<Edge> EDGES;
-    static String HEARTBEAT;
+    static String WIN_CONDITION;
     static Turn TURN;
     static Pane ROOT;
     static List<ArgumentListener> myArgumentListeners;
@@ -34,7 +34,7 @@ public class GameData {
         Map<String, Player> players, Map<Integer, Entity> entities,
         Map<String, EntityPrototype> entityPrototypes,
         Map<Integer, Tile> tiles, Map<String, Phase> phases,
-        String heartbeat, Map<String, Node> nodes,
+        String winCondition, Map<String, Node> nodes,
         Set<Edge> edges, Turn turn, Pane root, Initializer initializer
     ){
         GameData.GRID_WIDTH = grid_dimension.getX();
@@ -45,7 +45,7 @@ public class GameData {
         ENTITY_PROTOTYPES = entityPrototypes;
         TILES = tiles;
         PHASES = phases;
-        HEARTBEAT = heartbeat;
+        WIN_CONDITION = winCondition;
         NODES = nodes;
         EDGES = edges;
         TURN = turn;

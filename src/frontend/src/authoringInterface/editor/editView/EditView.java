@@ -47,7 +47,7 @@ public class EditView implements SubView<TabPane> {
     private Tab mainTab;
     private Tab phaseNodeTab;
     private Tab gridTab;
-    private Tab heartbeatTab;
+    private Tab winConditionTab;
     private Stage newStage;
     private TabPane newTabPane;
 
@@ -89,14 +89,14 @@ public class EditView implements SubView<TabPane> {
         );
         phaseNodeTab.setContent(phaseView.getView());
 
-        heartbeatTab = new Tab();
-        Label heartbeatLabel = new Label("Heartbeat");
-        labelOnTab(heartbeatLabel, heartbeatTab);
-        var dialog = groovyPaneFactory.heartbeat();
+        winConditionTab = new Tab();
+        Label winConditionLabel = new Label("win condition");
+        labelOnTab(winConditionLabel, winConditionTab);
+        var dialog = groovyPaneFactory.winCondition();
         dialog.closeWindow(); // we're only gonna use its view
-        heartbeatTab.setContent(dialog.getView());
+        winConditionTab.setContent(dialog.getView());
 
-        tabPane.getTabs().addAll(mainTab, gridTab, phaseNodeTab, heartbeatTab);
+        tabPane.getTabs().addAll(mainTab, gridTab, phaseNodeTab, winConditionTab);
 
         gridLabel.setOnMouseDragged(e -> {
             Point2D mouseLoc = new Point2D(e.getScreenX(), e.getScreenY());
@@ -106,9 +106,9 @@ public class EditView implements SubView<TabPane> {
             Point2D mouseLoc = new Point2D(e.getScreenX(), e.getScreenY());
             splitTab(mouseLoc, phaseNodeTab);
         });
-        heartbeatLabel.setOnMouseDragged(e -> {
+        winConditionLabel.setOnMouseDragged(e -> {
             Point2D mouseLoc = new Point2D(e.getScreenX(), e.getScreenY());
-            splitTab(mouseLoc, heartbeatTab);
+            splitTab(mouseLoc, winConditionTab);
         });
     }
     

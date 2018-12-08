@@ -134,9 +134,9 @@ public class XMLParser {
         return turn;
     }
 
-    public String getHeartBeat() {
-        NodeList heartbeats = myDocTree.getElementsByTagName("heartbeat");
-        return heartbeats.item(0).getTextContent(); // only one heartbeat per game
+    public String getWinCondition() {
+        NodeList winCondition = myDocTree.getElementsByTagName("winCondition");
+        return winCondition.item(0).getTextContent(); // only one winCondition per game
     }
 
     /**
