@@ -1,8 +1,6 @@
 package utils;
 
-import javafx.scene.Parent;
 import javafx.scene.control.Alert;
-import javafx.scene.layout.Pane;
 
 /**
  * This class is a utility class that shows an error window with some basic settings.
@@ -14,5 +12,12 @@ public class ErrorWindow extends Alert {
         super(AlertType.ERROR);
         setTitle(alertName);
         setContentText(content);
+    }
+
+    public static void display(String alertName, String content) {
+        var alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(alertName);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }

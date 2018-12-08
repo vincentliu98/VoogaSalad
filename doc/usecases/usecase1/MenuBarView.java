@@ -3,7 +3,6 @@ package authoringInterface.menu;
 import api.ParentView;
 import api.SubView;
 import authoringInterface.MainAuthoringProgram;
-import authoringInterface.spritechoosingwindow.EntityWindow;
 import javafx.event.ActionEvent;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -14,7 +13,6 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**

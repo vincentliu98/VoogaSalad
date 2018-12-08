@@ -1,11 +1,9 @@
 package authoringInterface.subEditors;
 
 import api.SubView;
+import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
-import gameObjects.crud.GameObjectsCRUDInterface;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -14,8 +12,8 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import utils.nodeInstance.NodeInstanceController;
 import utils.exception.NodeNotFoundException;
+import utils.nodeInstance.NodeInstanceController;
 
 /**
  * This abstract class provides a boiler plate for different editors because they are pretty similar.
@@ -36,7 +34,6 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
     T gameObjectClass;
     V gameObjectInstance;
     GridPane layout;
-    GridPane gridPane;
 
     AbstractGameObjectEditor(GameObjectsCRUDInterface manager) {
         editingMode = EditingMode.NONE;
@@ -50,9 +47,9 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
         confirm = new Button("Apply");
         cancel = new Button("Cancel");
         confirm.setStyle("-fx-text-fill: white;"
-                         + "-fx-background-color: #343a40;");
+                + "-fx-background-color: #343a40;");
         cancel.setStyle("-fx-text-fill: white;"
-                         + "-fx-background-color: #343a40;");
+                + "-fx-background-color: #343a40;");
         cancel.setOnAction(e -> {
             System.out.println(e.toString());
             ((Stage) rootPane.getScene().getWindow()).close();
@@ -72,9 +69,9 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
         nameField.setLayoutX(208);
         nameField.setLayoutY(35);
         confirm.setLayoutX(296);
-        confirm.setLayoutY(460);
+        confirm.setLayoutY(950);
         cancel.setLayoutX(391);
-        cancel.setLayoutY(460);
+        cancel.setLayoutY(950);
         layout.setVgap(50);
         layout.setHgap(50);
         AnchorPane.setTopAnchor(layout, 100.0);
@@ -96,7 +93,7 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
     /**
      * Register the editor with an existing TreeItem in order to update or edit existing entries.
      *
-     * @param treeItem: An existing TreeItem.
+     * @param treeItem:        An existing TreeItem.
      * @param gameObjectClass: The GameObjectClass associated with the TreeItem to be edited by the user.
      */
     public void editTreeItem(TreeItem<String> treeItem, T gameObjectClass) {
@@ -119,13 +116,11 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
     /**
      * Register the node to Object map.
      *
-     * @param node: The node that is to be altered.
+     * @param node:       The node that is to be altered.
      * @param controller: The NodeInstanceController that controls the relationship between a Node and a GameObjectInstance.
-     * @param gridPane: The GridPane that is the parent of the Node edited. This is needed because sometimes the editor wishes to make changes regarding the coordinates and sizes of the Nodes.
      */
-    public void editNode(Node node, NodeInstanceController controller, GridPane gridPane) {
+    public void editNode(Node node, NodeInstanceController controller) {
         this.nodeEdited = node;
-        this.gridPane = gridPane;
         editingMode = EditingMode.EDIT_NODE;
         nodeInstanceController = controller;
         try {

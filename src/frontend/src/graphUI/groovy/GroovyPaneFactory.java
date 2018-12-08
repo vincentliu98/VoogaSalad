@@ -1,17 +1,18 @@
 package graphUI.groovy;
 
+import api.SubView;
 import authoringInterface.spritechoosingwindow.PopUpWindow;
 import authoringUtils.frontendUtils.Try;
 import groovy.api.BlockGraph;
 import groovy.api.GroovyFactory;
 import groovy.api.Ports;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -20,6 +21,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Pair;
+import utils.ErrorWindow;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -39,12 +41,11 @@ import java.util.stream.Collectors;
 public class GroovyPaneFactory {
     public static final Double WIDTH = 1200.0;
     public static final Double HEIGHT = 800.0;
-    public static final Double ICON_WIDTH = 30.;
-    public static final Double ICON_HEIGHT = 30.;
 
     private GroovyNodeFactory nodeFactory;
     private GroovyFactory factory;
     private Stage primaryStage;
+    private GroovyPane endHandlerPane;
 
     private enum DRAG_PURPOSE {
         NOTHING,
@@ -52,10 +53,11 @@ public class GroovyPaneFactory {
         CONNECT_LINE
     }
 
-    public GroovyPaneFactory(Stage primaryStage, GroovyFactory factory) {
+    public GroovyPaneFactory(Stage primaryStage, GroovyFactory factory, BlockGraph endHandler) {
         this.primaryStage = primaryStage;
         this.nodeFactory = new GroovyNodeFactory(factory);
         this.factory = factory;
+        this.endHandlerPane = new GroovyPane(primaryStage, endHandler);
     }
 
     public GroovyPaneFactory withStage(Stage anotherStage) {
@@ -64,8 +66,9 @@ public class GroovyPaneFactory {
     }
 
     public GroovyPane gen() { return new GroovyPane(primaryStage); }
+    public GroovyPane endHandler() { return endHandlerPane; }
 
-    public class GroovyPane extends PopUpWindow {
+    public class GroovyPane extends PopUpWindow implements SubView<GridPane> {
         private DRAG_PURPOSE draggingPurpose = DRAG_PURPOSE.NOTHING;
         private double orgSceneX, orgSceneY;
         private double orgTranslateX, orgTranslateY;
@@ -75,15 +78,12 @@ public class GroovyPaneFactory {
         private Group group = new Group();
         private ScrollPane itemBox = new ScrollPane();
         private Scene myScene;
-        private double newNodeX;
-        private double newNodeY;
+        private DoubleProperty newNodeX, newNodeY;
 
         private Map<Pair<GroovyNode, Ports>, Pair<GroovyNode, Line>> lines;
         private Set<GroovyNode> nodes;
 
         private BlockGraph graph;
-        private String currentDragType;
-        private boolean currentFetchArg;
         private Pair<GroovyNode, Ports> edgeFrom;
         private Line tmpLine;
 
@@ -95,9 +95,14 @@ public class GroovyPaneFactory {
         private SimpleObjectProperty<Pair<GroovyNode, Ports>> selectedEdge;
         private SimpleObjectProperty<GroovyNode> selectedNode;
 
-        public GroovyPane(Stage primaryStage) {
+        private DraggableGroovyIconFactory iconFactory;
+
+        private GroovyPane(Stage primaryStage) { this(primaryStage, factory.createGraph()); }
+        private GroovyPane(Stage primaryStage, BlockGraph graph) {
             super(primaryStage);
-            graph = factory.createGraph();
+            myScene = new Scene(root, WIDTH, HEIGHT);
+
+            this.graph = graph;
 
             codePane.setEditable(false);
             codePane.setWrapText(true);
@@ -105,6 +110,10 @@ public class GroovyPaneFactory {
             lines = new HashMap<>();
             nodes = new HashSet<>();
             createNode(nodeFactory.source(graph.source(), WIDTH-200, HEIGHT+50));
+
+            newNodeX = new SimpleDoubleProperty();
+            newNodeY = new SimpleDoubleProperty();
+            iconFactory = new DraggableGroovyIconFactory(myScene, nodeFactory, newNodeX, newNodeY);
 
             selection = new Rectangle();
             selection.setFill(Color.rgb(0, 0, 0, 0.2));
@@ -133,7 +142,7 @@ public class GroovyPaneFactory {
                 }
             });
 
-            dialog.addEventFilter(KeyEvent.KEY_RELEASED, e -> {
+            root.addEventFilter(KeyEvent.KEY_RELEASED, e -> {
                 if (e.getCode() == KeyCode.DELETE) deleteSelected();
                 if (e.getCode() == KeyCode.ESCAPE) {
                     selectedNode.set(null);
@@ -191,7 +200,7 @@ public class GroovyPaneFactory {
             root.setPrefHeight(HEIGHT);
             graphBox.getChildren().add(group);
             graphBox.setPrefSize(2 * WIDTH, 3 * HEIGHT);
-            setupGraphbox();
+            setupGraphBox();
             initializeGridPane();
             initializeItemBox();
             root.add(itemBox, 0, 0);
@@ -205,8 +214,6 @@ public class GroovyPaneFactory {
 
             graphBox.getChildren().add(selection);
             setupSelectionListener();
-
-            myScene = new Scene(root, WIDTH, HEIGHT);
         }
 
         private void setupSelectionListener() {
@@ -242,21 +249,11 @@ public class GroovyPaneFactory {
                 new Separator()
             );
 
-            vbox.getChildren().addAll(
-                IconLoader.loadControls(img -> type -> fetchArg -> draggableGroovyIcon(img, type, fetchArg))
-            );
-            vbox.getChildren().addAll(
-                IconLoader.loadBinaries(img -> type -> fetchArg -> draggableGroovyIcon(img, type, fetchArg))
-            );
-            vbox.getChildren().addAll(
-                IconLoader.loadLiterals(img -> type -> fetchArg -> draggableGroovyIcon(img, type, fetchArg))
-            );
-            vbox.getChildren().addAll(
-                IconLoader.loadFunctions(img -> type -> fetchArg -> draggableGroovyIcon(img, type, fetchArg))
-            );
-            vbox.getChildren().addAll(
-                IconLoader.loadGameMethods(img -> type -> fetchArg -> draggableGroovyIcon(img, type, fetchArg))
-            );
+            vbox.getChildren().addAll(IconLoader.loadControls(iconFactory::gen));
+            vbox.getChildren().addAll(IconLoader.loadBinaries(iconFactory::gen));
+            vbox.getChildren().addAll(IconLoader.loadLiterals(iconFactory::gen));
+            vbox.getChildren().addAll(IconLoader.loadFunctions(iconFactory::gen));
+            vbox.getChildren().addAll(IconLoader.loadGameMethods(iconFactory::genWithInfo));
 
             vbox.setSpacing(10);
             vbox.getChildren().forEach(c -> {
@@ -267,38 +264,17 @@ public class GroovyPaneFactory {
             itemBox.setMinHeight(HEIGHT);
         }
 
-        private void setupGraphbox() {
+        private void setupGraphBox() {
             graphBox.setOnDragOver(this::graphBoxDragOverHandler);
-            graphBox.setOnDragDropped(this::graphBoxDragDropHandler);
+            graphBox.setOnDragDropped(e -> iconFactory.dropHandler(e, this::createNode));
         }
 
         private void graphBoxDragOverHandler(DragEvent event) {
             if (event.getGestureSource() != graphBox && event.getDragboard().hasImage()) {
                 event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-                newNodeX = event.getX();
-                newNodeY = event.getY();
+                newNodeX.set(event.getX());
+                newNodeY.set(event.getY());
             }
-            event.consume();
-        }
-
-        private void graphBoxDragDropHandler(DragEvent event) {
-            Dragboard db = event.getDragboard();
-            boolean success = false;
-            if (db.hasImage()) {
-                success = true;
-                try {
-                    String arg = "";
-                    if (currentFetchArg) {
-                        var dialog = new TextInputDialog();
-                        dialog.setHeaderText("Type the parameter to initialize " + currentDragType);
-                        arg = dialog.showAndWait().get();
-                    }
-                    createNode(nodeFactory.toModel(currentDragType, newNodeX, newNodeY, arg).get());
-                } catch (Throwable t) {
-                    displayError(t.toString());
-                }
-            }
-            event.setDropCompleted(success);
             event.consume();
         }
 
@@ -340,25 +316,6 @@ public class GroovyPaneFactory {
         }
 
 
-        private ImageView draggableGroovyIcon(Image icon, String blockType, boolean fetchArg) {
-            var view = new ImageView(icon);
-            view.setFitWidth(ICON_WIDTH);
-            view.setFitHeight(ICON_HEIGHT);
-            view.setOnMouseEntered(e -> myScene.setCursor(Cursor.HAND));
-            view.setOnMouseExited(e -> myScene.setCursor(Cursor.DEFAULT));
-            view.setOnDragDetected(event -> {
-                Dragboard db = view.startDragAndDrop(TransferMode.ANY);
-                ClipboardContent content = new ClipboardContent();
-                content.putImage(icon);
-                db.setContent(content);
-                currentDragType = blockType;
-                currentFetchArg = fetchArg;
-                event.consume();
-            });
-
-            return view;
-        }
-
         private void initializeGridPane() {
             var col1 = new ColumnConstraints();
             col1.setPercentWidth(30);
@@ -386,7 +343,7 @@ public class GroovyPaneFactory {
                 edgeLine.toBack();
                 updateCodePane();
             } catch (Throwable t) {
-                displayError(t.toString());
+                ErrorWindow.display("Error while connecting nodes", t.toString());
             }
         }
 
@@ -482,15 +439,6 @@ public class GroovyPaneFactory {
             }
         }
 
-        private void displayError(String msg) {
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Something's wrong");
-            alert.setContentText(msg);
-            alert.showAndWait();
-        }
-
-
         private void updateLocations(GroovyNode n) {
             if(n instanceof ShrunkGroovyNode)
                 ((ShrunkGroovyNode) n).nodes().forEach(this::updateLocations);
@@ -524,6 +472,9 @@ public class GroovyPaneFactory {
         }
 
         public Try<String> toGroovy() { return graph.transformToGroovy(); }
+
+        @Override
+        public GridPane getView() { return root; }
     }
 }
 

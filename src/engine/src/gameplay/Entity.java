@@ -1,6 +1,7 @@
 package gameplay;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
+import grids.PointImpl;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.EventHandler;
@@ -15,9 +16,11 @@ import java.util.stream.Collectors;
 public class Entity extends PropertyHolder<Entity> implements GameObject, EventHandler<MouseEvent> {
     private int myID;
     private String name;
-    private int tileID;
     private List<String> myImagePaths;
     private String myImageSelector; // Groovy code
+    private int myWidth, myHeight;
+    private PointImpl myCoord; // ugh interfaces are hard to use with XStream
+
     @XStreamOmitField
     private transient SimpleIntegerProperty imgIndex;
     private transient SimpleDoubleProperty xCoord, yCoord;
@@ -28,7 +31,8 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
 
     public Entity(
             int myID,
-            int tileID,
+            int x, int y,
+            int width, int height,
             String name,
             Map<String, Object> properties,
             List<String> myImagePaths,
@@ -36,7 +40,9 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
     ) {
         this.myID = myID;
         this.props = properties;
-        this.tileID = tileID;
+        this.myCoord = new PointImpl(x, y);
+        this.myWidth = width;
+        this.myHeight = height;
         this.name = name;
         this.myImagePaths = myImagePaths;
         this.myImageSelector = myImageSelector;
@@ -54,9 +60,8 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
         imgIndex = new SimpleIntegerProperty(-1);
         imgIndex.addListener((e, oldVal, newVal) -> myImageView.setImage(myImages.get(newVal.intValue())));
 
-        var pos = GameMethods.getTile(tileID);
-        xCoord = new SimpleDoubleProperty(pos.getX());
-        yCoord = new SimpleDoubleProperty(pos.getY());
+        this.xCoord = new SimpleDoubleProperty(myCoord.getX());
+        this.yCoord = new SimpleDoubleProperty(myCoord.getY());
     }
 
     /**
@@ -66,8 +71,8 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
     public void adjustViewSize(double screenWidth, double screenHeight) {
         myImageView.setY((screenHeight * yCoord.get()) / GameMethods.gridHeight());
         myImageView.setX((screenWidth * xCoord.get()) / GameMethods.gridWidth());
-        myImageView.setFitWidth(screenWidth/GameMethods.gridWidth());
-        myImageView.setFitHeight(screenHeight/GameMethods.gridHeight());
+        myImageView.setFitWidth(screenWidth * myWidth /GameMethods.gridWidth());
+        myImageView.setFitHeight(screenHeight * myHeight /GameMethods.gridHeight());
 
         myImages = myImagePaths.stream()
                                .map(path ->
@@ -100,11 +105,9 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
         } else imgIndex.set(0);
     }
 
-    public void setLocation(int tileID){
-        this.tileID = tileID;
-        var data = GameMethods.getTile(tileID);
-        this.xCoord.set(data.getX());
-        this.yCoord.set(data.getY());
+    public void setLocation(double x, double y){
+        this.xCoord.set(x);
+        this.yCoord.set(y);
     }
 
     public ImageView getImageView(){ return myImageView; }
@@ -112,7 +115,12 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
     public String getName() { return name; }
     public double getX() { return xCoord.get(); }
     public double getY() { return yCoord.get(); }
-    public int getTileID() { return tileID; }
+
+    @Override
+    public double getWidth() { return myWidth; }
+
+    @Override
+    public double getHeight() { return myHeight; }
 
     @Override
     public void handle(MouseEvent event) {

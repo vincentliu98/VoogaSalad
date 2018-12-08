@@ -1,7 +1,6 @@
 package playingGame;
 
 import javafx.scene.Group;
-import javafx.scene.layout.Pane;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;

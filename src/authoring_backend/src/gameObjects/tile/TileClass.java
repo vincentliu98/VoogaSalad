@@ -1,9 +1,12 @@
 package gameObjects.tile;
 
-import authoringUtils.exception.*;
-import gameObjects.gameObject.*;
+import authoringUtils.exception.GameObjectTypeException;
+import authoringUtils.exception.InvalidIdException;
+import gameObjects.gameObject.GameObjectClass;
+import gameObjects.gameObject.GameObjectType;
 import grids.Point;
-import javafx.beans.property.*;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
 
 public interface TileClass extends GameObjectClass {
@@ -54,4 +57,8 @@ public interface TileClass extends GameObjectClass {
     default GameObjectType getType() {
         return GameObjectType.TILE;
     }
+
+    void setHeight(int height);
+
+    void setWidth(int width);
 }

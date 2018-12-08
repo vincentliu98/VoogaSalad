@@ -1,11 +1,12 @@
 package phase.api;
 
+import groovy.api.BlockGraph;
+import authoringUtils.frontendUtils.Try;
 import groovy.api.GroovyFactory;
 import phase.NamespaceException;
 import phase.PhaseGraphImpl;
 import phase.PhaseImpl;
 import phase.TransitionImpl;
-import authoringUtils.frontendUtils.Try;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -22,12 +23,14 @@ public class PhaseDB {
     private List<PhaseGraph> phaseGraphs;
     private GroovyFactory factory;
     private String startingPhase;
+    private BlockGraph endHandler;
 
     public PhaseDB(GroovyFactory factory) {
         this.namespace = new HashSet<>();
         this.phaseNamespace = new HashSet<>();
         phaseGraphs = new ArrayList<>();
         this.factory = factory;
+        endHandler = factory.createGraph();
     }
 
     public Try<PhaseGraph> createGraph(String name) {
@@ -60,4 +63,5 @@ public class PhaseDB {
     public void setStartingPhase(String phaseName) { startingPhase = phaseName; }
     public String getStartingPhase() { return startingPhase; }
 
+    public BlockGraph endHandler() { return endHandler; }
 }

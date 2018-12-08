@@ -3,13 +3,10 @@ import authoringUtils.exception.GameObjectClassNotFoundException;
 import authoringUtils.exception.GameObjectTypeException;
 import authoringUtils.exception.InvalidIdException;
 import gameObjects.category.CategoryClass;
-import gameObjects.category.CategoryInstance;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.crud.SimpleGameObjectsCRUD;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.Set;
 
 
 public class CRUDTest {
