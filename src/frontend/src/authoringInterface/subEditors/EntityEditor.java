@@ -17,10 +17,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -187,8 +184,6 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                             // TODO: proper error handling
                             e1.printStackTrace();
                         }
-                        GridPane.setColumnSpan(nodeEdited, width);
-                        GridPane.setRowSpan(nodeEdited, height);
                         break;
                     case EDIT_TREEITEM:
                         try { ImageManager.removeClassImage(gameObjectClass); } catch (GameObjectClassNotFoundException ignored) {}
@@ -258,8 +253,6 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         nameField.setText(gameObjectInstance.getInstanceName().getValue());
         imagePaths.addAll(gameObjectInstance.getImagePathList());
         list.putAll(gameObjectInstance.getPropertiesMap());
-        System.out.println(gameObjectInstance.getWidth().getValue());
-        System.out.println(gameObjectInstance.getHeight().getValue());
         widthInput.setText(String.valueOf(gameObjectInstance.getWidth().getValue()));
         heightInput.setText(String.valueOf(gameObjectInstance.getHeight().getValue()));
         Label xLabel = new Label("x");

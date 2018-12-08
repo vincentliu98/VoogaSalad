@@ -52,6 +52,8 @@ public class EditGridView implements SubView<ScrollPane> {
     private boolean isShiftDown;
     private Label batchMode;
     private static final double INDICATOR_FADE_TIME = 3000;
+    private static final double CELL_HEIGHT = 100;
+    private static final double CELL_WIDTH = 100;
 
     public EditGridView(int row, int col, GameObjectsCRUDInterface manager, NodeInstanceController controller) {
         gameObjectManager = manager;
@@ -65,8 +67,8 @@ public class EditGridView implements SubView<ScrollPane> {
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
                 StackPane cell = new StackPane();
-                cell.setPrefWidth(100);
-                cell.setPrefHeight(100);
+                cell.setPrefWidth(CELL_WIDTH);
+                cell.setPrefHeight(CELL_HEIGHT);
                 gridScrollView.add(cell, i, j);
                 cell.setOnDragOver(e -> setUpHoveringColorDraggedOver(e, Color.LIGHTGREEN, cell));
                 cell.setOnDragExited(e -> setUpDragExit(e, cell));
@@ -118,8 +120,8 @@ public class EditGridView implements SubView<ScrollPane> {
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 StackPane cell = new StackPane();
-                cell.setPrefWidth(100);
-                cell.setPrefHeight(100);
+                cell.setPrefWidth(CELL_WIDTH);
+                cell.setPrefHeight(CELL_HEIGHT);
                 gridScrollView.add(cell, i, j);
                 cell.setOnDragOver(e -> setUpHoveringColorDraggedOver(e, Color.LIGHTGREEN, cell));
                 cell.setOnDragExited(e -> setUpDragExit(e, cell));
@@ -208,7 +210,7 @@ public class EditGridView implements SubView<ScrollPane> {
             e.printStackTrace();
         }
         assert editor != null;
-        editor.editNode(targetNode, nodeInstanceController, gridScrollView);
+        editor.editNode(targetNode, nodeInstanceController);
         dialogStage.setScene(new Scene(editor.getView(), 500, 1000));
         dialogStage.show();
     }
