@@ -16,13 +16,13 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import runningGame.GameWindow;
 
 import java.io.File;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 /**
  * MenuBarView class
@@ -66,6 +66,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
 
         MenuItem newFile = new MenuItem("New");
         MenuItem open = new MenuItem("Open");
+        MenuItem export = new MenuItem("Export");
         MenuItem save = new MenuItem("Save");
         MenuItem saveAs = new MenuItem("Save As");
         MenuItem close = new MenuItem("Close");
@@ -83,6 +84,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
 
         newFile.setOnAction(e -> new NewWindowView());
         open.setOnAction(this::handleOpen);
+        export.setOnAction(this::handleExport);
         save.setOnAction(this::handleSave);
         saveAs.setOnAction(this::handleSaveAs);
         close.setOnAction(e -> new CloseFileView(closeWindow));
@@ -96,7 +98,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         helpDoc.setOnAction(this::handleHelpDoc);
         about.setOnAction(this::handleAbout);
 
-        file.getItems().addAll(newFile, open, save, saveAs, close);
+        file.getItems().addAll(newFile, open, export, save, saveAs, close);
         edit.getItems().addAll(undo, redo);
         run.getItems().addAll(runProject);
         settings.getItems().addAll(resizeGrid, setBGM);
@@ -110,9 +112,14 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         editorCaretaker.addMemento(editor.save());
         editor.setState(editorCaretaker.getMemento(currentMemento++).getSavedState());
     }
+
     void handleSaveAs(ActionEvent event) {
-        new SaveFileView();
+        new SaveFileView(null); // for now
         handleSave(event);
+    }
+
+    void handleExport(ActionEvent event) {
+        new SaveFileView(authTools::toEngineXML);
     }
 
     void handleOpen(ActionEvent event) {
@@ -139,8 +146,9 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         gameWindow = new GameWindow();
         try{
             Initializer initializer =
-                    new Initializer(new File(getClass().getClassLoader().getResource(fileName).getFile()));
+                new Initializer(new File(getClass().getClassLoader().getResource(fileName).getFile()));
             Scene newScene = new Scene(initializer.getRoot(), View.GAME_WIDTH, View.GAME_HEIGHT);
+            newScene.addEventFilter(KeyEvent.KEY_RELEASED, initializer::keyFilter);
             newWindow.setScene(newScene);
             newWindow.setX(MainAuthoringProgram.SCREEN_WIDTH*0.5 - View.GAME_WIDTH*0.5);
             newWindow.setY(MainAuthoringProgram.SCREEN_HEIGHT*0.5 - View.GAME_HEIGHT*0.5);

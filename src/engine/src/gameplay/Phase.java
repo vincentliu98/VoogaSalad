@@ -3,27 +3,23 @@ package gameplay;
 import java.util.Set;
 
 public class Phase {
-    private int myID;
-    private int myStartNodeID;
-    private int myCurrentNodeID;
-    private Set<Integer> myNodeIDs;
+    private String myStartNodeName;
+    private String myCurrentNodeName;
+    private Set<String> myNodeNames;
 
-    public Phase(int id, int startNodeID, Set<Integer> nodeIDs){
-        this.myID = id;
-        this.myStartNodeID = startNodeID;
-        this.myNodeIDs = nodeIDs;
+    public Phase(String startNodeName, Set<String> nodeNames){
+        this.myStartNodeName = startNodeName;
+        this.myNodeNames = nodeNames;
     }
 
-    public void step(int nodeID){
-        myCurrentNodeID = nodeID;
-        GameData.getNode(myCurrentNodeID).execute();
+    public void step(String nodeName){
+        myCurrentNodeName = nodeName;
+        GameData.getNode(myCurrentNodeName).execute();
     }
 
     public void startTraversal(){
-        step(myStartNodeID);
+        step(myStartNodeName);
     }
 
-    public int getID(){
-        return myID;
-    }
+    public String getName(){ return myStartNodeName; }
 }

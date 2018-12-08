@@ -44,5 +44,7 @@ public abstract class GameEvent {
 
         @Override
         public String toString() { return getClass().getSimpleName() + "." + code.getName(); }
+
+        public KeyCode getCode() { return code; }
     }
 }
