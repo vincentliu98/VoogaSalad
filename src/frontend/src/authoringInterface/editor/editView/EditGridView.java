@@ -35,6 +35,7 @@ import utils.nodeInstance.NodeInstanceController;
 import utils.exception.NodeNotFoundException;
 import utils.simpleAnimation.SingleNodeFade;
 
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -93,38 +94,38 @@ public class EditGridView implements SubView<ScrollPane> {
         gridScrollView.add(batchMode, 0, 0, 3, 2);
         SingleNodeFade.getNodeFadeOut(batchMode, 20000).playFromStart();
         scrollPane = new ScrollPane(gridScrollView);
-        scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, this::setUpControl);
-        scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, this::setUpShift);
+        scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.CONTROL) {
+                setUpControl();
+            } else if (keyEvent.getCode() == KeyCode.SHIFT) {
+                setUpShift();
+            } else if (keyEvent.getCode() == KeyCode.DELETE || keyEvent.getCode() == KeyCode.BACK_SPACE) {
+                System.out.println("test");
+                toRemove.forEach(this::handleNodeDeleting);
+            }
+        });
     }
 
     /**
      * Set up a key toggle and attach the this boolean toggle to some boolean variable of this class.
-     *
-     * @param keyEvent: The KeyEvent that encodes the pressed key.
      */
-    private void setUpControl(KeyEvent keyEvent) {
-        if (keyEvent.getCode() == KeyCode.CONTROL) {
-            isControlDown = !isControlDown;
-        }
+    private void setUpControl() {
+        isControlDown = !isControlDown;
     }
 
     /**
      * Set up a key toggle for toggling for the Shift key.
-     *
-     * @param keyEvent: The KeyEvent that encodes the pressed key.
      */
-    private void setUpShift(KeyEvent keyEvent) {
-        if (keyEvent.getCode() == KeyCode.SHIFT) {
-            isShiftDown = !isShiftDown;
-            if (isShiftDown) {
-                batchMode.setText("Batch Mode: On");
-                batchMode.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, null, null)));
-            } else {
-                batchMode.setText("Batch Mode: Off");
-                batchMode.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, null, null)));
-            }
-            SingleNodeFade.getNodeFadeInAndOut(batchMode, INDICATOR_FADE_TIME).playFromStart();
+    private void setUpShift() {
+        isShiftDown = !isShiftDown;
+        if (isShiftDown) {
+            batchMode.setText("Batch Mode: On");
+            batchMode.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, null, null)));
+        } else {
+            batchMode.setText("Batch Mode: Off");
+            batchMode.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, null, null)));
         }
+        SingleNodeFade.getNodeFadeInAndOut(batchMode, INDICATOR_FADE_TIME).playFromStart();
     }
 
     public void updateDimension(int width, int height) {
@@ -372,10 +373,10 @@ public class EditGridView implements SubView<ScrollPane> {
      */
     private void handleClickToRemove(Node node) {
         if (!toRemove.remove(node)) {
-            node.setOpacity(FULL_OPACITY);
-        } else {
             node.setOpacity(HALF_OPACITY);
             toRemove.add(node);
+        } else {
+            node.setOpacity(FULL_OPACITY);
         }
     }
 
