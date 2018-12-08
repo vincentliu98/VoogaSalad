@@ -137,7 +137,6 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
         imagePaths.addAll(imagePathList);
         widthText.setText(String.valueOf(width.getValue()));
         heightText.setText(String.valueOf(height.getValue()));
-        readClassProperties();
     }
 
     /**
@@ -146,6 +145,7 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
     @Override
     public void readGameObjectClass() {
         readCommonTileCharacteristic(gameObjectClass.getClassName(), gameObjectClass.getImagePathList(), gameObjectClass.getWidth(), gameObjectClass.getHeight());
+        readClassProperties();
     }
 
     /**
