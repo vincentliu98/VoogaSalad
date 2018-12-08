@@ -23,6 +23,9 @@ public class User {
         myTwitter = null;
     }
 
+    /**
+     * Taken from https://xmeng.wordpress.com/2011/07/10/how-to-handle-sign-in-with-twitter-using-twitter4j/
+     */
     public void configureTwitter() {
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
