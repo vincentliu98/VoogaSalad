@@ -477,6 +477,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
             myIdManager.returnInstanceIdFunc().accept(gameObjectInstance);
         }
         gameObjectInstanceMapById.clear();
+        defaultPlayer = createPlayerInstance(DEFAULT_PLAYER_NAME);
     }
 
     /**

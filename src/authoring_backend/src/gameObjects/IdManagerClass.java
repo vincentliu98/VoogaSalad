@@ -36,7 +36,7 @@ public class IdManagerClass implements IdManager {
             Function<Integer, GameObjectInstance> getInstanceFromMapFunc) {
         classCount = 1;
         instanceCount = 1;
-        playerInstanceCount = 0;
+        playerInstanceCount = 1;
         returnedClassIds = new ArrayList<>();
         returnedInstanceIds = new ArrayList<>();
         returnedPlayerInstanceIds = new ArrayList<>();
