@@ -86,12 +86,17 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
                 addGameObjectInstanceToMapFunc());
     }
 
-    @Override
-    public TileClass createTileClass(String className)
-            throws DuplicateGameObjectClassException {
+    private void checkDuplicate(String className)
+            throws DuplicateGameObjectClassException{
         if (gameObjectClassMapByName.containsKey(className)) {
             throw new DuplicateGameObjectClassException();
         }
+    }
+
+    @Override
+    public TileClass createTileClass(String className)
+            throws DuplicateGameObjectClassException {
+        checkDuplicate(className);
         TileClass newTileClass = new SimpleTileClass(
                 className,
                 myTileInstanceFactory,
@@ -105,9 +110,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     @Override
     public CategoryClass createCategoryClass(String className)
             throws DuplicateGameObjectClassException {
-        if (gameObjectClassMapByName.containsKey(className)) {
-            throw new DuplicateGameObjectClassException();
-        }
+        checkDuplicate(className);
         CategoryClass newCategoryClass = new SimpleCategoryClass(
                 className,
                 myCategoryInstanceFactory,
@@ -121,9 +124,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     @Override
     public SoundClass createSoundClass(String className)
             throws DuplicateGameObjectClassException {
-        if (gameObjectClassMapByName.containsKey(className)) {
-            throw new DuplicateGameObjectClassException();
-        }
+        checkDuplicate(className);
         SoundClass newSoundClass = new SimpleSoundClass(
                 className,
                 mySoundInstanceFactory,
@@ -137,9 +138,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     @Override
     public EntityClass createEntityClass(String className)
             throws DuplicateGameObjectClassException {
-        if (gameObjectClassMapByName.containsKey(className)) {
-            throw new DuplicateGameObjectClassException();
-        }
+        checkDuplicate(className);
         EntityClass newEntityClass = new SimpleEntityClass(
                 className,
                 myEntityInstanceFactory,
@@ -153,9 +152,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     @Override
     public PlayerClass createPlayerClass(String className)
             throws DuplicateGameObjectClassException {
-        if (gameObjectClassMapByName.containsKey(className)) {
-            throw new DuplicateGameObjectClassException();
-        }
+        checkDuplicate(className);
         PlayerClass newPlayerClass = new SimplePlayerClass(
                 className,
                 myPlayerInstanceFactory,
@@ -368,7 +365,6 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
 
     @Override
     public Collection<GameObjectInstance> getAllInstances(String className) {
-
         Set<GameObjectInstance> instancesSet = new HashSet<>();
         for (Map.Entry<Integer, GameObjectInstance> entry : gameObjectInstanceMapById.entrySet()) {
             if (entry.getValue().getClassName().getValue().equals(className)) {
