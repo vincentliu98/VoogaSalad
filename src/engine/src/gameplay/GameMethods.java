@@ -11,6 +11,7 @@ import static gameplay.GameData.*;
  *  https://hackmd.io/kO3SRcCeQFyQJ_3VwEv1BQ?both#
  */
 public class GameMethods {
+    private static final int DEFAULT_PLAYER_ID = 0;
     /**
      *  Grid
      */
@@ -20,10 +21,10 @@ public class GameMethods {
     /**
      *  dot to function
      */
-    public static int id(GameObject object) { return object.getID(); }
-    public static String name(GameObject object) { return object.getName(); }
-    public static double x(GameObject object) { return object.getX(); }
-    public static double y(GameObject object) { return object.getY(); }
+    public static int getId(GameObject object) { return object.getID(); }
+    public static String getName(GameObject object) { return object.getName(); }
+    public static double getX(GameObject object) { return object.getX(); }
+    public static double getY(GameObject object) { return object.getY(); }
     public static void setProperty(PropertyHolder object, String key, Object value) { object.set(key, value); }
     public static Object getProperty(PropertyHolder object, String key) { return object.get(key); }
 
@@ -33,9 +34,8 @@ public class GameMethods {
     public static boolean isEntity(GameObject object) {
         return GameData.ENTITY_PROTOTYPES.keySet().contains(object.getName());
     }
-    public static Entity getEntity(int entityID){
-        return ENTITIES.get(entityID);
-    }
+    public static Entity getEntity(int entityID){ return ENTITIES.get(entityID); }
+
     public static Entity createEntity(String entityName, int x, int y, int ownerID){
         var nextID = ENTITIES.keySet().stream().max(Comparator.comparingInt(a -> a)).orElse(0)+1;
         var newEntity = ENTITY_PROTOTYPES.get(entityName).build(nextID, x, y);
@@ -46,6 +46,10 @@ public class GameMethods {
         ROOT.getChildren().add(newEntity.getImageView());
         return newEntity;
     }
+    public static Entity createEntity(String entityName, int x, int y){
+        return createEntity(entityName, x, y, DEFAULT_PLAYER_ID);
+    }
+
     public static void removeEntity(Entity entity) {
         ROOT.getChildren().remove(entity.getImageView());
         ENTITIES.remove(entity.getID());

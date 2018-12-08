@@ -17,6 +17,7 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
     private String name;
     private List<String> myImagePaths;
     private String myImageSelector; // Groovy code
+    private int width, height;
     @XStreamOmitField
     private transient SimpleIntegerProperty imgIndex;
     private transient SimpleDoubleProperty xCoord, yCoord;
@@ -28,6 +29,7 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
     public Entity(
             int myID,
             int x, int y,
+            int width, int height,
             String name,
             Map<String, Object> properties,
             List<String> myImagePaths,
@@ -37,6 +39,8 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
         this.props = properties;
         this.xCoord = new SimpleDoubleProperty(x);
         this.yCoord = new SimpleDoubleProperty(y);
+        this.width = width;
+        this.height = height;
         this.name = name;
         this.myImagePaths = myImagePaths;
         this.myImageSelector = myImageSelector;
@@ -62,8 +66,8 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
     public void adjustViewSize(double screenWidth, double screenHeight) {
         myImageView.setY((screenHeight * yCoord.get()) / GameMethods.gridHeight());
         myImageView.setX((screenWidth * xCoord.get()) / GameMethods.gridWidth());
-        myImageView.setFitWidth(screenWidth/GameMethods.gridWidth());
-        myImageView.setFitHeight(screenHeight/GameMethods.gridHeight());
+        myImageView.setFitWidth(screenWidth * width /GameMethods.gridWidth());
+        myImageView.setFitHeight(screenHeight * height /GameMethods.gridHeight());
 
         myImages = myImagePaths.stream()
                                .map(path ->
@@ -106,6 +110,12 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
     public String getName() { return name; }
     public double getX() { return xCoord.get(); }
     public double getY() { return yCoord.get(); }
+
+    @Override
+    public double getWidth() { return width; }
+
+    @Override
+    public double getHeight() { return height; }
 
     @Override
     public void handle(MouseEvent event) {
