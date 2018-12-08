@@ -184,6 +184,8 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                             // TODO: proper error handling
                             e1.printStackTrace();
                         }
+                        Tooltip tooltip = new Tooltip(String.format("Width: %s\nHeight: %s\nDouble Click or Right Click to edit", width, height));
+                        Tooltip.install(nodeEdited, tooltip);
                         break;
                     case EDIT_TREEITEM:
                         try { ImageManager.removeClassImage(gameObjectClass); } catch (GameObjectClassNotFoundException ignored) {}

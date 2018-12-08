@@ -6,8 +6,13 @@ import authoringInterface.subEditors.*;
 import authoringUtils.exception.GameObjectClassNotFoundException;
 import authoringUtils.exception.GameObjectTypeException;
 import gameObjects.crud.GameObjectsCRUDInterface;
+import gameObjects.entity.EntityClass;
+import gameObjects.entity.EntityInstance;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
+import gameObjects.gameObject.GameObjectType;
+import gameObjects.tile.TileClass;
+import gameObjects.tile.TileInstance;
 import grids.PointImpl;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -330,6 +335,19 @@ public class EditGridView implements SubView<ScrollPane> {
                 handleDoubleClick(e, finalNodeOnGrid);
             }
         });
+        int height = 0;
+        int width = 0;
+        if (gameObjectClass.getType() == GameObjectType.ENTITY) {
+            height = ((EntityClass) gameObjectClass).getHeight().getValue();
+            width = ((EntityClass) gameObjectClass).getWidth().getValue();
+        } else if (gameObjectClass.getType() == GameObjectType.TILE) {
+            height = ((TileClass) gameObjectClass).getHeight().getValue();
+            width = ((TileClass) gameObjectClass).getWidth().getValue();
+        }
+        if (height != 0 && width != 0) {
+            Tooltip tooltip = new Tooltip(String.format("Width: %s\nHeight: %s\nDouble Click or Right Click to edit", width, height));
+            Tooltip.install(finalNodeOnGrid, tooltip);
+        }
     }
 
     /**
