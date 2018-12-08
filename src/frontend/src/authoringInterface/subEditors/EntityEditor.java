@@ -105,149 +105,68 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
      * This method sets up the confirm logic for adding new TreeItems.
      */
     @Override
-    protected void confirmAddTreeItem() {
-        int width;
-        try {
-            width = outputPositiveInteger(widthInput);
-        } catch (IllegalGeometryException e) {
-            new ErrorWindow("Illegal Width", e.toString()).showAndWait();
-            return;
-        }
-        int height;
-        try {
-            height = outputPositiveInteger(heightInput);
-        } catch (IllegalGeometryException e) {
-            new ErrorWindow("Illegal Height", e.toString()).showAndWait();
-            return;
-        }
-        try {
-            gameObjectManager.createEntityClass(nameField.getText().trim());
-        } catch (DuplicateGameObjectClassException e1) {
-            // TODO
-            e1.printStackTrace();
-        }
-        EntityClass entityClass = null;
-        try {
-            entityClass = gameObjectManager.getEntityClass(nameField.getText().trim());
-        } catch (GameObjectClassNotFoundException e1) {
-            // TODO
-            e1.printStackTrace();
-        }
+    protected void confirmAddTreeItem() throws IllegalGeometryException, PreviewUnavailableException, GameObjectClassNotFoundException, DuplicateGameObjectClassException {
+        int width = outputPositiveInteger(widthInput);
+        int height = outputPositiveInteger(heightInput);
+        gameObjectManager.createEntityClass(nameField.getText().trim());
+        EntityClass entityClass = gameObjectManager.getEntityClass(nameField.getText().trim());
         assert entityClass != null;
         TreeItem<String> newItem = new TreeItem<>(entityClass.getClassName().getValue());
         entityClass.getImagePathList().addAll(imagePaths);
         entityClass.setHeight(height);
         entityClass.setWidth(width);
-        ImageView icon = null;
-        try {
-            icon = new ImageView(ImageManager.getPreview(entityClass));
-        } catch (PreviewUnavailableException e1) {
-            // TODO: proper error handling
-            e1.printStackTrace();
-        }
-        assert icon != null;
+        ImageView icon = new ImageView(ImageManager.getPreview(entityClass));
         JavaFxOperation.setWidthAndHeight(icon, ICON_WIDTH, ICON_HEIGHT);
         newItem.setGraphic(icon);
         treeItem.getChildren().add(newItem);
+        super.confirmAddTreeItem();
     }
 
     /**
      * This method sets up the confirm logic of editing existing TreeItem.
      */
     @Override
-    protected void confirmEditTreeItem() {
-        int width;
-        try {
-            width = outputPositiveInteger(widthInput);
-        } catch (IllegalGeometryException e) {
-            new ErrorWindow("Illegal Width", e.toString()).showAndWait();
-            return;
-        }
-        int height;
-        try {
-            height = outputPositiveInteger(heightInput);
-        } catch (IllegalGeometryException e) {
-            new ErrorWindow("Illegal Height", e.toString()).showAndWait();
-            return;
-        }
-        try {
-            ImageManager.removeClassImage(gameObjectClass);
-        } catch (GameObjectClassNotFoundException ignored) {}
+    protected void confirmEditTreeItem() throws IllegalGeometryException, GameObjectClassNotFoundException, InvalidOperationException, PreviewUnavailableException {
+        int width = outputPositiveInteger(widthInput);
+        int height = outputPositiveInteger(heightInput);
+        ImageManager.removeClassImage(gameObjectClass);
         gameObjectClass.getImagePathList().clear();
         gameObjectClass.getImagePathList().addAll(imagePaths);
         gameObjectClass.getPropertiesMap().clear();
         gameObjectClass.setWidth(width);
         gameObjectClass.setHeight(height);
-        try {
-            gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName().getValue(), nameField.getText());
-        } catch (InvalidOperationException e1) {
-            // TODO
-            e1.printStackTrace();
-        }
-        ImageView icon2 = null;
-        try {
-            icon2 = new ImageView(ImageManager.getPreview(gameObjectClass));
-        } catch (PreviewUnavailableException e1) {
-            // TODO: proper error handling
-            e1.printStackTrace();
-        }
-        assert icon2 != null;
+        gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName().getValue(), nameField.getText());
+        ImageView icon2 = new ImageView(ImageManager.getPreview(gameObjectClass));
         JavaFxOperation.setWidthAndHeight(icon2, ICON_WIDTH, ICON_HEIGHT);
         treeItem.setValue(nameField.getText());
         treeItem.setGraphic(icon2);
+        super.confirmEditTreeItem();
     }
 
     /**
      * This method sets up the confirm logic of editing existing Node.
      */
     @Override
-    protected void confirmEditNode() {
-        int width;
-        try {
-            width = outputPositiveInteger(widthInput);
-        } catch (IllegalGeometryException e) {
-            new ErrorWindow("Illegal Width", e.toString()).showAndWait();
-            return;
-        }
-        int height;
-        try {
-            height = outputPositiveInteger(heightInput);
-        } catch (IllegalGeometryException e) {
-            new ErrorWindow("Illegal Height", e.toString()).showAndWait();
-            return;
-        }
-        try { ImageManager.removeInstanceImage(gameObjectInstance); } catch (GameObjectInstanceNotFoundException ignored) {}
+    protected void confirmEditNode() throws IllegalGeometryException, PreviewUnavailableException, UnremovableNodeException, GridIndexOutOfBoundsException, GameObjectInstanceNotFoundException {
+        int width = outputPositiveInteger(widthInput);
+        int height = outputPositiveInteger(heightInput);
+        ImageManager.removeInstanceImage(gameObjectInstance);
         gameObjectInstance.setInstanceName(nameField.getText());
         gameObjectInstance.getImagePathList().clear();
         gameObjectInstance.getImagePathList().addAll(imagePaths);
         gameObjectInstance.getPropertiesMap().clear();
         gameObjectInstance.setWidth(width);
         gameObjectInstance.setHeight(height);
-        try {
-            ((ImageView) nodeEdited).setImage(ImageManager.getPreview(gameObjectInstance));
-        } catch (PreviewUnavailableException e1) {
-            // TODO: proper error handling
-            e1.printStackTrace();
-        }
+        ((ImageView) nodeEdited).setImage(ImageManager.getPreview(gameObjectInstance));
         Tooltip.install(nodeEdited, new Tooltip(String.format("Width: %s\nHeight: %s\nSingle Click to toggle Deletion\nDouble Click or Right Click to edit\nInstance ID: %s\nClass Name: %s", width, height, gameObjectInstance.getInstanceId().getValue(), gameObjectInstance.getClassName().getValue())));
-        StackPane target;
-        int row = Integer.parseInt(rowInput.getText());
-        int col = Integer.parseInt(colInput.getText());
-        try {
-            target = JavaFxOperation.getNodeFromGridPaneByIndices(((GridPane) JavaFxOperation.getGrandParent(nodeEdited)), row, col);
-        } catch (GridIndexOutOfBoundsException e1) {
-            new ErrorWindow("GridIndexOutOfBounds error", e1.toString()).showAndWait();
-            return;
-        }
-        try {
-            JavaFxOperation.removeFromParent(nodeEdited);
-        } catch (UnremovableNodeException e1) {
-            // TODO: proper error handling
-            e1.printStackTrace();
-        }
+        int row = outputPositiveInteger(rowInput);
+        int col = outputPositiveInteger(colInput);
+        StackPane target = JavaFxOperation.getNodeFromGridPaneByIndices(((GridPane) JavaFxOperation.getGrandParent(nodeEdited)), row, col);
+        JavaFxOperation.removeFromParent(nodeEdited);
         assert target != null;
         target.getChildren().add(nodeEdited);
         gameObjectInstance.setCoord(new PointImpl(col, row));
+        super.confirmEditNode();
     }
 
     /**

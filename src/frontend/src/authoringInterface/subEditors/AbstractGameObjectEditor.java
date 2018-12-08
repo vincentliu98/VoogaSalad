@@ -1,6 +1,10 @@
 package authoringInterface.subEditors;
 
 import api.SubView;
+import authoringUtils.exception.DuplicateGameObjectClassException;
+import authoringUtils.exception.GameObjectClassNotFoundException;
+import authoringUtils.exception.GameObjectInstanceNotFoundException;
+import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
@@ -19,7 +23,10 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import utils.ErrorWindow;
+import utils.exception.GridIndexOutOfBoundsException;
 import utils.exception.NodeNotFoundException;
+import utils.exception.PreviewUnavailableException;
+import utils.exception.UnremovableNodeException;
 import utils.nodeInstance.NodeInstanceController;
 
 import java.io.File;
@@ -141,7 +148,6 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
         readGameObjectClass();
         confirm.setOnAction(e -> {
             confirmEditTreeItem();
-            propBoxes.forEach(box -> gameObjectClass.getPropertiesMap().put(box.getKey(), box.getValue()));
             closeEditor();
         });
     }
@@ -156,7 +162,6 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
         editingMode = EditingMode.ADD_TREEITEM;
         confirm.setOnAction(e -> {
             confirmAddTreeItem();
-            propBoxes.forEach(box -> gameObjectClass.getPropertiesMap().put(box.getKey(), box.getValue()));
             closeEditor();
         });
     }
@@ -180,7 +185,6 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
         readGameObjectInstance();
         confirm.setOnAction(e -> {
             confirmEditNode();
-            propBoxes.forEach(box -> gameObjectInstance.getPropertiesMap().put(box.getKey(), box.getValue()));
             closeEditor();
         });
     }
@@ -202,17 +206,23 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
     /**
      * This method sets up the confirm logic of adding new TreeItem.
      */
-    protected abstract void confirmAddTreeItem();
+    protected void confirmAddTreeItem() throws IllegalGeometryException, PreviewUnavailableException, GameObjectClassNotFoundException, DuplicateGameObjectClassException {
+        propBoxes.forEach(box -> gameObjectClass.getPropertiesMap().put(box.getKey(), box.getValue()));
+    }
 
     /**
      * This method sets up the confirm logic of editing existing TreeItem.
      */
-    protected abstract void confirmEditTreeItem();
+    protected void confirmEditTreeItem() throws IllegalGeometryException, GameObjectClassNotFoundException, InvalidOperationException, PreviewUnavailableException {
+        propBoxes.forEach(box -> gameObjectClass.getPropertiesMap().put(box.getKey(), box.getValue()));
+    }
 
     /**
      * This method sets up the confirm logic of editing existing Node.
      */
-    protected abstract void confirmEditNode();
+    protected void confirmEditNode() throws IllegalGeometryException, PreviewUnavailableException, UnremovableNodeException, GridIndexOutOfBoundsException, GameObjectInstanceNotFoundException {
+        propBoxes.forEach(box -> gameObjectInstance.getPropertiesMap().put(box.getKey(), box.getValue()));
+    }
 
     /**
      * This method closes the editor.
@@ -228,7 +238,7 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
      * @return An int representing the legal output.
      * @throws IllegalGeometryException
      */
-    protected int outputPositiveInteger(TextField intInput) throws IllegalGeometryException {
+    int outputPositiveInteger(TextField intInput) throws IllegalGeometryException {
         int ret;
         try {
             ret = Integer.parseInt(intInput.getText());
