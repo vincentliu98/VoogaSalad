@@ -32,15 +32,12 @@ public class PhaseGraphXMLWriter<T> {
         }
     }
 
-    /**
-     *
-     */
     public void generate() {
         try {
             Element rootElement = doc.createElement("frontEndData");
             doc.appendChild(rootElement);
 
-            phaseGraph.keySet().forEach(c -> rootElement.appendChild(encodePhase(phaseGraph.get(c))));
+            phaseGraph.keySet().forEach(c -> rootElement.appendChild(encodeSinglePhase(phaseGraph.get(c))));
 
             TransformerFactory.newInstance().newTransformer().transform(
                     new DOMSource(doc), new StreamResult(outFile));
@@ -49,16 +46,46 @@ public class PhaseGraphXMLWriter<T> {
         }
     }
 
-    /**
-     * @param
-     * @return
-     */
-    private Element encodePhase(SinglePhaseData singlePhaseData) {
+    private Element encodeSinglePhase(SinglePhaseData singlePhaseData) {
         var parent = doc.createElement("phase");
 
+        Element name = encodeName(singlePhaseData);
+        Element nodes = encodeNodes(singlePhaseData);
+        Element connections = encodeConnections(singlePhaseData);
+
+        parent.appendChild(name);
+        parent.appendChild(nodes);
+        parent.appendChild(connections);
+
+        return parent;
+    }
+
+    private Element encodeName(SinglePhaseData singlePhaseData) {
         var name = doc.createElement("name");
         name.appendChild(doc.createTextNode(singlePhaseData.getPhaseName()));
+        return name;
+    }
 
+    private Element encodeConnections(SinglePhaseData singlePhaseData) {
+        var connections = doc.createElement("connections");
+        singlePhaseData.getNodesConnect().keySet().forEach(p -> {
+            var connection = doc.createElement("connection");
+            var from = doc.createElement("from");
+            var to = doc.createElement("to");
+            var type = doc.createElement("type");
+            from.appendChild(doc.createTextNode(p.getKey()));
+            to.appendChild(doc.createTextNode(p.getValue()));
+            type.appendChild(doc.createTextNode(singlePhaseData.getNodesConnect().get(p).toString()));
+            connection.appendChild(from);
+            connection.appendChild(to);
+            connection.appendChild(type);
+
+            connections.appendChild(connection);
+        });
+        return connections;
+    }
+
+    private Element encodeNodes(SinglePhaseData singlePhaseData) {
         var nodes = doc.createElement("nodes");
         singlePhaseData.getNodesName().forEach(n -> {
             var node = doc.createElement("node");
@@ -75,27 +102,7 @@ public class PhaseGraphXMLWriter<T> {
 
             nodes.appendChild(node);
         });
-
-        var connections = doc.createElement("connections");
-        singlePhaseData.getNodesConnect().keySet().forEach(p -> {
-            var connection = doc.createElement("connection");
-            var from = doc.createElement("from");
-            var to = doc.createElement("to");
-            var type = doc.createElement("type");
-            from.appendChild(doc.createTextNode(p.getKey()));
-            to.appendChild(doc.createTextNode(p.getValue()));
-            type.appendChild(doc.createTextNode(singlePhaseData.getNodesConnect().get(p).toString()));
-            connection.appendChild(from);
-            connection.appendChild(to);
-            connection.appendChild(type);
-
-            connections.appendChild(connection);
-        });
-        parent.appendChild(name);
-        parent.appendChild(nodes);
-        parent.appendChild(connections);
-
-        return parent;
+        return nodes;
     }
 }
 
