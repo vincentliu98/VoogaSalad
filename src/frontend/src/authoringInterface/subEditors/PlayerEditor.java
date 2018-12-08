@@ -8,15 +8,17 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
 
     PlayerEditor(GameObjectsCRUDInterface manager) {
         super(manager);
+        nameLabel.setText("Your Player Name");
+        nameField.setPromptText("Player 0");
     }
 
     @Override
     protected void readGameObjectInstance() {
-
+        nameField.setText(gameObjectInstance.getClassName().getValue());
     }
 
     @Override
     protected void readGameObjectClass() {
-
+        nameField.setText(gameObjectClass.getClassName().getValue());
     }
 }

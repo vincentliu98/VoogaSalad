@@ -53,7 +53,7 @@ public class SideView implements SubView<StackPane> {
                 new SimpleEntityClass("O"),
                 new SimpleEntityClass("X"),
                 new SimpleTileClass("Default Grid"),
-                new SimplePlayerClass("Player 0"),
+                new SimplePlayerClass("Default Player"),
                 new SimpleSoundClass("Sound file")
         ));
         for (GameObjectClass item : defaultList) {
