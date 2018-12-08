@@ -178,14 +178,14 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
         try {
             width = outputPositiveInteger(widthText);
         } catch (IllegalGeometryException e) {
-            new ErrorWindow("Illegal Width", e.toString());
+            new ErrorWindow("Illegal Width", e.toString()).showAndWait();
             return;
         }
         int height;
         try {
             height = outputPositiveInteger(heightText);
         } catch (IllegalGeometryException e) {
-            new ErrorWindow("Illegal Height", e.toString());
+            new ErrorWindow("Illegal Height", e.toString()).showAndWait();
             return;
         }
         try {
@@ -226,14 +226,14 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
         try {
             width = outputPositiveInteger(widthText);
         } catch (IllegalGeometryException e) {
-            new ErrorWindow("Illegal Width", e.toString());
+            new ErrorWindow("Illegal Width", e.toString()).showAndWait();
             return;
         }
         int height;
         try {
             height = outputPositiveInteger(heightText);
         } catch (IllegalGeometryException e) {
-            new ErrorWindow("Illegal Height", e.toString());
+            new ErrorWindow("Illegal Height", e.toString()).showAndWait();
             return;
         }
         try {
@@ -271,14 +271,14 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
         try {
             width = outputPositiveInteger(widthText);
         } catch (IllegalGeometryException e) {
-            new ErrorWindow("Illegal Width", e.toString());
+            new ErrorWindow("Illegal Width", e.toString()).showAndWait();
             return;
         }
         int height;
         try {
             height = outputPositiveInteger(heightText);
         } catch (IllegalGeometryException e) {
-            new ErrorWindow("Illegal Height", e.toString());
+            new ErrorWindow("Illegal Height", e.toString()).showAndWait();
             return;
         }
         try {
