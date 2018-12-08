@@ -59,23 +59,23 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
         imagePanel = new HBox(IMAGE_PANEL_GAP);
 
         confirm.setStyle("-fx-text-fill: white;"
-                + "-fx-background-color: #343a40;");
-        confirm.setOnAction(e -> {
-            if (nameField.getText().trim().isEmpty()) {
-                new ErrorWindow("Empty name", "You must give your player a non-empty name").showAndWait();
-            } else {
-                switch (editingMode) {
-                    case ADD_TREEITEM:
-                        try {
-                            gameObjectManager.createPlayerClass(nameField.getText().trim());
-                        } catch (DuplicateGameObjectClassException e1) {
-                            // TODO
-                            e1.printStackTrace();
-                        }
-
-                }
-            }
-        });
+//                + "-fx-background-color: #343a40;");
+//        confirm.setOnAction(e -> {
+//            if (nameField.getText().trim().isEmpty()) {
+//                new ErrorWindow("Empty name", "You must give your player a non-empty name").showAndWait();
+//            } else {
+//                switch (editingMode) {
+//                    case ADD_TREEITEM:
+//                        try {
+//                            gameObjectManager.createPlayerClass(nameField.getText().trim());
+//                        } catch (DuplicateGameObjectClassException e1) {
+//                            // TODO
+//                            e1.printStackTrace();
+//                        }
+//
+//                }
+//            }
+//        });
         layout.addRow(0, imageText, chooseImage);
         layout.addRow(1, imagePanel);
     }
