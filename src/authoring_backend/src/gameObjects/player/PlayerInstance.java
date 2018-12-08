@@ -3,16 +3,12 @@ package gameObjects.player;
 import authoringUtils.exception.InvalidOperationException;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
+import javafx.beans.property.SimpleStringProperty;
 
 import java.util.Set;
 
 public interface PlayerInstance extends GameObjectInstance {
 
-    @Override
-    default void setClassName(String name)
-            throws InvalidOperationException {
-        throw new InvalidOperationException("Player Class name is not settable");
-    }
 
     Set<Integer> getEntityIDs();
 
@@ -22,7 +18,11 @@ public interface PlayerInstance extends GameObjectInstance {
 
     void removeAllEntities();
 
-//    PlayerClass getGameObjectClass();
+    SimpleStringProperty getImagePath();
+
+    void setImagePath(String newImagePath);
+
+    PlayerClass getGameObjectClass();
 
     @Override
     default GameObjectType getType() {

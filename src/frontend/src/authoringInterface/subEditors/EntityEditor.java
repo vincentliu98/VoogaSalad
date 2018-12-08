@@ -8,17 +8,25 @@ import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.entity.EntityClass;
 import gameObjects.entity.EntityInstance;
 import javafx.collections.*;
+import grids.PointImpl;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.util.Pair;
 import utils.ErrorWindow;
+import utils.exception.GridIndexOutOfBoundsException;
 import utils.exception.PreviewUnavailableException;
+import utils.exception.UnremovableNodeException;
 import utils.imageManipulation.ImageManager;
 import utils.imageManipulation.JavaFxOperation;
 
@@ -55,7 +63,8 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     private Set<ImageView> toRemove;
     private Set<String> toRemovePath;
     private GridPane size;
-    private GridPane position;
+    private TextField xInput;
+    private TextField yInput;
 
     EntityEditor(GameObjectsCRUDInterface manager) {
         super(manager);
@@ -131,8 +140,8 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
             } else if (heightInput.getText().trim().isEmpty()) {
                 new ErrorWindow("Empty height", "You must specify a height for this entity").showAndWait();
             } else {
-                int width = DEFAULT_WIDTH;
-                int height = DEFAULT_HEIGHT;
+                int width;
+                int height;
                 try {
                     width = Integer.parseInt(widthInput.getText());
                 } catch (NumberFormatException e1) {
@@ -204,6 +213,24 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                             e1.printStackTrace();
                         }
                         Tooltip.install(nodeEdited, new Tooltip(String.format("Width: %s\nHeight: %s\nSingle Click to toggle Deletion\nDouble Click or Right Click to edit\nInstance ID: %s\nClass Name: %s", width, height, gameObjectInstance.getInstanceId().getValue(), gameObjectInstance.getClassName().getValue())));
+                        StackPane target;
+                        int row = Integer.parseInt(yInput.getText());
+                        int col = Integer.parseInt(xInput.getText());
+                        try {
+                            target = JavaFxOperation.getNodeFromGridPaneByIndices(((GridPane) JavaFxOperation.getGrandParent(nodeEdited)), row, col);
+                        } catch (GridIndexOutOfBoundsException e1) {
+                            new ErrorWindow("GridIndexOutOfBounds error", e1.toString()).showAndWait();
+                            return;
+                        }
+                        try {
+                            JavaFxOperation.removeFromParent(nodeEdited);
+                        } catch (UnremovableNodeException e1) {
+                            // TODO: proper error handling
+                            e1.printStackTrace();
+                        }
+                        assert target != null;
+                        target.getChildren().add(nodeEdited);
+                        gameObjectInstance.setCoord(new PointImpl(col, row));
                         break;
                     case EDIT_TREEITEM:
                         try {
@@ -276,19 +303,23 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     @Override
     public void readGameObjectInstance() {
         nameField.setText(gameObjectInstance.getInstanceName().getValue());
-        imagePaths.addAll(gameObjectInstance.getImagePathList());
-        widthInput.setText(String.valueOf(gameObjectInstance.getWidth().getValue()));
-        heightInput.setText(String.valueOf(gameObjectInstance.getHeight().getValue()));
+        readCommonEntityCharacteristics(gameObjectInstance.getImagePathList(), gameObjectInstance.getPropertiesMap(), gameObjectInstance.getWidth(), gameObjectInstance.getHeight());
         Label xLabel = new Label("x");
         Label yLabel = new Label("y");
-        TextField xInput = new TextField(String.valueOf(gameObjectInstance.getCoord().getX()));
-        TextField yInput = new TextField(String.valueOf(gameObjectInstance.getCoord().getY()));
-        gameObjectInstance.getPropertiesMap().forEach((k, v) -> propBoxes.add(new PropertyBox(k, v, propBoxes::remove)));
-        position = new GridPane();
+        xInput = new TextField(String.valueOf(gameObjectInstance.getCoord().getX()));
+        yInput = new TextField(String.valueOf(gameObjectInstance.getCoord().getY()));
+        GridPane position = new GridPane();
         position.addRow(0, xLabel, xInput);
         position.addRow(1, yLabel, yInput);
         position.setHgap(20);
         layout.addRow(6, position);
+    }
+
+    private void readCommonEntityCharacteristics(ObservableList<String> imagePathList, ObservableMap<String, String> propertiesMap, SimpleIntegerProperty width, SimpleIntegerProperty height) {
+        imagePaths.addAll(imagePathList);
+        propertiesMap.forEach((k, v) -> propBoxes.add(new PropertyBox(k, v, propBoxes::remove)));
+        widthInput.setText(String.valueOf(width.getValue()));
+        heightInput.setText(String.valueOf(height.getValue()));
     }
 
     /**
@@ -297,10 +328,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     @Override
     public void readGameObjectClass() {
         nameField.setText(gameObjectClass.getClassName().getValue());
-        imagePaths.addAll(gameObjectClass.getImagePathList());
-        gameObjectClass.getPropertiesMap().forEach((k, v) -> propBoxes.add(new PropertyBox(k, v, propBoxes::remove)));
-        widthInput.setText(String.valueOf(gameObjectClass.getWidth().getValue()));
-        heightInput.setText(String.valueOf(gameObjectClass.getHeight().getValue()));
+        readCommonEntityCharacteristics(gameObjectClass.getImagePathList(), gameObjectClass.getPropertiesMap(), gameObjectClass.getWidth(), gameObjectClass.getHeight());
     }
 
     private void setupLayout() {
@@ -313,6 +341,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     }
 
     private void addPlayers() {
+        //TODO
         comboBox.getItems().addAll(
         );
     }
