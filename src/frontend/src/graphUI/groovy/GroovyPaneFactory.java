@@ -2,7 +2,6 @@ package graphUI.groovy;
 
 import api.SubView;
 import authoringInterface.spritechoosingwindow.PopUpWindow;
-import authoringUtils.frontendUtils.Try;
 import groovy.api.BlockGraph;
 import groovy.api.GroovyFactory;
 import groovy.api.Ports;
@@ -45,7 +44,7 @@ public class GroovyPaneFactory {
     private GroovyNodeFactory nodeFactory;
     private GroovyFactory factory;
     private Stage primaryStage;
-    private GroovyPane heartbeat;
+    private GroovyPane winCondition;
 
     private enum DRAG_PURPOSE {
         NOTHING,
@@ -53,15 +52,15 @@ public class GroovyPaneFactory {
         CONNECT_LINE
     }
 
-    public GroovyPaneFactory(Stage primaryStage, GroovyFactory factory, BlockGraph heartbeat) {
+    public GroovyPaneFactory(Stage primaryStage, GroovyFactory factory, BlockGraph winCondition) {
         this.primaryStage = primaryStage;
         this.nodeFactory = new GroovyNodeFactory(factory);
         this.factory = factory;
-        this.heartbeat = new GroovyPane(primaryStage, heartbeat);
+        this.winCondition = new GroovyPane(primaryStage, winCondition);
     }
 
     public GroovyPane gen() { return new GroovyPane(primaryStage); }
-    public GroovyPane heartbeat() { return heartbeat; }
+    public GroovyPane winCondition() { return winCondition; }
 
     public class GroovyPane extends PopUpWindow implements SubView<GridPane> {
         private DRAG_PURPOSE draggingPurpose = DRAG_PURPOSE.NOTHING;

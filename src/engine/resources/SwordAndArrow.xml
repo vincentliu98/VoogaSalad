@@ -74,7 +74,7 @@
             <string>b</string>
         </myNodeNames>
     </gameplay.Phase>
-    <heartbeat>if(GameMethods.hasNoEntities(GameMethods.getCurrentPlayerName())) {   GameMethods.endGame(GameMethods.getCurrentPlayerName() + &apos; LOST!&apos;)}</heartbeat>
+    <winCondition>if(GameMethods.hasNoEntities(GameMethods.getCurrentPlayerName())) {   GameMethods.endGame(GameMethods.getCurrentPlayerName() + &apos; LOST!&apos;)}</winCondition>
     <grid-width>5</grid-width>
     <grid-height>5</grid-height>
     <gameplay.EntityPrototype>
