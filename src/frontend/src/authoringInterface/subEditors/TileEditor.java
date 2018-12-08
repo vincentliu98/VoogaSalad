@@ -38,6 +38,7 @@ import java.util.Set;
  * @author Haotian Wang, jl729
  */
 
+@SuppressWarnings("Duplicates")
 public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance> {
     private static final double ICON_WIDTH = 50;
     private static final double ICON_HEIGHT = 50;
