@@ -66,3 +66,7 @@
 .sort-button {
     -fx-background-color: transparent;
 }
+
+.profile-button {
+    -fx-background-color: blue;
+}
