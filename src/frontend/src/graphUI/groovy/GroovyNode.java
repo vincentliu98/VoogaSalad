@@ -14,6 +14,7 @@ import javafx.util.Duration;
 import javafx.util.Pair;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * A StackPane that contains a single groovy block (rectangular shape).
@@ -35,13 +36,24 @@ public class GroovyNode extends StackPane {
 
     private static final int PORT_RADIUS = 4;
 
-    public GroovyNode(
+    GroovyNode(
         GroovyBlock<?> block,
         double xPos, double yPos,
         double width, double height,
         double labelSize,
         Color color,
         List<Pair<Pos, Ports>> portPositions
+    ) {
+        this(block, xPos, yPos, width, height, labelSize, color, portPositions, null);
+    }
+    GroovyNode(
+        GroovyBlock<?> block,
+        double xPos, double yPos,
+        double width, double height,
+        double labelSize,
+        Color color,
+        List<Pair<Pos, Ports>> portPositions,
+        Map<Ports, String> portInfo
     ) {
         text = new Label(block.name());
         text.setFont(new Font(labelSize));
@@ -71,15 +83,22 @@ public class GroovyNode extends StackPane {
         getChildren().addAll(rectangle, text, inner);
         inner.toFront();
 
-        portPositions.forEach(p -> {
-                        var c = new Circle(PORT_RADIUS);
-                        setAlignment(c, p.getKey());
-                        var t = new Tooltip(p.getValue().name());
-                        t.setHideDelay(Duration.ZERO);
-                        t.setShowDelay(Duration.ZERO);
-                        Tooltip.install(c, t);
-                        getChildren().addAll(c);
-        });
+        for(var p : portPositions) {
+            var c = new Circle(PORT_RADIUS);
+            setAlignment(c, p.getKey());
+
+            Tooltip t;
+            try {
+                t = new Tooltip(portInfo.getOrDefault(p.getValue(), p.getValue().name()));
+            } catch (Exception e) {
+                t = new Tooltip(p.getValue().name());
+            }
+
+            Tooltip.install(c, t);
+            t.setHideDelay(Duration.ZERO);
+            t.setShowDelay(Duration.ZERO);
+            getChildren().addAll(c);
+        }
 
         layout();
 
