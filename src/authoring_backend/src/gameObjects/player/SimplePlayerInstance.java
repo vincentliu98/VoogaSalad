@@ -18,7 +18,6 @@ public class SimplePlayerInstance implements PlayerInstance {
 
     private SimpleStringProperty imagePath;
     private ObservableMap<String, String> propertiesMap;
-    private ObservableSet<Integer> entitiesSet;
     private Supplier<PlayerClass> getPlayerClassFunc;
 
 
@@ -86,27 +85,6 @@ public class SimplePlayerInstance implements PlayerInstance {
         }
         propertiesMap.put(propertyName, newValue);
         return true;
-    }
-
-    public Set<Integer> getEntityIDs() { return new TreeSet<>(entitiesSet); }
-
-    @Override
-    public boolean addEntity(int entityId) {
-        if (!entitiesSet.contains(entityId)){
-            entitiesSet.add(entityId);
-            return true;
-        }
-        else return false;
-    }
-
-    @Override
-    public boolean removeEntity(int entityId) {
-        return entitiesSet.remove(entityId);
-    }
-
-    @Override
-    public void removeAllEntities() {
-        entitiesSet.clear();
     }
 
     @Override

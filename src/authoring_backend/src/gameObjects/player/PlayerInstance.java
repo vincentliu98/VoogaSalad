@@ -9,15 +9,6 @@ import java.util.Set;
 
 public interface PlayerInstance extends GameObjectInstance {
 
-
-    Set<Integer> getEntityIDs();
-
-    boolean addEntity(int entityId);
-
-    boolean removeEntity(int entityId);
-
-    void removeAllEntities();
-
     SimpleStringProperty getImagePath();
 
     void setImagePath(String newImagePath);
