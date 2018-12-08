@@ -1,18 +1,12 @@
 package gameObjects.crud;
 
 import authoringUtils.exception.*;
-import gameObjects.category.CategoryClass;
-import gameObjects.category.CategoryInstance;
-import gameObjects.entity.EntityClass;
-import gameObjects.entity.EntityInstance;
-import gameObjects.gameObject.GameObjectClass;
-import gameObjects.gameObject.GameObjectInstance;
-import gameObjects.gameObject.GameObjectType;
-import gameObjects.player.PlayerInstance;
-import gameObjects.sound.SoundClass;
-import gameObjects.sound.SoundInstance;
-import gameObjects.tile.TileClass;
-import gameObjects.tile.TileInstance;
+import gameObjects.category.*;
+import gameObjects.entity.*;
+import gameObjects.gameObject.*;
+import gameObjects.player.*;
+import gameObjects.sound.*;
+import gameObjects.tile.*;
 import gameObjects.turn.Turn;
 import grids.Point;
 
@@ -160,7 +154,10 @@ public interface GameObjectsCRUDInterface {
     SoundInstance createSoundInstance(SoundClass soundClass) throws GameObjectTypeException;
 
 
-    PlayerInstance createPlayerInstance(String playerName);
+    PlayerInstance createPlayerInstance(String className)
+            throws GameObjectClassNotFoundException, GameObjectTypeException;
+
+    PlayerInstance createPlayerInstance(PlayerClass playerClass) throws GameObjectTypeException;
 
     Turn createTurn(String phaseName);
 
