@@ -220,39 +220,72 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
     }
 
     /**
-     * This method brings up an editor that contains the data of an existing object that is already created.
+     * This method reads in the properties of an existing GameObjectInstance.
      */
-    protected void readGameObjectInstance() {
+    void readInstanceProperties() {
         gameObjectInstance.getPropertiesMap().forEach((k, v) -> propBoxes.add(new PropertyBox(k, v, propBoxes::remove)));
     }
 
     /**
-     * Read the GameObjectClass represented by this editor.
+     * This method reads in the properties of an existing GameObjectClass.
      */
-    protected void readGameObjectClass() {
+    void readClassProperties() {
         gameObjectClass.getPropertiesMap().forEach((k, v) -> propBoxes.add(new PropertyBox(k, v, propBoxes::remove)));
     }
 
     /**
-     * This method sets up the confirm logic of adding new TreeItem.
+     * This method writes to the properties of an existing GameObjectClass.
      */
-    protected void confirmAddTreeItem() throws IllegalGeometryException, PreviewUnavailableException, GameObjectClassNotFoundException, DuplicateGameObjectClassException {
+    void writeClassProperties() {
         propBoxes.forEach(box -> gameObjectClass.getPropertiesMap().put(box.getKey(), box.getValue()));
     }
+
+    /**
+     * This method writes to the properties of an existing GameObjectInstance.
+     */
+    void writeInstanceProperties() {
+        propBoxes.forEach(box -> gameObjectInstance.getPropertiesMap().put(box.getKey(), box.getValue()));
+    }
+
+    /**
+     * This method brings up an editor that contains the data of an existing object that is already created.
+     */
+    protected abstract void readGameObjectInstance();
+
+    /**
+     * Read the GameObjectClass represented by this editor.
+     */
+    protected abstract void readGameObjectClass();
+
+    /**
+     * This method sets up the confirm logic of adding new TreeItem.
+     *
+     * @throws IllegalGeometryException
+     * @throws PreviewUnavailableException
+     * @throws GameObjectClassNotFoundException
+     * @throws DuplicateGameObjectClassException
+     */
+    protected abstract void confirmAddTreeItem() throws IllegalGeometryException, PreviewUnavailableException, GameObjectClassNotFoundException, DuplicateGameObjectClassException;
 
     /**
      * This method sets up the confirm logic of editing existing TreeItem.
+     *
+     * @throws IllegalGeometryException
+     * @throws GameObjectClassNotFoundException
+     * @throws InvalidOperationException
+     * @throws PreviewUnavailableException
      */
-    protected void confirmEditTreeItem() throws IllegalGeometryException, GameObjectClassNotFoundException, InvalidOperationException, PreviewUnavailableException {
-        propBoxes.forEach(box -> gameObjectClass.getPropertiesMap().put(box.getKey(), box.getValue()));
-    }
+    protected abstract void confirmEditTreeItem() throws IllegalGeometryException, GameObjectClassNotFoundException, InvalidOperationException, PreviewUnavailableException;
 
     /**
      * This method sets up the confirm logic of editing existing Node.
+     *
+     * @throws IllegalGeometryException
+     * @throws PreviewUnavailableException
+     * @throws UnremovableNodeException
+     * @throws GridIndexOutOfBoundsException
      */
-    protected void confirmEditNode() throws IllegalGeometryException, PreviewUnavailableException, UnremovableNodeException, GridIndexOutOfBoundsException {
-        propBoxes.forEach(box -> gameObjectInstance.getPropertiesMap().put(box.getKey(), box.getValue()));
-    }
+    protected abstract void confirmEditNode() throws IllegalGeometryException, PreviewUnavailableException, UnremovableNodeException, GridIndexOutOfBoundsException;
 
     /**
      * This method closes the editor.

@@ -129,6 +129,7 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
         position.addRow(1, yLabel, yInput);
         position.setHgap(20);
         layout.addRow(5, position);
+        readInstanceProperties();
     }
 
     private void readCommonTileCharacteristic(ReadOnlyStringProperty className, ObservableList<String> imagePathList, SimpleIntegerProperty width, SimpleIntegerProperty height) {
@@ -136,6 +137,7 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
         imagePaths.addAll(imagePathList);
         widthText.setText(String.valueOf(width.getValue()));
         heightText.setText(String.valueOf(height.getValue()));
+        readClassProperties();
     }
 
     /**
@@ -148,6 +150,11 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
 
     /**
      * This method sets up the confirm logic of adding new TreeItem.
+     *
+     * @throws IllegalGeometryException
+     * @throws PreviewUnavailableException
+     * @throws GameObjectClassNotFoundException
+     * @throws DuplicateGameObjectClassException
      */
     @Override
     protected void confirmAddTreeItem() throws IllegalGeometryException, PreviewUnavailableException, GameObjectClassNotFoundException, DuplicateGameObjectClassException {
@@ -163,11 +170,16 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
         tileClass.setHeight(height);
         tileClass.setWidth(width);
         treeItem.getChildren().add(newItem);
-        super.confirmAddTreeItem();
+        writeClassProperties();
     }
 
     /**
      * This method sets up the confirm logic of editing existing TreeItem.
+     *
+     * @throws IllegalGeometryException
+     * @throws InvalidOperationException
+     * @throws PreviewUnavailableException
+     * @throws GameObjectClassNotFoundException
      */
     @Override
     protected void confirmEditTreeItem() throws IllegalGeometryException, InvalidOperationException, PreviewUnavailableException, GameObjectClassNotFoundException {
@@ -183,11 +195,16 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
         JavaFxOperation.setWidthAndHeight(icon2, ICON_WIDTH, ICON_HEIGHT);
         treeItem.setValue(nameField.getText());
         treeItem.setGraphic(icon2);
-        super.confirmEditTreeItem();
+        writeClassProperties();
     }
 
     /**
      * This method sets up the confirm logic of editing existing Node.
+     *
+     * @throws IllegalGeometryException
+     * @throws UnremovableNodeException
+     * @throws GridIndexOutOfBoundsException
+     * @throws PreviewUnavailableException
      */
     @Override
     protected void confirmEditNode() throws IllegalGeometryException, UnremovableNodeException, GridIndexOutOfBoundsException, PreviewUnavailableException {
@@ -210,7 +227,7 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
         assert target != null;
         target.getChildren().add(nodeEdited);
         gameObjectInstance.setCoord(new PointImpl(col, row));
-        super.confirmEditNode();
+        writeInstanceProperties();
 
     }
 

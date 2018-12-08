@@ -41,6 +41,7 @@ import java.util.Set;
  * @author Haotian Wang
  * @author Amy
  */
+@SuppressWarnings("Duplicates")
 public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityInstance> {
     private static final double ICON_WIDTH = 50;
     private static final double ICON_HEIGHT = 50;
@@ -103,6 +104,11 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
 
     /**
      * This method sets up the confirm logic for adding new TreeItems.
+     *
+     * @throws IllegalGeometryException
+     * @throws PreviewUnavailableException
+     * @throws GameObjectClassNotFoundException
+     * @throws DuplicateGameObjectClassException
      */
     @Override
     protected void confirmAddTreeItem() throws IllegalGeometryException, PreviewUnavailableException, GameObjectClassNotFoundException, DuplicateGameObjectClassException {
@@ -119,11 +125,16 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         JavaFxOperation.setWidthAndHeight(icon, ICON_WIDTH, ICON_HEIGHT);
         newItem.setGraphic(icon);
         treeItem.getChildren().add(newItem);
-        super.confirmAddTreeItem();
+        writeClassProperties();
     }
 
     /**
      * This method sets up the confirm logic of editing existing TreeItem.
+     *
+     * @throws IllegalGeometryException
+     * @throws GameObjectClassNotFoundException
+     * @throws InvalidOperationException
+     * @throws PreviewUnavailableException
      */
     @Override
     protected void confirmEditTreeItem() throws IllegalGeometryException, GameObjectClassNotFoundException, InvalidOperationException, PreviewUnavailableException {
@@ -140,11 +151,16 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         JavaFxOperation.setWidthAndHeight(icon2, ICON_WIDTH, ICON_HEIGHT);
         treeItem.setValue(nameField.getText());
         treeItem.setGraphic(icon2);
-        super.confirmEditTreeItem();
+        writeClassProperties();
     }
 
     /**
      * This method sets up the confirm logic of editing existing Node.
+     *
+     * @throws IllegalGeometryException
+     * @throws PreviewUnavailableException
+     * @throws UnremovableNodeException
+     * @throws GridIndexOutOfBoundsException
      */
     @Override
     protected void confirmEditNode() throws IllegalGeometryException, PreviewUnavailableException, UnremovableNodeException, GridIndexOutOfBoundsException {
@@ -168,7 +184,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         assert target != null;
         target.getChildren().add(nodeEdited);
         gameObjectInstance.setCoord(new PointImpl(col, row));
-        super.confirmEditNode();
+        writeInstanceProperties();
     }
 
     /**
@@ -199,7 +215,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
      */
     @Override
     public void readGameObjectInstance() {
-        super.readGameObjectInstance();
+        readInstanceProperties();
         nameField.setText(gameObjectInstance.getInstanceName().getValue());
         imagePaths.addAll(gameObjectInstance.getImagePathList());
         widthInput.setText(String.valueOf(gameObjectInstance.getWidth().getValue()));
@@ -220,7 +236,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
      */
     @Override
     public void readGameObjectClass() {
-        super.readGameObjectClass();
+        readClassProperties();
         nameField.setText(gameObjectClass.getClassName().getValue());
         imagePaths.addAll(gameObjectClass.getImagePathList());
         widthInput.setText(String.valueOf(gameObjectClass.getWidth().getValue()));
