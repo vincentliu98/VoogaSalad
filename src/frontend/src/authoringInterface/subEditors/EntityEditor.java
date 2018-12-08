@@ -53,11 +53,6 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     private HBox imagePanel;
     private TextField widthInput;
     private TextField heightInput;
-    private Label propLabel = new Label("Properties");
-    private Button addProperties = new Button("Add");
-    private GridPane listProp;
-    private FlowPane listview;
-    private ObservableSet<PropertyBox> propBoxes;
     private ObservableList<String> imagePaths;
     private Set<ImageView> toRemove;
     private Set<String> toRemovePath;
@@ -87,17 +82,6 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         chooseImage.setStyle("-fx-text-fill: white;"
                 + "-fx-background-color: #343a40;");
         imagePanel = new HBox(IMAGE_PANEL_GAP);
-        listProp = new GridPane();
-        listview = new FlowPane();
-        listview.setVgap(10);
-        listview.setHgap(10);
-        propBoxes = FXCollections.observableSet();
-        propBoxes.addListener((SetChangeListener<? super PropertyBox>) e -> {
-            if(e.wasAdded()) listview.getChildren().add(e.getElementAdded());
-            else listview.getChildren().remove(e.getElementRemoved());
-        });
-
-        listProp.getChildren().add(listview);
         nameField.setPromptText("Your entity name");
         imagePaths = FXCollections.observableArrayList();
         imagePaths.addListener((ListChangeListener<String>) c -> presentImages());
@@ -109,19 +93,6 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                 imagePaths.add(imagePath);
             }
         });
-
-        addProperties.setStyle("-fx-text-fill: white;"
-                + "-fx-background-color: #343a40;");
-        addProperties.setOnAction(e -> new PropertyInputDialog().showAndWait().ifPresent(prop -> {
-            boolean added = false;
-            for(var box : propBoxes) {
-                if(box.getKey().equals(prop.getKey())) {
-                    box.setValue(prop.getValue());
-                    added = true;
-                }
-            }
-            if(!added) propBoxes.add(new PropertyBox(prop.getKey(), prop.getValue(), propBoxes::remove));
-        }));
         setupLayout();
         rootPane.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.DELETE || e.getCode() == KeyCode.BACK_SPACE) {
@@ -165,9 +136,6 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         assert entityClass != null;
         TreeItem<String> newItem = new TreeItem<>(entityClass.getClassName().getValue());
         entityClass.getImagePathList().addAll(imagePaths);
-        for(var box : propBoxes) {
-            entityClass.getPropertiesMap().put(box.getKey(), box.getValue());
-        }
         entityClass.setHeight(height);
         entityClass.setWidth(width);
         ImageView icon = null;
@@ -208,9 +176,6 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         gameObjectClass.getImagePathList().clear();
         gameObjectClass.getImagePathList().addAll(imagePaths);
         gameObjectClass.getPropertiesMap().clear();
-        for(var box : propBoxes) {
-            gameObjectClass.getPropertiesMap().put(box.getKey(), box.getValue());
-        }
         gameObjectClass.setWidth(width);
         gameObjectClass.setHeight(height);
         try {
@@ -256,9 +221,6 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         gameObjectInstance.getImagePathList().clear();
         gameObjectInstance.getImagePathList().addAll(imagePaths);
         gameObjectInstance.getPropertiesMap().clear();
-        for(var box : propBoxes) {
-            gameObjectInstance.getPropertiesMap().put(box.getKey(), box.getValue());
-        }
         gameObjectInstance.setWidth(width);
         gameObjectInstance.setHeight(height);
         try {
@@ -316,9 +278,9 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
      */
     @Override
     public void readGameObjectInstance() {
+        super.readGameObjectInstance();
         nameField.setText(gameObjectInstance.getInstanceName().getValue());
         imagePaths.addAll(gameObjectInstance.getImagePathList());
-        gameObjectInstance.getPropertiesMap().forEach((k, v) -> propBoxes.add(new PropertyBox(k, v, propBoxes::remove)));
         widthInput.setText(String.valueOf(gameObjectInstance.getWidth().getValue()));
         heightInput.setText(String.valueOf(gameObjectInstance.getHeight().getValue()));
         Label xLabel = new Label("x, col index");
@@ -337,9 +299,9 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
      */
     @Override
     public void readGameObjectClass() {
+        super.readGameObjectClass();
         nameField.setText(gameObjectClass.getClassName().getValue());
         imagePaths.addAll(gameObjectClass.getImagePathList());
-        gameObjectClass.getPropertiesMap().forEach((k, v) -> propBoxes.add(new PropertyBox(k, v, propBoxes::remove)));
         widthInput.setText(String.valueOf(gameObjectClass.getWidth().getValue()));
         heightInput.setText(String.valueOf(gameObjectClass.getHeight().getValue()));
     }

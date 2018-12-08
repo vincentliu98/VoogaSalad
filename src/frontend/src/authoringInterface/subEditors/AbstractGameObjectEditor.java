@@ -4,17 +4,25 @@ import api.SubView;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableSet;
+import javafx.collections.SetChangeListener;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import utils.ErrorWindow;
 import utils.exception.NodeNotFoundException;
 import utils.nodeInstance.NodeInstanceController;
+
+import java.io.File;
 
 /**
  * This abstract class provides a boiler plate for different editors because they are pretty similar.
@@ -35,6 +43,11 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
     T gameObjectClass;
     V gameObjectInstance;
     GridPane layout;
+    Label propLabel = new Label("Properties");
+    Button addProperties = new Button("Add");
+    GridPane listProp;
+    FlowPane listview;
+    ObservableSet<PropertyBox> propBoxes;
 
     AbstractGameObjectEditor(GameObjectsCRUDInterface manager) {
         editingMode = EditingMode.NONE;
@@ -54,6 +67,31 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
         cancel.setOnAction(e -> {
             closeEditor();
         });
+        listProp = new GridPane();
+        listview = new FlowPane();
+        listview.setVgap(10);
+        listview.setHgap(10);
+        propBoxes = FXCollections.observableSet();
+        propBoxes.addListener((SetChangeListener<? super PropertyBox>) e -> {
+            if(e.wasAdded()) listview.getChildren().add(e.getElementAdded());
+            else listview.getChildren().remove(e.getElementRemoved());
+        });
+
+        listProp.getChildren().add(listview);
+        nameField.setPromptText("Your entity name");
+
+        addProperties.setStyle("-fx-text-fill: white;"
+                + "-fx-background-color: #343a40;");
+        addProperties.setOnAction(e -> new PropertyInputDialog().showAndWait().ifPresent(prop -> {
+            boolean added = false;
+            for(var box : propBoxes) {
+                if(box.getKey().equals(prop.getKey())) {
+                    box.setValue(prop.getValue());
+                    added = true;
+                }
+            }
+            if(!added) propBoxes.add(new PropertyBox(prop.getKey(), prop.getValue(), propBoxes::remove));
+        }));
         rootPane.getChildren().addAll(nameLabel, nameField, layout, confirm, cancel);
         setupBasicLayout();
     }
@@ -103,6 +141,7 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
         readGameObjectClass();
         confirm.setOnAction(e -> {
             confirmEditTreeItem();
+            propBoxes.forEach(box -> gameObjectClass.getPropertiesMap().put(box.getKey(), box.getValue()));
             closeEditor();
         });
     }
@@ -117,6 +156,7 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
         editingMode = EditingMode.ADD_TREEITEM;
         confirm.setOnAction(e -> {
             confirmAddTreeItem();
+            propBoxes.forEach(box -> gameObjectClass.getPropertiesMap().put(box.getKey(), box.getValue()));
             closeEditor();
         });
     }
@@ -138,8 +178,9 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
             e.printStackTrace();
         }
         readGameObjectInstance();
-        confirm.setOnAction(e ->{
+        confirm.setOnAction(e -> {
             confirmEditNode();
+            propBoxes.forEach(box -> gameObjectInstance.getPropertiesMap().put(box.getKey(), box.getValue()));
             closeEditor();
         });
     }
@@ -147,12 +188,16 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
     /**
      * This method brings up an editor that contains the data of an existing object that is already created.
      */
-    protected abstract void readGameObjectInstance();
+    protected void readGameObjectInstance() {
+        gameObjectInstance.getPropertiesMap().forEach((k, v) -> propBoxes.add(new PropertyBox(k, v, propBoxes::remove)));
+    }
 
     /**
      * Read the GameObjectClass represented by this editor.
      */
-    protected abstract void readGameObjectClass();
+    protected void readGameObjectClass() {
+        gameObjectClass.getPropertiesMap().forEach((k, v) -> propBoxes.add(new PropertyBox(k, v, propBoxes::remove)));
+    }
 
     /**
      * This method sets up the confirm logic of adding new TreeItem.
