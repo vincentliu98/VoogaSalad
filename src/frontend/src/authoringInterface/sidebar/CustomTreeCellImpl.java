@@ -39,7 +39,7 @@ public class CustomTreeCellImpl extends TreeCell<String> {
             try {
                 Stage dialogStage = new Stage();
                 AbstractGameObjectEditor editor = EditorFactory.makeEditor(getItem(), manager);
-                dialogStage.setScene(new Scene(editor.getView(), 500, 500));
+                dialogStage.setScene(new Scene(editor.getView(), 600, 620));
                 dialogStage.show();
                 editor.addTreeItem(getTreeItem());
 

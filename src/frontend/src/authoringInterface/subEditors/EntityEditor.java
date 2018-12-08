@@ -7,13 +7,11 @@ import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.entity.EntityClass;
 import gameObjects.entity.EntityInstance;
-import grids.Point;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -50,11 +48,13 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     private Dialog<Pair<String, String>> dialog = new Dialog<>();
     private GridPane grid = new GridPane();
     private GridPane listProp;
-    private VBox listview;
+    private FlowPane listview;
     private ObservableMap<String, String> list;
     private TextField name;
     private TextField value;
     private Button delete;
+    private ComboBox<String> comboBox;
+    private Label playerLabel;
     private ObservableList<String> imagePaths;
     private Set<ImageView> toRemove;
     private Set<String> toRemovePath;
@@ -81,14 +81,17 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         size.addRow(0, widthLabel, widthInput);
         size.addRow(1, heightLabel, heightInput);
 
+
+        comboBox = new ComboBox<>();
+        comboBox.setPromptText("NONE");
+        playerLabel = new Label("Choose Player");
         imageText = new Label("Add an image to your entity");
         chooseImage = new Button("Choose image");
         chooseImage.setStyle("-fx-text-fill: white;"
                 + "-fx-background-color: #343a40;");
         imagePanel = new HBox(10);
         listProp = new GridPane();
-        listview = new VBox();
-        listview.setSpacing(10);
+        listview = new FlowPane();
         list = FXCollections.observableHashMap();
         listProp.getChildren().add(listview);
         nameField.setPromptText("Your entity name");
@@ -264,7 +267,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         position.addRow(0, xLabel, xInput);
         position.addRow(1, yLabel, yInput);
         position.setHgap(20);
-        layout.addRow(5, position);
+        layout.addRow(6, position);
     }
 
     /**
@@ -281,10 +284,11 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
 
     private void setupLayout() {
         layout.addRow(0, size);
-        layout.addRow(1, imageText, chooseImage);
-        layout.addRow(2, imagePanel);
-        layout.addRow(3, propLabel, addProperties);
-        layout.addRow(4, listProp);
+        layout.addRow(1, playerLabel, comboBox);
+        layout.addRow(2, imageText, chooseImage);
+        layout.addRow(3, imagePanel);
+        layout.addRow(4, propLabel, addProperties);
+        layout.addRow(5, listProp);
     }
 
     private void setupProp() {
@@ -303,7 +307,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
 
     private GridPane setPropkeys() {
         grid.setHgap(10);
-        grid.setVgap(10);
+        grid.setVgap(5);
         grid.setPadding(new Insets(20, 150, 10, 10));
         name = new TextField();
         value = new TextField();
@@ -320,13 +324,15 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
 
     private void manageList(String key, String value) {
         HBox prop = new HBox();
+        prop.setSpacing(20);
+        listview.setVgap(10);
+        listview.setHgap(10);
         delete = new Button("X");
         delete.setStyle("-fx-font-size: 8px;"
                 + "-fx-text-fill: white;"
                 + "-fx-background-color: black;");
         Text keyText = new Text(key);
         Text valueText = new Text(value);
-        prop.setSpacing(20);
         prop.setStyle("-fx-padding: 5;"
                 +"-fx-border-style: dashed");
         if (list.keySet().contains(key)){
