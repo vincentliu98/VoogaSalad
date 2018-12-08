@@ -57,8 +57,6 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     private GridPane listProp;
     private FlowPane listview;
     private ObservableSet<PropertyBox> propBoxes;
-    private ComboBox<String> comboBox;
-    private Label playerLabel;
     private ObservableList<String> imagePaths;
     private Set<ImageView> toRemove;
     private Set<String> toRemovePath;
@@ -83,10 +81,6 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         size.addRow(0, widthLabel, widthInput);
         size.addRow(1, heightLabel, heightInput);
 
-
-        comboBox = new ComboBox<>();
-        comboBox.setPromptText("NONE");
-        playerLabel = new Label("Choose Player");
         imageText = new Label("Add an image to your entity");
         chooseImage = new Button("Choose image");
         chooseImage.setStyle("-fx-text-fill: white;"
@@ -312,7 +306,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         position.addRow(0, xLabel, xInput);
         position.addRow(1, yLabel, yInput);
         position.setHgap(20);
-        layout.addRow(6, position);
+        layout.addRow(5, position);
     }
 
     private void readCommonEntityCharacteristics(ObservableList<String> imagePathList, ObservableMap<String, String> propertiesMap, SimpleIntegerProperty width, SimpleIntegerProperty height) {
@@ -333,16 +327,10 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
 
     private void setupLayout() {
         layout.addRow(0, size);
-        layout.addRow(1, playerLabel, comboBox);
-        layout.addRow(2, imageText, chooseImage);
-        layout.addRow(3, imagePanel);
-        layout.addRow(4, propLabel, addProperties);
-        layout.addRow(5, listProp);
+        layout.addRow(1, imageText, chooseImage);
+        layout.addRow(2, imagePanel);
+        layout.addRow(3, propLabel, addProperties);
+        layout.addRow(4, listProp);
     }
 
-    private void addPlayers() {
-        //TODO
-        comboBox.getItems().addAll(
-        );
-    }
 }

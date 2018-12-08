@@ -99,11 +99,6 @@ public class EditView implements SubView<TabPane> {
 
         tabPane.getTabs().addAll(mainTab, gridTab, phaseNodeTab, heartbeatTab);
 
-//        mainLabel.setOnMouseDragged(e -> {
-//            index = 0;
-//            Point2D mouseLoc = new Point2D(e.getScreenX(), e.getScreenY());
-//            splitTab(mouseLoc, mainTab, index);
-//        });
         gridLabel.setOnMouseDragged(e -> {
             index = 1;
             Point2D mouseLoc = new Point2D(e.getScreenX(), e.getScreenY());
