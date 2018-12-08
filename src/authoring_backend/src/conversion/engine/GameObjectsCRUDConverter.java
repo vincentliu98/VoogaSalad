@@ -15,6 +15,7 @@ import gameObjects.tile.TileClass;
 import groovy.lang.GroovyShell;
 
 import java.util.Map;
+import java.util.TreeSet;
 
 public class GameObjectsCRUDConverter implements Converter {
     private Mapper mapper;
@@ -210,9 +211,9 @@ public class GameObjectsCRUDConverter implements Converter {
             new MapConverter(mapper).marshal(shell.evaluate(toEval), writer, ctx);
             writer.endNode();
 
-//            writer.startNode("myEntityIDs");
-//            new TreeSetConverter(mapper).marshal(player.enei, writer, ctx);
-//            writer.endNode();
+            writer.startNode("myEntityIDs");
+            new TreeSetConverter(mapper).marshal(new TreeSet<>(player.getAllGameObjectInstanceIDs()), writer, ctx);
+            writer.endNode();
 
             writer.endNode();
         }

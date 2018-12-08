@@ -32,7 +32,6 @@ public class SimplePlayerInstance implements PlayerInstance {
         this.imagePath = imagePath;
         this.propertiesMap = properties;
         this.getPlayerClassFunc = getPlayerClassFunc;
-        this.entitiesSet = FXCollections.observableSet();
         instanceId = new ReadOnlyIntegerWrapper();
     }
 
