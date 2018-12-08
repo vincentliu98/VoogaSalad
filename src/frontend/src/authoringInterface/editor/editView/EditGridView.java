@@ -5,6 +5,7 @@ import authoringInterface.customEvent.UpdateStatusEventListener;
 import authoringInterface.subEditors.*;
 import authoringUtils.exception.GameObjectClassNotFoundException;
 import authoringUtils.exception.GameObjectTypeException;
+import authoringUtils.exception.InvalidIdException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.entity.EntityClass;
 import gameObjects.entity.EntityInstance;
@@ -136,7 +137,12 @@ public class EditGridView implements SubView<ScrollPane> {
             }
         }
         nodeInstanceController.clearAllLinks();
-        gameObjectManager.deleteAllInstances();
+        try {
+            gameObjectManager.deleteAllInstances();
+        } catch (InvalidIdException e) {
+            // TODO: error handling
+            e.printStackTrace();
+        }
     }
 
     /**

@@ -472,15 +472,11 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
      * Delete all instances currently in the CRUD.
      */
     @Override
-    public void deleteAllInstances() {
-        for (Integer integer : gameObjectInstanceMapById.keySet()) {
-            try {
-                removeGameObjectInstanceFromMap(integer);
-            } catch (InvalidIdException e) {
-                // TODO
-                e.printStackTrace();
-            }
+    public void deleteAllInstances() throws InvalidIdException {
+        for (GameObjectInstance gameObjectInstance : gameObjectInstanceMapById.values()) {
+            myIdManager.returnInstanceIdFunc().accept(gameObjectInstance);
         }
+        gameObjectInstanceMapById.clear();
     }
 
     /**
