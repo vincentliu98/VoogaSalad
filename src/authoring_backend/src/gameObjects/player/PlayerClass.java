@@ -13,6 +13,8 @@ public interface PlayerClass extends GameObjectClass {
 
     boolean addGameObjectInstances(GameObjectInstance gameObjectInstance);
 
+    boolean isOwnedByPlayer(GameObjectInstance gameObjectInstance);
+
     boolean removeGameObjectInstances(GameObjectInstance gameObjectInstance);
 
     void removeAllGameObjectInstances();
