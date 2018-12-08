@@ -1,7 +1,6 @@
 package grids;
-import java.util.HashSet;
+
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * Abstract representation of a position in the grid.

@@ -1,7 +1,5 @@
 package grids;
 
-import java.util.ArrayList;
-
 /**
  * Abstract representation of directions. Includes method that returns the direction vector.
  * This Class is used to get the position of the neighbours by defining all the possible locations of neighbors in an enum.

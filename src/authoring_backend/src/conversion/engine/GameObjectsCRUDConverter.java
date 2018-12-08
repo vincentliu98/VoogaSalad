@@ -1,5 +1,6 @@
 package conversion.engine;
 
+import authoringUtils.exception.GameObjectClassNotFoundException;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
@@ -12,7 +13,6 @@ import gameObjects.crud.SimpleGameObjectsCRUD;
 import gameObjects.entity.EntityClass;
 import gameObjects.tile.TileClass;
 import groovy.lang.GroovyShell;
-import authoringUtils.exception.GameObjectClassNotFoundException;
 
 import java.util.Map;
 

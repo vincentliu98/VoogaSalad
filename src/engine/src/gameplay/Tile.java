@@ -1,7 +1,6 @@
 package gameplay;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
-import grids.Point;
 import grids.PointImpl;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.EventHandler;

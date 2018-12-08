@@ -13,12 +13,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TabPane.TabDragPolicy;
 import javafx.scene.control.TabPane.TabClosingPolicy;
-import javafx.scene.layout.StackPane;
-import utils.nodeInstance.NodeInstanceController;
+import javafx.scene.control.TabPane.TabDragPolicy;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import utils.nodeInstance.NodeInstanceController;
 
 /**
  * EditView Class (TabPane > Pane)

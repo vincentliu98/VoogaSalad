@@ -2,9 +2,6 @@ package graphUI.graphData;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-//import simulation.Cell;
-//import simulation.CellGraph;
-//import xml.XMLException;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -13,8 +10,13 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Map;
+import java.util.ResourceBundle;
+
+//import simulation.Cell;
+//import simulation.CellGraph;
+//import xml.XMLException;
 
 /**
  *  PhaseGraphXMLWriter to write properties of a phaseGraph that are common to

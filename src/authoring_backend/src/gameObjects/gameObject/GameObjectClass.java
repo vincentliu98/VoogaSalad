@@ -4,13 +4,9 @@ import authoringUtils.exception.InvalidOperationException;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Set;
 import java.util.function.Consumer;
 
 /**

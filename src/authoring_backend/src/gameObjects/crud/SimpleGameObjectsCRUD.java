@@ -1,18 +1,42 @@
 package gameObjects.crud;
 
 import authoringUtils.exception.*;
-import gameObjects.*;
-import gameObjects.category.*;
-import gameObjects.entity.*;
-import gameObjects.gameObject.*;
-import gameObjects.player.*;
-import gameObjects.sound.*;
-import gameObjects.tile.*;
-import gameObjects.turn.*;
+import gameObjects.IdManager;
+import gameObjects.IdManagerClass;
+import gameObjects.ThrowingBiConsumer;
+import gameObjects.ThrowingConsumer;
+import gameObjects.category.CategoryClass;
+import gameObjects.category.CategoryInstance;
+import gameObjects.category.CategoryInstanceFactory;
+import gameObjects.category.SimpleCategoryClass;
+import gameObjects.entity.EntityClass;
+import gameObjects.entity.EntityInstance;
+import gameObjects.entity.EntityInstanceFactory;
+import gameObjects.entity.SimpleEntityClass;
+import gameObjects.gameObject.GameObjectClass;
+import gameObjects.gameObject.GameObjectInstance;
+import gameObjects.gameObject.GameObjectType;
+import gameObjects.player.PlayerInstance;
+import gameObjects.player.PlayerInstanceFactory;
+import gameObjects.sound.SimpleSoundClass;
+import gameObjects.sound.SoundClass;
+import gameObjects.sound.SoundInstance;
+import gameObjects.sound.SoundInstanceFactory;
+import gameObjects.tile.SimpleTileClass;
+import gameObjects.tile.TileClass;
+import gameObjects.tile.TileInstance;
+import gameObjects.tile.TileInstanceFactory;
+import gameObjects.turn.SimpleTurn;
+import gameObjects.turn.Turn;
 import grids.Point;
-import javafx.collections.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 
 public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
@@ -472,15 +496,12 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
      * Delete all instances currently in the CRUD.
      */
     @Override
-    public void deleteAllInstances() {
-        for (Integer integer : gameObjectInstanceMapById.keySet()) {
-            try {
-                removeGameObjectInstanceFromMap(integer);
-            } catch (InvalidIdException e) {
-                // TODO
-                e.printStackTrace();
-            }
+    public void deleteAllInstances() throws InvalidIdException {
+        for (GameObjectInstance gameObjectInstance : gameObjectInstanceMapById.values()) {
+            myIdManager.returnInstanceIdFunc().accept(gameObjectInstance);
         }
+        gameObjectInstanceMapById.clear();
+        defaultPlayer = createPlayerInstance(DEFAULT_PLAYER_NAME);
     }
 
     /**

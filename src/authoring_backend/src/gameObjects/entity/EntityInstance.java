@@ -1,6 +1,7 @@
 package gameObjects.entity;
 
-import gameObjects.gameObject.*;
+import gameObjects.gameObject.GameObjectInstance;
+import gameObjects.gameObject.GameObjectType;
 import grids.Point;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
