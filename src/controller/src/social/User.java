@@ -1,4 +1,4 @@
-package playing;
+package social;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -12,6 +12,7 @@ import twitter4j.conf.ConfigurationBuilder;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.HashSet;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 public class User {
@@ -19,6 +20,7 @@ public class User {
     private Set<String> myFavoriteGames;
     private ImageView myAvatar;
     private Twitter myTwitter;
+    private ResourceBundle myErrors;
 
     public User(int id){
         myID = id;
@@ -26,6 +28,7 @@ public class User {
         myTwitter = null;
         myAvatar = new ImageView();
         myAvatar.setImage(new Image(getClass().getResourceAsStream("/graphics/default-avatar.png")));
+        //myErrors = ResourceBundle.getBundle("resources/errors/Errors");
     }
 
     public void changeAvatar(Image image){
@@ -58,25 +61,21 @@ public class User {
         AccessToken accessToken = null;
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         try {
-            RequestToken requestToken = myTwitter.getOAuthRequestToken("oob");
+            RequestToken requestToken = myTwitter.getOAuthRequestToken("oob"); // directs to pin page
             while (null == accessToken) {
                 System.out.println("Open the following URL and grant access to your account:");
                 System.out.println(requestToken.getAuthorizationURL());
                 System.out.print("Enter the PIN(if available) and hit enter after you granted access.[PIN]:");
                 String pin = br.readLine();
-
                 try {
                     if (pin.length() > 0) {
                         accessToken = myTwitter.getOAuthAccessToken(requestToken, pin);
                     } else {
                         accessToken = myTwitter.getOAuthAccessToken(requestToken);
                     }
-                } catch (TwitterException te) {
-                    if (401 == te.getStatusCode()) {
-                        System.out.println("Unable to get the access token.");
-                    } else {
-                        te.printStackTrace();
-                    }
+                } catch (Exception e) {
+                    //throw new UserException(myErrors.getString("InvalidTwitterPin"));
+                    e.printStackTrace();
                 }
             }
         } catch (Exception e) {
