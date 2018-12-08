@@ -70,7 +70,7 @@ public class User {
         }
     }
 
-    public static void main (String[] args){
+    public static void main (String[] args){ // TODO: Delete (for testing only)
         User testUser = new User(1);
         testUser.configureTwitter();
     }
