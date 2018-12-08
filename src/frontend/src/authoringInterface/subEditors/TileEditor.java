@@ -170,7 +170,7 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
                             // TODO: proper error handling
                             e1.printStackTrace();
                         }
-                        Tooltip.install(nodeEdited, new Tooltip(String.format("Width: %s\nHeight: %s\nDouble Click or Right Click to edit\nInstance ID: %s\nClass Name: %s", width, height, gameObjectInstance.getInstanceId().getValue(), gameObjectInstance.getClassName().getValue())));
+                        Tooltip.install(nodeEdited, new Tooltip(String.format("Width: %s\nHeight: %s\nSingle Click to toggle Deletion\nDouble Click or Right Click to edit\nInstance ID: %s\nClass Name: %s", width, height, gameObjectInstance.getInstanceId().getValue(), gameObjectInstance.getClassName().getValue())));
                         break;
                     case EDIT_TREEITEM:
                         try { ImageManager.removeClassImage(gameObjectClass); } catch (GameObjectClassNotFoundException e1) {}

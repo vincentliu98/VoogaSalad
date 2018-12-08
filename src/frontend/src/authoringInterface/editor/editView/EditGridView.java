@@ -36,7 +36,9 @@ import utils.exception.NodeNotFoundException;
 import utils.simpleAnimation.SingleNodeFade;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * EditGridView Class (ScrollPane)
@@ -60,10 +62,14 @@ public class EditGridView implements SubView<ScrollPane> {
     private static final double INDICATOR_FADE_TIME = 3000;
     private static final double CELL_HEIGHT = 100;
     private static final double CELL_WIDTH = 100;
+    private Set<Node> toRemove;
+    private static final double HALF_OPACITY = 0.5;
+    private static final double FULL_OPACITY = 1;
 
     public EditGridView(int row, int col, GameObjectsCRUDInterface manager, NodeInstanceController controller) {
         gameObjectManager = manager;
         nodeInstanceController = controller;
+        toRemove = new HashSet<>();
         scrollPane = new ScrollPane();
         listeners = new ArrayList<>();
         batchMode = new Label("Batch Mode: Off\nPress Shift to Toggle");
@@ -322,6 +328,7 @@ public class EditGridView implements SubView<ScrollPane> {
             e.printStackTrace();
         }
         // TODO: smarter resizing
+        assert nodeOnGrid != null;
         nodeOnGrid.setFitHeight(NODE_HEIGHT);
         nodeOnGrid.setFitWidth(NODE_WIDTH);
         ImageView finalNodeOnGrid = nodeOnGrid;
@@ -337,6 +344,8 @@ public class EditGridView implements SubView<ScrollPane> {
         nodeOnGrid.setOnMouseClicked(e -> {
             if (e.getButton() == MouseButton.SECONDARY) {
                 setUpRightClickMenu(e, finalNodeOnGrid);
+            } else if (e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 1) {
+                handleClickToRemove(finalNodeOnGrid);
             } else {
                 handleDoubleClick(e, finalNodeOnGrid);
             }
@@ -352,7 +361,21 @@ public class EditGridView implements SubView<ScrollPane> {
         }
         if (height != 0 && width != 0) {
             assert gameObjectInstance != null;
-            Tooltip.install(finalNodeOnGrid, new Tooltip(String.format("Width: %s\nHeight: %s\nDouble Click or Right Click to edit\nInstance ID: %s\nClass Name: %s", width, height, gameObjectInstance.getInstanceId().getValue(), gameObjectInstance.getClassName().getValue())));
+            Tooltip.install(finalNodeOnGrid, new Tooltip(String.format("Width: %s\nHeight: %s\nSingle Click to toggle Deletion\nDouble Click or Right Click to edit\nInstance ID: %s\nClass Name: %s", width, height, gameObjectInstance.getInstanceId().getValue(), gameObjectInstance.getClassName().getValue())));
+        }
+    }
+
+    /**
+     * This method handles the single click to toggle the to remove the status of the specified node.
+     *
+     * @param node: The JavaFx node whose status will be toggled.
+     */
+    private void handleClickToRemove(Node node) {
+        if (!toRemove.remove(node)) {
+            node.setOpacity(FULL_OPACITY);
+        } else {
+            node.setOpacity(HALF_OPACITY);
+            toRemove.add(node);
         }
     }
 
