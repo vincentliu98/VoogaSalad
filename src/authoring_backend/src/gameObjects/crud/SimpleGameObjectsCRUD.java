@@ -170,7 +170,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
      * @return reformatted string
      */
     private String reformat(String str){
-        return str.charAt(0)+str.substring(1);
+        return str.charAt(0)+str.substring(1).toLowerCase();
     }
 
     private GameObjectClass getSpecificClass(String className, GameObjectType objectType)
@@ -212,7 +212,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         }
         GameObjectClass t = gameObjectClassMapByName.get(className);
         if (t.getType() != objectType) {
-            throw new GameObjectTypeException(className, reformat(objectType.name()));
+            throw new GameObjectTypeException(className, objectType);
         }
         return (T)t;
     }
@@ -619,7 +619,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         return gameObjectInstance -> {
             int instanceId = gameObjectInstance.getInstanceId().getValue();
             if (instanceId == 0) {
-                throw new InvalidIdException("GameObject Instance has an invalid Id");
+                throw new InvalidIdException();
             }
             gameObjectInstanceMapById.put(instanceId, gameObjectInstance);
         };
