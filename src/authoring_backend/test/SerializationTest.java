@@ -64,13 +64,13 @@ public class SerializationTest {
         var phaseDB = authTools.phaseDB();
         var factory = authTools.factory();
 
-        var hbSource = phaseDB.heartbeat().source();
+        var hbSource = phaseDB.winCondition().source();
         var hbScript = factory.rawBlock(
             "if(GameMethods.hasNoEntities(GameMethods.getCurrentPlayerName())) {" +
             "   GameMethods.endGame(GameMethods.getCurrentPlayerName() + ' LOST!')" +
             "}"
         );
-        phaseDB.heartbeat().addEdge(factory.createEdge(hbSource, Ports.FLOW_OUT, hbScript));
+        phaseDB.winCondition().addEdge(factory.createEdge(hbSource, Ports.FLOW_OUT, hbScript));
 
 
         var graph = phaseDB.createGraph("A").get(null);
