@@ -1,14 +1,16 @@
 package conversion.engine;
 
+import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 import phase.PhaseGraphImpl;
+import phase.api.GameEvent;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.stream.Collectors;
 
 public class PhaseGraphConverter implements Converter {
@@ -25,24 +27,19 @@ public class PhaseGraphConverter implements Converter {
                          .flatMap(Collection::stream)
                          .collect(Collectors.toSet());
 
-        var graphID = String.valueOf(graph.source().name().hashCode());
-        var nodeIDs = new HashMap<String, String>();
-        nodes.forEach(n -> nodeIDs.put(n.name(), String.valueOf(n.name().hashCode())));
-
         for(var node : nodes) {
             writer.startNode("gameplay.Node");
 
-            writer.startNode("myPhaseID");
-            writer.setValue(graphID);
+            writer.startNode("myPhaseName");
+            writer.setValue(graph.name());
             writer.endNode();
 
-            writer.startNode("myID");
-            writer.setValue(nodeIDs.get(node.name()));
+            writer.startNode("myName");
+            writer.setValue(node.name());
             writer.endNode();
 
             writer.startNode("myExecution");
-            String execStr = node.exec().transformToGroovy().get("");
-            writer.setValue(execStr.replaceAll("GameMethods.goTo\\(('.*')\\)", "GameMethods.goTo\\($1.hashCode()\\)"));
+            writer.setValue(node.exec().transformToGroovy().get(""));
             writer.endNode();
 
             writer.endNode();
@@ -51,20 +48,25 @@ public class PhaseGraphConverter implements Converter {
         for(var edge : edges) {
             writer.startNode("gameplay.Edge");
 
-            writer.startNode("myPhaseID");
-            writer.setValue(graphID);
+            writer.startNode("myPhaseName");
+            writer.setValue(graph.name());
             writer.endNode();
 
-            writer.startNode("myStartNodeID");
-            writer.setValue(nodeIDs.get(edge.from().name()));
+            writer.startNode("myStartNodeName");
+            writer.setValue(edge.from().name());
             writer.endNode();
 
-            writer.startNode("myEndNodeID");
-            writer.setValue(nodeIDs.get(edge.to().name()));
+            writer.startNode("myEndNodeName");
+            writer.setValue(edge.to().name());
             writer.endNode();
 
             writer.startNode("myTrigger");
             writer.addAttribute("class", edge.trigger().getClass().getName());
+            if(edge.trigger() instanceof GameEvent.KeyPress) {
+                writer.startNode("code");
+                writer.setValue(((GameEvent.KeyPress) edge.trigger()).getCode().name());
+                writer.endNode();
+            }
             writer.endNode();
 
             writer.startNode("myGuard");
@@ -76,23 +78,19 @@ public class PhaseGraphConverter implements Converter {
 
         writer.startNode("gameplay.Phase");
 
-        writer.startNode("myID");
-        writer.setValue(graphID);
-        writer.endNode();
-
-        writer.startNode("myStartNodeID");
-        writer.setValue(nodeIDs.get(graph.source().name()));
+        writer.startNode("myStartNodeName");
+        writer.setValue(graph.source().name());
         writer.endNode();
 
 
-        writer.startNode("myCurrentNodeID");
-        writer.setValue(nodeIDs.get(graph.source().name()));
+        writer.startNode("myCurrentNodeName");
+        writer.setValue(graph.source().name());
         writer.endNode();
 
-        writer.startNode("myNodeIDs");
+        writer.startNode("myNodeNames");
         for(var node: nodes) {
-            writer.startNode("int");
-            writer.setValue(nodeIDs.get(node.name()));
+            writer.startNode("string");
+            writer.setValue(node.name());
             writer.endNode();
         }
         writer.endNode();

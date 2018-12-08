@@ -24,8 +24,7 @@ public class EditorFactory {
             case ENTITY:
                 return (T) new EntityEditor(gameObjectManager);
             case PLAYER:
-                // TODO
-                break;
+                return (T) new PlayerEditor(gameObjectManager);
             case TILE:
                 return (T) new TileEditor(gameObjectManager);
             case SOUND:
