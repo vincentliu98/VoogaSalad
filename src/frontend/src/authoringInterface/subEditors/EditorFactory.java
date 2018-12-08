@@ -1,5 +1,6 @@
 package authoringInterface.subEditors;
 
+import authoringInterface.sidebar.treeItemEntries.Player;
 import authoringUtils.exception.GameObjectTypeException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.gameObject.GameObjectType;
@@ -24,8 +25,7 @@ public class EditorFactory {
             case ENTITY:
                 return (T) new EntityEditor(gameObjectManager);
             case PLAYER:
-                // TODO
-                break;
+                return (T) new PlayerEditor(gameObjectManager);
             case TILE:
                 return (T) new TileEditor(gameObjectManager);
             case SOUND:

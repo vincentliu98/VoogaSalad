@@ -64,6 +64,6 @@ public class Sound implements EditTreeItem<Text> {
      */
     @Override
     public TreeItemType getType() {
-        return TreeItemType.SOUND;
+        return type;
     }
 }
