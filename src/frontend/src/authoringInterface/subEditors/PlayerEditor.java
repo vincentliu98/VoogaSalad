@@ -41,7 +41,7 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
         nameLabel.setText("Your Player Name");
         nameField.setPromptText("Player 0");
 
-        imageText = new Label("Add an image to your entity");
+        imageText = new Label("Add an image to your player");
         chooseImage = new Button("Choose image");
         chooseImage.setStyle("-fx-text-fill: white;"
                 + "-fx-background-color: #343a40;");
@@ -133,9 +133,9 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
      */
     @Override
     protected void confirmEditTreeItem() {
-        try {
-            ImageManager.removeClassImage(gameObjectClass);
-        } catch (GameObjectClassNotFoundException ignored) {}
+//        try {
+//            ImageManager.removeClassImage(gameObjectClass);
+//        } catch (GameObjectClassNotFoundException ignored) {}
         gameObjectClass.setImagePath(imagePath);
 
         try {
