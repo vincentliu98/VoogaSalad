@@ -132,13 +132,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         if (t.getType() != GameObjectType.TILE) {
             throw new GameObjectTypeException(className, "Tile");
         }
-        try {
-            return myTileInstanceFactory.createInstance((TileClass) t, topLeftCoord);
-        } catch (InvalidIdException e) {
-            // TODO
-            e.printStackTrace();
-            return null;
-        }
+        return createTileInstance((TileClass) t, topLeftCoord);
     }
 
     @Override
@@ -203,13 +197,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         if (t.getType() != GameObjectType.ENTITY) {
             throw new GameObjectTypeException("className", "Entity");
         }
-        try {
-            return myEntityInstanceFactory.createInstance((EntityClass) t, playerID, point);
-        } catch (InvalidIdException e) {
-            // TODO
-            e.printStackTrace();
-            return null;
-        }
+        return createEntityInstance((EntityClass) t,playerID,point);
     }
 
     @Override
@@ -267,13 +255,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         if (t.getType() != GameObjectType.CATEGORY) {
             throw new GameObjectTypeException(className, "Category");
         }
-        try {
-            return myCategoryInstanceFactory.createInstance((CategoryClass) t);
-        } catch (InvalidIdException e) {
-            // TODO
-            e.printStackTrace();
-            return null;
-        }
+        return createCategoryInstance((CategoryClass)t);
     }
 
 
@@ -331,13 +313,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         if (c.getType() != GameObjectType.SOUND) {
             throw new GameObjectTypeException(className, "Sound");
         }
-        try {
-            return mySoundInstanceFactory.createInstance((SoundClass) c);
-        } catch (InvalidIdException e) {
-            // TODO
-            e.printStackTrace();
-            return null;
-        }
+        return createSoundInstance((SoundClass) c);
     }
 
     @Override
@@ -387,13 +363,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         if (t.getType() != GameObjectType.PLAYER) {
             throw new GameObjectTypeException(className, "Player");
         }
-        try {
-            return myPlayerInstanceFactory.createInstance((PlayerClass) t);
-        } catch (InvalidIdException e) {
-            // TODO
-            e.printStackTrace();
-            return null;
-        }
+        return createPlayerInstance((PlayerClass) t);
     }
 
     @Override
