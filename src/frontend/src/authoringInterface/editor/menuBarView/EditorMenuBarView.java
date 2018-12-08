@@ -10,6 +10,7 @@ import authoringInterface.editor.memento.EditorCaretaker;
 import authoringInterface.editor.menuBarView.subMenuBarView.*;
 import gameplay.Initializer;
 import graphUI.graphData.PhaseGraphXMLParser;
+import graphUI.graphData.SinglePhaseData;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
@@ -25,6 +26,7 @@ import runningGame.GameWindow;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 import java.util.function.BiConsumer;
 
 /**
@@ -131,13 +133,18 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         if (file != null) {
             var parser = new PhaseGraphXMLParser();
             try {
-                System.out.println(parser.parseFile(file));
+                Map<String, SinglePhaseData> phaseDataMap = parser.parseFile(file);
+                regeneratePhaseGraph(phaseDataMap);
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (SAXException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void regeneratePhaseGraph(Map<String, SinglePhaseData> phaseDataMap) {
+        editView.getPhaseView().reset(phaseDataMap);
     }
 
     void handleUndo(ActionEvent event) {

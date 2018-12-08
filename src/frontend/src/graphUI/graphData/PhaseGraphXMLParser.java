@@ -50,42 +50,50 @@ public class PhaseGraphXMLParser {
 
         for (int i = 0; i < phases.getLength(); i++) {
             Node child = phases.item(i);
-            System.out.println("Child name: " + child.getNodeName());
 
             if (child.getNodeType() == Node.ELEMENT_NODE) {
                 Element phase = (Element) child;
 
                 String phaseName = phase.getElementsByTagName(PHASE_NAME_TAG).item(0).getChildNodes().item(0).getNodeValue();
-                var nodes = phase.getElementsByTagName(NODES_TAG);
+                var nodes = phase.getElementsByTagName(NODES_TAG).item(0);
+                var nodesList = nodes.getChildNodes();
                 List<String> nodesName = new ArrayList<>();
                 Map<String, Pair<Double, Double>> nodesPos = new HashMap<>();
-                for (int j = 0; j < nodes.getLength(); j++) {
-                    Element node = (Element) nodes.item(j);
-                    System.out.println("node tag name: " + node.getTagName());
-                    var name = node.getElementsByTagName(NODE_NAME_TAG).item(0).getChildNodes().item(0).getNodeValue();
-                    nodesName.add(name);
-                    nodesPos.put(name, new Pair<>(Double.parseDouble(node.getElementsByTagName(X_TAG).item(0).getChildNodes().item(0).getNodeValue()),
-                            Double.parseDouble(node.getElementsByTagName(Y_TAG).item(0).getChildNodes().item(0).getNodeValue())));
+                for (int j = 0; j < nodesList.getLength(); j++) {
+                    Node temp = nodesList.item(j);
+
+                    if (temp.getNodeType() == Node.ELEMENT_NODE) {
+                        Element node = (Element) temp;
+                        System.out.println("node tag name: " + node.getTagName());
+                        var name = node.getElementsByTagName(NODE_NAME_TAG).item(0).getChildNodes().item(0).getNodeValue();
+                        nodesName.add(name);
+                        nodesPos.put(name, new Pair<>(Double.parseDouble(node.getElementsByTagName(X_TAG).item(0).getChildNodes().item(0).getNodeValue()),
+                                Double.parseDouble(node.getElementsByTagName(Y_TAG).item(0).getChildNodes().item(0).getNodeValue())));
+                    }
                 }
 
-                var connections = phase.getElementsByTagName(CONNECTIONS_TAG);
+                var connections = phase.getElementsByTagName(CONNECTIONS_TAG).item(0);
+                var connectionsList = connections.getChildNodes();
 
                 Map<Pair<String, String>, GameEvent> nodesConnect = new HashMap<>();
-                for (int k = 0; k < nodes.getLength(); k++) {
-                    Element connection = (Element) connections.item(k);
-                    String from = connection.getElementsByTagName(FROM_TAG).item(0).getChildNodes().item(0).getNodeValue();
-                    String to = connection.getElementsByTagName(TO_TAG).item(0).getChildNodes().item(0).getNodeValue();
-                    String eventType = connection.getElementsByTagName(TYPE_TAG).item(0).getChildNodes().item(0).getNodeValue();
-                    GameEvent gameEvent = null;
-                    switch (eventType) {
-                        case "MouseClick":
-                            gameEvent = new GameEvent.MouseClick();
-                            break;
-                        case "KeyPress":
-                            gameEvent = new GameEvent.MouseClick();
-                            break;
+                for (int k = 0; k < connectionsList.getLength(); k++) {
+                    Node temp1 = connectionsList.item(k);
+                    if (temp1.getNodeType() == Node.ELEMENT_NODE) {
+                        Element connection = (Element) temp1;
+                        String from = connection.getElementsByTagName(FROM_TAG).item(0).getChildNodes().item(0).getNodeValue();
+                        String to = connection.getElementsByTagName(TO_TAG).item(0).getChildNodes().item(0).getNodeValue();
+                        String eventType = connection.getElementsByTagName(TYPE_TAG).item(0).getChildNodes().item(0).getNodeValue();
+                        GameEvent gameEvent = null;
+                        switch (eventType) {
+                            case "MouseClick":
+                                gameEvent = new GameEvent.MouseClick();
+                                break;
+                            case "KeyPress":
+                                gameEvent = new GameEvent.MouseClick();
+                                break;
+                        }
+                        nodesConnect.put(new Pair<>(from, to), gameEvent);
                     }
-                    nodesConnect.put(new Pair<>(from, to), gameEvent);
                 }
                 map.put(phaseName, new SinglePhaseData(phaseName, nodesName, nodesPos, nodesConnect));
             }
