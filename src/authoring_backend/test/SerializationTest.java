@@ -2,6 +2,7 @@ import authoring.AuthoringTools;
 import gameObjects.gameObject.GameObjectInstance;
 import grids.PointImpl;
 import groovy.api.Ports;
+import javafx.scene.input.KeyCode;
 import phase.api.GameEvent;
 
 import java.util.ArrayList;
@@ -73,11 +74,11 @@ public class SerializationTest {
 
 
         var graph = phaseDB.createGraph("A").get(null);
-
         var node2 = phaseDB.createPhase("b").get(null);
         var node3 = phaseDB.createPhase("c").get(null);
         var node4 = phaseDB.createPhase("d").get(null);
 
+        var edge21 = phaseDB.createTransition(node2, GameEvent.keyPress(KeyCode.ESCAPE), graph.source());
         var edge12 = phaseDB.createTransition(graph.source(), GameEvent.mouseClick(), node2);
         var edge23 = phaseDB.createTransition(node2, GameEvent.mouseClick(), node3);
         var edge24 = phaseDB.createTransition(node2, GameEvent.mouseClick(), node4);
@@ -86,9 +87,15 @@ public class SerializationTest {
         graph.addNode(node3);
         graph.addNode(node4);
 
+        graph.addEdge(edge21);
         graph.addEdge(edge12);
         graph.addEdge(edge23);
         graph.addEdge(edge24);
+
+        var edge21graph = edge21.guard();
+        var noGuard = factory.rawBlock("GameMethods.$return(true)");
+        edge21graph.addNode(noGuard);
+        edge21graph.addEdge(factory.createEdge(edge21graph.source(), Ports.FLOW_OUT, noGuard));
 
         var edge12graph = edge12.guard();
 
