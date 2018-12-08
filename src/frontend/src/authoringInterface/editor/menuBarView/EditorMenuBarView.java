@@ -73,14 +73,15 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         MenuItem undo = new MenuItem("Undo");
         MenuItem redo = new MenuItem("Redo");
         MenuItem runProject = new MenuItem("Run");
+        MenuItem setPlayer = new MenuItem("Players");
         MenuItem resizeGrid = new MenuItem("Resize Grid");
         MenuItem setBGM = new MenuItem("BGM");
         MenuItem helpDoc = new MenuItem("Help");
         MenuItem about = new MenuItem("About");
 
         save.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
-        newFile.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN));
         resizeGrid.setAccelerator(new KeyCodeCombination(KeyCode.G, KeyCombination.CONTROL_DOWN));
+        helpDoc.setAccelerator(new KeyCodeCombination(KeyCode.H, KeyCombination.CONTROL_DOWN));
 
         newFile.setOnAction(e -> new NewWindowView());
         open.setOnAction(this::handleOpen);
@@ -90,6 +91,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         undo.setOnAction(this::handleUndo);
         redo.setOnAction(this::handleRedo);
         runProject.setOnAction(this::handleRunProject);
+        setPlayer.setOnAction(e -> new PlayerView().showAndwait().ifPresent(result -> result));
         resizeGrid.setOnAction(e -> new ResizeGridView().showAndWait().ifPresent(dimension ->
                 updateGridDimension.accept(dimension.getKey(), dimension.getValue())
         ));
@@ -100,7 +102,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         file.getItems().addAll(newFile, open, save, saveAs, close);
         edit.getItems().addAll(undo, redo);
         run.getItems().addAll(runProject);
-        settings.getItems().addAll(resizeGrid, setBGM);
+        settings.getItems().addAll(resizeGrid, setPlayer, setBGM);
         help.getItems().addAll(helpDoc, about);
 
         menuBar.getMenus().addAll(file, edit, settings, run, help);
@@ -120,7 +122,6 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open project files");
         File file = fileChooser.showOpenDialog(new Stage());
-        // TODO: keyboard warrior, backend do the rest.
         if (file != null) {
             fileName = file.getName();
         }
@@ -152,6 +153,8 @@ public class EditorMenuBarView implements SubView<MenuBar> {
             e.printStackTrace();
         }
     }
+
+
     void handleHelpDoc(ActionEvent event) {}
     void handleAbout(ActionEvent event) {}
 

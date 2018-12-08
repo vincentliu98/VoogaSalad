@@ -57,6 +57,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     private TextField name;
     private TextField value;
     private Button delete;
+    private HBox prop;
 
     EntityEditor(GameObjectsCRUDInterface manager) {
         super(manager);
@@ -67,6 +68,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                             + "-fx-background-color: #343a40;");
         imagePanel = new HBox(10);
         listProp = new GridPane();
+        prop = new HBox();
         listview = new VBox();
         listview.setSpacing(10);
         list = FXCollections.observableHashMap();
@@ -113,10 +115,10 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                         }
                         TreeItem<String> newItem = new TreeItem<>(entityClass.getClassName().getValue());
                         entityClass.getImagePathList().addAll(imagePaths);
+                        ImageView icon = null;
                         for(var key : list.keySet()){
                             entityClass.getPropertiesMap().put(key, list.get(key));
                         }
-                        ImageView icon = null;
                         try {
                             icon = new ImageView(ImageManager.getPreview(entityClass));
                         } catch (PreviewUnavailableException e1) {
@@ -140,6 +142,9 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                             // TODO: proper error handling
                             e1.printStackTrace();
                         }
+                        for(var key : list.keySet()) {
+                            gameObjectInstance.getPropertiesMap().put(key, list.get(key));
+                        }
                         break;
                     case EDIT_TREEITEM:
                         try { ImageManager.removeClassImage(gameObjectClass); } catch (utils.exception.GameObjectClassNotFoundException e1) {}
@@ -157,6 +162,9 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                         } catch (PreviewUnavailableException e1) {
                             // TODO: proper error handling
                             e1.printStackTrace();
+                        }
+                        for(var key : list.keySet()){
+                            gameObjectClass.getPropertiesMap().put(key, list.get(key));
                         }
                         Coordinates.setWidthAndHeight(icon2, ICON_WIDTH, ICON_HEIGHT);
                         treeItem.setValue(nameField.getText());
@@ -249,7 +257,6 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     }
 
     private void manageList(String key, String value) {
-        HBox prop = new HBox();
         delete = new Button("X");
         delete.setStyle("-fx-font-size: 8px;"
                 + "-fx-text-fill: white;"
