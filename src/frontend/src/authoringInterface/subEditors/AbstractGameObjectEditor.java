@@ -176,7 +176,23 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
         ((Stage) rootPane.getScene().getWindow()).close();
     }
 
-    protected int outputPositiveInteger(TextField intInput) {
-
+    /**
+     * This method outputs a positive integer from a TextField input and throws appropriate errors.
+     *
+     * @param intInput: A TextField input.
+     * @return An int representing the legal output.
+     * @throws IllegalGeometryException
+     */
+    protected int outputPositiveInteger(TextField intInput) throws IllegalGeometryException {
+        int ret;
+        try {
+            ret = Integer.parseInt(intInput.getText());
+        } catch (NumberFormatException e) {
+            throw new IllegalGeometryException(String.format("%s is not a positive integer", intInput.getText()), e);
+        }
+        if (ret == 0) {
+            throw new IllegalGeometryException(String.format("%s is not a positive integer", intInput.getText()));
+        }
+        return ret;
     }
 }
