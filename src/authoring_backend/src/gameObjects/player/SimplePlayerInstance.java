@@ -1,5 +1,6 @@
 package gameObjects.player;
 
+import authoringUtils.exception.InvalidOperationException;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
@@ -8,25 +9,30 @@ import javafx.collections.ObservableSet;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class SimplePlayerInstance implements PlayerInstance {
     private ReadOnlyStringWrapper className;
     private SimpleStringProperty instanceName;
     private ReadOnlyIntegerWrapper instanceId;
+
     private SimpleStringProperty imagePath;
     private ObservableMap<String, String> propertiesMap;
     private ObservableSet<Integer> entitiesSet;
-//    Supplier<PlayerClass> getPlayerClassFunc;
+    private Supplier<PlayerClass> getPlayerClassFunc;
 
 
-    public SimplePlayerInstance(
-            String className) {
-        this.className = new ReadOnlyStringWrapper(className);
+
+    public SimplePlayerInstance(String className,
+                                SimpleStringProperty imagePath,
+                                ObservableMap<String, String> properties,
+                                Supplier<PlayerClass> getPlayerClassFunc) {
+        this.className = new ReadOnlyStringWrapper();
+        this.className.setValue(className);
         this.instanceName = new SimpleStringProperty(className);
-        this.imagePath = new SimpleStringProperty();
-        this.propertiesMap = FXCollections.observableHashMap();
-        this.entitiesSet = FXCollections.observableSet();
-//        this.getPlayerClassFunc = getPlayerClassFunc;
+        this.imagePath = imagePath;
+        this.propertiesMap = properties;
+        this.getPlayerClassFunc = getPlayerClassFunc;
         instanceId = new ReadOnlyIntegerWrapper();
     }
 
@@ -42,6 +48,11 @@ public class SimplePlayerInstance implements PlayerInstance {
 
     @Override
     public ReadOnlyStringProperty getClassName() { return className; }
+
+    @Override
+    public void setClassName(String name) throws InvalidOperationException {
+        className.setValue(name);
+    }
 
     @Override
     public SimpleStringProperty getInstanceName() {
@@ -97,9 +108,19 @@ public class SimplePlayerInstance implements PlayerInstance {
         entitiesSet.clear();
     }
 
-//    @Override
-//    public PlayerClass getGameObjectClass() {
-//        return getPlayerClassFunc.get();
-//    }
+    @Override
+    public SimpleStringProperty getImagePath() {
+        return imagePath;
+    }
+
+    @Override
+    public void setImagePath(String newImagePath) {
+        imagePath.setValue(newImagePath);
+    }
+
+    @Override
+    public PlayerClass getGameObjectClass() {
+        return getPlayerClassFunc.get();
+    }
 
 }
