@@ -2,7 +2,9 @@ package gameObjects.entity;
 
 import authoringUtils.exception.*;
 import gameObjects.gameObject.*;
+import grids.Point;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
 
 public interface EntityClass extends GameObjectClass {
@@ -11,7 +13,8 @@ public interface EntityClass extends GameObjectClass {
 
     void setMovable(boolean move);
 
-    EntityInstance createInstance(int tileId, int playerID) throws InvalidGameObjectInstanceException, GameObjectTypeException, InvalidIdException;
+    EntityInstance createInstance(int playerId, Point point)
+            throws InvalidGameObjectInstanceException, GameObjectTypeException, InvalidIdException;
 
     /**
      * This method adds the image path to the GameObject Class and to all instances of the class.
@@ -49,4 +52,13 @@ public interface EntityClass extends GameObjectClass {
     default GameObjectType getType() {
         return GameObjectType.ENTITY;
     }
+
+    SimpleIntegerProperty getHeight();
+
+    SimpleIntegerProperty getWidth();
+
+
+    void setHeight(int newHeight);
+
+    void setWidth(int newWidth);
 }

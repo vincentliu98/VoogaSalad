@@ -9,6 +9,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,10 +34,13 @@ public class Tile extends PropertyHolder<Tile> implements GameObject, EventHandl
      *  Fills out the transient parts
      */
     public void setupView() {
+        myImages = new ArrayList<>();
+        for (String filepath : myImagePaths){
+            myImages.add(new Image(filepath));
+        }
         myImageView = new ImageView();
         myImageView.setPreserveRatio(true);
         myImageView.setOnMouseClicked(this);
-
         imgIndex = new SimpleIntegerProperty(-1);
         imgIndex.addListener((e, oldVal, newVal) -> myImageView.setImage(myImages.get(newVal.intValue())));
     }
@@ -83,6 +87,12 @@ public class Tile extends PropertyHolder<Tile> implements GameObject, EventHandl
 
     @Override
     public double getY() { return myCoord.getY(); }
+
+    @Override
+    public double getWidth() { return myWidth; }
+
+    @Override
+    public double getHeight() { return myHeight; }
 
     @Override
     public void handle(MouseEvent event) {

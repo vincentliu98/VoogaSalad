@@ -5,26 +5,14 @@ import authoringInterface.customEvent.UpdateStatusEventListener;
 import authoringInterface.subEditors.*;
 import authoringUtils.exception.GameObjectClassNotFoundException;
 import authoringUtils.exception.GameObjectTypeException;
-import authoringUtils.exception.InvalidGameObjectInstanceException;
-import authoringUtils.exception.InvalidIdException;
 import gameObjects.crud.GameObjectsCRUDInterface;
-import gameObjects.entity.EntityClass;
-import gameObjects.entity.EntityInstance;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
-import gameObjects.gameObject.GameObjectType;
-import gameObjects.tile.TileClass;
-import gameObjects.tile.TileInstance;
 import grids.PointImpl;
-import javafx.animation.FadeTransition;
-import javafx.beans.InvalidationListener;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TreeCell;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
@@ -34,13 +22,13 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import utils.exception.PreviewUnavailableException;
-import utils.imageManipulation.Coordinates;
+import utils.exception.UnremovableNodeException;
 import utils.imageManipulation.ImageManager;
+import utils.imageManipulation.JavaFxOperation;
 import utils.nodeInstance.NodeInstanceController;
 import utils.exception.NodeNotFoundException;
 import utils.simpleAnimation.SingleNodeFade;
 
-import java.security.Key;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,7 +77,7 @@ public class EditGridView implements SubView<ScrollPane> {
         }
         gridScrollView.setGridLinesVisible(true);
         gridScrollView.add(batchMode, 0, 0, 3, 2);
-        SingleNodeFade.getNodeFadeOut(batchMode, 10000).playFromStart();
+        SingleNodeFade.getNodeFadeOut(batchMode, 20000).playFromStart();
         scrollPane = new ScrollPane(gridScrollView);
         scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, this::setUpControl);
         scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, this::setUpShift);
@@ -165,16 +153,20 @@ public class EditGridView implements SubView<ScrollPane> {
             Text instanceName = new Text(instance.getInstanceName().getValue());
             Text className = new Text(instance.getClassName().getValue());
             Button edit = new Button("Edit");
+            Button delete = new Button("Delete");
+            GridPane control = new GridPane();
+            control.addColumn(0, edit, delete);
             instanceID.setOnMouseClicked(e -> handleDoubleClick(e, node));
             instanceName.setOnMouseClicked(e -> handleDoubleClick(e, node));
             className.setOnMouseClicked(e -> handleDoubleClick(e, node));
             edit.setOnMouseClicked(e -> handleNodeEditing(node));
+            delete.setOnMouseClicked(e -> handleNodeDeleting(node));
             listView.addRow(
                     listView.getRowCount(),
                     instanceID,
                     instanceName,
                     className,
-                    edit
+                    control
             );
             listView.getChildrenUnmodifiable().forEach(node1 -> GridPane.setHgrow(node1, Priority.ALWAYS));
         });
@@ -209,14 +201,36 @@ public class EditGridView implements SubView<ScrollPane> {
         Stage dialogStage = new Stage();
         AbstractGameObjectEditor editor = null;
         try {
+            assert userObject != null;
             editor = EditorFactory.makeEditor(userObject.getType(), gameObjectManager);
         } catch (MissingEditorForTypeException e) {
             // TODO
             e.printStackTrace();
         }
-        editor.editNode(targetNode, nodeInstanceController);
-        dialogStage.setScene(new Scene(editor.getView(), 500, 500));
+        assert editor != null;
+        editor.editNode(targetNode, nodeInstanceController, gridScrollView);
+        dialogStage.setScene(new Scene(editor.getView(), 500, 1000));
         dialogStage.show();
+    }
+
+    /**
+     * This method deletes the target node from grid and the whole editor.
+     *
+     * @param targetNode: A JavaFx Node that will be deleted.
+     */
+    private void handleNodeDeleting(Node targetNode) {
+        try {
+            JavaFxOperation.removeFromParent(targetNode);
+        } catch (UnremovableNodeException e) {
+            // TODO: proper error handling
+            e.printStackTrace();
+        }
+        try {
+            nodeInstanceController.removeNode(targetNode);
+        } catch (NodeNotFoundException e) {
+            // TODO: proper error handling
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -246,6 +260,25 @@ public class EditGridView implements SubView<ScrollPane> {
             cell.setBackground(new Background(new BackgroundFill(hoveringFill, CornerRadii.EMPTY, Insets.EMPTY)));
         }
         dragEvent.consume();
+    }
+
+    /**
+     * This method sets up a right click handler on a Node that allows the user to edit or delete this node.
+     *
+     * @param event: A MouseEvent that is RightClick.
+     * @param node: A JavaFx Node where the right-click context menu will be set up.
+     */
+    private void setUpRightClickMenu(MouseEvent event, Node node) {
+        if (event.getButton() != MouseButton.SECONDARY) {
+            return;
+        }
+        ContextMenu contextMenu = new ContextMenu();
+        MenuItem edit = new MenuItem("Edit this instance");
+        MenuItem delete = new MenuItem("Delete this instance");
+        edit.setOnAction(e -> handleNodeEditing(node));
+        delete.setOnAction(e -> handleNodeDeleting(node));
+        contextMenu.getItems().addAll(edit, delete);
+        contextMenu.show(node, event.getScreenX(), event.getScreenY());
     }
 
     /**
@@ -279,38 +312,22 @@ public class EditGridView implements SubView<ScrollPane> {
         nodeOnGrid.setFitHeight(NODE_HEIGHT);
         nodeOnGrid.setFitWidth(NODE_WIDTH);
         ImageView finalNodeOnGrid = nodeOnGrid;
-        nodeOnGrid.setOnMouseClicked(e -> handleDoubleClick(e, finalNodeOnGrid));
-        cell.getChildren().add(nodeOnGrid);
-        switch (gameObjectClass.getType()) {
-            case ENTITY:
-                // TODO: solve the TileID thing, and player ID thing
-                EntityInstance entityInstance = null;
-                try {
-                    entityInstance = ((EntityClass) gameObjectClass).createInstance(0, gameObjectManager.getDefaultPlayerID());
-                } catch (InvalidGameObjectInstanceException e) {
-                    e.printStackTrace();
-                } catch (GameObjectTypeException e) {
-                    e.printStackTrace();
-                } catch (InvalidIdException e) {
-                    e.printStackTrace();
-                }
-                nodeInstanceController.addLink(nodeOnGrid, entityInstance);
-                break;
-            case SOUND:
-                // TODO
-                break;
-            case TILE:
-                // TODO: solve point
-                TileInstance tileInstance = null;
-                try {
-                    tileInstance = ((TileClass) gameObjectClass).createInstance(new PointImpl(GridPane.getColumnIndex(cell), GridPane.getRowIndex(cell)));
-                } catch (GameObjectTypeException | InvalidIdException e) {
-                    // TODO
-                    e.printStackTrace();
-                }
-                nodeInstanceController.addLink(nodeOnGrid, tileInstance);
-                break;
+        cell.getChildren().add(finalNodeOnGrid);
+        GameObjectInstance gameObjectInstance = null;
+        try {
+            gameObjectInstance = gameObjectManager.createGameObjectInstance(gameObjectClass, gameObjectManager.getDefaultPlayerID(), new PointImpl(GridPane.getColumnIndex(cell), GridPane.getRowIndex(cell)));
+        } catch (GameObjectTypeException e) {
+            // TODO: proper error handling
+            e.printStackTrace();
         }
+        nodeInstanceController.addLink(finalNodeOnGrid, gameObjectInstance);
+        nodeOnGrid.setOnMouseClicked(e -> {
+            if (e.getButton() == MouseButton.SECONDARY) {
+                setUpRightClickMenu(e, finalNodeOnGrid);
+            } else {
+                handleDoubleClick(e, finalNodeOnGrid);
+            }
+        });
     }
 
     /**

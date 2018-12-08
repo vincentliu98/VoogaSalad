@@ -5,9 +5,11 @@ import authoringUtils.exception.DuplicateGameObjectClassException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.entity.SimpleEntityClass;
 import gameObjects.gameObject.GameObjectClass;
+import gameObjects.sound.SimpleSoundClass;
 import gameObjects.tile.SimpleTileClass;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
+import utils.nodeInstance.NodeInstanceController;
 
 import java.util.*;
 
@@ -19,10 +21,12 @@ import java.util.*;
 public class SideView implements SubView<StackPane> {
     private StackPane sidePane;
     private GameObjectsCRUDInterface gameObjectsManager;
+    private NodeInstanceController nodeInstanceController;
     private static final String ROOT_NAME = "Game Objects";
 
-    public SideView(GameObjectsCRUDInterface manager) {
+    public SideView(GameObjectsCRUDInterface manager, NodeInstanceController controller) {
         gameObjectsManager = manager;
+        nodeInstanceController = controller;
         sidePane = new StackPane();
         TreeItem<String> rootNode = new TreeItem<>(ROOT_NAME);
         try {
@@ -32,38 +36,27 @@ public class SideView implements SubView<StackPane> {
             e.printStackTrace();
         }
         rootNode.setExpanded(true);
+        try {
+            gameObjectsManager.createCategoryClass("ENTITY");
+            gameObjectsManager.createCategoryClass("TILE");
+            gameObjectsManager.createCategoryClass("SOUND");
+            gameObjectsManager.createCategoryClass("PLAYER");
+        } catch (DuplicateGameObjectClassException e) {
+            // TODO: proper error handling
+            e.printStackTrace();
+        }
         List<GameObjectClass> defaultList = new ArrayList<>(Arrays.asList(
                 new SimpleEntityClass("O"),
                 new SimpleEntityClass("X"),
-                new SimpleTileClass("Default Grid")
-                // TODO: new SimpleSoundClass("Sound file")
+                new SimpleTileClass("Default Grid"),
+                new SimpleSoundClass("Sound file")
         ));
         for (GameObjectClass item : defaultList) {
-            switch (item.getType()) {
-                case CATEGORY:
-                    try {
-                        gameObjectsManager.createCategoryClass(item.getClassName().getValue());
-                    } catch (DuplicateGameObjectClassException e) {
-                        // TODO
-                        e.printStackTrace();
-                    }
-                    break;
-                case ENTITY:
-                    try {
-                        gameObjectsManager.createEntityClass(item.getClassName().getValue());
-                    } catch (DuplicateGameObjectClassException e) {
-                        // TODO
-                        e.printStackTrace();
-                    }
-                    break;
-                case TILE:
-                    try {
-                        gameObjectsManager.createTileClass(item.getClassName().getValue());
-                    } catch (DuplicateGameObjectClassException e) {
-                        // TODO
-                        e.printStackTrace();
-                    }
-                    break;
+            try {
+                gameObjectsManager.createGameObjectClass(item.getType(), item.getClassName().getValue());
+            } catch (DuplicateGameObjectClassException e) {
+                // TODO: proper error handling
+                e.printStackTrace();
             }
             TreeItem<String> objectLeaf = new TreeItem<>(item.getClassName().getValue());
             boolean found = false;
@@ -82,7 +75,7 @@ public class SideView implements SubView<StackPane> {
         }
         TreeView<String> treeView = new TreeView<>(rootNode);
         treeView.setEditable(true);
-        treeView.setCellFactory(e -> new CustomTreeCellImpl(gameObjectsManager));
+        treeView.setCellFactory(e -> new CustomTreeCellImpl(gameObjectsManager, nodeInstanceController));
         sidePane.getChildren().add(treeView);
         treeView.getStyleClass().add("myTree");
         sidePane.getStyleClass().add("mySide");

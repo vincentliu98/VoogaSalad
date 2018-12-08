@@ -12,6 +12,8 @@ public class SimpleTileInstance implements TileInstance {
     private SimpleStringProperty instanceName;
     private ReadOnlyIntegerWrapper instanceId;
     private SimpleObjectProperty<Point> coord;
+    private SimpleIntegerProperty height;
+    private SimpleIntegerProperty width;
     private ObservableList<String> imagePathList;
     private String imageSelector;
     private ObservableMap<String, String> propertiesMap;
@@ -31,6 +33,8 @@ public class SimpleTileInstance implements TileInstance {
         this.imagePathList = imagePathList;
         this.propertiesMap = properties;
         this.getTileClassFunc = getTileClassFunc;
+        this.height = new SimpleIntegerProperty();
+        this.width = new SimpleIntegerProperty();
         instanceId = new ReadOnlyIntegerWrapper();
     }
 
@@ -50,13 +54,32 @@ public class SimpleTileInstance implements TileInstance {
         return className.getReadOnlyProperty();
     }
 
+    @Override
     public void setClassName(String name) {
         className.setValue(name);
     }
 
-//    public Consumer<GameObjectInstance> getReturnInstanceIdFunc() {
-//        return returnInstanceIdFunc;
-//    }
+
+    @Override
+    public SimpleIntegerProperty getHeight() {
+        return height;
+    }
+
+    @Override
+    public SimpleIntegerProperty getWidth() {
+        return width;
+    }
+
+    @Override
+    public void setHeight(int newHeight) {
+        height.setValue(newHeight);
+    }
+
+    @Override
+    public void setWidth(int newWidth) {
+        height.setValue(newWidth);
+    }
+
 
     @Override
     public SimpleStringProperty getInstanceName() {
@@ -125,6 +148,11 @@ public class SimpleTileInstance implements TileInstance {
 
     @Override
     public Point getCoord() { return coord.get(); }
+
+    @Override
+    public void setCoord(Point coord) {
+        this.coord.set(coord);
+    }
 
     @Override
     public TileClass getGameObjectClass() {

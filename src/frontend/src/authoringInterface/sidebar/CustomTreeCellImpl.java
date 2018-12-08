@@ -2,18 +2,22 @@ package authoringInterface.sidebar;
 
 import authoringInterface.subEditors.*;
 import authoringUtils.exception.GameObjectClassNotFoundException;
+import authoringUtils.exception.GameObjectInstanceNotFoundException;
 import authoringUtils.exception.GameObjectTypeException;
 import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
-import gameObjects.entity.EntityClass;
 import gameObjects.gameObject.GameObjectClass;
+import gameObjects.gameObject.GameObjectType;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.input.*;
 import javafx.stage.Stage;
 import utils.exception.PreviewUnavailableException;
+import utils.exception.UnremovableNodeException;
 import utils.imageManipulation.ImageManager;
+import utils.imageManipulation.JavaFxOperation;
+import utils.nodeInstance.NodeInstanceController;
 
 /**
  * This class organizes the cell factory call back methods into a nicer format.
@@ -25,9 +29,11 @@ public class CustomTreeCellImpl extends TreeCell<String> {
     private ContextMenu addMenu = new ContextMenu();
     private ContextMenu editMenu = new ContextMenu();
     private GameObjectsCRUDInterface objectManager;
+    private NodeInstanceController nodeInstanceController;
 
-    public CustomTreeCellImpl(GameObjectsCRUDInterface manager) {
+    public CustomTreeCellImpl(GameObjectsCRUDInterface manager, NodeInstanceController controller) {
         objectManager = manager;
+        nodeInstanceController = controller;
         MenuItem addMenuItem = new MenuItem("Add an entry");
         addMenuItem.setOnAction(e -> {
             try {
@@ -82,11 +88,37 @@ public class CustomTreeCellImpl extends TreeCell<String> {
                 // TODO
                 e1.printStackTrace();
             }
-            dialogStage.setScene(new Scene(editor.getView(), 500, 500));
+            dialogStage.setScene(new Scene(editor.getView(), 500, 1000));
             dialogStage.show();
             editor.editTreeItem(getTreeItem(), objectClass);
         });
         deleteMenuItem.setOnAction(e -> {
+            try {
+                objectManager.getGameObjectClass(getItem()).getAllInstances().forEach(gameObjectInstance -> {
+                    Node node = null;
+                    try {
+                        node = nodeInstanceController.getNode(gameObjectInstance);
+                    } catch (GameObjectInstanceNotFoundException e1) {
+                        // TODO: proper error handling
+                        e1.printStackTrace();
+                    }
+                    try {
+                        JavaFxOperation.removeFromParent(node);
+                    } catch (UnremovableNodeException e1) {
+                        // TODO: proper error handling
+                        e1.printStackTrace();
+                    }
+                    try {
+                        nodeInstanceController.removeGameObjectInstance(gameObjectInstance);
+                    } catch (GameObjectInstanceNotFoundException e1) {
+                        // TODO: proper error handling
+                        e1.printStackTrace();
+                    }
+                });
+            } catch (GameObjectClassNotFoundException e1) {
+                // TODO: proper error handling
+                e1.printStackTrace();
+            }
             objectManager.deleteGameObjectClass(getItem());
             getTreeItem().getParent().getChildren().remove(getTreeItem());
         });
@@ -127,11 +159,13 @@ public class CustomTreeCellImpl extends TreeCell<String> {
             } else {
                 setText(getString());
                 setGraphic(getTreeItem().getGraphic());
-                if (!getTreeItem().isLeaf()) {
-                    setContextMenu(addMenu);
-                } else {
-                    setContextMenu(editMenu);
-                }
+                try {
+                    if (objectManager.getGameObjectClass(getString()).getType() == GameObjectType.CATEGORY) {
+                        setContextMenu(addMenu);
+                    } else {
+                        setContextMenu(editMenu);
+                    }
+                } catch (GameObjectClassNotFoundException ignored) {}
             }
         }
     }

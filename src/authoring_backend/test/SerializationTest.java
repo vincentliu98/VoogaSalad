@@ -27,6 +27,8 @@ public class SerializationTest {
         }
 
         var swordmanClass = db.createEntityClass("swordman");
+        swordmanClass.setWidth(1);
+        swordmanClass.setHeight(1);
         swordmanClass.getPropertiesMap().put("hp", "5");
         swordmanClass.getPropertiesMap().put("attackRange", "1");
         swordmanClass.getPropertiesMap().put("dmg", "3");
@@ -38,6 +40,8 @@ public class SerializationTest {
         swordmanClass.setImageSelector("$return = $this.props.hp-1");
 
         var bowmanClass = db.createEntityClass("bowman");
+        bowmanClass.setWidth(2);
+        bowmanClass.setHeight(2);
         bowmanClass.getPropertiesMap().put("hp", "5");
         bowmanClass.getPropertiesMap().put("attackRange", "3");
         bowmanClass.getPropertiesMap().put("dmg", "1");
@@ -48,10 +52,10 @@ public class SerializationTest {
         bowmanClass.addImagePath("bowman5.png");
         bowmanClass.setImageSelector("$return = $this.props.hp-1");
 
-        swordmanClass.createInstance(boxes.get(0).getInstanceId().get(), playerA.getInstanceId().get());
-        swordmanClass.createInstance(boxes.get(1).getInstanceId().get(), playerA.getInstanceId().get());
-        bowmanClass.createInstance(boxes.get(23).getInstanceId().get(), playerB.getInstanceId().get());
-        bowmanClass.createInstance(boxes.get(24).getInstanceId().get(), playerB.getInstanceId().get());
+        swordmanClass.createInstance(playerA.getInstanceId().get(), new PointImpl(0,0));
+        swordmanClass.createInstance(playerA.getInstanceId().get(), new PointImpl(0,1));
+        bowmanClass.createInstance(playerB.getInstanceId().get(), new PointImpl(1, 3));
+        bowmanClass.createInstance(playerB.getInstanceId().get(), new PointImpl(3, 3));
 
         // -------------- PHASE ------------- //
 
@@ -117,12 +121,12 @@ public class SerializationTest {
         edge12graph.addEdge(factory.createEdge(n10, Ports.ASSIGN_RHS, n11));
 
         var edge23graph = edge23.guard();
-        var n23 = factory.rawBlock("if(GameMethods.isTile($clicked) && GameMethods.distance($clicked, selected) <= 1 && GameMethods.hasNoEntities($clicked)) { $return = true } else { $return = false }");
+        var n23 = factory.rawBlock("$return = GameMethods.isTile($clicked) && GameMethods.distance($clicked, selected) <= 1");
         edge23graph.addNode(n23);
         edge23graph.addEdge(factory.createEdge(edge23graph.source(), Ports.FLOW_OUT, n23));
 
         var edge24graph = edge24.guard();
-        var n24 = factory.rawBlock("if(GameMethods.isEntity($clicked) && !GameMethods.getCurrentPlayer().isMyEntity($clicked) && GameMethods.distance($clicked, selected) <= selected.props.attackRange ) { $return = true } else { $return = false }");
+        var n24 = factory.rawBlock("$return = GameMethods.isEntity($clicked) && !GameMethods.getCurrentPlayer().isMyEntity($clicked) && GameMethods.distance($clicked, selected) <= selected.props.attackRange");
         edge24graph.addNode(n24);
         edge24graph.addEdge(factory.createEdge(edge24graph.source(), Ports.FLOW_OUT, n24));
 

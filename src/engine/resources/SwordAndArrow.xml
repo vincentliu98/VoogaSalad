@@ -3,11 +3,6 @@
 <game>
     <gameplay.Node>
         <myPhaseID>65</myPhaseID>
-        <myID>65</myID>
-        <myExecution></myExecution>
-    </gameplay.Node>
-    <gameplay.Node>
-        <myPhaseID>65</myPhaseID>
         <myID>99</myID>
         <myExecution>GameMethods.moveEntity(selected, $clicked)
             GameMethods.toNextPlayer()
@@ -15,30 +10,42 @@
     </gameplay.Node>
     <gameplay.Node>
         <myPhaseID>65</myPhaseID>
-        <myID>100</myID>
-        <myExecution>$clicked.props.hp = $clicked.props.hp - selected.props.dmg
-            if(GameMethods.getProperty($clicked, 'hp') &lt;= 0) { GameMethods.removeEntity($clicked) }
-            GameMethods.toNextPlayer()
-            GameMethods.goTo(&apos;A&apos;.hashCode())</myExecution>
+        <myID>65</myID>
+        <myExecution></myExecution>
     </gameplay.Node>
     <gameplay.Node>
         <myPhaseID>65</myPhaseID>
         <myID>98</myID>
         <myExecution>selected = $clicked</myExecution>
     </gameplay.Node>
+    <gameplay.Node>
+        <myPhaseID>65</myPhaseID>
+        <myID>100</myID>
+        <myExecution>$clicked.props.hp = $clicked.props.hp - selected.props.dmg
+            if($clicked.props.hp &lt;= 0) { GameMethods.removeEntity($clicked) }
+            GameMethods.toNextPlayer()
+            GameMethods.goTo(&apos;A&apos;.hashCode())</myExecution>
+    </gameplay.Node>
     <gameplay.Edge>
         <myPhaseID>65</myPhaseID>
         <myStartNodeID>98</myStartNodeID>
         <myEndNodeID>99</myEndNodeID>
         <myTrigger class="phase.api.GameEvent$MouseClick"/>
-        <myGuard>$return = GameMethods.isTile($clicked) &amp;&amp; GameMethods.distance($clicked, selected) &lt;= 1 &amp;&amp; GameMethods.hasNoEntities($clicked)</myGuard>
+        <myGuard>$return = GameMethods.isTile($clicked) &amp;&amp; GameMethods.distance($clicked, selected) &lt;= 1</myGuard>
     </gameplay.Edge>
     <gameplay.Edge>
         <myPhaseID>65</myPhaseID>
         <myStartNodeID>65</myStartNodeID>
         <myEndNodeID>98</myEndNodeID>
         <myTrigger class="phase.api.GameEvent$MouseClick"/>
-        <myGuard>$return = (GameMethods.isEntity($clicked)) &amp;&amp; (GameMethods.getCurrentPlayer().isMyEntity($clicked))
+        <myGuard>if(((GameMethods.isEntity($clicked)) &amp;&amp; (GameMethods.getCurrentPlayer().isMyEntity($clicked)))) {
+            $return = true
+
+            }
+            else {
+            $return = false
+
+            }
         </myGuard>
     </gameplay.Edge>
     <gameplay.Edge>
@@ -46,17 +53,17 @@
         <myStartNodeID>98</myStartNodeID>
         <myEndNodeID>100</myEndNodeID>
         <myTrigger class="phase.api.GameEvent$MouseClick"/>
-        <myGuard>if(GameMethods.isEntity($clicked) &amp;&amp; !GameMethods.getCurrentPlayer().isMyEntity($clicked) &amp;&amp; GameMethods.distance($clicked, selected) &lt;= selected.props.attackRange ) { $return = true } else { $return = false }</myGuard>
+        <myGuard>$return = GameMethods.isEntity($clicked) &amp;&amp; !GameMethods.getCurrentPlayer().isMyEntity($clicked) &amp;&amp; GameMethods.distance($clicked, selected) &lt;= selected.props.attackRange</myGuard>
     </gameplay.Edge>
     <gameplay.Phase>
         <myID>65</myID>
         <myStartNodeID>65</myStartNodeID>
         <myCurrentNodeID>65</myCurrentNodeID>
         <myNodeIDs>
-            <int>65</int>
             <int>99</int>
-            <int>100</int>
+            <int>65</int>
             <int>98</int>
+            <int>100</int>
         </myNodeIDs>
     </gameplay.Phase>
     <grid-width>5</grid-width>
@@ -77,6 +84,8 @@
                 <int>3</int>
             </entry>
         </props>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
         <myImagePaths>
             <string>swordman1.png</string>
             <string>swordman2.png</string>
@@ -102,6 +111,8 @@
                 <int>1</int>
             </entry>
         </props>
+        <myWidth>2</myWidth>
+        <myHeight>2</myHeight>
         <myImagePaths>
             <string>bowman1.png</string>
             <string>bowman2.png</string>
@@ -112,13 +123,12 @@
         <myImageSelector>$return = $this.props.hp-1</myImageSelector>
     </gameplay.EntityPrototype>
     <gameplay.Entity>
-        <myID>28</myID>
-        <name>swordman</name>
-        <tileID>3</tileID>
+        <myID>31</myID>
+        <name>bowman</name>
         <props>
             <entry>
                 <string>attackRange</string>
-                <int>1</int>
+                <int>3</int>
             </entry>
             <entry>
                 <string>hp</string>
@@ -126,22 +136,27 @@
             </entry>
             <entry>
                 <string>dmg</string>
-                <int>3</int>
+                <int>1</int>
             </entry>
         </props>
+        <myWidth>2</myWidth>
+        <myHeight>2</myHeight>
+        <myCoord>
+            <x>1</x>
+            <y>3</y>
+        </myCoord>
         <myImagePaths>
-            <string>swordman1.png</string>
-            <string>swordman2.png</string>
-            <string>swordman3.png</string>
-            <string>swordman4.png</string>
-            <string>swordman5.png</string>
+            <string>bowman1.png</string>
+            <string>bowman2.png</string>
+            <string>bowman3.png</string>
+            <string>bowman4.png</string>
+            <string>bowman5.png</string>
         </myImagePaths>
         <myImageSelector>$return = $this.props.hp-1</myImageSelector>
     </gameplay.Entity>
     <gameplay.Entity>
         <myID>29</myID>
         <name>swordman</name>
-        <tileID>4</tileID>
         <props>
             <entry>
                 <string>attackRange</string>
@@ -156,6 +171,12 @@
                 <int>3</int>
             </entry>
         </props>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myCoord>
+            <x>0</x>
+            <y>0</y>
+        </myCoord>
         <myImagePaths>
             <string>swordman1.png</string>
             <string>swordman2.png</string>
@@ -167,12 +188,11 @@
     </gameplay.Entity>
     <gameplay.Entity>
         <myID>30</myID>
-        <name>bowman</name>
-        <tileID>26</tileID>
+        <name>swordman</name>
         <props>
             <entry>
                 <string>attackRange</string>
-                <int>3</int>
+                <int>1</int>
             </entry>
             <entry>
                 <string>hp</string>
@@ -180,69 +200,65 @@
             </entry>
             <entry>
                 <string>dmg</string>
-                <int>1</int>
-            </entry>
-        </props>
-        <myImagePaths>
-            <string>bowman1.png</string>
-            <string>bowman2.png</string>
-            <string>bowman3.png</string>
-            <string>bowman4.png</string>
-            <string>bowman5.png</string>
-        </myImagePaths>
-        <myImageSelector>$return = $this.props.hp-1</myImageSelector>
-    </gameplay.Entity>
-    <gameplay.Entity>
-        <myID>31</myID>
-        <name>bowman</name>
-        <tileID>27</tileID>
-        <props>
-            <entry>
-                <string>attackRange</string>
                 <int>3</int>
             </entry>
-            <entry>
-                <string>hp</string>
-                <int>5</int>
-            </entry>
-            <entry>
-                <string>dmg</string>
-                <int>1</int>
-            </entry>
         </props>
-        <myImagePaths>
-            <string>bowman1.png</string>
-            <string>bowman2.png</string>
-            <string>bowman3.png</string>
-            <string>bowman4.png</string>
-            <string>bowman5.png</string>
-        </myImagePaths>
-        <myImageSelector>$return = $this.props.hp-1</myImageSelector>
-    </gameplay.Entity>
-    <gameplay.Tile>
-        <myID>3</myID>
-        <name>box</name>
-        <props/>
-        <myWidth>1</myWidth>
-        <myHeight>1</myHeight>
-        <myCoord>
-            <x>0</x>
-            <y>0</y>
-        </myCoord>
-        <myImagePaths>
-            <string>square.png</string>
-        </myImagePaths>
-        <myImageSelector></myImageSelector>
-    </gameplay.Tile>
-    <gameplay.Tile>
-        <myID>4</myID>
-        <name>box</name>
-        <props/>
         <myWidth>1</myWidth>
         <myHeight>1</myHeight>
         <myCoord>
             <x>0</x>
             <y>1</y>
+        </myCoord>
+        <myImagePaths>
+            <string>swordman1.png</string>
+            <string>swordman2.png</string>
+            <string>swordman3.png</string>
+            <string>swordman4.png</string>
+            <string>swordman5.png</string>
+        </myImagePaths>
+        <myImageSelector>$return = $this.props.hp-1</myImageSelector>
+    </gameplay.Entity>
+    <gameplay.Entity>
+        <myID>32</myID>
+        <name>bowman</name>
+        <props>
+            <entry>
+                <string>attackRange</string>
+                <int>3</int>
+            </entry>
+            <entry>
+                <string>hp</string>
+                <int>5</int>
+            </entry>
+            <entry>
+                <string>dmg</string>
+                <int>1</int>
+            </entry>
+        </props>
+        <myWidth>2</myWidth>
+        <myHeight>2</myHeight>
+        <myCoord>
+            <x>3</x>
+            <y>3</y>
+        </myCoord>
+        <myImagePaths>
+            <string>bowman1.png</string>
+            <string>bowman2.png</string>
+            <string>bowman3.png</string>
+            <string>bowman4.png</string>
+            <string>bowman5.png</string>
+        </myImagePaths>
+        <myImageSelector>$return = $this.props.hp-1</myImageSelector>
+    </gameplay.Entity>
+    <gameplay.Tile>
+        <myID>7</myID>
+        <name>box</name>
+        <props/>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myCoord>
+            <x>0</x>
+            <y>3</y>
         </myCoord>
         <myImagePaths>
             <string>square.png</string>
@@ -257,216 +273,6 @@
         <myHeight>1</myHeight>
         <myCoord>
             <x>0</x>
-            <y>2</y>
-        </myCoord>
-        <myImagePaths>
-            <string>square.png</string>
-        </myImagePaths>
-        <myImageSelector></myImageSelector>
-    </gameplay.Tile>
-    <gameplay.Tile>
-        <myID>6</myID>
-        <name>box</name>
-        <props/>
-        <myWidth>1</myWidth>
-        <myHeight>1</myHeight>
-        <myCoord>
-            <x>0</x>
-            <y>3</y>
-        </myCoord>
-        <myImagePaths>
-            <string>square.png</string>
-        </myImagePaths>
-        <myImageSelector></myImageSelector>
-    </gameplay.Tile>
-    <gameplay.Tile>
-        <myID>7</myID>
-        <name>box</name>
-        <props/>
-        <myWidth>1</myWidth>
-        <myHeight>1</myHeight>
-        <myCoord>
-            <x>0</x>
-            <y>4</y>
-        </myCoord>
-        <myImagePaths>
-            <string>square.png</string>
-        </myImagePaths>
-        <myImageSelector></myImageSelector>
-    </gameplay.Tile>
-    <gameplay.Tile>
-        <myID>8</myID>
-        <name>box</name>
-        <props/>
-        <myWidth>1</myWidth>
-        <myHeight>1</myHeight>
-        <myCoord>
-            <x>1</x>
-            <y>0</y>
-        </myCoord>
-        <myImagePaths>
-            <string>square.png</string>
-        </myImagePaths>
-        <myImageSelector></myImageSelector>
-    </gameplay.Tile>
-    <gameplay.Tile>
-        <myID>9</myID>
-        <name>box</name>
-        <props/>
-        <myWidth>1</myWidth>
-        <myHeight>1</myHeight>
-        <myCoord>
-            <x>1</x>
-            <y>1</y>
-        </myCoord>
-        <myImagePaths>
-            <string>square.png</string>
-        </myImagePaths>
-        <myImageSelector></myImageSelector>
-    </gameplay.Tile>
-    <gameplay.Tile>
-        <myID>10</myID>
-        <name>box</name>
-        <props/>
-        <myWidth>1</myWidth>
-        <myHeight>1</myHeight>
-        <myCoord>
-            <x>1</x>
-            <y>2</y>
-        </myCoord>
-        <myImagePaths>
-            <string>square.png</string>
-        </myImagePaths>
-        <myImageSelector></myImageSelector>
-    </gameplay.Tile>
-    <gameplay.Tile>
-        <myID>11</myID>
-        <name>box</name>
-        <props/>
-        <myWidth>1</myWidth>
-        <myHeight>1</myHeight>
-        <myCoord>
-            <x>1</x>
-            <y>3</y>
-        </myCoord>
-        <myImagePaths>
-            <string>square.png</string>
-        </myImagePaths>
-        <myImageSelector></myImageSelector>
-    </gameplay.Tile>
-    <gameplay.Tile>
-        <myID>12</myID>
-        <name>box</name>
-        <props/>
-        <myWidth>1</myWidth>
-        <myHeight>1</myHeight>
-        <myCoord>
-            <x>1</x>
-            <y>4</y>
-        </myCoord>
-        <myImagePaths>
-            <string>square.png</string>
-        </myImagePaths>
-        <myImageSelector></myImageSelector>
-    </gameplay.Tile>
-    <gameplay.Tile>
-        <myID>13</myID>
-        <name>box</name>
-        <props/>
-        <myWidth>1</myWidth>
-        <myHeight>1</myHeight>
-        <myCoord>
-            <x>2</x>
-            <y>0</y>
-        </myCoord>
-        <myImagePaths>
-            <string>square.png</string>
-        </myImagePaths>
-        <myImageSelector></myImageSelector>
-    </gameplay.Tile>
-    <gameplay.Tile>
-        <myID>14</myID>
-        <name>box</name>
-        <props/>
-        <myWidth>1</myWidth>
-        <myHeight>1</myHeight>
-        <myCoord>
-            <x>2</x>
-            <y>1</y>
-        </myCoord>
-        <myImagePaths>
-            <string>square.png</string>
-        </myImagePaths>
-        <myImageSelector></myImageSelector>
-    </gameplay.Tile>
-    <gameplay.Tile>
-        <myID>15</myID>
-        <name>box</name>
-        <props/>
-        <myWidth>1</myWidth>
-        <myHeight>1</myHeight>
-        <myCoord>
-            <x>2</x>
-            <y>2</y>
-        </myCoord>
-        <myImagePaths>
-            <string>square.png</string>
-        </myImagePaths>
-        <myImageSelector></myImageSelector>
-    </gameplay.Tile>
-    <gameplay.Tile>
-        <myID>16</myID>
-        <name>box</name>
-        <props/>
-        <myWidth>1</myWidth>
-        <myHeight>1</myHeight>
-        <myCoord>
-            <x>2</x>
-            <y>3</y>
-        </myCoord>
-        <myImagePaths>
-            <string>square.png</string>
-        </myImagePaths>
-        <myImageSelector></myImageSelector>
-    </gameplay.Tile>
-    <gameplay.Tile>
-        <myID>17</myID>
-        <name>box</name>
-        <props/>
-        <myWidth>1</myWidth>
-        <myHeight>1</myHeight>
-        <myCoord>
-            <x>2</x>
-            <y>4</y>
-        </myCoord>
-        <myImagePaths>
-            <string>square.png</string>
-        </myImagePaths>
-        <myImageSelector></myImageSelector>
-    </gameplay.Tile>
-    <gameplay.Tile>
-        <myID>18</myID>
-        <name>box</name>
-        <props/>
-        <myWidth>1</myWidth>
-        <myHeight>1</myHeight>
-        <myCoord>
-            <x>3</x>
-            <y>0</y>
-        </myCoord>
-        <myImagePaths>
-            <string>square.png</string>
-        </myImagePaths>
-        <myImageSelector></myImageSelector>
-    </gameplay.Tile>
-    <gameplay.Tile>
-        <myID>19</myID>
-        <name>box</name>
-        <props/>
-        <myWidth>1</myWidth>
-        <myHeight>1</myHeight>
-        <myCoord>
-            <x>3</x>
             <y>1</y>
         </myCoord>
         <myImagePaths>
@@ -482,6 +288,36 @@
         <myHeight>1</myHeight>
         <myCoord>
             <x>3</x>
+            <y>1</y>
+        </myCoord>
+        <myImagePaths>
+            <string>square.png</string>
+        </myImagePaths>
+        <myImageSelector></myImageSelector>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>18</myID>
+        <name>box</name>
+        <props/>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myCoord>
+            <x>2</x>
+            <y>4</y>
+        </myCoord>
+        <myImagePaths>
+            <string>square.png</string>
+        </myImagePaths>
+        <myImageSelector></myImageSelector>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>16</myID>
+        <name>box</name>
+        <props/>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myCoord>
+            <x>2</x>
             <y>2</y>
         </myCoord>
         <myImagePaths>
@@ -490,13 +326,13 @@
         <myImageSelector></myImageSelector>
     </gameplay.Tile>
     <gameplay.Tile>
-        <myID>21</myID>
+        <myID>12</myID>
         <name>box</name>
         <props/>
         <myWidth>1</myWidth>
         <myHeight>1</myHeight>
         <myCoord>
-            <x>3</x>
+            <x>1</x>
             <y>3</y>
         </myCoord>
         <myImagePaths>
@@ -505,7 +341,37 @@
         <myImageSelector></myImageSelector>
     </gameplay.Tile>
     <gameplay.Tile>
-        <myID>22</myID>
+        <myID>17</myID>
+        <name>box</name>
+        <props/>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myCoord>
+            <x>2</x>
+            <y>3</y>
+        </myCoord>
+        <myImagePaths>
+            <string>square.png</string>
+        </myImagePaths>
+        <myImageSelector></myImageSelector>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>6</myID>
+        <name>box</name>
+        <props/>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myCoord>
+            <x>0</x>
+            <y>2</y>
+        </myCoord>
+        <myImagePaths>
+            <string>square.png</string>
+        </myImagePaths>
+        <myImageSelector></myImageSelector>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>23</myID>
         <name>box</name>
         <props/>
         <myWidth>1</myWidth>
@@ -520,14 +386,14 @@
         <myImageSelector></myImageSelector>
     </gameplay.Tile>
     <gameplay.Tile>
-        <myID>23</myID>
+        <myID>8</myID>
         <name>box</name>
         <props/>
         <myWidth>1</myWidth>
         <myHeight>1</myHeight>
         <myCoord>
-            <x>4</x>
-            <y>0</y>
+            <x>0</x>
+            <y>4</y>
         </myCoord>
         <myImagePaths>
             <string>square.png</string>
@@ -542,22 +408,7 @@
         <myHeight>1</myHeight>
         <myCoord>
             <x>4</x>
-            <y>1</y>
-        </myCoord>
-        <myImagePaths>
-            <string>square.png</string>
-        </myImagePaths>
-        <myImageSelector></myImageSelector>
-    </gameplay.Tile>
-    <gameplay.Tile>
-        <myID>25</myID>
-        <name>box</name>
-        <props/>
-        <myWidth>1</myWidth>
-        <myHeight>1</myHeight>
-        <myCoord>
-            <x>4</x>
-            <y>2</y>
+            <y>0</y>
         </myCoord>
         <myImagePaths>
             <string>square.png</string>
@@ -572,7 +423,127 @@
         <myHeight>1</myHeight>
         <myCoord>
             <x>4</x>
-            <y>3</y>
+            <y>2</y>
+        </myCoord>
+        <myImagePaths>
+            <string>square.png</string>
+        </myImagePaths>
+        <myImageSelector></myImageSelector>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>9</myID>
+        <name>box</name>
+        <props/>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myCoord>
+            <x>1</x>
+            <y>0</y>
+        </myCoord>
+        <myImagePaths>
+            <string>square.png</string>
+        </myImagePaths>
+        <myImageSelector></myImageSelector>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>10</myID>
+        <name>box</name>
+        <props/>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myCoord>
+            <x>1</x>
+            <y>1</y>
+        </myCoord>
+        <myImagePaths>
+            <string>square.png</string>
+        </myImagePaths>
+        <myImageSelector></myImageSelector>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>13</myID>
+        <name>box</name>
+        <props/>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myCoord>
+            <x>1</x>
+            <y>4</y>
+        </myCoord>
+        <myImagePaths>
+            <string>square.png</string>
+        </myImagePaths>
+        <myImageSelector></myImageSelector>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>21</myID>
+        <name>box</name>
+        <props/>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myCoord>
+            <x>3</x>
+            <y>2</y>
+        </myCoord>
+        <myImagePaths>
+            <string>square.png</string>
+        </myImagePaths>
+        <myImageSelector></myImageSelector>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>25</myID>
+        <name>box</name>
+        <props/>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myCoord>
+            <x>4</x>
+            <y>1</y>
+        </myCoord>
+        <myImagePaths>
+            <string>square.png</string>
+        </myImagePaths>
+        <myImageSelector></myImageSelector>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>28</myID>
+        <name>box</name>
+        <props/>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myCoord>
+            <x>4</x>
+            <y>4</y>
+        </myCoord>
+        <myImagePaths>
+            <string>square.png</string>
+        </myImagePaths>
+        <myImageSelector></myImageSelector>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>14</myID>
+        <name>box</name>
+        <props/>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myCoord>
+            <x>2</x>
+            <y>0</y>
+        </myCoord>
+        <myImagePaths>
+            <string>square.png</string>
+        </myImagePaths>
+        <myImageSelector></myImageSelector>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>19</myID>
+        <name>box</name>
+        <props/>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myCoord>
+            <x>3</x>
+            <y>0</y>
         </myCoord>
         <myImagePaths>
             <string>square.png</string>
@@ -587,7 +558,67 @@
         <myHeight>1</myHeight>
         <myCoord>
             <x>4</x>
-            <y>4</y>
+            <y>3</y>
+        </myCoord>
+        <myImagePaths>
+            <string>square.png</string>
+        </myImagePaths>
+        <myImageSelector></myImageSelector>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>15</myID>
+        <name>box</name>
+        <props/>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myCoord>
+            <x>2</x>
+            <y>1</y>
+        </myCoord>
+        <myImagePaths>
+            <string>square.png</string>
+        </myImagePaths>
+        <myImageSelector></myImageSelector>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>11</myID>
+        <name>box</name>
+        <props/>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myCoord>
+            <x>1</x>
+            <y>2</y>
+        </myCoord>
+        <myImagePaths>
+            <string>square.png</string>
+        </myImagePaths>
+        <myImageSelector></myImageSelector>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>4</myID>
+        <name>box</name>
+        <props/>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myCoord>
+            <x>0</x>
+            <y>0</y>
+        </myCoord>
+        <myImagePaths>
+            <string>square.png</string>
+        </myImagePaths>
+        <myImageSelector></myImageSelector>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>22</myID>
+        <name>box</name>
+        <props/>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myCoord>
+            <x>3</x>
+            <y>3</y>
         </myCoord>
         <myImagePaths>
             <string>square.png</string>
@@ -595,27 +626,26 @@
         <myImageSelector></myImageSelector>
     </gameplay.Tile>
     <gameplay.Player>
-        <myID>1</myID>
-        <myStats/>
-        <myEntityIDs>
-            <int>28</int>
-            <int>29</int>
-        </myEntityIDs>
-    </gameplay.Player>
-    <gameplay.Player>
         <myID>2</myID>
         <myStats/>
         <myEntityIDs>
+            <int>29</int>
             <int>30</int>
+        </myEntityIDs>
+    </gameplay.Player>
+    <gameplay.Player>
+        <myID>3</myID>
+        <myStats/>
+        <myEntityIDs>
             <int>31</int>
+            <int>32</int>
         </myEntityIDs>
     </gameplay.Player>
     <gameplay.Turn>
         <myCurrentPhaseID>65</myCurrentPhaseID>
         <playersOrder>
-            <int>1</int>
             <int>2</int>
+            <int>3</int>
         </playersOrder>
     </gameplay.Turn>
 </game>
-

@@ -1,5 +1,7 @@
 package utils.imageManipulation;
 
+import authoringUtils.exception.GameObjectClassNotFoundException;
+import authoringUtils.exception.GameObjectInstanceNotFoundException;
 import gameObjects.entity.EntityClass;
 import gameObjects.entity.EntityInstance;
 import gameObjects.gameObject.GameObjectClass;
@@ -13,12 +15,9 @@ import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Transform;
-import utils.exception.GameObjectClassNotFoundException;
-import utils.exception.GameObjectInstanceNotFoundException;
 import utils.exception.PreviewUnavailableException;
 
 import java.util.ArrayList;
@@ -122,7 +121,6 @@ public class ImageManager {
             gc.drawImage(images.get(i), x, y, IMAGE_WIDTH, IMAGE_HEIGHT);
         }
         SnapshotParameters sp =  new SnapshotParameters();
-        sp.setTransform(Transform.scale(IMAGE_WIDTH, IMAGE_HEIGHT));
         sp.setFill(Color.TRANSPARENT);
         return canvas.snapshot(sp, null);
     }
@@ -163,7 +161,7 @@ public class ImageManager {
                 } else {
                     imagePaths = ((TileInstance) gameObjectInstance).getImagePathList();
                 }
-                ret = getImage(imagePaths, gameObjectInstance.getInstanceName());
+                ret = getImage(imagePaths, gameObjectInstance.getClassName());
             case CATEGORY:
                 // TODO
                 break;

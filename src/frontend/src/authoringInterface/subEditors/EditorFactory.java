@@ -3,7 +3,6 @@ package authoringInterface.subEditors;
 import authoringUtils.exception.GameObjectTypeException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.gameObject.GameObjectType;
-import gameplay.GameObject;
 
 /**
  * This Factory class is responsible for creating respective AbstractGameObjectEditors by taking in some arguments.
@@ -19,22 +18,23 @@ public class EditorFactory {
      * @return A concrete implementation for AbstractGameObjectEditor.
      * @throws MissingEditorForTypeException
      */
-    public static AbstractGameObjectEditor makeEditor(GameObjectType gameObjectType, GameObjectsCRUDInterface gameObjectManager) throws MissingEditorForTypeException {
+    @SuppressWarnings("unchecked")
+    public static <T extends AbstractGameObjectEditor> T makeEditor(GameObjectType gameObjectType, GameObjectsCRUDInterface gameObjectManager) throws MissingEditorForTypeException {
         switch (gameObjectType) {
             case ENTITY:
-                return new EntityEditor(gameObjectManager);
+                return (T) new EntityEditor(gameObjectManager);
             case PLAYER:
                 // TODO
                 break;
             case TILE:
-                return new TileEditor(gameObjectManager);
+                return (T) new TileEditor(gameObjectManager);
             case SOUND:
-                return new SoundEditor(gameObjectManager);
+                return (T) new SoundEditor(gameObjectManager);
             case UNSPECIFIED:
                 // TODO
                 break;
             case CATEGORY:
-                return new CategoryEditor(gameObjectManager);
+                return (T) new CategoryEditor(gameObjectManager);
         }
         throw new MissingEditorForTypeException(String.format("An editor is not implemented for the type %s", gameObjectType.toString()));
     }
@@ -48,7 +48,7 @@ public class EditorFactory {
      * @throws GameObjectTypeException
      * @throws MissingEditorForTypeException
      */
-    public static AbstractGameObjectEditor makeEditor(String gameObjectType, GameObjectsCRUDInterface gameObjectManager) throws GameObjectTypeException, MissingEditorForTypeException {
+    public static <T extends AbstractGameObjectEditor> T makeEditor(String gameObjectType, GameObjectsCRUDInterface gameObjectManager) throws GameObjectTypeException, MissingEditorForTypeException {
         GameObjectType type = null;
         try {
             type = GameObjectType.valueOf(gameObjectType);

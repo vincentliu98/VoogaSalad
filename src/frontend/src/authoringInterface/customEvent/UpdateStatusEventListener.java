@@ -1,8 +1,5 @@
 package authoringInterface.customEvent;
 
-
-import javafx.scene.Node;
-
 /**
  * This interface is implemented by those (currently only StatusView) that listen to status statistic changes
  *
