@@ -1,14 +1,16 @@
 package conversion.engine;
 
+import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 import phase.PhaseGraphImpl;
+import phase.api.GameEvent;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.stream.Collectors;
 
 public class PhaseGraphConverter implements Converter {
@@ -60,6 +62,11 @@ public class PhaseGraphConverter implements Converter {
 
             writer.startNode("myTrigger");
             writer.addAttribute("class", edge.trigger().getClass().getName());
+            if(edge.trigger() instanceof GameEvent.KeyPress) {
+                writer.startNode("code");
+                writer.setValue(((GameEvent.KeyPress) edge.trigger()).getCode().name());
+                writer.endNode();
+            }
             writer.endNode();
 
             writer.startNode("myGuard");

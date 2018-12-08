@@ -16,13 +16,13 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import runningGame.GameWindow;
 
 import java.io.File;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 /**
  * MenuBarView class
@@ -146,8 +146,9 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         gameWindow = new GameWindow();
         try{
             Initializer initializer =
-                    new Initializer(new File(getClass().getClassLoader().getResource(fileName).getFile()));
+                new Initializer(new File(getClass().getClassLoader().getResource(fileName).getFile()));
             Scene newScene = new Scene(initializer.getRoot(), View.GAME_WIDTH, View.GAME_HEIGHT);
+            newScene.addEventFilter(KeyEvent.KEY_RELEASED, initializer::keyFilter);
             newWindow.setScene(newScene);
             newWindow.setX(MainAuthoringProgram.SCREEN_WIDTH*0.5 - View.GAME_WIDTH*0.5);
             newWindow.setY(MainAuthoringProgram.SCREEN_HEIGHT*0.5 - View.GAME_HEIGHT*0.5);
