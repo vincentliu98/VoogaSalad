@@ -4,10 +4,13 @@ import api.SubView;
 import authoring.AuthoringTools;
 import authoringInterface.MainAuthoringProgram;
 import authoringInterface.View;
+import authoringInterface.editor.editView.EditView;
 import authoringInterface.editor.memento.Editor;
 import authoringInterface.editor.memento.EditorCaretaker;
 import authoringInterface.editor.menuBarView.subMenuBarView.*;
 import gameplay.Initializer;
+import graphUI.graphData.PhaseGraphXMLParser;
+import graphUI.graphData.SinglePhaseData;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
@@ -19,9 +22,12 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.xml.sax.SAXException;
 import runningGame.GameWindow;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Map;
 import java.util.function.BiConsumer;
 
 /**
@@ -32,6 +38,7 @@ import java.util.function.BiConsumer;
  * @author jl729
  */
 public class EditorMenuBarView implements SubView<MenuBar> {
+    private EditView editView;
     private MenuBar menuBar;
     private GameWindow gameWindow;
     private AuthoringTools authTools;
@@ -47,10 +54,12 @@ public class EditorMenuBarView implements SubView<MenuBar> {
     public EditorMenuBarView(
             AuthoringTools authTools,
             Runnable closeWindow,
-            BiConsumer<Integer, Integer> updateGridDimension
+            BiConsumer<Integer, Integer> updateGridDimension,
+            EditView editView
     ) {
         this.authTools = authTools;
         this.closeWindow = closeWindow;
+        this.editView = editView;
         fileName = "TicTacToe.xml";
 
         menuBar = new MenuBar();
@@ -114,8 +123,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
     }
 
     void handleSaveAs(ActionEvent event) {
-        new SaveFileView(null); // for now
-        handleSave(event);
+        editView.getPhaseView().generateXML();
     }
 
     void handleExport(ActionEvent event) {
@@ -127,8 +135,20 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         fileChooser.setTitle("Open project files");
         File file = fileChooser.showOpenDialog(new Stage());
         if (file != null) {
-            fileName = file.getName();
+            var parser = new PhaseGraphXMLParser();
+            try {
+                Map<String, SinglePhaseData> phaseDataMap = parser.parseFile(file);
+                regeneratePhaseGraph(phaseDataMap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (SAXException e) {
+                e.printStackTrace();
+            }
         }
+    }
+
+    private void regeneratePhaseGraph(Map<String, SinglePhaseData> phaseDataMap) {
+        editView.getPhaseView().reset(phaseDataMap);
     }
 
     void handleUndo(ActionEvent event) {

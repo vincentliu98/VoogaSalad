@@ -2,6 +2,7 @@ package gameObjects.sound;
 
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 /**
@@ -12,6 +13,10 @@ public interface SoundInstance extends GameObjectInstance {
     SimpleStringProperty getMediaFilePath();
 
     void setMediaFilePath(String newMediaFilePath);
+
+    SimpleDoubleProperty getDuration();
+
+    public void setDuration(double newDuration);
 
     SoundClass getGameObjectClass();
 

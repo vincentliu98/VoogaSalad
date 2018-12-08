@@ -1,6 +1,7 @@
 package graphUI.phase;
 
 import api.SubView;
+import graphUI.graphData.PhaseGraphXMLWriter;
 import graphUI.graphData.SinglePhaseData;
 import graphUI.groovy.GroovyPaneFactory.GroovyPane;
 import javafx.collections.FXCollections;
@@ -14,13 +15,13 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import phase.api.PhaseDB;
 import utils.ErrorWindow;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.File;
+import java.util.*;
 import java.util.function.Supplier;
 
 /**
@@ -40,6 +41,7 @@ public class PhaseChooserPane implements SubView<GridPane> {
     private ListView<String> phaseListView;
     private List<PhasePane> phasePanes;
     private Map<String, SinglePhaseData> phaseDataMap;
+    private PhaseGraphXMLWriter phaseGraphXMLWriter;
 
     public PhaseChooserPane(PhaseDB phaseDB, Supplier<GroovyPane> genGroovyPane) {
         this.phaseDB = phaseDB;
@@ -59,6 +61,21 @@ public class PhaseChooserPane implements SubView<GridPane> {
 
     public void checkMapUpdate(){
         System.out.println("Updated map" + phaseDataMap);
+    }
+
+    public void reset(Map<String, SinglePhaseData> phaseDataMap){
+        this.phaseDataMap = phaseDataMap;
+        phaseDB.phases().forEach(phase -> phaseDB.removeGraph(phase));
+        phaseList.clear();
+        phasePanes.clear();
+
+        phaseDataMap.keySet().forEach(a -> {
+            phaseList.add(a);
+            recoverPhasePane(a, phaseDataMap);
+        });
+
+        System.out.println("map" + phaseDataMap);
+        phaseListView.setItems(phaseList);
     }
 
     private void initializeView() {
@@ -83,6 +100,7 @@ public class PhaseChooserPane implements SubView<GridPane> {
         vbox.setSpacing(15);
         vbox.getChildren().addAll(stack, phaseListView);
         phaseListView.getSelectionModel().selectedIndexProperty().addListener((e, o, n) -> {
+            System.out.println("old: " + o + "new: " + n);
             clearRightPane();
             view.add(phasePanes.get(n.intValue()).getView(), 1, 0);
         });
@@ -104,26 +122,58 @@ public class PhaseChooserPane implements SubView<GridPane> {
         TextInputDialog dialog = new TextInputDialog("");
         dialog.setContentText("Please enter the name of this phase graph:");
         dialog.showAndWait().ifPresent(name -> {
-            var tryGraph = phaseDB.createGraph(name);
-            if(tryGraph.isSuccess()) {
-                try {
-                    var graph = tryGraph.get();
-
-                    var singlePhaseData = new SinglePhaseData(name);
-                    phaseDataMap.put(name, singlePhaseData);
-                    System.out.println(phaseDataMap);
-
-                    var phasePane = new PhasePane(phaseDB, genGroovyPane, graph, singlePhaseData, this);
-                    phaseList.add(name);
-                    phasePanes.add(phasePane);
-                    phaseListView.getSelectionModel().select(phaseList.size()-1);
-                } catch (Throwable t) {
-                    new ErrorWindow("Error", "t.toString()").showAndWait();
-                }
-            }
+            createNewPhasePane(name);
         });
     }
 
+    private void createNewPhasePane(String name) {
+        var tryGraph = phaseDB.createGraph(name);
+        if(tryGraph.isSuccess()) {
+            try {
+                var graph = tryGraph.get();
+
+                var singlePhaseData = new SinglePhaseData(name);
+                phaseDataMap.put(name, singlePhaseData);
+                System.out.println(phaseDataMap);
+
+                var phasePane = new PhasePane(phaseDB, genGroovyPane, graph, singlePhaseData, this);
+                phaseList.add(name);
+                phasePanes.add(phasePane);
+                phaseListView.getSelectionModel().select(phaseList.size()-1);
+            } catch (Throwable t) {
+                new ErrorWindow("Error", "t.toString()").showAndWait();
+            }
+        }
+    }
+
+    private void recoverPhasePane(String name, Map<String, SinglePhaseData> phaseDataMap) {
+        var tryGraph = phaseDB.createGraph(name);
+        if(tryGraph.isSuccess()) {
+            try {
+                var graph = tryGraph.get();
+
+                var singlePhaseData = phaseDataMap.get(name);
+                phaseDataMap.put(name, singlePhaseData);
+
+                var phasePane = new PhasePane(phaseDB, genGroovyPane, graph, singlePhaseData, this);
+                phasePanes.add(phasePane);
+
+                phasePane.recoverData();
+
+                phaseListView.getSelectionModel().select(phaseList.size()-1);
+            } catch (Throwable t) {
+                new ErrorWindow("Error", "t.toString()").showAndWait();
+            }
+        }
+    }
+
+    public void generateXML() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save File");
+        File file = fileChooser.showSaveDialog(new Stage());
+        phaseGraphXMLWriter = new PhaseGraphXMLWriter(phaseDataMap, file);
+        phaseGraphXMLWriter.generate();
+    }
 
     @Override
     public GridPane getView() {
