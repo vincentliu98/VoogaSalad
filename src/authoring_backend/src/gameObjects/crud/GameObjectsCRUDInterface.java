@@ -11,6 +11,7 @@ import gameObjects.turn.Turn;
 import grids.Point;
 
 import java.util.Collection;
+import java.util.Set;
 
 /**
  *
@@ -314,4 +315,7 @@ public interface GameObjectsCRUDInterface {
     Iterable<TileInstance> getTileInstances();
     Iterable<CategoryInstance> getCategoryInstances();
     Iterable<SoundInstance> getSoundInstances();
+    Iterable<PlayerInstance> getPlayerInstances();
+
+    Set<String> getPlayerNames(GameObjectInstance gameObjectInstance);
 }

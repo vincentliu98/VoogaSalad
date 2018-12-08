@@ -14,6 +14,7 @@ import javafx.collections.*;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     private static final String DEFAULT_PLAYER_CLASS = "$defaultPlayerClass$";
@@ -624,7 +625,6 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         };
     }
 
-    // TODO: propagate changes
     @Override
     public void setDimension(int width, int height) {
         numCols = width;
@@ -698,5 +698,14 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     @Override
     public Iterable<SoundInstance> getSoundInstances() {
         return getSpecificInstances(GameObjectType.SOUND);
+    }
+
+    @Override
+    public Set<String> getPlayerNames(GameObjectInstance gameObjectInstance) {
+        return gameObjectClassMapByName.values().stream()
+                .filter(gameObjectClass -> gameObjectClass.getType() == GameObjectType.PLAYER)
+                .filter(gameObjectClass -> ((PlayerClass) gameObjectClass).isOwnedByPlayer(gameObjectInstance))
+                .map(gameObjectClass -> gameObjectClass.getClassName().getValue())
+                .collect(Collectors.toSet());
     }
 }
