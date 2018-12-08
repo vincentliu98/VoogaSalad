@@ -271,36 +271,20 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
 
     /**
      * This method sets up the confirm logic of adding new TreeItem.
-     *
-     * @throws IllegalGeometryException
-     * @throws PreviewUnavailableException
-     * @throws GameObjectClassNotFoundException
-     * @throws IllegalGameObjectNamingException
      */
-    protected abstract void confirmAddTreeItem() throws IllegalGeometryException, PreviewUnavailableException, GameObjectClassNotFoundException, IllegalGameObjectNamingException;
+    protected abstract void confirmAddTreeItem() throws IllegalGameObjectNamingException, IllegalGeometryException, PreviewUnavailableException, DuplicateGameObjectClassException;
 
     /**
      * This method sets up the confirm logic of editing existing TreeItem.
      *
-     * @throws IllegalGeometryException
-     * @throws GameObjectClassNotFoundException
-     * @throws InvalidOperationException
-     * @throws PreviewUnavailableException
-     * @throws IllegalGameObjectNamingException
      */
-    protected abstract void confirmEditTreeItem() throws IllegalGeometryException, GameObjectClassNotFoundException, InvalidOperationException, PreviewUnavailableException, IllegalGameObjectNamingException;
+    protected abstract void confirmEditTreeItem() throws IllegalGameObjectNamingException, IllegalGeometryException, InvalidOperationException, PreviewUnavailableException;
 
     /**
      * This method sets up the confirm logic of editing existing Node.
      *
-     * @throws IllegalGeometryException
-     * @throws PreviewUnavailableException
-     * @throws UnremovableNodeException
-     * @throws GridIndexOutOfBoundsException
-     * @throws IllegalGameObjectNamingException
      */
-    protected abstract void confirmEditNode() throws IllegalGeometryException, PreviewUnavailableException, UnremovableNodeException, GridIndexOutOfBoundsException, IllegalGameObjectNamingException;
-
+    protected abstract void confirmEditNode() throws IllegalGameObjectNamingException, IllegalGeometryException, PreviewUnavailableException, GridIndexOutOfBoundsException, UnremovableNodeException;
     /**
      * This method closes the editor.
      */
@@ -330,24 +314,27 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
 
     /**
      * This method sets names for GameObjectClass.
+     *
+     * @return A String name for the GameObjectClass.
      * @throws IllegalGameObjectNamingException
      */
-    void setClassName() throws IllegalGameObjectNamingException {
+    String getValidClassName() throws IllegalGameObjectNamingException {
         if (nameField.getText().trim().isEmpty()) {
             throw new IllegalGameObjectNamingException("GameObjectClass cannot have an empty name");
         }
-        gameObjectClass.setClassName(nameField.getText());
+        return nameField.getText();
     }
 
     /**
      * This method sets names for GameObjectInstance.
      *
+     * @return A String name for the GameObjectInstance.
      * @throws IllegalGameObjectNamingException
      */
-    void setInstanceName() throws IllegalGameObjectNamingException {
+    String getValidInstanceName() throws IllegalGameObjectNamingException {
         if (nameField.getText().trim().isEmpty()) {
             throw new IllegalGameObjectNamingException("GameObjectInstance cannot have an empty name");
         }
-        gameObjectInstance.setInstanceName(nameField.getText());
+        return nameField.getText();
     }
 }

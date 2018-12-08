@@ -9,6 +9,7 @@ import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.entity.EntityClass;
 import gameObjects.entity.EntityInstance;
+import gameObjects.gameObject.GameObjectClass;
 import grids.PointImpl;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -102,17 +103,16 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     /**
      * This method sets up the confirm logic for adding new TreeItems.
      *
+     * @throws IllegalGameObjectNamingException
      * @throws IllegalGeometryException
      * @throws PreviewUnavailableException
-     * @throws GameObjectClassNotFoundException
-     * @throws IllegalGameObjectNamingException
+     * @throws DuplicateGameObjectClassException
      */
     @Override
-    protected void confirmAddTreeItem() throws IllegalGeometryException, PreviewUnavailableException, GameObjectClassNotFoundException, IllegalGameObjectNamingException {
-        setClassName();
+    protected void confirmAddTreeItem() throws IllegalGameObjectNamingException, IllegalGeometryException, PreviewUnavailableException, DuplicateGameObjectClassException {
+        EntityClass entityClass = gameObjectManager.createEntityClass(getValidClassName());
         int width = outputPositiveInteger(widthInput);
         int height = outputPositiveInteger(heightInput);
-        EntityClass entityClass = gameObjectManager.getEntityClass(nameField.getText().trim());
         assert entityClass != null;
         TreeItem<String> newItem = new TreeItem<>(entityClass.getClassName().getValue());
         entityClass.getImagePathList().addAll(imagePaths);
@@ -128,18 +128,19 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     /**
      * This method sets up the confirm logic of editing existing TreeItem.
      *
+     * @throws IllegalGameObjectNamingException
      * @throws IllegalGeometryException
-     * @throws GameObjectClassNotFoundException
      * @throws InvalidOperationException
      * @throws PreviewUnavailableException
-     * @throws IllegalGameObjectNamingException
      */
     @Override
-    protected void confirmEditTreeItem() throws IllegalGeometryException, GameObjectClassNotFoundException, InvalidOperationException, PreviewUnavailableException, IllegalGameObjectNamingException {
-        setClassName();
+    protected void confirmEditTreeItem() throws IllegalGameObjectNamingException, IllegalGeometryException, InvalidOperationException, PreviewUnavailableException {
+        gameObjectClass.setClassName(getValidClassName());
         int width = outputPositiveInteger(widthInput);
         int height = outputPositiveInteger(heightInput);
-        ImageManager.removeClassImage(gameObjectClass);
+        try {
+            ImageManager.removeClassImage(gameObjectClass);
+        } catch (GameObjectClassNotFoundException ignored) {}
         gameObjectClass.getImagePathList().clear();
         gameObjectClass.getImagePathList().addAll(imagePaths);
         gameObjectClass.getPropertiesMap().clear();
@@ -156,15 +157,15 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     /**
      * This method sets up the confirm logic of editing existing Node.
      *
+     * @throws IllegalGameObjectNamingException
      * @throws IllegalGeometryException
      * @throws PreviewUnavailableException
-     * @throws UnremovableNodeException
      * @throws GridIndexOutOfBoundsException
-     * @throws IllegalGameObjectNamingException
+     * @throws UnremovableNodeException
      */
     @Override
-    protected void confirmEditNode() throws IllegalGeometryException, PreviewUnavailableException, UnremovableNodeException, GridIndexOutOfBoundsException, IllegalGameObjectNamingException {
-        setInstanceName();
+    protected void confirmEditNode() throws IllegalGameObjectNamingException, IllegalGeometryException, PreviewUnavailableException, GridIndexOutOfBoundsException, UnremovableNodeException {
+        gameObjectInstance.setInstanceName(getValidInstanceName());
         int width = outputPositiveInteger(widthInput);
         int height = outputPositiveInteger(heightInput);
         try {

@@ -158,11 +158,11 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
      * @throws IllegalGameObjectNamingException
      */
     @Override
-    protected void confirmAddTreeItem() throws IllegalGeometryException, PreviewUnavailableException, GameObjectClassNotFoundException, IllegalGameObjectNamingException {
+    protected void confirmAddTreeItem() throws IllegalGeometryException, PreviewUnavailableException, GameObjectClassNotFoundException, IllegalGameObjectNamingException, DuplicateGameObjectClassException {
         setClassName();
         int width = outputPositiveInteger(widthText);
         int height = outputPositiveInteger(heightText);
-        TileClass tileClass = gameObjectManager.getTileClass(nameField.getText().trim());
+        TileClass tileClass = gameObjectManager.createTileClass(nameField.getText().trim());
         TreeItem<String> newItem = new TreeItem<>(tileClass.getClassName().getValue());
         tileClass.getImagePathList().addAll(imagePaths);
         ImageView icon = new ImageView(ImageManager.getPreview(tileClass));
