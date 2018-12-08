@@ -157,6 +157,9 @@ public interface GameObjectsCRUDInterface {
     PlayerClass createPlayerClass(String className)
             throws DuplicateGameObjectClassException;
 
+    PlayerClass getPlayerClass(String className)
+            throws GameObjectClassNotFoundException;
+
     PlayerInstance createPlayerInstance(String className)
             throws GameObjectClassNotFoundException, GameObjectTypeException;
 

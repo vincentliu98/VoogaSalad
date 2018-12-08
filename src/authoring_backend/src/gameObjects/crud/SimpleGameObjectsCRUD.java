@@ -201,6 +201,13 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     }
 
     @Override
+    public PlayerClass getPlayerClass(String className)
+            throws GameObjectClassNotFoundException {
+        return (PlayerClass) getSpecificClass(className, GameObjectType.PLAYER);
+    }
+
+
+    @Override
     public CategoryClass getCategoryClass(String className)
             throws GameObjectClassNotFoundException {
         return (CategoryClass) getSpecificClass(className, GameObjectType.CATEGORY);
