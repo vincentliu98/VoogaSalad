@@ -49,6 +49,9 @@ public class GameMethods {
     public static Entity createEntity(String entityName, int x, int y){
         return createEntity(entityName, x, y, DEFAULT_PLAYER_ID);
     }
+    public static Entity createEntity(String entityName, Tile tile) {
+        return createEntity(entityName, (int) Math.round(tile.getX()), (int) Math.round(tile.getY()));
+    }
 
     public static void removeEntity(Entity entity) {
         ROOT.getChildren().remove(entity.getImageView());
@@ -80,7 +83,7 @@ public class GameMethods {
                 (e.getX() <= tile.getX() && tile.getX() < e.getX() + e.getWidth());
             boolean verdictY =
                 (tile.getY() <= e.getY() && e.getY() < tile.getY() + tile.getHeight()) ||
-                    (e.getY() <= tile.getY() && tile.getY() < e.getY() + e.getHeight());
+                (e.getY() <= tile.getY() && tile.getY() < e.getY() + e.getHeight());
             return verdictX && verdictY;
         });
     }
@@ -108,7 +111,7 @@ public class GameMethods {
     /**
      *  Phase
      */
-    public static void goTo(String nodeName) { getNode(nodeName).execute(); }
+    public static void $goto(String phaseNodeName) { getNode(phaseNodeName).execute(); }
 
     /**
      *  Meta
@@ -118,5 +121,12 @@ public class GameMethods {
         double dy = a.getY() - b.getY();
         System.out.println(Math.sqrt(dx*dx+dy*dy));
         return Math.sqrt(dx*dx+dy*dy);
+    }
+
+    public static void $return(Object retVal) {
+        GameData.shell().setVariable("$return", retVal);
+    }
+    public static GameObject $this() {
+        return (GameObject) GameData.shell().getVariable("$this");
     }
 }
