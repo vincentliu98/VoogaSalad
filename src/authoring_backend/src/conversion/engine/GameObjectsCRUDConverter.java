@@ -198,11 +198,11 @@ public class GameObjectsCRUDConverter implements Converter {
             writer.endNode();
         }
 
-        for(var player : db.getPlayerInstances()) {
+        for(var player : db.getPlayerClasses()) {
             writer.startNode("gameplay.Player");
 
-            writer.startNode("myID");
-            writer.setValue(String.valueOf(player.getInstanceId().get()));
+            writer.startNode("myName");
+            writer.setValue(player.getClassName().get());
             writer.endNode();
 
             writer.startNode("myStats");
@@ -210,9 +210,9 @@ public class GameObjectsCRUDConverter implements Converter {
             new MapConverter(mapper).marshal(shell.evaluate(toEval), writer, ctx);
             writer.endNode();
 
-            writer.startNode("myEntityIDs");
-            new TreeSetConverter(mapper).marshal(player.getEntityIDs(), writer, ctx);
-            writer.endNode();
+//            writer.startNode("myEntityIDs");
+//            new TreeSetConverter(mapper).marshal(player.enei, writer, ctx);
+//            writer.endNode();
 
             writer.endNode();
         }

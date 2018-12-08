@@ -2,7 +2,7 @@ package gameplay;
 
 
 public class Node {
-    private int myPhaseName;
+    private String myPhaseName;
     private String myName;
     private String myExecution; // Groovy code
 
@@ -19,7 +19,7 @@ public class Node {
         try{
             GameData.shell().evaluate(myExecution);
             GameData.shell().evaluate(GameData.HEARTBEAT);
-            System.out.println(GameMethods.hasNoEntities(GameMethods.getCurrentPlayerID()));
+            System.out.println(GameMethods.hasNoEntities(GameMethods.getCurrentPlayerName()));
             System.out.println(GameMethods.getCurrentPlayer().getMyEntities());
             GameData.updateViews();
         } catch (Exception e){ e.printStackTrace(); }

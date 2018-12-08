@@ -71,10 +71,6 @@ public class PhaseGraphConverter implements Converter {
 
         writer.startNode("gameplay.Phase");
 
-        writer.startNode("myName");
-        writer.setValue(graph.name());
-        writer.endNode();
-
         writer.startNode("myStartNodeName");
         writer.setValue(graph.source().name());
         writer.endNode();

@@ -14,7 +14,7 @@ import java.util.*;
 
 public class GameData {
     static int GRID_WIDTH, GRID_HEIGHT;
-    static Map<Integer, Player> PLAYERS;
+    static Map<String, Player> PLAYERS;
     static Map<Integer, Entity> ENTITIES;
     static Map<String, EntityPrototype> ENTITY_PROTOTYPES;
     static Map<Integer, Tile> TILES;
@@ -31,7 +31,7 @@ public class GameData {
 
     public static void setGameData(
         Point grid_dimension,
-        Map<Integer, Player> players, Map<Integer, Entity> entities,
+        Map<String, Player> players, Map<Integer, Entity> entities,
         Map<String, EntityPrototype> entityPrototypes,
         Map<Integer, Tile> tiles, Map<String, Phase> phases,
         String heartbeat, Map<String, Node> nodes,

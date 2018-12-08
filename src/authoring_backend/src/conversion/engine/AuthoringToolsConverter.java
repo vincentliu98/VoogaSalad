@@ -40,7 +40,7 @@ public class AuthoringToolsConverter implements Converter {
         writer.endNode();
 
         writer.startNode("playersOrder");
-        var playerNames = StreamSupport.stream(authTools.entityDB().getPlayerInstances().spliterator(),true)
+        var playerNames = StreamSupport.stream(authTools.entityDB().getPlayerClasses().spliterator() ,true)
                                  .map(e -> e.getClassName().get())
                                  .collect(Collectors.toList());
         new CollectionConverter(mapper).marshal(playerNames, writer, ctx);

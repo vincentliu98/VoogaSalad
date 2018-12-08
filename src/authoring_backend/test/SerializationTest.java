@@ -14,9 +14,8 @@ public class SerializationTest {
 
         var db = authTools.entityDB();
 
-        var playerClass = db.createPlayerClass("standard");
-        var playerA = playerClass.createInstance();
-        var playerB = playerClass.createInstance();
+        var playerClassA = db.createPlayerClass("classA");
+        var playerClassB = db.createPlayerClass("classB");
 
         var box = db.createTileClass("box");
         box.getImagePathList().add("square.png");
@@ -65,8 +64,8 @@ public class SerializationTest {
 
         var hbSource = phaseDB.heartbeat().source();
         var hbScript = factory.rawBlock(
-            "if(GameMethods.hasNoEntities(GameMethods.getCurrentPlayerID())) {" +
-            "   GameMethods.endGame('Player ' + GameMethods.getCurrentPlayerID() + ' won!')" +
+            "if(GameMethods.hasNoEntities(GameMethods.getCurrentPlayerName())) {" +
+            "   GameMethods.endGame('Player ' + GameMethods.getCurrentPlayerName() + ' won!')" +
             "}"
         );
         phaseDB.heartbeat().addEdge(factory.createEdge(hbSource, Ports.FLOW_OUT, hbScript));

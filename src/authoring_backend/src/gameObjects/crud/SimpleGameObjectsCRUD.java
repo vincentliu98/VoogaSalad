@@ -710,9 +710,10 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     }
 
     @Override
-    public Iterable<SoundClass> getSoundClasses() {
-        return getSpecificClasses(GameObjectType.SOUND);
-    }
+    public Iterable<SoundClass> getSoundClasses() { return getSpecificClasses(GameObjectType.SOUND); }
+
+    @Override
+    public Iterable<PlayerClass> getPlayerClasses() { return getSpecificClasses(GameObjectType.PLAYER); }
 
     private  <T extends GameObjectClass> Set<T> getSpecificClasses(GameObjectType objectType){
         Set<T> ret = new HashSet<>();
@@ -742,18 +743,6 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     @Override
     public Iterable<TileInstance> getTileInstances() {
         return getSpecificInstances(GameObjectType.TILE);
-    }
-
-    @Override
-    public Iterable<PlayerInstance> getPlayerInstances() {
-        ObservableList<PlayerInstance> ret = FXCollections.observableArrayList();
-        for (GameObjectInstance objectInstance : gameObjectInstanceMapById.values()) {
-            if (objectInstance.getType() == GameObjectType.PLAYER &&
-                    !objectInstance.getInstanceName().get().equals(DEFAULT_PLAYER_NAME)) {
-                ret.add((PlayerInstance) objectInstance);
-            }
-        }
-        return ret;
     }
 
     @Override

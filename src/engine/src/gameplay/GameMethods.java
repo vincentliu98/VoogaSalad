@@ -98,14 +98,14 @@ public class GameMethods {
     /**
      *  Player/Turn
      */
-    public static Player getCurrentPlayer() { return PLAYERS.get(TURN.getCurrentPlayerID()); }
+    public static Player getCurrentPlayer() { return PLAYERS.get(TURN.getCurrentPlayerName()); }
     public static Double getCurrentPlayerStats(String stat) { return getCurrentPlayer().getValue(stat); }
-    public static void setCurrentPlayer(int playerID) { TURN.setCurrentPlayer(playerID);}
-    public static int getCurrentPlayerID(){ return TURN.getCurrentPlayerID(); }
-    public static int getNextPlayerID() { return TURN.nextPlayerID(); }
-    public static int toNextPlayer() { return TURN.toNextPlayer(); }
-    public static void setPlayerOrder(List<Integer> newOrder){ TURN.setPlayerOrder(newOrder); }
-    public static boolean hasNoEntities(int playerID) { return PLAYERS.get(playerID).getMyEntities().size() == 0; }
+    public static void setCurrentPlayer(String playerName) { TURN.setCurrentPlayer(playerName);}
+    public static String getCurrentPlayerName(){ return TURN.getCurrentPlayerName(); }
+    public static String getNextPlayerName() { return TURN.nextPlayerName(); }
+    public static String toNextPlayer() { return TURN.toNextPlayer(); }
+    public static void setPlayerOrder(List<String> newOrder){ TURN.setPlayerOrder(newOrder); }
+    public static boolean hasNoEntities(String playerName) { return PLAYERS.get(playerName).getMyEntities().size() == 0; }
     public static void endGame(String endingMessage){ TURN.endGame(endingMessage);}
 
     /**

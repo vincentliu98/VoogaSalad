@@ -50,13 +50,13 @@ public class XMLParser {
                              Integer.parseInt(myDocTree.getElementsByTagName("grid-height").item(0).getTextContent()));
     }
 
-    public Map<Integer, Player> getPlayers(){
+    public Map<String, Player> getPlayers(){
         NodeList players = myDocTree.getElementsByTagName("gameplay.Player");
-        Map<Integer, Player> myPlayers = new HashMap<>();
+        Map<String, Player> myPlayers = new HashMap<>();
         for (int i = 0; i < players.getLength(); i++){
             String currentPlayer = nodeToString(players.item(i));
             Player player = (Player) mySerializer.fromXML(currentPlayer);
-            myPlayers.put(player.getID(), player);
+            myPlayers.put(player.getName(), player);
         }
         return myPlayers;
     }
