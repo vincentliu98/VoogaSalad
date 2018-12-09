@@ -286,8 +286,11 @@ public class CRUDConverterAuthoring implements Converter {
             new TreeSetConverter(mapper).marshal(new TreeSet<>(player.getAllGameObjectInstanceIDs()), writer, ctx);
             writer.endNode();
 
+
             writer.startNode("imagePath");
-            writer.setValue(player.getImagePath().getValue());
+            if (!player.getImagePath().isEmpty().getValue()) {
+                writer.setValue(player.getImagePath().getValue());
+            }
             writer.endNode();
 
             writer.endNode();
