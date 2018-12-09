@@ -16,6 +16,9 @@ import javafx.stage.Stage;
 import social.EngineEvent;
 import social.EventBus;
 import social.User;
+import social.UserException;
+
+import java.util.ResourceBundle;
 
 public class LoginScreen {
     public static final String LOGO_PATH = "duke_logo.png";
@@ -89,11 +92,12 @@ public class LoginScreen {
         passwordField.setPromptText("password");
         Button btn = new Button("LOGIN");
         btn.setPrefWidth(260.0D);
-        CheckBox cBox = new CheckBox("Remember me");
+        //CheckBox cBox = new CheckBox("Remember me"); TODO: Do we need this?
         Text register = new Text("Register");
         //Text forgotPassword = new Text("Forgot your password?");
 
         btn.setOnMouseClicked(e -> {
+            // throw exceptions for invalid password, username
             // assuming a valid user was retrieved from the database (myUser)
             User myUser = new User(1); // TODO: Remove later (just a placeholder)
             EventBus.getInstance().sendMessage(EngineEvent.CHANGE_USER, myUser);
@@ -101,7 +105,7 @@ public class LoginScreen {
 
         myPane.add(usernameField, 0, 2, 4, 1);
         myPane.add(passwordField, 0, 3, 4, 1);
-        myPane.add(cBox, 0, 4, 2, 1);
+        //myPane.add(cBox, 0, 4, 2, 1);
         myPane.add(btn, 0, 5, 4, 1);
         myPane.add(register, 0, 6);
         // grid.add(forgotPassword, 2, 6);

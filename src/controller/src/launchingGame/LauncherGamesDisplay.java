@@ -80,7 +80,6 @@ public class LauncherGamesDisplay implements Searchable, Sortable, Subscriber {
 
     @Override
     public void showFavorites() {
-        /*User myUser = new User(1);
         if (myUser == null) return;
         for(GameIcon icon: myActiveGames){
             myPane.getChildren().remove(icon.getView());
@@ -93,7 +92,7 @@ public class LauncherGamesDisplay implements Searchable, Sortable, Subscriber {
                     myPane.getChildren().add(icon.getView());
                 }
             }
-        }*/
+        }
     }
 
     public void sortByAlphabet(){

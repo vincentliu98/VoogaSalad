@@ -31,6 +31,10 @@ public class User {
         //myErrors = ResourceBundle.getBundle("resources/errors/Errors");
     }
 
+    public ImageView getAvatar(){
+        return myAvatar;
+    }
+
     public void changeAvatar(Image image){
         myAvatar = new ImageView(image);
     }
