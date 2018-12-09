@@ -16,10 +16,10 @@ import java.util.Map;
  * @author jl729
  * @author Inchan Hwang
  */
-public class PhaseGraphXMLWriter<T> {
+public class PhaseGraphXMLWriter implements PhaseGraphXMLWriterAPI{
 
     private Map<String, SinglePhaseData> phaseGraph;
-    protected Document doc;
+    private Document doc;
     private File outFile;
 
     public PhaseGraphXMLWriter(Map<String, SinglePhaseData> phaseGraph_, File outFile_) {
@@ -32,6 +32,7 @@ public class PhaseGraphXMLWriter<T> {
         }
     }
 
+    @Override
     public void generate() {
         try {
             Element rootElement = doc.createElement("frontEndData");
