@@ -1,5 +1,6 @@
 package launchingGame;
 
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
 import launching.GameParser;
 import social.EngineEvent;
@@ -49,7 +50,6 @@ public class LauncherGamesDisplay implements Searchable, Sortable, Subscriber {
             myPane.getChildren().add(myIcon.getView());
             myActiveGames.add(myIcon);
         }
-
     }
 
     @Override
