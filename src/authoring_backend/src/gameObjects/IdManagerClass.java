@@ -76,6 +76,7 @@ public class IdManagerClass implements IdManager {
                     g.setClassId(simpleIntegerProperty -> simpleIntegerProperty.setValue(newId));
                     gameObjectClassMap.put(newId, g);
                 }
+                classCount--;
             }
         };
     }
@@ -111,6 +112,7 @@ public class IdManagerClass implements IdManager {
                     g.setInstanceId(simpleIntegerProperty -> simpleIntegerProperty.setValue(newId));
                     gameObjectInstanceMap.put(newId, g);
                 }
+                instanceCount--;
             }
         };
     }
