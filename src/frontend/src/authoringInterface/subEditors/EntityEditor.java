@@ -178,8 +178,8 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         gameObjectInstance.setHeight(height);
         ((ImageView) nodeEdited).setImage(ImageManager.getPreview(gameObjectInstance));
         Tooltip.install(nodeEdited, new Tooltip(String.format("Width: %s\nHeight: %s\nSingle Click to toggle Deletion\nDouble Click or Right Click to edit\nInstance ID: %s\nClass Name: %s", width, height, gameObjectInstance.getInstanceId().getValue(), gameObjectInstance.getClassName().getValue())));
-        int row = outputPositiveInteger(rowInput);
-        int col = outputPositiveInteger(colInput);
+        int row = Integer.parseInt(rowInput.getText());
+        int col = Integer.parseInt(colInput.getText());
         StackPane target = JavaFxOperation.getNodeFromGridPaneByIndices(((GridPane) JavaFxOperation.getGrandParent(nodeEdited)), row, col);
         JavaFxOperation.removeFromParent(nodeEdited);
         assert target != null;
