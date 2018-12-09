@@ -7,17 +7,20 @@ import authoringInterface.editor.editView.EditView;
 import authoringInterface.editor.menuBarView.EditorMenuBarView;
 import authoringInterface.sidebar.SideView;
 import authoringInterface.sidebar.StatusView;
+import com.thoughtworks.xstream.XStream;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import graphUI.groovy.GroovyPaneFactory;
 import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import utils.nodeInstance.CrappyNodeInstanceController;
 import utils.nodeInstance.NodeInstanceController;
+import utils.serializerTest.SerializerTestCRUD;
 
 import java.io.*;
 
@@ -77,6 +80,12 @@ public class View implements ParentView<SubView> {
         mainView.getColumnConstraints().addAll(new ColumnConstraints(MainAuthoringProgram.SCREEN_WIDTH - SIDEBAR_WIDTH));
         mainView.addColumn(0, editView.getView());
         mainView.addColumn(1, sidebar);
+        rootPane.addEventFilter(KeyEvent.KEY_PRESSED, e-> {
+            if (e.getCode() == KeyCode.K) {
+                XStream crudXstream = new SerializerTestCRUD().getSerializer();
+                System.out.println(crudXstream.toXML(gameObjectManager));
+            }
+        });
     }
 
     private void updateGridDimension(Integer width, Integer height) {

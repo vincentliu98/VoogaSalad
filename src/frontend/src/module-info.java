@@ -6,6 +6,8 @@ module frontend {
     requires java.desktop;
     requires java.scripting;
 
+    requires xstream;
+
     requires authoring_backend;
     requires engine;
 
