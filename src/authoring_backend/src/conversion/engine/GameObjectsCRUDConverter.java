@@ -41,14 +41,16 @@ public class GameObjectsCRUDConverter implements Converter {
         for (CategoryClass categoryClass : db.getCategoryClasses()) {
             writer.startNode("gamePlay.CategoryPrototype");
 
-            // name
-            writer.startNode("name");
-            writer.setValue(categoryClass.getClassName().getValue());
-            writer.endNode();
+                // name
+                writer.startNode("name");
+                    writer.setValue(categoryClass.getClassName().getValue());
+                writer.endNode();
 
-            // id
-            writer.startNode("myID");
-            writer.setValue(String.valueOf(categoryClass.getClassId().getValue()));
+                // id
+                writer.startNode("myID");
+                    writer.setValue(String.valueOf(categoryClass.getClassId().getValue()));
+                writer.endNode();
+
             writer.endNode();
         }
 
@@ -95,6 +97,7 @@ public class GameObjectsCRUDConverter implements Converter {
             writer.endNode();
         }
 
+        // EntityInstance
         for(var entityInstance : db.getEntityInstances()) {
             EntityClass entityClass = null;
             try {
@@ -155,6 +158,52 @@ public class GameObjectsCRUDConverter implements Converter {
             writer.endNode();
         }
 
+        // TilePrototype
+        for (TileClass tileClass: db.getTileClasses()) {
+            writer.startNode("gameplay.TilePrototype");
+            // ID
+            writer.startNode("myID");
+            writer.setValue(tileClass.getClassId().getValue().toString());
+            writer.endNode();
+
+            // name
+            writer.startNode("name");
+            writer.setValue(tileClass.getClassName().getValue());
+            writer.endNode();
+
+            // props
+            writer.startNode("props");
+            var toEval = mapToString(tileClass.getPropertiesMap());
+            new MapConverter(mapper).marshal(shell.evaluate(toEval), writer, ctx);
+            writer.endNode();
+
+            // myWidth
+            writer.startNode("myWidth");
+            writer.setValue(String.valueOf(tileClass.getWidth().get()));
+            writer.endNode();
+
+            // myHeight
+            writer.startNode("myHeight");
+            writer.setValue(String.valueOf(tileClass.getHeight().get()));
+            writer.endNode();
+
+            //myImagePaths
+            writer.startNode("myImagePaths");
+            for(var path : tileClass.getImagePathList()) {
+            writer.startNode("string");
+            writer.setValue(path);
+            writer.endNode();
+            }
+            writer.endNode();
+
+            // myImageSelector
+            writer.startNode("myImageSelector");
+            writer.setValue(tileClass.getImageSelectorCode());
+            writer.endNode();
+            writer.endNode();
+        }
+
+        // TileInstance
         for(var tileInstance : db.getTileInstances()) {
             TileClass tileClass = null;
             try {
