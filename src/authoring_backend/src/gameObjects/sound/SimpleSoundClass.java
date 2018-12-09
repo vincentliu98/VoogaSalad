@@ -32,6 +32,7 @@ public class SimpleSoundClass implements SoundClass {
         classId = new ReadOnlyIntegerWrapper();
         mediaPath = new SimpleStringProperty();
         propertiesMap = FXCollections.observableHashMap();
+        duration = new SimpleDoubleProperty();
     }
 
     public SimpleSoundClass(

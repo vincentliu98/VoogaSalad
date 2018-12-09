@@ -99,7 +99,9 @@ public class CRUDConverterAuthoring implements Converter {
 
             // imageSelector
             writer.startNode("imageSelector");
-            writer.setValue(entityClass.getImageSelectorCode());
+            if (entityClass.getImageSelectorCode() != null && !entityClass.getImageSelectorCode().isEmpty()) {
+                writer.setValue(entityClass.getImageSelectorCode());
+            }
             writer.endNode();
 
             writer.endNode();
@@ -160,7 +162,7 @@ public class CRUDConverterAuthoring implements Converter {
 
             // imageSelector
             writer.startNode("imageSelector");
-            if (!entityInstance.getImageSelectorCode().isEmpty()) {
+            if (entityInstance.getImageSelectorCode() != null && !entityInstance.getImageSelectorCode().isEmpty()) {
                 writer.setValue(entityInstance.getImageSelectorCode());
             }
             writer.endNode();
@@ -208,7 +210,7 @@ public class CRUDConverterAuthoring implements Converter {
 
             // myImageSelector
             writer.startNode("imageSelector");
-            if (!tileClass.getImageSelectorCode().isEmpty()) {
+            if (tileClass.getImageSelectorCode() != null && !tileClass.getImageSelectorCode().isEmpty()) {
                 writer.setValue(tileClass.getImageSelectorCode());
             }
             writer.endNode();
@@ -270,7 +272,7 @@ public class CRUDConverterAuthoring implements Converter {
 
             // myImageSelector
             writer.startNode("imageSelector");
-            if (!tileInstance.getImageSelectorCode().isEmpty()) {
+            if (tileInstance.getImageSelectorCode() != null && !tileInstance.getImageSelectorCode().isEmpty()) {
                 writer.setValue(tileInstance.getImageSelectorCode());
             }
             writer.endNode();
