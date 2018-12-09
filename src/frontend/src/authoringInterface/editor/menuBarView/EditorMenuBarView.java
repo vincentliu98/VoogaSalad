@@ -48,6 +48,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
 
     private final EditorCaretaker editorCaretaker = new EditorCaretaker();
     private final Editor editor = new Editor();
+    private File myFile = null;
     private Integer currentMemento = 0;
     private Runnable closeWindow; //For each window closable
 
@@ -88,13 +89,18 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         MenuItem about = new MenuItem("About");
 
         save.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
+        saveAs.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN));
         resizeGrid.setAccelerator(new KeyCodeCombination(KeyCode.G, KeyCombination.CONTROL_DOWN));
         helpDoc.setAccelerator(new KeyCodeCombination(KeyCode.H, KeyCombination.CONTROL_DOWN));
 
         newFile.setOnAction(e -> new NewWindowView());
         open.setOnAction(this::handleOpen);
         export.setOnAction(this::handleExport);
-        save.setOnAction(this::handleSave);
+
+        save.setOnAction(e -> {
+            if (myFile != null)
+            handleSave(e, myFile);
+        });
         saveAs.setOnAction(this::handleSaveAs);
         close.setOnAction(e -> new CloseFileView(closeWindow));
         undo.setOnAction(this::handleUndo);
@@ -116,14 +122,17 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         menuBar.getMenus().addAll(file, edit, settings, run, help);
     }
 
-    void handleSave(ActionEvent event) {
+    void handleSave(ActionEvent event, File file) {
         // TODO: 11/17/18 Enable and Disable the undo and redo button (handleUndo + handleRedo function)
+        editView.getPhaseView().saveXML(file);
+        System.out.println("New Content is saved");
         editorCaretaker.addMemento(editor.save());
         editor.setState(editorCaretaker.getMemento(currentMemento++).getSavedState());
     }
 
     void handleSaveAs(ActionEvent event) {
-        editView.getPhaseView().generateXML();
+        myFile = editView.getPhaseView().generateXML();
+        handleSave(event, myFile);
     }
 
     void handleExport(ActionEvent event) {

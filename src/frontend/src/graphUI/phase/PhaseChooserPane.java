@@ -31,6 +31,7 @@ import java.util.function.Supplier;
  * It is the entire tab that contains the listView of all the Phase on the right and the pane of nodes on the right
  *
  * @author Amy
+ * @author jl729
  */
 
 public class PhaseChooserPane implements SubView<GridPane> {
@@ -170,14 +171,19 @@ public class PhaseChooserPane implements SubView<GridPane> {
         }
     }
 
-    public void generateXML() {
+    public File generateXML() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save File");
         File file = fileChooser.showSaveDialog(new Stage());
         phaseGraphXMLWriter = new PhaseGraphXMLWriter(phaseDataMap, file);
         phaseGraphXMLWriter.generate();
+        return file;
     }
 
+    public void saveXML(File oldFile){
+        phaseGraphXMLWriter = new PhaseGraphXMLWriter(phaseDataMap, oldFile);
+        phaseGraphXMLWriter.generate();
+    }
     @Override
     public GridPane getView() {
         return view;
