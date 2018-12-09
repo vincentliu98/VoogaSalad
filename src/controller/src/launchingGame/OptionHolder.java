@@ -1,5 +1,6 @@
 package launchingGame;
 
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -41,6 +42,10 @@ public class OptionHolder extends HBox {
         myText.getStyleClass().add(TEXT_CSS);
         myText.setFill(Color.WHITE);
         getChildren().add(myText);
+    }
+
+    public void setOnClickListener(EventHandler eventHandler){
+        myText.setOnMouseClicked(eventHandler);
     }
 
     private void initContainer(){

@@ -8,6 +8,7 @@ module controller {
 
     requires frontend;
     requires engine;
+    requires org.twitter4j.core;
 
     exports launching;
     exports playing;
