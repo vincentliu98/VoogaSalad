@@ -10,6 +10,7 @@ import gameObjects.tile.*;
 import gameObjects.turn.Turn;
 import grids.Point;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Set;
 

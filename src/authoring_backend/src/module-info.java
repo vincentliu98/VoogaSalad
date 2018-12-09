@@ -17,6 +17,7 @@ module authoring_backend {
     requires xstream;
 
     exports authoring;
+    exports conversion.engine;
     exports phase.api;
     exports groovy.api;
     exports groovy.graph.blocks.core;

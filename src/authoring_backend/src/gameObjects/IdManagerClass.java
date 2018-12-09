@@ -5,8 +5,7 @@ import authoringUtils.exception.InvalidIdException;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -19,28 +18,32 @@ import java.util.function.Function;
 
 
 public class IdManagerClass implements IdManager {
-    private List<Integer> returnedClassIds;
-    private List<Integer> returnedInstanceIds;
-    private List<Integer> returnedPlayerInstanceIds;
+//    private LinkedList<Integer> validClassIds;
+//    private LinkedList<Integer> validInstanceIds;
 
-    Function<Integer, GameObjectClass> getClassFromMapFunc;
-    Function<Integer, GameObjectInstance> getInstanceFromMapFunc;
+    private Function<Integer, GameObjectClass> getClassFromMapFunc;
+    private Function<Integer, GameObjectInstance> getInstanceFromMapFunc;
+    private Map<Integer, GameObjectClass> gameObjectClassMap;
+    private Map<Integer, GameObjectInstance> gameObjectInstanceMap;
 
 
     private int classCount;
     private int instanceCount;
-    private int playerInstanceCount;
+
 
     public IdManagerClass(
             Function<Integer, GameObjectClass> getClassFromMapFunc,
-            Function<Integer, GameObjectInstance> getInstanceFromMapFunc) {
+            Function<Integer, GameObjectInstance> getInstanceFromMapFunc,
+            Map<Integer, GameObjectClass> gameObjectClassMap,
+            Map<Integer, GameObjectInstance> gameObjectInstanceMap) {
+
         classCount = 1;
         instanceCount = 1;
-        playerInstanceCount = 1;
-        returnedClassIds = new ArrayList<>();
-        returnedInstanceIds = new ArrayList<>();
-        returnedPlayerInstanceIds = new ArrayList<>();
+//        validClassIds = new LinkedList<>();
+//        validInstanceIds = new LinkedList<>();
 
+        this.gameObjectClassMap = gameObjectClassMap;
+        this.gameObjectInstanceMap = gameObjectInstanceMap;
         this.getClassFromMapFunc = getClassFromMapFunc;
         this.getInstanceFromMapFunc = getInstanceFromMapFunc;
     }
@@ -50,13 +53,8 @@ public class IdManagerClass implements IdManager {
         return gameObjectClass -> {
             // Only set Ids for Classes without Ids
             if (gameObjectClass.getClassId().getValue() == 0) {
-                int id;
-                if (!returnedClassIds.isEmpty()) {
-                    id = returnedClassIds.remove(0);
-                } else {
-                    id = classCount;
-                    classCount++;
-                }
+                int id = classCount;
+                classCount++;
                 gameObjectClass.setClassId(simpleIntegerProperty -> simpleIntegerProperty.setValue(id));
             }
         };
@@ -68,10 +66,17 @@ public class IdManagerClass implements IdManager {
         return gameObjectClass -> {
             int returnedId = gameObjectClass.getClassId().getValue();
             if (returnedId != 0) {
-                if (classCount < returnedId || returnedId < 0 || returnedClassIds.contains(returnedId)) {
+                if (returnedId > classCount) {
                     throw new InvalidIdException("Deleted class contains invalid Id");
                 }
-                returnedClassIds.add(returnedId);
+                int nextId = returnedId + 1;
+                for (int i = nextId; i < classCount; i++) {
+                    GameObjectClass g = gameObjectClassMap.remove(i);
+                    int newId = i - 1;
+                    g.setClassId(simpleIntegerProperty -> simpleIntegerProperty.setValue(newId));
+                    gameObjectClassMap.put(newId, g);
+                }
+                classCount--;
             }
         };
     }
@@ -84,13 +89,8 @@ public class IdManagerClass implements IdManager {
         return gameObjectInstance -> {
             // Only set Ids for Instances without Ids
             if (gameObjectInstance.getInstanceId().getValue() == 0) {
-                int id;
-                if (!returnedInstanceIds.isEmpty()) {
-                    id = returnedInstanceIds.remove(0);
-                } else {
-                    id = instanceCount;
-                    instanceCount++;
-                }
+                int id = instanceCount;
+                instanceCount++;
                 gameObjectInstance.setInstanceId(simpleIntegerProperty -> simpleIntegerProperty.setValue(id));
             }
         };
@@ -102,13 +102,22 @@ public class IdManagerClass implements IdManager {
         return gameObjectInstance -> {
             int returnedId = gameObjectInstance.getInstanceId().getValue();
             if (returnedId != 0) {
-                if (instanceCount < returnedId || returnedId < 0 || returnedInstanceIds.contains(returnedId)) {
+                if (returnedId > instanceCount) {
                     throw new InvalidIdException("Deleted instance contains invalid Id");
                 }
-                returnedInstanceIds.add(returnedId);
+                int nextId = returnedId + 1;
+                for (int i = nextId; i < instanceCount; i++) {
+                    GameObjectInstance g = gameObjectInstanceMap.remove(i);
+                    int newId = i - 1;
+                    g.setInstanceId(simpleIntegerProperty -> simpleIntegerProperty.setValue(newId));
+                    gameObjectInstanceMap.put(newId, g);
+                }
+                instanceCount--;
             }
         };
     }
+
+
 
     @Override
     public Function<Integer, Boolean> verifyClassIdFunc() {

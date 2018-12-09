@@ -201,7 +201,7 @@ public class PhasePane implements SubView<StackPane> {
             nodes.remove(selectedNode.get());
 
             singlePhaseData.removeNode(selectedNode.get().getName());
-            phaseChooserPane.checkMapUpdate();
+            phaseChooserPane.checkMapUpdate("A Node is Deleted");
 
             var toRemove = new HashSet<TransitionLine>();
             for (var l : lines) {
@@ -248,7 +248,7 @@ public class PhasePane implements SubView<StackPane> {
             lines.add(edgeLine);
 
             singlePhaseData.addConnect(new Pair<>(node1.getName(), node2.getName()), event);
-            phaseChooserPane.checkMapUpdate();
+            phaseChooserPane.checkMapUpdate("Two Nodes Connected");
 
             edgeLine.getStyleClass().add("cursorImage");
             edgeLine.toBack();
@@ -286,10 +286,10 @@ public class PhasePane implements SubView<StackPane> {
         singlePhaseData.addNode(nodeName);
         singlePhaseData.addPos(nodeName, new Pair<>(node.getX(), node.getY()));
         // TODO: 12/4/18 make an observableMap
-        phaseChooserPane.setPhaseDataMap(new HashMap<>() {{
-            put(nodeName, singlePhaseData);
-        }});
-        phaseChooserPane.checkMapUpdate();
+        var oldMap = phaseChooserPane.getPhaseDataMap();
+        oldMap.replace(nodeName, singlePhaseData);
+        phaseChooserPane.setPhaseDataMap(oldMap);
+        phaseChooserPane.checkMapUpdate("Front End Data Updated");
     }
 
     private void nodeMousePressedHandler(MouseEvent t) {
@@ -341,7 +341,7 @@ public class PhasePane implements SubView<StackPane> {
             updateLocations(node);
 
             addFrontEndData(node);
-            phaseChooserPane.checkMapUpdate();
+            phaseChooserPane.checkMapUpdate("Node Position Updated");
 
         } else if (draggingPurpose == DRAG_PURPOSE.CONNECT_LINE) {
             tmpLine.setEndX(tmpLine.getStartX() + offsetX);

@@ -43,7 +43,11 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         gameObjectClassMapById = FXCollections.observableHashMap();
         gameObjectInstanceMapById = FXCollections.observableHashMap();
 
-        myIdManager = new IdManagerClass(getGameObjectClassFromMapFunc(), getGameObjectInstanceFromMapFunc());
+        myIdManager = new IdManagerClass(
+                getGameObjectClassFromMapFunc(),
+                getGameObjectInstanceFromMapFunc(),
+                gameObjectClassMapById,
+                gameObjectInstanceMapById);
 
         myTileInstanceFactory = instantiateTileInstanceFactory();
         myEntityInstanceFactory = instantiateEntityInstanceFactory();
@@ -376,6 +380,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     public Collection<GameObjectInstance> getAllInstances(String className) {
         Set<GameObjectInstance> instancesSet = new HashSet<>();
         for (Map.Entry<Integer, GameObjectInstance> entry : gameObjectInstanceMapById.entrySet()) {
+
             if (entry.getValue().getClassName().getValue().equals(className)) {
                 instancesSet.add(entry.getValue());
             }
@@ -568,16 +573,16 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
 
     private void removeGameObjectClassFromMaps(GameObjectClass g)
             throws InvalidIdException {
-        myIdManager.returnClassIdFunc().accept(g);
         gameObjectClassMapByName.remove(g.getClassName().getValue());
         gameObjectClassMapById.remove(g.getClassId().getValue());
+        myIdManager.returnClassIdFunc().accept(g);
     }
 
     private void removeGameObjectInstanceFromMap(int instanceId)
             throws InvalidIdException {
         GameObjectInstance gameObjectInstance = gameObjectInstanceMapById.get(instanceId);
-        myIdManager.returnInstanceIdFunc().accept(gameObjectInstance);
         gameObjectInstanceMapById.remove(instanceId);
+        myIdManager.returnInstanceIdFunc().accept(gameObjectInstance);
     }
 
 
@@ -597,7 +602,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     private void changeAllGameObjectInstancesClassName(String oldClassName, String newClassName)
             throws InvalidOperationException {
         for (Map.Entry<Integer, GameObjectInstance> e : gameObjectInstanceMapById.entrySet()) {
-            if (e.getValue().getClassName().equals(oldClassName)) {
+            if (e.getValue().getClassName().getValue().equals(oldClassName)) {
                 e.getValue().setClassName(newClassName);
             }
         }

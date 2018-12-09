@@ -1,4 +1,4 @@
-package launchingGame;
+package social;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -13,6 +13,12 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import social.EngineEvent;
+import social.EventBus;
+import social.User;
+import social.UserException;
+
+import java.util.ResourceBundle;
 
 public class LoginScreen {
     public static final String LOGO_PATH = "duke_logo.png";
@@ -21,12 +27,12 @@ public class LoginScreen {
 
     private GridPane myPane;
     private Scene myScene;
+    private Stage myStage;
 
-    public LoginScreen() {
-    }
+    public LoginScreen() { }
 
     public Stage launchLogin(){
-        Stage myStage = new Stage();
+        myStage = new Stage();
 
         initPane();
         initScene();
@@ -87,13 +93,25 @@ public class LoginScreen {
         passwordField.setPromptText("password");
         Button btn = new Button("LOGIN");
         btn.setPrefWidth(260.0D);
-        CheckBox cBox = new CheckBox("Remember me");
+        //CheckBox cBox = new CheckBox("Remember me"); TODO: Do we need this?
         Text register = new Text("Register");
+        register.setOnMouseClicked(e -> {
+            RegisterScreen myRegistration = new RegisterScreen();
+            myRegistration.launchRegistration().show();
+        });
         //Text forgotPassword = new Text("Forgot your password?");
+
+        btn.setOnMouseClicked(e -> {
+            // throw exceptions for invalid password, username
+            // assuming a valid user was retrieved from the database (myUser)
+            User myUser = new User(10, "bloop"); // TODO: Remove later (just a placeholder)
+            EventBus.getInstance().sendMessage(EngineEvent.CHANGE_USER, myUser);
+            myStage.close();
+        });
 
         myPane.add(usernameField, 0, 2, 4, 1);
         myPane.add(passwordField, 0, 3, 4, 1);
-        myPane.add(cBox, 0, 4, 2, 1);
+        //myPane.add(cBox, 0, 4, 2, 1);
         myPane.add(btn, 0, 5, 4, 1);
         myPane.add(register, 0, 6);
         // grid.add(forgotPassword, 2, 6);

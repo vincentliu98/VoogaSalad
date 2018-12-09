@@ -6,4 +6,6 @@ public interface Searchable {
 
     void showAll();
 
+    void showFavorites();
+
 }

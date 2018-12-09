@@ -31,6 +31,7 @@ import java.util.function.Supplier;
  * It is the entire tab that contains the listView of all the Phase on the right and the pane of nodes on the right
  *
  * @author Amy
+ * @author jl729
  */
 
 public class PhaseChooserPane implements SubView<GridPane> {
@@ -55,12 +56,16 @@ public class PhaseChooserPane implements SubView<GridPane> {
         setupLeft();
     }
 
+    public Map<String, SinglePhaseData> getPhaseDataMap() {
+        return phaseDataMap;
+    }
+
     public void setPhaseDataMap(Map<String, SinglePhaseData> phaseDataMap) {
         this.phaseDataMap = phaseDataMap;
     }
 
-    public void checkMapUpdate(){
-        System.out.println("Updated map" + phaseDataMap);
+    public void checkMapUpdate(String message){
+        System.out.println(message + "\nPhase Data Map: " + phaseDataMap);
     }
 
     public void reset(Map<String, SinglePhaseData> phaseDataMap){
@@ -100,7 +105,6 @@ public class PhaseChooserPane implements SubView<GridPane> {
         vbox.setSpacing(15);
         vbox.getChildren().addAll(stack, phaseListView);
         phaseListView.getSelectionModel().selectedIndexProperty().addListener((e, o, n) -> {
-            System.out.println("old: " + o + "new: " + n);
             clearRightPane();
             view.add(phasePanes.get(n.intValue()).getView(), 1, 0);
         });
@@ -167,14 +171,19 @@ public class PhaseChooserPane implements SubView<GridPane> {
         }
     }
 
-    public void generateXML() {
+    public File generateXML() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save File");
         File file = fileChooser.showSaveDialog(new Stage());
         phaseGraphXMLWriter = new PhaseGraphXMLWriter(phaseDataMap, file);
         phaseGraphXMLWriter.generate();
+        return file;
     }
 
+    public void saveXML(File oldFile){
+        phaseGraphXMLWriter = new PhaseGraphXMLWriter(phaseDataMap, oldFile);
+        phaseGraphXMLWriter.generate();
+    }
     @Override
     public GridPane getView() {
         return view;
