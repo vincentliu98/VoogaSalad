@@ -3,6 +3,7 @@ package launchingGame;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
@@ -29,7 +30,7 @@ public class LauncherTopBarView {
     private double yOffset;
 
 
-    public LauncherTopBarView(double height, Stage stage, Searchable searched){
+    public LauncherTopBarView(double height, Stage stage, BorderPane pane, Searchable searched){
         initHeight = height;
         myStage = stage;
 
@@ -39,7 +40,7 @@ public class LauncherTopBarView {
 
         mySearchBar = new SearchBar(searched);
 
-        myTextOptions = new TextOptions();
+        myTextOptions = new TextOptions(pane);
 
         myControlOptions = new ControlOptions(stage);
 

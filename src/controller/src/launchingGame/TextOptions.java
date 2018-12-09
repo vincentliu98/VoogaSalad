@@ -1,7 +1,10 @@
 package launchingGame;
 
 import javafx.geometry.Pos;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import social.LauncherSocialDisplay;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -19,10 +22,12 @@ public class TextOptions implements PropertyChangeListener {
     private OptionHolder myGames;
     private OptionHolder myStore;
     private OptionHolder mySocial;
+    private BorderPane myPane;
 
-    public TextOptions(){
+    public TextOptions(BorderPane pane){
         initBox();
         initText();
+        myPane = pane;
     }
 
     public void toggleSelected(OptionHolder selcted){
@@ -47,10 +52,16 @@ public class TextOptions implements PropertyChangeListener {
 
         myGames = new OptionHolder(MY_GAME_TEXT);
         myGames.addListener(this);
+        myGames.setOnClickListener(e -> {
+            myPane.setCenter(new LauncherGamesDisplay().getView());
+        });
         myStore = new OptionHolder(STORE_TEXT);
         myStore.addListener(this);
         mySocial = new OptionHolder(SOCIAL_TEXT);
         mySocial.addListener(this);
+        mySocial.setOnClickListener(e -> {
+            myPane.setCenter(new LauncherSocialDisplay().getView());
+        });
 
         myOptions.add(myGames);
         myOptions.add(myStore);
