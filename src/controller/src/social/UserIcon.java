@@ -12,8 +12,8 @@ import javafx.scene.text.Text;
 
 public class UserIcon implements Icon {
     public static final String TEXT_CSS = "title-box";
-    public static final String ADD_FRIEND_TEXT = "Add";
-    public static final String REMOVE_FRIEND_TEXT = "Remove";
+    public static final String FOLLOW_TEXT = "Follow";
+    public static final String UNFOLLOW_TEXT = "Unfollow";
     public static final String FRIEND_BUTTON_CSS_NORMAL = "play-button-normal";
     public static final double FRIEND_BUTTON_WIDTH = 110;
     public static final double FRIEND_BUTTON_HEIGHT = 35;
@@ -26,16 +26,16 @@ public class UserIcon implements Icon {
     private ImageView myBackground;
     private HBox myTitleHolder;
     private Text myTitle;
-    private boolean isFriended;
-    private Button myFriendButton;
+    private boolean isFollowing;
+    private Button myFollowButton;
     private HBox myButtonHolder;
     private String myName;
 
 
-    public UserIcon(String name, ImageView avatar, boolean friended){
+    public UserIcon(String name, ImageView avatar, boolean follows){
         myName = name;
         myBackground = avatar;
-        isFriended = friended;
+        isFollowing = follows;
         initPane();
         initBackground();
         initTitle();
@@ -65,35 +65,35 @@ public class UserIcon implements Icon {
     }
 
     private void initButton(){
-        isFriended = false;
-        myFriendButton = new Button();
-        myFriendButton.setTextFill(Color.WHITE);
-        myFriendButton.setPrefWidth(FRIEND_BUTTON_WIDTH);
-        myFriendButton.setPrefHeight(FRIEND_BUTTON_HEIGHT);
+        isFollowing = false;
+        myFollowButton = new Button();
+        myFollowButton.setTextFill(Color.WHITE);
+        myFollowButton.setPrefWidth(FRIEND_BUTTON_WIDTH);
+        myFollowButton.setPrefHeight(FRIEND_BUTTON_HEIGHT);
         changeButtonDisplay();
-        myFriendButton.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+        myFollowButton.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                isFriended = !isFriended;
+                isFollowing = !isFollowing;
                 changeButtonDisplay();
             }
         });
         myButtonHolder = new HBox();
-        myButtonHolder.getChildren().add(myFriendButton);
+        myButtonHolder.getChildren().add(myFollowButton);
         myButtonHolder.setAlignment(Pos.BOTTOM_RIGHT);
         myButtonHolder.getStyleClass().add(BUTTON_HOLDER_CSS);
         myPane.getChildren().add(myButtonHolder);
     }
 
     private void changeButtonDisplay(){
-        if (isFriended){
-            myFriendButton.getStyleClass().remove(FRIEND_BUTTON_CSS_HOVER);
-            myFriendButton.getStyleClass().add(FRIEND_BUTTON_CSS_NORMAL);
-            myFriendButton.setText(REMOVE_FRIEND_TEXT);
+        if (isFollowing){
+            myFollowButton.getStyleClass().remove(FRIEND_BUTTON_CSS_HOVER);
+            myFollowButton.getStyleClass().add(FRIEND_BUTTON_CSS_NORMAL);
+            myFollowButton.setText(UNFOLLOW_TEXT);
         } else {
-            myFriendButton.getStyleClass().remove(FRIEND_BUTTON_CSS_NORMAL);
-            myFriendButton.getStyleClass().add(FRIEND_BUTTON_CSS_HOVER);
-            myFriendButton.setText(ADD_FRIEND_TEXT);
+            myFollowButton.getStyleClass().remove(FRIEND_BUTTON_CSS_NORMAL);
+            myFollowButton.getStyleClass().add(FRIEND_BUTTON_CSS_HOVER);
+            myFollowButton.setText(FOLLOW_TEXT);
         }
     }
 

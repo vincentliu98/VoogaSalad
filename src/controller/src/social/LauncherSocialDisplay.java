@@ -60,7 +60,7 @@ public class LauncherSocialDisplay implements Sortable, Searchable, Subscriber {
     }
 
     /**
-     * Equivalent of showing friends of the User
+     * Equivalent of showing everyone the User follows
      */
     @Override
     public void showFavorites() {
@@ -69,7 +69,7 @@ public class LauncherSocialDisplay implements Sortable, Searchable, Subscriber {
             myPane.getChildren().remove(icon.getView());
         }
         myActiveUsers = new ArrayList<>();
-        for (String name : myUser.getFriends()){
+        for (String name : myUser.getFollowing()){
             for (UserIcon icon : myUsers){
                 if (icon.getName().equals(name)){
                     myActiveUsers.add(icon);

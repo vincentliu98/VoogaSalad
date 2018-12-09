@@ -22,16 +22,16 @@ public class User {
     private ImageView myAvatar;
     private Twitter myTwitter;
     private ResourceBundle myErrors;
-    private Set<String> myFriends;
+    private Set<String> myFollowing;
 
     public User(int id, String username){
         myID = id;
         myUsername = username;
         myFavoriteGames = new HashSet<>();
-        myFriends = new HashSet<>();
+        myFollowing = new HashSet<>();
         myTwitter = null;
         myAvatar = new ImageView();
-        myAvatar.setImage(new Image(getClass().getResourceAsStream("/graphics/person_logo.png")));
+        myAvatar.setImage(new Image(getClass().getResourceAsStream("/profile-images/person_logo.png")));
         //myErrors = ResourceBundle.getBundle("resources/errors/Errors");
     }
 
@@ -56,16 +56,16 @@ public class User {
         return myUsername;
     }
 
-    public void addFriend(String username){
-        myFriends.add(username);
+    public void addFollower(String username){
+        myFollowing.add(username);
     }
 
-    public void removeFriend(String username){
-        myFriends.remove(username);
+    public void removeFollower(String username){
+        myFollowing.remove(username);
     }
 
-    public Set<String> getFriends(){
-        return myFriends;
+    public Set<String> getFollowing(){
+        return myFollowing;
     }
 
     public Set<String> getFavorites(){

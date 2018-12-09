@@ -7,7 +7,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
 public class ProfileView implements Subscriber {
-    public static final String PERSON_PATH = "/graphics/person_logo.png";
+    public static final String PERSON_PATH = "/profile-images/person_logo.png";
     public static final double ICON_WIDTH = 20;
     public static final double ICON_HEIGHT = 20;
 
