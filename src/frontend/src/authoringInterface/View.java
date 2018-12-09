@@ -7,22 +7,15 @@ import authoringInterface.editor.editView.EditView;
 import authoringInterface.editor.menuBarView.EditorMenuBarView;
 import authoringInterface.sidebar.SideView;
 import authoringInterface.sidebar.StatusView;
-import com.thoughtworks.xstream.XStream;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import graphUI.groovy.GroovyPaneFactory;
 import javafx.scene.Node;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import utils.nodeInstance.CrappyNodeInstanceController;
 import utils.nodeInstance.NodeInstanceController;
-import utils.serializerTest.SerializerTestCRUD;
-
-import java.io.*;
 
 /**
  * This class provides an createGraph skeleton window with the basic menu items, and basic editing interfaces.
