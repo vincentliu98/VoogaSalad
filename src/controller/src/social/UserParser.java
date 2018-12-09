@@ -16,7 +16,10 @@ public class UserParser {
         Set<User> users = new HashSet<>();
         User u = new User(1, "natalieqle");
         u.changeAvatar(new Image("duke_logo.png"));
+        User u2 = new User(1, "bloopy");
+        u.changeAvatar(new Image("square.png"));
         users.add(u);
+        users.add(u2);
         generateUserIcons(users);
     }
 

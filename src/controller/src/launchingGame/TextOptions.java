@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 
 public class TextOptions implements PropertyChangeListener {
+    public static final double SIDE_WIDTH = 50;
     public static final String MY_GAME_TEXT = "My Games";
     public static final String STORE_TEXT = "Store";
     public static final String SOCIAL_TEXT = "Social";
@@ -53,14 +54,18 @@ public class TextOptions implements PropertyChangeListener {
         myGames = new OptionHolder(MY_GAME_TEXT);
         myGames.addListener(this);
         myGames.setOnClickListener(e -> {
-            myPane.setCenter(new LauncherGamesDisplay().getView());
+            LauncherGamesDisplay myGameDisplay = new LauncherGamesDisplay();
+            myPane.setCenter(myGameDisplay.getView());
+            myPane.setLeft(new LauncherSideBarView(SIDE_WIDTH, myGameDisplay).getView());
         });
         myStore = new OptionHolder(STORE_TEXT);
         myStore.addListener(this);
         mySocial = new OptionHolder(SOCIAL_TEXT);
         mySocial.addListener(this);
         mySocial.setOnClickListener(e -> {
-            myPane.setCenter(new LauncherSocialDisplay().getView());
+            LauncherSocialDisplay mySocialDisplay = new LauncherSocialDisplay();
+            myPane.setCenter(mySocialDisplay.getView());
+            myPane.setLeft(new LauncherSideBarView(SIDE_WIDTH, mySocialDisplay).getView());
         });
 
         myOptions.add(myGames);
