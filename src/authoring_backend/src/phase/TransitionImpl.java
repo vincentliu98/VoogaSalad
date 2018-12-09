@@ -8,7 +8,7 @@ import phase.api.Transition;
 
 /**
  *  The implementation of Transition initializes
- *  guard -> createGraph guard that passes everything in
+ *  guard -> createPhaseGraph guard that passes everything in
  */
 public class TransitionImpl extends SimpleEdge<Phase> implements Transition {
     private GameEvent trigger;

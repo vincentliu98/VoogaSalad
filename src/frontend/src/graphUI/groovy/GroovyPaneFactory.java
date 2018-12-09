@@ -2,7 +2,6 @@ package graphUI.groovy;
 
 import api.SubView;
 import authoringInterface.spritechoosingwindow.PopUpWindow;
-import authoringUtils.frontendUtils.Try;
 import groovy.api.BlockGraph;
 import groovy.api.GroovyFactory;
 import groovy.api.Ports;
@@ -31,7 +30,7 @@ import java.util.stream.Collectors;
 
 /**
  * A factory to product GroovyPane. The factory is used because many such GroovyPane is needed.
- * By calling the method `gen()`, the factory spits out a GroovyPane to be edited by the user.
+ * By calling `gen(BlockGraph model)`, the factory spits out a GroovyPane to be edited by the user.
  *
  * It is only initialized once in the View class.
  *
@@ -60,7 +59,7 @@ public class GroovyPaneFactory {
         this.heartbeat = new GroovyPane(primaryStage, heartbeat);
     }
 
-    public GroovyPane gen() { return new GroovyPane(primaryStage); }
+    public GroovyPane gen(BlockGraph model) { return new GroovyPane(primaryStage, model); }
     public GroovyPane heartbeat() { return heartbeat; }
 
     public class GroovyPane extends PopUpWindow implements SubView<GridPane> {
@@ -92,7 +91,6 @@ public class GroovyPaneFactory {
 
         private DraggableGroovyIconFactory iconFactory;
 
-        private GroovyPane(Stage primaryStage) { this(primaryStage, factory.createGraph()); }
         private GroovyPane(Stage primaryStage, BlockGraph graph) {
             super(primaryStage);
             myScene = new Scene(root, WIDTH, HEIGHT);
@@ -256,7 +254,6 @@ public class GroovyPaneFactory {
             });
 
             itemBox.setContent(vbox);
-            itemBox.setMinHeight(HEIGHT);
         }
 
         private void setupGraphBox() {

@@ -23,17 +23,17 @@ public class PhaseDB {
     private List<PhaseGraph> phaseGraphs;
     private GroovyFactory factory;
     private String startingPhase;
-    private BlockGraph endHandler;
+    private BlockGraph winningCondition;
 
     public PhaseDB(GroovyFactory factory) {
         this.namespace = new HashSet<>();
         this.phaseNamespace = new HashSet<>();
         phaseGraphs = new ArrayList<>();
         this.factory = factory;
-        endHandler = factory.createGraph();
+        winningCondition = factory.createGroovyGraph();
     }
 
-    public Try<PhaseGraph> createGraph(String name) {
+    public Try<PhaseGraph> createPhaseGraph(String name) {
         var trySource = createPhase(name);
         if(namespace.add(name)) {
             Try<PhaseGraph> graph = trySource.map(s -> new PhaseGraphImpl(name, s, namespace::add));
@@ -50,12 +50,12 @@ public class PhaseDB {
 
     public Try<Phase> createPhase(String name) {
         if (phaseNamespace.add(name)) {
-            return Try.success(new PhaseImpl(factory.createGraph(), name));
+            return Try.success(new PhaseImpl(factory.createGroovyGraph(), name));
         } else return Try.failure(new NamespaceException(name));
     }
 
     public Transition createTransition(Phase from, GameEvent trigger, Phase to) {
-        return new TransitionImpl(from, trigger, to, factory.createGraph());
+        return new TransitionImpl(from, trigger, to, factory.createGroovyGraph());
     }
 
     public List<PhaseGraph> phases() { return phaseGraphs; }
@@ -63,5 +63,5 @@ public class PhaseDB {
     public void setStartingPhase(String phaseName) { startingPhase = phaseName; }
     public String getStartingPhase() { return startingPhase; }
 
-    public BlockGraph heartbeat() { return endHandler; }
+    public BlockGraph heartbeat() { return winningCondition; }
 }

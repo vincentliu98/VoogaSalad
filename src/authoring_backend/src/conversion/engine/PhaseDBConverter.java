@@ -12,7 +12,10 @@ public class PhaseDBConverter implements Converter {
     public void marshal(Object o, HierarchicalStreamWriter writer, MarshallingContext ctx) {
         var db = (PhaseDB) o;
         var graphConverter = new PhaseGraphConverter();
-        db.phases().forEach(graph -> graphConverter.marshal(graph, writer, ctx));
+        db.phases().forEach(graph -> {
+            System.out.println(graph);
+            graphConverter.marshal(graph, writer, ctx);
+        });
         var blockGraphConverter = new BlockGraphConverter();
         writer.startNode("heartbeat");
         blockGraphConverter.marshal(db.heartbeat(), writer, ctx);

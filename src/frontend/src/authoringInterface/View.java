@@ -18,7 +18,7 @@ import utils.nodeInstance.CrappyNodeInstanceController;
 import utils.nodeInstance.NodeInstanceController;
 
 /**
- * This class provides an createGraph skeleton window with the basic menu items, and basic editing interfaces.
+ * This class provides an createPhaseGraph skeleton window with the basic menu items, and basic editing interfaces.
  *
  * @author Haotian Wang
  * @author jl729
@@ -46,7 +46,7 @@ public class View implements ParentView<SubView> {
     private static final double SIDEBAR_WIDTH = 250;
 
     /**
-     * Constructor for an createGraph window, with an AnchorPane as the root Node, and the AnchorPane constraints on top, left and right are 0.
+     * Constructor for an createPhaseGraph window, with an AnchorPane as the root Node, and the AnchorPane constraints on top, left and right are 0.
      */
     public View(Stage primaryStage) {
         this.primaryStage = primaryStage;

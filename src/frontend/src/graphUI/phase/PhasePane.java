@@ -5,6 +5,7 @@ import graphUI.graphData.SinglePhaseData;
 import graphUI.groovy.GroovyPaneFactory.GroovyPane;
 import graphUI.phase.PhaseNodeFactory.PhaseNode;
 import graphUI.phase.TransitionLineFactory.TransitionLine;
+import groovy.api.BlockGraph;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -26,6 +27,7 @@ import phase.api.PhaseGraph;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -75,7 +77,7 @@ public class PhasePane implements SubView<StackPane> {
     private Line tmpLine;
     private PhaseGraph graph;
 
-    public PhasePane(PhaseDB phaseDB, Supplier<GroovyPane> genGroovyPane, PhaseGraph graph, SinglePhaseData singlePhaseData, PhaseChooserPane phaseChooserPane) {
+    public PhasePane(PhaseDB phaseDB, Function<BlockGraph, GroovyPane> genGroovyPane, PhaseGraph graph, SinglePhaseData singlePhaseData, PhaseChooserPane phaseChooserPane) {
         this.graph = graph;
         this.phaseDB = phaseDB;
         this.singlePhaseData = singlePhaseData;
@@ -228,7 +230,8 @@ public class PhasePane implements SubView<StackPane> {
             var edgeLine = trFactory.gen(
                     node1.getCenterX(), node1.getCenterY(), node2.getCenterX(), node2.getCenterY(),
                     Stream.iterate(0, x -> x + 1).dropWhile(cnts::contains).findFirst().get(),
-                    node1, event, node2
+                    phaseDB.createTransition(node1.model(), event, node2.model()),
+                    node1, node2
             );
             edgeLine.setStrokeWidth(3);
             edgeLine.setOnMouseEntered(e -> root.setCursor(Cursor.HAND));

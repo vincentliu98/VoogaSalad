@@ -23,7 +23,7 @@ public class ValidationTest {
         var goblinInstance =
             goblinClass.createInstance(PointImpl.ZERO);
 
-        var source = phaseDB.createGraph("A").get(null).source();
+        var source = phaseDB.createPhaseGraph("A").get(null).source();
 
         // TEST1: creating ref block referencing hp (success)
         System.out.println(factory.refBlock("$clicked.props.hp").isSuccess());

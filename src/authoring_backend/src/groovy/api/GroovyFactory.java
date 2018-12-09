@@ -17,9 +17,11 @@ public class GroovyFactory {
     }
 
     /**
-     *  Makes an createGraph BlockGraph with one source node
+     *  Makes an createPhaseGraph BlockGraph with one source node
      */
-    public BlockGraph createGraph() { return new BlockGraphImpl(); }
+    public BlockGraph createGroovyGraph() {
+        return new BlockGraphImpl();
+    }
 
     /**
      *  Makes a default BlockGraph for guards, passing everything in.
@@ -30,7 +32,7 @@ public class GroovyFactory {
             var pass = rawBlock("$guardRet = true");
             graph.addEdge(createEdge(graph.source(), Ports.FLOW_OUT, pass));
             return graph;
-        } catch(Throwable ignored) { return createGraph(); } // but it's not gonna fail
+        } catch(Throwable ignored) { return null; } // but it's not gonna fail
     }
 
     /**

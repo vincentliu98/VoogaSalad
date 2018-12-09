@@ -3,6 +3,7 @@ package graphUI.phase;
 import api.SubView;
 import graphUI.graphData.SinglePhaseData;
 import graphUI.groovy.GroovyPaneFactory.GroovyPane;
+import groovy.api.BlockGraph;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -35,18 +37,17 @@ import java.util.function.Supplier;
 public class PhaseChooserPane implements SubView<GridPane> {
     private GridPane view;
     private PhaseDB phaseDB;
-    private Supplier<GroovyPane> genGroovyPane;
+    private Function<BlockGraph, GroovyPane> genGroovyPane;
     private ObservableList<String> phaseList;
     private ListView<String> phaseListView;
     private List<PhasePane> phasePanes;
     private Map<String, SinglePhaseData> phaseDataMap;
 
-    public PhaseChooserPane(PhaseDB phaseDB, Supplier<GroovyPane> genGroovyPane) {
+    public PhaseChooserPane(PhaseDB phaseDB, Function<BlockGraph, GroovyPane> genGroovyPane) {
         this.phaseDB = phaseDB;
         this.genGroovyPane = genGroovyPane;
         phaseList = FXCollections.observableArrayList();
         phasePanes = new ArrayList<>();
-
         phaseDataMap = new HashMap<>();
 
         initializeView();
@@ -104,7 +105,7 @@ public class PhaseChooserPane implements SubView<GridPane> {
         TextInputDialog dialog = new TextInputDialog("");
         dialog.setContentText("Please enter the name of this phase graph:");
         dialog.showAndWait().ifPresent(name -> {
-            var tryGraph = phaseDB.createGraph(name);
+            var tryGraph = phaseDB.createPhaseGraph(name);
             if(tryGraph.isSuccess()) {
                 try {
                     var graph = tryGraph.get();

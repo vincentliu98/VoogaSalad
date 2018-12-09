@@ -7,7 +7,7 @@ public class PhaseSerializationTest {
         var authTools = new AuthoringTools(5,5);
         var phaseDB = authTools.phaseDB();
 
-        var graph = phaseDB.createGraph("A").get(null);
+        var graph = phaseDB.createPhaseGraph("A").get(null);
 
         var node2 = phaseDB.createPhase("b").get(null);
         var node3 = phaseDB.createPhase("c").get(null);

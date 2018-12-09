@@ -73,7 +73,7 @@ public class SerializationTest {
         phaseDB.heartbeat().addEdge(factory.createEdge(hbSource, Ports.FLOW_OUT, hbScript));
 
 
-        var graph = phaseDB.createGraph("A").get(null);
+        var graph = phaseDB.createPhaseGraph("A").get(null);
         var node2 = phaseDB.createPhase("b").get(null);
         var node3 = phaseDB.createPhase("c").get(null);
         var node4 = phaseDB.createPhase("d").get(null);

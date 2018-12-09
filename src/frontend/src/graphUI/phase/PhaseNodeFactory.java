@@ -2,6 +2,7 @@ package graphUI.phase;
 
 import authoringUtils.frontendUtils.Try;
 import graphUI.groovy.GroovyPaneFactory.GroovyPane;
+import groovy.api.BlockGraph;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -10,6 +11,7 @@ import javafx.scene.text.Font;
 import phase.api.Phase;
 import phase.api.PhaseDB;
 
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -19,14 +21,16 @@ import java.util.function.Supplier;
  */
 public class PhaseNodeFactory {
     private PhaseDB db;
-    private Supplier<GroovyPane> genGroovyPane;
+    private Function<BlockGraph, GroovyPane> genGroovyPane;
 
-    public PhaseNodeFactory(PhaseDB db, Supplier<GroovyPane> genGroovyPane) {
+    public PhaseNodeFactory(PhaseDB db, Function<BlockGraph, GroovyPane> genGroovyPane) {
         this.db = db;
         this.genGroovyPane = genGroovyPane;
     }
 
-    public PhaseNode source(Phase phase, double xPos, double yPos) { return new PhaseNode(xPos, yPos, phase, true); }
+    public PhaseNode source(Phase phase, double xPos, double yPos) {
+        return new PhaseNode(xPos, yPos, phase, true);
+    }
     public Try<PhaseNode> gen(double xPos, double yPos, String name) {
         return db.createPhase(name).map(p -> new PhaseNode(xPos, yPos, p, false));
     }
@@ -63,7 +67,7 @@ public class PhaseNodeFactory {
             inner.toFront();
             text.toFront();
             text.setMouseTransparent(true);
-            groovyPane = genGroovyPane.get();
+            groovyPane = genGroovyPane.apply(model.exec());
             groovyPane.closeWindow();
 
             layout();

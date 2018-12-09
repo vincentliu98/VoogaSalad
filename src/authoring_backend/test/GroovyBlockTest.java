@@ -22,7 +22,7 @@ public class GroovyBlockTest {
 
     @Test
     public void testBasicTransformation() throws Throwable {
-        var graph = factory.createGraph();
+        var graph = factory.createGroovyGraph();
         var source = graph.source();
 
         // The author creates an assign block
@@ -132,7 +132,7 @@ public class GroovyBlockTest {
 
     @Test
     public void testMultiLine() throws Throwable {
-        var graph2 = factory.createGraph();
+        var graph2 = factory.createGroovyGraph();
 
         var s = factory.refBlock("sum").get();
         var init = factory.assignBlock();

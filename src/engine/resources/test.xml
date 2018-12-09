@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<game>
+  <gameplay.Node>
+    <myPhaseName>k</myPhaseName>
+    <myName>k</myName>
+    <myExecution>if(((false) &lt; (false))) {
+
+}
+</myExecution>
+  </gameplay.Node>
+  <gameplay.Node>
+    <myPhaseName>k</myPhaseName>
+    <myName>a</myName>
+    <myExecution></myExecution>
+  </gameplay.Node>
+  <gameplay.Edge>
+    <myPhaseName>k</myPhaseName>
+    <myStartNodeName>k</myStartNodeName>
+    <myEndNodeName>a</myEndNodeName>
+    <myTrigger class="phase.api.GameEvent$MouseClick"/>
+    <myGuard></myGuard>
+  </gameplay.Edge>
+  <gameplay.Phase>
+    <myStartNodeName>k</myStartNodeName>
+    <myCurrentNodeName>k</myCurrentNodeName>
+    <myNodeNames>
+      <string>k</string>
+      <string>a</string>
+    </myNodeNames>
+  </gameplay.Phase>
+  <heartbeat></heartbeat>
+  <grid-width>10</grid-width>
+  <grid-height>7</grid-height>
+  <gameplay.EntityPrototype>
+    <name>X</name>
+    <props/>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myImagePaths/>
+    <myImageSelector></myImageSelector>
+  </gameplay.EntityPrototype>
+  <gameplay.EntityPrototype>
+    <name>O</name>
+    <props/>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myImagePaths/>
+    <myImageSelector></myImageSelector>
+  </gameplay.EntityPrototype>
+  <gameplay.Player>
+    <myName>Default Player</myName>
+    <myStats/>
+    <myEntityIDs/>
+  </gameplay.Player>
+  <gameplay.Turn>
+    <myCurrentPhaseName>k</myCurrentPhaseName>
+    <playersOrder>
+      <string>Default Player</string>
+    </playersOrder>
+  </gameplay.Turn>
+</game>

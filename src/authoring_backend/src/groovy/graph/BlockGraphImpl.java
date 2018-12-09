@@ -53,13 +53,13 @@ public class BlockGraphImpl extends SimpleGraph<GroovyBlock, BlockEdge> implemen
                 .findFirst()
                 .orElseThrow(Try.supplyThrow(new PortNotConnectedException(from, fromPort))));
 
-        if(find.isFailure() && canBeEmpty) { // handle can-be-createGraph s
+        if(find.isFailure() && canBeEmpty) { // handle can-be-createPhaseGraph s
             return Try.success(new RawGroovyBlock(""));
         } else return find.map(Edge::to);
     }
 
     @Override
     public Try<GroovyBlock> findTarget(GroovyBlock from, Ports fromPort) {
-        return findTarget(from, fromPort, fromPort == Ports.FLOW_OUT); // FLOW_OUT can be createGraph by default
+        return findTarget(from, fromPort, fromPort == Ports.FLOW_OUT); // FLOW_OUT can be createPhaseGraph by default
     }
 }
