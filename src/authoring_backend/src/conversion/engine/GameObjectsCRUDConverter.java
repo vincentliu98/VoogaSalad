@@ -41,15 +41,15 @@ public class GameObjectsCRUDConverter implements Converter {
         for (CategoryClass categoryClass : db.getCategoryClasses()) {
             writer.startNode("gamePlay.CategoryPrototype");
 
-                // name
-                writer.startNode("name");
-                    writer.setValue(categoryClass.getClassName().getValue());
-                writer.endNode();
+            // name
+            writer.startNode("name");
+            writer.setValue(categoryClass.getClassName().getValue());
+            writer.endNode();
 
-                // id
-                writer.startNode("myID");
-                    writer.setValue(String.valueOf(categoryClass.getClassId().getValue()));
-                writer.endNode();
+            // id
+            writer.startNode("myID");
+            writer.setValue(String.valueOf(categoryClass.getClassId().getValue()));
+            writer.endNode();
 
             writer.endNode();
         }
@@ -114,6 +114,11 @@ public class GameObjectsCRUDConverter implements Converter {
             // name
             writer.startNode("name");
             writer.setValue(entityInstance.getClassName().get());
+            writer.endNode();
+
+            // instance name
+            writer.startNode("instanceName");
+            writer.setValue(entityInstance.getInstanceName().getValue());
             writer.endNode();
 
             // props
@@ -189,11 +194,11 @@ public class GameObjectsCRUDConverter implements Converter {
 
             //myImagePaths
             writer.startNode("myImagePaths");
-            for(var path : tileClass.getImagePathList()) {
-            writer.startNode("string");
-            writer.setValue(path);
-            writer.endNode();
-            }
+            tileClass.getImagePathList().forEach(path -> {
+                writer.startNode("string");
+                writer.setValue(path);
+                writer.endNode();
+            });
             writer.endNode();
 
             // myImageSelector
@@ -205,12 +210,6 @@ public class GameObjectsCRUDConverter implements Converter {
 
         // TileInstance
         for(var tileInstance : db.getTileInstances()) {
-            TileClass tileClass = null;
-            try {
-                tileClass = db.getTileClass(tileInstance.getClassName().get());
-            } catch (GameObjectClassNotFoundException e) {
-                e.printStackTrace();
-            }
             writer.startNode("gameplay.Tile");
 
             // myID
@@ -220,7 +219,7 @@ public class GameObjectsCRUDConverter implements Converter {
 
             // name
             writer.startNode("name");
-            writer.setValue(tileClass.getClassName().get());
+            writer.setValue(tileInstance.getClassName().get());
             writer.endNode();
 
             // props
