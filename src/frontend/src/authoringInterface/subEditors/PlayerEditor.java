@@ -1,5 +1,6 @@
 package authoringInterface.subEditors;
 
+import authoringInterface.subEditors.exception.IllegalGameObjectNamingException;
 import authoringUtils.exception.DuplicateGameObjectClassException;
 import authoringUtils.exception.GameObjectClassNotFoundException;
 import authoringUtils.exception.GameObjectInstanceNotFoundException;
@@ -7,11 +8,16 @@ import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.player.PlayerClass;
 import gameObjects.player.PlayerInstance;
+import grids.PointImpl;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.TreeItem;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import utils.exception.PreviewUnavailableException;
@@ -30,13 +36,13 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
     private Label imageText;
     private Button chooseImage;
     private HBox imagePanel;
-    private Set<ImageView> toRemove;
+    private Set<ImageView> toRemoveImage;
     private Set<String> toRemovePath;
     private String imagePath;
 
     PlayerEditor(GameObjectsCRUDInterface manager) {
         super(manager);
-        toRemove = new HashSet<>();
+        toRemoveImage = new HashSet<>();
         toRemovePath = new HashSet<>();
         nameLabel.setText("Your Player Name");
         nameField.setPromptText("Player 0");
@@ -61,6 +67,12 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
                 + "-fx-background-color: #343a40;");
         layout.addRow(0, imageText, chooseImage);
         layout.addRow(1, imagePanel);
+
+        rootPane.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.DELETE || e.getCode() == KeyCode.BACK_SPACE) {
+                toRemovePath.remove(imagePath);
+            }
+        });
     }
 
     private void presentImages() {
@@ -70,8 +82,8 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
         preview.setFitHeight(ICON_HEIGHT);
         imagePanel.getChildren().add(preview);
         preview.setOnMouseClicked(e -> {
-            if (!toRemove.remove(preview)) {
-                toRemove.add(preview);
+            if (!toRemoveImage.remove(preview)) {
+                toRemoveImage.add(preview);
                 toRemovePath.add(imagePath);
                 preview.setOpacity(REMOVE_OPACITY);
             } else {
@@ -83,93 +95,66 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
 
     @Override
     protected void readGameObjectInstance() {
+        readInstanceProperties();
         nameField.setText(gameObjectInstance.getClassName().getValue());
-        imagePath = gameObjectInstance.getImagePath().getName();
+        imagePath = gameObjectInstance.getImagePath().toString();
     }
 
     @Override
     protected void readGameObjectClass() {
+        readClassProperties();
         nameField.setText(gameObjectClass.getClassName().getValue());
-        imagePath = gameObjectClass.getImagePath().getName();
+        imagePath = gameObjectClass.getImagePath().toString();
+        System.out.print(imagePath);
     }
 
     /**
      * This method sets up the confirm logic of adding new TreeItem.
      */
     @Override
-    protected void confirmAddTreeItem() {
-        try {
-            gameObjectManager.createPlayerClass(nameField.getText().trim());
-        } catch (DuplicateGameObjectClassException e1) {
-            // TODO
-            e1.printStackTrace();
-        }
-        PlayerClass playerClass = null;
-        try {
-            playerClass = gameObjectManager.getPlayerClass((nameField.getText().trim()));
-        } catch (GameObjectClassNotFoundException e1) {
-            // TODO
-            e1.printStackTrace();
-        }
+    protected void confirmAddTreeItem() throws PreviewUnavailableException, IllegalGameObjectNamingException, DuplicateGameObjectClassException {
+        PlayerClass playerClass = gameObjectManager.createPlayerClass(getValidClassName());
         assert playerClass != null;
         TreeItem<String> newItem = new TreeItem<>(playerClass.getClassName().getValue());
         playerClass.setImagePath(imagePath);
-
-        ImageView icon = null;
-        try {
-            icon = new ImageView(ImageManager.getPreview(playerClass));
-        } catch (PreviewUnavailableException e1) {
-            // TODO: proper error handling
-            e1.printStackTrace();
-        }
-        assert icon != null;
-
+        ImageView icon = new ImageView(ImageManager.getPreview(playerClass));
+        JavaFxOperation.setWidthAndHeight(icon, ICON_WIDTH, ICON_HEIGHT);
         newItem.setGraphic(icon);
         treeItem.getChildren().add(newItem);
+        writeClassProperties();
     }
 
     /**
      * This method sets up the confirm logic of editing existing TreeItem.
      */
     @Override
-    protected void confirmEditTreeItem() {
-//        try {
-//            ImageManager.removeClassImage(gameObjectClass);
-//        } catch (GameObjectClassNotFoundException ignored) {}
+    protected void confirmEditTreeItem() throws IllegalGameObjectNamingException, InvalidOperationException, PreviewUnavailableException {
+        gameObjectClass.setClassName(getValidClassName());
+        try {
+            ImageManager.removeClassImage(gameObjectClass);
+        } catch (GameObjectClassNotFoundException ignored) {
+        }
         gameObjectClass.setImagePath(imagePath);
-
-        try {
-            gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName().getValue(), nameField.getText());
-        } catch (InvalidOperationException e1) {
-            // TODO
-            e1.printStackTrace();
-        }
-        ImageView icon2 = null;
-        try {
-            icon2 = new ImageView(ImageManager.getPreview(gameObjectClass));
-        } catch (PreviewUnavailableException e1) {
-            // TODO: proper error handling
-            e1.printStackTrace();
-        }
-        assert icon2 != null;
+        gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName().getValue(), nameField.getText());
+        ImageView icon2 = new ImageView(ImageManager.getPreview(gameObjectClass));
         JavaFxOperation.setWidthAndHeight(icon2, ICON_WIDTH, ICON_HEIGHT);
         treeItem.setValue(nameField.getText());
         treeItem.setGraphic(icon2);
+        writeClassProperties();
     }
 
     /**
      * This method sets up the confirm logic of editing existing Node.
      */
     @Override
-    protected void confirmEditNode() {
-        try { ImageManager.removeInstanceImage(gameObjectInstance); } catch (GameObjectInstanceNotFoundException ignored) {}
-        gameObjectInstance.setInstanceName(nameField.getText());
-        gameObjectInstance.setImagePath(imagePath);
+    protected void confirmEditNode() throws IllegalGameObjectNamingException, PreviewUnavailableException {
+        gameObjectInstance.setInstanceName(getValidInstanceName());
         try {
-            ((ImageView) nodeEdited).setImage(ImageManager.getPreview(gameObjectInstance));
-        } catch (PreviewUnavailableException e1) {
-            // TODO: proper error handling
-            e1.printStackTrace();
+            ImageManager.removeInstanceImage(gameObjectInstance);
+        } catch (GameObjectInstanceNotFoundException ignored) {
         }
+        gameObjectInstance.setImagePath(imagePath);
+        ((ImageView) nodeEdited).setImage(ImageManager.getPreview(gameObjectInstance));
+        writeInstanceProperties();
     }
 }
