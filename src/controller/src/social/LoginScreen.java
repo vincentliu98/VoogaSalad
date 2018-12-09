@@ -104,7 +104,7 @@ public class LoginScreen {
         btn.setOnMouseClicked(e -> {
             // throw exceptions for invalid password, username
             // assuming a valid user was retrieved from the database (myUser)
-            User myUser = new User(1); // TODO: Remove later (just a placeholder)
+            User myUser = new User(10, "bloop"); // TODO: Remove later (just a placeholder)
             EventBus.getInstance().sendMessage(EngineEvent.CHANGE_USER, myUser);
             myStage.close();
         });
