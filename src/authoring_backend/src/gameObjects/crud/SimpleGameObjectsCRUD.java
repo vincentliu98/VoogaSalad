@@ -43,7 +43,11 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         gameObjectClassMapById = FXCollections.observableHashMap();
         gameObjectInstanceMapById = FXCollections.observableHashMap();
 
-        myIdManager = new IdManagerClass(getGameObjectClassFromMapFunc(), getGameObjectInstanceFromMapFunc());
+        myIdManager = new IdManagerClass(
+                getGameObjectClassFromMapFunc(),
+                getGameObjectInstanceFromMapFunc(),
+                gameObjectClassMapById,
+                gameObjectInstanceMapById);
 
         myTileInstanceFactory = instantiateTileInstanceFactory();
         myEntityInstanceFactory = instantiateEntityInstanceFactory();
@@ -569,16 +573,16 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
 
     private void removeGameObjectClassFromMaps(GameObjectClass g)
             throws InvalidIdException {
-        myIdManager.returnClassIdFunc().accept(g);
         gameObjectClassMapByName.remove(g.getClassName().getValue());
         gameObjectClassMapById.remove(g.getClassId().getValue());
+        myIdManager.returnClassIdFunc().accept(g);
     }
 
     private void removeGameObjectInstanceFromMap(int instanceId)
             throws InvalidIdException {
         GameObjectInstance gameObjectInstance = gameObjectInstanceMapById.get(instanceId);
-        myIdManager.returnInstanceIdFunc().accept(gameObjectInstance);
         gameObjectInstanceMapById.remove(instanceId);
+        myIdManager.returnInstanceIdFunc().accept(gameObjectInstance);
     }
 
 
