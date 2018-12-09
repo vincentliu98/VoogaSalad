@@ -1,5 +1,7 @@
 package utils.serializer;
 
+import grids.Point;
+import grids.PointImpl;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
@@ -35,4 +37,17 @@ public class XMLParser {
         }
         myDocument.getDocumentElement().normalize();
     }
+
+    /**
+     * This method returns the dimension of the Grid specified by the XML.
+     *
+     * @return A Point representing height and width of the grid.
+     */
+    public Point getGridDimension() {
+        return new PointImpl(
+                Integer.parseInt(myDocument.getElementsByTagName("grid-width").item(0).getNodeValue()),
+                Integer.parseInt(myDocument.getElementsByTagName("grid-height").item(0).getNodeValue()));
+    }
+
+    
 }
