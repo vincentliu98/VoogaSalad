@@ -41,7 +41,11 @@ public class CRUDTest {
 
     @Test
     public void testDeleteInstances() {
-        catClass = crud.getCategoryClass(Integer.toString(1));
+        try {
+            catClass = crud.getCategoryClass(Integer.toString(1));
+        } catch (GameObjectClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
 }
