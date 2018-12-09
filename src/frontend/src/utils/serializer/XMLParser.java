@@ -49,5 +49,5 @@ public class XMLParser {
                 Integer.parseInt(myDocument.getElementsByTagName("grid-height").item(0).getNodeValue()));
     }
 
-    
+
 }
