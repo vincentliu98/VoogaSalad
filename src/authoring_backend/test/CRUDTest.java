@@ -39,4 +39,9 @@ public class CRUDTest {
 
     }
 
+    @Test
+    public void testDeleteInstances() {
+        catClass = crud.getCategoryClass(Integer.toString(1));
+    }
+
 }
