@@ -65,8 +65,6 @@ public class PhasePane implements SubView<StackPane> {
     private PhaseDB phaseDB;
     private PhaseNodeFactory factory;
     private TransitionLineFactory trFactory;
-    private SinglePhaseData singlePhaseData;
-    private PhaseChooserPane phaseChooserPane;
 
     private Set<TransitionLine> lines;
     private Set<PhaseNode> nodes;
@@ -77,11 +75,13 @@ public class PhasePane implements SubView<StackPane> {
     private Line tmpLine;
     private PhaseGraph graph;
 
-    public PhasePane(PhaseDB phaseDB, Function<BlockGraph, GroovyPane> genGroovyPane, PhaseGraph graph, SinglePhaseData singlePhaseData, PhaseChooserPane phaseChooserPane) {
+    public PhasePane(
+        PhaseDB phaseDB,
+        Function<BlockGraph, GroovyPane> genGroovyPane,
+        PhaseGraph graph
+    ) {
         this.graph = graph;
         this.phaseDB = phaseDB;
-        this.singlePhaseData = singlePhaseData;
-        this.phaseChooserPane = phaseChooserPane;
 
         factory = new PhaseNodeFactory(phaseDB, genGroovyPane);
         trFactory = new TransitionLineFactory(genGroovyPane, group.getChildren()::add, group.getChildren()::remove);
@@ -202,9 +202,6 @@ public class PhasePane implements SubView<StackPane> {
         if (selectedNode.get() != null && selectedNode.get().model() != graph.source()) {
             nodes.remove(selectedNode.get());
 
-            singlePhaseData.removeNode(selectedNode.get().getName());
-            phaseChooserPane.checkMapUpdate();
-
             var toRemove = new HashSet<TransitionLine>();
             for (var l : lines) {
                 if (l.start() == selectedNode.get() || l.end() == selectedNode.get()) {
@@ -250,9 +247,6 @@ public class PhasePane implements SubView<StackPane> {
             graph.addEdge(phaseDB.createTransition(node1.model(), event, node2.model()));
             lines.add(edgeLine);
 
-            singlePhaseData.addConnect(new Pair<>(node1.getName(), node2.getName()), event);
-            phaseChooserPane.checkMapUpdate();
-
             edgeLine.getStyleClass().add("cursorImage");
             edgeLine.toBack();
         } catch (Throwable t) {
@@ -264,8 +258,6 @@ public class PhasePane implements SubView<StackPane> {
         try {
             graph.addNode(node.model());
             nodes.add(node);
-
-            addFrontEndData(node);
 
             node.getStyleClass().add("cursorImage");
             // Add mouseEvent to the GroovyNode to update position
@@ -282,17 +274,6 @@ public class PhasePane implements SubView<StackPane> {
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
-    }
-
-    private void addFrontEndData(PhaseNode node) {
-        var nodeName = node.getName();
-        singlePhaseData.addNode(nodeName);
-        singlePhaseData.addPos(nodeName, new Pair<>(node.getX(), node.getY()));
-        // TODO: 12/4/18 make an observableMap
-        phaseChooserPane.setPhaseDataMap(new HashMap<>() {{
-            put(nodeName, singlePhaseData);
-        }});
-        phaseChooserPane.checkMapUpdate();
     }
 
     private void nodeMousePressedHandler(MouseEvent t) {
@@ -342,9 +323,6 @@ public class PhasePane implements SubView<StackPane> {
             node.setTranslateX(newTranslateX);
             node.setTranslateY(newTranslateY);
             updateLocations(node);
-
-            addFrontEndData(node);
-            phaseChooserPane.checkMapUpdate();
 
         } else if (draggingPurpose == DRAG_PURPOSE.CONNECT_LINE) {
             tmpLine.setEndX(tmpLine.getStartX() + offsetX);

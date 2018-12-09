@@ -1,72 +1,35 @@
+import authoring.AuthoringTools;
 import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import com.thoughtworks.xstream.io.xml.DomDriver;
-import grids.Point;
-import grids.PointImpl;
-import groovy.lang.Binding;
-import groovy.lang.GroovyShell;
-import javafx.scene.image.ImageView;
-import phase.api.GameEvent;
-
-import java.util.*;
+import groovy.api.BlockGraph;
+import groovy.api.Ports;
 
 public class XStreamTest {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Throwable {
         XStream xstream = new XStream(new DomDriver());
-        var e = (Entity) xstream.fromXML(XStreamTest.class.getClassLoader().getResourceAsStream("test_data.xml"));
 
-        var binding = new Binding();
-        binding.setVariable("entity", e);
-        GroovyShell shell = new GroovyShell(binding);
+        var authTools = new AuthoringTools(1, 1);
+        var groovyFactory = authTools.factory();
+        var graph = groovyFactory.createGroovyGraph();
 
-        e.printList();
-        e.properties().put("ha", "he");
-        e.properties().put("he", new Entity());
-        System.out.println(e.view());
-        System.out.println(e.properties());
+        var source = graph.source();
+        var doBlock = groovyFactory.functionBlock("doSomething", 1);
+        graph.addNode(doBlock);
+        graph.addEdge(groovyFactory.createEdge(source, Ports.FLOW_OUT, doBlock));
+        var trueBlock = groovyFactory.booleanBlock("true").get();
+        graph.addNode(trueBlock);
+        graph.addEdge(groovyFactory.createEdge(doBlock, Ports.A, trueBlock));
+        var ifBlock = groovyFactory.ifBlock();
+        graph.addNode(ifBlock);
+        graph.addEdge(groovyFactory.createEdge(doBlock, Ports.FLOW_OUT, ifBlock));
+        graph.addEdge(groovyFactory.createEdge(ifBlock, Ports.IF_PREDICATE, trueBlock));
 
-        System.out.println(xstream.toXML(e));
+        System.out.println("--------------------BEFORE SERIALIZATION----------------");
+        System.out.println(graph.transformToGroovy().get());
 
-        shell.evaluate("entity.properties().put('hi', 'ho')");
-        shell.evaluate("$ret = entity.properties().get('he').properties()");
-        System.out.println(((Entity) shell.getVariable("entity")).properties());
-        System.out.println(shell.getVariable("$ret"));
-        shell.evaluate("$ret.put('hello', 1)");
-        System.out.println(((Entity) e.properties().get("he")).properties().get("hello"));
-        System.out.println(shell.evaluate("entity.properties().get('he').properties().get('hello')-2"));
-        Point p = new PointImpl(1,2);
-        System.out.println(xstream.toXML(p));
+        var newGraph = (BlockGraph) xstream.fromXML(xstream.toXML(graph));
 
-    }
-
-    public static abstract class Property {
-        protected Map<String, Object> properties;
-    }
-
-    public static class Entity extends Property {
-        private List<String> images;
-        private Set<Integer> ids;
-        private GameEvent trigger;
-
-        public Entity() {
-            properties = new LinkedHashMap<>();
-            ids = new HashSet<>();
-            properties.put("ha", 1);
-            ids.add(1);
-            trigger = GameEvent.mouseClick();
-        }
-
-        @XStreamOmitField
-        private transient ImageView view;
-
-        public void printList() {
-            System.out.println(images);
-        }
-
-        public ImageView view() {
-            return view;
-        }
-
-        public Map<String, Object> properties() { return properties; }
+        System.out.println("--------------------AFTER  SERIALIZATION----------------");
+        System.out.println(newGraph.transformToGroovy().get());
     }
 }

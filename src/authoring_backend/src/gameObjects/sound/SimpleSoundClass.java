@@ -19,6 +19,7 @@ public class SimpleSoundClass implements SoundClass {
     private ReadOnlyStringWrapper className;
     private ReadOnlyIntegerWrapper classId;
     private SimpleStringProperty mediaPath;
+    private SimpleDoubleProperty duration;
     private ObservableMap<String, String> propertiesMap;
 
     private SoundInstanceFactory myFactory;
@@ -180,5 +181,15 @@ public class SimpleSoundClass implements SoundClass {
     @Override
     public void setMediaFilePath(String mediaFilePath) {
 
+    }
+
+    @Override
+    public SimpleDoubleProperty getDuration() {
+        return duration;
+    }
+
+    @Override
+    public void setDuration(double newDuration) {
+        duration.setValue(newDuration);
     }
 }

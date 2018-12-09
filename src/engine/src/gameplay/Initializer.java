@@ -1,6 +1,5 @@
 package gameplay;
 
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 
@@ -23,7 +22,7 @@ public class Initializer {
         GameData.setGameData(
             myXMLParser.getDimension(), myXMLParser.getPlayers(), myXMLParser.getEntities(),
             myXMLParser.getEntityPrototypes(), myXMLParser.getTiles(),
-            myXMLParser.getPhases(), myXMLParser.getHeartBeat(),
+            myXMLParser.getPhases(), myXMLParser.getWinCondition(),
             myXMLParser.getNodes(), myXMLParser.getEdges(), myXMLParser.getTurn(), myRoot, this);
         for (Tile tile : GameData.getTiles().values()){
             tile.setupView();
@@ -34,6 +33,11 @@ public class Initializer {
             myRoot.getChildren().add(entity.getImageView());
         }
         startGame();
+    }
+
+    public String getFileName(){
+        String filename = myFile.getName();
+        return filename.substring(0, filename.length() - 4); // .xml is 4 letters long
     }
 
     public Pane getRoot(){ return myRoot; }

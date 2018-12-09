@@ -63,55 +63,63 @@ public class GroovyNodeFactory {
         return new GroovyNode(sourceBlock, xPos, yPos, 50, 50, FONT_NORMAL, Color.INDIGO, SOURCE_PORT, null);
     }
 
-    public Try<GroovyNode> toModel(DraggableGroovyIcon icon, double xPos, double yPos, String arg) {
-        String type = icon.blockType();
+    /**
+     *  Model -----> View
+     */
 
-        if(type.equals("each")) return Try.success(forEachBlock(xPos, yPos, arg));
-        if(type.equals("if")) return Try.success(ifBlock(xPos, yPos));
-        if(type.equals("elseIf")) return Try.success(ifElseBlock(xPos, yPos));
-        if(type.equals("else")) return Try.success(elseBlock(xPos, yPos));
-        if(type.equals("assign")) return Try.success(assignBlock(xPos, yPos));
 
-        if(type.equals("add")) return Try.success(binaryBlock(xPos, yPos, "+"));
-        if(type.equals("minus")) return Try.success(binaryBlock(xPos, yPos, "-"));
-        if(type.equals("mult")) return Try.success(binaryBlock(xPos, yPos, "*"));
-        if(type.equals("div")) return Try.success(binaryBlock(xPos, yPos, "/"));
-        if(type.equals("eq")) return Try.success(binaryBlock(xPos, yPos, "=="));
-        if(type.equals("neq")) return Try.success(binaryBlock(xPos, yPos, "!="));
-        if(type.equals("lt")) return Try.success(binaryBlock(xPos, yPos, "<"));
-        if(type.equals("gt")) return Try.success(binaryBlock(xPos, yPos, ">"));
-        if(type.equals("leq")) return Try.success(binaryBlock(xPos, yPos, "<="));
-        if(type.equals("geq")) return Try.success(binaryBlock(xPos, yPos, ">="));
-        if(type.equals("and")) return Try.success(binaryBlock(xPos, yPos, "&&"));
-        if(type.equals("or")) return Try.success(binaryBlock(xPos, yPos, "||"));
-        if(type.equals("contains")) return Try.success(binaryBlock(xPos, yPos, ".contains"));
-        if(type.equals("range")) return Try.success(binaryBlock(xPos, yPos, ".."));
-        if(type.equals("binary")) return Try.success(binaryBlock(xPos, yPos, arg));
+    /**
+     *   Dragged Icon -----> Model
+     */
+    public Try<GroovyNode> toModel(
+        String blockType, Map<Ports, String> portInfo, double xPos, double yPos, String arg
+    ) {
+        if(blockType.equals("each")) return Try.success(forEachBlock(xPos, yPos, arg));
+        if(blockType.equals("if")) return Try.success(ifBlock(xPos, yPos));
+        if(blockType.equals("elseIf")) return Try.success(ifElseBlock(xPos, yPos));
+        if(blockType.equals("else")) return Try.success(elseBlock(xPos, yPos));
+        if(blockType.equals("assign")) return Try.success(assignBlock(xPos, yPos));
 
-        if(type.equals("true")) return booleanBlock(xPos, yPos, "true");
-        if(type.equals("false")) return booleanBlock(xPos, yPos, "false");
-        if(type.equals("int")) return integerBlock(xPos, yPos, arg);
-        if(type.equals("double")) return doubleBlock(xPos, yPos, arg);
-        if(type.equals("list")) return listBlock(xPos, yPos, arg);
-        if(type.equals("map")) return mapBlock(xPos, yPos, arg);
-        if(type.equals("str")) return Try.success(stringBlock(xPos, yPos, arg));
-        if(type.equals("ref")) return refBlock(xPos, yPos, arg);
-        if(type.equals("$clicked")) return refBlock(xPos, yPos, "$clicked");
-        if(type.equals("$pressed")) return refBlock(xPos, yPos, "$pressed");
-        if(type.equals("A")) return keyBlock(xPos, yPos, "65");
-        if(type.equals("S")) return keyBlock(xPos, yPos, "83");
-        if(type.equals("D")) return keyBlock(xPos, yPos, "68");
-        if(type.equals("W")) return keyBlock(xPos, yPos, "87");
-        if(type.equals("key1")) return keyBlock(xPos, yPos, "49");
-        if(type.equals("key2")) return keyBlock(xPos, yPos, "50");
-        if(type.equals("key3")) return keyBlock(xPos, yPos, "51");
-        if(type.equals("enter")) return keyBlock(xPos, yPos, "10");
-        if(type.equals("ESC")) return keyBlock(xPos, yPos, "27");
-        if(type.equals("space")) return keyBlock(xPos, yPos, "32");
+        if(blockType.equals("add")) return Try.success(binaryBlock(xPos, yPos, "+"));
+        if(blockType.equals("minus")) return Try.success(binaryBlock(xPos, yPos, "-"));
+        if(blockType.equals("mult")) return Try.success(binaryBlock(xPos, yPos, "*"));
+        if(blockType.equals("div")) return Try.success(binaryBlock(xPos, yPos, "/"));
+        if(blockType.equals("eq")) return Try.success(binaryBlock(xPos, yPos, "=="));
+        if(blockType.equals("neq")) return Try.success(binaryBlock(xPos, yPos, "!="));
+        if(blockType.equals("lt")) return Try.success(binaryBlock(xPos, yPos, "<"));
+        if(blockType.equals("gt")) return Try.success(binaryBlock(xPos, yPos, ">"));
+        if(blockType.equals("leq")) return Try.success(binaryBlock(xPos, yPos, "<="));
+        if(blockType.equals("geq")) return Try.success(binaryBlock(xPos, yPos, ">="));
+        if(blockType.equals("and")) return Try.success(binaryBlock(xPos, yPos, "&&"));
+        if(blockType.equals("or")) return Try.success(binaryBlock(xPos, yPos, "||"));
+        if(blockType.equals("contains")) return Try.success(binaryBlock(xPos, yPos, ".contains"));
+        if(blockType.equals("range")) return Try.success(binaryBlock(xPos, yPos, ".."));
+        if(blockType.equals("binary")) return Try.success(binaryBlock(xPos, yPos, arg));
 
-        if(type.equals("function")) return Try.success(functionBlock(xPos, yPos, arg, null));
+        if(blockType.equals("true")) return booleanBlock(xPos, yPos, "true");
+        if(blockType.equals("false")) return booleanBlock(xPos, yPos, "false");
+        if(blockType.equals("int")) return integerBlock(xPos, yPos, arg);
+        if(blockType.equals("double")) return doubleBlock(xPos, yPos, arg);
+        if(blockType.equals("list")) return listBlock(xPos, yPos, arg);
+        if(blockType.equals("map")) return mapBlock(xPos, yPos, arg);
+        if(blockType.equals("str")) return Try.success(stringBlock(xPos, yPos, arg));
+        if(blockType.equals("ref")) return refBlock(xPos, yPos, arg);
+        if(blockType.equals("$clicked")) return refBlock(xPos, yPos, "$clicked");
+        if(blockType.equals("$pressed")) return refBlock(xPos, yPos, "$pressed");
+        if(blockType.equals("A")) return keyBlock(xPos, yPos, "65");
+        if(blockType.equals("S")) return keyBlock(xPos, yPos, "83");
+        if(blockType.equals("D")) return keyBlock(xPos, yPos, "68");
+        if(blockType.equals("W")) return keyBlock(xPos, yPos, "87");
+        if(blockType.equals("key1")) return keyBlock(xPos, yPos, "49");
+        if(blockType.equals("key2")) return keyBlock(xPos, yPos, "50");
+        if(blockType.equals("key3")) return keyBlock(xPos, yPos, "51");
+        if(blockType.equals("enter")) return keyBlock(xPos, yPos, "10");
+        if(blockType.equals("ESC")) return keyBlock(xPos, yPos, "27");
+        if(blockType.equals("space")) return keyBlock(xPos, yPos, "32");
 
-        return Try.success(functionBlock(xPos, yPos, type, icon.getPortInfo()));
+        if(blockType.equals("function")) return Try.success(functionBlock(xPos, yPos, arg, null));
+
+        return Try.success(functionBlock(xPos, yPos, blockType, portInfo));
     }
 
     public GroovyNode forEachBlock(double xPos, double yPos, String loopvar) {

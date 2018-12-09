@@ -4,11 +4,15 @@ import api.SubView;
 import authoring.AuthoringTools;
 import authoringInterface.MainAuthoringProgram;
 import authoringInterface.View;
+import authoringInterface.editor.editView.EditView;
 import authoringInterface.editor.memento.Editor;
 import authoringInterface.editor.memento.EditorCaretaker;
 import authoringInterface.editor.menuBarView.subMenuBarView.*;
 import gameplay.Initializer;
+import graphUI.graphData.PhaseGraphXMLParser;
+import graphUI.graphData.SinglePhaseData;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -19,9 +23,13 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.xml.sax.SAXException;
 import runningGame.GameWindow;
+import utils.serializer.SerializerTestCRUD;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Map;
 import java.util.function.BiConsumer;
 
 /**
@@ -32,6 +40,7 @@ import java.util.function.BiConsumer;
  * @author jl729
  */
 public class EditorMenuBarView implements SubView<MenuBar> {
+    private EditView editView;
     private MenuBar menuBar;
     private GameWindow gameWindow;
     private AuthoringTools authTools;
@@ -41,16 +50,19 @@ public class EditorMenuBarView implements SubView<MenuBar> {
 
     private final EditorCaretaker editorCaretaker = new EditorCaretaker();
     private final Editor editor = new Editor();
+    private File myFile = null;
     private Integer currentMemento = 0;
     private Runnable closeWindow; //For each window closable
 
     public EditorMenuBarView(
             AuthoringTools authTools,
             Runnable closeWindow,
-            BiConsumer<Integer, Integer> updateGridDimension
+            BiConsumer<Integer, Integer> updateGridDimension,
+            EditView editView
     ) {
         this.authTools = authTools;
         this.closeWindow = closeWindow;
+        this.editView = editView;
         fileName = "TicTacToe.xml";
 
         menuBar = new MenuBar();
@@ -77,15 +89,23 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         MenuItem setBGM = new MenuItem("BGM");
         MenuItem helpDoc = new MenuItem("Help");
         MenuItem about = new MenuItem("About");
+        MenuItem saveGameObjects = new MenuItem("Save GameObjects");
 
         save.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
+        saveAs.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN));
         resizeGrid.setAccelerator(new KeyCodeCombination(KeyCode.G, KeyCombination.CONTROL_DOWN));
         helpDoc.setAccelerator(new KeyCodeCombination(KeyCode.H, KeyCombination.CONTROL_DOWN));
 
         newFile.setOnAction(e -> new NewWindowView());
         open.setOnAction(this::handleOpen);
         export.setOnAction(this::handleExport);
-        save.setOnAction(this::handleSave);
+
+        saveGameObjects.setOnAction(e -> new SaveGridAndGameObjectsView(new SerializerTestCRUD().getXMLString(authTools.entityDB())));
+
+        save.setOnAction(e -> {
+            if (myFile != null)
+            handleSave(e, myFile);
+        });
         saveAs.setOnAction(this::handleSaveAs);
         close.setOnAction(e -> new CloseFileView(closeWindow));
         undo.setOnAction(this::handleUndo);
@@ -98,7 +118,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         helpDoc.setOnAction(this::handleHelpDoc);
         about.setOnAction(this::handleAbout);
 
-        file.getItems().addAll(newFile, open, export, save, saveAs, close);
+        file.getItems().addAll(newFile, open, export, save, saveAs, saveGameObjects, close);
         edit.getItems().addAll(undo, redo);
         run.getItems().addAll(runProject);
         settings.getItems().addAll(resizeGrid, setBGM);
@@ -107,15 +127,17 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         menuBar.getMenus().addAll(file, edit, settings, run, help);
     }
 
-    void handleSave(ActionEvent event) {
+    void handleSave(ActionEvent event, File file) {
         // TODO: 11/17/18 Enable and Disable the undo and redo button (handleUndo + handleRedo function)
+//        editView.getPhaseView().saveXML(file);
+        System.out.println("New Content is saved");
         editorCaretaker.addMemento(editor.save());
         editor.setState(editorCaretaker.getMemento(currentMemento++).getSavedState());
     }
 
     void handleSaveAs(ActionEvent event) {
-        new SaveFileView(null); // for now
-        handleSave(event);
+//        myFile = editView.getPhaseView().generateXML();
+        handleSave(event, myFile);
     }
 
     void handleExport(ActionEvent event) {
@@ -127,7 +149,6 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         fileChooser.setTitle("Open project files");
         File file = fileChooser.showOpenDialog(new Stage());
         if (file != null) {
-            fileName = file.getName();
         }
     }
 

@@ -95,7 +95,9 @@ public class DraggableGroovyIconFactory {
                     arg = dialog.showAndWait().get();
                 }
                 createNode.accept(
-                    nodeFactory.toModel(draggingIcon, newNodeX.get(), newNodeY.get(), arg).get()
+                    nodeFactory.toModel(
+                        draggingIcon.blockType, draggingIcon.portInfo, newNodeX.get(), newNodeY.get(), arg
+                    ).get()
                 );
             } catch (Throwable t) {
                 ErrorWindow.display("Error while creating groovy node", t.toString());

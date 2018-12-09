@@ -3,10 +3,12 @@ package launchingGame;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
+import social.ProfileView;
 
 
 public class LauncherTopBarView {
@@ -21,13 +23,14 @@ public class LauncherTopBarView {
     private Pane mySpacer;
     private ControlOptions myControlOptions;
     private Stage myStage;
+    private ProfileView myProfile;
 
     private double initHeight;
     private double xOffset;
     private double yOffset;
 
 
-    public LauncherTopBarView(double height, Stage stage, Searchable searched){
+    public LauncherTopBarView(double height, Stage stage, BorderPane pane, Searchable searched){
         initHeight = height;
         myStage = stage;
 
@@ -37,14 +40,17 @@ public class LauncherTopBarView {
 
         mySearchBar = new SearchBar(searched);
 
-        myTextOptions = new TextOptions();
+        myTextOptions = new TextOptions(pane);
 
         myControlOptions = new ControlOptions(stage);
+
+        myProfile = new ProfileView();
 
         myBox.getChildren().add(mySearchBar.getView());
         myBox.getChildren().add(myDivider);
         myBox.getChildren().add(myTextOptions.getView());
         myBox.getChildren().add(mySpacer);
+        myBox.getChildren().add(myProfile.getView());
         myBox.getChildren().add(myControlOptions.getView());
     }
 
@@ -58,6 +64,7 @@ public class LauncherTopBarView {
 
         makeDraggable();
     }
+
 
     private void initDivider(){
         Image image = new Image(getClass().getResourceAsStream(DIVIDER_PATH));

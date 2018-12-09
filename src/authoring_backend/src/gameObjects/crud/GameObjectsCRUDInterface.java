@@ -10,6 +10,7 @@ import gameObjects.tile.*;
 import gameObjects.turn.Turn;
 import grids.Point;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Set;
 
@@ -156,6 +157,9 @@ public interface GameObjectsCRUDInterface {
 
     PlayerClass createPlayerClass(String className)
             throws DuplicateGameObjectClassException;
+
+    PlayerClass getPlayerClass(String className)
+            throws GameObjectClassNotFoundException;
 
     PlayerInstance createPlayerInstance(String className)
             throws GameObjectClassNotFoundException, GameObjectTypeException;

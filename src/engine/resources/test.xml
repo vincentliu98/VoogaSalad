@@ -3,20 +3,20 @@
   <gameplay.Node>
     <myPhaseName>k</myPhaseName>
     <myName>k</myName>
-    <myExecution>if(((false) &lt; (false))) {
+    <myExecution>if(true) {
 
 }
 </myExecution>
   </gameplay.Node>
   <gameplay.Node>
     <myPhaseName>k</myPhaseName>
-    <myName>a</myName>
+    <myName>l</myName>
     <myExecution></myExecution>
   </gameplay.Node>
   <gameplay.Edge>
     <myPhaseName>k</myPhaseName>
     <myStartNodeName>k</myStartNodeName>
-    <myEndNodeName>a</myEndNodeName>
+    <myEndNodeName>l</myEndNodeName>
     <myTrigger class="phase.api.GameEvent$MouseClick"/>
     <myGuard></myGuard>
   </gameplay.Edge>
@@ -25,20 +25,32 @@
     <myCurrentNodeName>k</myCurrentNodeName>
     <myNodeNames>
       <string>k</string>
-      <string>a</string>
+      <string>l</string>
     </myNodeNames>
   </gameplay.Phase>
-  <heartbeat></heartbeat>
+  <winCondition></winCondition>
   <grid-width>10</grid-width>
   <grid-height>7</grid-height>
-  <gameplay.EntityPrototype>
-    <name>X</name>
-    <props/>
-    <myWidth>1</myWidth>
-    <myHeight>1</myHeight>
-    <myImagePaths/>
-    <myImageSelector></myImageSelector>
-  </gameplay.EntityPrototype>
+  <gamePlay.CategoryPrototype>
+    <name>Game Objects</name>
+    <myID>1</myID>
+  </gamePlay.CategoryPrototype>
+  <gamePlay.CategoryPrototype>
+    <name>SOUND</name>
+    <myID>4</myID>
+  </gamePlay.CategoryPrototype>
+  <gamePlay.CategoryPrototype>
+    <name>ENTITY</name>
+    <myID>2</myID>
+  </gamePlay.CategoryPrototype>
+  <gamePlay.CategoryPrototype>
+    <name>TILE</name>
+    <myID>3</myID>
+  </gamePlay.CategoryPrototype>
+  <gamePlay.CategoryPrototype>
+    <name>PLAYER</name>
+    <myID>5</myID>
+  </gamePlay.CategoryPrototype>
   <gameplay.EntityPrototype>
     <name>O</name>
     <props/>
@@ -47,6 +59,23 @@
     <myImagePaths/>
     <myImageSelector></myImageSelector>
   </gameplay.EntityPrototype>
+  <gameplay.EntityPrototype>
+    <name>X</name>
+    <props/>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myImagePaths/>
+    <myImageSelector></myImageSelector>
+  </gameplay.EntityPrototype>
+  <gameplay.TilePrototype>
+    <myID>8</myID>
+    <name>Default Grid</name>
+    <props/>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myImagePaths/>
+    <myImageSelector></myImageSelector>
+  </gameplay.TilePrototype>
   <gameplay.Player>
     <myName>Default Player</myName>
     <myStats/>

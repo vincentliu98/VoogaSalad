@@ -1,5 +1,7 @@
 package authoringInterface.subEditors;
 
+import authoringInterface.subEditors.exception.IllegalGameObjectNamingException;
+import authoringInterface.subEditors.exception.IllegalGeometryException;
 import authoringUtils.exception.DuplicateGameObjectClassException;
 import authoringUtils.exception.GameObjectClassNotFoundException;
 import authoringUtils.exception.GameObjectInstanceNotFoundException;
@@ -7,23 +9,19 @@ import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.entity.EntityClass;
 import gameObjects.entity.EntityInstance;
-import javafx.collections.*;
+import gameObjects.gameObject.GameObjectClass;
 import grids.PointImpl;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import utils.ErrorWindow;
 import utils.exception.GridIndexOutOfBoundsException;
 import utils.exception.PreviewUnavailableException;
 import utils.exception.UnremovableNodeException;
@@ -41,6 +39,7 @@ import java.util.Set;
  * @author Haotian Wang
  * @author Amy
  */
+@SuppressWarnings("Duplicates")
 public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityInstance> {
     private static final double ICON_WIDTH = 50;
     private static final double ICON_HEIGHT = 50;
@@ -53,11 +52,6 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     private HBox imagePanel;
     private TextField widthInput;
     private TextField heightInput;
-    private Label propLabel = new Label("Properties");
-    private Button addProperties = new Button("Add");
-    private GridPane listProp;
-    private FlowPane listview;
-    private ObservableSet<PropertyBox> propBoxes;
     private ObservableList<String> imagePaths;
     private Set<ImageView> toRemove;
     private Set<String> toRemovePath;
@@ -87,17 +81,6 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         chooseImage.setStyle("-fx-text-fill: white;"
                 + "-fx-background-color: #343a40;");
         imagePanel = new HBox(IMAGE_PANEL_GAP);
-        listProp = new GridPane();
-        listview = new FlowPane();
-        listview.setVgap(10);
-        listview.setHgap(10);
-        propBoxes = FXCollections.observableSet();
-        propBoxes.addListener((SetChangeListener<? super PropertyBox>) e -> {
-            if(e.wasAdded()) listview.getChildren().add(e.getElementAdded());
-            else listview.getChildren().remove(e.getElementRemoved());
-        });
-
-        listProp.getChildren().add(listview);
         nameField.setPromptText("Your entity name");
         imagePaths = FXCollections.observableArrayList();
         imagePaths.addListener((ListChangeListener<String>) c -> presentImages());
@@ -109,19 +92,6 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                 imagePaths.add(imagePath);
             }
         });
-
-        addProperties.setStyle("-fx-text-fill: white;"
-                + "-fx-background-color: #343a40;");
-        addProperties.setOnAction(e -> new PropertyInputDialog().showAndWait().ifPresent(prop -> {
-            boolean added = false;
-            for(var box : propBoxes) {
-                if(box.getKey().equals(prop.getKey())) {
-                    box.setValue(prop.getValue());
-                    added = true;
-                }
-            }
-            if(!added) propBoxes.add(new PropertyBox(prop.getKey(), prop.getValue(), propBoxes::remove));
-        }));
         setupLayout();
         rootPane.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.DELETE || e.getCode() == KeyCode.BACK_SPACE) {
@@ -132,160 +102,90 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
 
     /**
      * This method sets up the confirm logic for adding new TreeItems.
+     *
+     * @throws IllegalGameObjectNamingException
+     * @throws IllegalGeometryException
+     * @throws PreviewUnavailableException
+     * @throws DuplicateGameObjectClassException
      */
     @Override
-    protected void confirmAddTreeItem() {
-        int width;
-        try {
-            width = outputPositiveInteger(widthInput);
-        } catch (IllegalGeometryException e) {
-            new ErrorWindow("Illegal Width", e.toString()).showAndWait();
-            return;
-        }
-        int height;
-        try {
-            height = outputPositiveInteger(heightInput);
-        } catch (IllegalGeometryException e) {
-            new ErrorWindow("Illegal Height", e.toString()).showAndWait();
-            return;
-        }
-        try {
-            gameObjectManager.createEntityClass(nameField.getText().trim());
-        } catch (DuplicateGameObjectClassException e1) {
-            // TODO
-            e1.printStackTrace();
-        }
-        EntityClass entityClass = null;
-        try {
-            entityClass = gameObjectManager.getEntityClass(nameField.getText().trim());
-        } catch (GameObjectClassNotFoundException e1) {
-            // TODO
-            e1.printStackTrace();
-        }
+    protected void confirmAddTreeItem() throws IllegalGameObjectNamingException, IllegalGeometryException, PreviewUnavailableException, DuplicateGameObjectClassException {
+        EntityClass entityClass = gameObjectManager.createEntityClass(getValidClassName());
+        int width = outputPositiveInteger(widthInput);
+        int height = outputPositiveInteger(heightInput);
         assert entityClass != null;
         TreeItem<String> newItem = new TreeItem<>(entityClass.getClassName().getValue());
         entityClass.getImagePathList().addAll(imagePaths);
-        for(var box : propBoxes) {
-            entityClass.getPropertiesMap().put(box.getKey(), box.getValue());
-        }
         entityClass.setHeight(height);
         entityClass.setWidth(width);
-        ImageView icon = null;
-        try {
-            icon = new ImageView(ImageManager.getPreview(entityClass));
-        } catch (PreviewUnavailableException e1) {
-            // TODO: proper error handling
-            e1.printStackTrace();
-        }
-        assert icon != null;
+        ImageView icon = new ImageView(ImageManager.getPreview(entityClass));
         JavaFxOperation.setWidthAndHeight(icon, ICON_WIDTH, ICON_HEIGHT);
         newItem.setGraphic(icon);
         treeItem.getChildren().add(newItem);
+        writeClassProperties();
     }
 
     /**
      * This method sets up the confirm logic of editing existing TreeItem.
+     *
+     * @throws IllegalGameObjectNamingException
+     * @throws IllegalGeometryException
+     * @throws InvalidOperationException
+     * @throws PreviewUnavailableException
      */
     @Override
-    protected void confirmEditTreeItem() {
-        int width;
-        try {
-            width = outputPositiveInteger(widthInput);
-        } catch (IllegalGeometryException e) {
-            new ErrorWindow("Illegal Width", e.toString()).showAndWait();
-            return;
-        }
-        int height;
-        try {
-            height = outputPositiveInteger(heightInput);
-        } catch (IllegalGeometryException e) {
-            new ErrorWindow("Illegal Height", e.toString()).showAndWait();
-            return;
-        }
+    protected void confirmEditTreeItem() throws IllegalGameObjectNamingException, IllegalGeometryException, InvalidOperationException, PreviewUnavailableException {
+        gameObjectClass.setClassName(getValidClassName());
+        int width = outputPositiveInteger(widthInput);
+        int height = outputPositiveInteger(heightInput);
         try {
             ImageManager.removeClassImage(gameObjectClass);
         } catch (GameObjectClassNotFoundException ignored) {}
         gameObjectClass.getImagePathList().clear();
         gameObjectClass.getImagePathList().addAll(imagePaths);
         gameObjectClass.getPropertiesMap().clear();
-        for(var box : propBoxes) {
-            gameObjectClass.getPropertiesMap().put(box.getKey(), box.getValue());
-        }
         gameObjectClass.setWidth(width);
         gameObjectClass.setHeight(height);
-        try {
-            gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName().getValue(), nameField.getText());
-        } catch (InvalidOperationException e1) {
-            // TODO
-            e1.printStackTrace();
-        }
-        ImageView icon2 = null;
-        try {
-            icon2 = new ImageView(ImageManager.getPreview(gameObjectClass));
-        } catch (PreviewUnavailableException e1) {
-            // TODO: proper error handling
-            e1.printStackTrace();
-        }
-        assert icon2 != null;
+        gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName().getValue(), nameField.getText());
+        ImageView icon2 = new ImageView(ImageManager.getPreview(gameObjectClass));
         JavaFxOperation.setWidthAndHeight(icon2, ICON_WIDTH, ICON_HEIGHT);
         treeItem.setValue(nameField.getText());
         treeItem.setGraphic(icon2);
+        writeClassProperties();
     }
 
     /**
      * This method sets up the confirm logic of editing existing Node.
+     *
+     * @throws IllegalGameObjectNamingException
+     * @throws IllegalGeometryException
+     * @throws PreviewUnavailableException
+     * @throws GridIndexOutOfBoundsException
+     * @throws UnremovableNodeException
      */
     @Override
-    protected void confirmEditNode() {
-        int width;
+    protected void confirmEditNode() throws IllegalGameObjectNamingException, IllegalGeometryException, PreviewUnavailableException, GridIndexOutOfBoundsException, UnremovableNodeException {
+        gameObjectInstance.setInstanceName(getValidInstanceName());
+        int width = outputPositiveInteger(widthInput);
+        int height = outputPositiveInteger(heightInput);
         try {
-            width = outputPositiveInteger(widthInput);
-        } catch (IllegalGeometryException e) {
-            new ErrorWindow("Illegal Width", e.toString()).showAndWait();
-            return;
-        }
-        int height;
-        try {
-            height = outputPositiveInteger(heightInput);
-        } catch (IllegalGeometryException e) {
-            new ErrorWindow("Illegal Height", e.toString()).showAndWait();
-            return;
-        }
-        try { ImageManager.removeInstanceImage(gameObjectInstance); } catch (GameObjectInstanceNotFoundException ignored) {}
-        gameObjectInstance.setInstanceName(nameField.getText());
+            ImageManager.removeInstanceImage(gameObjectInstance);
+        } catch (GameObjectInstanceNotFoundException ignored) {}
         gameObjectInstance.getImagePathList().clear();
         gameObjectInstance.getImagePathList().addAll(imagePaths);
         gameObjectInstance.getPropertiesMap().clear();
-        for(var box : propBoxes) {
-            gameObjectInstance.getPropertiesMap().put(box.getKey(), box.getValue());
-        }
         gameObjectInstance.setWidth(width);
         gameObjectInstance.setHeight(height);
-        try {
-            ((ImageView) nodeEdited).setImage(ImageManager.getPreview(gameObjectInstance));
-        } catch (PreviewUnavailableException e1) {
-            // TODO: proper error handling
-            e1.printStackTrace();
-        }
+        ((ImageView) nodeEdited).setImage(ImageManager.getPreview(gameObjectInstance));
         Tooltip.install(nodeEdited, new Tooltip(String.format("Width: %s\nHeight: %s\nSingle Click to toggle Deletion\nDouble Click or Right Click to edit\nInstance ID: %s\nClass Name: %s", width, height, gameObjectInstance.getInstanceId().getValue(), gameObjectInstance.getClassName().getValue())));
-        StackPane target;
         int row = Integer.parseInt(rowInput.getText());
         int col = Integer.parseInt(colInput.getText());
-        try {
-            target = JavaFxOperation.getNodeFromGridPaneByIndices(((GridPane) JavaFxOperation.getGrandParent(nodeEdited)), row, col);
-        } catch (GridIndexOutOfBoundsException e1) {
-            new ErrorWindow("GridIndexOutOfBounds error", e1.toString()).showAndWait();
-            return;
-        }
-        try {
-            JavaFxOperation.removeFromParent(nodeEdited);
-        } catch (UnremovableNodeException e1) {
-            // TODO: proper error handling
-            e1.printStackTrace();
-        }
+        StackPane target = JavaFxOperation.getNodeFromGridPaneByIndices(((GridPane) JavaFxOperation.getGrandParent(nodeEdited)), row, col);
+        JavaFxOperation.removeFromParent(nodeEdited);
         assert target != null;
         target.getChildren().add(nodeEdited);
         gameObjectInstance.setCoord(new PointImpl(col, row));
+        writeInstanceProperties();
     }
 
     /**
@@ -316,9 +216,9 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
      */
     @Override
     public void readGameObjectInstance() {
+        readInstanceProperties();
         nameField.setText(gameObjectInstance.getInstanceName().getValue());
         imagePaths.addAll(gameObjectInstance.getImagePathList());
-        gameObjectInstance.getPropertiesMap().forEach((k, v) -> propBoxes.add(new PropertyBox(k, v, propBoxes::remove)));
         widthInput.setText(String.valueOf(gameObjectInstance.getWidth().getValue()));
         heightInput.setText(String.valueOf(gameObjectInstance.getHeight().getValue()));
         Label xLabel = new Label("x, col index");
@@ -337,9 +237,9 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
      */
     @Override
     public void readGameObjectClass() {
+        readClassProperties();
         nameField.setText(gameObjectClass.getClassName().getValue());
         imagePaths.addAll(gameObjectClass.getImagePathList());
-        gameObjectClass.getPropertiesMap().forEach((k, v) -> propBoxes.add(new PropertyBox(k, v, propBoxes::remove)));
         widthInput.setText(String.valueOf(gameObjectClass.getWidth().getValue()));
         heightInput.setText(String.valueOf(gameObjectClass.getHeight().getValue()));
     }

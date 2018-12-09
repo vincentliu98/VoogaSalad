@@ -7,6 +7,7 @@ import groovy.api.Ports;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static groovy.api.Ports.*;
@@ -16,8 +17,8 @@ public class FunctionBlock extends SimpleNode implements GroovyBlock<FunctionBlo
 
     private String op;
     private int argN;
-    public FunctionBlock(String op, int argN) {
-        super();
+    public FunctionBlock(double x, double y, String op, int argN) {
+        super(x, y);
         this.op = op;
         this.argN = argN;
     }
@@ -66,7 +67,7 @@ public class FunctionBlock extends SimpleNode implements GroovyBlock<FunctionBlo
     }
 
     @Override
-    public FunctionBlock replicate() { return new FunctionBlock(op, argN); }
+    public FunctionBlock replicate() { return new FunctionBlock(x(), y(), op, argN); }
 
     @Override
     public Set<Ports> ports() {
@@ -81,5 +82,10 @@ public class FunctionBlock extends SimpleNode implements GroovyBlock<FunctionBlo
     public String name() {
         var s = op.split("\\.");
         return s[s.length-1];
+    }
+
+    @Override
+    public Map<String, Object> params() {
+        return Map.of("op", op, "argN", argN);
     }
 }

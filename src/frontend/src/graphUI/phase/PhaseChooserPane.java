@@ -1,7 +1,6 @@
 package graphUI.phase;
 
 import api.SubView;
-import graphUI.graphData.SinglePhaseData;
 import graphUI.groovy.GroovyPaneFactory.GroovyPane;
 import groovy.api.BlockGraph;
 import javafx.collections.FXCollections;
@@ -16,12 +15,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import phase.api.PhaseDB;
-import utility.ObservableUtils;
 import utils.ErrorWindow;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Function;
 
 /**
@@ -31,6 +27,7 @@ import java.util.function.Function;
  * It is the entire tab that contains the listView of all the Phase on the right and the pane of nodes on the right
  *
  * @author Amy
+ * @author jl729
  */
 
 public class PhaseChooserPane implements SubView<GridPane> {
@@ -39,24 +36,13 @@ public class PhaseChooserPane implements SubView<GridPane> {
     private Function<BlockGraph, GroovyPane> genGroovyPane;
     private ObservableList<PhasePane> phasePaneList;
     private ListView<String> phaseNameListView;
-    private Map<String, SinglePhaseData> phaseDataMap;
 
     public PhaseChooserPane(PhaseDB phaseDB, Function<BlockGraph, GroovyPane> genGroovyPane) {
         this.phaseDB = phaseDB;
         this.genGroovyPane = genGroovyPane;
         phasePaneList = FXCollections.observableArrayList();
-        phaseDataMap = new HashMap<>();
         initializeView();
         setupLeft();
-    }
-
-
-    public void setPhaseDataMap(Map<String, SinglePhaseData> phaseDataMap) {
-        this.phaseDataMap = phaseDataMap;
-    }
-
-    public void checkMapUpdate(){
-        System.out.println("Updated map" + phaseDataMap);
     }
 
     private void initializeView() {
@@ -84,7 +70,7 @@ public class PhaseChooserPane implements SubView<GridPane> {
             clearRightPane();
             view.add(phasePaneList.get(n.intValue()).getView(), 1, 0);
         });
-        createPhaseBtn.setOnMouseClicked(this::handlePhaseCreation);
+        createPhaseBtn.setOnMouseClicked(this::createPhasePane);
         view.add(vbox, 0, 0);
     }
 
@@ -98,31 +84,24 @@ public class PhaseChooserPane implements SubView<GridPane> {
         view.getChildren().removeAll(toRemove);
     }
 
-    private void handlePhaseCreation(MouseEvent e) {
+    private void createPhasePane(MouseEvent e) {
         TextInputDialog dialog = new TextInputDialog("");
         dialog.setContentText("Please enter the name of this phase graph:");
-        dialog.showAndWait().ifPresent(name -> {
-            var tryGraph = phaseDB.createPhaseGraph(name);
-            if(tryGraph.isSuccess()) {
-                try {
-                    var graph = tryGraph.get();
-
-                    var singlePhaseData = new SinglePhaseData(name);
-                    phaseDataMap.put(name, singlePhaseData);
-                    System.out.println(phaseDataMap);
-
-                    var phasePane = new PhasePane(phaseDB, genGroovyPane, graph, singlePhaseData, this);
-                    phasePaneList.add(phasePane);
-                    phaseNameListView.getSelectionModel().select(phaseNameListView.getItems().size()-1);
-                } catch (Throwable t) {
-                    new ErrorWindow("Error", "t.toString()").showAndWait();
-                }
-            }
-        });
+        dialog.showAndWait().ifPresent(this::createPhasePane);
     }
 
-    private void removeSelectedPane() {
-
+    private void createPhasePane(String name) {
+        var tryGraph = phaseDB.createPhaseGraph(name);
+        if(tryGraph.isSuccess()) {
+            try {
+                var graph = tryGraph.get();
+                var phasePane = new PhasePane(phaseDB, genGroovyPane, graph);
+                phasePaneList.add(phasePane);
+                phaseNameListView.getSelectionModel().select(phaseNameListView.getItems().size()-1);
+            } catch (Throwable t) {
+                new ErrorWindow("Error", t.toString()).showAndWait();
+            }
+        }
     }
 
     @Override

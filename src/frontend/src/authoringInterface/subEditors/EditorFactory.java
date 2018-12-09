@@ -1,5 +1,6 @@
 package authoringInterface.subEditors;
 
+import authoringInterface.subEditors.exception.MissingEditorForTypeException;
 import authoringUtils.exception.GameObjectTypeException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.gameObject.GameObjectType;

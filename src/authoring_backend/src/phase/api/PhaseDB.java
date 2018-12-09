@@ -68,6 +68,6 @@ public class PhaseDB {
     public void setStartingPhase(String phaseName) { startingPhase = phaseName; }
     public String getStartingPhase() { return startingPhase; }
 
-    public BlockGraph heartbeat() { return winningCondition; }
     public ObservableList<String> phaseNames() { return phaseName; }
+    public BlockGraph winCondition() { return winningCondition; }
 }

@@ -46,6 +46,7 @@ public class GroovyNode extends StackPane {
     ) {
         this(block, xPos, yPos, width, height, labelSize, color, portPositions, null);
     }
+
     GroovyNode(
         GroovyBlock<?> block,
         double xPos, double yPos,

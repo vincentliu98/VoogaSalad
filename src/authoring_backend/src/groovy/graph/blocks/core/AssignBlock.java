@@ -5,12 +5,13 @@ import graph.SimpleNode;
 import groovy.api.BlockGraph;
 import groovy.api.Ports;
 
+import java.util.HashMap;
 import java.util.Set;
 
 import static groovy.api.Ports.*;
 
 public class AssignBlock extends SimpleNode implements GroovyBlock<AssignBlock> {
-    public AssignBlock() { super(); }
+    public AssignBlock(double x, double y) { super(x, y); }
 
     @Override
     public Try<String> toGroovy(BlockGraph graph) {
@@ -26,10 +27,15 @@ public class AssignBlock extends SimpleNode implements GroovyBlock<AssignBlock> 
         );
     }
     @Override
-    public AssignBlock replicate() { return new AssignBlock(); }
+    public AssignBlock replicate() { return new AssignBlock(x(), y()); }
     @Override
     public Set<Ports> ports() { return Set.of(FLOW_OUT, ASSIGN_LHS, ASSIGN_RHS); }
 
     @Override
     public String name() { return "="; }
+
+    @Override
+    public HashMap<String, Object> params() {
+        return null;
+    }
 }

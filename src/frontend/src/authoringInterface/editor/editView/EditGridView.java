@@ -4,7 +4,7 @@ import api.SubView;
 import authoringInterface.customEvent.UpdateStatusEventListener;
 import authoringInterface.subEditors.AbstractGameObjectEditor;
 import authoringInterface.subEditors.EditorFactory;
-import authoringInterface.subEditors.MissingEditorForTypeException;
+import authoringInterface.subEditors.exception.MissingEditorForTypeException;
 import authoringUtils.exception.GameObjectClassNotFoundException;
 import authoringUtils.exception.GameObjectTypeException;
 import authoringUtils.exception.InvalidIdException;
@@ -156,6 +156,7 @@ public class EditGridView implements SubView<ScrollPane> {
                 cell.setOnDragEntered(e -> setUpBatchInstanceDrag(e, cell));
             }
         }
+        gameObjectManager.setDimension(width, height);
         nodeInstanceController.clearAllLinks();
         try {
             gameObjectManager.deleteAllInstances();

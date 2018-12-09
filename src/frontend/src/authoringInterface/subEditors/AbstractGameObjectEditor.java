@@ -1,19 +1,31 @@
 package authoringInterface.subEditors;
 
 import api.SubView;
+import authoringInterface.subEditors.exception.IllegalGameObjectNamingException;
+import authoringInterface.subEditors.exception.IllegalGeometryException;
+import authoringUtils.exception.DuplicateGameObjectClassException;
+import authoringUtils.exception.GameObjectClassNotFoundException;
+import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableSet;
+import javafx.collections.SetChangeListener;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import utils.ErrorWindow;
+import utils.exception.GridIndexOutOfBoundsException;
 import utils.exception.NodeNotFoundException;
+import utils.exception.PreviewUnavailableException;
+import utils.exception.UnremovableNodeException;
 import utils.nodeInstance.NodeInstanceController;
 
 /**
@@ -35,6 +47,11 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
     T gameObjectClass;
     V gameObjectInstance;
     GridPane layout;
+    Label propLabel = new Label("Properties");
+    Button addProperties = new Button("Add");
+    GridPane listProp;
+    FlowPane listview;
+    ObservableSet<PropertyBox> propBoxes;
 
     AbstractGameObjectEditor(GameObjectsCRUDInterface manager) {
         editingMode = EditingMode.NONE;
@@ -54,6 +71,31 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
         cancel.setOnAction(e -> {
             closeEditor();
         });
+        listProp = new GridPane();
+        listview = new FlowPane();
+        listview.setVgap(10);
+        listview.setHgap(10);
+        propBoxes = FXCollections.observableSet();
+        propBoxes.addListener((SetChangeListener<? super PropertyBox>) e -> {
+            if(e.wasAdded()) listview.getChildren().add(e.getElementAdded());
+            else listview.getChildren().remove(e.getElementRemoved());
+        });
+
+        listProp.getChildren().add(listview);
+        nameField.setPromptText("Your entity name");
+
+        addProperties.setStyle("-fx-text-fill: white;"
+                + "-fx-background-color: #343a40;");
+        addProperties.setOnAction(e -> new PropertyInputDialog().showAndWait().ifPresent(prop -> {
+            boolean added = false;
+            for(var box : propBoxes) {
+                if(box.getKey().equals(prop.getKey())) {
+                    box.setValue(prop.getValue());
+                    added = true;
+                }
+            }
+            if(!added) propBoxes.add(new PropertyBox(prop.getKey(), prop.getValue(), propBoxes::remove));
+        }));
         rootPane.getChildren().addAll(nameLabel, nameField, layout, confirm, cancel);
         setupBasicLayout();
     }
@@ -102,7 +144,21 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
         this.gameObjectClass = gameObjectClass;
         readGameObjectClass();
         confirm.setOnAction(e -> {
-            confirmEditTreeItem();
+            try {
+                confirmEditTreeItem();
+            } catch (IllegalGeometryException e1) {
+                new ErrorWindow("Illegal Geometry", e1.toString()).showAndWait();
+                return;
+            } catch (InvalidOperationException e1) {
+                new ErrorWindow("Invalid Operation", e1.toString()).showAndWait();
+                return;
+            } catch (PreviewUnavailableException e1) {
+                new ErrorWindow("Preview Unavailable", e1.toString()).showAndWait();
+                return;
+            } catch (IllegalGameObjectNamingException e1) {
+                new ErrorWindow("Illegal Naming", e1.toString()).showAndWait();
+                return;
+            }
             closeEditor();
         });
     }
@@ -116,7 +172,20 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
         this.treeItem = treeItem;
         editingMode = EditingMode.ADD_TREEITEM;
         confirm.setOnAction(e -> {
-            confirmAddTreeItem();
+            try {
+                confirmAddTreeItem();
+            } catch (IllegalGeometryException e1) {
+                new ErrorWindow("Illegal Geometry", e1.toString()).showAndWait();
+                return;
+            } catch (PreviewUnavailableException e1) {
+                new ErrorWindow("Preview Unavailable", e1.toString()).showAndWait();
+                return;
+            } catch (IllegalGameObjectNamingException e1) {
+                new ErrorWindow("Illegal Naming", e1.toString()).showAndWait();
+                return;
+            } catch (DuplicateGameObjectClassException e1) {
+                new ErrorWindow("Duplicate GameObjectClass", e1.toString()).showAndWait();
+            }
             closeEditor();
         });
     }
@@ -133,15 +202,57 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
         nodeInstanceController = controller;
         try {
             this.gameObjectInstance = controller.getGameObjectInstance(node);
-        } catch (NodeNotFoundException e) {
-            // TODO: proper error handling
-            e.printStackTrace();
-        }
+        } catch (NodeNotFoundException ignored) {}
         readGameObjectInstance();
-        confirm.setOnAction(e ->{
-            confirmEditNode();
+        confirm.setOnAction(e -> {
+            try {
+                confirmEditNode();
+            } catch (IllegalGeometryException e1) {
+                new ErrorWindow("Illegal Geometry", e1.toString()).showAndWait();
+                return;
+            } catch (PreviewUnavailableException e1) {
+                new ErrorWindow("Preview Unavailable", e1.toString()).showAndWait();
+                return;
+            } catch (UnremovableNodeException e1) {
+                new ErrorWindow("Unremovable Node", e1.toString()).showAndWait();
+                return;
+            } catch (GridIndexOutOfBoundsException e1) {
+                new ErrorWindow("Grid IndexOutOfBounds", e1.toString()).showAndWait();
+                return;
+            } catch (IllegalGameObjectNamingException e1) {
+                new ErrorWindow("Illegal Naming", e1.toString()).showAndWait();
+                return;
+            }
             closeEditor();
         });
+    }
+
+    /**
+     * This method reads in the properties of an existing GameObjectInstance.
+     */
+    void readInstanceProperties() {
+        gameObjectInstance.getPropertiesMap().forEach((k, v) -> propBoxes.add(new PropertyBox(k, v, propBoxes::remove)));
+    }
+
+    /**
+     * This method reads in the properties of an existing GameObjectClass.
+     */
+    void readClassProperties() {
+        gameObjectClass.getPropertiesMap().forEach((k, v) -> propBoxes.add(new PropertyBox(k, v, propBoxes::remove)));
+    }
+
+    /**
+     * This method writes to the properties of an existing GameObjectClass.
+     */
+    void writeClassProperties() {
+        propBoxes.forEach(box -> gameObjectClass.getPropertiesMap().put(box.getKey(), box.getValue()));
+    }
+
+    /**
+     * This method writes to the properties of an existing GameObjectInstance.
+     */
+    void writeInstanceProperties() {
+        propBoxes.forEach(box -> gameObjectInstance.getPropertiesMap().put(box.getKey(), box.getValue()));
     }
 
     /**
@@ -156,19 +267,34 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
 
     /**
      * This method sets up the confirm logic of adding new TreeItem.
+     *
+     * @throws IllegalGameObjectNamingException
+     * @throws IllegalGeometryException
+     * @throws PreviewUnavailableException
+     * @throws DuplicateGameObjectClassException
      */
-    protected abstract void confirmAddTreeItem();
+    protected abstract void confirmAddTreeItem() throws IllegalGameObjectNamingException, IllegalGeometryException, PreviewUnavailableException, DuplicateGameObjectClassException;
 
     /**
      * This method sets up the confirm logic of editing existing TreeItem.
+     *
+     * @throws IllegalGameObjectNamingException
+     * @throws IllegalGeometryException
+     * @throws InvalidOperationException
+     * @throws PreviewUnavailableException
      */
-    protected abstract void confirmEditTreeItem();
+    protected abstract void confirmEditTreeItem() throws IllegalGameObjectNamingException, IllegalGeometryException, InvalidOperationException, PreviewUnavailableException;
 
     /**
      * This method sets up the confirm logic of editing existing Node.
+     *
+     * @throws IllegalGameObjectNamingException
+     * @throws IllegalGeometryException
+     * @throws PreviewUnavailableException
+     * @throws GridIndexOutOfBoundsException
+     * @throws UnremovableNodeException
      */
-    protected abstract void confirmEditNode();
-
+    protected abstract void confirmEditNode() throws IllegalGameObjectNamingException, IllegalGeometryException, PreviewUnavailableException, GridIndexOutOfBoundsException, UnremovableNodeException;
     /**
      * This method closes the editor.
      */
@@ -183,7 +309,7 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
      * @return An int representing the legal output.
      * @throws IllegalGeometryException
      */
-    protected int outputPositiveInteger(TextField intInput) throws IllegalGeometryException {
+    int outputPositiveInteger(TextField intInput) throws IllegalGeometryException {
         int ret;
         try {
             ret = Integer.parseInt(intInput.getText());
@@ -194,5 +320,31 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
             throw new IllegalGeometryException(String.format("%s is not a positive integer", intInput.getText()));
         }
         return ret;
+    }
+
+    /**
+     * This method sets names for GameObjectClass.
+     *
+     * @return A String name for the GameObjectClass.
+     * @throws IllegalGameObjectNamingException
+     */
+    String getValidClassName() throws IllegalGameObjectNamingException {
+        if (nameField.getText().trim().isEmpty()) {
+            throw new IllegalGameObjectNamingException("GameObjectClass cannot have an empty name");
+        }
+        return nameField.getText();
+    }
+
+    /**
+     * This method sets names for GameObjectInstance.
+     *
+     * @return A String name for the GameObjectInstance.
+     * @throws IllegalGameObjectNamingException
+     */
+    String getValidInstanceName() throws IllegalGameObjectNamingException {
+        if (nameField.getText().trim().isEmpty()) {
+            throw new IllegalGameObjectNamingException("GameObjectInstance cannot have an empty name");
+        }
+        return nameField.getText();
     }
 }

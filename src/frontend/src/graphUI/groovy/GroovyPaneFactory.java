@@ -44,7 +44,7 @@ public class GroovyPaneFactory {
     private GroovyNodeFactory nodeFactory;
     private GroovyFactory factory;
     private Stage primaryStage;
-    private GroovyPane heartbeat;
+    private GroovyPane winCondition;
 
     private enum DRAG_PURPOSE {
         NOTHING,
@@ -52,15 +52,15 @@ public class GroovyPaneFactory {
         CONNECT_LINE
     }
 
-    public GroovyPaneFactory(Stage primaryStage, GroovyFactory factory, BlockGraph heartbeat) {
+    public GroovyPaneFactory(Stage primaryStage, GroovyFactory factory, BlockGraph winCondition) {
         this.primaryStage = primaryStage;
         this.nodeFactory = new GroovyNodeFactory(factory);
         this.factory = factory;
-        this.heartbeat = new GroovyPane(primaryStage, heartbeat);
+        this.winCondition = new GroovyPane(primaryStage, winCondition);
     }
 
     public GroovyPane gen(BlockGraph model) { return new GroovyPane(primaryStage, model); }
-    public GroovyPane heartbeat() { return heartbeat; }
+    public GroovyPane winCondition() { return winCondition; }
 
     public class GroovyPane extends PopUpWindow implements SubView<GridPane> {
         private DRAG_PURPOSE draggingPurpose = DRAG_PURPOSE.NOTHING;
@@ -84,12 +84,12 @@ public class GroovyPaneFactory {
         private double selectionX, selectionY;
         private Rectangle selection;
 
-        private TextArea codePane = new TextArea();
+        private DraggableGroovyIconFactory iconFactory;
 
+        // XStream ignored
+        private TextArea codePane = new TextArea();
         private SimpleObjectProperty<Pair<GroovyNode, Ports>> selectedEdge;
         private SimpleObjectProperty<GroovyNode> selectedNode;
-
-        private DraggableGroovyIconFactory iconFactory;
 
         private GroovyPane(Stage primaryStage, BlockGraph graph) {
             super(primaryStage);
