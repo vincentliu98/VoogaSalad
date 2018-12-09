@@ -59,14 +59,13 @@ public class ImageManager {
             case UNSPECIFIED:
                 throw new PreviewUnavailableException(String.format("The GameObjectClass %s does not support getPreview operation.", gameObjectClass.getClassName().getValue()));
             case TILE:
+                ObservableList<String> paths1 = ((TileClass) gameObjectClass).getImagePathList();
+                ret = getImage(paths1, gameObjectClass.getClassName());
+                break;
             case ENTITY:
-                ObservableList<String> imagePaths;
-                if (gameObjectClass instanceof EntityClass) {
-                    imagePaths = ((EntityClass) gameObjectClass).getImagePathList();
-                } else {
-                    imagePaths = ((TileClass) gameObjectClass).getImagePathList();
-                }
-                ret = getImage(imagePaths, gameObjectClass.getClassName());
+                ObservableList<String> paths2 = ((EntityClass) gameObjectClass).getImagePathList();
+                ret = getImage(paths2, gameObjectClass.getClassName());
+                break;
             case CATEGORY:
                 // TODO
                 break;
