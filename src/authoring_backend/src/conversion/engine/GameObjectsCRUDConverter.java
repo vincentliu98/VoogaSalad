@@ -222,20 +222,25 @@ public class GameObjectsCRUDConverter implements Converter {
             writer.setValue(tileInstance.getClassName().get());
             writer.endNode();
 
+            // instance name
+            writer.startNode("instanceName");
+            writer.setValue(tileInstance.getInstanceName().get());
+            writer.endNode();
+
             // props
-            var toEval = mapToString(tileClass.getPropertiesMap()); // should be instance tho...
+            var toEval = mapToString(tileInstance.getPropertiesMap()); // should be instance tho...
             writer.startNode("props");
             new MapConverter(mapper).marshal(shell.evaluate(toEval), writer, ctx);
             writer.endNode();
 
             // myWidth
             writer.startNode("myWidth");
-            writer.setValue(String.valueOf(tileClass.getWidth().get()));
+            writer.setValue(String.valueOf(tileInstance.getWidth().get()));
             writer.endNode();
 
             // myHeight
             writer.startNode("myHeight");
-            writer.setValue(String.valueOf(tileClass.getHeight().get()));
+            writer.setValue(String.valueOf(tileInstance.getHeight().get()));
             writer.endNode();
 
             writer.startNode("myCoord");
@@ -249,16 +254,16 @@ public class GameObjectsCRUDConverter implements Converter {
 
             //myImagePaths
             writer.startNode("myImagePaths");
-            for(var path : tileClass.getImagePathList()) {
+            tileInstance.getImagePathList().forEach(path -> {
                 writer.startNode("string");
                 writer.setValue(path);
                 writer.endNode();
-            }
+            });
             writer.endNode();
 
             // myImageSelector
             writer.startNode("myImageSelector");
-            writer.setValue(tileClass.getImageSelectorCode());
+            writer.setValue(tileInstance.getImageSelectorCode());
             writer.endNode();
 
             writer.endNode();
