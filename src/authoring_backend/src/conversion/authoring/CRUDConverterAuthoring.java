@@ -160,7 +160,9 @@ public class CRUDConverterAuthoring implements Converter {
 
             // imageSelector
             writer.startNode("imageSelector");
-            writer.setValue(entityInstance.getImageSelectorCode());
+            if (!entityInstance.getImageSelectorCode().isEmpty()) {
+                writer.setValue(entityInstance.getImageSelectorCode());
+            }
             writer.endNode();
 
             writer.endNode();
@@ -206,7 +208,9 @@ public class CRUDConverterAuthoring implements Converter {
 
             // myImageSelector
             writer.startNode("imageSelector");
-            writer.setValue(tileClass.getImageSelectorCode());
+            if (!tileClass.getImageSelectorCode().isEmpty()) {
+                writer.setValue(tileClass.getImageSelectorCode());
+            }
             writer.endNode();
             writer.endNode();
         }
@@ -266,7 +270,9 @@ public class CRUDConverterAuthoring implements Converter {
 
             // myImageSelector
             writer.startNode("imageSelector");
-            writer.setValue(tileInstance.getImageSelectorCode());
+            if (!tileInstance.getImageSelectorCode().isEmpty()) {
+                writer.setValue(tileInstance.getImageSelectorCode());
+            }
             writer.endNode();
 
             writer.endNode();
@@ -315,7 +321,9 @@ public class CRUDConverterAuthoring implements Converter {
             writer.endNode();
 
             writer.startNode("mediaFilePath");
-            writer.setValue(soundClass.getMediaFilePath().getValue());
+            if (!soundClass.getMediaFilePath().isEmpty().getValue()) {
+                writer.setValue(soundClass.getMediaFilePath().getValue());
+            }
             writer.endNode();
 
             writer.startNode("duration");
@@ -351,7 +359,9 @@ public class CRUDConverterAuthoring implements Converter {
 
             // file path
             writer.startNode("mediaFilePath");
-            writer.setValue(soundInstance.getMediaFilePath().getValue());
+            if (!soundInstance.getMediaFilePath().isEmpty().getValue()) {
+                writer.setValue(soundInstance.getMediaFilePath().getValue());
+            }
             writer.endNode();
         }
     }
