@@ -80,8 +80,9 @@ public class UserIcon implements Icon {
         });
         myButtonHolder = new HBox();
         myButtonHolder.getChildren().add(myFriendButton);
-        myButtonHolder.setAlignment(Pos.BOTTOM_LEFT);
+        myButtonHolder.setAlignment(Pos.BOTTOM_RIGHT);
         myButtonHolder.getStyleClass().add(BUTTON_HOLDER_CSS);
+        myPane.getChildren().add(myButtonHolder);
     }
 
     private void changeButtonDisplay(){

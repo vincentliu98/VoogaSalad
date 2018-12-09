@@ -1,6 +1,5 @@
 package launchingGame;
 
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
 import launching.GameParser;
 import social.EngineEvent;
