@@ -18,6 +18,7 @@ import groovy.lang.GroovyShell;
 import java.util.Map;
 import java.util.TreeSet;
 
+@SuppressWarnings("Duplicates")
 public class GameObjectsCRUDConverter implements Converter {
     private Mapper mapper;
     public GameObjectsCRUDConverter(Mapper mapper) {
@@ -37,7 +38,19 @@ public class GameObjectsCRUDConverter implements Converter {
         writer.endNode();
 
         // CategoryPrototypes
-        for (CategoryClass categoryClass : db.getCategoryClasses())
+        for (CategoryClass categoryClass : db.getCategoryClasses()) {
+            writer.startNode("gamePlay.CategoryPrototype");
+
+            // name
+            writer.startNode("name");
+            writer.setValue(categoryClass.getClassName().getValue());
+            writer.endNode();
+
+            // id
+            writer.startNode("myID");
+            writer.setValue(String.valueOf(categoryClass.getClassId().getValue()));
+            writer.endNode();
+        }
 
         // EntityPrototypes
         for(var entityClass : db.getEntityClasses()) {
