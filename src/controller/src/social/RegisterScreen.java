@@ -14,7 +14,6 @@ import javafx.stage.Stage;
 public class RegisterScreen {
     public static final String MOTTO = "Enter a username and password below.";
 
-
     private GridPane myPane;
     private Scene myScene;
     private Stage myStage;
@@ -26,7 +25,6 @@ public class RegisterScreen {
 
         initPane();
         initScene();
-        //initLogo();
         initMotto();
         initFields();
 

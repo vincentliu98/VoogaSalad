@@ -21,10 +21,12 @@ public class User {
     private ImageView myAvatar;
     private Twitter myTwitter;
     private ResourceBundle myErrors;
+    private Set<String> myFriends;
 
     public User(int id){
         myID = id;
         myFavoriteGames = new HashSet<>();
+        myFriends = new HashSet<>();
         myTwitter = null;
         myAvatar = new ImageView();
         myAvatar.setImage(new Image(getClass().getResourceAsStream("/graphics/person_logo.png")));
@@ -46,6 +48,14 @@ public class User {
     public void removeFavorite(String gameName){
         if (!myFavoriteGames.contains(gameName)) return;
         myFavoriteGames.remove(gameName);
+    }
+
+    public void addFriend(String username){
+        myFriends.add(username);
+    }
+
+    public void removeFriend(String username){
+        myFriends.remove(username);
     }
 
     public Set<String> getFavorites(){
