@@ -82,8 +82,16 @@ public class View implements ParentView<SubView> {
         mainView.addColumn(1, sidebar);
         rootPane.addEventFilter(KeyEvent.KEY_PRESSED, e-> {
             if (e.getCode() == KeyCode.K) {
-                XStream crudXstream = new SerializerTestCRUD().getSerializer();
-                System.out.println(crudXstream.toXML(gameObjectManager));
+                XStream crudXstream = (new SerializerTestCRUD()).getSerializer();
+                File test = new File("test.xml");
+                try {
+                    FileWriter fileWriter = new FileWriter(test.getAbsolutePath());
+                    fileWriter.write(crudXstream.toXML(gameObjectManager));
+                    fileWriter.flush();
+                    fileWriter.close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
             }
         });
     }
