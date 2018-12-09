@@ -135,6 +135,12 @@ public class CustomTreeCellImpl extends TreeCell<String> {
 
     @Override
     public void startEdit() {
+        try {
+            if (objectManager.getGameObjectClass(getString()).getType() == GameObjectType.CATEGORY) {
+                return;
+            }
+        } catch (GameObjectClassNotFoundException ignored) {
+        }
         super.startEdit();
         if (textField == null) {
             createTextField();

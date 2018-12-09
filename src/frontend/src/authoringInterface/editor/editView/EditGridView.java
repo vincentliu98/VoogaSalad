@@ -156,6 +156,7 @@ public class EditGridView implements SubView<ScrollPane> {
                 cell.setOnDragEntered(e -> setUpBatchInstanceDrag(e, cell));
             }
         }
+        gameObjectManager.setDimension(width, height);
         nodeInstanceController.clearAllLinks();
         try {
             gameObjectManager.deleteAllInstances();
