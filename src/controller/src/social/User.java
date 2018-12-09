@@ -17,14 +17,16 @@ import java.util.Set;
 
 public class User {
     private int myID;
+    private String myUsername;
     private Set<String> myFavoriteGames;
     private ImageView myAvatar;
     private Twitter myTwitter;
     private ResourceBundle myErrors;
     private Set<String> myFriends;
 
-    public User(int id){
+    public User(int id, String username){
         myID = id;
+        myUsername = username;
         myFavoriteGames = new HashSet<>();
         myFriends = new HashSet<>();
         myTwitter = null;
@@ -50,12 +52,20 @@ public class User {
         myFavoriteGames.remove(gameName);
     }
 
+    public String getUsername(){
+        return myUsername;
+    }
+
     public void addFriend(String username){
         myFriends.add(username);
     }
 
     public void removeFriend(String username){
         myFriends.remove(username);
+    }
+
+    public Set<String> getFriends(){
+        return myFriends;
     }
 
     public Set<String> getFavorites(){
@@ -106,7 +116,7 @@ public class User {
     }
 
     public static void main (String[] args){ // TODO: Delete (for testing only)
-        User testUser = new User(1);
+        User testUser = new User(1, "vooga");
         testUser.configureTwitter();
     }
 
