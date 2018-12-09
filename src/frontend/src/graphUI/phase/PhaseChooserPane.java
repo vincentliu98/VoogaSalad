@@ -16,14 +16,13 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import phase.api.PhaseDB;
+import utility.ObservableUtils;
 import utils.ErrorWindow;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * PhaseChooserPane
@@ -38,21 +37,19 @@ public class PhaseChooserPane implements SubView<GridPane> {
     private GridPane view;
     private PhaseDB phaseDB;
     private Function<BlockGraph, GroovyPane> genGroovyPane;
-    private ObservableList<String> phaseList;
-    private ListView<String> phaseListView;
-    private List<PhasePane> phasePanes;
+    private ObservableList<PhasePane> phasePaneList;
+    private ListView<String> phaseNameListView;
     private Map<String, SinglePhaseData> phaseDataMap;
 
     public PhaseChooserPane(PhaseDB phaseDB, Function<BlockGraph, GroovyPane> genGroovyPane) {
         this.phaseDB = phaseDB;
         this.genGroovyPane = genGroovyPane;
-        phaseList = FXCollections.observableArrayList();
-        phasePanes = new ArrayList<>();
+        phasePaneList = FXCollections.observableArrayList();
         phaseDataMap = new HashMap<>();
-
         initializeView();
         setupLeft();
     }
+
 
     public void setPhaseDataMap(Map<String, SinglePhaseData> phaseDataMap) {
         this.phaseDataMap = phaseDataMap;
@@ -79,13 +76,13 @@ public class PhaseChooserPane implements SubView<GridPane> {
         stack.getChildren().add(createPhaseBtn);
         vbox.getStyleClass().add("vboxPhase");
         createPhaseBtn.getStyleClass().add("phaseBtn");
-        phaseListView = new ListView<>(phaseList);
-        phaseListView.setMinHeight(570);
+        phaseNameListView = new ListView<>(phaseDB.phaseNames());
+        phaseNameListView.setMinHeight(570);
         vbox.setSpacing(15);
-        vbox.getChildren().addAll(stack, phaseListView);
-        phaseListView.getSelectionModel().selectedIndexProperty().addListener((e, o, n) -> {
+        vbox.getChildren().addAll(stack, phaseNameListView);
+        phaseNameListView.getSelectionModel().selectedIndexProperty().addListener((e, o, n) -> {
             clearRightPane();
-            view.add(phasePanes.get(n.intValue()).getView(), 1, 0);
+            view.add(phasePaneList.get(n.intValue()).getView(), 1, 0);
         });
         createPhaseBtn.setOnMouseClicked(this::handlePhaseCreation);
         view.add(vbox, 0, 0);
@@ -115,9 +112,8 @@ public class PhaseChooserPane implements SubView<GridPane> {
                     System.out.println(phaseDataMap);
 
                     var phasePane = new PhasePane(phaseDB, genGroovyPane, graph, singlePhaseData, this);
-                    phaseList.add(name);
-                    phasePanes.add(phasePane);
-                    phaseListView.getSelectionModel().select(phaseList.size()-1);
+                    phasePaneList.add(phasePane);
+                    phaseNameListView.getSelectionModel().select(phaseNameListView.getItems().size()-1);
                 } catch (Throwable t) {
                     new ErrorWindow("Error", "t.toString()").showAndWait();
                 }
@@ -125,6 +121,9 @@ public class PhaseChooserPane implements SubView<GridPane> {
         });
     }
 
+    private void removeSelectedPane() {
+
+    }
 
     @Override
     public GridPane getView() {

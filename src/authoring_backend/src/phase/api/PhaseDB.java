@@ -1,14 +1,16 @@
 package phase.api;
 
-import groovy.api.BlockGraph;
 import authoringUtils.frontendUtils.Try;
+import groovy.api.BlockGraph;
 import groovy.api.GroovyFactory;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import phase.NamespaceException;
 import phase.PhaseGraphImpl;
 import phase.PhaseImpl;
 import phase.TransitionImpl;
+import utility.ObservableUtils;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -20,7 +22,8 @@ import java.util.Set;
 public class PhaseDB {
     private Set<String> namespace;
     private Set<String> phaseNamespace;
-    private List<PhaseGraph> phaseGraphs;
+    private ObservableList<PhaseGraph> phaseGraphs;
+    private ObservableList<String> phaseName;
     private GroovyFactory factory;
     private String startingPhase;
     private BlockGraph winningCondition;
@@ -28,7 +31,9 @@ public class PhaseDB {
     public PhaseDB(GroovyFactory factory) {
         this.namespace = new HashSet<>();
         this.phaseNamespace = new HashSet<>();
-        phaseGraphs = new ArrayList<>();
+        phaseGraphs = FXCollections.observableArrayList();
+        phaseName = FXCollections.observableArrayList();
+        ObservableUtils.bindList(phaseGraphs, phaseName, PhaseGraph::name);
         this.factory = factory;
         winningCondition = factory.createGroovyGraph();
     }
@@ -64,4 +69,5 @@ public class PhaseDB {
     public String getStartingPhase() { return startingPhase; }
 
     public BlockGraph heartbeat() { return winningCondition; }
+    public ObservableList<String> phaseNames() { return phaseName; }
 }
