@@ -68,19 +68,32 @@ public class PhaseChooserPane implements SubView<GridPane> {
         System.out.println(message + "\nPhase Data Map: " + phaseDataMap);
     }
 
+    /**
+     * Load data:
+     * 1. Clear all the previous data in frontend and backend
+     * 2. Take the names of phaseGraphs as Set<String> and restore ListView on the left
+     * 3. For each ChooserPane:
+     *  1. restore all the nodes according to X and Y position and name
+     *  2. restore connections between nodes by going through the map and generate edges.
+     *
+     * @param phaseDataMap
+     */
     public void reset(Map<String, SinglePhaseData> phaseDataMap){
         this.phaseDataMap = phaseDataMap;
-        phaseDB.phases().forEach(phase -> phaseDB.removeGraph(phase));
-        phaseList.clear();
-        phasePanes.clear();
+        clearPrevData();
 
         phaseDataMap.keySet().forEach(a -> {
             phaseList.add(a);
             recoverPhasePane(a, phaseDataMap);
         });
-
-        System.out.println("map" + phaseDataMap);
         phaseListView.setItems(phaseList);
+        System.out.println("Map after reset" + phaseDataMap);
+    }
+
+    private void clearPrevData() {
+        phaseDB.phases().forEach(phase -> phaseDB.removeGraph(phase));
+        phaseList.clear();
+        phasePanes.clear();
     }
 
     private void initializeView() {
