@@ -12,6 +12,7 @@ import gameplay.Initializer;
 import graphUI.graphData.PhaseGraphXMLParser;
 import graphUI.graphData.SinglePhaseData;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -24,6 +25,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.xml.sax.SAXException;
 import runningGame.GameWindow;
+import utils.serializer.SerializerTestCRUD;
 
 import java.io.File;
 import java.io.IOException;
@@ -87,6 +89,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         MenuItem setBGM = new MenuItem("BGM");
         MenuItem helpDoc = new MenuItem("Help");
         MenuItem about = new MenuItem("About");
+        MenuItem saveGameObjects = new MenuItem("Save GameObjects");
 
         save.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
         saveAs.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN));
@@ -96,6 +99,8 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         newFile.setOnAction(e -> new NewWindowView());
         open.setOnAction(this::handleOpen);
         export.setOnAction(this::handleExport);
+
+        saveGameObjects.setOnAction(e -> new SaveGridAndGameObjectsView(new SerializerTestCRUD().getXMLString(authTools.entityDB())));
 
         save.setOnAction(e -> {
             if (myFile != null)
@@ -113,7 +118,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         helpDoc.setOnAction(this::handleHelpDoc);
         about.setOnAction(this::handleAbout);
 
-        file.getItems().addAll(newFile, open, export, save, saveAs, close);
+        file.getItems().addAll(newFile, open, export, save, saveAs, saveGameObjects, close);
         edit.getItems().addAll(undo, redo);
         run.getItems().addAll(runProject);
         settings.getItems().addAll(resizeGrid, setBGM);

@@ -18,6 +18,7 @@ module authoring_backend {
 
     exports authoring;
     exports conversion.engine;
+    exports conversion.authoring;
     exports phase.api;
     exports groovy.api;
     exports groovy.graph.blocks.core;
