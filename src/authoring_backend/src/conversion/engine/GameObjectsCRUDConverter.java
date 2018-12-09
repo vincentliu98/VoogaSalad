@@ -9,6 +9,7 @@ import com.thoughtworks.xstream.converters.collections.TreeSetConverter;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.mapper.Mapper;
+import gameObjects.category.CategoryClass;
 import gameObjects.crud.SimpleGameObjectsCRUD;
 import gameObjects.entity.EntityClass;
 import gameObjects.tile.TileClass;
@@ -34,6 +35,9 @@ public class GameObjectsCRUDConverter implements Converter {
         writer.startNode("grid-height");
         writer.setValue(String.valueOf(db.getHeight()));
         writer.endNode();
+
+        // CategoryPrototypes
+        for (CategoryClass categoryClass : db.getCategoryClasses())
 
         // EntityPrototypes
         for(var entityClass : db.getEntityClasses()) {
