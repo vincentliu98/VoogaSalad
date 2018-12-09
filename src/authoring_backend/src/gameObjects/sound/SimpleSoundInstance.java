@@ -24,6 +24,7 @@ public class SimpleSoundInstance implements SoundInstance {
             Supplier<SoundClass> getSoundClassFunc) {
         this.className = new ReadOnlyStringWrapper();
         this.className.setValue(className);
+        this.duration = new SimpleDoubleProperty();
         this.instanceName = new SimpleStringProperty(className);
         this.mediaFilePath = mediaFilePath;
         this.propertiesMap = properties;
