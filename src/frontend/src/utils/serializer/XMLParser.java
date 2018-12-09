@@ -50,5 +50,12 @@ public class XMLParser {
                 Integer.parseInt(myDocument.getElementsByTagName("grid-height").item(0).getNodeValue()));
     }
 
-
+    /**
+     * This method returns an iterable of GameObjectClasses in the most raw String format from the document.
+     *
+     * @return An Iterable<String>
+     */
+    public Iterable<RawClass> getGameObjectClasses() {
+        return null;
+    }
 }

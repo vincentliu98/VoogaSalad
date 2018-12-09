@@ -12,6 +12,8 @@ import com.thoughtworks.xstream.mapper.Mapper;
 import gameObjects.category.CategoryClass;
 import gameObjects.crud.SimpleGameObjectsCRUD;
 import gameObjects.entity.EntityClass;
+import gameObjects.sound.SoundClass;
+import gameObjects.sound.SoundInstance;
 import gameObjects.tile.TileClass;
 import groovy.lang.GroovyShell;
 
@@ -273,8 +275,12 @@ public class CRUDConverterAuthoring implements Converter {
         for(var player : db.getPlayerClasses()) {
             writer.startNode("playerClass");
 
-            writer.startNode("name");
+            writer.startNode("className");
             writer.setValue(player.getClassName().get());
+            writer.endNode();
+
+            writer.startNode("classID");
+            writer.setValue(String.valueOf(player.getClassId().getValue()));
             writer.endNode();
 
             writer.startNode("props");
@@ -286,13 +292,66 @@ public class CRUDConverterAuthoring implements Converter {
             new TreeSetConverter(mapper).marshal(new TreeSet<>(player.getAllGameObjectInstanceIDs()), writer, ctx);
             writer.endNode();
 
-
             writer.startNode("imagePath");
             if (!player.getImagePath().isEmpty().getValue()) {
                 writer.setValue(player.getImagePath().getValue());
             }
             writer.endNode();
 
+            writer.endNode();
+        }
+
+        // SoundClass
+        for (SoundClass soundClass : db.getSoundClasses()) {
+            writer.startNode("soundClass");
+
+            // Class Name
+            writer.startNode("soundName");
+            writer.setValue(soundClass.getClassName().getValue());
+            writer.endNode();
+
+            writer.startNode("classID");
+            writer.setValue(String.valueOf(soundClass.getClassId().getValue()));
+            writer.endNode();
+
+            writer.startNode("mediaFilePath");
+            writer.setValue(soundClass.getMediaFilePath().getValue());
+            writer.endNode();
+
+            writer.startNode("duration");
+            writer.setValue(String.valueOf(soundClass.getDuration().getValue()));
+            writer.endNode();
+
+            writer.endNode();
+        }
+
+        // SoundInstance
+        for (SoundInstance soundInstance : db.getSoundInstances()) {
+            writer.startNode("soundInstance");
+
+            // ClassName
+            writer.startNode("className");
+            writer.setValue(soundInstance.getClassName().getValue());
+            writer.endNode();
+
+            // Instance name
+            writer.startNode("instanceName");
+            writer.setValue(soundInstance.getInstanceName().getValue());
+            writer.endNode();
+
+            // Instance ID
+            writer.startNode("instanceID");
+            writer.setValue(String.valueOf(soundInstance.getInstanceId().getValue()));
+            writer.endNode();
+
+            // duration
+            writer.startNode("duration");
+            writer.setValue(String.valueOf(soundInstance.getDuration().getValue()));
+            writer.endNode();
+
+            // file path
+            writer.startNode("mediaFilePath");
+            writer.setValue(soundInstance.getMediaFilePath().getValue());
             writer.endNode();
         }
     }
