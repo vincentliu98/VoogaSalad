@@ -111,7 +111,7 @@ public class ImageManager {
      * @return
      */
     private static Image getPlayerImage(SimpleStringProperty imagePaths, ReadOnlyStringProperty textToDisplay) {
-        if (imagePaths == null) {
+        if (imagePaths.get() == null) {
             return composeImageFromString(textToDisplay.getValue());
         } else {
             return new Image(imagePaths.get());

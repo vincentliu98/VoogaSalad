@@ -9,7 +9,6 @@ import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.entity.EntityClass;
 import gameObjects.entity.EntityInstance;
-import gameObjects.gameObject.GameObjectClass;
 import grids.PointImpl;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;

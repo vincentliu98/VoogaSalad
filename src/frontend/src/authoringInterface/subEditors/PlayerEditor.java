@@ -9,10 +9,7 @@ import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.player.PlayerClass;
 import gameObjects.player.PlayerInstance;
 import grids.PointImpl;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Tooltip;
-import javafx.scene.control.TreeItem;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
@@ -39,6 +36,8 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
     private Set<ImageView> toRemoveImage;
     private Set<String> toRemovePath;
     private String imagePath;
+    private Label entityText;
+    private CheckBox entitybox;
 
     PlayerEditor(GameObjectsCRUDInterface manager) {
         super(manager);
@@ -63,10 +62,15 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
         });
         imagePanel = new HBox(IMAGE_PANEL_GAP);
 
+        entityText = new Label("Assign Entities");
+        entitybox = new CheckBox();
+
         confirm.setStyle("-fx-text-fill: white;"
                 + "-fx-background-color: #343a40;");
         layout.addRow(0, imageText, chooseImage);
         layout.addRow(1, imagePanel);
+        layout.addRow(2, entityText);
+        layout.addRow(3, entitybox);
 
         rootPane.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.DELETE || e.getCode() == KeyCode.BACK_SPACE) {
@@ -97,14 +101,15 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
     protected void readGameObjectInstance() {
         readInstanceProperties();
         nameField.setText(gameObjectInstance.getClassName().getValue());
-        imagePath = gameObjectInstance.getImagePath().toString();
+        imagePath = gameObjectInstance.getImagePath().get();
+        System.out.print(imagePath);
     }
 
     @Override
     protected void readGameObjectClass() {
         readClassProperties();
         nameField.setText(gameObjectClass.getClassName().getValue());
-        imagePath = gameObjectClass.getImagePath().toString();
+        imagePath = gameObjectClass.getImagePath().get();
         System.out.print(imagePath);
     }
 
@@ -121,7 +126,7 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
         JavaFxOperation.setWidthAndHeight(icon, ICON_WIDTH, ICON_HEIGHT);
         newItem.setGraphic(icon);
         treeItem.getChildren().add(newItem);
-        writeClassProperties();
+        System.out.print(treeItem.getChildren());
     }
 
     /**
@@ -140,7 +145,6 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
         JavaFxOperation.setWidthAndHeight(icon2, ICON_WIDTH, ICON_HEIGHT);
         treeItem.setValue(nameField.getText());
         treeItem.setGraphic(icon2);
-        writeClassProperties();
     }
 
     /**
@@ -155,6 +159,5 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
         }
         gameObjectInstance.setImagePath(imagePath);
         ((ImageView) nodeEdited).setImage(ImageManager.getPreview(gameObjectInstance));
-        writeInstanceProperties();
     }
 }
