@@ -2,6 +2,7 @@ package graphUI.graphData;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import phase.api.GameEvent;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.TransformerException;
@@ -12,11 +13,10 @@ import java.io.File;
 import java.util.Map;
 
 /**
- *
  * @author jl729
  * @author Inchan Hwang
  */
-public class PhaseGraphXMLWriter implements PhaseGraphXMLWriterAPI{
+public class PhaseGraphXMLWriter implements PhaseGraphXMLWriterAPI {
 
     private Map<String, SinglePhaseData> phaseGraph;
     private Document doc;
@@ -74,9 +74,11 @@ public class PhaseGraphXMLWriter implements PhaseGraphXMLWriterAPI{
             var from = doc.createElement("from");
             var to = doc.createElement("to");
             var type = doc.createElement("type");
+
             from.appendChild(doc.createTextNode(p.getKey()));
             to.appendChild(doc.createTextNode(p.getValue()));
             type.appendChild(doc.createTextNode(singlePhaseData.getNodesConnect().get(p).toString()));
+
             connection.appendChild(from);
             connection.appendChild(to);
             connection.appendChild(type);

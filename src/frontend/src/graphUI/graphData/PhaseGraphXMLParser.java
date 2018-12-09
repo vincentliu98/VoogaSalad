@@ -24,7 +24,7 @@ import java.util.Map;
  * @author jl729
  */
 
-public class PhaseGraphXMLParser implements PhaseGraphXMLParserAPI{
+public class PhaseGraphXMLParser implements PhaseGraphXMLParserAPI {
     private static final DocumentBuilder DOCUMENT_BUILDER = getDocumentBuilder();
     private final String PHASE_NAME_TAG = "name";
     private final String NODES_TAG = "nodes";
@@ -40,7 +40,8 @@ public class PhaseGraphXMLParser implements PhaseGraphXMLParserAPI{
     /**
      * Create a parser for XML files of given type.
      */
-    public PhaseGraphXMLParser() { }
+    public PhaseGraphXMLParser() {
+    }
 
     @Override
     public Map<String, SinglePhaseData> parseFile(File file) throws IOException, SAXException {
@@ -98,13 +99,10 @@ public class PhaseGraphXMLParser implements PhaseGraphXMLParserAPI{
                 String to = connection.getElementsByTagName(TO_TAG).item(0).getChildNodes().item(0).getNodeValue();
                 String eventType = connection.getElementsByTagName(TYPE_TAG).item(0).getChildNodes().item(0).getNodeValue();
                 GameEvent gameEvent = null;
-                switch (eventType) {
-                    case "MouseClick":
-                        gameEvent = new GameEvent.MouseClick();
-                        break;
-                    case "KeyPress":
-                        gameEvent = new GameEvent.KeyPress(KeyCode.K);
-                        break;
+                if (eventType.startsWith("KeyPress")) {
+                    gameEvent = new GameEvent.KeyPress(KeyCode.valueOf(eventType.substring(9)));
+                } else {
+                    gameEvent = new GameEvent.MouseClick();
                 }
                 nodesConnect.put(new Pair<>(from, to), gameEvent);
             }

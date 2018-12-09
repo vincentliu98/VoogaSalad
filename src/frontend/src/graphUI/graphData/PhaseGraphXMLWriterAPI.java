@@ -23,7 +23,9 @@ public interface PhaseGraphXMLWriterAPI {
      *                  <connection>
      *                      <from>1</from>
      *                      <to>2</to>
-     *                      <type>MouseClick</type>
+     *                      <type>
+     *                          MouseClick (Or KeyPress.K)
+     *                      </type>
      *                  </connection>
      *           </connections>
      *        </phase>
