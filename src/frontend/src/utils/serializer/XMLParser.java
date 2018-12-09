@@ -22,13 +22,17 @@ public class XMLParser {
      *
      * @param file: A File in the desired XML format.
      */
-    public void loadXML(File file) throws SAXException, IOException {
+    public void loadXML(File file) throws SAXException, XMLParsingException {
         DocumentBuilder docBuilder = null;
         try {
             docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         } catch (ParserConfigurationException ignored) {
         }
-        myDocument = docBuilder.parse(file);
-
+        try {
+            myDocument = docBuilder.parse(file);
+        } catch (IOException e) {
+            throw new XMLParsingException("The XML Parser encountered an error upon reading" + file.getAbsolutePath(), e);
+        }
+        myDocument.getDocumentElement().normalize();
     }
 }
