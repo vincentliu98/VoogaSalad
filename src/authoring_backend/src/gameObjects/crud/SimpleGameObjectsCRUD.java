@@ -376,6 +376,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     public Collection<GameObjectInstance> getAllInstances(String className) {
         Set<GameObjectInstance> instancesSet = new HashSet<>();
         for (Map.Entry<Integer, GameObjectInstance> entry : gameObjectInstanceMapById.entrySet()) {
+
             if (entry.getValue().getClassName().getValue().equals(className)) {
                 instancesSet.add(entry.getValue());
             }
@@ -597,7 +598,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     private void changeAllGameObjectInstancesClassName(String oldClassName, String newClassName)
             throws InvalidOperationException {
         for (Map.Entry<Integer, GameObjectInstance> e : gameObjectInstanceMapById.entrySet()) {
-            if (e.getValue().getClassName().equals(oldClassName)) {
+            if (e.getValue().getClassName().getValue().equals(oldClassName)) {
                 e.getValue().setClassName(newClassName);
             }
         }
