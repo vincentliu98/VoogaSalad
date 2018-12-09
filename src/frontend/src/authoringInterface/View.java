@@ -10,12 +10,16 @@ import authoringInterface.sidebar.StatusView;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import graphUI.groovy.GroovyPaneFactory;
 import javafx.scene.Node;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import utils.nodeInstance.CrappyNodeInstanceController;
 import utils.nodeInstance.NodeInstanceController;
+
+import java.io.*;
 
 /**
  * This class provides an createGraph skeleton window with the basic menu items, and basic editing interfaces.
@@ -64,11 +68,11 @@ public class View implements ParentView<SubView> {
 
     private void initializeElements() {
         sidebar = new GridPane();
-        menuBar = new EditorMenuBarView(tools, primaryStage::close, this::updateGridDimension);
         sideView = new SideView(gameObjectManager, nodeInstanceController);
         editView = new EditView(tools, groovyPaneFactory, ROW_NUMBER, COL_NUMBER, gameObjectManager, nodeInstanceController);
         statusView = new StatusView(gameObjectManager);
         editView.addUpdateStatusEventListener(statusView);
+        menuBar = new EditorMenuBarView(tools, primaryStage::close, this::updateGridDimension, editView);
         sidebar.addColumn(0, sideView.getView(), statusView.getView());
         mainView.getColumnConstraints().addAll(new ColumnConstraints(MainAuthoringProgram.SCREEN_WIDTH - SIDEBAR_WIDTH));
         mainView.addColumn(0, editView.getView());

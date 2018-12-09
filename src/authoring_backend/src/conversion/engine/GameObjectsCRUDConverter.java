@@ -9,6 +9,7 @@ import com.thoughtworks.xstream.converters.collections.TreeSetConverter;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.mapper.Mapper;
+import gameObjects.category.CategoryClass;
 import gameObjects.crud.SimpleGameObjectsCRUD;
 import gameObjects.entity.EntityClass;
 import gameObjects.tile.TileClass;
@@ -17,6 +18,7 @@ import groovy.lang.GroovyShell;
 import java.util.Map;
 import java.util.TreeSet;
 
+@SuppressWarnings("Duplicates")
 public class GameObjectsCRUDConverter implements Converter {
     private Mapper mapper;
     public GameObjectsCRUDConverter(Mapper mapper) {
@@ -34,6 +36,23 @@ public class GameObjectsCRUDConverter implements Converter {
         writer.startNode("grid-height");
         writer.setValue(String.valueOf(db.getHeight()));
         writer.endNode();
+
+        // CategoryPrototypes
+        for (CategoryClass categoryClass : db.getCategoryClasses()) {
+            writer.startNode("gamePlay.CategoryPrototype");
+
+            // name
+            writer.startNode("name");
+            writer.setValue(categoryClass.getClassName().getValue());
+            writer.endNode();
+
+            // id
+            writer.startNode("myID");
+            writer.setValue(String.valueOf(categoryClass.getClassId().getValue()));
+            writer.endNode();
+
+            writer.endNode();
+        }
 
         // EntityPrototypes
         for(var entityClass : db.getEntityClasses()) {
@@ -78,6 +97,7 @@ public class GameObjectsCRUDConverter implements Converter {
             writer.endNode();
         }
 
+        // EntityInstance
         for(var entityInstance : db.getEntityInstances()) {
             EntityClass entityClass = null;
             try {
@@ -94,6 +114,11 @@ public class GameObjectsCRUDConverter implements Converter {
             // name
             writer.startNode("name");
             writer.setValue(entityInstance.getClassName().get());
+            writer.endNode();
+
+            // instance name
+            writer.startNode("instanceName");
+            writer.setValue(entityInstance.getInstanceName().getValue());
             writer.endNode();
 
             // props
@@ -138,28 +163,22 @@ public class GameObjectsCRUDConverter implements Converter {
             writer.endNode();
         }
 
-        for(var tileInstance : db.getTileInstances()) {
-            TileClass tileClass = null;
-            try {
-                tileClass = db.getTileClass(tileInstance.getClassName().get());
-            } catch (GameObjectClassNotFoundException e) {
-                e.printStackTrace();
-            }
-            writer.startNode("gameplay.Tile");
-
-            // myID
+        // TilePrototype
+        for (TileClass tileClass: db.getTileClasses()) {
+            writer.startNode("gameplay.TilePrototype");
+            // ID
             writer.startNode("myID");
-            writer.setValue(String.valueOf(tileInstance.getInstanceId().get()));
+            writer.setValue(tileClass.getClassId().getValue().toString());
             writer.endNode();
 
             // name
             writer.startNode("name");
-            writer.setValue(tileClass.getClassName().get());
+            writer.setValue(tileClass.getClassName().getValue());
             writer.endNode();
 
             // props
-            var toEval = mapToString(tileClass.getPropertiesMap()); // should be instance tho...
             writer.startNode("props");
+            var toEval = mapToString(tileClass.getPropertiesMap());
             new MapConverter(mapper).marshal(shell.evaluate(toEval), writer, ctx);
             writer.endNode();
 
@@ -173,6 +192,57 @@ public class GameObjectsCRUDConverter implements Converter {
             writer.setValue(String.valueOf(tileClass.getHeight().get()));
             writer.endNode();
 
+            //myImagePaths
+            writer.startNode("myImagePaths");
+            tileClass.getImagePathList().forEach(path -> {
+                writer.startNode("string");
+                writer.setValue(path);
+                writer.endNode();
+            });
+            writer.endNode();
+
+            // myImageSelector
+            writer.startNode("myImageSelector");
+            writer.setValue(tileClass.getImageSelectorCode());
+            writer.endNode();
+            writer.endNode();
+        }
+
+        // TileInstance
+        for(var tileInstance : db.getTileInstances()) {
+            writer.startNode("gameplay.Tile");
+
+            // myID
+            writer.startNode("myID");
+            writer.setValue(String.valueOf(tileInstance.getInstanceId().get()));
+            writer.endNode();
+
+            // name
+            writer.startNode("name");
+            writer.setValue(tileInstance.getClassName().get());
+            writer.endNode();
+
+            // instance name
+            writer.startNode("instanceName");
+            writer.setValue(tileInstance.getInstanceName().get());
+            writer.endNode();
+
+            // props
+            var toEval = mapToString(tileInstance.getPropertiesMap()); // should be instance tho...
+            writer.startNode("props");
+            new MapConverter(mapper).marshal(shell.evaluate(toEval), writer, ctx);
+            writer.endNode();
+
+            // myWidth
+            writer.startNode("myWidth");
+            writer.setValue(String.valueOf(tileInstance.getWidth().get()));
+            writer.endNode();
+
+            // myHeight
+            writer.startNode("myHeight");
+            writer.setValue(String.valueOf(tileInstance.getHeight().get()));
+            writer.endNode();
+
             writer.startNode("myCoord");
             writer.startNode("x");
             writer.setValue(String.valueOf(tileInstance.getCoord().getX()));
@@ -184,16 +254,16 @@ public class GameObjectsCRUDConverter implements Converter {
 
             //myImagePaths
             writer.startNode("myImagePaths");
-            for(var path : tileClass.getImagePathList()) {
+            tileInstance.getImagePathList().forEach(path -> {
                 writer.startNode("string");
                 writer.setValue(path);
                 writer.endNode();
-            }
+            });
             writer.endNode();
 
             // myImageSelector
             writer.startNode("myImageSelector");
-            writer.setValue(tileClass.getImageSelectorCode());
+            writer.setValue(tileInstance.getImageSelectorCode());
             writer.endNode();
 
             writer.endNode();

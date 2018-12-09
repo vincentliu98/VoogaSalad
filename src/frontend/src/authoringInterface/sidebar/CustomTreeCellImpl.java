@@ -2,7 +2,7 @@ package authoringInterface.sidebar;
 
 import authoringInterface.subEditors.AbstractGameObjectEditor;
 import authoringInterface.subEditors.EditorFactory;
-import authoringInterface.subEditors.MissingEditorForTypeException;
+import authoringInterface.subEditors.exception.MissingEditorForTypeException;
 import authoringUtils.exception.GameObjectClassNotFoundException;
 import authoringUtils.exception.GameObjectInstanceNotFoundException;
 import authoringUtils.exception.GameObjectTypeException;
@@ -135,6 +135,12 @@ public class CustomTreeCellImpl extends TreeCell<String> {
 
     @Override
     public void startEdit() {
+        try {
+            if (objectManager.getGameObjectClass(getString()).getType() == GameObjectType.CATEGORY) {
+                return;
+            }
+        } catch (GameObjectClassNotFoundException ignored) {
+        }
         super.startEdit();
         if (textField == null) {
             createTextField();
