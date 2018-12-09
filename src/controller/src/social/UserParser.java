@@ -13,11 +13,12 @@ public class UserParser {
     public UserParser(){
         myUsers = new ArrayList<>();
         // TODO: Get all users from database and pass into generateUserIcons
+        // FIXME: Erase sample users below (just placeholders)
         Set<User> users = new HashSet<>();
         User u = new User(1, "natalieqle");
-        u.changeAvatar(new Image("duke_logo.png"));
+        u.changeAvatar(new Image("/profile-images/ocean.jpeg"));
         User u2 = new User(1, "bloopy");
-        u.changeAvatar(new Image("square.png"));
+        u2.changeAvatar(new Image("/profile-images/sunset.jpg"));
         users.add(u);
         users.add(u2);
         generateUserIcons(users);
