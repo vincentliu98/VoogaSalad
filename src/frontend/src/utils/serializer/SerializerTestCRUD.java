@@ -25,4 +25,14 @@ public class SerializerTestCRUD {
     public XStream getSerializer() {
         return xstream;
     }
+
+    /**
+     * This method returns the String representation of the object.
+     *
+     * @param object: An Object that is to be serialized to an XML String.
+     * @return An XML String.
+     */
+    public String getXMLString(Object object) {
+        return xstream.toXML(object);
+    }
 }
