@@ -12,8 +12,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import playing.MainPlayer;
+import social.Icon;
 
-public class GameIcon {
+public class GameIcon implements Icon {
     public static final String TEXT_CSS = "title-box";
     public static final String DESCRIPTION_CSS = "description-box";
     public static final double DESCRIPTION_INSET = 10;
@@ -92,7 +93,8 @@ public class GameIcon {
 
     }
 
-    private void initBackground(){
+    @Override
+    public void initBackground(){
         Image image = new Image(getClass().getResourceAsStream(IMAGES_FOLDER_PATH + myImagePath));
         myBackground = new ImageView(image);
         myBackground.setFitWidth(ICON_WIDTH);
@@ -100,7 +102,8 @@ public class GameIcon {
         myPane.getChildren().add(myBackground);
     }
 
-    private void initTitle(){
+    @Override
+    public void initTitle(){
         myTitle = new Text(myName);
         myTitle.setFill(Color.BLACK);
 
@@ -162,10 +165,12 @@ public class GameIcon {
         myButtonHolder.getStyleClass().add(BUTTON_HOLDER_CSS);
     }
 
+    @Override
     public String getName(){
         return myName;
     }
 
+    @Override
     public StackPane getView() {
         return myPane;
     }
