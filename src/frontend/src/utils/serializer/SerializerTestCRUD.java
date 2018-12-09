@@ -2,6 +2,7 @@ package utils.serializer;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import conversion.authoring.CRUDConverterAuthoring;
 import conversion.engine.GameObjectsCRUDConverter;
 import gameObjects.crud.SimpleGameObjectsCRUD;
 
@@ -20,7 +21,7 @@ public class SerializerTestCRUD {
     public SerializerTestCRUD() {
         xstream = new XStream(new DomDriver());
         xstream.alias("CRUD", SimpleGameObjectsCRUD.class);
-        xstream.registerConverter(new GameObjectsCRUDConverter(xstream.getMapper()));
+        xstream.registerConverter(new CRUDConverterAuthoring(xstream.getMapper()));
     }
 
     /**

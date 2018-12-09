@@ -1,4 +1,4 @@
-package utils.serializer;
+package utils.exception;
 
 /**
  * This exception is thrown when the XMLParser encountered an error parsing the XML.

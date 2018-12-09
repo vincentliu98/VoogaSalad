@@ -4,6 +4,7 @@ import grids.Point;
 import grids.PointImpl;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
+import utils.exception.XMLParsingException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
