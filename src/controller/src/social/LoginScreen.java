@@ -1,4 +1,4 @@
-package launchingGame;
+package social;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -27,11 +27,12 @@ public class LoginScreen {
 
     private GridPane myPane;
     private Scene myScene;
+    private Stage myStage;
 
     public LoginScreen() { }
 
     public Stage launchLogin(){
-        Stage myStage = new Stage();
+        myStage = new Stage();
 
         initPane();
         initScene();
@@ -94,6 +95,10 @@ public class LoginScreen {
         btn.setPrefWidth(260.0D);
         //CheckBox cBox = new CheckBox("Remember me"); TODO: Do we need this?
         Text register = new Text("Register");
+        register.setOnMouseClicked(e -> {
+            RegisterScreen myRegistration = new RegisterScreen();
+            myRegistration.launchRegistration().show();
+        });
         //Text forgotPassword = new Text("Forgot your password?");
 
         btn.setOnMouseClicked(e -> {
@@ -101,6 +106,7 @@ public class LoginScreen {
             // assuming a valid user was retrieved from the database (myUser)
             User myUser = new User(1); // TODO: Remove later (just a placeholder)
             EventBus.getInstance().sendMessage(EngineEvent.CHANGE_USER, myUser);
+            myStage.close();
         });
 
         myPane.add(usernameField, 0, 2, 4, 1);

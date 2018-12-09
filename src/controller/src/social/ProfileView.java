@@ -1,13 +1,10 @@
-package launchingGame;
+package social;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import social.EngineEvent;
-import social.Subscriber;
-import social.User;
 
 public class ProfileView implements Subscriber {
     public static final String PERSON_PATH = "/graphics/person_logo.png";
