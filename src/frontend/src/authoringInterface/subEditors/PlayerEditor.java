@@ -6,6 +6,7 @@ import authoringUtils.exception.GameObjectClassNotFoundException;
 import authoringUtils.exception.GameObjectInstanceNotFoundException;
 import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
+import gameObjects.entity.EntityClass;
 import gameObjects.player.PlayerClass;
 import gameObjects.player.PlayerInstance;
 import grids.PointImpl;
