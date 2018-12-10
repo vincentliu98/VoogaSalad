@@ -58,12 +58,12 @@ public class SideView implements SubView<StackPane> {
         ));
         for (GameObjectClass item : defaultList) {
             try {
-                gameObjectsManager.createGameObjectClass(item.getType(), item.getClassName().getValue());
+                gameObjectsManager.createGameObjectClass(item.getType(), item.getClassName());
             } catch (DuplicateGameObjectClassException e) {
                 // TODO: proper error handling
                 e.printStackTrace();
             }
-            TreeItem<String> objectLeaf = new TreeItem<>(item.getClassName().getValue());
+            TreeItem<String> objectLeaf = new TreeItem<>(item.getClassName());
             boolean found = false;
             for (TreeItem<String> categoryNode : rootNode.getChildren()) {
                 if (categoryNode.getValue() == item.getType().toString()) {

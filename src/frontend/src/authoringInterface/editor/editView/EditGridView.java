@@ -185,30 +185,31 @@ public class EditGridView implements SubView<ScrollPane> {
             GameObjectInstance instance = null;
             try {
                 instance = nodeInstanceController.getGameObjectInstance(node);
+                Text instanceID = new Text(String.valueOf(instance.getInstanceId()));
+                Text instanceName = new Text(instance.getInstanceName());
+                Text className = new Text(instance.getClassName());
+                Button edit = new Button("Edit");
+                Button delete = new Button("Delete");
+                GridPane control = new GridPane();
+                control.addColumn(0, edit, delete);
+                instanceID.setOnMouseClicked(e -> handleDoubleClick(e, node));
+                instanceName.setOnMouseClicked(e -> handleDoubleClick(e, node));
+                className.setOnMouseClicked(e -> handleDoubleClick(e, node));
+                edit.setOnMouseClicked(e -> handleNodeEditing(node));
+                delete.setOnMouseClicked(e -> handleNodeDeleting(node));
+                listView.addRow(
+                        listView.getRowCount(),
+                        instanceID,
+                        instanceName,
+                        className,
+                        control
+                );
+                listView.getChildrenUnmodifiable().forEach(node1 -> GridPane.setHgrow(node1, Priority.ALWAYS));
+
             } catch (NodeNotFoundException e) {
                 // TODO: Proper error handling.
                 e.printStackTrace();
             }
-            Text instanceID = new Text(instance.getInstanceId().getValue().toString());
-            Text instanceName = new Text(instance.getInstanceName().getValue());
-            Text className = new Text(instance.getClassName().getValue());
-            Button edit = new Button("Edit");
-            Button delete = new Button("Delete");
-            GridPane control = new GridPane();
-            control.addColumn(0, edit, delete);
-            instanceID.setOnMouseClicked(e -> handleDoubleClick(e, node));
-            instanceName.setOnMouseClicked(e -> handleDoubleClick(e, node));
-            className.setOnMouseClicked(e -> handleDoubleClick(e, node));
-            edit.setOnMouseClicked(e -> handleNodeEditing(node));
-            delete.setOnMouseClicked(e -> handleNodeDeleting(node));
-            listView.addRow(
-                    listView.getRowCount(),
-                    instanceID,
-                    instanceName,
-                    className,
-                    control
-            );
-            listView.getChildrenUnmodifiable().forEach(node1 -> GridPane.setHgrow(node1, Priority.ALWAYS));
         });
         return listView;
     }
@@ -374,15 +375,15 @@ public class EditGridView implements SubView<ScrollPane> {
         int height = 0;
         int width = 0;
         if (gameObjectClass.getType() == GameObjectType.ENTITY) {
-            height = ((EntityClass) gameObjectClass).getHeight().getValue();
-            width = ((EntityClass) gameObjectClass).getWidth().getValue();
+            height = ((EntityClass) gameObjectClass).getHeight();
+            width = ((EntityClass) gameObjectClass).getWidth();
         } else if (gameObjectClass.getType() == GameObjectType.TILE) {
-            height = ((TileClass) gameObjectClass).getHeight().getValue();
-            width = ((TileClass) gameObjectClass).getWidth().getValue();
+            height = ((TileClass) gameObjectClass).getHeight();
+            width = ((TileClass) gameObjectClass).getWidth();
         }
         if (height != 0 && width != 0) {
             assert gameObjectInstance != null;
-            Tooltip.install(finalNodeOnGrid, new Tooltip(String.format("Width: %s\nHeight: %s\nSingle Click to toggle Deletion\nDouble Click or Right Click to edit\nInstance ID: %s\nClass Name: %s", width, height, gameObjectInstance.getInstanceId().getValue(), gameObjectInstance.getClassName().getValue())));
+            Tooltip.install(finalNodeOnGrid, new Tooltip(String.format("Width: %s\nHeight: %s\nSingle Click to toggle Deletion\nDouble Click or Right Click to edit\nInstance ID: %s\nClass Name: %s", width, height, gameObjectInstance.getInstanceId(), gameObjectInstance.getClassName())));
         }
     }
 

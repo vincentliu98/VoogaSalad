@@ -88,10 +88,10 @@ public class IdManagerClass implements IdManager {
     public Consumer<GameObjectInstance> requestInstanceIdFunc() {
         return gameObjectInstance -> {
             // Only set Ids for Instances without Ids
-            if (gameObjectInstance.getInstanceId().getValue() == 0) {
+            if (gameObjectInstance.getInstanceId() == 0) {
                 int id = instanceCount;
                 instanceCount++;
-                gameObjectInstance.setInstanceId(simpleIntegerProperty -> simpleIntegerProperty.setValue(id));
+                gameObjectInstance.setInstanceId(id);
             }
         };
     }
@@ -100,7 +100,7 @@ public class IdManagerClass implements IdManager {
     public ThrowingConsumer<GameObjectInstance, InvalidIdException> returnInstanceIdFunc() {
 
         return gameObjectInstance -> {
-            int returnedId = gameObjectInstance.getInstanceId().getValue();
+            int returnedId = gameObjectInstance.getInstanceId();
             if (returnedId != 0) {
                 if (returnedId > instanceCount) {
                     throw new InvalidIdException("Deleted instance contains invalid Id");
@@ -109,7 +109,7 @@ public class IdManagerClass implements IdManager {
                 for (int i = nextId; i < instanceCount; i++) {
                     GameObjectInstance g = gameObjectInstanceMap.remove(i);
                     int newId = i - 1;
-                    g.setInstanceId(simpleIntegerProperty -> simpleIntegerProperty.setValue(newId));
+                    g.setInstanceId(newId);
                     gameObjectInstanceMap.put(newId, g);
                 }
                 instanceCount--;

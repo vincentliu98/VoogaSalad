@@ -5,10 +5,8 @@ import authoringUtils.exception.InvalidIdException;
 import gameObjects.ThrowingConsumer;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableMap;
 
+import java.util.HashMap;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -35,12 +33,10 @@ public class PlayerInstanceFactory {
         if (playerPrototype.getType() != GameObjectType.PLAYER) {
             throw new GameObjectTypeException(GameObjectType.PLAYER);
         }
-        SimpleStringProperty imagePathCopy = new SimpleStringProperty();
-        ObservableMap propertiesMapCopy = FXCollections.observableHashMap();
-        imagePathCopy.setValue(playerPrototype.getImagePath().getValue());
-        propertiesMapCopy.putAll(playerPrototype.getPropertiesMap());
+        var imagePathCopy = playerPrototype.getImagePath();
+        var propertiesMapCopy = new HashMap<>(playerPrototype.getPropertiesMap());
         Supplier<PlayerClass> getPlayerClassFunc = () -> playerPrototype;
-        PlayerInstance playerInstance = new SimplePlayerInstance(playerPrototype.getClassName().getValue(), imagePathCopy, propertiesMapCopy, getPlayerClassFunc);
+        PlayerInstance playerInstance = new SimplePlayerInstance(playerPrototype.getClassName(), imagePathCopy, propertiesMapCopy, getPlayerClassFunc);
         requestInstanceIdFunc.accept(playerInstance);
         addInstanceToMapFunc.accept(playerInstance);
         return playerInstance;

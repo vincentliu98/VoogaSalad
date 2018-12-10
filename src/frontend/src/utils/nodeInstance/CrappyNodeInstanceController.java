@@ -83,7 +83,7 @@ public class CrappyNodeInstanceController implements NodeInstanceController {
     @Override
     public Node getNode(GameObjectInstance gameObjectInstance) throws GameObjectInstanceNotFoundException {
         if (!instanceNodeMap.containsKey(gameObjectInstance)) {
-            throw new GameObjectInstanceNotFoundException(String.format("The input GameObjectInstance %s is not defined in the NodeInstanceController", gameObjectInstance.getInstanceName().getValue()));
+            throw new GameObjectInstanceNotFoundException(String.format("The input GameObjectInstance %s is not defined in the NodeInstanceController", gameObjectInstance.getInstanceName()));
         }
         return instanceNodeMap.get(gameObjectInstance);
     }
@@ -106,7 +106,7 @@ public class CrappyNodeInstanceController implements NodeInstanceController {
     @Override
     public void removeGameObjectInstance(GameObjectInstance gameObjectInstance) throws GameObjectInstanceNotFoundException {
         if (!instanceNodeMap.containsKey(gameObjectInstance)) {
-            throw new GameObjectInstanceNotFoundException(String.format("The GameObjectInstance %s is not defined in the controller", gameObjectInstance.getInstanceName().getValue()));
+            throw new GameObjectInstanceNotFoundException(String.format("The GameObjectInstance %s is not defined in the controller", gameObjectInstance.getInstanceName()));
         }
         nodeInstanceMap.remove(instanceNodeMap.get(gameObjectInstance));
         instanceNodeMap.remove(gameObjectInstance);

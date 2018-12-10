@@ -10,9 +10,6 @@ import gameObjects.gameObject.GameObjectType;
 import gameObjects.player.PlayerClass;
 import gameObjects.tile.TileClass;
 import gameObjects.tile.TileInstance;
-import javafx.beans.property.ReadOnlyStringProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.ObservableList;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -60,13 +57,13 @@ public class ImageManager {
         Image ret = null;
         switch (type) {
             case UNSPECIFIED:
-                throw new PreviewUnavailableException(String.format("The GameObjectClass %s does not support getPreview operation.", gameObjectClass.getClassName().getValue()));
+                throw new PreviewUnavailableException(String.format("The GameObjectClass %s does not support getPreview operation.", gameObjectClass.getClassName()));
             case TILE:
-                ObservableList<String> paths1 = ((TileClass) gameObjectClass).getImagePathList();
+                List<String> paths1 = ((TileClass) gameObjectClass).getImagePathList();
                 ret = getImage(paths1, gameObjectClass.getClassName());
                 break;
             case ENTITY:
-                ObservableList<String> paths2 = ((EntityClass) gameObjectClass).getImagePathList();
+                List<String> paths2 = ((EntityClass) gameObjectClass).getImagePathList();
                 ret = getImage(paths2, gameObjectClass.getClassName());
                 break;
             case CATEGORY:
@@ -76,7 +73,7 @@ public class ImageManager {
                 // TODO
                 break;
             case PLAYER:
-                SimpleStringProperty paths3 = ((PlayerClass) gameObjectClass).getImagePath();
+                String paths3 = ((PlayerClass) gameObjectClass).getImagePath();
                 ret = getPlayerImage(paths3, gameObjectClass.getClassName());
                 break;
         }
@@ -91,9 +88,9 @@ public class ImageManager {
      * @param textToDisplay: The input String if image file is not available.
      * @return An Image for this GameObject Instance or Class.
      */
-    private static Image getImage(ObservableList<String> imagePaths, ReadOnlyStringProperty textToDisplay) {
+    private static Image getImage(List<String> imagePaths, String textToDisplay) {
         if (imagePaths == null || imagePaths.isEmpty()) {
-            return composeImageFromString(textToDisplay.getValue());
+            return composeImageFromString(textToDisplay);
         } else if (imagePaths.size() == 1) {
             return new Image(imagePaths.get(0));
         } else {
@@ -110,11 +107,11 @@ public class ImageManager {
      * @param textToDisplay
      * @return
      */
-    private static Image getPlayerImage(SimpleStringProperty imagePaths, ReadOnlyStringProperty textToDisplay) {
-        if (imagePaths.get() == null) {
-            return composeImageFromString(textToDisplay.getValue());
+    private static Image getPlayerImage(String imagePaths, String textToDisplay) {
+        if (imagePaths == null) {
+            return composeImageFromString(textToDisplay);
         } else {
-            return new Image(imagePaths.get());
+            return new Image(imagePaths);
         }
     }
 
@@ -170,13 +167,13 @@ public class ImageManager {
         GameObjectType type = gameObjectInstance.getType();
         switch (type) {
             case UNSPECIFIED:
-                throw new PreviewUnavailableException(String.format("The instance %s does not support getPreview operation.", gameObjectInstance.getInstanceName().getValue()));
+                throw new PreviewUnavailableException(String.format("The instance %s does not support getPreview operation.", gameObjectInstance.getInstanceName()));
             case TILE:
-                ObservableList<String> paths1 = ((TileInstance) gameObjectInstance).getImagePathList();
+                List<String> paths1 = ((TileInstance) gameObjectInstance).getImagePathList();
                 ret = getImage(paths1, gameObjectInstance.getInstanceName());
                 break;
             case ENTITY:
-                ObservableList<String> paths2 = ((EntityInstance) gameObjectInstance).getImagePathList();
+                List<String> paths2 = ((EntityInstance) gameObjectInstance).getImagePathList();
                 ret = getImage(paths2, gameObjectInstance.getInstanceName());
                 break;
             case CATEGORY:
@@ -186,7 +183,7 @@ public class ImageManager {
                 // TODO
                 break;
             case PLAYER:
-                SimpleStringProperty paths3 = ((PlayerClass) gameObjectInstance).getImagePath();
+                String paths3 = ((PlayerClass) gameObjectInstance).getImagePath();
                 ret = getPlayerImage(paths3, gameObjectInstance.getClassName());
                 break;
         }
@@ -202,7 +199,7 @@ public class ImageManager {
      */
     public static void removeInstanceImage(GameObjectInstance gameObjectInstance) throws GameObjectInstanceNotFoundException {
         if (!instanceImageMap.containsKey(gameObjectInstance)) {
-            throw new GameObjectInstanceNotFoundException(String.format("The Image preview for the GameObjectInstance %s is not found", gameObjectInstance.getInstanceName().getValue()));
+            throw new GameObjectInstanceNotFoundException(String.format("The Image preview for the GameObjectInstance %s is not found", gameObjectInstance.getInstanceName()));
         }
         instanceImageMap.remove(gameObjectInstance);
     }
@@ -215,7 +212,7 @@ public class ImageManager {
      */
     public static void removeClassImage(GameObjectClass gameObjectClass) throws GameObjectClassNotFoundException {
         if (!classImageMap.containsKey(gameObjectClass)) {
-            throw new GameObjectClassNotFoundException(String.format("The Image preview for the GameObjectClass %s is not found", gameObjectClass.getClassName().getValue()));
+            throw new GameObjectClassNotFoundException(String.format("The Image preview for the GameObjectClass %s is not found", gameObjectClass.getClassName()));
         }
         classImageMap.remove(gameObjectClass);
     }

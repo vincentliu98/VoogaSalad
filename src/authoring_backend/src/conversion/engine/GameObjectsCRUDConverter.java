@@ -43,12 +43,12 @@ public class GameObjectsCRUDConverter implements Converter {
 
             // name
             writer.startNode("name");
-            writer.setValue(categoryClass.getClassName().getValue());
+            writer.setValue(categoryClass.getClassName());
             writer.endNode();
 
             // id
             writer.startNode("myID");
-            writer.setValue(String.valueOf(categoryClass.getClassId().getValue()));
+            writer.setValue(String.valueOf(categoryClass.getClassId()));
             writer.endNode();
 
             writer.endNode();
@@ -60,7 +60,7 @@ public class GameObjectsCRUDConverter implements Converter {
 
             // name
             writer.startNode("name");
-            writer.setValue(entityClass.getClassName().get());
+            writer.setValue(entityClass.getClassName());
             writer.endNode();
 
             // props
@@ -71,12 +71,12 @@ public class GameObjectsCRUDConverter implements Converter {
 
             // myWidth
             writer.startNode("myWidth");
-            writer.setValue(String.valueOf(entityClass.getWidth().get()));
+            writer.setValue(String.valueOf(entityClass.getWidth()));
             writer.endNode();
 
             // myHeight
             writer.startNode("myHeight");
-            writer.setValue(String.valueOf(entityClass.getHeight().get()));
+            writer.setValue(String.valueOf(entityClass.getHeight()));
             writer.endNode();
 
 
@@ -101,24 +101,24 @@ public class GameObjectsCRUDConverter implements Converter {
         for(var entityInstance : db.getEntityInstances()) {
             EntityClass entityClass = null;
             try {
-                entityClass = db.getEntityClass(entityInstance.getClassName().get());
+                entityClass = db.getEntityClass(entityInstance.getClassName());
             } catch (GameObjectClassNotFoundException ignored) { }
 
             writer.startNode("gameplay.Entity");
 
             // id
             writer.startNode("myID");
-            writer.setValue(String.valueOf(entityInstance.getInstanceId().get()));
+            writer.setValue(String.valueOf(entityInstance.getInstanceId()));
             writer.endNode();
 
             // name
             writer.startNode("name");
-            writer.setValue(entityInstance.getClassName().get());
+            writer.setValue(entityInstance.getClassName());
             writer.endNode();
 
             // instance name
             writer.startNode("instanceName");
-            writer.setValue(entityInstance.getInstanceName().getValue());
+            writer.setValue(entityInstance.getInstanceName());
             writer.endNode();
 
             // props
@@ -129,12 +129,12 @@ public class GameObjectsCRUDConverter implements Converter {
 
             // myWidth
             writer.startNode("myWidth");
-            writer.setValue(String.valueOf(entityClass.getWidth().get()));
+            writer.setValue(String.valueOf(entityClass.getWidth()));
             writer.endNode();
 
             // myHeight
             writer.startNode("myHeight");
-            writer.setValue(String.valueOf(entityClass.getHeight().get()));
+            writer.setValue(String.valueOf(entityClass.getHeight()));
             writer.endNode();
 
             writer.startNode("myCoord");
@@ -168,12 +168,12 @@ public class GameObjectsCRUDConverter implements Converter {
             writer.startNode("gameplay.TilePrototype");
             // ID
             writer.startNode("myID");
-            writer.setValue(tileClass.getClassId().getValue().toString());
+            writer.setValue(String.valueOf(tileClass.getClassId()));
             writer.endNode();
 
             // name
             writer.startNode("name");
-            writer.setValue(tileClass.getClassName().getValue());
+            writer.setValue(tileClass.getClassName());
             writer.endNode();
 
             // props
@@ -184,12 +184,12 @@ public class GameObjectsCRUDConverter implements Converter {
 
             // myWidth
             writer.startNode("myWidth");
-            writer.setValue(String.valueOf(tileClass.getWidth().get()));
+            writer.setValue(String.valueOf(tileClass.getWidth()));
             writer.endNode();
 
             // myHeight
             writer.startNode("myHeight");
-            writer.setValue(String.valueOf(tileClass.getHeight().get()));
+            writer.setValue(String.valueOf(tileClass.getHeight()));
             writer.endNode();
 
             //myImagePaths
@@ -214,17 +214,17 @@ public class GameObjectsCRUDConverter implements Converter {
 
             // myID
             writer.startNode("myID");
-            writer.setValue(String.valueOf(tileInstance.getInstanceId().get()));
+            writer.setValue(String.valueOf(tileInstance.getInstanceId()));
             writer.endNode();
 
             // name
             writer.startNode("name");
-            writer.setValue(tileInstance.getClassName().get());
+            writer.setValue(tileInstance.getClassName());
             writer.endNode();
 
             // instance name
             writer.startNode("instanceName");
-            writer.setValue(tileInstance.getInstanceName().get());
+            writer.setValue(tileInstance.getInstanceName());
             writer.endNode();
 
             // props
@@ -235,12 +235,12 @@ public class GameObjectsCRUDConverter implements Converter {
 
             // myWidth
             writer.startNode("myWidth");
-            writer.setValue(String.valueOf(tileInstance.getWidth().get()));
+            writer.setValue(String.valueOf(tileInstance.getWidth()));
             writer.endNode();
 
             // myHeight
             writer.startNode("myHeight");
-            writer.setValue(String.valueOf(tileInstance.getHeight().get()));
+            writer.setValue(String.valueOf(tileInstance.getHeight()));
             writer.endNode();
 
             writer.startNode("myCoord");
@@ -273,7 +273,7 @@ public class GameObjectsCRUDConverter implements Converter {
             writer.startNode("gameplay.Player");
 
             writer.startNode("myName");
-            writer.setValue(player.getClassName().get());
+            writer.setValue(player.getClassName());
             writer.endNode();
 
             writer.startNode("myStats");

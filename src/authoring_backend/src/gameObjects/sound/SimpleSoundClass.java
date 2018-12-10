@@ -6,11 +6,8 @@ import authoringUtils.exception.InvalidOperationException;
 import gameObjects.ThrowingBiConsumer;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableMap;
-import javafx.collections.ObservableSet;
 
-import java.util.Collection;
+import java.util.*;
 import java.util.function.Function;
 
 public class SimpleSoundClass implements SoundClass {
@@ -18,7 +15,7 @@ public class SimpleSoundClass implements SoundClass {
     private int classId;
     private String mediaPath;
     private double duration;
-    private ObservableMap<String, String> propertiesMap;
+    private Map<String, String> propertiesMap;
 
     private SoundInstanceFactory myFactory;
     private ThrowingBiConsumer<String, String, InvalidOperationException> changeSoundClassNameFunc;
@@ -30,7 +27,7 @@ public class SimpleSoundClass implements SoundClass {
         classId = 0;
         duration = 0;
         mediaPath = "";
-        propertiesMap = FXCollections.observableHashMap();
+        propertiesMap = new HashMap<>();
         duration = 0;
     }
 
@@ -85,7 +82,7 @@ public class SimpleSoundClass implements SoundClass {
      * @return properties map
      */
     @Override
-    public ObservableMap<String, String> getPropertiesMap() {
+    public Map<String, String> getPropertiesMap() {
         return propertiesMap;
     }
 
@@ -135,7 +132,7 @@ public class SimpleSoundClass implements SoundClass {
      */
     @Override
     public Collection<SoundInstance> getAllInstances() {
-        ObservableSet<SoundInstance> s = FXCollections.observableSet();
+        Set<SoundInstance> s = new HashSet<>();
         Collection<GameObjectInstance> instances = getAllSoundInstancesFunc.apply(getClassName());
         for (GameObjectInstance i : instances) {
             if (i.getType() == GameObjectType.SOUND) {

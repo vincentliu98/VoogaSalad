@@ -7,10 +7,9 @@ import gameObjects.ThrowingConsumer;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import grids.Point;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -42,16 +41,14 @@ public class TileInstanceFactory {
         if (tilePrototype.getType() != GameObjectType.TILE) {
             throw new GameObjectTypeException(GameObjectType.TILE);
         }
-        ObservableList imagePathListCopy = FXCollections.observableArrayList();
-        ObservableMap propertiesMapCopy = FXCollections.observableHashMap();
-        imagePathListCopy.addAll(tilePrototype.getImagePathList());
-        propertiesMapCopy.putAll(tilePrototype.getPropertiesMap());
+        var imagePathListCopy = new ArrayList<>(tilePrototype.getImagePathList());
+        var propertiesMapCopy = new HashMap<>(tilePrototype.getPropertiesMap());
         Supplier<TileClass> getTileClassFunc = () -> tilePrototype;
-        TileInstance tileInstance = new SimpleTileInstance(tilePrototype.getClassName().getValue(), topLeftCoord, imagePathListCopy, propertiesMapCopy, getTileClassFunc);
+        TileInstance tileInstance = new SimpleTileInstance(tilePrototype.getClassName(), topLeftCoord, imagePathListCopy, propertiesMapCopy, getTileClassFunc);
         requestInstanceIdFunc.accept(tileInstance);
         addInstanceToMapFunc.accept(tileInstance);
-        tileInstance.setHeight(tilePrototype.getHeight().getValue());
-        tileInstance.setWidth(tilePrototype.getWidth().getValue());
+        tileInstance.setHeight(tilePrototype.getHeight());
+        tileInstance.setWidth(tilePrototype.getWidth());
         return tileInstance;
 
     }

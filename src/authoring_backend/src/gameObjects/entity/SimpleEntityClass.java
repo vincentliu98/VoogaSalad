@@ -7,14 +7,8 @@ import gameObjects.ThrowingBiConsumer;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import grids.Point;
-import javafx.beans.property.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
-import javafx.collections.ObservableSet;
 
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class SimpleEntityClass implements EntityClass {
@@ -65,7 +59,7 @@ public class SimpleEntityClass implements EntityClass {
     public int getClassId() { return classId; }
 
     @Override
-    public void setClassId(Consumer<Integer> setFunc) { setFunc.accept(classId); }
+    public void setClassId(int newId) { classId = newId; }
 
     @Override
     public String getClassName() { return className; }
@@ -167,7 +161,7 @@ public class SimpleEntityClass implements EntityClass {
 
     @Override
     public Collection<EntityInstance> getAllInstances() {
-        ObservableSet<EntityInstance> s = FXCollections.observableSet();
+        Set<EntityInstance> s = new HashSet<>();
         Collection<GameObjectInstance> instances = getAllEntityInstancesFunc.apply(getClassName());
         for (GameObjectInstance i : instances) {
             if (i.getType() == GameObjectType.ENTITY) {

@@ -1,10 +1,6 @@
 package gameObjects.sound;
 
-import javafx.beans.property.*;
-import javafx.collections.ObservableMap;
-
 import java.util.Map;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class SimpleSoundInstance implements SoundInstance {

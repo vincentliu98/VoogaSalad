@@ -5,17 +5,9 @@ import authoringUtils.exception.InvalidIdException;
 import authoringUtils.exception.InvalidOperationException;
 import gameObjects.ThrowingBiConsumer;
 import gameObjects.gameObject.GameObjectInstance;
-
-
 import gameObjects.gameObject.GameObjectType;
-import javafx.beans.property.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableMap;
-import javafx.collections.ObservableSet;
 
-import java.util.Collection;
-import java.util.Set;
-import java.util.function.Consumer;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -25,11 +17,11 @@ import java.util.stream.Collectors;
 
 
 public class SimplePlayerClass implements PlayerClass {
-    private ReadOnlyStringWrapper className;
-    private ReadOnlyIntegerWrapper classId;
-    private SimpleStringProperty imagePath;
-    private ObservableMap<String, String> propertiesMap;
-    private ObservableSet<GameObjectInstance> gameObjectInstancesSet;
+    private String className;
+    private int classId;
+    private String imagePath;
+    private Map<String, String> propertiesMap;
+    private Set<GameObjectInstance> gameObjectInstancesSet;
 
     private PlayerInstanceFactory myFactory;
     private ThrowingBiConsumer<String, String, InvalidOperationException> changePlayerClassNameFunc;
@@ -37,11 +29,11 @@ public class SimplePlayerClass implements PlayerClass {
     private Function<Integer, Boolean> deletePlayerInstanceFunc;
 
     public SimplePlayerClass(String className) {
-        this.className = new ReadOnlyStringWrapper(className);
-        classId = new ReadOnlyIntegerWrapper();
-        imagePath = new SimpleStringProperty();
-        propertiesMap = FXCollections.observableHashMap();
-        gameObjectInstancesSet = FXCollections.observableSet();
+        this.className = className;
+        classId = 0;
+        imagePath = "";
+        propertiesMap = new HashMap<>();
+        gameObjectInstancesSet = new HashSet<>();
     }
 
     public SimplePlayerClass(String className,
@@ -62,21 +54,16 @@ public class SimplePlayerClass implements PlayerClass {
      * @return classId
      */
     @Override
-    public ReadOnlyIntegerProperty getClassId() {
-        return classId.getReadOnlyProperty();
-    }
+    public int getClassId() { return classId; }
 
 
     /**
      * This method receives a function that sets the id of the GameObject Class.
      * The id of the GameObject Class is set by the received function.
      *
-     * @param setFunc the function from IdManager that sets the id
      */
     @Override
-    public void setClassId(Consumer<SimpleIntegerProperty> setFunc) {
-        setFunc.accept(classId);
-    }
+    public void setClassId(int newId) { classId = newId; }
 
     /**
      * This method gets the name of this GameObject Class.
@@ -84,21 +71,17 @@ public class SimplePlayerClass implements PlayerClass {
      * @return class name
      */
     @Override
-    public ReadOnlyStringProperty getClassName() {
-        return className.getReadOnlyProperty();
-    }
+    public String getClassName() { return className; }
 
     @Override
     public void changeClassName(String newClassName)
             throws InvalidOperationException {
-        changePlayerClassNameFunc.accept(className.getValue(), newClassName);
+        changePlayerClassNameFunc.accept(className, newClassName);
     }
 
 
     @Override
-    public void setClassName(String newClassName) {
-        className.setValue(newClassName);
-    }
+    public void setClassName(String newClassName) { className = newClassName; }
 
 
     /**
@@ -107,9 +90,7 @@ public class SimplePlayerClass implements PlayerClass {
      * @return properties map
      */
     @Override
-    public ObservableMap<String, String> getPropertiesMap() {
-        return propertiesMap;
-    }
+    public Map<String, String> getPropertiesMap() { return propertiesMap; }
 
     /**
      * This method adds the property to the GameObject Class and to all instances of the class.
@@ -161,8 +142,8 @@ public class SimplePlayerClass implements PlayerClass {
      */
     @Override
     public Set<PlayerInstance> getAllInstances() {
-        ObservableSet<PlayerInstance> s = FXCollections.observableSet();
-        Collection<GameObjectInstance> instances = getAllPlayerInstancesFunc.apply(getClassName().getValue());
+        Set<PlayerInstance> s = new HashSet<>();
+        Collection<GameObjectInstance> instances = getAllPlayerInstancesFunc.apply(getClassName());
         for (GameObjectInstance i : instances) {
             if (i.getType() == GameObjectType.PLAYER) {
                 s.add((PlayerInstance) i);
@@ -214,16 +195,12 @@ public class SimplePlayerClass implements PlayerClass {
 
     @Override
     public Set<Integer> getAllGameObjectInstanceIDs() {
-        return gameObjectInstancesSet.stream().map(i -> i.getInstanceId().get()).collect(Collectors.toSet());
+        return gameObjectInstancesSet.stream().map(GameObjectInstance::getInstanceId).collect(Collectors.toSet());
     }
 
     @Override
-    public SimpleStringProperty getImagePath() {
-        return imagePath;
-    }
+    public String getImagePath() { return imagePath; }
 
     @Override
-    public void setImagePath(String newImagePath) {
-        imagePath.setValue(newImagePath);
-    }
+    public void setImagePath(String newImagePath) { imagePath = newImagePath; }
 }

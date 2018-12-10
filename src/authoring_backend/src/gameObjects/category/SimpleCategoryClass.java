@@ -6,16 +6,8 @@ import authoringUtils.exception.InvalidOperationException;
 import gameObjects.ThrowingBiConsumer;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
-import javafx.beans.property.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableMap;
-import javafx.collections.ObservableSet;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Consumer;
+import java.util.*;
 import java.util.function.Function;
 
 /**
@@ -140,7 +132,7 @@ public class SimpleCategoryClass implements CategoryClass {
      */
     @Override
     public Set<CategoryInstance> getAllInstances() {
-        ObservableSet<CategoryInstance> s = FXCollections.observableSet();
+        Set<CategoryInstance> s = new HashSet<>();
         Collection<GameObjectInstance> instances = getAllCategoryInstancesFunc.apply(getClassName());
         for (GameObjectInstance i : instances) {
             if (i.getType() == GameObjectType.CATEGORY) {

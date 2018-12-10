@@ -10,6 +10,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.mapper.Mapper;
 import gameObjects.crud.SimpleGameObjectsCRUD;
+import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
 import phase.api.PhaseDB;
 
@@ -41,7 +42,7 @@ public class AuthoringToolsConverter implements Converter {
 
         writer.startNode("playersOrder");
         var playerNames = StreamSupport.stream(authTools.entityDB().getPlayerClasses().spliterator() ,true)
-                                 .map(e -> e.getClassName().get())
+                                 .map(GameObjectClass::getClassName)
                                  .collect(Collectors.toList());
         new CollectionConverter(mapper).marshal(playerNames, writer, ctx);
 

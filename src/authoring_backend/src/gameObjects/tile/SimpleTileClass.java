@@ -7,14 +7,8 @@ import gameObjects.ThrowingBiConsumer;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import grids.Point;
-import javafx.beans.property.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
-import javafx.collections.ObservableSet;
 
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class SimpleTileClass implements TileClass {
@@ -161,7 +155,7 @@ public class SimpleTileClass implements TileClass {
 
     @Override
     public Collection<TileInstance> getAllInstances() {
-        ObservableSet<TileInstance> s = FXCollections.observableSet();
+        Set<TileInstance> s = new HashSet<>();
         Collection<GameObjectInstance> instances = getAllTileInstancesFunc.apply(getClassName());
         for (GameObjectInstance i : instances) {
             if (i.getType() == GameObjectType.TILE) {

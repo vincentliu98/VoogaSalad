@@ -51,12 +51,12 @@ public class CRUDConverterAuthoring implements Converter {
 
             // name
             writer.startNode("className");
-            writer.setValue(categoryClass.getClassName().getValue());
+            writer.setValue(categoryClass.getClassName());
             writer.endNode();
 
             // id
             writer.startNode("classID");
-            writer.setValue(String.valueOf(categoryClass.getClassId().getValue()));
+            writer.setValue(String.valueOf(categoryClass.getClassId()));
             writer.endNode();
 
             writer.endNode();
@@ -84,12 +84,12 @@ public class CRUDConverterAuthoring implements Converter {
 
             // myWidth
             writer.startNode("width");
-            writer.setValue(String.valueOf(entityClass.getWidth().get()));
+            writer.setValue(String.valueOf(entityClass.getWidth()));
             writer.endNode();
 
             // myHeight
             writer.startNode("height");
-            writer.setValue(String.valueOf(entityClass.getHeight().get()));
+            writer.setValue(String.valueOf(entityClass.getHeight()));
             writer.endNode();
 
 
@@ -118,17 +118,17 @@ public class CRUDConverterAuthoring implements Converter {
 
             // id
             writer.startNode("instanceID");
-            writer.setValue(String.valueOf(entityInstance.getInstanceId().get()));
+            writer.setValue(String.valueOf(entityInstance.getInstanceId()));
             writer.endNode();
 
             // name
             writer.startNode("className");
-            writer.setValue(entityInstance.getClassName().get());
+            writer.setValue(entityInstance.getClassName());
             writer.endNode();
 
             // instance name
             writer.startNode("instanceName");
-            writer.setValue(entityInstance.getInstanceName().getValue());
+            writer.setValue(entityInstance.getInstanceName());
             writer.endNode();
 
             // props
@@ -139,12 +139,12 @@ public class CRUDConverterAuthoring implements Converter {
 
             // myWidth
             writer.startNode("width");
-            writer.setValue(String.valueOf(entityInstance.getWidth().get()));
+            writer.setValue(String.valueOf(entityInstance.getWidth()));
             writer.endNode();
 
             // myHeight
             writer.startNode("height");
-            writer.setValue(String.valueOf(entityInstance.getHeight().get()));
+            writer.setValue(String.valueOf(entityInstance.getHeight()));
             writer.endNode();
 
             writer.startNode("coord");
@@ -180,12 +180,12 @@ public class CRUDConverterAuthoring implements Converter {
             writer.startNode("tileClass");
             // ID
             writer.startNode("classID");
-            writer.setValue(tileClass.getClassId().getValue().toString());
+            writer.setValue(String.valueOf(tileClass.getClassId()));
             writer.endNode();
 
             // name
             writer.startNode("className");
-            writer.setValue(tileClass.getClassName().getValue());
+            writer.setValue(tileClass.getClassName());
             writer.endNode();
 
             // props
@@ -196,12 +196,12 @@ public class CRUDConverterAuthoring implements Converter {
 
             // myWidth
             writer.startNode("width");
-            writer.setValue(String.valueOf(tileClass.getWidth().get()));
+            writer.setValue(String.valueOf(tileClass.getWidth()));
             writer.endNode();
 
             // myHeight
             writer.startNode("height");
-            writer.setValue(String.valueOf(tileClass.getHeight().get()));
+            writer.setValue(String.valueOf(tileClass.getHeight()));
             writer.endNode();
 
             //myImagePaths
@@ -228,17 +228,17 @@ public class CRUDConverterAuthoring implements Converter {
 
             // myID
             writer.startNode("instanceID");
-            writer.setValue(String.valueOf(tileInstance.getInstanceId().get()));
+            writer.setValue(String.valueOf(tileInstance.getInstanceId()));
             writer.endNode();
 
             // name
             writer.startNode("className");
-            writer.setValue(tileInstance.getClassName().get());
+            writer.setValue(tileInstance.getClassName());
             writer.endNode();
 
             // instance name
             writer.startNode("instanceName");
-            writer.setValue(tileInstance.getInstanceName().get());
+            writer.setValue(tileInstance.getInstanceName());
             writer.endNode();
 
             // props
@@ -249,12 +249,12 @@ public class CRUDConverterAuthoring implements Converter {
 
             // myWidth
             writer.startNode("width");
-            writer.setValue(String.valueOf(tileInstance.getWidth().get()));
+            writer.setValue(String.valueOf(tileInstance.getWidth()));
             writer.endNode();
 
             // myHeight
             writer.startNode("height");
-            writer.setValue(String.valueOf(tileInstance.getHeight().get()));
+            writer.setValue(String.valueOf(tileInstance.getHeight()));
             writer.endNode();
 
             writer.startNode("coord");
@@ -289,11 +289,11 @@ public class CRUDConverterAuthoring implements Converter {
             writer.startNode("playerClass");
 
             writer.startNode("className");
-            writer.setValue(player.getClassName().get());
+            writer.setValue(player.getClassName());
             writer.endNode();
 
             writer.startNode("classID");
-            writer.setValue(String.valueOf(player.getClassId().getValue()));
+            writer.setValue(String.valueOf(player.getClassId()));
             writer.endNode();
 
             writer.startNode("props");
@@ -306,8 +306,8 @@ public class CRUDConverterAuthoring implements Converter {
             writer.endNode();
 
             writer.startNode("imagePath");
-            if (!player.getImagePath().isEmpty().getValue()) {
-                writer.setValue(player.getImagePath().getValue());
+            if (!player.getImagePath().isEmpty()) {
+                writer.setValue(player.getImagePath());
             }
             writer.endNode();
 
@@ -320,21 +320,21 @@ public class CRUDConverterAuthoring implements Converter {
 
             // Class Name
             writer.startNode("className");
-            writer.setValue(soundClass.getClassName().getValue());
+            writer.setValue(soundClass.getClassName());
             writer.endNode();
 
             writer.startNode("classID");
-            writer.setValue(String.valueOf(soundClass.getClassId().getValue()));
+            writer.setValue(String.valueOf(soundClass.getClassId()));
             writer.endNode();
 
             writer.startNode("mediaFilePath");
-            if (!soundClass.getMediaFilePath().isEmpty().getValue()) {
-                writer.setValue(soundClass.getMediaFilePath().getValue());
+            if (!soundClass.getMediaFilePath().isEmpty()) {
+                writer.setValue(soundClass.getMediaFilePath());
             }
             writer.endNode();
 
             writer.startNode("duration");
-            writer.setValue(String.valueOf(soundClass.getDuration().getValue()));
+            writer.setValue(String.valueOf(soundClass.getDuration()));
             writer.endNode();
 
             writer.endNode();
@@ -346,28 +346,28 @@ public class CRUDConverterAuthoring implements Converter {
 
             // ClassName
             writer.startNode("className");
-            writer.setValue(soundInstance.getClassName().getValue());
+            writer.setValue(soundInstance.getClassName());
             writer.endNode();
 
             // Instance name
             writer.startNode("instanceName");
-            writer.setValue(soundInstance.getInstanceName().getValue());
+            writer.setValue(soundInstance.getInstanceName());
             writer.endNode();
 
             // Instance ID
             writer.startNode("instanceID");
-            writer.setValue(String.valueOf(soundInstance.getInstanceId().getValue()));
+            writer.setValue(String.valueOf(soundInstance.getInstanceId()));
             writer.endNode();
 
             // duration
             writer.startNode("duration");
-            writer.setValue(String.valueOf(soundInstance.getDuration().getValue()));
+            writer.setValue(String.valueOf(soundInstance.getDuration()));
             writer.endNode();
 
             // file path
             writer.startNode("mediaFilePath");
-            if (!soundInstance.getMediaFilePath().isEmpty().getValue()) {
-                writer.setValue(soundInstance.getMediaFilePath().getValue());
+            if (!soundInstance.getMediaFilePath().isEmpty()) {
+                writer.setValue(soundInstance.getMediaFilePath());
             }
             writer.endNode();
         }
