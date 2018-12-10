@@ -12,6 +12,11 @@ public class BlockGraphConverter implements Converter {
     @Override
     public void marshal(Object o, HierarchicalStreamWriter writer, MarshallingContext ctx) {
         // the failure should have been checked by this time
+        try {
+            System.out.println("Marshalling" + o.hashCode());
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
         writer.setValue(((BlockGraph) o).transformToGroovy().get(""));
     }
 

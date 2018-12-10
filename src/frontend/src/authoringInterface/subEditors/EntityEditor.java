@@ -113,7 +113,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         int width = outputPositiveInteger(widthInput);
         int height = outputPositiveInteger(heightInput);
         assert entityClass != null;
-        TreeItem<String> newItem = new TreeItem<>(entityClass.getClassName().getValue());
+        TreeItem<String> newItem = new TreeItem<>(entityClass.getClassName());
         entityClass.getImagePathList().addAll(imagePaths);
         entityClass.setHeight(height);
         entityClass.setWidth(width);
@@ -145,7 +145,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         gameObjectClass.getPropertiesMap().clear();
         gameObjectClass.setWidth(width);
         gameObjectClass.setHeight(height);
-        gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName().getValue(), nameField.getText());
+        gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName(), nameField.getText());
         ImageView icon2 = new ImageView(ImageManager.getPreview(gameObjectClass));
         JavaFxOperation.setWidthAndHeight(icon2, ICON_WIDTH, ICON_HEIGHT);
         treeItem.setValue(nameField.getText());
@@ -176,7 +176,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         gameObjectInstance.setWidth(width);
         gameObjectInstance.setHeight(height);
         ((ImageView) nodeEdited).setImage(ImageManager.getPreview(gameObjectInstance));
-        Tooltip.install(nodeEdited, new Tooltip(String.format("Width: %s\nHeight: %s\nSingle Click to toggle Deletion\nDouble Click or Right Click to edit\nInstance ID: %s\nClass Name: %s", width, height, gameObjectInstance.getInstanceId().getValue(), gameObjectInstance.getClassName().getValue())));
+        Tooltip.install(nodeEdited, new Tooltip(String.format("Width: %s\nHeight: %s\nSingle Click to toggle Deletion\nDouble Click or Right Click to edit\nInstance ID: %s\nClass Name: %s", width, height, gameObjectInstance.getInstanceId(), gameObjectInstance.getClassName())));
         int row = Integer.parseInt(rowInput.getText());
         int col = Integer.parseInt(colInput.getText());
         StackPane target = JavaFxOperation.getNodeFromGridPaneByIndices(((GridPane) JavaFxOperation.getGrandParent(nodeEdited)), row, col);
@@ -216,10 +216,10 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     @Override
     public void readGameObjectInstance() {
         readInstanceProperties();
-        nameField.setText(gameObjectInstance.getInstanceName().getValue());
+        nameField.setText(gameObjectInstance.getInstanceName());
         imagePaths.addAll(gameObjectInstance.getImagePathList());
-        widthInput.setText(String.valueOf(gameObjectInstance.getWidth().getValue()));
-        heightInput.setText(String.valueOf(gameObjectInstance.getHeight().getValue()));
+        widthInput.setText(String.valueOf(gameObjectInstance.getWidth()));
+        heightInput.setText(String.valueOf(gameObjectInstance.getHeight()));
         Label xLabel = new Label("x, col index");
         Label yLabel = new Label("y, row index");
         colInput = new TextField(String.valueOf(gameObjectInstance.getCoord().getX()));
@@ -237,10 +237,10 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     @Override
     public void readGameObjectClass() {
         readClassProperties();
-        nameField.setText(gameObjectClass.getClassName().getValue());
+        nameField.setText(gameObjectClass.getClassName());
         imagePaths.addAll(gameObjectClass.getImagePathList());
-        widthInput.setText(String.valueOf(gameObjectClass.getWidth().getValue()));
-        heightInput.setText(String.valueOf(gameObjectClass.getHeight().getValue()));
+        widthInput.setText(String.valueOf(gameObjectClass.getWidth()));
+        heightInput.setText(String.valueOf(gameObjectClass.getHeight()));
     }
 
     private void setupLayout() {

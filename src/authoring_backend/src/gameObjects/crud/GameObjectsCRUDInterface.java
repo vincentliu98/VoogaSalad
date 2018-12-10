@@ -7,10 +7,8 @@ import gameObjects.gameObject.*;
 import gameObjects.player.*;
 import gameObjects.sound.*;
 import gameObjects.tile.*;
-import gameObjects.turn.Turn;
 import grids.Point;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.Set;
 
@@ -24,6 +22,9 @@ import java.util.Set;
  */
 public interface GameObjectsCRUDInterface {
 
+    int getNumCols();
+
+    int getNumRows();
 
     /**
      * This method creates a Tile Class and adds it to the map.
@@ -167,14 +168,6 @@ public interface GameObjectsCRUDInterface {
 
     PlayerInstance createPlayerInstance(PlayerClass playerClass) throws GameObjectTypeException;
 
-    Turn createTurn(String phaseName);
-
-    Turn getTurn(String phaseName) throws TurnNotFoundException;
-
-
-    boolean deleteTurn(String phaseName);
-
-
     /**
      *  Sets the dimension of the entire grid
      * @param width
@@ -203,6 +196,8 @@ public interface GameObjectsCRUDInterface {
      * @return
      */
     <T extends GameObjectInstance> T getGameObjectInstance(int instanceId) throws GameObjectInstanceNotFoundException;
+
+    Collection<GameObjectInstance> getAllInstances();
 
     /**
      *
@@ -325,4 +320,6 @@ public interface GameObjectsCRUDInterface {
     Iterable<PlayerInstance> getPlayerInstances();
 
     Set<String> getPlayerNames(GameObjectInstance gameObjectInstance);
+
+    String toXML();
 }

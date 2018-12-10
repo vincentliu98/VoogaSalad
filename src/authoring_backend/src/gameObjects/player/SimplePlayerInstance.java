@@ -1,14 +1,6 @@
 package gameObjects.player;
 
-import authoringUtils.exception.InvalidOperationException;
-import javafx.beans.property.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableMap;
-import javafx.collections.ObservableSet;
-
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.function.Consumer;
+import java.util.Map;
 import java.util.function.Supplier;
 
 /**
@@ -17,59 +9,48 @@ import java.util.function.Supplier;
 
 
 public class SimplePlayerInstance implements PlayerInstance {
-    private ReadOnlyStringWrapper className;
-    private SimpleStringProperty instanceName;
-    private ReadOnlyIntegerWrapper instanceId;
+    private String className;
+    private String instanceName;
+    private int instanceId;
 
-    private SimpleStringProperty imagePath;
-    private ObservableMap<String, String> propertiesMap;
-    private Supplier<PlayerClass> getPlayerClassFunc;
+    private String imagePath;
+    private Map<String, String> propertiesMap;
+    private PlayerClass playerClass;
 
 
 
     public SimplePlayerInstance(String className,
-                                SimpleStringProperty imagePath,
-                                ObservableMap<String, String> properties,
-                                Supplier<PlayerClass> getPlayerClassFunc) {
-        this.className = new ReadOnlyStringWrapper();
-        this.className.setValue(className);
-        this.instanceName = new SimpleStringProperty(className);
+                                String imagePath,
+                                Map<String, String> properties,
+                                PlayerClass playerClass) {
+        this.className = className;
+        this.instanceName = className;
         this.imagePath = imagePath;
         this.propertiesMap = properties;
-        this.getPlayerClassFunc = getPlayerClassFunc;
-        instanceId = new ReadOnlyIntegerWrapper();
+        this.playerClass = playerClass;
+        instanceId = 0;
     }
 
     @Override
-    public ReadOnlyIntegerProperty getInstanceId() {
-        return instanceId.getReadOnlyProperty();
-    }
+    public int getInstanceId() { return instanceId; }
 
     @Override
-    public void setInstanceId(Consumer<SimpleIntegerProperty> setFunc) {
-        setFunc.accept(instanceId);
-    }
+    public void setInstanceId(int newId) { instanceId = newId; }
 
     @Override
-    public ReadOnlyStringProperty getClassName() { return className; }
+    public String getClassName() { return className; }
 
     @Override
-    public void setClassName(String name) throws InvalidOperationException {
-        className.setValue(name);
-    }
+    public void setClassName(String name) { className = name; }
 
     @Override
-    public SimpleStringProperty getInstanceName() {
-        return instanceName;
-    }
+    public String getInstanceName() { return instanceName; }
 
     @Override
-    public void setInstanceName(String newInstanceName) {
-        instanceName.setValue(newInstanceName);
-    }
+    public void setInstanceName(String newInstanceName) { instanceName = newInstanceName; }
 
     @Override
-    public ObservableMap<String, String> getPropertiesMap() { return propertiesMap; }
+    public Map<String, String> getPropertiesMap() { return propertiesMap; }
 
 
     @Override
@@ -92,18 +73,12 @@ public class SimplePlayerInstance implements PlayerInstance {
     }
 
     @Override
-    public SimpleStringProperty getImagePath() {
-        return imagePath;
-    }
+    public String getImagePath() { return imagePath; }
 
     @Override
-    public void setImagePath(String newImagePath) {
-        imagePath.setValue(newImagePath);
-    }
+    public void setImagePath(String newImagePath) { imagePath = newImagePath; }
 
     @Override
-    public PlayerClass getGameObjectClass() {
-        return getPlayerClassFunc.get();
-    }
+    public PlayerClass getGameObjectClass() { return playerClass; }
 
 }

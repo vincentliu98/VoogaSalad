@@ -2,20 +2,27 @@ package gameObjects.tile;
 
 import authoringUtils.exception.GameObjectTypeException;
 import authoringUtils.exception.InvalidIdException;
+import authoringUtils.exception.InvalidOperationException;
+import gameObjects.ThrowingBiConsumer;
 import gameObjects.gameObject.GameObjectClass;
+import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import grids.Point;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.function.Function;
+
 public interface TileClass extends GameObjectClass {
 
-    SimpleIntegerProperty getWidth();
+    int getWidth();
 
-    SimpleIntegerProperty getHeight();
+    int getHeight();
 
-    SimpleBooleanProperty isEntityContainable();
+    boolean isEntityContainable();
 
     void setEntityContainable(boolean contains);
 
@@ -30,7 +37,7 @@ public interface TileClass extends GameObjectClass {
      * This method gets the image path list of the GameObject Class.
      * @return a list of the file paths of the images
      */
-    ObservableList<String> getImagePathList();
+    List<String> getImagePathList();
 
     /**
      * This method removes the image path from the Entity Class and from all instances of the class.
@@ -61,4 +68,11 @@ public interface TileClass extends GameObjectClass {
     void setHeight(int height);
 
     void setWidth(int width);
+
+    void equipContext(
+        TileInstanceFactory tileInstanceFactory,
+        ThrowingBiConsumer<String, String, InvalidOperationException> changeTileClassNameFunc,
+        Function<String, Collection<GameObjectInstance>> getAllTileInstancesFunc,
+        Function<Integer, Boolean> deleteTileInstanceFunc
+    );
 }

@@ -3,16 +3,23 @@ package gameObjects.entity;
 import authoringUtils.exception.GameObjectTypeException;
 import authoringUtils.exception.InvalidGameObjectInstanceException;
 import authoringUtils.exception.InvalidIdException;
+import authoringUtils.exception.InvalidOperationException;
+import gameObjects.ThrowingBiConsumer;
 import gameObjects.gameObject.GameObjectClass;
+import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import grids.Point;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.function.Function;
+
 public interface EntityClass extends GameObjectClass {
 
-    SimpleBooleanProperty isMovable();
+    boolean isMovable();
 
     void setMovable(boolean move);
 
@@ -29,7 +36,7 @@ public interface EntityClass extends GameObjectClass {
      * This method gets the image path list of the GameObject Class.
      * @return a list of the file paths of the images
      */
-    ObservableList<String> getImagePathList();
+    List<String> getImagePathList();
 
     /**
      * This method removes the image path from the Entity Class and from all instances of the class.
@@ -37,12 +44,6 @@ public interface EntityClass extends GameObjectClass {
      * @return true if the image file path successfully removed
      */
     boolean removeImagePath(int index);
-
-    /**
-     * This method sets the GroovyCode for choosing the image to display from the list of images.
-     * @param blockCode GroovyCode
-     */
-    void setImageSelector(String blockCode);
 
     /**
      * This method gets the image selector code.
@@ -56,12 +57,19 @@ public interface EntityClass extends GameObjectClass {
         return GameObjectType.ENTITY;
     }
 
-    SimpleIntegerProperty getHeight();
+    int getHeight();
 
-    SimpleIntegerProperty getWidth();
+    int getWidth();
 
 
     void setHeight(int newHeight);
 
     void setWidth(int newWidth);
+
+    void equipContext(
+        EntityInstanceFactory entityInstanceFactory,
+        ThrowingBiConsumer<String, String, InvalidOperationException> changeEntityClassNameFunc,
+        Function<String, Collection<GameObjectInstance>> getAllEntityInstancesFunc,
+        Function<Integer, Boolean> deleteEntityInstanceFunc
+    );
 }

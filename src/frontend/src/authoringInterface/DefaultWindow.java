@@ -45,7 +45,7 @@
 //    /**
 //     * This method constructs the menu bar.
 //     *
-//     * @return A MenuBar Node to be displayed at the top of the createGraph window.
+//     * @return A MenuBar Node to be displayed at the top of the createPhaseGraph window.
 //     */
 //    private MenuBar constructMenuBar(double height) {
 //

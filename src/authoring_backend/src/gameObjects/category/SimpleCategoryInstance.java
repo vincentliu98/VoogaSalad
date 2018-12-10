@@ -1,78 +1,60 @@
 package gameObjects.category;
 
-import javafx.beans.property.*;
-import javafx.collections.ObservableMap;
-
-import java.util.function.Consumer;
-import java.util.function.Supplier;
+import java.util.Map;
 
 public class SimpleCategoryInstance implements CategoryInstance {
-    private ReadOnlyStringWrapper className;
-    private SimpleStringProperty instanceName;
-    private ReadOnlyIntegerWrapper instanceId;
+    private String className;
+    private String instanceName;
+    private int instanceId;
 
-    private SimpleStringProperty imagePath;
-    private ObservableMap<String, String> propertiesMap;
-    private Supplier<CategoryClass> getCategoryClassFunc;
+    private String imagePath;
+    private Map<String, String> propertiesMap;
+    private CategoryClass categoryClass;
 
     public SimpleCategoryInstance(
             String className,
-            SimpleStringProperty imagePath,
-            ObservableMap<String, String> properties,
-            Supplier<CategoryClass> getCategoryClassFunc) {
-        this.className = new ReadOnlyStringWrapper();
-        this.className.setValue(className);
-        this.instanceName = new SimpleStringProperty(className);
+            String imagePath,
+            Map<String, String> properties,
+            CategoryClass categoryClass) {
+        this.className = className;
+        this.instanceName = className; // ???
         this.imagePath = imagePath;
         this.propertiesMap = properties;
-        this.getCategoryClassFunc = getCategoryClassFunc;
-        instanceId = new ReadOnlyIntegerWrapper();
+        this.categoryClass = categoryClass;
+        instanceId = 0;
     }
 
     /**
      * @return
      */
     @Override
-    public ReadOnlyIntegerProperty getInstanceId() {
-        return instanceId.getReadOnlyProperty();
-    }
+    public int getInstanceId() { return instanceId; }
 
     /**
-     * @param setFunc
      */
     @Override
-    public void setInstanceId(Consumer<SimpleIntegerProperty> setFunc) {
-        setFunc.accept(instanceId);
-    }
+    public void setInstanceId(int newId) { instanceId = newId; }
 
     /**
      * @return
      */
     @Override
-    public ReadOnlyStringProperty getClassName() {
-        return className.getReadOnlyProperty();
-    }
+    public String getClassName() { return className; }
 
     /**
      * @param name
      */
     @Override
-    public void setClassName(String name) {
-        className.setValue(name);
-    }
+    public void setClassName(String name) { className = name; }
 
     @Override
-    public SimpleStringProperty getInstanceName() {
-        return instanceName;
-    }
+    public String getInstanceName() { return instanceName; }
 
     @Override
-    public void setInstanceName(String newInstanceName) {
-        instanceName.setValue(newInstanceName);
-    }
+    public void setInstanceName(String newInstanceName) { instanceName = newInstanceName; }
 
     @Override
-    public ObservableMap<String, String> getPropertiesMap() { return propertiesMap; }
+    public Map<String, String> getPropertiesMap() { return propertiesMap; }
 
     /**
      * @param propertyName
@@ -103,18 +85,16 @@ public class SimpleCategoryInstance implements CategoryInstance {
     }
 
     @Override
-    public SimpleStringProperty getImagePath() {
+    public String getImagePath() {
         return imagePath;
     }
 
     @Override
     public void setImagePath(String newImagePath) {
-        imagePath.setValue(newImagePath);
+        imagePath = newImagePath;
     }
 
     @Override
-    public CategoryClass getGameObjectClass() {
-        return getCategoryClassFunc.get();
-    }
+    public CategoryClass getGameObjectClass() { return categoryClass; }
 
 }

@@ -6,14 +6,11 @@ import gameObjects.ThrowingConsumer;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import grids.Point;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 
-import java.util.function.BiConsumer;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class EntityInstanceFactory {
 
@@ -41,15 +38,12 @@ public class EntityInstanceFactory {
         if (entityPrototype.getType() != GameObjectType.ENTITY) {
             throw new GameObjectTypeException(GameObjectType.ENTITY);
         }
-        ObservableList imagePathListCopy = FXCollections.observableArrayList();
-        ObservableMap propertiesMapCopy = FXCollections.observableHashMap();
-        imagePathListCopy.addAll(entityPrototype.getImagePathList());
-        propertiesMapCopy.putAll(entityPrototype.getPropertiesMap());
-        Supplier<EntityClass> getEntityClassFunc = () -> entityPrototype;
-        EntityInstance entityInstance = new SimpleEntityInstance(entityPrototype.getClassName().getValue(), imagePathListCopy, propertiesMapCopy, getEntityClassFunc);
+        var imagePathListCopy = new ArrayList<>(entityPrototype.getImagePathList());
+        var propertiesMapCopy = new HashMap<>(entityPrototype.getPropertiesMap());
+        EntityInstance entityInstance = new SimpleEntityInstance(entityPrototype.getClassName(), imagePathListCopy, propertiesMapCopy, entityPrototype);
         entityInstance.setCoord(point);
-        entityInstance.setHeight(entityPrototype.getHeight().getValue());
-        entityInstance.setWidth(entityPrototype.getWidth().getValue());
+        entityInstance.setHeight(entityPrototype.getHeight());
+        entityInstance.setWidth(entityPrototype.getWidth());
         requestInstanceIdFunc.accept(entityInstance);
         addInstanceToMapFunc.accept(entityInstance);
         return entityInstance;

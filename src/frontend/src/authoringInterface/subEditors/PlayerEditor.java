@@ -106,16 +106,16 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
     @Override
     protected void readGameObjectInstance() {
         readInstanceProperties();
-        nameField.setText(gameObjectInstance.getClassName().getValue());
-        imagePath = gameObjectInstance.getImagePath().get();
+        nameField.setText(gameObjectInstance.getClassName());
+        imagePath = gameObjectInstance.getImagePath();
         System.out.print(imagePath);
     }
 
     @Override
     protected void readGameObjectClass() {
         readClassProperties();
-        nameField.setText(gameObjectClass.getClassName().getValue());
-        imagePath = gameObjectClass.getImagePath().get();
+        nameField.setText(gameObjectClass.getClassName());
+        imagePath = gameObjectClass.getImagePath();
         System.out.print(imagePath);
     }
 
@@ -126,7 +126,7 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
     protected void confirmAddTreeItem() throws PreviewUnavailableException, IllegalGameObjectNamingException, DuplicateGameObjectClassException {
         PlayerClass playerClass = gameObjectManager.createPlayerClass(getValidClassName());
         assert playerClass != null;
-        TreeItem<String> newItem = new TreeItem<>(playerClass.getClassName().getValue());
+        TreeItem<String> newItem = new TreeItem<>(playerClass.getClassName());
         playerClass.setImagePath(imagePath);
         ImageView icon = new ImageView(ImageManager.getPreview(playerClass));
         JavaFxOperation.setWidthAndHeight(icon, ICON_WIDTH, ICON_HEIGHT);
@@ -146,7 +146,7 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
         } catch (GameObjectClassNotFoundException ignored) {
         }
         gameObjectClass.setImagePath(imagePath);
-        gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName().getValue(), nameField.getText());
+        gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName(), nameField.getText());
         ImageView icon2 = new ImageView(ImageManager.getPreview(gameObjectClass));
         JavaFxOperation.setWidthAndHeight(icon2, ICON_WIDTH, ICON_HEIGHT);
         treeItem.setValue(nameField.getText());

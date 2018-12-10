@@ -1,11 +1,7 @@
 package gameObjects.player;
 
-import authoringUtils.exception.InvalidOperationException;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
-import javafx.beans.property.SimpleStringProperty;
-
-import java.util.Set;
 
 /**
  * @author Yunhao Qing
@@ -13,8 +9,7 @@ import java.util.Set;
 
 
 public interface PlayerInstance extends GameObjectInstance {
-
-    SimpleStringProperty getImagePath();
+    String getImagePath();
 
     void setImagePath(String newImagePath);
 

@@ -5,6 +5,7 @@ import graph.SimpleNode;
 import groovy.api.BlockGraph;
 import groovy.api.Ports;
 
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -18,8 +19,8 @@ import java.util.Set;
  */
 public class LiteralBlock extends SimpleNode implements GroovyBlock<LiteralBlock> {
     private String value, type;
-    public LiteralBlock(String value, String type) {
-        super();
+    public LiteralBlock(double x, double y, String value, String type) {
+        super(x, y);
         this.value = value;
         this.type = type;
     }
@@ -28,11 +29,16 @@ public class LiteralBlock extends SimpleNode implements GroovyBlock<LiteralBlock
     public Try<String> toGroovy(BlockGraph graph) { return Try.success(value); }
 
     @Override
-    public LiteralBlock replicate() { return new LiteralBlock(value, type); }
+    public LiteralBlock replicate() { return new LiteralBlock(x(), y(), value, type); }
 
     @Override
     public Set<Ports> ports() { return Set.of(); }
 
     @Override
     public String name() { return type + ": " + value; }
+
+    @Override
+    public Map<String, Object> params() {
+        return Map.of("value", value, "type", type);
+    }
 }

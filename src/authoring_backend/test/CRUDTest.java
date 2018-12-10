@@ -16,7 +16,7 @@ public class CRUDTest {
     @BeforeEach
     public void setupTestData()
             throws DuplicateGameObjectClassException, GameObjectClassNotFoundException, GameObjectTypeException, InvalidIdException {
-        crud = new SimpleGameObjectsCRUD(10,10);
+        crud = new SimpleGameObjectsCRUD(10,10, false);
         for (int i = 0; i < 5; i++) {
             crud.createCategoryClass(Integer.toString(i));
         }
@@ -36,7 +36,7 @@ public class CRUDTest {
         catClass = crud.getCategoryClass(Integer.toString(1));
         catClass.changeClassName("hello");
         for (GameObjectInstance g : crud.getAllInstances("hello")) {
-            System.out.println(g.getClassName().getValue());
+            System.out.println(g.getClassName());
         }
 
     }
@@ -47,7 +47,7 @@ public class CRUDTest {
         crud.deleteGameObjectInstance(3);
         crud.deleteGameObjectInstance(2);
         for (GameObjectInstance g : crud.getCategoryInstances()) {
-            System.out.println(g.getInstanceId().getValue());
+            System.out.println(g.getInstanceId());
         }
     }
 

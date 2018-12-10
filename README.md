@@ -24,16 +24,17 @@ Hours Spent: 100 hours per person
 
 ### Primary Roles
 
-* Vincent Liu : Frontend developer. <Description>
-* Haotian Wang : Frontend developer. <Description>
-* Amy Kim : Frontend developer. <Description>
+* Vincent Liu : Frontend developer. <Add description here>
+* Haotian Wang : Frontend developer. <Add description here>
+* Amy Kim : Frontend developer. <Add description here>
 
-* Natalie Le : Backend engine developer. <Description>
-* Jonathan Nakagawa : Backend engine developer <Description>
+* Natalie Le : Backend engine developer. <Add description here>
+* Jonathan Nakagawa : Backend engine developer. <Add description here>
 
-* Inchan Hwang : Backend authoring engine developer.
-* Jason Zhou : Backend authoring engine developer.
-* Yunhao Qing : Backend authoring engine developer.
+* Inchan Hwang : Backend authoring engine developer. Worked on the Groove part of the authoring engine.
+* Jason Zhou : Backend authoring engine developer. Worked on GameObjectCRUD and various specific game objects such as Entity, Tile and Sound.
+* Yunhao Qing : Backend authoring engine developer. Worked on GameObjeectCRUD and Player component.
+
 ### Resources Used
 
 ###### Images
@@ -92,7 +93,9 @@ Hours Spent: 100 hours per person
 
 ### files used to start the project
 
-### files used to test the project and errors you expect your program to handle without crashing
+* src/frontend/src/authoringInterface/MainAuthoringProgram.java
+
+### files used to test the project
 
 * src/authoring_backend/test/CRUDTest.java : This file tests whether the game object CRUD is functioning correctly.
 * src/authoring_backend/test/GroovyBlockTest.java : This file tests whether the groove components, such as the graph and nodes are working appropriately and whether grooveblock is functioning correctly.
@@ -101,34 +104,103 @@ Hours Spent: 100 hours per person
 * src/authoring_backend/test/ValidationTest.java : This file tests whether validation is running.
 * src/authoring_backend/test/XStreamTest.java : This file tests the XStream.
 
+* src/frontend/test/GroovyShellTest.java : This class tests the functionality of the Groovy Shell.
+* src/frontend/test/ImageSelectorTest.java : This class tests wheteher image selector is working.
+* src/frontend/test/SerializationTest.java : This class tests the serialization of CRUD interface.
+* src/frontend/test/SwitchingPaneTest.java : This class tests whether switching pane is successful.
+* src/frontend/test/TestGameData.java : This class tests game data.
+
+### files for error handling
+
+Authoring_backend
+
+* src/authoring_backend/src/authoringUtils/exception/DuplicateGameObjectClassException.java
+* src/authoring_backend/src/authoringUtils/exception/DuplicateIdException.java
+* src/authoring_backend/src/authoringUtils/exception/GameObjectClassException.java
+* src/authoring_backend/src/authoringUtils/exception/GameObjectClassNotFoundException.java
+* src/authoring_backend/src/authoringUtils/exception/GameObjectInstanceException.java
+* src/authoring_backend/src/authoringUtils/exception/GameObjectInstanceNotFoundException.java
+* src/authoring_backend/src/authoringUtils/exception/GameObjectTypeException.java
+* src/authoring_backend/src/authoringUtils/exception/IdException.java
+* src/authoring_backend/src/authoringUtils/exception/InvalidGameObjectClassException.java
+* src/authoring_backend/src/authoringUtils/exception/InvalidGameObjectInstanceException.java
+* src/authoring_backend/src/authoringUtils/exception/InvalidIdException.java
+* src/authoring_backend/src/authoringUtils/exception/InvalidOperationException.java
+* src/authoring_backend/src/authoringUtils/exception/InvalidPointsException.java
+* src/authoring_backend/src/authoringUtils/exception/TurnNotFoundException.java
+
+* src/authoring_backend/src/groovy/graph/blocks/core/ArgNumberMismatchException.java
+* src/authoring_backend/src/groovy/graph/blocks/small_factory/ListParseException.java
+* src/authoring_backend/src/groovy/graph/blocks/small_factory/MapParseException.java
+* src/authoring_backend/src/groovy/graph/blocks/small_factory/NoSuchPropertyException.java
+* src/authoring_backend/src/groovy/graph/blocks/small_factory/ReferenceParseException.java
+* src/authoring_backend/src/groovy/graph/PortAlreadyFilledException.java
+* src/authoring_backend/src/groovy/graph/PortNotConnectedException.java
+* src/authoring_backend/src/phase/NamespaceException.java
+
+Controller
+
+* src/controller/src/social/UserException.java
+
+Frontend
+
+* src/frontend/src/authoringInterface/sidebar/RedundantNamingException.java
+* src/frontend/src/authoringInterface/subEditors/exception/IllegalGameObjectNamingException.java
+* src/frontend/src/authoringInterface/subEditors/exception/IllegalGeometryException.java
+* src/frontend/src/authoringInterface/subEditors/exception/MissingEditorForTypeException.java
+* src/frontend/src/runningGame/IllegalSavedGameException.java
+* src/frontend/src/utils/exception/GridIndexOutOfBoundsException.java
+* src/frontend/src/utils/exception/NodeNotFoundException.java
+* src/frontend/src/utils/exception/PreviewUnavailableException.java
+* src/frontend/src/utils/exception/UnhandledCoordinatesClassException.java
+* src/frontend/src/utils/exception/UnremovableNodeException.java
+* src/frontend/src/utils/exception/XMLParsingException.java
+
+
+
 ### data or resource files required by the project
 
 The user can to customize images for entity, tile and user avatars. The user need to prepare these images and set the appropriate image for respective image objects in building the game.
 
 ### UI Layout of the project
 
+TO BE ADDED
+
 ![UI View](doc/<name>.png)
 
 ### How to use the program
 
+* Run the src/frontend/src/authoringInterface/MainAuthoringProgram.java to get access to the authoring program.
 
 ### Known Bugs
+
+* Redo and Undo are too difficult with our current framework and we did not manage to finish it before the deadline.
 
 
 ### Design decision
 
+* Initially we were unsure about how to build the authoring engine so the author can build a game with little code. We carefully studied the game TicTacToe and came up with the idea of having a grid and various game objects such as entities and tiles. We later decided to also have players, turns and categories as game objects too. After making the TicTacToe works, we started to think about how to make other games work. Inchan came up with the idea of Groovy, through which all kinds of logic can be converted from graphics such as nodes and lines to codes that can be run. These two components form the foundation of the authoring backend.
 
 ### Extra features
 
 * User can connect to social media such as Twitter and share result of playing the game instantly.
 
+* User can customize background music for the game and also customize sound effect on actions in playing the game.
+
 ### Impression
 
-* Vincent Liu : Slogo is more challenging compared to the previous two projects, breakout and cell society. I learn how to work with a team by using interfaces and I truly feel I can work better in a team setting in the future.
+* Vincent Liu : VoogaSalad is more challenging compared to the previous 3 projects, Breakout, Cell Society and SLogo. I learnt how to work with a team by using interfaces and I truly feel I can work better in a team setting in the future.
+
 * Haotian Wang : I have been working on connecting backend and the UI. I enjoyed the process a lot, it is so fun to see how much changes I made and how flexible our codes become after I re-construct the structure of our project. I feel I understand the 'Open For Extension,Closed for Modification' much more after this project.
+
 * Amy Kim : I have been working on the GUI and I really like the experience. Learning how all the UI components work, how the UI components are connected to the back-end and learning how to handle user input were challenging but fun as well. I have also been doing a lot of testing and debugging, it feels great to see how the UI becomes more perfect and beautiful over time.
+
 * Natalie Le : I am so glad that our program works eventually! This project has been fun and I had a great time with my teammates who are amazing! I feel I have learnt much about API and it is going to be super helpful for my future.
+
 * Jonathan Nakagawa : I am truly happy with working on the sole of our program - the game engine. I spent some time on UI as well. I have learnt a lot and I believe the skills and friendship I obtained from the project will last.
+
 * Inchan Hwang : This project is very challenging but I learnt so much about APIs and Reflection and I truly appreciate the power of JavaFX now! Although it is time-consuming, the project is definitely worth doing. I realise how much I enjoy backend coding and I aspire to be a backend engineer in the future!
+
 * Jason Zhou :  The project is challenging in its concept and design. I learn a lot about APIs, Lambda, and Reflection. I had a great time design and implementing the front end and also learn how to connect the front end and the back end, which is very valuable for me.
+
 * Yunhao Qing : Building Voogasalad is very time-consuming. I get much more used to using Git as a part of a team through doing this project. I am responsible for authoring engine backend coding and I am very satisfied with working on backend.I learn about how flexibility of codes is important as making changes on flexible codes is much easier and changing codes is what we do all the time.

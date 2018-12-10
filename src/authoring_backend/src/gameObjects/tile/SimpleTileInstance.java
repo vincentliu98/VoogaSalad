@@ -1,99 +1,86 @@
 package gameObjects.tile;
 
 import grids.Point;
-import javafx.beans.property.*;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 
-import java.util.function.Consumer;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 public class SimpleTileInstance implements TileInstance {
-    private ReadOnlyStringWrapper className;
-    private SimpleStringProperty instanceName;
-    private ReadOnlyIntegerWrapper instanceId;
-    private SimpleObjectProperty<Point> coord;
-    private SimpleIntegerProperty height;
-    private SimpleIntegerProperty width;
-    private ObservableList<String> imagePathList;
+    private String className;
+    private String instanceName;
+    private int instanceId;
+    private Point coord;
+    private int height;
+    private int width;
+    private List<String> imagePathList;
     private String imageSelector;
-    private ObservableMap<String, String> propertiesMap;
-    private Supplier<TileClass> getTileClassFunc;
+    private Map<String, String> propertiesMap;
+    private TileClass tileClass;
 
 
     SimpleTileInstance(
             String className,
             Point topLeftCoord,
-            ObservableList<String> imagePathList,
-            ObservableMap<String, String> properties,
-            Supplier<TileClass> getTileClassFunc) {
-        this.className = new ReadOnlyStringWrapper();
-        this.className.setValue(className);
-        this.instanceName = new SimpleStringProperty(className);
-        this.coord = new SimpleObjectProperty<>(topLeftCoord);
+            List<String> imagePathList,
+            Map<String, String> properties,
+            TileClass tileClass) {
+        this.className = className;
+        this.instanceName = className;
+        this.coord = topLeftCoord;
         this.imagePathList = imagePathList;
         this.propertiesMap = properties;
-        this.getTileClassFunc = getTileClassFunc;
-        this.height = new SimpleIntegerProperty();
-        this.width = new SimpleIntegerProperty();
-        instanceId = new ReadOnlyIntegerWrapper();
+        this.tileClass = tileClass;
+        this.height = 1;
+        this.width = 1;
+        instanceId = 0;
     }
 
 
     @Override
-    public ReadOnlyIntegerProperty getInstanceId() {
-        return instanceId.getReadOnlyProperty();
+    public int getInstanceId() { return instanceId; }
+
+    @Override
+    public void setInstanceId(int newId) {
+        instanceId = newId;
     }
 
     @Override
-    public void setInstanceId(Consumer<SimpleIntegerProperty> setFunc) {
-        setFunc.accept(instanceId);
-    }
+    public String getClassName() { return className; }
 
     @Override
-    public ReadOnlyStringProperty getClassName() {
-        return className.getReadOnlyProperty();
-    }
-
-    @Override
-    public void setClassName(String name) {
-        className.setValue(name);
-    }
+    public void setClassName(String name) { className = name; }
 
 
     @Override
-    public SimpleIntegerProperty getHeight() {
-        return height;
-    }
+    public int getHeight() { return height; }
 
     @Override
-    public SimpleIntegerProperty getWidth() {
+    public int getWidth() {
         return width;
     }
 
     @Override
     public void setHeight(int newHeight) {
-        height.setValue(newHeight);
+        height = newHeight;
     }
 
     @Override
     public void setWidth(int newWidth) {
-        width.setValue(newWidth);
+        width = newWidth;
     }
 
 
     @Override
-    public SimpleStringProperty getInstanceName() {
+    public String getInstanceName() {
         return instanceName;
     }
 
     @Override
-    public void setInstanceName(String newInstanceName) {
-        instanceName.setValue(newInstanceName);
-    }
+    public void setInstanceName(String newInstanceName) { instanceName = newInstanceName; }
 
     @Override
-    public ObservableMap<String, String> getPropertiesMap() { return propertiesMap; }
+    public Map<String, String> getPropertiesMap() { return propertiesMap; }
 
     @Override
     public void addProperty(String propertyName, String defaultValue) {
@@ -115,7 +102,7 @@ public class SimpleTileInstance implements TileInstance {
     }
 
     @Override
-    public ObservableList<String> getImagePathList() {
+    public List<String> getImagePathList() {
         return imagePathList;
     }
 
@@ -148,15 +135,11 @@ public class SimpleTileInstance implements TileInstance {
 
 
     @Override
-    public Point getCoord() { return coord.get(); }
+    public Point getCoord() { return coord; }
 
     @Override
-    public void setCoord(Point coord) {
-        this.coord.set(coord);
-    }
+    public void setCoord(Point coord) { this.coord = coord; }
 
     @Override
-    public TileClass getGameObjectClass() {
-        return getTileClassFunc.get();
-    }
+    public TileClass getGameObjectClass() { return tileClass; }
 }

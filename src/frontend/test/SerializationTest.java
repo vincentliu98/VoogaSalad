@@ -1,10 +1,6 @@
-import javafx.application.Application;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import org.xml.sax.SAXException;
 import utils.exception.XMLParsingException;
 import utils.serializer.CRUDLoadException;
-import utils.serializer.SerializerTestCRUD;
 import utils.serializer.XMLParser;
 
 import java.io.File;

@@ -54,7 +54,7 @@ public class EditView implements SubView<TabPane> {
     /**
      * This method constructs the tabView.
      *
-     * @return A tabView Node to be displayed at the left side of the createGraph window.
+     * @return A tabView Node to be displayed at the left side of the createPhaseGraph window.
      */
     public EditView(AuthoringTools authTools, GroovyPaneFactory groovyPaneFactory, int row, int col, GameObjectsCRUDInterface manager, NodeInstanceController controller) {
         this.authTools = authTools;

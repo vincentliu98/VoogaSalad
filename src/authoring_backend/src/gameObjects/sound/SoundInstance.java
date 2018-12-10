@@ -10,13 +10,13 @@ import javafx.beans.property.SimpleStringProperty;
  */
 public interface SoundInstance extends GameObjectInstance {
 
-    SimpleStringProperty getMediaFilePath();
+    String getMediaFilePath();
 
     void setMediaFilePath(String newMediaFilePath);
 
-    SimpleDoubleProperty getDuration();
+    double getDuration();
 
-    public void setDuration(double newDuration);
+    void setDuration(double newDuration);
 
     SoundClass getGameObjectClass();
 

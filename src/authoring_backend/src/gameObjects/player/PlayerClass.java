@@ -2,12 +2,16 @@ package gameObjects.player;
 
 import authoringUtils.exception.GameObjectTypeException;
 import authoringUtils.exception.InvalidIdException;
+import authoringUtils.exception.InvalidOperationException;
+import gameObjects.ThrowingBiConsumer;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import javafx.beans.property.SimpleStringProperty;
 
+import java.util.Collection;
 import java.util.Set;
+import java.util.function.Function;
 
 /**
  * @author Yunhao Qing
@@ -27,9 +31,16 @@ public interface PlayerClass extends GameObjectClass {
 
     Set<Integer> getAllGameObjectInstanceIDs();
 
-    SimpleStringProperty getImagePath();
+    String getImagePath();
 
     void setImagePath(String newImagePath);
+
+    void equipContext(
+        PlayerInstanceFactory playerInstanceFactory,
+        ThrowingBiConsumer<String, String, InvalidOperationException> changePlayerClassNameFunc,
+        Function<String, Collection<GameObjectInstance>> getAllPlayerInstancesFunc,
+        Function<Integer, Boolean> deletePlayerInstanceFunc
+    );
 
     @Override
     default GameObjectType getType() {

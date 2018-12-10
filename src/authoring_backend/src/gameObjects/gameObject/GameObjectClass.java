@@ -7,6 +7,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableMap;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.function.Consumer;
 
 /**
@@ -21,20 +22,19 @@ public interface GameObjectClass {
      * This method sets the id of the GameObject Class.
      * @return classId
      */
-    ReadOnlyIntegerProperty getClassId();
+    int getClassId();
 
     /**
      * This method receives a function that sets the id of the GameObject Class.
      * The id of the GameObject Class is set by the received function.
-     * @param setFunc the function from IdManager that sets the id
      */
-    void setClassId(Consumer<SimpleIntegerProperty> setFunc);
+    void setClassId(int newId);
 
     /**
      * This method gets the name of this GameObject Class.
      * @return class name
      */
-    ReadOnlyStringProperty getClassName();
+    String getClassName();
 
 
 
@@ -54,7 +54,7 @@ public interface GameObjectClass {
      * This method gets the properties map of the GameObject Class.
      * @return properties map
      */
-    ObservableMap<String, String> getPropertiesMap();
+    Map<String, String> getPropertiesMap();
 
     /**
      * This method adds the property to the GameObject Class and to all instances of the class.

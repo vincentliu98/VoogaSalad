@@ -7,6 +7,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableMap;
 
+import java.util.Map;
 import java.util.function.Consumer;
 
 /**
@@ -20,19 +21,19 @@ public interface GameObjectInstance {
      *
      * @return
      */
-    ReadOnlyIntegerProperty getInstanceId();
+    int getInstanceId();
 
     /**
      *
-     * @param setFunc
+     * @param newId
      */
-    void setInstanceId(Consumer<SimpleIntegerProperty> setFunc);
+    void setInstanceId(int newId);
 
     /**
      *
      * @return
      */
-    ReadOnlyStringProperty getClassName();
+    String getClassName();
 
     /**
      *
@@ -46,7 +47,7 @@ public interface GameObjectInstance {
      */
 //    Consumer<GameObjectInstance> getReturnInstanceIdFunc();
 
-    SimpleStringProperty getInstanceName();
+    String getInstanceName();
 
     void setInstanceName(String instanceName);
 
@@ -55,7 +56,7 @@ public interface GameObjectInstance {
      * This method gets the properties map of the GameObject Class.
      * @return properties map
      */
-    ObservableMap<String, String> getPropertiesMap();
+    Map<String, String> getPropertiesMap();
 
     /**
      * This method adds the property to the GameObject Class and to all instances of the class.
@@ -78,12 +79,6 @@ public interface GameObjectInstance {
      * @return
      */
     boolean changePropertyValue(String propertyName, String newValue);
-
-
-
-
-//    Collection<GameObjectInstance> getInstancesAtSamePoint();
-
 
     /**
      * @return The GameObjectType enum variable for this GameObjectInstance object.
