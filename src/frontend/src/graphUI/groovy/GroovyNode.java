@@ -75,7 +75,7 @@ public class GroovyNode extends StackPane {
 
 
         setLayoutX(block.x());
-        setLayoutY(block.x());
+        setLayoutY(block.y());
 
         this.portPositions = portPositions;
 

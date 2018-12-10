@@ -85,5 +85,7 @@ public class FunctionBlock extends SimpleNode implements GroovyBlock<FunctionBlo
     public String name() { return op; }
 
     @Override
-    public Map<String, Object> params() { return Map.of("op", op, "portInfo", portInfo); }
+    public Map<String, Object> params() {
+        return portInfo == null ? Map.of("op", op) : Map.of("op", op, "portInfo", portInfo);
+    }
 }

@@ -16,7 +16,7 @@ public class ShrunkGroovyNode extends GroovyNode {
     private List<GroovyNode> nodes;
     private List<Pair<Double, Double>> originalPos;
     public ShrunkGroovyNode(String description, double xPos, double yPos, double width, double height, double labelSize, Color color, Set<GroovyNode> nodes) {
-        super(new RawGroovyBlock(description), xPos, yPos, width, height, labelSize, color, List.of());
+        super(new RawGroovyBlock(xPos, yPos, description), width, height, labelSize, color, List.of());
         setCenterX(xPos);
         setCenterY(yPos);
         this.nodes = new ArrayList<>(nodes);

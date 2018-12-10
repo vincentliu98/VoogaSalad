@@ -99,6 +99,7 @@ public class DraggableGroovyIconFactory {
                     ).get()
                 );
             } catch (Throwable t) {
+                t.printStackTrace();
                 ErrorWindow.display("Error while creating groovy node", t.toString());
             }
         }

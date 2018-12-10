@@ -14,8 +14,8 @@ public class BlockGraphImpl extends SimpleGraph<GroovyBlock, BlockEdge> implemen
     private SourceBlock source;
     public BlockGraphImpl() {
         super();
-        source = new SourceBlock();
-        try { addNode(source); } catch (Throwable ignored) {} // not. going. to. happen.
+        source = new SourceBlock(1000, 850); // this dirty little secret should be fixed
+        try { addNode(source); } catch (Throwable ignored) {}
     }
 
     @Override
@@ -53,8 +53,8 @@ public class BlockGraphImpl extends SimpleGraph<GroovyBlock, BlockEdge> implemen
                 .findFirst()
                 .orElseThrow(Try.supplyThrow(new PortNotConnectedException(from, fromPort))));
 
-        if(find.isFailure() && canBeEmpty) { // handle can-be-createPhaseGraph s
-            return Try.success(new RawGroovyBlock(""));
+        if(find.isFailure() && canBeEmpty) { // handle can-be-empties
+            return Try.success(new RawGroovyBlock(0, 0, ""));
         } else return find.map(Edge::to);
     }
 

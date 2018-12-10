@@ -32,7 +32,7 @@ public class PhaseNodeFactory {
         return new PhaseNode(xPos, yPos, phase, true);
     }
     public Try<PhaseNode> gen(double xPos, double yPos, String name) {
-        return db.createPhase(name).map(p -> new PhaseNode(xPos, yPos, p, false));
+        return db.createPhase(xPos, yPos, name).map(p -> new PhaseNode(xPos, yPos, p, false));
     }
 
     public class PhaseNode extends StackPane {

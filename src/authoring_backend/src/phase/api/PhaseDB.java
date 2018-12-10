@@ -39,7 +39,7 @@ public class PhaseDB {
     }
 
     public Try<PhaseGraph> createPhaseGraph(String name) {
-        var trySource = createPhase(name);
+        var trySource = createPhase(100, 50, name); // this dirty little secret should be fixed
         if(namespace.add(name)) {
             Try<PhaseGraph> graph = trySource.map(s -> new PhaseGraphImpl(name, s, namespace::add));
             graph.forEach(phaseGraphs::add);
@@ -53,9 +53,9 @@ public class PhaseDB {
         phaseGraphs.remove(graph);
     }
 
-    public Try<Phase> createPhase(String name) {
+    public Try<Phase> createPhase(double x, double y, String name) {
         if (phaseNamespace.add(name)) {
-            return Try.success(new PhaseImpl(factory.createGroovyGraph(), name));
+            return Try.success(new PhaseImpl(x, y, factory.createGroovyGraph(), name));
         } else return Try.failure(new NamespaceException(name));
     }
 

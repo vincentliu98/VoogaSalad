@@ -126,6 +126,7 @@ public class GroovyNodeFactory {
 
         if(blockType.equals("function")) return Try.success(factory.functionBlock(xPos, yPos, arg, null));
 
+        System.out.println(blockType);
         return Try.success(factory.functionBlock(xPos, yPos, blockType, portInfo));
     }
 
@@ -148,9 +149,10 @@ public class GroovyNodeFactory {
         } else if (model instanceof InfixBinaryBlock) {
             return new GroovyNode(model, 50, 50, FONT_BIG, Color.DARKRED, BINARY_PORT);
         } else {
+            System.out.println(model.params().get("portInfo"));
             var portInfo = (Map<Ports, String>) model.params().get("portInfo");
             var argN = portInfo == null ? 5 : portInfo.size();
-            return new GroovyNode(model, 120, 50, FONT_BIG, Color.PERU, functionPorts(argN));
+            return new GroovyNode(model, 120, 50, FONT_NORMAL, Color.PERU, functionPorts(argN), portInfo);
         }
     }
 

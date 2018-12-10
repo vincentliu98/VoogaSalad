@@ -102,7 +102,7 @@ public class GroovyPaneFactory {
 
             lines = new HashMap<>();
             nodes = new HashSet<>();
-            createNode(nodeFactory.source(graph.source(), WIDTH-200, HEIGHT+50));
+            createNode(nodeFactory.toView(graph.source()));
 
             newNodeX = new SimpleDoubleProperty();
             newNodeY = new SimpleDoubleProperty();

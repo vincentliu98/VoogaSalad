@@ -8,8 +8,8 @@ public class PhaseImpl extends SimpleNode implements Phase {
     private String name;
     private BlockGraph exec;
 
-    public PhaseImpl(BlockGraph exec, String name) {
-        super();
+    public PhaseImpl(double x, double y, BlockGraph exec, String name) {
+        super(x, y);
         this.name = name;
         this.exec = exec;
     }

@@ -74,9 +74,9 @@ public class SerializationTest {
 
 
         var graph = phaseDB.createPhaseGraph("A").get(null);
-        var node2 = phaseDB.createPhase("b").get(null);
-        var node3 = phaseDB.createPhase("c").get(null);
-        var node4 = phaseDB.createPhase("d").get(null);
+        var node2 = phaseDB.createPhase(0, 0, "b").get(null);
+        var node3 = phaseDB.createPhase(0, 0, "c").get(null);
+        var node4 = phaseDB.createPhase(0, 0, "d").get(null);
 
         var edge21 = phaseDB.createTransition(node2, GameEvent.keyPress(KeyCode.ESCAPE), graph.source());
         var edge12 = phaseDB.createTransition(graph.source(), GameEvent.mouseClick(), node2);
@@ -101,10 +101,10 @@ public class SerializationTest {
 
         // this is properly done, but I'm gonna cheat afterwards
         var n1 = factory.ifBlock(0, 0);
-        var n2 = factory.functionBlock(0, 0,"GameMethods.isEntity", 1);
+        var n2 = factory.functionBlock(0, 0,"GameMethods.isEntity", null);
         var n3 = factory.refBlock(0, 0, "$clicked").get();
         var n4 = factory.binaryBlock(0, 0, "&&");
-        var n5 = factory.functionBlock(0, 0, "GameMethods.getCurrentPlayer().isMyEntity", 1);
+        var n5 = factory.functionBlock(0, 0, "GameMethods.getCurrentPlayer().isMyEntity", null);
         var n6 = factory.assignBlock(0, 0);
         var n7 = factory.refBlock(0, 0, "$return").get();
         var n8 = factory.booleanBlock(0, 0, "true").get();

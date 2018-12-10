@@ -50,7 +50,9 @@ public class GroovyFactory {
     public GroovyBlock<?> stringBlock(double x, double y, String value) { return LiteralFactory.stringBlock(x, y, value); }
     public Try<GroovyBlock<?>> refBlock(double x, double y, String value) { return LiteralFactory.refBlock(x, y, value, entityDB); }
 
-    public GroovyBlock<?> functionBlock(double x, double y, String op, Map<Ports, String> portInfo) { return new FunctionBlock(x, y, op, portInfo); }
+    public GroovyBlock<?> functionBlock(double x, double y, String op, Map<Ports, String> portInfo) {
+        return new FunctionBlock(x, y, op, portInfo);
+    }
     public GroovyBlock<?> binaryBlock(double x, double y, String op) { return new InfixBinaryBlock(x, y, op); }
     public GroovyBlock<?> rawBlock(double x, double y, String code) { return new RawGroovyBlock(x, y, code); }
 }
