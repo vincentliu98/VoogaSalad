@@ -95,8 +95,7 @@ Hours Spent: 100 hours per person
 
 * src/frontend/src/authoringInterface/MainAuthoringProgram.java
 
-
-### files used to test the project and errors you expect your program to handle without crashing
+### files used to test the project
 
 * src/authoring_backend/test/CRUDTest.java : This file tests whether the game object CRUD is functioning correctly.
 * src/authoring_backend/test/GroovyBlockTest.java : This file tests whether the groove components, such as the graph and nodes are working appropriately and whether grooveblock is functioning correctly.
@@ -110,6 +109,10 @@ Hours Spent: 100 hours per person
 * src/frontend/test/SerializationTest.java : This class tests the serialization of CRUD interface.
 * src/frontend/test/SwitchingPaneTest.java : This class tests whether switching pane is successful.
 * src/frontend/test/TestGameData.java : This class tests game data.
+
+### files for error handling
+
+
 
 
 ### data or resource files required by the project
