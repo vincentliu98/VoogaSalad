@@ -1,17 +1,19 @@
 package phase.api;
 
-import groovy.api.BlockGraph;
 import authoringUtils.frontendUtils.Try;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
+import groovy.api.BlockGraph;
 import groovy.api.GroovyFactory;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import phase.NamespaceException;
 import phase.PhaseGraphImpl;
 import phase.PhaseImpl;
 import phase.TransitionImpl;
+import utility.ObservableUtils;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  *  PhaseDB keeps track of all the PhaseGraphs that are "out" there,
@@ -19,22 +21,44 @@ import java.util.Set;
  */
 public class PhaseDB {
     private Set<String> namespace;
-    private Set<String> phaseNamespace;
-    private List<PhaseGraph> phaseGraphs;
-    private GroovyFactory factory;
+    private ObservableList<PhaseGraph> phaseGraphs;
+    private ObservableList<String> phaseNames;
     private String startingPhase;
-    private BlockGraph endHandler;
+    private BlockGraph winningCondition;
 
-    public PhaseDB(GroovyFactory factory) {
-        this.namespace = new HashSet<>();
-        this.phaseNamespace = new HashSet<>();
-        phaseGraphs = new ArrayList<>();
-        this.factory = factory;
-        endHandler = factory.createGraph();
+    private GroovyFactory factory;
+
+    public PhaseDB() {
+        namespace = new HashSet<>();
+        phaseGraphs = FXCollections.observableArrayList();
+        phaseNames = FXCollections.observableArrayList();
+        ObservableUtils.bindList(phaseGraphs, phaseNames, PhaseGraph::name);
     }
 
-    public Try<PhaseGraph> createGraph(String name) {
-        var trySource = createPhase(name);
+    public PhaseDB(GroovyFactory factory) {
+        this();
+        this.factory = factory;
+        winningCondition = factory.createGroovyGraph();
+    }
+
+    /**
+     *  Initialize from XML
+     */
+    public PhaseDB(GroovyFactory factory, String xml) {
+        this();
+        this.factory = factory;
+
+        var xstream = new XStream(new DomDriver());
+        var savedDB = (SavedPhaseDB) xstream.fromXML(xml);
+        System.out.println(xml);
+        this.namespace = savedDB.namespace();
+        this.winningCondition = savedDB.winningCondition();
+        this.phaseGraphs.addAll(savedDB.phaseGraphs()); // addAll to invoke listener
+        this.startingPhase = savedDB.startingPhase();
+    }
+
+    public Try<PhaseGraph> createPhaseGraph(String name) {
+        var trySource = createPhase(100, 50, name, true); // this dirty little secret should be fixed
         if(namespace.add(name)) {
             Try<PhaseGraph> graph = trySource.map(s -> new PhaseGraphImpl(name, s, namespace::add));
             graph.forEach(phaseGraphs::add);
@@ -48,20 +72,37 @@ public class PhaseDB {
         phaseGraphs.remove(graph);
     }
 
-    public Try<Phase> createPhase(String name) {
-        if (phaseNamespace.add(name)) {
-            return Try.success(new PhaseImpl(factory.createGraph(), name));
+    public Try<Phase> createPhase(double x, double y, String name) { return createPhase(x, y, name, false); }
+    public Try<Phase> createPhase(double x, double y, String name, boolean isSource) {
+        if (!phaseNames.contains(name)) {
+            return Try.success(new PhaseImpl(x, y, factory.createGroovyGraph(), name, isSource));
         } else return Try.failure(new NamespaceException(name));
     }
 
     public Transition createTransition(Phase from, GameEvent trigger, Phase to) {
-        return new TransitionImpl(from, trigger, to, factory.createGraph());
+        return new TransitionImpl(from, trigger, to, factory.createGroovyGraph());
     }
 
-    public List<PhaseGraph> phases() { return phaseGraphs; }
+    public List<PhaseGraph> phaseGraphs() { return phaseGraphs; }
 
     public void setStartingPhase(String phaseName) { startingPhase = phaseName; }
     public String getStartingPhase() { return startingPhase; }
 
-    public BlockGraph winCondition() { return endHandler; }
+    public ObservableList<String> phaseNames() { return phaseNames; }
+    public BlockGraph winCondition() { return winningCondition; }
+
+    /**
+     *  Serialize to XML
+     */
+    public String toXML() {
+        var xstream = new XStream(new DomDriver());
+        return xstream.toXML(
+            new SavedPhaseDB(
+                new TreeSet<>(namespace),
+                new ArrayList<>(phaseGraphs),
+                startingPhase,
+                winningCondition
+            )
+        );
+    }
 }

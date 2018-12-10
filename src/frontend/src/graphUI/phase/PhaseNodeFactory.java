@@ -2,6 +2,7 @@ package graphUI.phase;
 
 import authoringUtils.frontendUtils.Try;
 import graphUI.groovy.GroovyPaneFactory.GroovyPane;
+import groovy.api.BlockGraph;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -10,6 +11,7 @@ import javafx.scene.text.Font;
 import phase.api.Phase;
 import phase.api.PhaseDB;
 
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -18,21 +20,28 @@ import java.util.function.Supplier;
  * @author Inchan Hwang
  */
 public class PhaseNodeFactory {
+    public static final double PHASE_NODE_RADIUS = 30;
     private PhaseDB db;
-    private Supplier<GroovyPane> genGroovyPane;
+    private Function<BlockGraph, GroovyPane> genGroovyPane;
 
-    public PhaseNodeFactory(PhaseDB db, Supplier<GroovyPane> genGroovyPane) {
+    public PhaseNodeFactory(PhaseDB db, Function<BlockGraph, GroovyPane> genGroovyPane) {
         this.db = db;
         this.genGroovyPane = genGroovyPane;
     }
 
-    public PhaseNode source(Phase phase, double xPos, double yPos) { return new PhaseNode(xPos, yPos, phase, true); }
-    public Try<PhaseNode> gen(double xPos, double yPos, String name) {
-        return db.createPhase(name).map(p -> new PhaseNode(xPos, yPos, p, false));
+    public Try<Phase> toModel(double xPos, double yPos, String name) {
+        return db.createPhase(xPos, yPos, name, false);
+    }
+
+    public PhaseNode toView(Phase phase) {
+        return new PhaseNode(phase.x(), phase.y(), phase);
+    }
+
+    public Try<PhaseNode> makeNode(double xPos, double yPos, String name) {
+        return toModel(xPos, yPos, name).map(this::toView);
     }
 
     public class PhaseNode extends StackPane {
-        private static final double NODE_RADIUS = 30;
         private static final double PADDING = 10;
         private static final int LABEL_SIZE = 12;
         private Phase model;
@@ -42,19 +51,19 @@ public class PhaseNodeFactory {
         private String name;
         private GroovyPane groovyPane;
 
-        public PhaseNode(double xPos, double yPos, Phase model, boolean isSource) {
+        public PhaseNode(double xPos, double yPos, Phase model) {
             this.model = model;
             name = model.name();
 
-            circle = new Circle(xPos, yPos, NODE_RADIUS);
-            circle.setFill(isSource ? Color.GRAY : Color.DIMGRAY);
+            circle = new Circle(xPos, yPos, PHASE_NODE_RADIUS);
+            circle.setFill(model.isSource() ? Color.GRAY : Color.DIMGRAY);
 
-            inner = new Circle(NODE_RADIUS, NODE_RADIUS, NODE_RADIUS-PADDING);
-            inner.setFill((isSource ? Color.BLACK : Color.WHITE).darker());
+            inner = new Circle(PHASE_NODE_RADIUS, PHASE_NODE_RADIUS, PHASE_NODE_RADIUS-PADDING);
+            inner.setFill((model.isSource() ? Color.BLACK : Color.WHITE).darker());
 
             text = new Label(model.name());
             text.setFont(new Font(LABEL_SIZE));
-            text.setTextFill(isSource ? Color.WHITE : Color.BLACK);
+            text.setTextFill(model.isSource() ? Color.WHITE : Color.BLACK);
 
             setLayoutX(xPos);
             setLayoutY(yPos);
@@ -63,7 +72,7 @@ public class PhaseNodeFactory {
             inner.toFront();
             text.toFront();
             text.setMouseTransparent(true);
-            groovyPane = genGroovyPane.get();
+            groovyPane = genGroovyPane.apply(model.exec());
             groovyPane.closeWindow();
 
             layout();
@@ -75,8 +84,8 @@ public class PhaseNodeFactory {
         public String getName() {
             return name;
         }
-        public double getCenterX() { return getLayoutX() + getTranslateX() + NODE_RADIUS; }
-        public double getCenterY() { return getLayoutY() + getTranslateY() + NODE_RADIUS; }
+        public double getCenterX() { return getLayoutX() + getTranslateX() + PHASE_NODE_RADIUS; }
+        public double getCenterY() { return getLayoutY() + getTranslateY() + PHASE_NODE_RADIUS; }
         public double getX() { return getLayoutX() + getTranslateX(); }
         public double getY() { return getLayoutY() + getTranslateY(); }
         public void showGraph() { groovyPane.showWindow(); }

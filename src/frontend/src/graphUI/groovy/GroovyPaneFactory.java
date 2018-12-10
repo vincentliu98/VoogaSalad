@@ -5,6 +5,7 @@ import authoringInterface.spritechoosingwindow.PopUpWindow;
 import groovy.api.BlockGraph;
 import groovy.api.GroovyFactory;
 import groovy.api.Ports;
+import groovy.graph.blocks.core.GroovyBlock;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -22,15 +23,12 @@ import javafx.stage.Stage;
 import javafx.util.Pair;
 import utils.ErrorWindow;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * A factory to product GroovyPane. The factory is used because many such GroovyPane is needed.
- * By calling the method `gen()`, the factory spits out a GroovyPane to be edited by the user.
+ * By calling `toView(BlockGraph model)`, the factory spits out a GroovyPane to be edited by the user.
  *
  * It is only initialized once in the View class.
  *
@@ -59,7 +57,7 @@ public class GroovyPaneFactory {
         this.winCondition = new GroovyPane(primaryStage, winCondition);
     }
 
-    public GroovyPane gen() { return new GroovyPane(primaryStage); }
+    public GroovyPane gen(BlockGraph model) { return new GroovyPane(primaryStage, model); }
     public GroovyPane winCondition() { return winCondition; }
 
     public class GroovyPane extends PopUpWindow implements SubView<GridPane> {
@@ -84,14 +82,13 @@ public class GroovyPaneFactory {
         private double selectionX, selectionY;
         private Rectangle selection;
 
-        private TextArea codePane = new TextArea();
+        private DraggableGroovyIconFactory iconFactory;
 
+        // XStream ignored
+        private TextArea codePane = new TextArea();
         private SimpleObjectProperty<Pair<GroovyNode, Ports>> selectedEdge;
         private SimpleObjectProperty<GroovyNode> selectedNode;
 
-        private DraggableGroovyIconFactory iconFactory;
-
-        private GroovyPane(Stage primaryStage) { this(primaryStage, factory.createGraph()); }
         private GroovyPane(Stage primaryStage, BlockGraph graph) {
             super(primaryStage);
             myScene = new Scene(root, WIDTH, HEIGHT);
@@ -103,7 +100,6 @@ public class GroovyPaneFactory {
 
             lines = new HashMap<>();
             nodes = new HashSet<>();
-            createNode(nodeFactory.source(graph.source(), WIDTH-200, HEIGHT+50));
 
             newNodeX = new SimpleDoubleProperty();
             newNodeY = new SimpleDoubleProperty();
@@ -172,7 +168,27 @@ public class GroovyPaneFactory {
             });
 
             initializeUI();
+            buildFromGraph();
             showWindow();
+        }
+
+        // private Map<Pair<GroovyNode, Ports>, Pair<GroovyNode, Line>> lines;
+        private void buildFromGraph() {
+            for(var block : graph.keySet()) createNode(nodeFactory.toView(block));
+            for(var block : graph.keySet()) {
+                for(var edge : graph.get(block)) {
+                    var node1 = getNodeWithModel(edge.from());
+                    var node2 = getNodeWithModel(edge.to());
+                    if(node1.isPresent() && node2.isPresent()) {
+                        graph.removeEdge(edge); // since connectNodes is going to connect it
+                        connectNodes(node1.get(), edge.fromPort(), node2.get());
+                    }
+                }
+            }
+        }
+
+        private Optional<GroovyNode> getNodeWithModel(GroovyBlock<?> block) {
+            return nodes.stream().filter(p -> p.model() == block).findFirst();
         }
 
         @Override
@@ -255,7 +271,6 @@ public class GroovyPaneFactory {
             });
 
             itemBox.setContent(vbox);
-            itemBox.setMinHeight(HEIGHT);
         }
 
         private void setupGraphBox() {
@@ -358,10 +373,7 @@ public class GroovyPaneFactory {
                 node.setOnMouseReleased(this::nodeMouseReleasedHandler);
                 node.inner().setOnMouseEntered(e -> myScene.setCursor(Cursor.MOVE));
                 node.inner().setOnMouseExited(e -> myScene.setCursor(Cursor.DEFAULT));
-                node.setOnMouseClicked(e -> {
-                    if (e.getClickCount() == 1) selectedNode.set(node);
-                    else if (e.getClickCount() >= 2) new NodeSettingWindow(new Stage());
-                });
+                node.setOnMouseClicked(e -> selectedNode.set(node));
                 group.getChildren().add(node);
                 updateCodePane();
             } catch (Throwable throwable) {
@@ -401,6 +413,11 @@ public class GroovyPaneFactory {
                     }
                 }
                 group.getChildren().remove(tmpLine);
+            } else if(draggingPurpose == DRAG_PURPOSE.CHANGE_POS) {
+                double offsetX = t.getSceneX() - orgSceneX;
+                double offsetY = t.getSceneY() - orgSceneY;
+                GroovyNode node = (GroovyNode) t.getSource();
+                node.model().setXY(node.model().x()+offsetX, node.model().y()+offsetY);
             }
             draggingPurpose = DRAG_PURPOSE.NOTHING;
         }

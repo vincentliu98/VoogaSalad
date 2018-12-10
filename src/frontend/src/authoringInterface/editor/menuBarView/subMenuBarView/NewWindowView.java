@@ -8,6 +8,9 @@ import javafx.stage.Stage;
 
 import java.util.Optional;
 
+import static authoringInterface.MainAuthoringProgram.SCREEN_HEIGHT;
+import static authoringInterface.MainAuthoringProgram.SCREEN_WIDTH;
+
 /**
  * NewWindowView
  * @author Amy Kim
@@ -15,8 +18,6 @@ import java.util.Optional;
 
 public class NewWindowView {
     public static final String STYLESHEET = "style.css";
-    public static final int SCREEN_WIDTH = 1200;
-    public static final int SCREEN_HEIGHT = 700;
 
     public NewWindowView(){
         ButtonType new_window = new ButtonType("New window");
@@ -45,5 +46,4 @@ public class NewWindowView {
 
         newWindow.show();
     }
-
 }

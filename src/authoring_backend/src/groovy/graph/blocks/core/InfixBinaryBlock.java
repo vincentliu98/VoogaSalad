@@ -5,6 +5,7 @@ import graph.SimpleNode;
 import groovy.api.BlockGraph;
 import groovy.api.Ports;
 
+import java.util.Map;
 import java.util.Set;
 
 import static groovy.api.Ports.A;
@@ -15,8 +16,8 @@ import static groovy.api.Ports.B;
  */
 public class InfixBinaryBlock extends SimpleNode implements GroovyBlock<InfixBinaryBlock> {
     private String op;
-    public InfixBinaryBlock(String op) {
-        super();
+    public InfixBinaryBlock(double x, double y, String op) {
+        super(x, y);
         this.op = op;
     }
 
@@ -32,11 +33,14 @@ public class InfixBinaryBlock extends SimpleNode implements GroovyBlock<InfixBin
     }
 
     @Override
-    public InfixBinaryBlock replicate() { return new InfixBinaryBlock(op); }
+    public InfixBinaryBlock replicate() { return new InfixBinaryBlock(x(), y(), op); }
 
     @Override
     public Set<Ports> ports() { return Set.of(A, B); }
 
     @Override
     public String name() { return op; }
+
+    @Override
+    public Map<String, Object> params() { return Map.of("op", op); }
 }

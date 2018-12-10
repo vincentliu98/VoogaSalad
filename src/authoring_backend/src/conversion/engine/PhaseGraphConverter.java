@@ -40,6 +40,8 @@ public class PhaseGraphConverter implements Converter {
 
             writer.startNode("myExecution");
             writer.setValue(node.exec().transformToGroovy().get(""));
+            System.out.println("toGroovyRes" + node.exec().transformToGroovy());
+            System.out.println("marshalling" + node.exec().hashCode());
             writer.endNode();
 
             writer.endNode();

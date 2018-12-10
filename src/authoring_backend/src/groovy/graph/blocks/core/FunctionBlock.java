@@ -7,6 +7,7 @@ import groovy.api.Ports;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static groovy.api.Ports.*;
@@ -15,11 +16,11 @@ public class FunctionBlock extends SimpleNode implements GroovyBlock<FunctionBlo
     private static final int DONT_CARE = -1;
 
     private String op;
-    private int argN;
-    public FunctionBlock(String op, int argN) {
-        super();
+    private Map<Ports, String> portInfo;
+    public FunctionBlock(double x, double y, String op, Map<Ports, String> portInfo) {
+        super(x, y);
         this.op = op;
-        this.argN = argN;
+        this.portInfo = portInfo;
     }
 
     @Override
@@ -31,7 +32,8 @@ public class FunctionBlock extends SimpleNode implements GroovyBlock<FunctionBlo
         var tryE = graph.findTarget(this, E, true).flatMap(b -> b.toGroovy(graph));
         var tryOut = graph.findTarget(this, FLOW_OUT).flatMap(b -> b.toGroovy(graph));
         int argCount = count(tryA, tryB, tryC, tryD, tryE);
-        if(argN != DONT_CARE && argCount != argN) return Try.failure(new ArgNumberMismatchException(argN, argCount));
+        if(argN() != DONT_CARE && argCount != argN())
+            return Try.failure(new ArgNumberMismatchException(argN(), argCount));
 
         return tryA.flatMap(a ->
             tryB.flatMap(b ->
@@ -48,6 +50,8 @@ public class FunctionBlock extends SimpleNode implements GroovyBlock<FunctionBlo
             )
         );
     }
+
+    private int argN() { return portInfo == null ? DONT_CARE : portInfo.size(); }
 
     private String args(Object... args) {
         var sb = new StringBuilder();
@@ -66,20 +70,22 @@ public class FunctionBlock extends SimpleNode implements GroovyBlock<FunctionBlo
     }
 
     @Override
-    public FunctionBlock replicate() { return new FunctionBlock(op, argN); }
+    public FunctionBlock replicate() { return new FunctionBlock(x(), y(), op, portInfo); }
 
     @Override
     public Set<Ports> ports() {
         var ports = List.of(A, B, C, D, E);
         var ret = new HashSet<Ports>();
-        for(int i = 0 ; i < argN ; i ++) ret.add(ports.get(i));
+        for(int i = 0 ; i < (argN() == DONT_CARE ? 5 : argN()) ; i ++) ret.add(ports.get(i));
         ret.add(FLOW_OUT);
         return ret;
     }
 
     @Override
-    public String name() {
-        var s = op.split("\\.");
-        return s[s.length-1];
+    public String name() { return op; }
+
+    @Override
+    public Map<String, Object> params() {
+        return portInfo == null ? Map.of("op", op) : Map.of("op", op, "portInfo", portInfo);
     }
 }

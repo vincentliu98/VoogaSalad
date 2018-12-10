@@ -3,7 +3,7 @@ package phase.api;
 import graph.Graph;
 
 /**
- *   Turn-based games have discrete "phases" that the user can decide on their moves.
+ *   Turn-based games have discrete "phaseGraphs" that the user can decide on their moves.
  *   The PhaseGraph represents this idea by having nodes and edges represent the following.
  *
  *   Nodes (Phase) -> The createPhase that the user can be on, at a specific point of the gameplay.
