@@ -93,9 +93,19 @@ Hours Spent: 100 hours per person
 
 
 ### files used to start the project
+
 ### files used to test the project and errors you expect your program to handle without crashing
+
+src/authoring_backend/test/CRUDTest.java : This file tests whether the game object CRUD is functioning correctly.
+src/authoring_backend/test/GroovyBlockTest.java : This file tests whether the groove components, such as the graph and nodes are working appropriately and whether grooveblock is functioning correctly.
+src/authoring_backend/test/PhaseSerializationTest.java : This file tests whether serialization of phase is successful.
+src/authoring_backend/test/SerializationTest.java : This file tests whether serialization of groove is successful with the game sword and arrow.
+src/authoring_backend/test/ValidationTest.java : This file tests whether validation is running.
+src/authoring_backend/test/XStreamTest.java : This file tests the XStream.
+
 ### data or resource files required by the project
 
+The user can to customize images for entity, tile and user avatars. The user need to prepare these images and set the appropriate image for respective image objects in building the game.
 
 ### UI Layout of the project
 
@@ -112,6 +122,7 @@ Hours Spent: 100 hours per person
 
 ### Extra features
 
+* Linking to social image
 
 ### Impression
 
