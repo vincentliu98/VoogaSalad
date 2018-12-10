@@ -8,6 +8,7 @@ import authoringInterface.editor.editView.EditView;
 import authoringInterface.editor.memento.Editor;
 import authoringInterface.editor.memento.EditorCaretaker;
 import authoringInterface.editor.menuBarView.subMenuBarView.*;
+import conversion.authoring.CRUDConverterAuthoring;
 import gameplay.Initializer;
 import graphUI.graphData.PhaseGraphXMLParser;
 import graphUI.graphData.SinglePhaseData;
@@ -45,6 +46,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
     private GameWindow gameWindow;
     private AuthoringTools authTools;
     private String fileName; //TODO: temp var, will be changed
+    private SerializerTestCRUD serializer;
 
     private SoundView soundView;
 
@@ -60,6 +62,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
             BiConsumer<Integer, Integer> updateGridDimension,
             EditView editView
     ) {
+        serializer = new SerializerTestCRUD();
         this.authTools = authTools;
         this.closeWindow = closeWindow;
         this.editView = editView;
@@ -100,7 +103,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         open.setOnAction(this::handleOpen);
         export.setOnAction(this::handleExport);
 
-        saveGameObjects.setOnAction(e -> new SaveGridAndGameObjectsView(new SerializerTestCRUD().getXMLString(authTools.entityDB())));
+        saveGameObjects.setOnAction(e -> new SaveGridAndGameObjectsView(serializer.getXMLString(authTools.entityDB())));
 
         save.setOnAction(e -> {
             if (myFile != null)
