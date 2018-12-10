@@ -177,7 +177,7 @@ public class CRUDConverterAuthoring implements Converter {
 
         // TilePrototype
         for (TileClass tileClass: db.getTileClasses()) {
-            writer.startNode("tilePrototype");
+            writer.startNode("tileClass");
             // ID
             writer.startNode("classID");
             writer.setValue(tileClass.getClassId().getValue().toString());
