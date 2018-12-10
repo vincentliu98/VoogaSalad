@@ -112,6 +112,20 @@ Hours Spent: 100 hours per person
 
 ### files for error handling
 
+* src/authoring_backend/src/authoringUtils/exception/DuplicateGameObjectClassException.java
+* src/authoring_backend/src/authoringUtils/exception/DuplicateIdException.java
+* src/authoring_backend/src/authoringUtils/exception/GameObjectClassException.java
+* src/authoring_backend/src/authoringUtils/exception/GameObjectClassNotFoundException.java
+* src/authoring_backend/src/authoringUtils/exception/GameObjectInstanceException.java
+* src/authoring_backend/src/authoringUtils/exception/GameObjectInstanceNotFoundException.java
+* src/authoring_backend/src/authoringUtils/exception/GameObjectTypeException.java
+* src/authoring_backend/src/authoringUtils/exception/IdException.java
+* src/authoring_backend/src/authoringUtils/exception/InvalidGameObjectClassException.java
+* src/authoring_backend/src/authoringUtils/exception/InvalidGameObjectInstanceException.java
+* src/authoring_backend/src/authoringUtils/exception/InvalidIdException.java
+* src/authoring_backend/src/authoringUtils/exception/InvalidOperationException.java
+* src/authoring_backend/src/authoringUtils/exception/InvalidPointsException.java
+* src/authoring_backend/src/authoringUtils/exception/TurnNotFoundException.java
 
 
 
