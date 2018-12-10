@@ -9,4 +9,5 @@ import groovy.api.BlockGraph;
 public interface Phase extends Node {
     String name();
     BlockGraph exec();
+    boolean isSource();
 }

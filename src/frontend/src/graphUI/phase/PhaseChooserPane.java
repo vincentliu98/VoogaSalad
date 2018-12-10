@@ -1,9 +1,8 @@
 package graphUI.phase;
 
 import api.SubView;
-import graphUI.graphData.PhaseGraphXMLWriter;
-import graphUI.graphData.SinglePhaseData;
 import graphUI.groovy.GroovyPaneFactory.GroovyPane;
+import groovy.api.BlockGraph;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -15,14 +14,12 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import phase.api.PhaseDB;
+import phase.api.PhaseGraph;
 import utils.ErrorWindow;
 
-import java.io.File;
-import java.util.*;
-import java.util.function.Supplier;
+import java.util.ArrayList;
+import java.util.function.Function;
 
 /**
  * PhaseChooserPane
@@ -37,63 +34,16 @@ import java.util.function.Supplier;
 public class PhaseChooserPane implements SubView<GridPane> {
     private GridPane view;
     private PhaseDB phaseDB;
-    private Supplier<GroovyPane> genGroovyPane;
-    private ObservableList<String> phaseList;
-    private ListView<String> phaseListView;
-    private List<PhasePane> phasePanes;
-    private Map<String, SinglePhaseData> phaseDataMap;
-    private PhaseGraphXMLWriter phaseGraphXMLWriter;
+    private Function<BlockGraph, GroovyPane> genGroovyPane;
+    private ObservableList<PhasePane> phasePaneList;
+    private ListView<String> phaseNameListView;
 
-    public PhaseChooserPane(PhaseDB phaseDB, Supplier<GroovyPane> genGroovyPane) {
+    public PhaseChooserPane(PhaseDB phaseDB, Function<BlockGraph, GroovyPane> genGroovyPane) {
         this.phaseDB = phaseDB;
         this.genGroovyPane = genGroovyPane;
-        phaseList = FXCollections.observableArrayList();
-        phasePanes = new ArrayList<>();
-
-        phaseDataMap = new HashMap<>();
-
+        phasePaneList = FXCollections.observableArrayList();
         initializeView();
         setupLeft();
-    }
-
-    public Map<String, SinglePhaseData> getPhaseDataMap() {
-        return phaseDataMap;
-    }
-
-    public void setPhaseDataMap(Map<String, SinglePhaseData> phaseDataMap) {
-        this.phaseDataMap = phaseDataMap;
-    }
-
-    public void checkMapUpdate(String message){
-        System.out.println(message + "\nPhase Data Map: " + phaseDataMap);
-    }
-
-    /**
-     * Load data:
-     * 1. Clear all the previous data in frontend and backend
-     * 2. Take the names of phaseGraphs as Set<String> and restore ListView on the left
-     * 3. For each ChooserPane:
-     *  1. restore all the nodes according to X and Y position and name
-     *  2. restore connections between nodes by going through the map and generate edges.
-     *
-     * @param phaseDataMap
-     */
-    public void reset(Map<String, SinglePhaseData> phaseDataMap){
-        this.phaseDataMap = phaseDataMap;
-        clearPrevData();
-
-        phaseDataMap.keySet().forEach(a -> {
-            phaseList.add(a);
-            recoverPhasePane(a, phaseDataMap);
-        });
-        phaseListView.setItems(phaseList);
-        System.out.println("Map after reset" + phaseDataMap);
-    }
-
-    private void clearPrevData() {
-        phaseDB.phases().forEach(phase -> phaseDB.removeGraph(phase));
-        phaseList.clear();
-        phasePanes.clear();
     }
 
     private void initializeView() {
@@ -113,16 +63,17 @@ public class PhaseChooserPane implements SubView<GridPane> {
         stack.getChildren().add(createPhaseBtn);
         vbox.getStyleClass().add("vboxPhase");
         createPhaseBtn.getStyleClass().add("phaseBtn");
-        phaseListView = new ListView<>(phaseList);
-        phaseListView.setMinHeight(570);
+        phaseNameListView = new ListView<>(phaseDB.phaseNames());
+        phaseNameListView.setMinHeight(570);
         vbox.setSpacing(15);
-        vbox.getChildren().addAll(stack, phaseListView);
-        phaseListView.getSelectionModel().selectedIndexProperty().addListener((e, o, n) -> {
+        vbox.getChildren().addAll(stack, phaseNameListView);
+        phaseNameListView.getSelectionModel().selectedIndexProperty().addListener((e, o, n) -> {
             clearRightPane();
-            view.add(phasePanes.get(n.intValue()).getView(), 1, 0);
+            view.add(phasePaneList.get(n.intValue()).getView(), 1, 0);
         });
-        createPhaseBtn.setOnMouseClicked(this::handlePhaseCreation);
+        createPhaseBtn.setOnMouseClicked(this::createPhasePane);
         view.add(vbox, 0, 0);
+        phaseDB.phaseGraphs().forEach(this::createPhasePane);
     }
 
     private void clearRightPane() {
@@ -135,68 +86,29 @@ public class PhaseChooserPane implements SubView<GridPane> {
         view.getChildren().removeAll(toRemove);
     }
 
-    private void handlePhaseCreation(MouseEvent e) {
+    private void createPhasePane(MouseEvent e) {
         TextInputDialog dialog = new TextInputDialog("");
         dialog.setContentText("Please enter the name of this phase graph:");
-        dialog.showAndWait().ifPresent(name -> {
-            createNewPhasePane(name);
-        });
+        dialog.showAndWait().ifPresent(this::createPhasePane);
     }
 
-    private void createNewPhasePane(String name) {
-        var tryGraph = phaseDB.createGraph(name);
+    private void createPhasePane(String name) {
+        var tryGraph = phaseDB.createPhaseGraph(name);
         if(tryGraph.isSuccess()) {
             try {
-                var graph = tryGraph.get();
-
-                var singlePhaseData = new SinglePhaseData(name);
-                phaseDataMap.put(name, singlePhaseData);
-                System.out.println(phaseDataMap);
-
-                var phasePane = new PhasePane(phaseDB, genGroovyPane, graph, singlePhaseData, this);
-                phaseList.add(name);
-                phasePanes.add(phasePane);
-                phaseListView.getSelectionModel().select(phaseList.size()-1);
+                createPhasePane(tryGraph.get());
             } catch (Throwable t) {
-                new ErrorWindow("Error", "t.toString()").showAndWait();
+                t.printStackTrace();
+                ErrorWindow.display("Error", t.toString());
             }
         }
     }
 
-    private void recoverPhasePane(String name, Map<String, SinglePhaseData> phaseDataMap) {
-        var tryGraph = phaseDB.createGraph(name);
-        if(tryGraph.isSuccess()) {
-            try {
-                var graph = tryGraph.get();
-
-                var singlePhaseData = phaseDataMap.get(name);
-                phaseDataMap.put(name, singlePhaseData);
-
-                var phasePane = new PhasePane(phaseDB, genGroovyPane, graph, singlePhaseData, this);
-                phasePanes.add(phasePane);
-
-                phasePane.recoverData();
-
-                phaseListView.getSelectionModel().select(phaseList.size()-1);
-            } catch (Throwable t) {
-                new ErrorWindow("Error", "t.toString()").showAndWait();
-            }
-        }
+    private void createPhasePane(PhaseGraph graph) {
+        phasePaneList.add(new PhasePane(phaseDB, genGroovyPane, graph));
+        phaseNameListView.getSelectionModel().select(phasePaneList.size()-1);
     }
 
-    public File generateXML() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Save File");
-        File file = fileChooser.showSaveDialog(new Stage());
-        phaseGraphXMLWriter = new PhaseGraphXMLWriter(phaseDataMap, file);
-        phaseGraphXMLWriter.generate();
-        return file;
-    }
-
-    public void saveXML(File oldFile){
-        phaseGraphXMLWriter = new PhaseGraphXMLWriter(phaseDataMap, oldFile);
-        phaseGraphXMLWriter.generate();
-    }
     @Override
     public GridPane getView() {
         return view;

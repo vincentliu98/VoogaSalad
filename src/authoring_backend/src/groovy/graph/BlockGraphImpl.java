@@ -7,6 +7,7 @@ import groovy.api.BlockEdge;
 import groovy.api.BlockGraph;
 import groovy.api.Ports;
 import groovy.graph.blocks.core.GroovyBlock;
+import groovy.graph.blocks.core.IfBlock;
 import groovy.graph.blocks.core.RawGroovyBlock;
 import groovy.graph.blocks.core.SourceBlock;
 
@@ -14,8 +15,8 @@ public class BlockGraphImpl extends SimpleGraph<GroovyBlock, BlockEdge> implemen
     private SourceBlock source;
     public BlockGraphImpl() {
         super();
-        source = new SourceBlock();
-        try { addNode(source); } catch (Throwable ignored) {} // not. going. to. happen.
+        source = new SourceBlock(1000, 1000); // this dirty little secret should be fixed
+        try { addNode(source); } catch (Throwable ignored) {}
     }
 
     @Override
@@ -53,13 +54,13 @@ public class BlockGraphImpl extends SimpleGraph<GroovyBlock, BlockEdge> implemen
                 .findFirst()
                 .orElseThrow(Try.supplyThrow(new PortNotConnectedException(from, fromPort))));
 
-        if(find.isFailure() && canBeEmpty) { // handle can-be-createGraph s
-            return Try.success(new RawGroovyBlock(""));
+        if(find.isFailure() && canBeEmpty) { // handle can-be-empties
+            return Try.success(new RawGroovyBlock(0, 0, ""));
         } else return find.map(Edge::to);
     }
 
     @Override
     public Try<GroovyBlock> findTarget(GroovyBlock from, Ports fromPort) {
-        return findTarget(from, fromPort, fromPort == Ports.FLOW_OUT); // FLOW_OUT can be createGraph by default
+        return findTarget(from, fromPort, fromPort == Ports.FLOW_OUT); // FLOW_OUT can be createPhaseGraph by default
     }
 }

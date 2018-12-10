@@ -5,14 +5,15 @@ import graph.SimpleNode;
 import groovy.api.BlockGraph;
 import groovy.api.Ports;
 
+import java.util.Map;
 import java.util.Set;
 
 import static groovy.api.Ports.*;
 
 public class IfBlock extends SimpleNode implements GroovyBlock<IfBlock> {
     private boolean elseIf;
-    public IfBlock(boolean elseIf) {
-        super();
+    public IfBlock(double x, double y, boolean elseIf) {
+        super(x, y);
         this.elseIf = elseIf;
     }
 
@@ -34,8 +35,13 @@ public class IfBlock extends SimpleNode implements GroovyBlock<IfBlock> {
     }
 
     @Override
-    public IfBlock replicate() { return new IfBlock(elseIf); }
+    public IfBlock replicate() { return new IfBlock(x(), y(), elseIf); }
 
     @Override
     public String name() { return elseIf ? "Else If" : "If"; }
+
+    @Override
+    public Map<String, Object> params() {
+        return Map.of("elseIf", elseIf);
+    }
 }

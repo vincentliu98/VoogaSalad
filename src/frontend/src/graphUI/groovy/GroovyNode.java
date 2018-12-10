@@ -38,17 +38,16 @@ public class GroovyNode extends StackPane {
 
     GroovyNode(
         GroovyBlock<?> block,
-        double xPos, double yPos,
         double width, double height,
         double labelSize,
         Color color,
         List<Pair<Pos, Ports>> portPositions
     ) {
-        this(block, xPos, yPos, width, height, labelSize, color, portPositions, null);
+        this(block, width, height, labelSize, color, portPositions, null);
     }
+
     GroovyNode(
         GroovyBlock<?> block,
-        double xPos, double yPos,
         double width, double height,
         double labelSize,
         Color color,
@@ -68,15 +67,15 @@ public class GroovyNode extends StackPane {
         );
 
         model = block;
-        rectangle = new Rectangle(xPos, yPos, width, height);
+        rectangle = new Rectangle(block.x(), block.x(), width, height);
         rectangle.setFill(color);
 
         inner = new Rectangle(PADDING, PADDING, width-2*PADDING, height-2*PADDING);
         inner.setFill(Color.TRANSPARENT);
 
 
-        setLayoutX(xPos);
-        setLayoutY(yPos);
+        setLayoutX(block.x());
+        setLayoutY(block.y());
 
         this.portPositions = portPositions;
 
@@ -155,11 +154,16 @@ public class GroovyNode extends StackPane {
     public Rectangle inner() { return inner; }
     public double getCenterX() { return getLayoutX() + getTranslateX() + rectangle.getWidth()/2; }
     public double getCenterY() { return getLayoutY() + getTranslateY() + rectangle.getHeight()/2; }
-    public void setCenterX(double x) {
+    public void setCenterX(double x) { setCenterX(x, true);}
+    public void setCenterY(double y) { setCenterY(y, true); }
+
+    public void setCenterX(double x, boolean modifyModel) {
+        if(modifyModel) model.setXY(x-rectangle.getWidth()/2, model.y());
         setLayoutX(x-rectangle.getWidth()/2);
         setTranslateX(0);
     }
-    public void setCenterY(double y) {
+    public void setCenterY(double y, boolean modifyModel) {
+        if(modifyModel) model.setXY(model.x(), y-rectangle.getHeight()/2);
         setLayoutY(y-rectangle.getHeight()/2);
         setTranslateY(0);
     }

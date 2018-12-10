@@ -6,6 +6,7 @@ import graph.Node;
 import groovy.api.BlockGraph;
 import groovy.api.Ports;
 
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -41,4 +42,10 @@ public interface GroovyBlock<T extends GroovyBlock<T>> extends Node,Replicable<T
      * @return Representative Name
      */
     String name();
+
+
+    /**
+     * Params
+     */
+    Map<String, Object> params();
 }

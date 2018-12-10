@@ -2,14 +2,22 @@ package graphUI.phase;
 
 import graphUI.groovy.GroovyPaneFactory.GroovyPane;
 import graphUI.phase.PhaseNodeFactory.PhaseNode;
+import groovy.api.BlockGraph;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import phase.api.GameEvent;
+import phase.api.Phase;
+import phase.api.PhaseDB;
+import phase.api.Transition;
 
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
+
+import static graphUI.phase.PhaseNodeFactory.PHASE_NODE_RADIUS;
 
 /**
  *TransitionLineFactory
@@ -17,24 +25,45 @@ import java.util.function.Supplier;
  * @author Amy
  */
 public class TransitionLineFactory {
-    private Supplier<GroovyPane> genGroovyPane;
+    private PhaseDB phaseDB;
+    private Function<BlockGraph, GroovyPane> genGroovyPane;
     private Consumer<Node> removeFromScreen;
     private Consumer<Node> addToScreen;
+    private BiFunction<Phase, Phase, Integer> countOverlap;
 
     public TransitionLineFactory(
-        Supplier<GroovyPane> genGroovyPane,
+        PhaseDB phaseDB,
+        Function<BlockGraph, GroovyPane> genGroovyPane,
         Consumer<Node> addToScreen,
-        Consumer<Node> removeFromScreen
+        Consumer<Node> removeFromScreen,
+        BiFunction<Phase, Phase, Integer> countOverlap
     ) {
+        this.phaseDB = phaseDB;
         this.genGroovyPane = genGroovyPane;
         this.removeFromScreen = removeFromScreen;
         this.addToScreen = addToScreen;
+        this.countOverlap = countOverlap;
     }
 
-    public TransitionLine gen(
-        double x, double y, double x2, double y2, int cnt,
-        PhaseNode start, GameEvent event, PhaseNode end
-    ) { return new TransitionLine(x, y, x2, y2, cnt, start, event, end); }
+
+    public TransitionLine makeEdge(PhaseNode from, GameEvent event, PhaseNode to) {
+        return toView(toModel(from.model(), event, to.model()), from, to);
+    }
+
+    /**
+     *  (from, event, to) ----> Model
+     */
+    public Transition toModel(Phase from, GameEvent event, Phase to) {
+        return phaseDB.createTransition(from, event, to);
+    }
+
+    /**
+     *  (model, node view, node view) ----> View
+     */
+    public TransitionLine toView(Transition transition, PhaseNode node1, PhaseNode node2) {
+        return new TransitionLine(countOverlap.apply(node1.model(), node2.model()), transition, node1, node2);
+    }
+
 
     public class TransitionLine extends Line {
         private static final int MAX_CNT = 5;
@@ -42,21 +71,19 @@ public class TransitionLineFactory {
         private static final double ARROW_OFFSET = 30;
 
         private Line arrowL, arrowR;
-        private PhaseNode start, end;
-        private GameEvent model;
+        private Transition model;
+        private PhaseNode node1, node2;
         private Text label;
         private int cnt;
         private GroovyPane groovyPane;
 
-        public TransitionLine(
-            double x, double y, double x2, double y2, int cnt,
-            PhaseNode start, GameEvent event, PhaseNode end
-        ) {
-            super(x, y, x2, y2);
-            this.start = start;
-            this.end = end;
-            this.label = new Text(event.toString());
-            this.model = event;
+        public TransitionLine(int cnt, Transition transition, PhaseNode node1, PhaseNode node2) {
+            super(node1.getCenterX(), node1.getCenterY(), node2.getCenterX(), node2.getCenterY());
+
+            this.model = transition;
+            this.node1 = node1;
+            this.node2 = node2;
+            this.label = new Text(transition.trigger().toString());
             this.cnt = cnt;
 
             arrowL = new Line();
@@ -72,7 +99,7 @@ public class TransitionLineFactory {
             repositionLabel();
             repositionArrow();
 
-            groovyPane = genGroovyPane.get();
+            groovyPane = genGroovyPane.apply(transition.guard());
             groovyPane.closeWindow();
 
             startXProperty().addListener((e, o, n) -> update());
@@ -134,11 +161,12 @@ public class TransitionLineFactory {
             label.setStroke(c);
         }
 
-        public PhaseNode start() { return start; }
-        public PhaseNode end() { return end; }
-        public GameEvent trigger() { return model; }
+        public PhaseNode start() { return node1; }
+        public PhaseNode end() { return node2; }
+        public GameEvent trigger() { return model.trigger(); }
         public Text label() { return label; }
         public int cnt() { return cnt; }
         public void showGraph() { groovyPane.showWindow(); }
+        public Transition model() { return model; }
     }
 }

@@ -7,11 +7,11 @@ public class PhaseSerializationTest {
         var authTools = new AuthoringTools(5,5);
         var phaseDB = authTools.phaseDB();
 
-        var graph = phaseDB.createGraph("A").get(null);
+        var graph = phaseDB.createPhaseGraph("A").get(null);
 
-        var node2 = phaseDB.createPhase("b").get(null);
-        var node3 = phaseDB.createPhase("c").get(null);
-        var node4 = phaseDB.createPhase("d").get(null);
+        var node2 = phaseDB.createPhase(0, 0, "b").get(null);
+        var node3 = phaseDB.createPhase(0, 0, "c").get(null);
+        var node4 = phaseDB.createPhase(0, 0, "d").get(null);
 
         var edge12 = phaseDB.createTransition(graph.source(), GameEvent.mouseClick(), node2);
         var edge23 = phaseDB.createTransition(node2, GameEvent.mouseClick(), node3);
