@@ -23,8 +23,6 @@ public class SaveGridAndGameObjectsView {
         if (file != null) {
             try {
                 var fs = new BufferedWriter(new FileWriter(file));
-                fs.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-                fs.newLine();
                 fs.write(xml);
                 fs.close();
             } catch (IOException e) {

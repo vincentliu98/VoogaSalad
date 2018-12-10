@@ -2,6 +2,7 @@ package utils.serializer;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import java.util.*;
 
@@ -11,6 +12,7 @@ import java.util.*;
  * @author Haotian Wang
  */
 public class RawInstance implements Comparable<RawInstance> {
+    private Element rootElement;
     private int instanceID;
     private String type;
     private String className;
@@ -24,48 +26,110 @@ public class RawInstance implements Comparable<RawInstance> {
     private Set<Integer> gameObjectInstanceIDs;
     private String instanceName;
 
-    public RawInstance(Element entry) {
+    public RawInstance(Element entry) throws CRUDLoadException {
+        rootElement = entry;
         type = entry.getTagName();
-        instanceID = Integer.parseInt(entry.getElementsByTagName("instanceID").item(0).getNodeValue());
-        className = entry.getElementsByTagName("className").item(0).getNodeValue();
-        instanceName = entry.getElementsByTagName("instanceName").item(0).getNodeName();
-        if (entry.getElementsByTagName("height").item(0).getNodeValue() != null) {
-            height = Integer.parseInt(entry.getElementsByTagName("height").item(0).getNodeValue());
+        Element instanceIDElement = getChildElement("instanceID");
+        if (!hasValue(instanceIDElement)) {
+            throw new CRUDLoadException("GameObjectInstance(s) does not have a valid instanceID");
         }
-        if (entry.getElementsByTagName("width").item(0).getNodeValue() != null) {
-            width = Integer.parseInt(entry.getElementsByTagName("width").item(0).getNodeValue());
+        instanceID = Integer.parseInt(instanceIDElement.getTextContent());
+        Element instanceNameElement = getChildElement("instanceName");
+        if (!hasValue(instanceIDElement)) {
+            throw new CRUDLoadException("GameObjectInstance(s) does not have a valid instance name");
         }
-        if (entry.getElementsByTagName("props").item(0).getChildNodes() != null) {
-            props = new HashMap<>();
-            Node propNode = entry.getElementsByTagName("props").item(0);
-            for (int i = 0; i < propNode.getChildNodes().getLength(); i++) {
-                Node current = propNode.getChildNodes().item(i);
-                String key = current.getChildNodes().item(0).getNodeValue();
-                String value = current.getChildNodes().item(1).getNodeValue();
-                props.put(key, value);
+        instanceName = instanceNameElement.getTextContent();
+        Element classNameElement = getChildElement("className");
+        if (!hasValue(classNameElement)) {
+            throw new CRUDLoadException("GameObjectInstance(s) does not have a valid class name");
+        }
+        className = classNameElement.getTextContent();
+        if (containsChildElement("height")) {
+            Element heightElement = getChildElement("height");
+            if (hasValue(heightElement)) {
+                height = Integer.parseInt(heightElement.getTextContent());
+                if (height <= 0) {
+                    throw new CRUDLoadException("Height must be a positive integer");
+                }
             }
         }
-        if (entry.getElementsByTagName("imagePaths").item(0).getChildNodes() != null) {
-            imagePaths = new ArrayList<>();
-            for (int i = 0; i < entry.getElementsByTagName("imagePaths").item(0).getChildNodes().getLength(); i++) {
-                imagePaths.add(entry.getElementsByTagName("imagePaths").item(0).getChildNodes().item(i).getNodeValue());
+        if (containsChildElement("width")) {
+            Element widthElement = getChildElement("width");
+            if (hasValue(widthElement)) {
+                width = Integer.parseInt(widthElement.getTextContent());
+                if (width <= 0) {
+                    throw new CRUDLoadException("Width must be a positive integer");
+                }
             }
         }
-        if (entry.getElementsByTagName("imagePath").item(0).getNodeValue() != null) {
-            imagePath = entry.getElementsByTagName("imagePath").item(0).getNodeValue();
-        }
-        if (entry.getElementsByTagName("imageSelector").item(0).getNodeValue() != null) {
-            imageSelector = entry.getElementsByTagName("imageSelector").item(0).getNodeValue();
-        }
-        if (entry.getElementsByTagName("mediaFilePath").item(0).getNodeValue() != null) {
-            mediaFilePath = entry.getElementsByTagName("mediaFilePath").item(0).getNodeValue();
-        }
-        if (entry.getElementsByTagName("gameObjectInstanceIDs").item(0).getChildNodes() != null) {
-            gameObjectInstanceIDs = new HashSet<>();
-            for (int i = 0; i < entry.getElementsByTagName("gameObjectInstanceIDs").item(0).getChildNodes().getLength(); i++) {
-                gameObjectInstanceIDs.add(Integer.parseInt(entry.getElementsByTagName("gameObjectInstanceIDs").item(0).getChildNodes().item(i).getNodeValue()));
+        if (containsChildElement("props")) {
+            Element propNode = getChildElement("props");
+            if (hasChild(propNode)) {
+                props = new HashMap<>();
+                for (int i = 0; i < propNode.getChildNodes().getLength(); i++) {
+                    Node current = propNode.getChildNodes().item(i);
+                    String key = current.getChildNodes().item(0).getTextContent();
+                    String value = current.getChildNodes().item(1).getTextContent();
+                    props.put(key, value);
+                }
             }
         }
+        if (containsChildElement("imagePaths")) {
+            Element imagePathsNode = getChildElement("imagePaths");
+            if (hasValue(imagePathsNode)) {
+                imagePaths = new ArrayList<>();
+                for (int i = 0; i < imagePathsNode.getChildNodes().getLength(); i++) {
+                    imagePaths.add(imagePathsNode.getChildNodes().item(i).getTextContent());
+                }
+            }
+        }
+        if (containsChildElement("imagePath")) {
+            Element imagePathElement = getChildElement("imagePath");
+            if (hasValue(imagePathElement)) {
+                imagePath = imagePathElement.getTextContent();
+            }
+        }
+        if (containsChildElement("imageSelector")) {
+            Element imageSelectorElement = getChildElement("imageSelector");
+            if (hasValue(imageSelectorElement)) {
+                imageSelector = imageSelectorElement.getTextContent();
+            }
+        }
+        if (containsChildElement("mediaFilePath")) {
+            Element mediaFilePathElement = getChildElement("mediaFilePath");
+            if (hasValue(mediaFilePathElement)) {
+                mediaFilePath = mediaFilePathElement.getTextContent();
+            }
+        }
+        if (containsChildElement("gameObjectInstanceIDs")) {
+            Element gameObjectInstanceIDsElement = getChildElement("gameObjectInstanceIDs");
+            if (hasChild(gameObjectInstanceIDsElement)) {
+                gameObjectInstanceIDs = new HashSet<>();
+                for (int i = 0; i < gameObjectInstanceIDsElement.getChildNodes().getLength(); i++) {
+                    gameObjectInstanceIDs.add(Integer.parseInt(gameObjectInstanceIDsElement.getChildNodes().item(i).getTextContent()));
+                }
+            }
+        }
+    }
+
+    private boolean containsChildElement(String name) {
+        return rootElement.getElementsByTagName(name).getLength() != 0;
+    }
+
+    private boolean hasValue(Element element) {
+        return element.getTextContent() != null && !element.getTextContent().isEmpty();
+    }
+
+    private boolean hasChild(Element element) {
+        return element.getChildNodes().getLength() != 0;
+    }
+
+    private Element getChildElement(String name) throws CRUDLoadException {
+        NodeList candidates = rootElement.getElementsByTagName(name);
+        if (candidates.getLength() == 0) {
+            throw new CRUDLoadException("GameObjectClass(es) do not have " + name);
+        }
+        return (Element) candidates.item(0);
     }
 
     public String getClassName() {
@@ -132,5 +196,10 @@ public class RawInstance implements Comparable<RawInstance> {
     @Override
     public int compareTo(RawInstance o) {
         return instanceID - o.getInstanceID();
+    }
+
+    @Override
+    public String toString() {
+        return instanceName + "," + instanceID;
     }
 }

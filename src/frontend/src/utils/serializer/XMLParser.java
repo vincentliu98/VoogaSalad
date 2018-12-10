@@ -39,7 +39,8 @@ public class XMLParser {
     public void loadXML(File file) throws SAXException, XMLParsingException {
         DocumentBuilder docBuilder = null;
         try {
-            docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+            docBuilder = docBuilderFactory.newDocumentBuilder();
         } catch (ParserConfigurationException ignored) {
         }
         try {
@@ -49,17 +50,20 @@ public class XMLParser {
         }
         myDocument.getDocumentElement().normalize();
         Element root = myDocument.getDocumentElement();
-        System.out.println(root.getFirstChild().getNodeValue());
         dimension = new PointImpl(
-                Integer.parseInt(root.getElementsByTagName("gridWidth").item(0).getNodeValue()),
-                Integer.parseInt(root.getElementsByTagName("gridHeight").item(0).getNodeValue()));
+                Integer.parseInt(root.getElementsByTagName("gridWidth").item(0).getTextContent()),
+                Integer.parseInt(root.getElementsByTagName("gridHeight").item(0).getTextContent()));
         classesFromXML = new TreeSet<>();
         instancesFromXML = new TreeSet<>();
         for (String classType : allClasses) {
             NodeList classesOfType = root.getElementsByTagName(classType);
             if (classesOfType.getLength() != 0) {
                 for (int i = 0; i < classesOfType.getLength(); i++) {
-                    classesFromXML.add(new RawClass((Element) classesOfType.item(i)));
+                    try {
+                        classesFromXML.add(new RawClass((Element) classesOfType.item(i)));
+                    } catch (CRUDLoadException e) {
+                        System.out.println(e.getMessage());
+                    }
                 }
             }
         }
@@ -67,7 +71,11 @@ public class XMLParser {
             NodeList instancesOfType = root.getElementsByTagName(instanceType);
             if (instancesOfType.getLength() != 0) {
                 for (int i = 0; i < instancesOfType.getLength(); i++) {
-                    instancesFromXML.add(new RawInstance((Element) instancesOfType.item(i)));
+                    try {
+                        instancesFromXML.add(new RawInstance((Element) instancesOfType.item(i)));
+                    } catch (CRUDLoadException e) {
+                        System.out.println(e.getMessage());
+                    }
                 }
             }
         }

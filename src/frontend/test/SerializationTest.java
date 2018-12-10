@@ -16,7 +16,7 @@ import java.io.File;
 public class SerializationTest {
     public static void main(String[] args) {
         XMLParser parser = new XMLParser();
-        File file = new File("starter.xml");
+        File file = new File("default.xml");
         System.out.println(file.getAbsolutePath());
         try {
             parser.loadXML(file);
@@ -25,5 +25,8 @@ public class SerializationTest {
         } catch (XMLParsingException e) {
             e.printStackTrace();
         }
+        System.out.println(parser.getGridDimension());
+        System.out.println(parser.getGameObjectClasses());
+        System.out.println(parser.getGameObjectInstances());
     }
 }
