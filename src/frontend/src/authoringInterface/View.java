@@ -82,7 +82,7 @@ public class View implements ParentView<SubView> {
     private void initializeElements() {
         sidebar = new GridPane();
         sideView = new SideView(gameObjectManager, nodeInstanceController);
-        editView = new EditView(tools, groovyPaneFactory, ROW_NUMBER, COL_NUMBER, gameObjectManager, nodeInstanceController);
+        editView = new EditView(tools, groovyPaneFactory, gameObjectManager.getNumRows(), gameObjectManager.getNumCols(), gameObjectManager, nodeInstanceController);
         statusView = new StatusView(gameObjectManager);
         editView.addUpdateStatusEventListener(statusView);
         menuBar = new EditorMenuBarView(tools, primaryStage::close, this::updateGridDimension, editView);
