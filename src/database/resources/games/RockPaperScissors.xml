@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<game>
+    <grid-width>2</grid-width>
+    <grid-height>3</grid-height>
+    <gameplay.Player>
+        <myID>0</myID>
+        <myStats/>
+        <myEntityIDs/>
+    </gameplay.Player>
+    <gameplay.Player>
+        <myID>1</myID>
+        <myStats/>
+        <myEntityIDs/>
+    </gameplay.Player>
+    <gameplay.Tile>
+        <myID>1</myID>
+        <name>Rock</name>
+        <props/>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myCoord>
+            <x>0</x>
+            <y>0</y>
+        </myCoord>
+        <myImagePaths>
+            <string>rock.png</string>
+        </myImagePaths>
+        <myImageSelector></myImageSelector>
+        <myImages/>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>2</myID>
+        <name>Paper</name>
+        <props/>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myCoord>
+            <x>0</x>
+            <y>1</y>
+        </myCoord>
+        <myImagePaths>
+            <string>paper.png</string>
+        </myImagePaths>
+        <myImageSelector></myImageSelector>
+        <myImages/>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>3</myID>
+        <name>Scissors</name>
+        <props/>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myCoord>
+            <x>0</x>
+            <y>2</y>
+        </myCoord>
+        <myImagePaths>
+            <string>scissors.png</string>
+        </myImagePaths>
+        <myImageSelector></myImageSelector>
+        <myImages/>
+    </gameplay.Tile>
+
+    <gameplay.EntityPrototype>
+        <name>RockEntity</name>
+        <props/>
+        <myImagePaths>
+            <string>empty.png</string>
+        </myImagePaths>
+        <myImageSelector/>
+    </gameplay.EntityPrototype>
+
+    <gameplay.EntityPrototype>
+        <name>PaperEntity</name>
+        <props/>
+        <myImagePaths>
+            <string>empty.png</string>
+        </myImagePaths>
+        <myImageSelector/>
+    </gameplay.EntityPrototype>
+
+    <gameplay.EntityPrototype>
+        <name>ScissorsEntity</name>
+        <props/>
+        <myImagePaths>
+            <string>empty.png</string>
+        </myImagePaths>
+        <myImageSelector/>
+    </gameplay.EntityPrototype>
+
+    <gameplay.Phase>
+        <myID>1</myID>
+        <myStartNodeID>1</myStartNodeID>
+        <myCurrentNodeID>0</myCurrentNodeID>
+        <myNodeIDs>
+            <int>1</int>
+            <int>2</int>
+        </myNodeIDs>
+    </gameplay.Phase>
+
+    <gameplay.Node>
+        <myPhaseID>1</myPhaseID>
+        <myID>1</myID>
+        <myExecution/>
+    </gameplay.Node>
+
+    <gameplay.Node>
+        <myPhaseID>1</myPhaseID>
+        <myID>2</myID>
+        <myExecution>
+            turn = GameMethods.getCurrentPlayerID()
+            if($clicked.getID() == 1) {
+            entityName = "RockEntity";
+            } else if ($clicked.getID() == 2){
+            entityName = "PaperEntity";
+            } else {
+            entityName = "ScissorsEntity";
+            }
+            GameMethods.createEntity(entityName, $clicked.getID(), turn);
+            if (turn == 1){
+            def firstTileSet = [] as HashSet;
+            for (Integer i : GameMethods.getPlayer(1-turn).getMyEntities()){ firstTileSet.add(GameMethods.getEntity(i).getTileID()); }
+            def secondTileSet = [] as HashSet;
+            for (Integer i : GameMethods.getPlayer(turn).getMyEntities()){ secondTileSet.add(GameMethods.getEntity(i).getTileID()); }
+            if ((firstTileSet.contains(1) &amp;&amp; secondTileSet.contains(3)) ||
+            (firstTileSet.contains(2) &amp;&amp; secondTileSet.contains(1)) ||
+            (firstTileSet.contains(3) &amp;&amp; secondTileSet.contains(2))) {
+            GameMethods.getTurn().endGame(1-turn);
+            return;
+            }
+            if ((firstTileSet.contains(3) &amp;&amp; secondTileSet.contains(1)) ||
+            (firstTileSet.contains(1) &amp;&amp; secondTileSet.contains(2)) ||
+            (firstTileSet.contains(2) &amp;&amp; secondTileSet.contains(3))) {
+            GameMethods.getTurn().endGame(turn);
+            return;
+            }
+            GameMethods.getPlayer(GameMethods.getNextPlayerID()).clearMyEntities();
+            GameMethods.getPlayer(GameMethods.getNextPlayerID()).clearMyEntities();
+            }
+            GameMethods.toNextPlayer();
+            GameMethods.goTo(1);
+        </myExecution>
+    </gameplay.Node>
+
+    <gameplay.Edge>
+        <myPhaseID>1</myPhaseID>
+        <myStartNodeID>1</myStartNodeID>
+        <myEndNodeID>2</myEndNodeID>
+        <myTrigger class="phase.api.GameEvent$MouseClick"/>
+        <myGuard>
+            $return = true;
+        </myGuard>
+    </gameplay.Edge>
+
+    <gameplay.Turn>
+        <myCurrentPhaseID>1</myCurrentPhaseID>
+        <playersOrder>
+            <int>0</int>
+            <int>1</int>
+        </playersOrder>
+    </gameplay.Turn>
+</game>
