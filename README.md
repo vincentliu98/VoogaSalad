@@ -112,6 +112,49 @@ Hours Spent: 100 hours per person
 
 ### files for error handling
 
+Authoring_backend
+
+* src/authoring_backend/src/authoringUtils/exception/DuplicateGameObjectClassException.java
+* src/authoring_backend/src/authoringUtils/exception/DuplicateIdException.java
+* src/authoring_backend/src/authoringUtils/exception/GameObjectClassException.java
+* src/authoring_backend/src/authoringUtils/exception/GameObjectClassNotFoundException.java
+* src/authoring_backend/src/authoringUtils/exception/GameObjectInstanceException.java
+* src/authoring_backend/src/authoringUtils/exception/GameObjectInstanceNotFoundException.java
+* src/authoring_backend/src/authoringUtils/exception/GameObjectTypeException.java
+* src/authoring_backend/src/authoringUtils/exception/IdException.java
+* src/authoring_backend/src/authoringUtils/exception/InvalidGameObjectClassException.java
+* src/authoring_backend/src/authoringUtils/exception/InvalidGameObjectInstanceException.java
+* src/authoring_backend/src/authoringUtils/exception/InvalidIdException.java
+* src/authoring_backend/src/authoringUtils/exception/InvalidOperationException.java
+* src/authoring_backend/src/authoringUtils/exception/InvalidPointsException.java
+* src/authoring_backend/src/authoringUtils/exception/TurnNotFoundException.java
+
+* src/authoring_backend/src/groovy/graph/blocks/core/ArgNumberMismatchException.java
+* src/authoring_backend/src/groovy/graph/blocks/small_factory/ListParseException.java
+* src/authoring_backend/src/groovy/graph/blocks/small_factory/MapParseException.java
+* src/authoring_backend/src/groovy/graph/blocks/small_factory/NoSuchPropertyException.java
+* src/authoring_backend/src/groovy/graph/blocks/small_factory/ReferenceParseException.java
+* src/authoring_backend/src/groovy/graph/PortAlreadyFilledException.java
+* src/authoring_backend/src/groovy/graph/PortNotConnectedException.java
+* src/authoring_backend/src/phase/NamespaceException.java
+
+Controller
+
+* src/controller/src/social/UserException.java
+
+Frontend
+
+* src/frontend/src/authoringInterface/sidebar/RedundantNamingException.java
+* src/frontend/src/authoringInterface/subEditors/exception/IllegalGameObjectNamingException.java
+* src/frontend/src/authoringInterface/subEditors/exception/IllegalGeometryException.java
+* src/frontend/src/authoringInterface/subEditors/exception/MissingEditorForTypeException.java
+* src/frontend/src/runningGame/IllegalSavedGameException.java
+* src/frontend/src/utils/exception/GridIndexOutOfBoundsException.java
+* src/frontend/src/utils/exception/NodeNotFoundException.java
+* src/frontend/src/utils/exception/PreviewUnavailableException.java
+* src/frontend/src/utils/exception/UnhandledCoordinatesClassException.java
+* src/frontend/src/utils/exception/UnremovableNodeException.java
+* src/frontend/src/utils/exception/XMLParsingException.java
 
 
 
