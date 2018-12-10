@@ -142,6 +142,20 @@ Controller
 
 * src/controller/src/social/UserException.java
 
+Frontend
+
+* src/frontend/src/authoringInterface/sidebar/RedundantNamingException.java
+* src/frontend/src/authoringInterface/subEditors/exception/IllegalGameObjectNamingException.java
+* src/frontend/src/authoringInterface/subEditors/exception/IllegalGeometryException.java
+* src/frontend/src/authoringInterface/subEditors/exception/MissingEditorForTypeException.java
+* src/frontend/src/runningGame/IllegalSavedGameException.java
+* src/frontend/src/utils/exception/GridIndexOutOfBoundsException.java
+* src/frontend/src/utils/exception/NodeNotFoundException.java
+* src/frontend/src/utils/exception/PreviewUnavailableException.java
+* src/frontend/src/utils/exception/UnhandledCoordinatesClassException.java
+* src/frontend/src/utils/exception/UnremovableNodeException.java
+* src/frontend/src/utils/exception/XMLParsingException.java
+
 
 
 ### data or resource files required by the project
