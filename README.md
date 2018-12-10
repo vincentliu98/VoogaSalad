@@ -138,6 +138,11 @@ Authoring_backend
 * src/authoring_backend/src/groovy/graph/PortNotConnectedException.java
 * src/authoring_backend/src/phase/NamespaceException.java
 
+Controller
+
+* src/controller/src/social/UserException.java
+
+
 
 ### data or resource files required by the project
 
