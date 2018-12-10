@@ -16,7 +16,9 @@ import java.io.File;
 public class SerializationTest {
     public static void main(String[] args) {
         XMLParser parser = new XMLParser();
-        File file = new File("test.xml");
+        String fileName = "test.xml";
+        ClassLoader classLoader = SerializationTest.class.getClassLoader();
+        File file = new File(classLoader.getResource(fileName).getPath());
         System.out.println(file.getAbsolutePath());
         try {
             parser.loadXML(file);
