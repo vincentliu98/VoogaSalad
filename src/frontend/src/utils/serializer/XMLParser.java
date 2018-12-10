@@ -29,6 +29,7 @@ public class XMLParser {
     private static final Set<String> allInstances = Set.of("entityInstance", "soundInstance", "tileInstance");
     private Set<RawClass> classesFromXML;
     private Set<RawInstance> instancesFromXML;
+    private Point dimension;
 
     /**
      * This method reads in the XML file and saves the information in the class.
@@ -46,6 +47,9 @@ public class XMLParser {
         } catch (IOException e) {
             throw new XMLParsingException("The XML Parser encountered an error upon reading" + file.getAbsolutePath(), e);
         }
+        dimension = new PointImpl(
+                Integer.parseInt(myDocument.getElementsByTagName("grid-width").item(0).getNodeValue()),
+                Integer.parseInt(myDocument.getElementsByTagName("grid-height").item(0).getNodeValue()));
         myDocument.getDocumentElement().normalize();
         classesFromXML = new TreeSet<>();
         instancesFromXML = new TreeSet<>();
@@ -73,9 +77,7 @@ public class XMLParser {
      * @return A Point representing height and width of the grid.
      */
     public Point getGridDimension() {
-        return new PointImpl(
-                Integer.parseInt(myDocument.getElementsByTagName("grid-width").item(0).getNodeValue()),
-                Integer.parseInt(myDocument.getElementsByTagName("grid-height").item(0).getNodeValue()));
+        return dimension;
     }
 
     /**

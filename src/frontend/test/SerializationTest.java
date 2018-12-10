@@ -17,6 +17,7 @@ public class SerializationTest {
     public static void main(String[] args) {
         XMLParser parser = new XMLParser();
         File file = new File("starter.xml");
+        System.out.println(file.getAbsolutePath());
         try {
             parser.loadXML(file);
         } catch (SAXException e) {
