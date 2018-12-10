@@ -75,6 +75,24 @@ public class XMLParser {
     }
 
     /**
+     * This method returns the width of the grid.
+     *
+     * @return An int representing width.
+     */
+    public int getGridWidth() {
+        return dimension.getX();
+    }
+
+    /**
+     * This method returns the height of the grid.
+     *
+     * @return An int representing height.
+     */
+    public int getGridHeight() {
+        return dimension.getY();
+    }
+
+    /**
      * This method returns the dimension of the Grid specified by the XML.
      *
      * @return A Point representing height and width of the grid.

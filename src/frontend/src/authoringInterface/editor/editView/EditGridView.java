@@ -86,7 +86,7 @@ public class EditGridView implements SubView<ScrollPane> {
                 StackPane cell = new StackPane();
                 cell.setPrefWidth(CELL_WIDTH);
                 cell.setPrefHeight(CELL_HEIGHT);
-                gridScrollView.add(cell, i, j);
+                gridScrollView.add(cell, j, i);
                 cell.setOnDragOver(e -> setUpHoveringColorDraggedOver(e, Color.LIGHTGREEN, cell));
                 cell.setOnDragExited(e -> setUpDragExit(e, cell));
                 cell.setOnDragDropped(e -> handleDragFromSideView(e, cell));
@@ -141,14 +141,14 @@ public class EditGridView implements SubView<ScrollPane> {
         SingleNodeFade.getNodeFadeInAndOut(batchMode, INDICATOR_FADE_TIME).playFromStart();
     }
 
-    public void updateDimension(int width, int height) {
+    public void updateDimension(int row, int col) {
         gridScrollView.getChildren().removeIf(c -> c instanceof StackPane);
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
                 StackPane cell = new StackPane();
                 cell.setPrefWidth(CELL_WIDTH);
                 cell.setPrefHeight(CELL_HEIGHT);
-                gridScrollView.add(cell, i, j);
+                gridScrollView.add(cell, j, i);
                 cell.setOnDragOver(e -> setUpHoveringColorDraggedOver(e, Color.LIGHTGREEN, cell));
                 cell.setOnDragExited(e -> setUpDragExit(e, cell));
                 cell.setOnDragDropped(e -> handleDragFromSideView(e, cell));
@@ -156,7 +156,7 @@ public class EditGridView implements SubView<ScrollPane> {
                 cell.setOnDragEntered(e -> setUpBatchInstanceDrag(e, cell));
             }
         }
-        gameObjectManager.setDimension(width, height);
+        gameObjectManager.setDimension(row, col);
         nodeInstanceController.clearAllLinks();
         try {
             gameObjectManager.deleteAllInstances();

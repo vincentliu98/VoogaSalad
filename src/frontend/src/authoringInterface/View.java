@@ -67,7 +67,7 @@ public class View implements ParentView<SubView> {
         mainView = new GridPane();
         rootPane = new AnchorPane();
         rootPane.getStyleClass().add("mainPane");
-        tools = new AuthoringTools(xmlParser.getGridDimension().getY(), xmlParser.getGridDimension().getX());
+        tools = new AuthoringTools(COL_NUMBER, ROW_NUMBER);
         gameObjectManager = tools.entityDB();
         groovyPaneFactory = new GroovyPaneFactory(primaryStage, tools.factory(), tools.phaseDB().winCondition());
         nodeInstanceController = new CrappyNodeInstanceController();
