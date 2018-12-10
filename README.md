@@ -24,16 +24,17 @@ Hours Spent: 100 hours per person
 
 ### Primary Roles
 
-* Vincent Liu : Frontend developer. <Description>
-* Haotian Wang : Frontend developer. <Description>
-* Amy Kim : Frontend developer. <Description>
+* Vincent Liu : Frontend developer. <Add description here>
+* Haotian Wang : Frontend developer. <Add description here>
+* Amy Kim : Frontend developer. <Add description here>
 
-* Natalie Le : Backend engine developer. <Description>
-* Jonathan Nakagawa : Backend engine developer <Description>
+* Natalie Le : Backend engine developer. <Add description here>
+* Jonathan Nakagawa : Backend engine developer. <Add description here>
 
-* Inchan Hwang : Backend authoring engine developer.
-* Jason Zhou : Backend authoring engine developer.
-* Yunhao Qing : Backend authoring engine developer.
+* Inchan Hwang : Backend authoring engine developer. Worked on the Groove part of the authoring engine.
+* Jason Zhou : Backend authoring engine developer. Worked on GameObjectCRUD and various specific game objects such as Entity, Tile and Sound.
+* Yunhao Qing : Backend authoring engine developer. Worked on GameObjeectCRUD and Player component.
+
 ### Resources Used
 
 ###### Images
@@ -107,20 +108,28 @@ The user can to customize images for entity, tile and user avatars. The user nee
 
 ### UI Layout of the project
 
+TO BE ADDED
+
 ![UI View](doc/<name>.png)
 
 ### How to use the program
 
+*Run the src/frontend/src/authoringInterface/MainAuthoringProgram.java to get access to the authoring program.
 
 ### Known Bugs
+
+* Redo and Undo are too difficult with our current framework and we did not manage to finish it before the deadline.
 
 
 ### Design decision
 
+* Initially we were unsure about how to build the authoring engine so the author can build a game with little code. We carefully studied the game TicTacToe and came up with the idea of having a grid and various game objects such as entities and tiles. We later decided to also have players, turns and categories as game objects too. After making the TicTacToe works, we started to think about how to make other games work. Inchan came up with the idea of Groovy, through which all kinds of logic can be converted from graphics such as nodes and lines to codes that can be run. These two components form the foundation of the authoring backend.
 
 ### Extra features
 
 * User can connect to social media such as Twitter and share result of playing the game instantly.
+
+* User can customize background music for the game and also customize sound effect on actions in playing the game.
 
 ### Impression
 
