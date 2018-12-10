@@ -112,6 +112,8 @@ Hours Spent: 100 hours per person
 
 ### files for error handling
 
+Authoring_backend
+
 * src/authoring_backend/src/authoringUtils/exception/DuplicateGameObjectClassException.java
 * src/authoring_backend/src/authoringUtils/exception/DuplicateIdException.java
 * src/authoring_backend/src/authoringUtils/exception/GameObjectClassException.java
@@ -127,6 +129,14 @@ Hours Spent: 100 hours per person
 * src/authoring_backend/src/authoringUtils/exception/InvalidPointsException.java
 * src/authoring_backend/src/authoringUtils/exception/TurnNotFoundException.java
 
+* src/authoring_backend/src/groovy/graph/blocks/core/ArgNumberMismatchException.java
+* src/authoring_backend/src/groovy/graph/blocks/small_factory/ListParseException.java
+* src/authoring_backend/src/groovy/graph/blocks/small_factory/MapParseException.java
+* src/authoring_backend/src/groovy/graph/blocks/small_factory/NoSuchPropertyException.java
+* src/authoring_backend/src/groovy/graph/blocks/small_factory/ReferenceParseException.java
+* src/authoring_backend/src/groovy/graph/PortAlreadyFilledException.java
+* src/authoring_backend/src/groovy/graph/PortNotConnectedException.java
+* src/authoring_backend/src/phase/NamespaceException.java
 
 
 ### data or resource files required by the project
