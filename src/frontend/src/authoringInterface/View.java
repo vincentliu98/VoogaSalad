@@ -67,7 +67,7 @@ public class View implements ParentView<SubView> {
         mainView = new GridPane();
         rootPane = new AnchorPane();
         rootPane.getStyleClass().add("mainPane");
-        tools = new AuthoringTools(xmlParser.getGridWidth(), xmlParser.getGridHeight());
+        tools = new AuthoringTools(COL_NUMBER, ROW_NUMBER);
         gameObjectManager = tools.entityDB();
         groovyPaneFactory = new GroovyPaneFactory(primaryStage, tools.factory(), tools.phaseDB().winCondition());
         nodeInstanceController = new CrappyNodeInstanceController();
@@ -79,7 +79,7 @@ public class View implements ParentView<SubView> {
     private void initializeElements() {
         sidebar = new GridPane();
         sideView = new SideView(gameObjectManager, nodeInstanceController);
-        editView = new EditView(tools, groovyPaneFactory, xmlParser.getGridHeight(), xmlParser.getGridWidth(), gameObjectManager, nodeInstanceController);
+        editView = new EditView(tools, groovyPaneFactory, ROW_NUMBER, COL_NUMBER, gameObjectManager, nodeInstanceController);
         statusView = new StatusView(gameObjectManager);
         editView.addUpdateStatusEventListener(statusView);
         menuBar = new EditorMenuBarView(tools, primaryStage::close, this::updateGridDimension, editView);
