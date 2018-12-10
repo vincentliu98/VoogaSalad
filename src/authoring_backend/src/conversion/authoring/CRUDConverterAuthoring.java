@@ -152,7 +152,7 @@ public class CRUDConverterAuthoring implements Converter {
             writer.endNode();
 
             // imagePaths
-            writer.startNode("myImagePaths");
+            writer.startNode("imagePaths");
             entityInstance.getImagePathList().forEach(path -> {
                 writer.startNode("path");
                 writer.setValue(path);
