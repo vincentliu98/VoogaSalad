@@ -32,12 +32,12 @@ public class RawClass implements Comparable<RawClass> {
         type = entry.getTagName();
         Element classIDElement = getChildElement("classID");
         if (!hasValue(classIDElement)) {
-            throw new CRUDLoadException("GameObjectClass does not have a valid classID");
+            throw new CRUDLoadException(type + " does not have a valid classID");
         }
         classID = Integer.parseInt(classIDElement.getTextContent());
         Element classNameElement = getChildElement("className");
         if (!hasValue(classNameElement)) {
-            throw new CRUDLoadException("GameObjectClass does not have a valid class name");
+            throw new CRUDLoadException(type + " does not have a valid class name");
         }
         className = classNameElement.getTextContent();
         if (containsChildElement("height")) {
@@ -123,7 +123,7 @@ public class RawClass implements Comparable<RawClass> {
     private Element getChildElement(String name) throws CRUDLoadException {
         NodeList candidates = rootElement.getElementsByTagName(name);
         if (candidates.getLength() == 0) {
-            throw new CRUDLoadException("GameObjectClass(es) do not have " + name);
+            throw new CRUDLoadException(type + " does not have " + name);
         }
         return (Element) candidates.item(0);
     }

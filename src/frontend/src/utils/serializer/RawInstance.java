@@ -31,17 +31,17 @@ public class RawInstance implements Comparable<RawInstance> {
         type = entry.getTagName();
         Element instanceIDElement = getChildElement("instanceID");
         if (!hasValue(instanceIDElement)) {
-            throw new CRUDLoadException("GameObjectInstance(s) does not have a valid instanceID");
+            throw new CRUDLoadException(type + " does not have a valid instanceID");
         }
         instanceID = Integer.parseInt(instanceIDElement.getTextContent());
         Element instanceNameElement = getChildElement("instanceName");
         if (!hasValue(instanceIDElement)) {
-            throw new CRUDLoadException("GameObjectInstance(s) does not have a valid instance name");
+            throw new CRUDLoadException(type + " does not have a valid instance name");
         }
         instanceName = instanceNameElement.getTextContent();
         Element classNameElement = getChildElement("className");
         if (!hasValue(classNameElement)) {
-            throw new CRUDLoadException("GameObjectInstance(s) does not have a valid class name");
+            throw new CRUDLoadException(type + " does not have a valid class name");
         }
         className = classNameElement.getTextContent();
         if (containsChildElement("height")) {
@@ -127,7 +127,7 @@ public class RawInstance implements Comparable<RawInstance> {
     private Element getChildElement(String name) throws CRUDLoadException {
         NodeList candidates = rootElement.getElementsByTagName(name);
         if (candidates.getLength() == 0) {
-            throw new CRUDLoadException("GameObjectClass(es) do not have " + name);
+            throw new CRUDLoadException(type + " does not have " + name);
         }
         return (Element) candidates.item(0);
     }
