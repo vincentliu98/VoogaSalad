@@ -12,6 +12,7 @@ import java.util.*;
  * @author Haotian Wang
  */
 public class RawClass implements Comparable<RawClass> {
+    private Element rootElement;
     private int classID;
     private String type;
     private String className;
@@ -25,49 +26,55 @@ public class RawClass implements Comparable<RawClass> {
     private Set<Integer> gameObjectInstanceIDs;
 
     public RawClass(Element entry) {
+        rootElement = entry;
         type = entry.getTagName();
-        for (int i = 0; i < entry.getChildNodes().getLength(); i++) {
-            System.out.println(entry.getChildNodes().item(i).getNodeName() + "," + entry.getChildNodes().item(i).getTextContent());
-        }
         classID = Integer.parseInt(entry.getElementsByTagName("classID").item(0).getTextContent());
-        className = entry.getElementsByTagName("className").item(0).getNodeValue();
-        if (entry.getElementsByTagName("height").item(0).getNodeValue() != null) {
-            height = Integer.parseInt(entry.getElementsByTagName("height").item(0).getNodeValue());
+        className = entry.getElementsByTagName("className").item(0).getTextContent();
+        Element heightElement = (Element) entry.getElementsByTagName("height").item(0);
+        if (entry.getElementsByTagName("height").item(0) != null) {
+            height = Integer.parseInt(entry.getElementsByTagName("height").item(0).getTextContent());
         }
-        if (entry.getElementsByTagName("width").item(0).getNodeValue() != null) {
-            width = Integer.parseInt(entry.getElementsByTagName("width").item(0).getNodeValue());
+        if (entry.getElementsByTagName("width").item(0).getTextContent() != null) {
+            width = Integer.parseInt(entry.getElementsByTagName("width").item(0).getTextContent());
         }
         if (entry.getElementsByTagName("props").item(0).getChildNodes() != null) {
             props = new HashMap<>();
             Node propNode = entry.getElementsByTagName("props").item(0);
             for (int i = 0; i < propNode.getChildNodes().getLength(); i++) {
                 Node current = propNode.getChildNodes().item(i);
-                String key = current.getChildNodes().item(0).getNodeValue();
-                String value = current.getChildNodes().item(1).getNodeValue();
+                String key = current.getChildNodes().item(0).getTextContent();
+                String value = current.getChildNodes().item(1).getTextContent();
                 props.put(key, value);
             }
         }
         if (entry.getElementsByTagName("imagePaths").item(0).getChildNodes() != null) {
             imagePaths = new ArrayList<>();
             for (int i = 0; i < entry.getElementsByTagName("imagePaths").item(0).getChildNodes().getLength(); i++) {
-                imagePaths.add(entry.getElementsByTagName("imagePaths").item(0).getChildNodes().item(i).getNodeValue());
+                imagePaths.add(entry.getElementsByTagName("imagePaths").item(0).getChildNodes().item(i).getTextContent());
             }
         }
-        if (entry.getElementsByTagName("imagePath").item(0).getNodeValue() != null) {
-            imagePath = entry.getElementsByTagName("imagePath").item(0).getNodeValue();
+        if (entry.getElementsByTagName("imagePath").item(0).getTextContent() != null) {
+            imagePath = entry.getElementsByTagName("imagePath").item(0).getTextContent();
         }
-        if (entry.getElementsByTagName("imageSelector").item(0).getNodeValue() != null) {
-            imageSelector = entry.getElementsByTagName("imageSelector").item(0).getNodeValue();
+        if (entry.getElementsByTagName("imageSelector").item(0).getTextContent() != null) {
+            imageSelector = entry.getElementsByTagName("imageSelector").item(0).getTextContent();
         }
-        if (entry.getElementsByTagName("mediaFilePath").item(0).getNodeValue() != null) {
-            mediaFilePath = entry.getElementsByTagName("mediaFilePath").item(0).getNodeValue();
+        if (entry.getElementsByTagName("mediaFilePath").item(0).getTextContent() != null) {
+            mediaFilePath = entry.getElementsByTagName("mediaFilePath").item(0).getTextContent();
         }
         if (entry.getElementsByTagName("gameObjectInstanceIDs").item(0).getChildNodes() != null) {
             gameObjectInstanceIDs = new HashSet<>();
             for (int i = 0; i < entry.getElementsByTagName("gameObjectInstanceIDs").item(0).getChildNodes().getLength(); i++) {
-                gameObjectInstanceIDs.add(Integer.parseInt(entry.getElementsByTagName("gameObjectInstanceIDs").item(0).getChildNodes().item(i).getNodeValue()));
+                gameObjectInstanceIDs.add(Integer.parseInt(entry.getElementsByTagName("gameObjectInstanceIDs").item(0).getChildNodes().item(i).getTextContent()));
             }
         }
+    }
+    private boolean containsChildElement(String name) {
+        return rootElement.getElementsByTagName(name).getLength() != 0;
+    }
+
+    private Element getChildElement(String name) {
+        return (Element) rootElement.getElementsByTagName(name).item(0);
     }
 
     public String getClassName() {
