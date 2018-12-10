@@ -7,6 +7,11 @@ import javafx.beans.property.SimpleStringProperty;
 
 import java.util.Set;
 
+/**
+ * @author Yunhao Qing
+ */
+
+
 public interface PlayerInstance extends GameObjectInstance {
 
     SimpleStringProperty getImagePath();
