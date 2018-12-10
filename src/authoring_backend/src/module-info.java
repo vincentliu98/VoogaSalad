@@ -37,5 +37,6 @@ module authoring_backend {
     exports gameObjects.crud;
     exports gameObjects.player;
     exports gameObjects.turn;
+    exports gameObjects.tileGeneration;
     exports utility;
 }

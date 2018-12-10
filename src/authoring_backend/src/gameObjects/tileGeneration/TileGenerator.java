@@ -5,13 +5,11 @@ import authoringUtils.exception.GameObjectTypeException;
 import authoringUtils.exception.InvalidOperationException;
 import authoringUtils.exception.NumericalException;
 import gameObjects.crud.GameObjectsCRUDInterface;
-import gameObjects.gameObject.GameObjectClass;
 import gameObjects.tile.TileClass;
 import grids.Point;
 import grids.PointImpl;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Map;
 import java.util.Random;
 
