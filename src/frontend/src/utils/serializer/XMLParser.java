@@ -24,7 +24,6 @@ import java.util.TreeSet;
  * @author Haotian Wang
  */
 public class XMLParser {
-    private Document myDocument;
     private static final Set<String> allClasses = Set.of("entityClass", "categoryClass", "soundClass", "playerClass", "tileClass");
     private static final Set<String> allInstances = Set.of("entityInstance", "soundInstance", "tileInstance");
     private Set<RawClass> classesFromXML;
@@ -36,14 +35,16 @@ public class XMLParser {
      *
      * @param file: A File in the desired XML format.
      */
-    public void loadXML(File file) throws SAXException, XMLParsingException {
+    public void loadXML(File file) throws SAXException, XMLParsingException, CRUDLoadException {
         DocumentBuilder docBuilder = null;
         try {
             DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
             docBuilder = docBuilderFactory.newDocumentBuilder();
         } catch (ParserConfigurationException ignored) {
         }
+        Document myDocument;
         try {
+            assert docBuilder != null;
             myDocument = docBuilder.parse(file);
         } catch (IOException e) {
             throw new XMLParsingException("The XML Parser encountered an error upon reading" + file.getAbsolutePath(), e);
@@ -59,11 +60,7 @@ public class XMLParser {
             NodeList classesOfType = root.getElementsByTagName(classType);
             if (classesOfType.getLength() != 0) {
                 for (int i = 0; i < classesOfType.getLength(); i++) {
-                    try {
-                        classesFromXML.add(new RawClass((Element) classesOfType.item(i)));
-                    } catch (CRUDLoadException e) {
-                        System.out.println(e.getMessage());
-                    }
+                    classesFromXML.add(new RawClass((Element) classesOfType.item(i)));
                 }
             }
         }
@@ -71,11 +68,7 @@ public class XMLParser {
             NodeList instancesOfType = root.getElementsByTagName(instanceType);
             if (instancesOfType.getLength() != 0) {
                 for (int i = 0; i < instancesOfType.getLength(); i++) {
-                    try {
-                        instancesFromXML.add(new RawInstance((Element) instancesOfType.item(i)));
-                    } catch (CRUDLoadException e) {
-                        System.out.println(e.getMessage());
-                    }
+                    instancesFromXML.add(new RawInstance((Element) instancesOfType.item(i)));
                 }
             }
         }

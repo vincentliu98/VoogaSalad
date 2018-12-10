@@ -3,6 +3,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.xml.sax.SAXException;
 import utils.exception.XMLParsingException;
+import utils.serializer.CRUDLoadException;
 import utils.serializer.SerializerTestCRUD;
 import utils.serializer.XMLParser;
 
@@ -25,6 +26,8 @@ public class SerializationTest {
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (XMLParsingException e) {
+            e.printStackTrace();
+        } catch (CRUDLoadException e) {
             e.printStackTrace();
         }
         System.out.println(parser.getGridDimension());

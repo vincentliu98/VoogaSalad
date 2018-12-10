@@ -9,13 +9,23 @@ import authoringInterface.sidebar.SideView;
 import authoringInterface.sidebar.StatusView;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import graphUI.groovy.GroovyPaneFactory;
+import grids.Point;
+import grids.PointImpl;
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import org.xml.sax.SAXException;
+import utils.exception.XMLParsingException;
 import utils.nodeInstance.CrappyNodeInstanceController;
 import utils.nodeInstance.NodeInstanceController;
+import utils.serializer.CRUDLoadException;
+import utils.serializer.XMLParser;
+
+import java.io.File;
+import java.util.Objects;
+import java.util.function.Supplier;
 
 /**
  * This class provides an createGraph skeleton window with the basic menu items, and basic editing interfaces.
@@ -36,6 +46,7 @@ public class View implements ParentView<SubView> {
     private StatusView statusView;
     private GridPane sidebar;
     private GridPane mainView;
+    private static final String DEFAULT_CONFIG = Objects.requireNonNull(View.class.getClassLoader().getResource("default.xml")).getFile();
     private NodeInstanceController nodeInstanceController;
     private GameObjectsCRUDInterface gameObjectManager;
     public static final double MENU_BAR_HEIGHT = 30;
@@ -44,16 +55,19 @@ public class View implements ParentView<SubView> {
     private static final int ROW_NUMBER = 10;
     private static final int COL_NUMBER = 7;
     private static final double SIDEBAR_WIDTH = 250;
+    private XMLParser xmlParser;
 
     /**
      * Constructor for an createGraph window, with an AnchorPane as the root Node, and the AnchorPane constraints on top, left and right are 0.
      */
     public View(Stage primaryStage) {
         this.primaryStage = primaryStage;
+        xmlParser = new XMLParser();
+        try { xmlParser.loadXML(new File(DEFAULT_CONFIG)); } catch (SAXException | CRUDLoadException | XMLParsingException ignored) {}
         mainView = new GridPane();
         rootPane = new AnchorPane();
         rootPane.getStyleClass().add("mainPane");
-        tools = new AuthoringTools(COL_NUMBER, ROW_NUMBER);
+        tools = new AuthoringTools(xmlParser.getGridDimension().getY(), xmlParser.getGridDimension().getX());
         gameObjectManager = tools.entityDB();
         groovyPaneFactory = new GroovyPaneFactory(primaryStage, tools.factory(), tools.phaseDB().winCondition());
         nodeInstanceController = new CrappyNodeInstanceController();
