@@ -23,7 +23,7 @@ public class AuthoringTools {
     private transient GroovyFactory factory;
 
     public AuthoringTools(int gridWidth, int gridHeight) {
-        entityDB = new SimpleGameObjectsCRUD(gridWidth, gridHeight, false);
+        entityDB = new SimpleGameObjectsCRUD(gridHeight, gridWidth, false);
 
         factory = new GroovyFactory(entityDB);
 
@@ -44,7 +44,7 @@ public class AuthoringTools {
     }
 
     public void setGridDimension(int width, int height) {
-        entityDB.setDimension(width, height);
+        entityDB.setDimension(height, width);
     }
 
     public GroovyFactory factory() { return factory; }

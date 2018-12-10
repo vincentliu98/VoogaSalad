@@ -45,6 +45,7 @@ public class View implements ParentView<SubView> {
     private StatusView statusView;
     private GridPane sidebar;
     private GridPane mainView;
+
     private NodeInstanceController nodeInstanceController;
     private GameObjectsCRUDInterface gameObjectManager;
     public static final double MENU_BAR_HEIGHT = 30;
