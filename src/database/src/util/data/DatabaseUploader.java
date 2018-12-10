@@ -1,12 +1,12 @@
-package util;
+package util.data;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class ServerUploader extends ServerConnector implements ServerUpload {
+public class DatabaseUploader extends DatabaseConnector implements DatabaseUpload {
 
-    public ServerUploader(String username, String databasename, String password, String servername, int port){
+    public DatabaseUploader(String username, String databasename, String password, String servername, int port){
         super();
         this.setConnection(username, databasename, password, servername, port);
     }

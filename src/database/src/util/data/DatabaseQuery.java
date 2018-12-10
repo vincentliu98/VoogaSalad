@@ -1,8 +1,8 @@
-package util;
+package util.data;
 
 import java.sql.ResultSet;
 
-public interface ServerQuery {
+public interface DatabaseQuery {
 
     /**
      *

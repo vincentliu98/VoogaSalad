@@ -1,6 +1,6 @@
-package util;
+package util.data;
 
-public interface ServerUpload {
+public interface DatabaseUpload {
 
     /**
      *

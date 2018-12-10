@@ -1,13 +1,13 @@
-package util;
+package util.data;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class ServerDownloader extends ServerConnector implements ServerQuery {
+public class DatabaseDownloader extends DatabaseConnector implements DatabaseQuery {
 
-    public ServerDownloader(String username, String databasename, String password, String servername, int port){
+    public DatabaseDownloader(String username, String databasename, String password, String servername, int port){
         super();
         this.setConnection(username, databasename, password, servername, port);
     }
