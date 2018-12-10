@@ -26,6 +26,10 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * @author Amy
+ */
+
 public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerInstance> {
     private static final double ICON_WIDTH = 50;
     private static final double ICON_HEIGHT = 50;
