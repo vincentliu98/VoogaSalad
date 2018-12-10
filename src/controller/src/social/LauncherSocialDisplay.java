@@ -98,7 +98,6 @@ public class LauncherSocialDisplay implements Sortable, Searchable, Subscriber {
     public void update(EngineEvent engineEvent, Object ... args) {
         if (engineEvent.equals(EngineEvent.CHANGE_USER) && args[0].getClass().equals(User.class)){
             myUser = (User) args[0];
-            System.out.println("Username is " + myUser.getUsername() + "classname is " + getClass().getName());
         }
     }
 }
