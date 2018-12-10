@@ -5,12 +5,17 @@ import authoringUtils.exception.DuplicateGameObjectClassException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.entity.SimpleEntityClass;
 import gameObjects.gameObject.GameObjectClass;
+import gameObjects.gameObject.GameObjectType;
 import gameObjects.player.SimplePlayerClass;
 import gameObjects.sound.SimpleSoundClass;
 import gameObjects.tile.SimpleTileClass;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
+import utils.exception.PreviewUnavailableException;
+import utils.imageManipulation.ImageManager;
+import utils.imageManipulation.JavaFxOperation;
 import utils.nodeInstance.NodeInstanceController;
 
 import java.util.ArrayList;
@@ -20,9 +25,14 @@ import java.util.List;
 /**
  * This class represents a new SideView implementation that has a JavaFx TreeView object inside, but with cleaner implementation.
  *
+ * It sources from gameObjectsManager to initialize its items
+ *
  * @author Haotian Wang
  */
 public class SideView implements SubView<StackPane> {
+    private static final double ICON_WIDTH = 50;
+    private static final double ICON_HEIGHT = 50;
+
     private StackPane sidePane;
     private GameObjectsCRUDInterface gameObjectsManager;
     private NodeInstanceController nodeInstanceController;
@@ -33,57 +43,41 @@ public class SideView implements SubView<StackPane> {
         nodeInstanceController = controller;
         sidePane = new StackPane();
         TreeItem<String> rootNode = new TreeItem<>(ROOT_NAME);
-        try {
-            gameObjectsManager.createCategoryClass(ROOT_NAME);
-        } catch (DuplicateGameObjectClassException e) {
-            // TODO
-            e.printStackTrace();
-        }
         rootNode.setExpanded(true);
-        try {
-            gameObjectsManager.createCategoryClass("ENTITY");
-            gameObjectsManager.createCategoryClass("TILE");
-            gameObjectsManager.createCategoryClass("SOUND");
-            gameObjectsManager.createCategoryClass("PLAYER");
-        } catch (DuplicateGameObjectClassException e) {
-            // TODO: proper error handling
-            e.printStackTrace();
-        }
-        List<GameObjectClass> defaultList = new ArrayList<>(Arrays.asList(
-                new SimpleEntityClass("O"),
-                new SimpleEntityClass("X"),
-                new SimpleTileClass("Default Grid"),
-                new SimplePlayerClass("Default Player"),
-                new SimpleSoundClass("Sound file")
-        ));
-        for (GameObjectClass item : defaultList) {
-            try {
-                gameObjectsManager.createGameObjectClass(item.getType(), item.getClassName());
-            } catch (DuplicateGameObjectClassException e) {
-                // TODO: proper error handling
-                e.printStackTrace();
-            }
+
+        TreeView<String> treeView = new TreeView<>(rootNode);
+        treeView.setEditable(true);
+        treeView.setCellFactory(e -> new CustomTreeCellImpl(gameObjectsManager, nodeInstanceController));
+
+        for (GameObjectClass item : gameObjectsManager.getAllClasses()) {
             TreeItem<String> objectLeaf = new TreeItem<>(item.getClassName());
             boolean found = false;
             for (TreeItem<String> categoryNode : rootNode.getChildren()) {
-                if (categoryNode.getValue() == item.getType().toString()) {
+                if (categoryNode.getValue().equals(item.getType().toString())) {
+                    tryToAddIcon(objectLeaf, item);
                     categoryNode.getChildren().add(objectLeaf);
                     found = true;
                     break;
                 }
             }
-            if (!found) {
+            if (!found && item.getType() != GameObjectType.CATEGORY) {
                 TreeItem<String> categoryNode = new TreeItem<>(item.getType().toString());
                 rootNode.getChildren().add(categoryNode);
                 categoryNode.getChildren().add(objectLeaf);
+                tryToAddIcon(objectLeaf, item);
             }
         }
-        TreeView<String> treeView = new TreeView<>(rootNode);
-        treeView.setEditable(true);
-        treeView.setCellFactory(e -> new CustomTreeCellImpl(gameObjectsManager, nodeInstanceController));
         sidePane.getChildren().add(treeView);
         treeView.getStyleClass().add("myTree");
         sidePane.getStyleClass().add("mySide");
+    }
+
+    private void tryToAddIcon(TreeItem<String> objectLeaf, GameObjectClass item) {
+        try {
+            var icon = new ImageView(ImageManager.getPreview(item));
+            JavaFxOperation.setWidthAndHeight(icon, ICON_WIDTH, ICON_HEIGHT);
+            objectLeaf.setGraphic(icon);
+        } catch (Exception ignored) { } // if it doesn't, i dunno
     }
 
     /**

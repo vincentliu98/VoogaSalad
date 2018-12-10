@@ -10,10 +10,13 @@ import authoringUtils.exception.GameObjectTypeException;
 import authoringUtils.exception.InvalidIdException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.entity.EntityClass;
+import gameObjects.entity.EntityInstance;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import gameObjects.tile.TileClass;
+import gameObjects.tile.TileInstance;
+import grids.Point;
 import grids.PointImpl;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -109,6 +112,30 @@ public class EditGridView implements SubView<ScrollPane> {
                 toRemove.forEach(this::handleNodeDeleting);
             }
         });
+
+        // Fill grids with what we have
+        manager.getAllInstances().forEach(instance -> {
+            Point p = null;
+            switch(instance.getType()) {
+                case ENTITY:
+                    p = ((EntityInstance) instance).getCoord();
+                    break;
+                case TILE:
+                    p = ((TileInstance) instance).getCoord();
+            }
+            if(p == null) return;
+            var cell = getCellAt(p.getY(), p.getX());
+            if(cell == null) return;
+            createInstanceAtGridCell(instance, cell);
+        });
+    }
+
+    private Pane getCellAt(int r, int c) {
+        for(var child : gridScrollView.getChildren()) {
+            if(r == GridPane.getRowIndex(child) && c == GridPane.getColumnIndex(child)) {
+                return (StackPane) child;
+            }
+        } return null;
     }
 
     /**
@@ -338,13 +365,13 @@ public class EditGridView implements SubView<ScrollPane> {
     /**
      * Create an instance at a specific Grid cell, which is a Pane from a GameObjectClass
      *
-     * @param gameObjectClass: A GameObjectClass whose instances will be created on the grid.
+     * @param gameObjectInstance: A GameObjectInstance that is created on the grid.
      * @param cell: The Pane where an instance will be created.
      */
-    private void createInstanceAtGridCell(GameObjectClass gameObjectClass, Pane cell) {
+    private void createInstanceAtGridCell(GameObjectInstance gameObjectInstance, Pane cell) {
         ImageView nodeOnGrid = null;
         try {
-            nodeOnGrid = new ImageView(ImageManager.getPreview(gameObjectClass));
+            nodeOnGrid = new ImageView(ImageManager.getPreview(gameObjectInstance));
         } catch (PreviewUnavailableException e) {
             // TODO: proper error handling
             e.printStackTrace();
@@ -355,13 +382,6 @@ public class EditGridView implements SubView<ScrollPane> {
         nodeOnGrid.setFitWidth(NODE_WIDTH);
         ImageView finalNodeOnGrid = nodeOnGrid;
         cell.getChildren().add(finalNodeOnGrid);
-        GameObjectInstance gameObjectInstance = null;
-        try {
-            gameObjectInstance = gameObjectManager.createGameObjectInstance(gameObjectClass, new PointImpl(GridPane.getColumnIndex(cell), GridPane.getRowIndex(cell)));
-        } catch (GameObjectTypeException e) {
-            // TODO: proper error handling
-            e.printStackTrace();
-        }
         nodeInstanceController.addLink(finalNodeOnGrid, gameObjectInstance);
         nodeOnGrid.setOnMouseClicked(e -> {
             if (e.getButton() == MouseButton.SECONDARY) {
@@ -374,17 +394,27 @@ public class EditGridView implements SubView<ScrollPane> {
         });
         int height = 0;
         int width = 0;
-        if (gameObjectClass.getType() == GameObjectType.ENTITY) {
-            height = ((EntityClass) gameObjectClass).getHeight();
-            width = ((EntityClass) gameObjectClass).getWidth();
-        } else if (gameObjectClass.getType() == GameObjectType.TILE) {
-            height = ((TileClass) gameObjectClass).getHeight();
-            width = ((TileClass) gameObjectClass).getWidth();
+        if (gameObjectInstance.getType() == GameObjectType.ENTITY) {
+            height = ((EntityInstance) gameObjectInstance).getHeight();
+            width = ((EntityInstance) gameObjectInstance).getWidth();
+        } else if (gameObjectInstance.getType() == GameObjectType.TILE) {
+            height = ((TileInstance) gameObjectInstance).getHeight();
+            width = ((TileInstance) gameObjectInstance).getWidth();
         }
         if (height != 0 && width != 0) {
-            assert gameObjectInstance != null;
             Tooltip.install(finalNodeOnGrid, new Tooltip(String.format("Width: %s\nHeight: %s\nSingle Click to toggle Deletion\nDouble Click or Right Click to edit\nInstance ID: %s\nClass Name: %s", width, height, gameObjectInstance.getInstanceId(), gameObjectInstance.getClassName())));
         }
+    }
+
+    private void createInstanceAtGridCell(GameObjectClass gameObjectClass, Pane cell) {
+        GameObjectInstance gameObjectInstance = null;
+        try {
+            gameObjectInstance = gameObjectManager.createGameObjectInstance(gameObjectClass, new PointImpl(GridPane.getColumnIndex(cell), GridPane.getRowIndex(cell)));
+        } catch (GameObjectTypeException e) {
+            // TODO: proper error handling
+            e.printStackTrace();
+        }
+        createInstanceAtGridCell(gameObjectInstance, cell);
     }
 
     /**

@@ -16,7 +16,7 @@ public class CRUDTest {
     @BeforeEach
     public void setupTestData()
             throws DuplicateGameObjectClassException, GameObjectClassNotFoundException, GameObjectTypeException, InvalidIdException {
-        crud = new SimpleGameObjectsCRUD(10,10);
+        crud = new SimpleGameObjectsCRUD(10,10, false);
         for (int i = 0; i < 5; i++) {
             crud.createCategoryClass(Integer.toString(i));
         }

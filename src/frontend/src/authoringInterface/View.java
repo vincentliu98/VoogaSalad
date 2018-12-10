@@ -72,7 +72,6 @@ public class View implements ParentView<SubView> {
         tools = authTools;
 
         gameObjectManager = tools.entityDB();
-        System.out.println(gameObjectManager);
         groovyPaneFactory = new GroovyPaneFactory(primaryStage, tools.factory(), tools.phaseDB().winCondition());
         nodeInstanceController = new CrappyNodeInstanceController();
         initializeElements();

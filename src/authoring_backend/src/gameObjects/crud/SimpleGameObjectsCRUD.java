@@ -37,6 +37,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
+    private static final String ROOT_NAME = "Game Objects";
+
     private int numRows;
     private int numCols;
     private Map<String, GameObjectClass> gameObjectClassMapByName;
@@ -51,7 +53,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
 
     private IdManager myIdManager;
 
-    public SimpleGameObjectsCRUD(int numRows, int numCols) {
+    public SimpleGameObjectsCRUD(int numRows, int numCols, boolean fromXML) {
         this.numRows = numRows;
         this.numCols = numCols;
         gameObjectClassMapByName = new HashMap<>();
@@ -70,10 +72,29 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         myCategoryInstanceFactory = instantiateCategoryInstanceFactory();
         mySoundInstanceFactory = instantiateSoundInstanceFactory();
         myPlayerInstanceFactory = instantiatePlayerInstanceFactory();
+
+        if(fromXML) return;
+
+        try {
+            createCategoryClass(ROOT_NAME);
+
+            createCategoryClass("ENTITY");
+            createCategoryClass("TILE");
+            createCategoryClass("SOUND");
+            createCategoryClass("PLAYER");
+
+            createEntityClass("O");
+            createEntityClass("X");
+            createTileClass("Default Grid");
+            createPlayerClass("Default Player");
+            createSoundClass("Sound file");
+        } catch (DuplicateGameObjectClassException e) { // TODO: proper error handling
+            e.printStackTrace();
+        }
     }
 
     public SimpleGameObjectsCRUD(SavedEntityDB saved) {
-        this(saved.numRows(), saved.numCols());
+        this(saved.numRows(), saved.numCols(), true);
         for (var c : saved.classes()) {
             switch (c.getType()) {
                 case CATEGORY: createCategoryClass((CategoryClass) c); break;

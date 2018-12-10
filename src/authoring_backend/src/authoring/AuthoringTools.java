@@ -23,7 +23,7 @@ public class AuthoringTools {
     private transient GroovyFactory factory;
 
     public AuthoringTools(int gridWidth, int gridHeight) {
-        entityDB = new SimpleGameObjectsCRUD(gridWidth, gridHeight);
+        entityDB = new SimpleGameObjectsCRUD(gridWidth, gridHeight, false);
 
         factory = new GroovyFactory(entityDB);
 
