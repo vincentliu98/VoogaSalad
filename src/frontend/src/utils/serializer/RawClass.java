@@ -30,24 +30,23 @@ public class RawClass implements Comparable<RawClass> {
     public RawClass(Element entry) throws CRUDLoadException {
         rootElement = entry;
         type = entry.getTagName();
-        if (!containsChildElement("classID")) {
-            throw new CRUDLoadException("One GameObjectClass does not have Class ID");
-        }
         classID = Integer.parseInt(getChildElement("classID").getTextContent());
-        if (!containsChildElement("className")) {
-            throw new CRUDLoadException("One GameObjectClass does not have Class Name");
+        className = getChildElement("className").getTextContent();
+        if (containsChildElement("height")) {
+            height = Integer.parseInt(getChildElement("height").getTextContent());
+            if (height <= 0) {
+                throw new CRUDLoadException("Height must be a positive integer");
+            }
         }
-        className = getChildElement("className");
-        Element heightElement = (Element) entry.getElementsByTagName("height").item(0);
-        if (entry.getElementsByTagName("height").item(0) != null) {
-            height = Integer.parseInt(entry.getElementsByTagName("height").item(0).getTextContent());
+        if (containsChildElement("width")) {
+            height = Integer.parseInt(getChildElement("width").getTextContent());
+            if (height <= 0) {
+                throw new CRUDLoadException("Width must be a positive integer");
+            }
         }
-        if (entry.getElementsByTagName("width").item(0).getTextContent() != null) {
-            width = Integer.parseInt(entry.getElementsByTagName("width").item(0).getTextContent());
-        }
-        if (entry.getElementsByTagName("props").item(0).getChildNodes() != null) {
+        if (containsChildElement("props")) {
             props = new HashMap<>();
-            Node propNode = entry.getElementsByTagName("props").item(0);
+            Element propNode = getChildElement("props");
             for (int i = 0; i < propNode.getChildNodes().getLength(); i++) {
                 Node current = propNode.getChildNodes().item(i);
                 String key = current.getChildNodes().item(0).getTextContent();
@@ -55,16 +54,17 @@ public class RawClass implements Comparable<RawClass> {
                 props.put(key, value);
             }
         }
-        if (entry.getElementsByTagName("imagePaths").item(0).getChildNodes() != null) {
+        if (containsChildElement("imagePaths")) {
+            Element imagePathsNode = getChildElement("imagePaths");
             imagePaths = new ArrayList<>();
-            for (int i = 0; i < entry.getElementsByTagName("imagePaths").item(0).getChildNodes().getLength(); i++) {
-                imagePaths.add(entry.getElementsByTagName("imagePaths").item(0).getChildNodes().item(i).getTextContent());
+            for (int i = 0; i < imagePathsNode.getChildNodes().getLength(); i++) {
+                imagePaths.add(imagePathsNode.getChildNodes().item(i).getTextContent());
             }
         }
-        if (entry.getElementsByTagName("imagePath").item(0).getTextContent() != null) {
-            imagePath = entry.getElementsByTagName("imagePath").item(0).getTextContent();
+        if (containsChildElement("imagePath")) {
+            imagePath = getChildElement("imagePath").getTextContent();
         }
-        if (entry.getElementsByTagName("imageSelector").item(0).getTextContent() != null) {
+        if (containsChildElement("imageSelector")) {
             imageSelector = entry.getElementsByTagName("imageSelector").item(0).getTextContent();
         }
         if (entry.getElementsByTagName("mediaFilePath").item(0).getTextContent() != null) {
@@ -77,8 +77,17 @@ public class RawClass implements Comparable<RawClass> {
             }
         }
     }
+
     private boolean containsChildElement(String name) {
         return rootElement.getElementsByTagName(name).getLength() != 0;
+    }
+
+    private boolean hasValue(Element element) {
+        return element.getTextContent() != null && !element.getTextContent().isEmpty();
+    }
+
+    private boolean hasChild(Element element) {
+        return element.getChildNodes().getLength() != 0;
     }
 
     private Element getChildElement(String name) throws CRUDLoadException {
