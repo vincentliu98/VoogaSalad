@@ -5,6 +5,7 @@ import authoringUtils.exception.InvalidIdException;
 import gameObjects.ThrowingConsumer;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
@@ -32,11 +33,13 @@ public class SoundInstanceFactory {
             throw new GameObjectTypeException(GameObjectType.SOUND);
         }
         SimpleStringProperty mediaFilePathCopy = new SimpleStringProperty();
+        SimpleDoubleProperty durationCopy = new SimpleDoubleProperty();
         ObservableMap propertiesMapCopy = FXCollections.observableHashMap();
         mediaFilePathCopy.setValue(soundPrototype.getMediaFilePath().getValue());
+        durationCopy.setValue((soundPrototype.getDuration().getValue()));
         propertiesMapCopy.putAll(soundPrototype.getPropertiesMap());
         Supplier<SoundClass> getCategoryClassFunc = () -> soundPrototype;
-        SoundInstance categoryInstance = new SimpleSoundInstance(soundPrototype.getClassName().getValue(), mediaFilePathCopy, propertiesMapCopy, getCategoryClassFunc);
+        SoundInstance categoryInstance = new SimpleSoundInstance(soundPrototype.getClassName().getValue(), mediaFilePathCopy, propertiesMapCopy, durationCopy, getCategoryClassFunc);
         requestInstanceIdFunc.accept(categoryInstance);
         addInstanceToMapFunc.accept(categoryInstance);
         return categoryInstance;

@@ -19,6 +19,11 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * @author Yunhao Qing
+ */
+
+
 public class SimplePlayerClass implements PlayerClass {
 
     private ReadOnlyStringWrapper className;
