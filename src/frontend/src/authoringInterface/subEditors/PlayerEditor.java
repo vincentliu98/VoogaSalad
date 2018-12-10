@@ -30,6 +30,7 @@ import java.util.Set;
  * @author Amy
  */
 
+@SuppressWarnings("Duplicates")
 public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerInstance> {
     private static final double ICON_WIDTH = 50;
     private static final double ICON_HEIGHT = 50;
