@@ -2,6 +2,10 @@ package launching;
 
 import launchingGame.GameIcon;
 import org.w3c.dom.Document;
+import social.EngineEvent;
+import social.EventBus;
+import social.Subscriber;
+import social.User;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -10,7 +14,7 @@ import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameParser {
+public class GameParser implements Subscriber {
     public static final String NAME_TAG = "name";
     public static final String DESCRIPTION_TAG = "info";
     public static final String IMAGE_TAG = "displaygraphic";
@@ -22,9 +26,11 @@ public class GameParser {
     private File[] myFiles;
     private List<GameIcon> myGames;
     private DocumentBuilder myDocumentBuilder;
+    private User myUser;
 
-    public GameParser(String path){
+    public GameParser(String path, User user){
         mySourcePath = path;
+        myUser = user;
         myGames = new ArrayList<>();
         findFiles();
         try{
@@ -36,7 +42,7 @@ public class GameParser {
         catch (Exception e){
 
         }
-
+        EventBus.getInstance().register(EngineEvent.CHANGE_USER, this);
     }
 
     private void findFiles(){
@@ -59,7 +65,7 @@ public class GameParser {
             String reference = myDocTree.getElementsByTagName(REFERENCE_TAG).item(0).getTextContent().trim();
             String tags = myDocTree.getElementsByTagName(TAGS_TAG).item(0).getTextContent().trim();
 
-            GameIcon nwIcon = new GameIcon(name, description, reference, color, image, tags);
+            GameIcon nwIcon = new GameIcon(name, description, reference, color, image, tags, myUser);
             myGames.add(nwIcon);
         }
         catch (Exception e){
@@ -72,4 +78,10 @@ public class GameParser {
     }
 
 
+    @Override
+    public void update(EngineEvent engineEvent, Object... args) {
+        if (engineEvent.equals(EngineEvent.CHANGE_USER) && args[0].getClass().equals(User.class)){
+            myUser = (User) args[0];
+        }
+    }
 }

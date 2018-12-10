@@ -121,17 +121,23 @@ public class GameData {
 
     public static Collection<Edge> getEdges() { return EDGES; }
 
+    // TODO: Fix to include all pieces of info
     public static String saveGameData(){
         String xmlString = "";
         XStream serializer = new XStream(new DomDriver());
-        serializeData(serializer, xmlString, PLAYERS);
-        serializeData(serializer, xmlString, ENTITIES);
-        serializeData(serializer, xmlString, ENTITY_PROTOTYPES);
-        serializeData(serializer, xmlString, TILES);
-        serializeData(serializer, xmlString, PHASES);
-        serializeData(serializer, xmlString, NODES);
-        serializeData(serializer, xmlString, EDGES);
-        xmlString = xmlString + serializer.toXML(TURN);
+        xmlString = serializeData(serializer, xmlString, PLAYERS);
+        xmlString = serializeData(serializer, xmlString, ENTITIES);
+        xmlString = serializeData(serializer, xmlString, ENTITY_PROTOTYPES);
+        xmlString = serializeData(serializer, xmlString, TILES);
+        xmlString = serializeData(serializer, xmlString, PHASES);
+        xmlString = serializeData(serializer, xmlString, NODES);
+        xmlString = serializeData(serializer, xmlString, EDGES);
+        xmlString = xmlString + serializer.toXML(TURN) + "\n" +
+                "<grid-width>" + GRID_WIDTH + "</grid-width>\n" +
+                "<grid-height>" + GRID_HEIGHT + "</grid-height>\n" +
+                "<winCondition>" + WIN_CONDITION + "</winCondition>\n";
+        System.out.println("from savegamedata");
+        System.out.println(xmlString);
         return xmlString;
     }
 

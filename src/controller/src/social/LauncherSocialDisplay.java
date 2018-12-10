@@ -19,11 +19,25 @@ public class LauncherSocialDisplay implements Sortable, Searchable, Subscriber {
     private List<UserIcon> myActiveUsers;
     private User myUser;
 
-    public LauncherSocialDisplay(){
+    private static LauncherSocialDisplay single_instance = null;
+
+    public LauncherSocialDisplay(User user){
+        myUser = user;
+        if (myUser != null){
+            System.out.println("socialdisplay user is initalizied to " + myUser.getUsername());
+        } else {
+            System.out.println("socialdisplay user is initalizied to null user");
+        }
         initTiles();
         initUsers();
-        myUser = null;
         EventBus.getInstance().register(EngineEvent.CHANGE_USER, this);
+    }
+
+    public static LauncherSocialDisplay getInstance(User user){
+        if (single_instance == null){
+            single_instance = new LauncherSocialDisplay(user);
+        }
+        return single_instance;
     }
 
     private void initTiles(){
@@ -35,8 +49,9 @@ public class LauncherSocialDisplay implements Sortable, Searchable, Subscriber {
     }
 
     private void initUsers(){
-        UserParser myParser = new UserParser();
-        myUsers = myParser.getMyUsers();
+        UserParser myParser = new UserParser(myUser);
+        myUsers = myParser.getAllUsers();
+        System.out.println("Size of users is " + myUsers.size());
         myActiveUsers = new ArrayList<>();
         for(UserIcon myIcon: myUsers){
             myPane.getChildren().add(myIcon.getView());
@@ -98,6 +113,7 @@ public class LauncherSocialDisplay implements Sortable, Searchable, Subscriber {
     public void update(EngineEvent engineEvent, Object ... args) {
         if (engineEvent.equals(EngineEvent.CHANGE_USER) && args[0].getClass().equals(User.class)){
             myUser = (User) args[0];
+            System.out.println("myUser has changed, in social display, to " + myUser.getUsername());
         }
     }
 }

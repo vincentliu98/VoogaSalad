@@ -4,14 +4,14 @@ import javafx.geometry.Pos;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import social.LauncherSocialDisplay;
+import social.*;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
 
-public class TextOptions implements PropertyChangeListener {
+public class TextOptions implements PropertyChangeListener, Subscriber {
     public static final double SIDE_WIDTH = 50;
     public static final String MY_GAME_TEXT = "My Games";
     public static final String STORE_TEXT = "Store";
@@ -24,11 +24,14 @@ public class TextOptions implements PropertyChangeListener {
     private OptionHolder myStore;
     private OptionHolder mySocial;
     private BorderPane myPane;
+    private User myUser;
 
     public TextOptions(BorderPane pane){
         initBox();
         initText();
         myPane = pane;
+        myUser = null;
+        EventBus.getInstance().register(EngineEvent.CHANGE_USER, this);
     }
 
     public void toggleSelected(OptionHolder selcted){
@@ -63,7 +66,7 @@ public class TextOptions implements PropertyChangeListener {
         mySocial = new OptionHolder(SOCIAL_TEXT);
         mySocial.addListener(this);
         mySocial.setOnClickListener(e -> {
-            LauncherSocialDisplay mySocialDisplay = new LauncherSocialDisplay();
+            LauncherSocialDisplay mySocialDisplay = LauncherSocialDisplay.getInstance(myUser);
             myPane.setCenter(mySocialDisplay.getView());
             myPane.setLeft(new LauncherSideBarView(SIDE_WIDTH, mySocialDisplay).getView());
         });
@@ -77,11 +80,17 @@ public class TextOptions implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        System.out.println("hello");
         toggleSelected((OptionHolder) evt.getNewValue());
     }
 
     public HBox getView() {
         return myHbox;
+    }
+
+    @Override
+    public void update(EngineEvent engineEvent, Object... args) {
+        if (engineEvent.equals(EngineEvent.CHANGE_USER) && args[0].getClass().equals(User.class)){
+            myUser = (User) args[0];
+        }
     }
 }
