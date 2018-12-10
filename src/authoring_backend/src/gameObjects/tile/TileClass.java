@@ -2,14 +2,19 @@ package gameObjects.tile;
 
 import authoringUtils.exception.GameObjectTypeException;
 import authoringUtils.exception.InvalidIdException;
+import authoringUtils.exception.InvalidOperationException;
+import gameObjects.ThrowingBiConsumer;
 import gameObjects.gameObject.GameObjectClass;
+import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import grids.Point;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
 
 public interface TileClass extends GameObjectClass {
 
@@ -63,4 +68,11 @@ public interface TileClass extends GameObjectClass {
     void setHeight(int height);
 
     void setWidth(int width);
+
+    void equipContext(
+        TileInstanceFactory tileInstanceFactory,
+        ThrowingBiConsumer<String, String, InvalidOperationException> changeTileClassNameFunc,
+        Function<String, Collection<GameObjectInstance>> getAllTileInstancesFunc,
+        Function<Integer, Boolean> deleteTileInstanceFunc
+    );
 }

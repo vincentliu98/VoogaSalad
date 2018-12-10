@@ -36,7 +36,8 @@ public class SimpleCategoryClass implements CategoryClass {
             CategoryInstanceFactory categoryInstanceFactory,
             ThrowingBiConsumer<String, String, InvalidOperationException> changeCategoryClassNameFunc,
             Function<String, Collection<GameObjectInstance>> getAllCategoryInstancesFunc,
-            Function<Integer, Boolean> deleteCategoryInstanceFunc) {
+            Function<Integer, Boolean> deleteCategoryInstanceFunc
+    ) {
         this(className);
         this.myFactory = categoryInstanceFactory;
         this.changeCategoryClassNameFunc = changeCategoryClassNameFunc;
@@ -166,4 +167,19 @@ public class SimpleCategoryClass implements CategoryClass {
 
     @Override
     public void setImagePath(String newImagePath) { imagePath = newImagePath; }
+
+    @Override
+    public void equipContext(
+        CategoryInstanceFactory categoryInstanceFactory,
+        ThrowingBiConsumer<String, String, InvalidOperationException> changeCategoryClassNameFunc,
+        Function<String, Collection<GameObjectInstance>> getAllCategoryInstancesFunc,
+        Function<Integer, Boolean> deleteCategoryInstanceFunc
+    ) {
+        this.myFactory = categoryInstanceFactory;
+        this.changeCategoryClassNameFunc = changeCategoryClassNameFunc;
+        this.getAllCategoryInstancesFunc = getAllCategoryInstancesFunc;
+        this.deleteCategoryInstanceFunc = deleteCategoryInstanceFunc;
+    }
+
+
 }

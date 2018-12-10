@@ -3,14 +3,19 @@ package gameObjects.entity;
 import authoringUtils.exception.GameObjectTypeException;
 import authoringUtils.exception.InvalidGameObjectInstanceException;
 import authoringUtils.exception.InvalidIdException;
+import authoringUtils.exception.InvalidOperationException;
+import gameObjects.ThrowingBiConsumer;
 import gameObjects.gameObject.GameObjectClass;
+import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import grids.Point;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
 
 public interface EntityClass extends GameObjectClass {
 
@@ -41,12 +46,6 @@ public interface EntityClass extends GameObjectClass {
     boolean removeImagePath(int index);
 
     /**
-     * This method sets the GroovyCode for choosing the image to display from the list of images.
-     * @param blockCode GroovyCode
-     */
-    void setImageSelector(String blockCode);
-
-    /**
      * This method gets the image selector code.
      * @return image selector code
      */
@@ -66,4 +65,11 @@ public interface EntityClass extends GameObjectClass {
     void setHeight(int newHeight);
 
     void setWidth(int newWidth);
+
+    void equipContext(
+        EntityInstanceFactory entityInstanceFactory,
+        ThrowingBiConsumer<String, String, InvalidOperationException> changeEntityClassNameFunc,
+        Function<String, Collection<GameObjectInstance>> getAllEntityInstancesFunc,
+        Function<Integer, Boolean> deleteEntityInstanceFunc
+    );
 }

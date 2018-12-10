@@ -176,4 +176,17 @@ public class SimpleSoundClass implements SoundClass {
 
     @Override
     public void setDuration(double newDuration) { duration = newDuration; }
+
+    @Override
+    public void equipContext(
+        SoundInstanceFactory soundInstanceFactory,
+        ThrowingBiConsumer<String, String, InvalidOperationException> changeSoundClassNameFunc,
+        Function<String, Collection<GameObjectInstance>> getAllSoundInstancesFunc,
+        Function<Integer, Boolean> deleteSoundInstanceFunc
+    ) {
+        this.myFactory = soundInstanceFactory;
+        this.changeSoundClassNameFunc = changeSoundClassNameFunc;
+        this.getAllSoundInstancesFunc = getAllSoundInstancesFunc;
+        this.deleteSoundInstanceFunc = deleteSoundInstanceFunc;
+    }
 }

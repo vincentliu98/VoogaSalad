@@ -149,6 +149,19 @@ public class SimpleTileClass implements TileClass {
     @Override
     public void setWidth(int width) { this.width = width; }
 
+    @Override
+    public void equipContext(
+        TileInstanceFactory tileInstanceFactory,
+        ThrowingBiConsumer<String, String, InvalidOperationException> changeTileClassNameFunc,
+        Function<String, Collection<GameObjectInstance>> getAllTileInstancesFunc,
+        Function<Integer, Boolean> deleteTileInstanceFunc
+    ) {
+        this.myFactory = tileInstanceFactory;
+        this.changeTileClassNameFunc = changeTileClassNameFunc;
+        this.getAllTileInstancesFunc = getAllTileInstancesFunc;
+        this.deleteTileInstanceFunc = deleteTileInstanceFunc;
+    }
+
     public boolean deleteInstance(int tileInstanceId) {
         return deleteTileInstanceFunc.apply(tileInstanceId);
     }

@@ -3,10 +3,12 @@ package gameObjects.entity;
 import authoringUtils.exception.GameObjectTypeException;
 import authoringUtils.exception.InvalidIdException;
 import authoringUtils.exception.InvalidOperationException;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import gameObjects.ThrowingBiConsumer;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import grids.Point;
+import groovy.api.BlockGraph;
 
 import java.util.*;
 import java.util.function.Function;
@@ -20,15 +22,18 @@ public class SimpleEntityClass implements EntityClass {
     private boolean movable;
     private List<String> imagePathList;
     private Map<String, String> propertiesMap;
-    private String imageSelector;
+    private BlockGraph imageSelector;
     private int width;
     private int height;
 
+    @XStreamOmitField
     private EntityInstanceFactory myFactory;
+    @XStreamOmitField
     private ThrowingBiConsumer<String, String, InvalidOperationException> changeEntityClassNameFunc;
+    @XStreamOmitField
     private Function<String, Collection<GameObjectInstance>> getAllEntityInstancesFunc;
+    @XStreamOmitField
     private Function<Integer, Boolean> deleteEntityInstanceFunc;
-
 
     public SimpleEntityClass(String className) {
         this.className = className;
@@ -36,7 +41,6 @@ public class SimpleEntityClass implements EntityClass {
         movable = true;
         imagePathList = new ArrayList<>();
         propertiesMap = new HashMap<>();
-        imageSelector = "";
         width = DEFAULT_WIDTH;
         height = DEFAULT_HEIGHT;
     }
@@ -46,7 +50,8 @@ public class SimpleEntityClass implements EntityClass {
             EntityInstanceFactory entityInstanceFactory,
             ThrowingBiConsumer<String, String, InvalidOperationException> changeEntityClassNameFunc,
             Function<String, Collection<GameObjectInstance>> getAllEntityInstancesFunc,
-            Function<Integer, Boolean> deleteEntityInstanceFunc) {
+            Function<Integer, Boolean> deleteEntityInstanceFunc
+    ) {
         this(className);
         this.myFactory = entityInstanceFactory;
         this.changeEntityClassNameFunc = changeEntityClassNameFunc;
@@ -123,14 +128,7 @@ public class SimpleEntityClass implements EntityClass {
     }
 
     @Override
-    public void setImageSelector(String blockCode) {
-        imageSelector = blockCode;
-    }
-
-    @Override
-    public String getImageSelectorCode() {
-        return imageSelector;
-    }
+    public String getImageSelectorCode() { return imageSelector.transformToGroovy().get(""); }
 
     @Override
     public int getHeight() {
@@ -147,6 +145,19 @@ public class SimpleEntityClass implements EntityClass {
 
     @Override
     public void setWidth(int newWidth) { width = newWidth; }
+
+    @Override
+    public void equipContext(
+        EntityInstanceFactory entityInstanceFactory,
+        ThrowingBiConsumer<String, String, InvalidOperationException> changeEntityClassNameFunc,
+        Function<String, Collection<GameObjectInstance>> getAllEntityInstancesFunc,
+        Function<Integer, Boolean> deleteEntityInstanceFunc
+    ) {
+        myFactory = entityInstanceFactory;
+        this.changeEntityClassNameFunc = changeEntityClassNameFunc;
+        this.getAllEntityInstancesFunc = getAllEntityInstancesFunc;
+        this.deleteEntityInstanceFunc = deleteEntityInstanceFunc;
+    }
 
     @Override
     public EntityInstance createInstance(Point point)

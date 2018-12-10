@@ -2,10 +2,17 @@ package gameObjects.sound;
 
 import authoringUtils.exception.GameObjectTypeException;
 import authoringUtils.exception.InvalidIdException;
+import authoringUtils.exception.InvalidOperationException;
+import gameObjects.ThrowingBiConsumer;
 import gameObjects.gameObject.GameObjectClass;
+import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
+
+import java.util.Collection;
+import java.util.function.Function;
+
 /**
  * @author  Haotian Wang
  */
@@ -20,6 +27,13 @@ public interface SoundClass extends GameObjectClass {
     double getDuration();
 
     void setDuration(double newDuration);
+
+    void equipContext(
+        SoundInstanceFactory soundInstanceFactory,
+        ThrowingBiConsumer<String, String, InvalidOperationException> changeSoundClassNameFunc,
+        Function<String, Collection<GameObjectInstance>> getAllSoundInstancesFunc,
+        Function<Integer, Boolean> deleteSoundInstanceFunc
+    );
 
     @Override
     default GameObjectType getType() {

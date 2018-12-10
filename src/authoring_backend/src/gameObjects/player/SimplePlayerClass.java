@@ -40,7 +40,8 @@ public class SimplePlayerClass implements PlayerClass {
                       PlayerInstanceFactory playerInstanceFactory,
                       ThrowingBiConsumer<String, String, InvalidOperationException> changePlayerClassNameFunc,
                       Function<String, Collection<GameObjectInstance>> getAllPlayerInstancesFunc,
-                      Function<Integer, Boolean> deletePlayerInstanceFunc) {
+                      Function<Integer, Boolean> deletePlayerInstanceFunc
+    ) {
         this(className);
         this.myFactory = playerInstanceFactory;
         this.changePlayerClassNameFunc = changePlayerClassNameFunc;
@@ -203,4 +204,17 @@ public class SimplePlayerClass implements PlayerClass {
 
     @Override
     public void setImagePath(String newImagePath) { imagePath = newImagePath; }
+
+    @Override
+    public void equipContext(
+        PlayerInstanceFactory playerInstanceFactory,
+        ThrowingBiConsumer<String, String, InvalidOperationException> changePlayerClassNameFunc,
+        Function<String, Collection<GameObjectInstance>> getAllPlayerInstancesFunc,
+        Function<Integer, Boolean> deletePlayerInstanceFunc
+    ) {
+        this.myFactory = playerInstanceFactory;
+        this.changePlayerClassNameFunc = changePlayerClassNameFunc;
+        this.getAllPlayerInstancesFunc = getAllPlayerInstancesFunc;
+        this.deletePlayerInstanceFunc = deletePlayerInstanceFunc;
+    }
 }
