@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 
 /**
  * A factory to product GroovyPane. The factory is used because many such GroovyPane is needed.
- * By calling `gen(BlockGraph model)`, the factory spits out a GroovyPane to be edited by the user.
+ * By calling `toView(BlockGraph model)`, the factory spits out a GroovyPane to be edited by the user.
  *
  * It is only initialized once in the View class.
  *
@@ -373,10 +373,7 @@ public class GroovyPaneFactory {
                 node.setOnMouseReleased(this::nodeMouseReleasedHandler);
                 node.inner().setOnMouseEntered(e -> myScene.setCursor(Cursor.MOVE));
                 node.inner().setOnMouseExited(e -> myScene.setCursor(Cursor.DEFAULT));
-                node.setOnMouseClicked(e -> {
-                    if (e.getClickCount() == 1) selectedNode.set(node);
-                    else if (e.getClickCount() >= 2) new NodeSettingWindow(new Stage());
-                });
+                node.setOnMouseClicked(e -> selectedNode.set(node));
                 group.getChildren().add(node);
                 updateCodePane();
             } catch (Throwable throwable) {
@@ -416,6 +413,11 @@ public class GroovyPaneFactory {
                     }
                 }
                 group.getChildren().remove(tmpLine);
+            } else if(draggingPurpose == DRAG_PURPOSE.CHANGE_POS) {
+                double offsetX = t.getSceneX() - orgSceneX;
+                double offsetY = t.getSceneY() - orgSceneY;
+                GroovyNode node = (GroovyNode) t.getSource();
+                node.model().setXY(node.model().x()+offsetX, node.model().y()+offsetY);
             }
             draggingPurpose = DRAG_PURPOSE.NOTHING;
         }

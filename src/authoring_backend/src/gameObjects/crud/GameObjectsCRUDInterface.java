@@ -324,4 +324,6 @@ public interface GameObjectsCRUDInterface {
     Iterable<PlayerInstance> getPlayerInstances();
 
     Set<String> getPlayerNames(GameObjectInstance gameObjectInstance);
+
+    String toXML();
 }

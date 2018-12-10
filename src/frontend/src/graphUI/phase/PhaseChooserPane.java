@@ -15,6 +15,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import phase.api.PhaseDB;
+import phase.api.PhaseGraph;
 import utils.ErrorWindow;
 
 import java.util.ArrayList;
@@ -72,6 +73,7 @@ public class PhaseChooserPane implements SubView<GridPane> {
         });
         createPhaseBtn.setOnMouseClicked(this::createPhasePane);
         view.add(vbox, 0, 0);
+        phaseDB.phaseGraphs().forEach(this::createPhasePane);
     }
 
     private void clearRightPane() {
@@ -94,14 +96,17 @@ public class PhaseChooserPane implements SubView<GridPane> {
         var tryGraph = phaseDB.createPhaseGraph(name);
         if(tryGraph.isSuccess()) {
             try {
-                var graph = tryGraph.get();
-                var phasePane = new PhasePane(phaseDB, genGroovyPane, graph);
-                phasePaneList.add(phasePane);
-                phaseNameListView.getSelectionModel().select(phaseNameListView.getItems().size()-1);
+                createPhasePane(tryGraph.get());
             } catch (Throwable t) {
-                new ErrorWindow("Error", t.toString()).showAndWait();
+                t.printStackTrace();
+                ErrorWindow.display("Error", t.toString());
             }
         }
+    }
+
+    private void createPhasePane(PhaseGraph graph) {
+        phasePaneList.add(new PhasePane(phaseDB, genGroovyPane, graph));
+        phaseNameListView.getSelectionModel().select(phasePaneList.size()-1);
     }
 
     @Override

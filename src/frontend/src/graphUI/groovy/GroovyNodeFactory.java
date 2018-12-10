@@ -149,7 +149,6 @@ public class GroovyNodeFactory {
         } else if (model instanceof InfixBinaryBlock) {
             return new GroovyNode(model, 50, 50, FONT_BIG, Color.DARKRED, BINARY_PORT);
         } else {
-            System.out.println(model.params().get("portInfo"));
             var portInfo = (Map<Ports, String>) model.params().get("portInfo");
             var argN = portInfo == null ? 5 : portInfo.size();
             return new GroovyNode(model, 120, 50, FONT_NORMAL, Color.PERU, functionPorts(argN), portInfo);

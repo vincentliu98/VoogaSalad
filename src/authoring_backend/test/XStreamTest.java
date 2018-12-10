@@ -31,5 +31,9 @@ public class XStreamTest {
 
         System.out.println("--------------------AFTER  SERIALIZATION----------------");
         System.out.println(newGraph.transformToGroovy().get());
+
+
+        var phaseDB = authTools.phaseDB();
+        System.out.println(phaseDB.toXML());
     }
 }

@@ -48,12 +48,17 @@ public class View implements ParentView<SubView> {
     /**
      * Constructor for an createPhaseGraph window, with an AnchorPane as the root Node, and the AnchorPane constraints on top, left and right are 0.
      */
-    public View(Stage primaryStage) {
+    public View(Stage primaryStage) { this(primaryStage, new AuthoringTools(COL_NUMBER, ROW_NUMBER)); }
+    public View(Stage primaryStage, String xml) { this(primaryStage, new AuthoringTools(xml)); }
+    public View(Stage primaryStage, AuthoringTools authTools) {
         this.primaryStage = primaryStage;
         mainView = new GridPane();
         rootPane = new AnchorPane();
         rootPane.getStyleClass().add("mainPane");
-        tools = new AuthoringTools(COL_NUMBER, ROW_NUMBER);
+        tools = authTools;
+        System.out.println("-------loaded tools -------");
+        System.out.println(tools.phaseDB().phaseGraphs());
+
         gameObjectManager = tools.entityDB();
         groovyPaneFactory = new GroovyPaneFactory(primaryStage, tools.factory(), tools.phaseDB().winCondition());
         nodeInstanceController = new CrappyNodeInstanceController();

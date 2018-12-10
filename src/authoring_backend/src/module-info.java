@@ -12,6 +12,8 @@ module authoring_backend {
     opens grids to xstream;
     opens authoringUtils.exception to xstream;
     opens authoringUtils.frontendUtils to xstream;
+    opens graph to xstream;
+    opens groovy.graph.blocks.core to xstream;
 
     requires org.codehaus.groovy;
     requires xstream;

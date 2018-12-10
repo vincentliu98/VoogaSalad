@@ -36,6 +36,10 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
 
     private IdManager myIdManager;
 
+    // Just a placeholder
+    public SimpleGameObjectsCRUD(String xml) { this(3, 3); }
+    public String toXML() { return ""; }
+
     public SimpleGameObjectsCRUD(int numRows, int numCols) {
         this.numRows = numRows;
         this.numCols = numCols;

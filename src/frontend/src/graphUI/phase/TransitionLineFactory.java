@@ -8,11 +8,16 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import phase.api.GameEvent;
+import phase.api.Phase;
+import phase.api.PhaseDB;
 import phase.api.Transition;
 
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
+
+import static graphUI.phase.PhaseNodeFactory.PHASE_NODE_RADIUS;
 
 /**
  *TransitionLineFactory
@@ -20,26 +25,45 @@ import java.util.function.Supplier;
  * @author Amy
  */
 public class TransitionLineFactory {
+    private PhaseDB phaseDB;
     private Function<BlockGraph, GroovyPane> genGroovyPane;
     private Consumer<Node> removeFromScreen;
     private Consumer<Node> addToScreen;
+    private BiFunction<Phase, Phase, Integer> countOverlap;
 
     public TransitionLineFactory(
+        PhaseDB phaseDB,
         Function<BlockGraph, GroovyPane> genGroovyPane,
         Consumer<Node> addToScreen,
-        Consumer<Node> removeFromScreen
+        Consumer<Node> removeFromScreen,
+        BiFunction<Phase, Phase, Integer> countOverlap
     ) {
+        this.phaseDB = phaseDB;
         this.genGroovyPane = genGroovyPane;
         this.removeFromScreen = removeFromScreen;
         this.addToScreen = addToScreen;
+        this.countOverlap = countOverlap;
     }
 
-    public TransitionLine gen(
-        double x, double y, double x2, double y2, int cnt,
-        Transition transition, PhaseNode node1, PhaseNode node2
-    ) {
-        return new TransitionLine(x, y, x2, y2, cnt, transition, node1, node2);
+
+    public TransitionLine makeEdge(PhaseNode from, GameEvent event, PhaseNode to) {
+        return toView(toModel(from.model(), event, to.model()), from, to);
     }
+
+    /**
+     *  (from, event, to) ----> Model
+     */
+    public Transition toModel(Phase from, GameEvent event, Phase to) {
+        return phaseDB.createTransition(from, event, to);
+    }
+
+    /**
+     *  (model, node view, node view) ----> View
+     */
+    public TransitionLine toView(Transition transition, PhaseNode node1, PhaseNode node2) {
+        return new TransitionLine(countOverlap.apply(node1.model(), node2.model()), transition, node1, node2);
+    }
+
 
     public class TransitionLine extends Line {
         private static final int MAX_CNT = 5;
@@ -53,11 +77,9 @@ public class TransitionLineFactory {
         private int cnt;
         private GroovyPane groovyPane;
 
-        public TransitionLine(
-            double x, double y, double x2, double y2, int cnt,
-            Transition transition, PhaseNode node1, PhaseNode node2
-        ) {
-            super(x, y, x2, y2);
+        public TransitionLine(int cnt, Transition transition, PhaseNode node1, PhaseNode node2) {
+            super(node1.getCenterX(), node1.getCenterY(), node2.getCenterX(), node2.getCenterY());
+
             this.model = transition;
             this.node1 = node1;
             this.node2 = node2;
@@ -145,5 +167,6 @@ public class TransitionLineFactory {
         public Text label() { return label; }
         public int cnt() { return cnt; }
         public void showGraph() { groovyPane.showWindow(); }
+        public Transition model() { return model; }
     }
 }

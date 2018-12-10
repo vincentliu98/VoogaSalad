@@ -1,90 +1,196 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<game>
-  <gameplay.Node>
-    <myPhaseName>k</myPhaseName>
-    <myName>k</myName>
-    <myExecution>if(true) {
-
-}
-</myExecution>
-  </gameplay.Node>
-  <gameplay.Node>
-    <myPhaseName>k</myPhaseName>
-    <myName>l</myName>
-    <myExecution></myExecution>
-  </gameplay.Node>
-  <gameplay.Edge>
-    <myPhaseName>k</myPhaseName>
-    <myStartNodeName>k</myStartNodeName>
-    <myEndNodeName>l</myEndNodeName>
-    <myTrigger class="phase.api.GameEvent$MouseClick"/>
-    <myGuard></myGuard>
-  </gameplay.Edge>
-  <gameplay.Phase>
-    <myStartNodeName>k</myStartNodeName>
-    <myCurrentNodeName>k</myCurrentNodeName>
-    <myNodeNames>
-      <string>k</string>
-      <string>l</string>
-    </myNodeNames>
-  </gameplay.Phase>
-  <winCondition></winCondition>
-  <grid-width>10</grid-width>
-  <grid-height>7</grid-height>
-  <gamePlay.CategoryPrototype>
-    <name>Game Objects</name>
-    <myID>1</myID>
-  </gamePlay.CategoryPrototype>
-  <gamePlay.CategoryPrototype>
-    <name>SOUND</name>
-    <myID>4</myID>
-  </gamePlay.CategoryPrototype>
-  <gamePlay.CategoryPrototype>
-    <name>ENTITY</name>
-    <myID>2</myID>
-  </gamePlay.CategoryPrototype>
-  <gamePlay.CategoryPrototype>
-    <name>TILE</name>
-    <myID>3</myID>
-  </gamePlay.CategoryPrototype>
-  <gamePlay.CategoryPrototype>
-    <name>PLAYER</name>
-    <myID>5</myID>
-  </gamePlay.CategoryPrototype>
-  <gameplay.EntityPrototype>
-    <name>O</name>
-    <props/>
-    <myWidth>1</myWidth>
-    <myHeight>1</myHeight>
-    <myImagePaths/>
-    <myImageSelector></myImageSelector>
-  </gameplay.EntityPrototype>
-  <gameplay.EntityPrototype>
-    <name>X</name>
-    <props/>
-    <myWidth>1</myWidth>
-    <myHeight>1</myHeight>
-    <myImagePaths/>
-    <myImageSelector></myImageSelector>
-  </gameplay.EntityPrototype>
-  <gameplay.TilePrototype>
-    <myID>8</myID>
-    <name>Default Grid</name>
-    <props/>
-    <myWidth>1</myWidth>
-    <myHeight>1</myHeight>
-    <myImagePaths/>
-    <myImageSelector></myImageSelector>
-  </gameplay.TilePrototype>
-  <gameplay.Player>
-    <myName>Default Player</myName>
-    <myStats/>
-    <myEntityIDs/>
-  </gameplay.Player>
-  <gameplay.Turn>
-    <myCurrentPhaseName>k</myCurrentPhaseName>
-    <playersOrder>
-      <string>Default Player</string>
-    </playersOrder>
-  </gameplay.Turn>
-</game>
+<authoring.SavedAuthoringTools>
+  <entityDBXML></entityDBXML>
+  <phaseDBXML>&lt;phase.api.SavedPhaseDB&gt;
+  &lt;namespace class=&quot;sorted-set&quot;&gt;
+    &lt;string&gt;k&lt;/string&gt;
+  &lt;/namespace&gt;
+  &lt;phaseGraphs&gt;
+    &lt;phase.PhaseGraphImpl serialization=&quot;custom&quot;&gt;
+      &lt;unserializable-parents/&gt;
+      &lt;map&gt;
+        &lt;default&gt;
+          &lt;loadFactor&gt;0.75&lt;/loadFactor&gt;
+          &lt;threshold&gt;12&lt;/threshold&gt;
+        &lt;/default&gt;
+        &lt;int&gt;16&lt;/int&gt;
+        &lt;int&gt;2&lt;/int&gt;
+        &lt;phase.PhaseImpl&gt;
+          &lt;description&gt;
+            &lt;value&gt;source&lt;/value&gt;
+            &lt;valid&gt;false&lt;/valid&gt;
+            &lt;name&gt;&lt;/name&gt;
+          &lt;/description&gt;
+          &lt;x&gt;100.0&lt;/x&gt;
+          &lt;y&gt;50.0&lt;/y&gt;
+          &lt;name&gt;k&lt;/name&gt;
+          &lt;exec class=&quot;groovy.graph.BlockGraphImpl&quot; serialization=&quot;custom&quot;&gt;
+            &lt;unserializable-parents/&gt;
+            &lt;map&gt;
+              &lt;default&gt;
+                &lt;loadFactor&gt;0.75&lt;/loadFactor&gt;
+                &lt;threshold&gt;12&lt;/threshold&gt;
+              &lt;/default&gt;
+              &lt;int&gt;16&lt;/int&gt;
+              &lt;int&gt;1&lt;/int&gt;
+              &lt;groovy.graph.blocks.core.SourceBlock&gt;
+                &lt;description&gt;
+                  &lt;value&gt;&lt;/value&gt;
+                  &lt;valid&gt;true&lt;/valid&gt;
+                  &lt;name&gt;&lt;/name&gt;
+                &lt;/description&gt;
+                &lt;x&gt;1000.0&lt;/x&gt;
+                &lt;y&gt;1000.0&lt;/y&gt;
+              &lt;/groovy.graph.blocks.core.SourceBlock&gt;
+              &lt;list/&gt;
+            &lt;/map&gt;
+            &lt;groovy.graph.BlockGraphImpl&gt;
+              &lt;default&gt;
+                &lt;source reference=&quot;../../../map/groovy.graph.blocks.core.SourceBlock&quot;/&gt;
+              &lt;/default&gt;
+            &lt;/groovy.graph.BlockGraphImpl&gt;
+          &lt;/exec&gt;
+          &lt;isSource&gt;true&lt;/isSource&gt;
+        &lt;/phase.PhaseImpl&gt;
+        &lt;list&gt;
+          &lt;phase.TransitionImpl&gt;
+            &lt;from class=&quot;phase.PhaseImpl&quot; reference=&quot;../../../phase.PhaseImpl&quot;/&gt;
+            &lt;to class=&quot;phase.PhaseImpl&quot;&gt;
+              &lt;description&gt;
+                &lt;value&gt;&lt;/value&gt;
+                &lt;valid&gt;true&lt;/valid&gt;
+                &lt;name&gt;&lt;/name&gt;
+              &lt;/description&gt;
+              &lt;x&gt;89.0&lt;/x&gt;
+              &lt;y&gt;285.0&lt;/y&gt;
+              &lt;name&gt;z&lt;/name&gt;
+              &lt;exec class=&quot;groovy.graph.BlockGraphImpl&quot; serialization=&quot;custom&quot;&gt;
+                &lt;unserializable-parents/&gt;
+                &lt;map&gt;
+                  &lt;default&gt;
+                    &lt;loadFactor&gt;0.75&lt;/loadFactor&gt;
+                    &lt;threshold&gt;12&lt;/threshold&gt;
+                  &lt;/default&gt;
+                  &lt;int&gt;16&lt;/int&gt;
+                  &lt;int&gt;3&lt;/int&gt;
+                  &lt;groovy.graph.blocks.core.InfixBinaryBlock&gt;
+                    &lt;description&gt;
+                      &lt;value&gt;&lt;/value&gt;
+                      &lt;valid&gt;true&lt;/valid&gt;
+                      &lt;name&gt;&lt;/name&gt;
+                    &lt;/description&gt;
+                    &lt;x&gt;1246.0&lt;/x&gt;
+                    &lt;y&gt;1177.0&lt;/y&gt;
+                    &lt;op&gt;l&lt;/op&gt;
+                  &lt;/groovy.graph.blocks.core.InfixBinaryBlock&gt;
+                  &lt;list/&gt;
+                  &lt;groovy.graph.blocks.core.SourceBlock&gt;
+                    &lt;description&gt;
+                      &lt;value&gt;&lt;/value&gt;
+                      &lt;valid&gt;true&lt;/valid&gt;
+                      &lt;name&gt;&lt;/name&gt;
+                    &lt;/description&gt;
+                    &lt;x&gt;1000.0&lt;/x&gt;
+                    &lt;y&gt;1000.0&lt;/y&gt;
+                  &lt;/groovy.graph.blocks.core.SourceBlock&gt;
+                  &lt;list&gt;
+                    &lt;groovy.graph.BlockEdgeImpl&gt;
+                      &lt;from class=&quot;groovy.graph.blocks.core.SourceBlock&quot; reference=&quot;../../../groovy.graph.blocks.core.SourceBlock&quot;/&gt;
+                      &lt;to class=&quot;groovy.graph.blocks.core.IfBlock&quot;&gt;
+                        &lt;description&gt;
+                          &lt;value&gt;&lt;/value&gt;
+                          &lt;valid&gt;true&lt;/valid&gt;
+                          &lt;name&gt;&lt;/name&gt;
+                        &lt;/description&gt;
+                        &lt;x&gt;1215.0&lt;/x&gt;
+                        &lt;y&gt;998.0&lt;/y&gt;
+                        &lt;elseIf&gt;false&lt;/elseIf&gt;
+                      &lt;/to&gt;
+                      &lt;fromPort&gt;FLOW_OUT&lt;/fromPort&gt;
+                    &lt;/groovy.graph.BlockEdgeImpl&gt;
+                  &lt;/list&gt;
+                  &lt;groovy.graph.blocks.core.IfBlock reference=&quot;../list[2]/groovy.graph.BlockEdgeImpl/to&quot;/&gt;
+                  &lt;list&gt;
+                    &lt;groovy.graph.BlockEdgeImpl&gt;
+                      &lt;from class=&quot;groovy.graph.blocks.core.IfBlock&quot; reference=&quot;../../../list[2]/groovy.graph.BlockEdgeImpl/to&quot;/&gt;
+                      &lt;to class=&quot;groovy.graph.blocks.core.InfixBinaryBlock&quot; reference=&quot;../../../groovy.graph.blocks.core.InfixBinaryBlock&quot;/&gt;
+                      &lt;fromPort&gt;IF_PREDICATE&lt;/fromPort&gt;
+                    &lt;/groovy.graph.BlockEdgeImpl&gt;
+                  &lt;/list&gt;
+                &lt;/map&gt;
+                &lt;groovy.graph.BlockGraphImpl&gt;
+                  &lt;default&gt;
+                    &lt;source reference=&quot;../../../map/groovy.graph.blocks.core.SourceBlock&quot;/&gt;
+                  &lt;/default&gt;
+                &lt;/groovy.graph.BlockGraphImpl&gt;
+              &lt;/exec&gt;
+              &lt;isSource&gt;false&lt;/isSource&gt;
+            &lt;/to&gt;
+            &lt;trigger class=&quot;phase.api.GameEvent$MouseClick&quot;/&gt;
+            &lt;guard class=&quot;groovy.graph.BlockGraphImpl&quot; serialization=&quot;custom&quot;&gt;
+              &lt;unserializable-parents/&gt;
+              &lt;map&gt;
+                &lt;default&gt;
+                  &lt;loadFactor&gt;0.75&lt;/loadFactor&gt;
+                  &lt;threshold&gt;12&lt;/threshold&gt;
+                &lt;/default&gt;
+                &lt;int&gt;16&lt;/int&gt;
+                &lt;int&gt;1&lt;/int&gt;
+                &lt;groovy.graph.blocks.core.SourceBlock&gt;
+                  &lt;description&gt;
+                    &lt;value&gt;&lt;/value&gt;
+                    &lt;valid&gt;true&lt;/valid&gt;
+                    &lt;name&gt;&lt;/name&gt;
+                  &lt;/description&gt;
+                  &lt;x&gt;1000.0&lt;/x&gt;
+                  &lt;y&gt;1000.0&lt;/y&gt;
+                &lt;/groovy.graph.blocks.core.SourceBlock&gt;
+                &lt;list/&gt;
+              &lt;/map&gt;
+              &lt;groovy.graph.BlockGraphImpl&gt;
+                &lt;default&gt;
+                  &lt;source reference=&quot;../../../map/groovy.graph.blocks.core.SourceBlock&quot;/&gt;
+                &lt;/default&gt;
+              &lt;/groovy.graph.BlockGraphImpl&gt;
+            &lt;/guard&gt;
+          &lt;/phase.TransitionImpl&gt;
+        &lt;/list&gt;
+        &lt;phase.PhaseImpl reference=&quot;../list/phase.TransitionImpl/to&quot;/&gt;
+        &lt;list/&gt;
+      &lt;/map&gt;
+      &lt;phase.PhaseGraphImpl&gt;
+        &lt;default&gt;
+          &lt;name&gt;k&lt;/name&gt;
+          &lt;source class=&quot;phase.PhaseImpl&quot; reference=&quot;../../../map/phase.PhaseImpl&quot;/&gt;
+        &lt;/default&gt;
+      &lt;/phase.PhaseGraphImpl&gt;
+    &lt;/phase.PhaseGraphImpl&gt;
+  &lt;/phaseGraphs&gt;
+  &lt;startingPhase&gt;k&lt;/startingPhase&gt;
+  &lt;winningCondition class=&quot;groovy.graph.BlockGraphImpl&quot; serialization=&quot;custom&quot;&gt;
+    &lt;unserializable-parents/&gt;
+    &lt;map&gt;
+      &lt;default&gt;
+        &lt;loadFactor&gt;0.75&lt;/loadFactor&gt;
+        &lt;threshold&gt;12&lt;/threshold&gt;
+      &lt;/default&gt;
+      &lt;int&gt;16&lt;/int&gt;
+      &lt;int&gt;1&lt;/int&gt;
+      &lt;groovy.graph.blocks.core.SourceBlock&gt;
+        &lt;description&gt;
+          &lt;value&gt;&lt;/value&gt;
+          &lt;valid&gt;true&lt;/valid&gt;
+          &lt;name&gt;&lt;/name&gt;
+        &lt;/description&gt;
+        &lt;x&gt;1000.0&lt;/x&gt;
+        &lt;y&gt;1000.0&lt;/y&gt;
+      &lt;/groovy.graph.blocks.core.SourceBlock&gt;
+      &lt;list/&gt;
+    &lt;/map&gt;
+    &lt;groovy.graph.BlockGraphImpl&gt;
+      &lt;default&gt;
+        &lt;source reference=&quot;../../../map/groovy.graph.blocks.core.SourceBlock&quot;/&gt;
+      &lt;/default&gt;
+    &lt;/groovy.graph.BlockGraphImpl&gt;
+  &lt;/winningCondition&gt;
+&lt;/phase.api.SavedPhaseDB&gt;</phaseDBXML>
+</authoring.SavedAuthoringTools>
