@@ -18,6 +18,7 @@ public class ProfileView implements Subscriber {
         myBox = new HBox();
         myBox.setAlignment(Pos.CENTER_LEFT);
         initButton();
+        EventBus.getInstance().register(EngineEvent.CHANGE_USER, this);
     }
 
     public HBox getView(){

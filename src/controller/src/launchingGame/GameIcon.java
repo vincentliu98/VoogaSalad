@@ -12,10 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import playing.MainPlayer;
-import social.EngineEvent;
-import social.Icon;
-import social.Subscriber;
-import social.User;
+import social.*;
 
 public class GameIcon implements Icon, Subscriber {
     public static final String TEXT_CSS = "title-box";
@@ -63,6 +60,7 @@ public class GameIcon implements Icon, Subscriber {
         initTitle();
         initDescription();
         initButton();
+        EventBus.getInstance().register(EngineEvent.CHANGE_USER, this);
     }
 
     public Boolean checkTag(String tag){
@@ -184,6 +182,7 @@ public class GameIcon implements Icon, Subscriber {
     public void update(EngineEvent engineEvent, Object... args) {
         if (engineEvent.equals(EngineEvent.CHANGE_USER) && args[0].getClass().equals(User.class)){
             myUser = (User) args[0];
+            System.out.println("Username is " + myUser.getUsername() + "classname is " + getClass().getName());
         }
     }
 }

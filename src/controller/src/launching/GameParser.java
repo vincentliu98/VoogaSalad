@@ -3,6 +3,7 @@ package launching;
 import launchingGame.GameIcon;
 import org.w3c.dom.Document;
 import social.EngineEvent;
+import social.EventBus;
 import social.Subscriber;
 import social.User;
 
@@ -41,7 +42,7 @@ public class GameParser implements Subscriber {
         catch (Exception e){
 
         }
-
+        EventBus.getInstance().register(EngineEvent.CHANGE_USER, this);
     }
 
     private void findFiles(){
@@ -81,6 +82,7 @@ public class GameParser implements Subscriber {
     public void update(EngineEvent engineEvent, Object... args) {
         if (engineEvent.equals(EngineEvent.CHANGE_USER) && args[0].getClass().equals(User.class)){
             myUser = (User) args[0];
+            System.out.println("Username is " + myUser.getUsername() + "classname is " + getClass().getName());
         }
     }
 }
