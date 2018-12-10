@@ -4,7 +4,10 @@ import javafx.geometry.Pos;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import social.EngineEvent;
 import social.LauncherSocialDisplay;
+import social.Subscriber;
+import social.User;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -63,7 +66,7 @@ public class TextOptions implements PropertyChangeListener {
         mySocial = new OptionHolder(SOCIAL_TEXT);
         mySocial.addListener(this);
         mySocial.setOnClickListener(e -> {
-            LauncherSocialDisplay mySocialDisplay = new LauncherSocialDisplay();
+            LauncherSocialDisplay mySocialDisplay = LauncherSocialDisplay.getInstance();
             myPane.setCenter(mySocialDisplay.getView());
             myPane.setLeft(new LauncherSideBarView(SIDE_WIDTH, mySocialDisplay).getView());
         });
@@ -77,7 +80,6 @@ public class TextOptions implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        System.out.println("hello");
         toggleSelected((OptionHolder) evt.getNewValue());
     }
 
