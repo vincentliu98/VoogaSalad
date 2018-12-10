@@ -22,6 +22,9 @@ public class User {
     private ResourceBundle myErrors;
     private Set<String> myFollowing;
     private Map<String, String> myProgress;
+    private String myImageReference;
+    private String myStatus;
+    private static final String IMAGES_FOLDER_PATH = "/profile-images/";
 
     public User(int id, String username){
         myID = id;
@@ -30,8 +33,10 @@ public class User {
         myFollowing = new HashSet<>();
         myTwitter = null;
         myProgress = new HashMap<>();
+        myImageReference = "person_logo.png";
+        myStatus = "";
         myAvatar = new ImageView();
-        myAvatar.setImage(new Image(getClass().getResourceAsStream("/profile-images/person_logo.png")));
+        myAvatar.setImage(new Image(getClass().getResourceAsStream(IMAGES_FOLDER_PATH + myImageReference)));
         //myErrors = ResourceBundle.getBundle("resources/errors/Errors");
     }
 
@@ -39,8 +44,21 @@ public class User {
         return myAvatar;
     }
 
-    public void changeAvatar(Image image){
-        myAvatar = new ImageView(image);
+    public void updateStatus(String message){
+        myStatus = message;
+    }
+
+    public String getStatus(){
+        return myStatus;
+    }
+
+    public String getImageReference(){
+        return myImageReference;
+    }
+
+    public void changeAvatar(String imageReference){
+        myImageReference = imageReference;
+        myAvatar.setImage(new Image(getClass().getResourceAsStream(IMAGES_FOLDER_PATH + myImageReference)));
     }
 
     public void addFavorite(String gameName){
@@ -67,10 +85,13 @@ public class User {
 
     public void addFollower(String username){
         myFollowing.add(username);
+        System.out.println("MyFollowing of " + myUsername + "is now " + myFollowing.toString());
     }
 
     public void removeFollower(String username){
+        if (!myFollowing.contains(username)) return;
         myFollowing.remove(username);
+        System.out.println("MyFollowing of " + myUsername + "is now " + myFollowing.toString());
     }
 
     public Set<String> getFollowing(){
