@@ -146,7 +146,7 @@ TO BE ADDED
 
 ### Impression
 
-* Vincent Liu : Slogo is more challenging compared to the previous two projects, breakout and cell society. I learn how to work with a team by using interfaces and I truly feel I can work better in a team setting in the future.
+* Vincent Liu : VoogaSalad is more challenging compared to the previous 3 projects, Breakout, Cell Society and SLogo. I learnt how to work with a team by using interfaces and I truly feel I can work better in a team setting in the future.
 
 * Haotian Wang : I have been working on connecting backend and the UI. I enjoyed the process a lot, it is so fun to see how much changes I made and how flexible our codes become after I re-construct the structure of our project. I feel I understand the 'Open For Extension,Closed for Modification' much more after this project.
 
