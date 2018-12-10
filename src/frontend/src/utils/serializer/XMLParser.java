@@ -11,6 +11,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * The Parser reads in an XML file and reconstructs the GameObjectClasses and GameObjectInstances in the authoring engine.
@@ -19,6 +22,8 @@ import java.io.IOException;
  */
 public class XMLParser {
     private Document myDocument;
+    private static final Set<String> allClasses = Set.of("entityClass", "categoryClass", "soundClass", "playerClass", "tileClass");
+    private static final Set<String> allInstances = Set.of("entityInstance", "soundInstance", "tileInstance");
 
     /**
      * This method reads in the XML file and saves the information in the class.
