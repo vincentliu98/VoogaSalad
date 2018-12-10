@@ -19,9 +19,9 @@ import java.util.stream.Collectors;
 public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     private int numRows;
     private int numCols;
-    private ObservableMap<String, GameObjectClass> gameObjectClassMapByName;
-    private ObservableMap<Integer, GameObjectClass> gameObjectClassMapById;
-    private ObservableMap<Integer, GameObjectInstance> gameObjectInstanceMapById;
+    private Map<String, GameObjectClass> gameObjectClassMapByName;
+    private Map<Integer, GameObjectClass> gameObjectClassMapById;
+    private Map<Integer, GameObjectInstance> gameObjectInstanceMapById;
 
     private TileInstanceFactory myTileInstanceFactory;
     private EntityInstanceFactory myEntityInstanceFactory;
@@ -34,15 +34,16 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     public SimpleGameObjectsCRUD(int numRows, int numCols) {
         this.numRows = numRows;
         this.numCols = numCols;
-        gameObjectClassMapByName = FXCollections.observableHashMap();
-        gameObjectClassMapById = FXCollections.observableHashMap();
-        gameObjectInstanceMapById = FXCollections.observableHashMap();
+        gameObjectClassMapByName = new HashMap<>();
+        gameObjectClassMapById = new HashMap<>();
+        gameObjectInstanceMapById = new HashMap<>();
 
         myIdManager = new IdManagerClass(
                 getGameObjectClassFromMapFunc(),
                 getGameObjectInstanceFromMapFunc(),
                 gameObjectClassMapById,
-                gameObjectInstanceMapById);
+                gameObjectInstanceMapById
+        );
 
         myTileInstanceFactory = instantiateTileInstanceFactory();
         myEntityInstanceFactory = instantiateEntityInstanceFactory();

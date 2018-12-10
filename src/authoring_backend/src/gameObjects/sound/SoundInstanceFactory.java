@@ -32,8 +32,7 @@ public class SoundInstanceFactory {
         String mediaFilePathCopy = soundPrototype.getMediaFilePath();
         var durationCopy = soundPrototype.getDuration();
         var propertiesMapCopy = new HashMap<>(soundPrototype.getPropertiesMap());
-        Supplier<SoundClass> getCategoryClassFunc = () -> soundPrototype;
-        SoundInstance categoryInstance = new SimpleSoundInstance(soundPrototype.getClassName(), mediaFilePathCopy, propertiesMapCopy, durationCopy, getCategoryClassFunc);
+        SoundInstance categoryInstance = new SimpleSoundInstance(soundPrototype.getClassName(), mediaFilePathCopy, propertiesMapCopy, durationCopy, soundPrototype);
         requestInstanceIdFunc.accept(categoryInstance);
         addInstanceToMapFunc.accept(categoryInstance);
         return categoryInstance;

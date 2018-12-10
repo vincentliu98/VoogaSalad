@@ -12,18 +12,18 @@ public class SimpleCategoryInstance implements CategoryInstance {
 
     private String imagePath;
     private Map<String, String> propertiesMap;
-    private Supplier<CategoryClass> getCategoryClassFunc;
+    private CategoryClass categoryClass;
 
     public SimpleCategoryInstance(
             String className,
             String imagePath,
             Map<String, String> properties,
-            Supplier<CategoryClass> getCategoryClassFunc) {
+            CategoryClass categoryClass) {
         this.className = className;
         this.instanceName = className; // ???
         this.imagePath = imagePath;
         this.propertiesMap = properties;
-        this.getCategoryClassFunc = getCategoryClassFunc;
+        this.categoryClass = categoryClass;
         instanceId = 0;
     }
 
@@ -98,8 +98,6 @@ public class SimpleCategoryInstance implements CategoryInstance {
     }
 
     @Override
-    public CategoryClass getGameObjectClass() {
-        return getCategoryClassFunc.get();
-    }
+    public CategoryClass getGameObjectClass() { return categoryClass; }
 
 }

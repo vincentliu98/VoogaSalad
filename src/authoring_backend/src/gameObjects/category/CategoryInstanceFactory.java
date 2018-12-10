@@ -9,7 +9,6 @@ import gameObjects.gameObject.GameObjectType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 public class CategoryInstanceFactory {
     private Consumer<GameObjectInstance> requestInstanceIdFunc;
@@ -31,8 +30,7 @@ public class CategoryInstanceFactory {
         }
         String imagePathCopy = categoryPrototype.getImagePath();
         Map<String, String> propertiesMapCopy = new HashMap<>(categoryPrototype.getPropertiesMap());
-        Supplier<CategoryClass> getCategoryClassFunc = () -> categoryPrototype;
-        CategoryInstance categoryInstance = new SimpleCategoryInstance(categoryPrototype.getClassName(), imagePathCopy, propertiesMapCopy, getCategoryClassFunc);
+        CategoryInstance categoryInstance = new SimpleCategoryInstance(categoryPrototype.getClassName(), imagePathCopy, propertiesMapCopy, categoryPrototype);
         requestInstanceIdFunc.accept(categoryInstance);
         addInstanceToMapFunc.accept(categoryInstance);
         return categoryInstance;

@@ -15,19 +15,19 @@ public class SimplePlayerInstance implements PlayerInstance {
 
     private String imagePath;
     private Map<String, String> propertiesMap;
-    private Supplier<PlayerClass> getPlayerClassFunc;
+    private PlayerClass playerClass;
 
 
 
     public SimplePlayerInstance(String className,
                                 String imagePath,
                                 Map<String, String> properties,
-                                Supplier<PlayerClass> getPlayerClassFunc) {
+                                PlayerClass playerClass) {
         this.className = className;
         this.instanceName = className;
         this.imagePath = imagePath;
         this.propertiesMap = properties;
-        this.getPlayerClassFunc = getPlayerClassFunc;
+        this.playerClass = playerClass;
         instanceId = 0;
     }
 
@@ -79,8 +79,6 @@ public class SimplePlayerInstance implements PlayerInstance {
     public void setImagePath(String newImagePath) { imagePath = newImagePath; }
 
     @Override
-    public PlayerClass getGameObjectClass() {
-        return getPlayerClassFunc.get();
-    }
+    public PlayerClass getGameObjectClass() { return playerClass; }
 
 }

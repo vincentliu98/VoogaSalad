@@ -35,8 +35,7 @@ public class PlayerInstanceFactory {
         }
         var imagePathCopy = playerPrototype.getImagePath();
         var propertiesMapCopy = new HashMap<>(playerPrototype.getPropertiesMap());
-        Supplier<PlayerClass> getPlayerClassFunc = () -> playerPrototype;
-        PlayerInstance playerInstance = new SimplePlayerInstance(playerPrototype.getClassName(), imagePathCopy, propertiesMapCopy, getPlayerClassFunc);
+        PlayerInstance playerInstance = new SimplePlayerInstance(playerPrototype.getClassName(), imagePathCopy, propertiesMapCopy, playerPrototype);
         requestInstanceIdFunc.accept(playerInstance);
         addInstanceToMapFunc.accept(playerInstance);
         return playerInstance;

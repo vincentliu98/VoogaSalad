@@ -16,7 +16,7 @@ public class SimpleTileInstance implements TileInstance {
     private List<String> imagePathList;
     private String imageSelector;
     private Map<String, String> propertiesMap;
-    private Supplier<TileClass> getTileClassFunc;
+    private TileClass tileClass;
 
 
     SimpleTileInstance(
@@ -24,13 +24,13 @@ public class SimpleTileInstance implements TileInstance {
             Point topLeftCoord,
             List<String> imagePathList,
             Map<String, String> properties,
-            Supplier<TileClass> getTileClassFunc) {
+            TileClass tileClass) {
         this.className = className;
         this.instanceName = className;
         this.coord = topLeftCoord;
         this.imagePathList = imagePathList;
         this.propertiesMap = properties;
-        this.getTileClassFunc = getTileClassFunc;
+        this.tileClass = tileClass;
         this.height = 1;
         this.width = 1;
         instanceId = 0;
@@ -141,7 +141,5 @@ public class SimpleTileInstance implements TileInstance {
     public void setCoord(Point coord) { this.coord = coord; }
 
     @Override
-    public TileClass getGameObjectClass() {
-        return getTileClassFunc.get();
-    }
+    public TileClass getGameObjectClass() { return tileClass; }
 }

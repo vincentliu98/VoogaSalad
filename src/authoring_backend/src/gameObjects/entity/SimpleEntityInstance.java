@@ -16,18 +16,19 @@ public class SimpleEntityInstance implements EntityInstance {
     private List<String> imagePathList;
     private String imageSelector;
     private Map<String, String> propertiesMap;
-    private Supplier<EntityClass> getEntityClassFunc;
+    private EntityClass entityClass;
 
     SimpleEntityInstance(
             String className,
             List<String> imagePathList,
             Map<String, String> properties,
-            Supplier<EntityClass> getEntityClassFunc) {
+            EntityClass entityClass
+    ) {
         this.className = className;
         this.instanceName = className; // ???
         this.imagePathList = imagePathList;
         this.propertiesMap = properties;
-        this.getEntityClassFunc = getEntityClassFunc;
+        this.entityClass = entityClass;
         this.coord = null; // PIN: might be problematic
         this.height = 1;
         this.width = 1;
@@ -108,9 +109,7 @@ public class SimpleEntityInstance implements EntityInstance {
     }
 
     @Override
-    public EntityClass getGameObjectClass() {
-        return getEntityClassFunc.get();
-    }
+    public EntityClass getGameObjectClass() { return entityClass; }
 
 
     @Override

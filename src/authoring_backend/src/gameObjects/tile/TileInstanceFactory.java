@@ -43,8 +43,7 @@ public class TileInstanceFactory {
         }
         var imagePathListCopy = new ArrayList<>(tilePrototype.getImagePathList());
         var propertiesMapCopy = new HashMap<>(tilePrototype.getPropertiesMap());
-        Supplier<TileClass> getTileClassFunc = () -> tilePrototype;
-        TileInstance tileInstance = new SimpleTileInstance(tilePrototype.getClassName(), topLeftCoord, imagePathListCopy, propertiesMapCopy, getTileClassFunc);
+        TileInstance tileInstance = new SimpleTileInstance(tilePrototype.getClassName(), topLeftCoord, imagePathListCopy, propertiesMapCopy, tilePrototype);
         requestInstanceIdFunc.accept(tileInstance);
         addInstanceToMapFunc.accept(tileInstance);
         tileInstance.setHeight(tilePrototype.getHeight());

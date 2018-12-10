@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class EntityInstanceFactory {
 
@@ -41,8 +40,7 @@ public class EntityInstanceFactory {
         }
         var imagePathListCopy = new ArrayList<>(entityPrototype.getImagePathList());
         var propertiesMapCopy = new HashMap<>(entityPrototype.getPropertiesMap());
-        Supplier<EntityClass> getEntityClassFunc = () -> entityPrototype;
-        EntityInstance entityInstance = new SimpleEntityInstance(entityPrototype.getClassName(), imagePathListCopy, propertiesMapCopy, getEntityClassFunc);
+        EntityInstance entityInstance = new SimpleEntityInstance(entityPrototype.getClassName(), imagePathListCopy, propertiesMapCopy, entityPrototype);
         entityInstance.setCoord(point);
         entityInstance.setHeight(entityPrototype.getHeight());
         entityInstance.setWidth(entityPrototype.getWidth());

@@ -1,7 +1,6 @@
 package gameObjects.sound;
 
 import java.util.Map;
-import java.util.function.Supplier;
 
 public class SimpleSoundInstance implements SoundInstance {
     private String className;
@@ -11,20 +10,21 @@ public class SimpleSoundInstance implements SoundInstance {
     private double duration;
     private String mediaFilePath;
     private Map<String, String> propertiesMap;
-    private Supplier<SoundClass> getSoundClassFunc;
+    private SoundClass soundClass;
 
     public SimpleSoundInstance(
             String className,
             String mediaFilePath,
             Map<String, String> properties,
             double duration,
-            Supplier<SoundClass> getSoundClassFunc) {
+            SoundClass soundClass
+    ) {
         this.className = className;
         this.duration = 0;
         this.instanceName = className;
         this.mediaFilePath = mediaFilePath;
         this.propertiesMap = properties;
-        this.getSoundClassFunc = getSoundClassFunc;
+        this.soundClass = soundClass;
         this.duration = duration;
         instanceId = 0;
     }
@@ -107,8 +107,6 @@ public class SimpleSoundInstance implements SoundInstance {
     public void setDuration(double newDuration) { duration = newDuration; }
 
     @Override
-    public SoundClass getGameObjectClass() {
-        return getSoundClassFunc.get();
-    }
+    public SoundClass getGameObjectClass() { return soundClass; }
 
 }
