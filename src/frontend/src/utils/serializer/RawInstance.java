@@ -1,5 +1,6 @@
 package utils.serializer;
 
+import grids.Point;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -25,6 +26,8 @@ public class RawInstance implements Comparable<RawInstance> {
     private String imageSelector;
     private Set<Integer> gameObjectInstanceIDs;
     private String instanceName;
+    private int xCoord;
+    private int yCoord;
 
     public RawInstance(Element entry) throws CRUDLoadException {
         rootElement = entry;
@@ -44,6 +47,12 @@ public class RawInstance implements Comparable<RawInstance> {
             throw new CRUDLoadException(type + " does not have a valid class name");
         }
         className = classNameElement.getTextContent();
+        Element coordElement = getChildElement("coord");
+        if (!hasChild(coordElement)) {
+            throw new CRUDLoadException(type + " does not have valid coordinates");
+        }
+        xCoord = Integer.parseInt(coordElement.getChildNodes().item(0).getTextContent());
+        yCoord = Integer.parseInt(coordElement.getChildNodes().item(1).getTextContent());
         if (containsChildElement("height")) {
             Element heightElement = getChildElement("height");
             if (hasValue(heightElement)) {
@@ -130,6 +139,14 @@ public class RawInstance implements Comparable<RawInstance> {
             throw new CRUDLoadException(type + " does not have " + name);
         }
         return (Element) candidates.item(0);
+    }
+
+    public int getxCoord() {
+        return xCoord;
+    }
+
+    public int getyCoord() {
+        return yCoord;
     }
 
     public String getClassName() {

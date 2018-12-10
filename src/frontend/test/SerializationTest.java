@@ -30,5 +30,6 @@ public class SerializationTest {
         System.out.println(parser.getGridDimension());
         System.out.println(parser.getGameObjectClasses());
         System.out.println(parser.getGameObjectInstances());
+        parser.getGameObjectInstances().forEach(rawInstance -> System.out.println(rawInstance.getInstanceName() + "," + rawInstance.getxCoord() + "," + rawInstance.getyCoord()));
     }
 }
