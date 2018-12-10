@@ -81,7 +81,7 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
     }
 
     private void presentImages() {
-        if(imagePath.isEmpty()) return;
+        if(imagePath == null) return;
         imagePanel.getChildren().clear();
         ImageView preview = new ImageView(imagePath);
         preview.setFitWidth(ICON_WIDTH);
