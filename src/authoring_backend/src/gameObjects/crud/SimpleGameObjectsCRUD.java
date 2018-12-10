@@ -56,6 +56,16 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         myPlayerInstanceFactory = instantiatePlayerInstanceFactory();
     }
 
+    @Override
+    public int getNumCols() {
+        return numCols;
+    }
+
+    @Override
+    public int getNumRows() {
+        return numRows;
+    }
+
     private TileInstanceFactory instantiateTileInstanceFactory() {
         return new TileInstanceFactory(
                 numRows,
@@ -727,4 +737,5 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
                 .map(gameObjectClass -> gameObjectClass.getClassName().getValue())
                 .collect(Collectors.toSet());
     }
+
 }

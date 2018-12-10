@@ -6,7 +6,11 @@ module frontend {
     requires java.desktop;
     requires java.scripting;
 
+
+    opens utils.serializer to xstream;
+
     requires xstream;
+
 
     requires authoring_backend;
     requires engine;
