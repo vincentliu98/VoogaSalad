@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * The Parser reads in an XML file and reconstructs the GameObjectClasses and GameObjectInstances in the authoring engine.
@@ -24,6 +25,8 @@ public class XMLParser {
     private Document myDocument;
     private static final Set<String> allClasses = Set.of("entityClass", "categoryClass", "soundClass", "playerClass", "tileClass");
     private static final Set<String> allInstances = Set.of("entityInstance", "soundInstance", "tileInstance");
+    private Iterable<RawClass> classesFromXML;
+    private Iterable<RawInstance> instancesFromXML;
 
     /**
      * This method reads in the XML file and saves the information in the class.
@@ -61,6 +64,15 @@ public class XMLParser {
      * @return An Iterable<String>
      */
     public Iterable<RawClass> getGameObjectClasses() {
-        return null;
+        return classesFromXML;
+    }
+
+    /**
+     * This method returns an iterable of GameObjectInstances in the most raw String format from the document.
+     *
+     * @return An Iterable<String>.
+     */
+    public Iterable<RawInstance> getGameObjectInstances() {
+        return instancesFromXML;
     }
 }
