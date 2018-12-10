@@ -24,6 +24,7 @@
   </categoryClass>
   <entityClass>
     <className>X</className>
+    <classID>99</classID>
     <props/>
     <width>1</width>
     <height>1</height>
@@ -32,6 +33,7 @@
   </entityClass>
   <entityClass>
     <className>O</className>
+    <classID>49</classID>
     <props>
       <entry>
         <string>hp</string>
@@ -50,7 +52,7 @@
     </imagePaths>
     <imageSelector></imageSelector>
   </entityClass>
-  <tilePrototype>
+  <tileClass>
     <classID>8</classID>
     <className>Default Grid</className>
     <props/>
@@ -58,8 +60,9 @@
     <height>1</height>
     <imagePaths/>
     <imageSelector></imageSelector>
-  </tilePrototype>
+  </tileClass>
   <playerClass>
+    <classID>14</classID>
     <name>Default Player</name>
     <props/>
     <gameObjectInstanceIDs/>

@@ -29,6 +29,7 @@ public class XMLParser {
     private static final Set<String> allInstances = Set.of("entityInstance", "soundInstance", "tileInstance");
     private Set<RawClass> classesFromXML;
     private Set<RawInstance> instancesFromXML;
+    private Point dimension;
 
     /**
      * This method reads in the XML file and saves the information in the class.
@@ -47,10 +48,15 @@ public class XMLParser {
             throw new XMLParsingException("The XML Parser encountered an error upon reading" + file.getAbsolutePath(), e);
         }
         myDocument.getDocumentElement().normalize();
+        Element root = myDocument.getDocumentElement();
+        System.out.println(root.getFirstChild().getNodeValue());
+        dimension = new PointImpl(
+                Integer.parseInt(root.getElementsByTagName("gridWidth").item(0).getNodeValue()),
+                Integer.parseInt(root.getElementsByTagName("gridHeight").item(0).getNodeValue()));
         classesFromXML = new TreeSet<>();
         instancesFromXML = new TreeSet<>();
         for (String classType : allClasses) {
-            NodeList classesOfType = myDocument.getElementsByTagName(classType);
+            NodeList classesOfType = root.getElementsByTagName(classType);
             if (classesOfType.getLength() != 0) {
                 for (int i = 0; i < classesOfType.getLength(); i++) {
                     classesFromXML.add(new RawClass((Element) classesOfType.item(i)));
@@ -58,7 +64,7 @@ public class XMLParser {
             }
         }
         for (String instanceType : allInstances) {
-            NodeList instancesOfType = myDocument.getElementsByTagName(instanceType);
+            NodeList instancesOfType = root.getElementsByTagName(instanceType);
             if (instancesOfType.getLength() != 0) {
                 for (int i = 0; i < instancesOfType.getLength(); i++) {
                     instancesFromXML.add(new RawInstance((Element) instancesOfType.item(i)));
@@ -73,9 +79,7 @@ public class XMLParser {
      * @return A Point representing height and width of the grid.
      */
     public Point getGridDimension() {
-        return new PointImpl(
-                Integer.parseInt(myDocument.getElementsByTagName("grid-width").item(0).getNodeValue()),
-                Integer.parseInt(myDocument.getElementsByTagName("grid-height").item(0).getNodeValue()));
+        return dimension;
     }
 
     /**
