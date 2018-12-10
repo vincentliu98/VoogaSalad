@@ -74,8 +74,8 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
 
     public SimpleGameObjectsCRUD(SavedEntityDB saved) {
         this(saved.numRows(), saved.numCols());
-        for(var c : saved.classes()) {
-            switch(c.getType()) {
+        for (var c : saved.classes()) {
+            switch (c.getType()) {
                 case CATEGORY: createCategoryClass((CategoryClass) c); break;
                 case PLAYER: createPlayerClass((PlayerClass) c); break;
                 case ENTITY: createEntityClass((EntityClass) c); break;
@@ -84,11 +84,24 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
                 case UNSPECIFIED: // fuck it. honestly
             }
         }
-        for(var i : saved.instances()) {
+        for (var i : saved.instances()) {
             System.out.println(i.getInstanceId());
-            try { addGameObjectInstanceToMapFunc().accept(i);
-            } catch (InvalidIdException e) { e.printStackTrace(); } // not gonna happen in normal... circumstances
+            try {
+                addGameObjectInstanceToMapFunc().accept(i);
+            } catch (InvalidIdException e) {
+                e.printStackTrace();
+            } // not gonna happen in normal... circumstances
         }
+    }
+
+    @Override
+    public int getNumCols() {
+        return numCols;
+    }
+
+    @Override
+    public int getNumRows() {
+        return numRows;
     }
 
     private TileInstanceFactory instantiateTileInstanceFactory() {

@@ -4,7 +4,6 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import conversion.authoring.SavedEntityDB;
 import gameObjects.crud.SimpleGameObjectsCRUD;
-import gameObjects.gameObject.GameObjectInstance;
 import grids.PointImpl;
 
 public class CRUDSerializationTest {
@@ -25,12 +24,11 @@ public class CRUDSerializationTest {
 
         var recoveredDB = new SimpleGameObjectsCRUD((SavedEntityDB) new XStream(new DomDriver()).fromXML(entityDB.toXML()));
         System.out.println("-------------AFTER  SERIALIZATION-----------");
-        recoveredDB.getAllInstances().forEach(i -> System.out.println(i.getInstanceId()));
-
         var recoveredGoblinClass = recoveredDB.getEntityClass("goblin");
         System.out.println(recoveredGoblinClass.createInstance(new PointImpl(2, 1)));
         System.out.println(recoveredDB.getAllInstances("goblin"));
+        recoveredGoblinClass.addProperty("hp ", "[   ]");
 
-        recoveredDB.getAllInstances().forEach(i -> System.out.println(i.getInstanceId()));
+        recoveredGoblinClass.getAllInstances().forEach(c -> System.out.println(c.getPropertiesMap()));
     }
 }

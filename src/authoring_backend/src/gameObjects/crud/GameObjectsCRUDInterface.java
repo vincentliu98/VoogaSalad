@@ -22,6 +22,9 @@ import java.util.Set;
  */
 public interface GameObjectsCRUDInterface {
 
+    int getNumCols();
+
+    int getNumRows();
 
     /**
      * This method creates a Tile Class and adds it to the map.
