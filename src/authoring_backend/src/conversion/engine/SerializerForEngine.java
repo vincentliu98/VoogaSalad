@@ -27,7 +27,6 @@ public class SerializerForEngine {
     public static XStream gen() {
         var serializer = new XStream(new DomDriver());
         serializer.alias("game", AuthoringTools.class);
-
         serializer.registerConverter(new AuthoringToolsConverter(genAux(), serializer.getMapper()));
 
         return serializer;

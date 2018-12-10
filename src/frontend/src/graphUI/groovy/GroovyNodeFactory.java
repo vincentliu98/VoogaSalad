@@ -126,7 +126,6 @@ public class GroovyNodeFactory {
 
         if(blockType.equals("function")) return Try.success(factory.functionBlock(xPos, yPos, arg, null));
 
-        System.out.println(blockType);
         return Try.success(factory.functionBlock(xPos, yPos, blockType, portInfo));
     }
 

@@ -14,6 +14,12 @@ module authoring_backend {
     opens authoringUtils.frontendUtils to xstream;
     opens graph to xstream;
     opens groovy.graph.blocks.core to xstream;
+    opens conversion.authoring to xstream;
+    opens gameObjects.category to xstream;
+    opens gameObjects.entity to xstream;
+    opens gameObjects.sound to xstream;
+    opens gameObjects.player to xstream;
+    opens gameObjects.tile to xstream;
 
     requires org.codehaus.groovy;
     requires xstream;
@@ -36,7 +42,6 @@ module authoring_backend {
     exports gameObjects.gameObject;
     exports gameObjects.crud;
     exports gameObjects.player;
-    exports gameObjects.turn;
     exports gameObjects.tileGeneration;
     exports utility;
 }

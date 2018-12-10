@@ -31,6 +31,7 @@ import utils.imageManipulation.JavaFxOperation;
 
 import java.io.File;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -132,11 +133,11 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
         readInstanceProperties();
     }
 
-    private void readCommonTileCharacteristic(ReadOnlyStringProperty className, ObservableList<String> imagePathList, SimpleIntegerProperty width, SimpleIntegerProperty height) {
-        nameField.setText(className.getValue());
+    private void readCommonTileCharacteristic(String className, List<String> imagePathList, int width, int height) {
+        nameField.setText(className);
         imagePaths.addAll(imagePathList);
-        widthText.setText(String.valueOf(width.getValue()));
-        heightText.setText(String.valueOf(height.getValue()));
+        widthText.setText(String.valueOf(width));
+        heightText.setText(String.valueOf(height));
     }
 
     /**
@@ -161,7 +162,7 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
         TileClass tileClass = gameObjectManager.createTileClass(getValidClassName());
         int width = outputPositiveInteger(widthText);
         int height = outputPositiveInteger(heightText);
-        TreeItem<String> newItem = new TreeItem<>(tileClass.getClassName().getValue());
+        TreeItem<String> newItem = new TreeItem<>(tileClass.getClassName());
         tileClass.getImagePathList().addAll(imagePaths);
         ImageView icon = new ImageView(ImageManager.getPreview(tileClass));
         JavaFxOperation.setWidthAndHeight(icon, ICON_WIDTH, ICON_HEIGHT);
@@ -192,7 +193,7 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
         gameObjectClass.getImagePathList().addAll(imagePaths);
         gameObjectClass.setWidth(width);
         gameObjectClass.setHeight(height);
-        gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName().getValue(), nameField.getText());
+        gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName(), nameField.getText());
         ImageView icon2 = new ImageView(ImageManager.getPreview(gameObjectClass));
         JavaFxOperation.setWidthAndHeight(icon2, ICON_WIDTH, ICON_HEIGHT);
         treeItem.setValue(nameField.getText());
@@ -222,7 +223,7 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
         gameObjectInstance.setWidth(width);
         gameObjectInstance.setHeight(height);
         ((ImageView) nodeEdited).setImage(ImageManager.getPreview(gameObjectInstance));
-        Tooltip.install(nodeEdited, new Tooltip(String.format("Width: %s\nHeight: %s\nSingle Click to toggle Deletion\nDouble Click or Right Click to edit\nInstance ID: %s\nClass Name: %s", width, height, gameObjectInstance.getInstanceId().getValue(), gameObjectInstance.getClassName().getValue())));
+        Tooltip.install(nodeEdited, new Tooltip(String.format("Width: %s\nHeight: %s\nSingle Click to toggle Deletion\nDouble Click or Right Click to edit\nInstance ID: %s\nClass Name: %s", width, height, gameObjectInstance.getInstanceId(), gameObjectInstance.getClassName())));
         int row = outputPositiveInteger(yInput);
         int col = outputPositiveInteger(xInput);
         StackPane target = JavaFxOperation.getNodeFromGridPaneByIndices(((GridPane) JavaFxOperation.getGrandParent(nodeEdited)), row, col);

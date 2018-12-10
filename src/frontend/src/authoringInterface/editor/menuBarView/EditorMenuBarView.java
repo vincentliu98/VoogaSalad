@@ -2,11 +2,9 @@ package authoringInterface.editor.menuBarView;
 
 import api.SubView;
 import authoring.AuthoringTools;
-import authoringInterface.MainAuthoringProgram;
 import authoringInterface.View;
 import authoringInterface.editor.editView.EditView;
 import authoringInterface.editor.menuBarView.subMenuBarView.*;
-import conversion.authoring.CRUDConverterAuthoring;
 import gameplay.Initializer;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
@@ -21,7 +19,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import runningGame.GameWindow;
 import utils.ErrorWindow;
-import utils.serializer.SerializerTestCRUD;
+import conversion.authoring.SerializerCRUD;
 
 import java.io.*;
 import java.util.function.BiConsumer;
@@ -43,7 +41,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
     private GameWindow gameWindow;
     private AuthoringTools authTools;
     private String fileName; //TODO: temp var, will be changed
-    private SerializerTestCRUD serializer;
+    private SerializerCRUD serializer;
     private SoundView soundView;
     private Runnable closeWindow; //For each window closable
 
@@ -55,7 +53,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
             BiConsumer<Integer, Integer> updateGridDimension,
             EditView editView
     ) {
-        serializer = new SerializerTestCRUD();
+        serializer = new SerializerCRUD();
         this.authTools = authTools;
         this.closeWindow = closeWindow;
         this.editView = editView;
@@ -82,7 +80,6 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         MenuItem setBGM = new MenuItem("BGM");
         MenuItem helpDoc = new MenuItem("Help");
         MenuItem about = new MenuItem("About");
-        MenuItem saveGameObjects = new MenuItem("Save GameObjects");
 
         save.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
         saveAs.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN));
@@ -93,7 +90,6 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         open.setOnAction(this::handleOpen);
         export.setOnAction(this::handleExport);
 
-        saveGameObjects.setOnAction(e -> new SaveGridAndGameObjectsView(new SerializerTestCRUD().getXMLString(authTools.entityDB())));
         save.setOnAction(this::handleSave);
         saveAs.setOnAction(this::handleSaveAs);
         close.setOnAction(e -> new CloseFileView(closeWindow));
@@ -105,7 +101,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         helpDoc.setOnAction(this::handleHelpDoc);
         about.setOnAction(this::handleAbout);
 
-        file.getItems().addAll(newFile, open, export, save, saveAs, saveGameObjects, close);
+        file.getItems().addAll(newFile, open, export, save, saveAs, close);
         run.getItems().addAll(runProject);
         settings.getItems().addAll(resizeGrid, setBGM);
         help.getItems().addAll(helpDoc, about);

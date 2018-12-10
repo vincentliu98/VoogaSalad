@@ -3,7 +3,8 @@ package authoring;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import com.thoughtworks.xstream.io.xml.DomDriver;
-import com.thoughtworks.xstream.io.xml.StaxDriver;
+import conversion.authoring.SavedEntityDB;
+import conversion.authoring.SerializerCRUD;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.crud.SimpleGameObjectsCRUD;
 import groovy.api.GroovyFactory;
@@ -22,7 +23,7 @@ public class AuthoringTools {
     private transient GroovyFactory factory;
 
     public AuthoringTools(int gridWidth, int gridHeight) {
-        entityDB = new SimpleGameObjectsCRUD(gridWidth, gridHeight);
+        entityDB = new SimpleGameObjectsCRUD(gridWidth, gridHeight, false);
 
         factory = new GroovyFactory(entityDB);
 
@@ -33,15 +34,11 @@ public class AuthoringTools {
      *  Initialize with a XML string
      */
     public AuthoringTools(String xml) {
-        System.out.println("--------Whole  xml-------");
-        System.out.println(xml);
         var xstream = new XStream(new DomDriver());
         var p = (SavedAuthoringTools) xstream.fromXML(xml);
         System.out.println("--------Entity xml-------");
         System.out.println(p.entityDBXML());
-        System.out.println("--------Phase  xml-------");
-        System.out.println(p.phaseDBXML());
-        entityDB = new SimpleGameObjectsCRUD(p.entityDBXML());
+        entityDB = new SimpleGameObjectsCRUD((SavedEntityDB) xstream.fromXML(p.entityDBXML()));
         factory = new GroovyFactory(entityDB);
         phaseDB = new PhaseDB(factory, p.phaseDBXML());
     }

@@ -15,7 +15,7 @@ public interface CategoryInstance extends GameObjectInstance {
      *
      * @return
      */
-    SimpleStringProperty getImagePath();
+    String getImagePath();
 
     /**
      *

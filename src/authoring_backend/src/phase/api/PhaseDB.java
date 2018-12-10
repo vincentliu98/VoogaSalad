@@ -50,7 +50,6 @@ public class PhaseDB {
 
         var xstream = new XStream(new DomDriver());
         var savedDB = (SavedPhaseDB) xstream.fromXML(xml);
-        System.out.println(xml);
         this.namespace = savedDB.namespace();
         this.winningCondition = savedDB.winningCondition();
         this.phaseGraphs.addAll(savedDB.phaseGraphs()); // addAll to invoke listener

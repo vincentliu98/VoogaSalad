@@ -37,7 +37,7 @@ public class TileGenerator {
             checkInput += e.getKey();
             cdf.add(checkInput);
             noOfClasses += 1;
-            crudInterface.getTileClass(e.getValue().getClassName().getValue());
+            crudInterface.getTileClass(e.getValue().getClassName());
         }
         if (mode == GenerationMode.RANDOM && checkInput != 1) {
             throw new NumericalException("Probabilities do not sum to 1");

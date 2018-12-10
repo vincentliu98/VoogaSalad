@@ -6,17 +6,13 @@ import grids.Point;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
 
+import java.util.List;
+
 /**
  *
  * @author Jason Zhou
  */
 public interface EntityInstance extends GameObjectInstance {
-
-
-    void setTileId(int newTileId);
-
-    SimpleIntegerProperty getTileID();
-
     /**
      * This method adds the image path to the GameObject Class and to all instances of the class.
      * @param imagePath file path of the image
@@ -27,7 +23,7 @@ public interface EntityInstance extends GameObjectInstance {
      * This method gets the image path list of the GameObject Class.
      * @return a list of the file paths of the images
      */
-    ObservableList<String> getImagePathList();
+    List<String> getImagePathList();
 
     /**
      * This method removes the image path from the Entity Class and from all instances of the class.
@@ -66,19 +62,19 @@ public interface EntityInstance extends GameObjectInstance {
      *
      * @param coord
      */
-    public void setCoord(Point coord);
+    void setCoord(Point coord);
 
     /**
      *
      * @return
      */
-    SimpleIntegerProperty getHeight();
+    int getHeight();
 
     /**
      *
      * @return
      */
-    SimpleIntegerProperty getWidth();
+    int getWidth();
 
 
     /**

@@ -70,8 +70,6 @@ public class View implements ParentView<SubView> {
         rootPane = new AnchorPane();
         rootPane.getStyleClass().add("mainPane");
         tools = authTools;
-        System.out.println("-------loaded tools -------");
-        System.out.println(tools.phaseDB().phaseGraphs());
 
         gameObjectManager = tools.entityDB();
         groovyPaneFactory = new GroovyPaneFactory(primaryStage, tools.factory(), tools.phaseDB().winCondition());

@@ -3,52 +3,46 @@ package gameObjects.entity;
 import authoringUtils.exception.GameObjectTypeException;
 import authoringUtils.exception.InvalidIdException;
 import authoringUtils.exception.InvalidOperationException;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import gameObjects.ThrowingBiConsumer;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import grids.Point;
-import javafx.beans.property.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
-import javafx.collections.ObservableSet;
+import groovy.api.BlockGraph;
 
-import java.util.Collection;
-import java.util.function.Consumer;
+import java.util.*;
 import java.util.function.Function;
 
 public class SimpleEntityClass implements EntityClass {
-
-    private static final String CONST_CLASSNAME = "className";
-    private static final String CONST_ID = "id";
-    private static final String CONST_MOVABLE = "movable";
     private static final int DEFAULT_HEIGHT = 1;
     private static final int DEFAULT_WIDTH = 1;
 
-    private ReadOnlyStringWrapper className;
-    private ReadOnlyIntegerWrapper classId;
-    private SimpleBooleanProperty movable;
-    private ObservableList<String> imagePathList;
-    private ObservableMap<String, String> propertiesMap;
-    private String imageSelector;
-    private SimpleIntegerProperty width;
-    private SimpleIntegerProperty height;
+    private String className;
+    private int classId;
+    private boolean movable;
+    private List<String> imagePathList;
+    private Map<String, String> propertiesMap;
+    private BlockGraph imageSelector;
+    private int width;
+    private int height;
 
-    private EntityInstanceFactory myFactory;
-    private ThrowingBiConsumer<String, String, InvalidOperationException> changeEntityClassNameFunc;
-    private Function<String, Collection<GameObjectInstance>> getAllEntityInstancesFunc;
-    private Function<Integer, Boolean> deleteEntityInstanceFunc;
-
+    @XStreamOmitField
+    private transient EntityInstanceFactory myFactory;
+    @XStreamOmitField
+    private transient ThrowingBiConsumer<String, String, InvalidOperationException> changeEntityClassNameFunc;
+    @XStreamOmitField
+    private transient Function<String, Collection<GameObjectInstance>> getAllEntityInstancesFunc;
+    @XStreamOmitField
+    private transient Function<Integer, Boolean> deleteEntityInstanceFunc;
 
     public SimpleEntityClass(String className) {
-        this.className = new ReadOnlyStringWrapper(this, CONST_CLASSNAME, className);
-        classId = new ReadOnlyIntegerWrapper(this, CONST_ID);
-        movable = new SimpleBooleanProperty(this, CONST_MOVABLE);
-        imagePathList = FXCollections.observableArrayList();
-        propertiesMap = FXCollections.observableHashMap();
-        imageSelector = "";
-        width = new SimpleIntegerProperty(DEFAULT_WIDTH);
-        height = new SimpleIntegerProperty(DEFAULT_HEIGHT);
+        this.className = className;
+        classId = 0;
+        movable = true;
+        imagePathList = new ArrayList<>();
+        propertiesMap = new HashMap<>();
+        width = DEFAULT_WIDTH;
+        height = DEFAULT_HEIGHT;
     }
 
     public SimpleEntityClass(
@@ -56,7 +50,8 @@ public class SimpleEntityClass implements EntityClass {
             EntityInstanceFactory entityInstanceFactory,
             ThrowingBiConsumer<String, String, InvalidOperationException> changeEntityClassNameFunc,
             Function<String, Collection<GameObjectInstance>> getAllEntityInstancesFunc,
-            Function<Integer, Boolean> deleteEntityInstanceFunc) {
+            Function<Integer, Boolean> deleteEntityInstanceFunc
+    ) {
         this(className);
         this.myFactory = entityInstanceFactory;
         this.changeEntityClassNameFunc = changeEntityClassNameFunc;
@@ -66,36 +61,25 @@ public class SimpleEntityClass implements EntityClass {
 
 
     @Override
-    public ReadOnlyIntegerProperty getClassId() {
-        return classId.getReadOnlyProperty();
-    }
+    public int getClassId() { return classId; }
 
     @Override
-    public void setClassId(Consumer<SimpleIntegerProperty> setFunc) {
-        setFunc.accept(classId);
-    }
+    public void setClassId(int newId) { classId = newId; }
 
     @Override
-    public ReadOnlyStringProperty getClassName() {
-        return className.getReadOnlyProperty();
-    }
-
+    public String getClassName() { return className; }
 
     @Override
     public void changeClassName(String newClassName)
             throws InvalidOperationException {
-        changeEntityClassNameFunc.accept(className.getValue(), newClassName);
+        changeEntityClassNameFunc.accept(className, newClassName);
     }
 
     @Override
-    public void setClassName(String newClassName) {
-        className.setValue(newClassName);
-    }
+    public void setClassName(String newClassName) { className = newClassName; }
 
     @Override
-    public ObservableMap<String, String> getPropertiesMap() {
-        return propertiesMap;
-    }
+    public Map<String, String> getPropertiesMap() { return propertiesMap; }
 
     @Override
     public boolean addProperty(String propertyName, String defaultValue) {
@@ -124,14 +108,12 @@ public class SimpleEntityClass implements EntityClass {
     }
 
     @Override
-    public ObservableList<String> getImagePathList() {
+    public List<String> getImagePathList() {
         return imagePathList;
     }
 
     @Override
-    public void addImagePath(String path) {
-        imagePathList.add(path);
-    }
+    public void addImagePath(String path) { imagePathList.add(path); }
 
 
     @Override
@@ -146,38 +128,39 @@ public class SimpleEntityClass implements EntityClass {
     }
 
     @Override
-    public void setImageSelector(String blockCode) {
-        imageSelector = blockCode;
-    }
+    public String getImageSelectorCode() { return imageSelector.transformToGroovy().get(""); }
 
     @Override
-    public String getImageSelectorCode() {
-        return imageSelector;
-    }
-
-    @Override
-    public SimpleIntegerProperty getHeight() {
+    public int getHeight() {
         return height;
     }
 
     @Override
-    public SimpleIntegerProperty getWidth() {
+    public int getWidth() {
         return width;
     }
 
     @Override
-    public void setHeight(int newHeight) {
-        height.set(newHeight);
+    public void setHeight(int newHeight) { height = newHeight; }
+
+    @Override
+    public void setWidth(int newWidth) { width = newWidth; }
+
+    @Override
+    public void equipContext(
+        EntityInstanceFactory entityInstanceFactory,
+        ThrowingBiConsumer<String, String, InvalidOperationException> changeEntityClassNameFunc,
+        Function<String, Collection<GameObjectInstance>> getAllEntityInstancesFunc,
+        Function<Integer, Boolean> deleteEntityInstanceFunc
+    ) {
+        myFactory = entityInstanceFactory;
+        this.changeEntityClassNameFunc = changeEntityClassNameFunc;
+        this.getAllEntityInstancesFunc = getAllEntityInstancesFunc;
+        this.deleteEntityInstanceFunc = deleteEntityInstanceFunc;
     }
 
     @Override
-    public void setWidth(int newWidth) {
-        width.set(newWidth);
-    }
-
-    @Override
-    public EntityInstance createInstance(Point point)
-            throws GameObjectTypeException, InvalidIdException {
+    public EntityInstance createInstance(Point point) throws GameObjectTypeException, InvalidIdException {
         return myFactory.createInstance(this, point);
     }
 
@@ -188,8 +171,8 @@ public class SimpleEntityClass implements EntityClass {
 
     @Override
     public Collection<EntityInstance> getAllInstances() {
-        ObservableSet<EntityInstance> s = FXCollections.observableSet();
-        Collection<GameObjectInstance> instances = getAllEntityInstancesFunc.apply(getClassName().getValue());
+        Set<EntityInstance> s = new HashSet<>();
+        Collection<GameObjectInstance> instances = getAllEntityInstancesFunc.apply(getClassName());
         for (GameObjectInstance i : instances) {
             if (i.getType() == GameObjectType.ENTITY) {
                 s.add((EntityInstance) i);
@@ -199,12 +182,8 @@ public class SimpleEntityClass implements EntityClass {
     }
 
     @Override
-    public SimpleBooleanProperty isMovable() {
-        return movable;
-    }
+    public boolean isMovable() { return movable; }
 
     @Override
-    public void setMovable(boolean move) {
-        movable.setValue(move);
-    }
+    public void setMovable(boolean move) { movable = move; }
 }
