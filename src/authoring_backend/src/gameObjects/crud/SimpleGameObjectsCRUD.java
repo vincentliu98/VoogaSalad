@@ -88,7 +88,8 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
             createTileClass("Default Grid");
             createPlayerClass("Default Player");
             createSoundClass("Sound file");
-        } catch (DuplicateGameObjectClassException e) { // TODO: proper error handling
+        } catch (DuplicateGameObjectClassException e) {
+            // TODO: proper error handling
             e.printStackTrace();
         }
     }
@@ -106,7 +107,6 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
             }
         }
         for (var i : saved.instances()) {
-            System.out.println(i.getInstanceId());
             try {
                 addGameObjectInstanceToMapFunc().accept(i);
             } catch (InvalidIdException e) {
@@ -350,7 +350,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         if (t.getType() != objectType) {
             throw new GameObjectTypeException(className, objectType);
         }
-        return (T)t;
+        return (T) t;
     }
 
     @Override
@@ -698,6 +698,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
 
     private void changeAllGameObjectInstancesClassName(String oldClassName, String newClassName)
             throws InvalidOperationException {
+        System.out.println("bgj");
         for (Map.Entry<Integer, GameObjectInstance> e : gameObjectInstanceMapById.entrySet()) {
             if (e.getValue().getClassName().equals(oldClassName)) {
                 e.getValue().setClassName(newClassName);

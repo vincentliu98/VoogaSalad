@@ -142,7 +142,6 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
      */
     @Override
     protected void confirmEditTreeItem() throws IllegalGameObjectNamingException, IllegalGeometryException, InvalidOperationException, PreviewUnavailableException {
-        gameObjectClass.setClassName(getValidClassName());
         int width = outputPositiveInteger(widthInput);
         int height = outputPositiveInteger(heightInput);
         try {
@@ -153,10 +152,10 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         gameObjectClass.getPropertiesMap().clear();
         gameObjectClass.setWidth(width);
         gameObjectClass.setHeight(height);
-        gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName(), nameField.getText());
+        gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName(), getValidClassName());
         ImageView icon2 = new ImageView(ImageManager.getPreview(gameObjectClass));
         JavaFxOperation.setWidthAndHeight(icon2, ICON_WIDTH, ICON_HEIGHT);
-        treeItem.setValue(nameField.getText());
+        treeItem.setValue(getValidClassName());
         treeItem.setGraphic(icon2);
         writeClassProperties();
     }
