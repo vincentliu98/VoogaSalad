@@ -698,7 +698,6 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
 
     private void changeAllGameObjectInstancesClassName(String oldClassName, String newClassName)
             throws InvalidOperationException {
-        System.out.println("bgj");
         for (Map.Entry<Integer, GameObjectInstance> e : gameObjectInstanceMapById.entrySet()) {
             if (e.getValue().getClassName().equals(oldClassName)) {
                 e.getValue().setClassName(newClassName);
