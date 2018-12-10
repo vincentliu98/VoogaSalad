@@ -42,11 +42,9 @@ public class View implements ParentView<SubView> {
     private EditView editView;
     private Stage primaryStage;
     private AuthoringTools tools;
-    private Node preview;
     private StatusView statusView;
     private GridPane sidebar;
     private GridPane mainView;
-    private static final String DEFAULT_CONFIG = Objects.requireNonNull(View.class.getClassLoader().getResource("default.xml")).getFile();
     private NodeInstanceController nodeInstanceController;
     private GameObjectsCRUDInterface gameObjectManager;
     public static final double MENU_BAR_HEIGHT = 30;
@@ -55,7 +53,6 @@ public class View implements ParentView<SubView> {
     private static final int ROW_NUMBER = 10;
     private static final int COL_NUMBER = 7;
     private static final double SIDEBAR_WIDTH = 250;
-    private XMLParser xmlParser;
 
     /**
      * Constructor for an createPhaseGraph window, with an AnchorPane as the root Node, and the AnchorPane constraints on top, left and right are 0.
@@ -64,8 +61,6 @@ public class View implements ParentView<SubView> {
     public View(Stage primaryStage, String xml) { this(primaryStage, new AuthoringTools(xml)); }
     public View(Stage primaryStage, AuthoringTools authTools) {
         this.primaryStage = primaryStage;
-        xmlParser = new XMLParser();
-        try { xmlParser.loadXML(new File(DEFAULT_CONFIG)); } catch (SAXException | CRUDLoadException | XMLParsingException ignored) {}
         mainView = new GridPane();
         rootPane = new AnchorPane();
         rootPane.getStyleClass().add("mainPane");
