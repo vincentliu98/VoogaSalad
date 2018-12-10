@@ -105,6 +105,13 @@ Hours Spent: 100 hours per person
 * src/authoring_backend/test/ValidationTest.java : This file tests whether validation is running.
 * src/authoring_backend/test/XStreamTest.java : This file tests the XStream.
 
+* src/frontend/test/GroovyShellTest.java : This class tests the functionality of the Groovy Shell.
+* src/frontend/test/ImageSelectorTest.java : This class tests wheteher image selector is working.
+* src/frontend/test/SerializationTest.java : This class tests the serialization of CRUD interface.
+* src/frontend/test/SwitchingPaneTest.java : This class tests whether switching pane is successful.
+* src/frontend/test/TestGameData.java : This class tests game data.
+
+
 ### data or resource files required by the project
 
 The user can to customize images for entity, tile and user avatars. The user need to prepare these images and set the appropriate image for respective image objects in building the game.
