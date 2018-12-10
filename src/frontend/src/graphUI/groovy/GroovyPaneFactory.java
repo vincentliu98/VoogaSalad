@@ -174,14 +174,13 @@ public class GroovyPaneFactory {
 
         // private Map<Pair<GroovyNode, Ports>, Pair<GroovyNode, Line>> lines;
         private void buildFromGraph() {
-            for(var block : graph.keySet()) {
-                createNode(nodeFactory.toView(block));
-            }
+            for(var block : graph.keySet()) createNode(nodeFactory.toView(block));
             for(var block : graph.keySet()) {
                 for(var edge : graph.get(block)) {
                     var node1 = getNodeWithModel(edge.from());
                     var node2 = getNodeWithModel(edge.to());
                     if(node1.isPresent() && node2.isPresent()) {
+                        graph.removeEdge(edge); // since connectNodes is going to connect it
                         connectNodes(node1.get(), edge.fromPort(), node2.get());
                     }
                 }

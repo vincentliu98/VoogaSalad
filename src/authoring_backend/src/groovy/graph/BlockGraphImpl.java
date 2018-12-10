@@ -15,7 +15,7 @@ public class BlockGraphImpl extends SimpleGraph<GroovyBlock, BlockEdge> implemen
     private SourceBlock source;
     public BlockGraphImpl() {
         super();
-        source = new SourceBlock(1000, 850); // this dirty little secret should be fixed
+        source = new SourceBlock(1000, 1000); // this dirty little secret should be fixed
         try { addNode(source); } catch (Throwable ignored) {}
     }
 

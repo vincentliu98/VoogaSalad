@@ -21,9 +21,7 @@ public class GroovyFactory {
     /**
      *  Makes an createPhaseGraph BlockGraph with one source node
      */
-    public BlockGraph createGroovyGraph() {
-        return new BlockGraphImpl();
-    }
+    public BlockGraph createGroovyGraph() { return new BlockGraphImpl(); }
 
     /**
      *  Makes an edge
