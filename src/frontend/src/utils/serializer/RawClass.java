@@ -39,7 +39,7 @@ public class RawClass implements Comparable<RawClass> {
         if (!hasValue(classNameElement)) {
             throw new CRUDLoadException("GameObjectClass does not have a valid class name");
         }
-        className = getChildElement("className").getTextContent();
+        className = classNameElement.getTextContent();
         if (containsChildElement("height")) {
             Element heightElement = getChildElement("height");
             if (hasValue(heightElement)) {
