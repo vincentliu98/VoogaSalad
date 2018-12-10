@@ -128,4 +128,9 @@ public class RawClass implements Comparable<RawClass> {
     public int compareTo(RawClass o) {
         return classID - o.getClassID();
     }
+
+    @Override
+    public String toString() {
+        return className + "," + classID;
+    }
 }

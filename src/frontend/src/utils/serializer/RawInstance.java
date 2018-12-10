@@ -133,4 +133,9 @@ public class RawInstance implements Comparable<RawInstance> {
     public int compareTo(RawInstance o) {
         return instanceID - o.getInstanceID();
     }
+
+    @Override
+    public String toString() {
+        return instanceName + "," + instanceID;
+    }
 }

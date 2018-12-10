@@ -25,5 +25,8 @@ public class SerializationTest {
         } catch (XMLParsingException e) {
             e.printStackTrace();
         }
+        System.out.println(parser.getGridDimension());
+        System.out.println(parser.getGameObjectClasses());
+        System.out.println(parser.getGameObjectInstances());
     }
 }
