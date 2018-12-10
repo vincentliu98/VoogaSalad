@@ -49,7 +49,7 @@ public class XMLParser {
         }
         myDocument.getDocumentElement().normalize();
         Element root = myDocument.getDocumentElement();
-        System.out.println(root.getFirstChild().getNodeValue());
+        System.out.println(root.getChildNodes().item(1).getNodeValue());
         dimension = new PointImpl(
                 Integer.parseInt(root.getElementsByTagName("gridWidth").item(0).getNodeValue()),
                 Integer.parseInt(root.getElementsByTagName("gridHeight").item(0).getNodeValue()));
