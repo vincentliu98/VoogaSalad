@@ -7,6 +7,11 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.util.Pair;
 
+/**
+ *
+ * Get prop's key and value
+ * @author Amy
+ */
 
 public class PropertyInputDialog extends Dialog<Pair<String, String>> {
     private TextField key, value;

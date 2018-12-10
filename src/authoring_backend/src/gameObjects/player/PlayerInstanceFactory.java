@@ -12,6 +12,11 @@ import javafx.collections.ObservableMap;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+/**
+ * @author Yunhao Qing
+ */
+
+
 public class PlayerInstanceFactory {
     private Consumer<GameObjectInstance> requestInstanceIdFunc;
     private ThrowingConsumer<GameObjectInstance, InvalidIdException> addInstanceToMapFunc;

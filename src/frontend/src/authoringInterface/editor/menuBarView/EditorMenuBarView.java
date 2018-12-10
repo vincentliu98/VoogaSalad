@@ -6,6 +6,7 @@ import authoringInterface.MainAuthoringProgram;
 import authoringInterface.View;
 import authoringInterface.editor.editView.EditView;
 import authoringInterface.editor.menuBarView.subMenuBarView.*;
+import conversion.authoring.CRUDConverterAuthoring;
 import gameplay.Initializer;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
@@ -42,6 +43,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
     private GameWindow gameWindow;
     private AuthoringTools authTools;
     private String fileName; //TODO: temp var, will be changed
+    private SerializerTestCRUD serializer;
     private SoundView soundView;
     private Runnable closeWindow; //For each window closable
 
@@ -53,6 +55,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
             BiConsumer<Integer, Integer> updateGridDimension,
             EditView editView
     ) {
+        serializer = new SerializerTestCRUD();
         this.authTools = authTools;
         this.closeWindow = closeWindow;
         this.editView = editView;

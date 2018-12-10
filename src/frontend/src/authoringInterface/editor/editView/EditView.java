@@ -148,7 +148,7 @@ public class EditView implements SubView<TabPane> {
 
 
     public void updateDimension(int width, int height) {
-        gridView.updateDimension(width, height);
+        gridView.updateDimension(height, width);
     }
 
 

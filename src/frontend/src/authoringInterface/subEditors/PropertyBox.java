@@ -6,6 +6,9 @@ import javafx.scene.text.Text;
 
 import java.util.function.Consumer;
 
+/**
+ * @author Amy
+ */
 public class PropertyBox extends HBox {
     private Text keyText, valueText;
     public PropertyBox(String key, String value, Consumer<PropertyBox> deleteThis) {
