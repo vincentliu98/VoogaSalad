@@ -39,7 +39,8 @@ public class XMLParser {
     public void loadXML(File file) throws SAXException, XMLParsingException {
         DocumentBuilder docBuilder = null;
         try {
-            docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+            docBuilder = docBuilderFactory.newDocumentBuilder();
         } catch (ParserConfigurationException ignored) {
         }
         try {

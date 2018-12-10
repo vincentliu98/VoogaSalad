@@ -26,7 +26,10 @@ public class RawClass implements Comparable<RawClass> {
 
     public RawClass(Element entry) {
         type = entry.getTagName();
-        classID = Integer.parseInt(entry.getElementsByTagName("classID").item(0).getNodeValue());
+        for (int i = 0; i < entry.getChildNodes().getLength(); i++) {
+            System.out.println(entry.getChildNodes().item(i).getNodeName() + "," + entry.getChildNodes().item(i).getTextContent());
+        }
+        classID = Integer.parseInt(entry.getElementsByTagName("classID").item(0).getTextContent());
         className = entry.getElementsByTagName("className").item(0).getNodeValue();
         if (entry.getElementsByTagName("height").item(0).getNodeValue() != null) {
             height = Integer.parseInt(entry.getElementsByTagName("height").item(0).getNodeValue());
