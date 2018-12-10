@@ -11,9 +11,7 @@ import twitter4j.conf.ConfigurationBuilder;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.HashSet;
-import java.util.ResourceBundle;
-import java.util.Set;
+import java.util.*;
 
 public class User {
     private int myID;
@@ -23,6 +21,7 @@ public class User {
     private Twitter myTwitter;
     private ResourceBundle myErrors;
     private Set<String> myFollowing;
+    private Map<String, String> myProgress;
 
     public User(int id, String username){
         myID = id;
@@ -30,6 +29,7 @@ public class User {
         myFavoriteGames = new HashSet<>();
         myFollowing = new HashSet<>();
         myTwitter = null;
+        myProgress = new HashMap<>();
         myAvatar = new ImageView();
         myAvatar.setImage(new Image(getClass().getResourceAsStream("/profile-images/person_logo.png")));
         //myErrors = ResourceBundle.getBundle("resources/errors/Errors");
@@ -50,6 +50,15 @@ public class User {
     public void removeFavorite(String gameName){
         if (!myFavoriteGames.contains(gameName)) return;
         myFavoriteGames.remove(gameName);
+    }
+
+    public void setGameState(String gameName, String xmlString){
+        myProgress.put(gameName, xmlString);
+    }
+
+    public String getGameState(String gameName){
+        if (!myProgress.keySet().contains(gameName)) return "";
+        return myProgress.get(gameName);
     }
 
     public String getUsername(){
