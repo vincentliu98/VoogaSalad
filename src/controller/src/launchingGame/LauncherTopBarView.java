@@ -8,10 +8,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
-import social.ProfileView;
+import social.*;
 
 
-public class LauncherTopBarView {
+public class LauncherTopBarView implements Subscriber {
     public static final String DIVIDER_PATH = "/graphics/gray-line.png";
     public static final double DIVIDER_RATIO = 0.7;
     public static final double SPACING = 25;
@@ -24,6 +24,7 @@ public class LauncherTopBarView {
     private ControlOptions myControlOptions;
     private Stage myStage;
     private ProfileView myProfile;
+    private User myUser;
 
     private double initHeight;
     private double xOffset;
@@ -31,6 +32,7 @@ public class LauncherTopBarView {
 
 
     public LauncherTopBarView(double height, Stage stage, BorderPane pane, Searchable searched){
+        myUser = null;
         initHeight = height;
         myStage = stage;
 
@@ -52,6 +54,7 @@ public class LauncherTopBarView {
         myBox.getChildren().add(mySpacer);
         myBox.getChildren().add(myProfile.getView());
         myBox.getChildren().add(myControlOptions.getView());
+        EventBus.getInstance().register(EngineEvent.CHANGE_USER, this);
     }
 
     private void initBox(){
@@ -95,5 +98,12 @@ public class LauncherTopBarView {
 
     public HBox getView() {
         return myBox;
+    }
+
+    @Override
+    public void update(EngineEvent engineEvent, Object... args) {
+        if (engineEvent.equals(EngineEvent.CHANGE_USER) && args[0].getClass().equals(User.class)){
+            myUser = (User) args[0];
+        }
     }
 }

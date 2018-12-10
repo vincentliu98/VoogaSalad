@@ -11,9 +11,7 @@ import twitter4j.conf.ConfigurationBuilder;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.HashSet;
-import java.util.ResourceBundle;
-import java.util.Set;
+import java.util.*;
 
 public class User {
     private int myID;
@@ -23,6 +21,10 @@ public class User {
     private Twitter myTwitter;
     private ResourceBundle myErrors;
     private Set<String> myFollowing;
+    private Map<String, String> myProgress;
+    private String myImageReference;
+    private String myStatus;
+    private static final String IMAGES_FOLDER_PATH = "/profile-images/";
 
     public User(int id, String username){
         myID = id;
@@ -30,8 +32,11 @@ public class User {
         myFavoriteGames = new HashSet<>();
         myFollowing = new HashSet<>();
         myTwitter = null;
+        myProgress = new HashMap<>();
+        myImageReference = "person_logo.png";
+        myStatus = "";
         myAvatar = new ImageView();
-        myAvatar.setImage(new Image(getClass().getResourceAsStream("/profile-images/person_logo.png")));
+        myAvatar.setImage(new Image(getClass().getResourceAsStream(IMAGES_FOLDER_PATH + myImageReference)));
         //myErrors = ResourceBundle.getBundle("resources/errors/Errors");
     }
 
@@ -39,8 +44,21 @@ public class User {
         return myAvatar;
     }
 
-    public void changeAvatar(Image image){
-        myAvatar = new ImageView(image);
+    public void updateStatus(String message){
+        myStatus = message;
+    }
+
+    public String getStatus(){
+        return myStatus;
+    }
+
+    public String getImageReference(){
+        return myImageReference;
+    }
+
+    public void changeAvatar(String imageReference){
+        myImageReference = imageReference;
+        myAvatar.setImage(new Image(getClass().getResourceAsStream(IMAGES_FOLDER_PATH + myImageReference)));
     }
 
     public void addFavorite(String gameName){
@@ -52,16 +70,28 @@ public class User {
         myFavoriteGames.remove(gameName);
     }
 
+    public void saveGameState(String gameName, String xmlString){
+        myProgress.put(gameName, xmlString);
+    }
+
+    public String getGameState(String gameName){
+        if (!myProgress.keySet().contains(gameName)) return "";
+        return myProgress.get(gameName);
+    }
+
     public String getUsername(){
         return myUsername;
     }
 
     public void addFollower(String username){
         myFollowing.add(username);
+        System.out.println("MyFollowing of " + myUsername + " is now " + myFollowing.toString());
     }
 
     public void removeFollower(String username){
+        if (!myFollowing.contains(username)) return;
         myFollowing.remove(username);
+        System.out.println("MyFollowing of " + myUsername + " is now " + myFollowing.toString());
     }
 
     public Set<String> getFollowing(){
