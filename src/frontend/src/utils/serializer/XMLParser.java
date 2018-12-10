@@ -59,7 +59,11 @@ public class XMLParser {
             NodeList classesOfType = root.getElementsByTagName(classType);
             if (classesOfType.getLength() != 0) {
                 for (int i = 0; i < classesOfType.getLength(); i++) {
-                    classesFromXML.add(new RawClass((Element) classesOfType.item(i)));
+                    try {
+                        classesFromXML.add(new RawClass((Element) classesOfType.item(i)));
+                    } catch (CRUDLoadException e) {
+                        System.out.println(e.getMessage());
+                    }
                 }
             }
         }
@@ -67,7 +71,11 @@ public class XMLParser {
             NodeList instancesOfType = root.getElementsByTagName(instanceType);
             if (instancesOfType.getLength() != 0) {
                 for (int i = 0; i < instancesOfType.getLength(); i++) {
-                    instancesFromXML.add(new RawInstance((Element) instancesOfType.item(i)));
+                    try {
+                        instancesFromXML.add(new RawInstance((Element) instancesOfType.item(i)));
+                    } catch (CRUDLoadException e) {
+                        System.out.println(e.getMessage());
+                    }
                 }
             }
         }
