@@ -30,50 +30,80 @@ public class RawClass implements Comparable<RawClass> {
     public RawClass(Element entry) throws CRUDLoadException {
         rootElement = entry;
         type = entry.getTagName();
-        classID = Integer.parseInt(getChildElement("classID").getTextContent());
+        Element classIDElement = getChildElement("classID");
+        if (!hasValue(classIDElement)) {
+            throw new CRUDLoadException("GameObjectClass does not have a valid classID");
+        }
+        classID = Integer.parseInt(classIDElement.getTextContent());
+        Element classNameElement = getChildElement("className");
+        if (!hasValue(classNameElement)) {
+            throw new CRUDLoadException("GameObjectClass does not have a valid class name");
+        }
         className = getChildElement("className").getTextContent();
         if (containsChildElement("height")) {
-            height = Integer.parseInt(getChildElement("height").getTextContent());
-            if (height <= 0) {
-                throw new CRUDLoadException("Height must be a positive integer");
+            Element heightElement = getChildElement("height");
+            if (hasValue(heightElement)) {
+                height = Integer.parseInt(heightElement.getTextContent());
+                if (height <= 0) {
+                    throw new CRUDLoadException("Height must be a positive integer");
+                }
             }
         }
         if (containsChildElement("width")) {
-            height = Integer.parseInt(getChildElement("width").getTextContent());
-            if (height <= 0) {
-                throw new CRUDLoadException("Width must be a positive integer");
+            Element widthElement = getChildElement("width");
+            if (hasValue(widthElement)) {
+                width = Integer.parseInt(widthElement.getTextContent());
+                if (width <= 0) {
+                    throw new CRUDLoadException("Width must be a positive integer");
+                }
             }
         }
         if (containsChildElement("props")) {
-            props = new HashMap<>();
             Element propNode = getChildElement("props");
-            for (int i = 0; i < propNode.getChildNodes().getLength(); i++) {
-                Node current = propNode.getChildNodes().item(i);
-                String key = current.getChildNodes().item(0).getTextContent();
-                String value = current.getChildNodes().item(1).getTextContent();
-                props.put(key, value);
+            if (hasChild(propNode)) {
+                props = new HashMap<>();
+                for (int i = 0; i < propNode.getChildNodes().getLength(); i++) {
+                    Node current = propNode.getChildNodes().item(i);
+                    String key = current.getChildNodes().item(0).getTextContent();
+                    String value = current.getChildNodes().item(1).getTextContent();
+                    props.put(key, value);
+                }
             }
         }
         if (containsChildElement("imagePaths")) {
             Element imagePathsNode = getChildElement("imagePaths");
-            imagePaths = new ArrayList<>();
-            for (int i = 0; i < imagePathsNode.getChildNodes().getLength(); i++) {
-                imagePaths.add(imagePathsNode.getChildNodes().item(i).getTextContent());
+            if (hasValue(imagePathsNode)) {
+                imagePaths = new ArrayList<>();
+                for (int i = 0; i < imagePathsNode.getChildNodes().getLength(); i++) {
+                    imagePaths.add(imagePathsNode.getChildNodes().item(i).getTextContent());
+                }
             }
         }
         if (containsChildElement("imagePath")) {
-            imagePath = getChildElement("imagePath").getTextContent();
+            Element imagePathElement = getChildElement("imagePath");
+            if (hasValue(imagePathElement)) {
+                imagePath = imagePathElement.getTextContent();
+            }
         }
         if (containsChildElement("imageSelector")) {
-            imageSelector = entry.getElementsByTagName("imageSelector").item(0).getTextContent();
+            Element imageSelectorElement = getChildElement("imageSelector");
+            if (hasValue(imageSelectorElement)) {
+                imageSelector = imageSelectorElement.getTextContent();
+            }
         }
-        if (entry.getElementsByTagName("mediaFilePath").item(0).getTextContent() != null) {
-            mediaFilePath = entry.getElementsByTagName("mediaFilePath").item(0).getTextContent();
+        if (containsChildElement("mediaFilePath")) {
+            Element mediaFilePathElement = getChildElement("mediaFilePath");
+            if (hasValue(mediaFilePathElement)) {
+                mediaFilePath = mediaFilePathElement.getTextContent();
+            }
         }
-        if (entry.getElementsByTagName("gameObjectInstanceIDs").item(0).getChildNodes() != null) {
-            gameObjectInstanceIDs = new HashSet<>();
-            for (int i = 0; i < entry.getElementsByTagName("gameObjectInstanceIDs").item(0).getChildNodes().getLength(); i++) {
-                gameObjectInstanceIDs.add(Integer.parseInt(entry.getElementsByTagName("gameObjectInstanceIDs").item(0).getChildNodes().item(i).getTextContent()));
+        if (containsChildElement("gameObjectInstanceIDs")) {
+            Element gameObjectInstanceIDsElement = getChildElement("gameObjectInstanceIDs");
+            if (hasChild(gameObjectInstanceIDsElement)) {
+                gameObjectInstanceIDs = new HashSet<>();
+                for (int i = 0; i < gameObjectInstanceIDsElement.getChildNodes().getLength(); i++) {
+                    gameObjectInstanceIDs.add(Integer.parseInt(gameObjectInstanceIDsElement.getChildNodes().item(i).getTextContent()));
+                }
             }
         }
     }
