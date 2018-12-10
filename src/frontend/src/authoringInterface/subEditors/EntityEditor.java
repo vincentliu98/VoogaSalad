@@ -9,6 +9,7 @@ import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.entity.EntityClass;
 import gameObjects.entity.EntityInstance;
+import gameObjects.player.PlayerClass;
 import grids.PointImpl;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -28,6 +29,7 @@ import utils.imageManipulation.ImageManager;
 import utils.imageManipulation.JavaFxOperation;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -57,6 +59,8 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     private GridPane size;
     private TextField rowInput;
     private TextField colInput;
+    private Label playerText;
+    private ComboBox<PlayerClass> playerBox;
 
     EntityEditor(GameObjectsCRUDInterface manager) {
         super(manager);
@@ -75,6 +79,10 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         size.addRow(0, widthLabel, widthInput);
         size.addRow(1, heightLabel, heightInput);
 
+        playerText = new Label("Choose a player");
+        var players = FXCollections.<PlayerClass>observableArrayList();
+        manager.getPlayerClasses().forEach(players::add);
+        playerBox = new ComboBox<>(players);
         imageText = new Label("Add an image to your entity");
         chooseImage = new Button("Choose image");
         chooseImage.setStyle("-fx-text-fill: white;"
@@ -175,6 +183,8 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         gameObjectInstance.getPropertiesMap().clear();
         gameObjectInstance.setWidth(width);
         gameObjectInstance.setHeight(height);
+        var chosenPlayer = playerBox.getValue();
+        if(chosenPlayer != null) chosenPlayer.addGameObjectInstances(gameObjectInstance);
         ((ImageView) nodeEdited).setImage(ImageManager.getPreview(gameObjectInstance));
         Tooltip.install(nodeEdited, new Tooltip(String.format("Width: %s\nHeight: %s\nSingle Click to toggle Deletion\nDouble Click or Right Click to edit\nInstance ID: %s\nClass Name: %s", width, height, gameObjectInstance.getInstanceId(), gameObjectInstance.getClassName())));
         int row = Integer.parseInt(rowInput.getText());
@@ -220,6 +230,11 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         imagePaths.addAll(gameObjectInstance.getImagePathList());
         widthInput.setText(String.valueOf(gameObjectInstance.getWidth()));
         heightInput.setText(String.valueOf(gameObjectInstance.getHeight()));
+        gameObjectManager.getPlayerClasses().forEach(p -> {
+            if(p.isOwnedByPlayer(gameObjectInstance)) {
+                playerBox.getSelectionModel().select(p);
+            }
+        });
         Label xLabel = new Label("x, col index");
         Label yLabel = new Label("y, row index");
         colInput = new TextField(String.valueOf(gameObjectInstance.getCoord().getX()));
@@ -228,7 +243,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         position.addRow(0, xLabel, colInput);
         position.addRow(1, yLabel, rowInput);
         position.setHgap(20);
-        layout.addRow(5, position);
+        layout.addRow(6, position);
     }
 
     /**
@@ -245,9 +260,10 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
 
     private void setupLayout() {
         layout.addRow(0, size);
-        layout.addRow(1, imageText, chooseImage);
-        layout.addRow(2, imagePanel);
-        layout.addRow(3, propLabel, addProperties);
-        layout.addRow(4, listProp);
+        layout.addRow(1, playerText, playerBox);
+        layout.addRow(2, imageText, chooseImage);
+        layout.addRow(3, imagePanel);
+        layout.addRow(4, propLabel, addProperties);
+        layout.addRow(5, listProp);
     }
 }
