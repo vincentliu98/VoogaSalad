@@ -98,7 +98,7 @@ public class LoginScreen {
             // throw exceptions for invalid password, username
             // assuming a valid user was retrieved from the database (myUser)
             User myUser = new User(10, "bloop");// TODO: Remove later (just a placeholder)
-            myUser.changeAvatar(new Image("/profile-images/ocean.jpeg"));
+            myUser.changeAvatar("ocean.jpeg");
             // TODO: Remove - just for testing that loading the gamestate works
             myUser.saveGameState("SwordAndArrow.xml", "\n" +
                     "<game>\n" +
