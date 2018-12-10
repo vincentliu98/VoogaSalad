@@ -20,6 +20,7 @@ import java.util.Set;
  * It holds maps of GameObject Classes and GameObject Instances.
  * @author Jason Zhou
  * @author Haotian Wang
+ * @author Yunhao Qing
  */
 public interface GameObjectsCRUDInterface {
 

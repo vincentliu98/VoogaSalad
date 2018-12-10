@@ -9,6 +9,10 @@ import javafx.beans.property.SimpleStringProperty;
 
 import java.util.Set;
 
+/**
+ * @author Yunhao Qing
+ */
+
 public interface PlayerClass extends GameObjectClass {
 
     PlayerInstance createInstance() throws GameObjectTypeException, InvalidIdException;

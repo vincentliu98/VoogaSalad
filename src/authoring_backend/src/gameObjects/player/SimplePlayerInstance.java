@@ -11,6 +11,11 @@ import java.util.TreeSet;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+/**
+ * @author Yunhao Qing
+ */
+
+
 public class SimplePlayerInstance implements PlayerInstance {
     private ReadOnlyStringWrapper className;
     private SimpleStringProperty instanceName;
