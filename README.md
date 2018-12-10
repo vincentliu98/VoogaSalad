@@ -93,6 +93,9 @@ Hours Spent: 100 hours per person
 
 ### files used to start the project
 
+* src/frontend/src/authoringInterface/MainAuthoringProgram.java
+
+
 ### files used to test the project and errors you expect your program to handle without crashing
 
 * src/authoring_backend/test/CRUDTest.java : This file tests whether the game object CRUD is functioning correctly.
@@ -114,7 +117,7 @@ TO BE ADDED
 
 ### How to use the program
 
-*Run the src/frontend/src/authoringInterface/MainAuthoringProgram.java to get access to the authoring program.
+* Run the src/frontend/src/authoringInterface/MainAuthoringProgram.java to get access to the authoring program.
 
 ### Known Bugs
 
@@ -134,10 +137,17 @@ TO BE ADDED
 ### Impression
 
 * Vincent Liu : Slogo is more challenging compared to the previous two projects, breakout and cell society. I learn how to work with a team by using interfaces and I truly feel I can work better in a team setting in the future.
+
 * Haotian Wang : I have been working on connecting backend and the UI. I enjoyed the process a lot, it is so fun to see how much changes I made and how flexible our codes become after I re-construct the structure of our project. I feel I understand the 'Open For Extension,Closed for Modification' much more after this project.
+
 * Amy Kim : I have been working on the GUI and I really like the experience. Learning how all the UI components work, how the UI components are connected to the back-end and learning how to handle user input were challenging but fun as well. I have also been doing a lot of testing and debugging, it feels great to see how the UI becomes more perfect and beautiful over time.
+
 * Natalie Le : I am so glad that our program works eventually! This project has been fun and I had a great time with my teammates who are amazing! I feel I have learnt much about API and it is going to be super helpful for my future.
+
 * Jonathan Nakagawa : I am truly happy with working on the sole of our program - the game engine. I spent some time on UI as well. I have learnt a lot and I believe the skills and friendship I obtained from the project will last.
+
 * Inchan Hwang : This project is very challenging but I learnt so much about APIs and Reflection and I truly appreciate the power of JavaFX now! Although it is time-consuming, the project is definitely worth doing. I realise how much I enjoy backend coding and I aspire to be a backend engineer in the future!
+
 * Jason Zhou :  The project is challenging in its concept and design. I learn a lot about APIs, Lambda, and Reflection. I had a great time design and implementing the front end and also learn how to connect the front end and the back end, which is very valuable for me.
+
 * Yunhao Qing : Building Voogasalad is very time-consuming. I get much more used to using Git as a part of a team through doing this project. I am responsible for authoring engine backend coding and I am very satisfied with working on backend.I learn about how flexibility of codes is important as making changes on flexible codes is much easier and changing codes is what we do all the time.
