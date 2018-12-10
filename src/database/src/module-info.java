@@ -7,9 +7,12 @@ module database {
     requires java.sql;
     requires java.xml;
     requires java.scripting;
+    requires java.naming;
 
     requires mysql.connector.java;
+    requires jsch;
 
-    exports util;
+    exports util.data;
+    exports util.files;
 
 }
