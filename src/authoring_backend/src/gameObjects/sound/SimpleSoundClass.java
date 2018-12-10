@@ -3,6 +3,7 @@ package gameObjects.sound;
 import authoringUtils.exception.GameObjectTypeException;
 import authoringUtils.exception.InvalidIdException;
 import authoringUtils.exception.InvalidOperationException;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import gameObjects.ThrowingBiConsumer;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
@@ -17,10 +18,14 @@ public class SimpleSoundClass implements SoundClass {
     private double duration;
     private Map<String, String> propertiesMap;
 
-    private SoundInstanceFactory myFactory;
-    private ThrowingBiConsumer<String, String, InvalidOperationException> changeSoundClassNameFunc;
-    private Function<String, Collection<GameObjectInstance>> getAllSoundInstancesFunc;
-    private Function<Integer, Boolean> deleteSoundInstanceFunc;
+    @XStreamOmitField
+    private transient SoundInstanceFactory myFactory;
+    @XStreamOmitField
+    private transient ThrowingBiConsumer<String, String, InvalidOperationException> changeSoundClassNameFunc;
+    @XStreamOmitField
+    private transient Function<String, Collection<GameObjectInstance>> getAllSoundInstancesFunc;
+    @XStreamOmitField
+    private transient Function<Integer, Boolean> deleteSoundInstanceFunc;
 
     public SimpleSoundClass(String className) {
         this.className = className;

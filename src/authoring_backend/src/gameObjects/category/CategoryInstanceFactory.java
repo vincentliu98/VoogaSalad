@@ -34,6 +34,5 @@ public class CategoryInstanceFactory {
         requestInstanceIdFunc.accept(categoryInstance);
         addInstanceToMapFunc.accept(categoryInstance);
         return categoryInstance;
-
     }
 }

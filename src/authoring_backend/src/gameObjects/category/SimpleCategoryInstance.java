@@ -1,9 +1,6 @@
 package gameObjects.category;
 
-import javafx.collections.ObservableMap;
-
 import java.util.Map;
-import java.util.function.Supplier;
 
 public class SimpleCategoryInstance implements CategoryInstance {
     private String className;

@@ -1,13 +1,13 @@
 package gameObjects;
 
 
-import authoringUtils.exception.InvalidIdException;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
 
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  * This Class implements the IdManager Interface.
@@ -26,19 +26,13 @@ public class IdManagerClass implements IdManager {
     private Map<Integer, GameObjectClass> gameObjectClassMap;
     private Map<Integer, GameObjectInstance> gameObjectInstanceMap;
 
-
-    private int classCount;
-    private int instanceCount;
-
-
     public IdManagerClass(
             Function<Integer, GameObjectClass> getClassFromMapFunc,
             Function<Integer, GameObjectInstance> getInstanceFromMapFunc,
             Map<Integer, GameObjectClass> gameObjectClassMap,
-            Map<Integer, GameObjectInstance> gameObjectInstanceMap) {
+            Map<Integer, GameObjectInstance> gameObjectInstanceMap
+    ) {
 
-        classCount = 1;
-        instanceCount = 1;
 //        validClassIds = new LinkedList<>();
 //        validInstanceIds = new LinkedList<>();
 
@@ -53,71 +47,39 @@ public class IdManagerClass implements IdManager {
         return gameObjectClass -> {
             // Only set Ids for Classes without Ids
             if (gameObjectClass.getClassId() == 0) {
-                int id = classCount;
-                classCount++;
-                gameObjectClass.setClassId(id);
+                gameObjectClass.setClassId(newClassID());
             }
         };
     }
-
-    @Override
-    public ThrowingConsumer<GameObjectClass, InvalidIdException> returnClassIdFunc() {
-
-        return gameObjectClass -> {
-            int returnedId = gameObjectClass.getClassId();
-            if (returnedId != 0) {
-                if (returnedId > classCount) {
-                    throw new InvalidIdException("Deleted class contains invalid Id");
-                }
-                int nextId = returnedId + 1;
-                for (int i = nextId; i < classCount; i++) {
-                    GameObjectClass g = gameObjectClassMap.remove(i);
-                    int newId = i - 1;
-                    g.setClassId(newId);
-                    gameObjectClassMap.put(newId, g);
-                }
-                classCount--;
-            }
-        };
-    }
-
-
-
 
     @Override
     public Consumer<GameObjectInstance> requestInstanceIdFunc() {
         return gameObjectInstance -> {
             // Only set Ids for Instances without Ids
             if (gameObjectInstance.getInstanceId() == 0) {
-                int id = instanceCount;
-                instanceCount++;
-                gameObjectInstance.setInstanceId(id);
+                gameObjectInstance.setInstanceId(newInstanceID());
             }
         };
     }
 
-    @Override
-    public ThrowingConsumer<GameObjectInstance, InvalidIdException> returnInstanceIdFunc() {
-
-        return gameObjectInstance -> {
-            int returnedId = gameObjectInstance.getInstanceId();
-            if (returnedId != 0) {
-                if (returnedId > instanceCount) {
-                    throw new InvalidIdException("Deleted instance contains invalid Id");
-                }
-                int nextId = returnedId + 1;
-                for (int i = nextId; i < instanceCount; i++) {
-                    GameObjectInstance g = gameObjectInstanceMap.remove(i);
-                    int newId = i - 1;
-                    g.setInstanceId(newId);
-                    gameObjectInstanceMap.put(newId, g);
-                }
-                instanceCount--;
-            }
-        };
+    private int newClassID() {
+        return Stream.iterate(1, a -> a+1).filter(this::notIssuedClassID).findFirst().get();
     }
 
+    private int newInstanceID() {
+        return Stream.iterate(1, a -> a+1).filter(this::notIssuedInstanceID).findFirst().get();
+    }
 
+    private boolean notIssuedClassID(int id) {
+        return gameObjectClassMap.values()
+                                 .stream()
+                                 .noneMatch(c -> c.getClassId() == id);
+    }
+    private boolean notIssuedInstanceID(int id) {
+        return gameObjectInstanceMap.values()
+                                    .stream()
+                                    .noneMatch(c -> c.getInstanceId() == id);
+    }
 
     @Override
     public Function<Integer, Boolean> verifyClassIdFunc() {

@@ -1,21 +1,36 @@
 import authoring.AuthoringTools;
-import authoringUtils.exception.DuplicateGameObjectClassException;
-import authoringUtils.exception.GameObjectTypeException;
-import authoringUtils.exception.InvalidGameObjectInstanceException;
-import authoringUtils.exception.InvalidIdException;
+import authoringUtils.exception.*;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
+import conversion.authoring.SavedEntityDB;
+import gameObjects.crud.SimpleGameObjectsCRUD;
+import gameObjects.gameObject.GameObjectInstance;
 import grids.PointImpl;
 
 public class CRUDSerializationTest {
-    public static void main(String[] args) throws DuplicateGameObjectClassException, GameObjectTypeException, InvalidIdException, InvalidGameObjectInstanceException {
-        var authTools = new AuthoringTools(3, 3);
+    public static void main(String[] args) throws DuplicateGameObjectClassException, GameObjectTypeException, InvalidIdException, InvalidGameObjectInstanceException, GameObjectClassNotFoundException {
+        var authTools = new AuthoringTools(4, 3);
         var entityDB = authTools.entityDB();
 
         var playerA = entityDB.createPlayerClass("PlayerA");
         playerA.addProperty("ha", "5");
 
         var goblinClass = entityDB.createEntityClass("goblin");
+        var trollClass = entityDB.createEntityClass("troll");
         var goblinInstance = goblinClass.createInstance(new PointImpl(1, 1));
+        var trollInstance = trollClass.createInstance(new PointImpl(2, 2));
 
+        System.out.println("-------------BEFORE SERIALIZATION-----------");
         System.out.println(entityDB.toXML());
+
+        var recoveredDB = new SimpleGameObjectsCRUD((SavedEntityDB) new XStream(new DomDriver()).fromXML(entityDB.toXML()));
+        System.out.println("-------------AFTER  SERIALIZATION-----------");
+        recoveredDB.getAllInstances().forEach(i -> System.out.println(i.getInstanceId()));
+
+        var recoveredGoblinClass = recoveredDB.getEntityClass("goblin");
+        System.out.println(recoveredGoblinClass.createInstance(new PointImpl(2, 1)));
+        System.out.println(recoveredDB.getAllInstances("goblin"));
+
+        recoveredDB.getAllInstances().forEach(i -> System.out.println(i.getInstanceId()));
     }
 }

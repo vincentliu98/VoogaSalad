@@ -3,6 +3,7 @@ package gameObjects.player;
 import authoringUtils.exception.GameObjectTypeException;
 import authoringUtils.exception.InvalidIdException;
 import authoringUtils.exception.InvalidOperationException;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import gameObjects.ThrowingBiConsumer;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
@@ -23,10 +24,14 @@ public class SimplePlayerClass implements PlayerClass {
     private Map<String, String> propertiesMap;
     private Set<GameObjectInstance> gameObjectInstancesSet;
 
-    private PlayerInstanceFactory myFactory;
-    private ThrowingBiConsumer<String, String, InvalidOperationException> changePlayerClassNameFunc;
-    private Function<String, Collection<GameObjectInstance>> getAllPlayerInstancesFunc;
-    private Function<Integer, Boolean> deletePlayerInstanceFunc;
+    @XStreamOmitField
+    private transient PlayerInstanceFactory myFactory;
+    @XStreamOmitField
+    private transient ThrowingBiConsumer<String, String, InvalidOperationException> changePlayerClassNameFunc;
+    @XStreamOmitField
+    private transient Function<String, Collection<GameObjectInstance>> getAllPlayerInstancesFunc;
+    @XStreamOmitField
+    private transient Function<Integer, Boolean> deletePlayerInstanceFunc;
 
     public SimplePlayerClass(String className) {
         this.className = className;

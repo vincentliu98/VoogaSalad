@@ -3,6 +3,7 @@ package authoring;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import conversion.authoring.SavedEntityDB;
 import conversion.authoring.SerializerCRUD;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.crud.SimpleGameObjectsCRUD;
@@ -37,7 +38,7 @@ public class AuthoringTools {
         var p = (SavedAuthoringTools) xstream.fromXML(xml);
         System.out.println("--------Entity xml-------");
         System.out.println(p.entityDBXML());
-        entityDB = (SimpleGameObjectsCRUD) new SerializerCRUD().getSerializer().fromXML(p.entityDBXML());
+        entityDB = new SimpleGameObjectsCRUD((SavedEntityDB) xstream.fromXML(p.entityDBXML()));
         factory = new GroovyFactory(entityDB);
         phaseDB = new PhaseDB(factory, p.phaseDBXML());
     }

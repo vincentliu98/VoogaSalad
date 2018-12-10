@@ -27,13 +27,13 @@ public class SimpleEntityClass implements EntityClass {
     private int height;
 
     @XStreamOmitField
-    private EntityInstanceFactory myFactory;
+    private transient EntityInstanceFactory myFactory;
     @XStreamOmitField
-    private ThrowingBiConsumer<String, String, InvalidOperationException> changeEntityClassNameFunc;
+    private transient ThrowingBiConsumer<String, String, InvalidOperationException> changeEntityClassNameFunc;
     @XStreamOmitField
-    private Function<String, Collection<GameObjectInstance>> getAllEntityInstancesFunc;
+    private transient Function<String, Collection<GameObjectInstance>> getAllEntityInstancesFunc;
     @XStreamOmitField
-    private Function<Integer, Boolean> deleteEntityInstanceFunc;
+    private transient Function<Integer, Boolean> deleteEntityInstanceFunc;
 
     public SimpleEntityClass(String className) {
         this.className = className;
@@ -160,8 +160,7 @@ public class SimpleEntityClass implements EntityClass {
     }
 
     @Override
-    public EntityInstance createInstance(Point point)
-            throws GameObjectTypeException, InvalidIdException {
+    public EntityInstance createInstance(Point point) throws GameObjectTypeException, InvalidIdException {
         return myFactory.createInstance(this, point);
     }
 

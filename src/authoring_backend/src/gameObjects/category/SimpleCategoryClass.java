@@ -3,6 +3,7 @@ package gameObjects.category;
 import authoringUtils.exception.GameObjectTypeException;
 import authoringUtils.exception.InvalidIdException;
 import authoringUtils.exception.InvalidOperationException;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import gameObjects.ThrowingBiConsumer;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
@@ -19,10 +20,14 @@ public class SimpleCategoryClass implements CategoryClass {
     private String imagePath;
     private Map<String, String> propertiesMap;
 
-    private CategoryInstanceFactory myFactory;
-    private ThrowingBiConsumer<String, String, InvalidOperationException> changeCategoryClassNameFunc;
-    private Function<String, Collection<GameObjectInstance>> getAllCategoryInstancesFunc;
-    private Function<Integer, Boolean> deleteCategoryInstanceFunc;
+    @XStreamOmitField
+    private transient CategoryInstanceFactory myFactory;
+    @XStreamOmitField
+    private transient ThrowingBiConsumer<String, String, InvalidOperationException> changeCategoryClassNameFunc;
+    @XStreamOmitField
+    private transient Function<String, Collection<GameObjectInstance>> getAllCategoryInstancesFunc;
+    @XStreamOmitField
+    private transient Function<Integer, Boolean> deleteCategoryInstanceFunc;
 
     public SimpleCategoryClass(String className) {
         this.className = className;

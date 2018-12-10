@@ -3,6 +3,7 @@ package gameObjects.tile;
 import authoringUtils.exception.GameObjectTypeException;
 import authoringUtils.exception.InvalidIdException;
 import authoringUtils.exception.InvalidOperationException;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import gameObjects.ThrowingBiConsumer;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
@@ -23,10 +24,14 @@ public class SimpleTileClass implements TileClass {
     private Map<String, String> propertiesMap;
     private String imageSelector;
 
-    private TileInstanceFactory myFactory;
-    private ThrowingBiConsumer<String, String, InvalidOperationException> changeTileClassNameFunc;
-    private Function<String, Collection<GameObjectInstance>> getAllTileInstancesFunc;
-    private Function<Integer, Boolean> deleteTileInstanceFunc;
+    @XStreamOmitField
+    private transient TileInstanceFactory myFactory;
+    @XStreamOmitField
+    private transient ThrowingBiConsumer<String, String, InvalidOperationException> changeTileClassNameFunc;
+    @XStreamOmitField
+    private transient Function<String, Collection<GameObjectInstance>> getAllTileInstancesFunc;
+    @XStreamOmitField
+    private transient Function<Integer, Boolean> deleteTileInstanceFunc;
 
     public SimpleTileClass(String name) {
         className = name;
