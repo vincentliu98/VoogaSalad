@@ -14,5 +14,4 @@ module database {
 
     exports util.data;
     exports util.files;
-
 }

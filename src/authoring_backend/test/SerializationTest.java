@@ -38,7 +38,6 @@ public class SerializationTest {
         swordmanClass.addImagePath("swordman3.png");
         swordmanClass.addImagePath("swordman4.png");
         swordmanClass.addImagePath("swordman5.png");
-        swordmanClass.setImageSelector("$return = $this.props.hp-1");
 
         var bowmanClass = db.createEntityClass("bowman");
         bowmanClass.setWidth(2);
@@ -51,7 +50,6 @@ public class SerializationTest {
         bowmanClass.addImagePath("bowman3.png");
         bowmanClass.addImagePath("bowman4.png");
         bowmanClass.addImagePath("bowman5.png");
-        bowmanClass.setImageSelector("$return = $this.props.hp-1");
 
         playerClassA.addGameObjectInstances(swordmanClass.createInstance(new PointImpl(0,0)));
         playerClassA.addGameObjectInstances(swordmanClass.createInstance(new PointImpl(0,1)));
