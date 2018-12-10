@@ -12,9 +12,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import playing.MainPlayer;
+import social.EngineEvent;
 import social.Icon;
+import social.Subscriber;
+import social.User;
 
-public class GameIcon implements Icon {
+public class GameIcon implements Icon, Subscriber {
     public static final String TEXT_CSS = "title-box";
     public static final String DESCRIPTION_CSS = "description-box";
     public static final double DESCRIPTION_INSET = 10;
@@ -37,6 +40,7 @@ public class GameIcon implements Icon {
     private Text myDescription;
     private Button myPlayButton;
     private HBox myButtonHolder;
+    private User myUser;
 
     private String myName;
     private String myDescriptionString;
@@ -45,12 +49,14 @@ public class GameIcon implements Icon {
     private String myReferencePath;
 
 
-    public GameIcon(String gameName, String description, String reference, String color, String imagePath, String tags){
+    public GameIcon(String gameName, String description, String reference, String color, String imagePath,
+                    String tags, User user){
         myName = gameName;
         myDescriptionString = description;
         myReferencePath = reference;
         myImagePath = imagePath;
         myTags = tags.split(SPACE_REGEX);
+        myUser = user;
 
         initPane();
         initBackground();
@@ -154,8 +160,7 @@ public class GameIcon implements Icon {
         myPlayButton.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                MainPlayer myPlayer = new MainPlayer();
-                myPlayer.launchGame(myReferencePath);
+                new MainPlayer(myUser, myReferencePath);
             }
         });
 
@@ -173,5 +178,12 @@ public class GameIcon implements Icon {
     @Override
     public StackPane getView() {
         return myPane;
+    }
+
+    @Override
+    public void update(EngineEvent engineEvent, Object... args) {
+        if (engineEvent.equals(EngineEvent.CHANGE_USER) && args[0].getClass().equals(User.class)){
+            myUser = (User) args[0];
+        }
     }
 }

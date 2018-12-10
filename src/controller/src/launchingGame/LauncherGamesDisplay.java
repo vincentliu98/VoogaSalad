@@ -42,7 +42,7 @@ public class LauncherGamesDisplay implements Searchable, Sortable, Subscriber {
     }
 
     private void initGames(){
-        GameParser myParser = new GameParser(System.getProperty(CURRENT_FOLDER_KEY) + GAMES_PATH);
+        GameParser myParser = new GameParser(System.getProperty(CURRENT_FOLDER_KEY) + GAMES_PATH, myUser);
         myGames = myParser.getMyGames();
         myActiveGames = new ArrayList<>();
         for(GameIcon myIcon: myGames){
