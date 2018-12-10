@@ -43,7 +43,6 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
     private Set<String> toRemovePath;
     private String imagePath;
     private Label entityText;
-    private CheckBox entitybox;
 
     PlayerEditor(GameObjectsCRUDInterface manager) {
         super(manager);
@@ -68,15 +67,11 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
         });
         imagePanel = new HBox(IMAGE_PANEL_GAP);
 
-        entityText = new Label("Assign Entities");
-        entitybox = new CheckBox();
 
         confirm.setStyle("-fx-text-fill: white;"
                 + "-fx-background-color: #343a40;");
         layout.addRow(0, imageText, chooseImage);
         layout.addRow(1, imagePanel);
-        layout.addRow(2, entityText);
-        layout.addRow(3, entitybox);
 
         rootPane.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.DELETE || e.getCode() == KeyCode.BACK_SPACE) {
@@ -132,7 +127,6 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
         JavaFxOperation.setWidthAndHeight(icon, ICON_WIDTH, ICON_HEIGHT);
         newItem.setGraphic(icon);
         treeItem.getChildren().add(newItem);
-        System.out.print(treeItem.getChildren());
     }
 
     /**
