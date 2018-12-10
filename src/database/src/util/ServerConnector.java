@@ -2,10 +2,7 @@ package util;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 
 public class ServerConnector{
 //    public static final String USER_NAME = "client";
