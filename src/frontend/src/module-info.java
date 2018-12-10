@@ -8,6 +8,7 @@ module frontend {
 
 
     opens utils.serializer to xstream;
+    opens utils to xstream;
 
     requires xstream;
 
