@@ -28,7 +28,6 @@ public class LauncherGamesDisplay implements Searchable, Sortable, Subscriber {
     public LauncherGamesDisplay(){
         initTiles();
         initGames();
-        myUser = null;
         EventBus.getInstance().register(EngineEvent.CHANGE_USER, this);
     }
 
