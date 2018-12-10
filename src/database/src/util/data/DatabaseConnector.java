@@ -1,10 +1,11 @@
-package util;
+package util.data;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
+import java.sql.*;
 
-import java.sql.ResultSet;
+//import java.sql.ResultSet;
 
-public class ServerConnector{
+public class DatabaseConnector {
 //    public static final String USER_NAME = "client";
 //    public static final String DATABASE_NAME = "store";
 //    public static final String PASSWORD = "e.printstacktrace";
@@ -14,7 +15,7 @@ public class ServerConnector{
     protected MysqlDataSource myDataSrc;
     protected ResultSet mySet;
 
-    public ServerConnector(){
+    public DatabaseConnector(){
     }
 
     public void setConnection(String username, String databasename, String password, String servername, int port){
