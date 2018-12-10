@@ -88,27 +88,26 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
         });
         imagePaths.addListener((ListChangeListener<String>) change -> {
             imagePanel.getChildren().clear();
-            imagePaths.forEach(string -> {
-                ImageView preview = new ImageView(string);
-                preview.setFitHeight(ICON_HEIGHT);
+            imagePaths.forEach(path -> {
+                ImageView preview = new ImageView(path);
                 preview.setFitWidth(ICON_WIDTH);
+                preview.setFitHeight(ICON_HEIGHT);
                 imagePanel.getChildren().add(preview);
                 preview.setOnMouseClicked(e -> {
                     if (!toRemoveImageView.remove(preview)) {
                         toRemoveImageView.add(preview);
-                        toRemovePath.add(string);
+                        toRemovePath.add(path);
                         preview.setOpacity(REMOVE_OPACITY);
                     } else {
-                        toRemoveImageView.remove(preview);
-                        toRemovePath.remove(string);
-                        preview.setOpacity(FULL_OPACITY);
+                        toRemovePath.remove(path);
+                        preview.setOpacity(1);
                     }
                 });
             });
         });
 
         rootPane.setOnKeyPressed(e -> {
-            if (e.getCode() == KeyCode.DELETE) {
+            if (e.getCode() == KeyCode.DELETE || e.getCode() == KeyCode.BACK_SPACE) {
                 imagePaths.removeAll(toRemovePath);
             }
         });

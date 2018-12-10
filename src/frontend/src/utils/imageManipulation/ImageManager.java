@@ -7,9 +7,11 @@ import gameObjects.entity.EntityInstance;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
+import gameObjects.player.PlayerClass;
 import gameObjects.tile.TileClass;
 import gameObjects.tile.TileInstance;
 import javafx.beans.property.ReadOnlyStringProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
@@ -30,6 +32,7 @@ import java.util.Map;
  * This class also has functionalities that stack the multiple Images of a GameObjectClass if it has one.
  *
  * @author Haotian Wang
+ * @author Amy
  */
 public class ImageManager {
     private static final double IMAGE_WIDTH = 100;
@@ -73,7 +76,8 @@ public class ImageManager {
                 // TODO
                 break;
             case PLAYER:
-                // TODO
+                SimpleStringProperty paths3 = ((PlayerClass) gameObjectClass).getImagePath();
+                ret = getPlayerImage(paths3, gameObjectClass.getClassName());
                 break;
         }
         classImageMap.put(gameObjectClass, ret);
@@ -96,6 +100,21 @@ public class ImageManager {
             List<Image> images = new ArrayList<>();
             imagePaths.forEach(uri -> images.add(new Image(uri)));
             return stackImageFromMultipleImages(images);
+        }
+    }
+
+    /**
+     * This is only for PlayerClass image (which is SimpleStringProperty not observableList.
+     *
+     * @param imagePaths
+     * @param textToDisplay
+     * @return
+     */
+    private static Image getPlayerImage(SimpleStringProperty imagePaths, ReadOnlyStringProperty textToDisplay) {
+        if (imagePaths.get() == null) {
+            return composeImageFromString(textToDisplay.getValue());
+        } else {
+            return new Image(imagePaths.get());
         }
     }
 
@@ -167,7 +186,8 @@ public class ImageManager {
                 // TODO
                 break;
             case PLAYER:
-                // TODO
+                SimpleStringProperty paths3 = ((PlayerClass) gameObjectInstance).getImagePath();
+                ret = getPlayerImage(paths3, gameObjectInstance.getClassName());
                 break;
         }
         instanceImageMap.put(gameObjectInstance, ret);
