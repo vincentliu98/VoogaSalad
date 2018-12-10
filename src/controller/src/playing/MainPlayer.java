@@ -79,6 +79,7 @@ public class MainPlayer {
         saveButton.setMinWidth(View.GAME_WIDTH);
         saveButton.setOnMouseClicked(e -> {
             try{
+                // TODO: saveGameData Needs to be fixed
                 myUser.saveGameState(myReferencePath, GameData.saveGameData());
             } catch (Exception ex){ }
         });
