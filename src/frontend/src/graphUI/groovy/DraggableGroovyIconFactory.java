@@ -79,7 +79,6 @@ public class DraggableGroovyIconFactory {
 
         public boolean fetchArg() { return fetchArg; }
         public String blockType() { return blockType; }
-        public Map<Ports, String> getPortInfo() { return portInfo; }
     }
 
     public void dropHandler(DragEvent event, Consumer<GroovyNode> createNode) {
@@ -95,7 +94,7 @@ public class DraggableGroovyIconFactory {
                     arg = dialog.showAndWait().get();
                 }
                 createNode.accept(
-                    nodeFactory.toModel(
+                    nodeFactory.makeNode(
                         draggingIcon.blockType, draggingIcon.portInfo, newNodeX.get(), newNodeY.get(), arg
                     ).get()
                 );

@@ -65,7 +65,7 @@ public class SerializationTest {
         var factory = authTools.factory();
 
         var hbSource = phaseDB.winCondition().source();
-        var hbScript = factory.rawBlock(
+        var hbScript = factory.rawBlock(0, 0,
             "if(GameMethods.hasNoEntities(GameMethods.getCurrentPlayerName())) {" +
             "   GameMethods.endGame(GameMethods.getCurrentPlayerName() + ' LOST!')" +
             "}"
@@ -93,24 +93,24 @@ public class SerializationTest {
         graph.addEdge(edge24);
 
         var edge21graph = edge21.guard();
-        var noGuard = factory.rawBlock("GameMethods.$return(true)");
+        var noGuard = factory.rawBlock(0, 0,"GameMethods.$return(true)");
         edge21graph.addNode(noGuard);
         edge21graph.addEdge(factory.createEdge(edge21graph.source(), Ports.FLOW_OUT, noGuard));
 
         var edge12graph = edge12.guard();
 
         // this is properly done, but I'm gonna cheat afterwards
-        var n1 = factory.ifBlock();
-        var n2 = factory.functionBlock("GameMethods.isEntity", 1);
-        var n3 = factory.refBlock("$clicked").get();
-        var n4 = factory.binaryBlock("&&");
-        var n5 = factory.functionBlock("GameMethods.getCurrentPlayer().isMyEntity", 1);
-        var n6 = factory.assignBlock();
-        var n7 = factory.refBlock("$return").get();
-        var n8 = factory.booleanBlock("true").get();
-        var n9 = factory.elseBlock();
-        var n10 = factory.assignBlock();
-        var n11 = factory.booleanBlock("false").get();
+        var n1 = factory.ifBlock(0, 0);
+        var n2 = factory.functionBlock(0, 0,"GameMethods.isEntity", 1);
+        var n3 = factory.refBlock(0, 0, "$clicked").get();
+        var n4 = factory.binaryBlock(0, 0, "&&");
+        var n5 = factory.functionBlock(0, 0, "GameMethods.getCurrentPlayer().isMyEntity", 1);
+        var n6 = factory.assignBlock(0, 0);
+        var n7 = factory.refBlock(0, 0, "$return").get();
+        var n8 = factory.booleanBlock(0, 0, "true").get();
+        var n9 = factory.elseBlock(0, 0);
+        var n10 = factory.assignBlock(0, 0);
+        var n11 = factory.booleanBlock(0, 0, "false").get();
         edge12graph.addNode(n1);
         edge12graph.addNode(n2);
         edge12graph.addNode(n3);
@@ -138,20 +138,20 @@ public class SerializationTest {
         edge12graph.addEdge(factory.createEdge(n10, Ports.ASSIGN_RHS, n11));
 
         var edge23graph = edge23.guard();
-        var n23 = factory.rawBlock("GameMethods.$return(GameMethods.isTile($clicked) && GameMethods.distance($clicked, selected) <= 1)");
+        var n23 = factory.rawBlock(0, 0, "GameMethods.$return(GameMethods.isTile($clicked) && GameMethods.distance($clicked, selected) <= 1)");
         edge23graph.addNode(n23);
         edge23graph.addEdge(factory.createEdge(edge23graph.source(), Ports.FLOW_OUT, n23));
 
         var edge24graph = edge24.guard();
-        var n24 = factory.rawBlock("GameMethods.$return(GameMethods.isEntity($clicked) && !GameMethods.getCurrentPlayer().isMyEntity($clicked) && GameMethods.distance($clicked, selected) <= selected.props.attackRange)");
+        var n24 = factory.rawBlock(0, 0, "GameMethods.$return(GameMethods.isEntity($clicked) && !GameMethods.getCurrentPlayer().isMyEntity($clicked) && GameMethods.distance($clicked, selected) <= selected.props.attackRange)");
         edge24graph.addNode(n24);
         edge24graph.addEdge(factory.createEdge(edge24graph.source(), Ports.FLOW_OUT, n24));
 
-        var exec2 = factory.rawBlock("selected = $clicked");
+        var exec2 = factory.rawBlock(0, 0, "selected = $clicked");
         node2.exec().addNode(exec2);
         node2.exec().addEdge(factory.createEdge(node2.exec().source(), Ports.FLOW_OUT, exec2));
 
-        var exec3 = factory.rawBlock(
+        var exec3 = factory.rawBlock(0, 0,
             "GameMethods.moveEntity(selected, $clicked)\n" +
             "GameMethods.toNextPlayer()\n" +
             "GameMethods.$goto('A')"
@@ -160,7 +160,7 @@ public class SerializationTest {
         node3.exec().addEdge(factory.createEdge(node3.exec().source(), Ports.FLOW_OUT, exec3));
 
 
-        var exec4 = factory.rawBlock(
+        var exec4 = factory.rawBlock(0, 0,
             "$clicked.props.hp = $clicked.props.hp - selected.props.dmg\n" +
             "if($clicked.props.hp <= 0) { GameMethods.removeEntity($clicked) }\n" +
             "GameMethods.toNextPlayer()\n" +

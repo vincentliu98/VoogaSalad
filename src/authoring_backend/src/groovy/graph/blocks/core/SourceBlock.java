@@ -28,7 +28,5 @@ public class SourceBlock extends SimpleNode implements GroovyBlock<SourceBlock> 
     public String name() { return "source"; }
 
     @Override
-    public Map<String, Object> params() {
-        return null;
-    }
+    public Map<String, Object> params() { return null; }
 }

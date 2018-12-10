@@ -7,6 +7,8 @@ import groovy.graph.BlockGraphImpl;
 import groovy.graph.blocks.core.*;
 import groovy.graph.blocks.small_factory.LiteralFactory;
 
+import java.util.Map;
+
 /**
  *  A Factory that can generate Graph/Node/Edge that represents Groovy code.
  */
@@ -24,18 +26,6 @@ public class GroovyFactory {
     }
 
     /**
-     *  Makes a default BlockGraph for guards, passing everything in.
-     */
-    public BlockGraph createGuard() {
-        try {
-            var graph = new BlockGraphImpl();
-            var pass = rawBlock("$guardRet = true");
-            graph.addEdge(createEdge(graph.source(), Ports.FLOW_OUT, pass));
-            return graph;
-        } catch(Throwable ignored) { return null; } // but it's not gonna fail
-    }
-
-    /**
      *  Makes an edge
      */
     public BlockEdge createEdge(GroovyBlock from, Ports fromPort, GroovyBlock to) {
@@ -45,24 +35,23 @@ public class GroovyFactory {
     /**
      *  Core Blocks
      */
-    public IfBlock ifBlock() { return new IfBlock(false); }
-    public IfBlock ifElseBlock() { return new IfBlock(true); }
-    public ElseBlock elseBlock() { return new ElseBlock(); }
-    public ForEachBlock forEachBlock(String loopvar) { return new ForEachBlock(loopvar); }
+    public GroovyBlock<?> ifBlock(double x, double y) { return new IfBlock(x, y, false); }
+    public GroovyBlock<?> ifElseBlock(double x, double y) { return new IfBlock(x, y, true); }
+    public GroovyBlock<?> elseBlock(double x, double y) { return new ElseBlock(x, y); }
+    public GroovyBlock<?> forEachBlock(double x, double y, String loopvar) { return new ForEachBlock(x, y, loopvar); }
+    public GroovyBlock<?> assignBlock(double x, double y) { return new AssignBlock(x, y); }
 
-    public AssignBlock assignBlock() { return new AssignBlock(); }
+    public Try<GroovyBlock<?>> booleanBlock(double x, double y, String value) { return LiteralFactory.booleanBlock(x, y, value); }
+    public Try<GroovyBlock<?>> integerBlock(double x, double y, String value) { return LiteralFactory.integerBlock(x, y, value); }
+    public Try<GroovyBlock<?>> keyBlock(double x, double y, String value) { return LiteralFactory.keyBlock(x, y, value); }
+    public Try<GroovyBlock<?>> doubleBlock(double x, double y, String value) { return LiteralFactory.doubleBlock(x, y, value); }
+    public Try<GroovyBlock<?>> listBlock(double x, double y, String value) { return LiteralFactory.listBlock(x, y, value); }
+    public Try<GroovyBlock<?>> mapBlock(double x, double y, String value) { return LiteralFactory.mapBlock(x, y, value); }
+    public GroovyBlock<?> stringBlock(double x, double y, String value) { return LiteralFactory.stringBlock(x, y, value); }
+    public Try<GroovyBlock<?>> refBlock(double x, double y, String value) { return LiteralFactory.refBlock(x, y, value, entityDB); }
 
-    public Try<LiteralBlock> booleanBlock(String value) { return LiteralFactory.booleanBlock(value); }
-    public Try<LiteralBlock> integerBlock(String value) { return LiteralFactory.integerBlock(value); }
-    public Try<LiteralBlock> keyBlock(String value) { return LiteralFactory.keyBlock(value); }
-    public Try<LiteralBlock> doubleBlock(String value) { return LiteralFactory.doubleBlock(value); }
-    public Try<LiteralBlock> listBlock(String value) { return LiteralFactory.listBlock(value); }
-    public Try<LiteralBlock> mapBlock(String value) { return LiteralFactory.mapBlock(value); }
-    public LiteralBlock stringBlock(String value) { return LiteralFactory.stringBlock(value); }
-    public Try<LiteralBlock> refBlock(String value) { return LiteralFactory.refBlock(value, entityDB); }
-
-    public FunctionBlock functionBlock(String op, int argN) { return new FunctionBlock(op, argN); }
-    public InfixBinaryBlock binaryBlock(String op) { return new InfixBinaryBlock(op); }
-    public RawGroovyBlock rawBlock(String code) { return new RawGroovyBlock(code); }
+    public GroovyBlock<?> functionBlock(double x, double y, String op, Map<Ports, String> portInfo) { return new FunctionBlock(x, y, op, portInfo); }
+    public GroovyBlock<?> binaryBlock(double x, double y, String op) { return new InfixBinaryBlock(x, y, op); }
+    public GroovyBlock<?> rawBlock(double x, double y, String code) { return new RawGroovyBlock(x, y, code); }
 }
 
