@@ -5,6 +5,9 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
 public class ServerConnector {
+    public static final String HOST_PATH = "/home/vcm/public_html";
+
+    protected boolean useDefaultPath;
 
 //    mySession = myJsch.getSession("vcm", "vcm-7456.vm.duke.edu", 22);
 //            mySession.setConfig("StrictHostKeyChecking", "no");
@@ -18,6 +21,7 @@ public class ServerConnector {
     public ServerConnector(){
         myJsch = new JSch();
         mySession = null;
+        useDefaultPath = true;
     }
 
     public void connectServer(String username, String host, int port, String password){
@@ -30,5 +34,13 @@ public class ServerConnector {
             System.out.println("Failed to Connect");
         }
 
+    }
+
+    public void useFullPath(){
+        useDefaultPath = false;
+    }
+
+    public void usePresetPath(){
+        useDefaultPath = true;
     }
 }

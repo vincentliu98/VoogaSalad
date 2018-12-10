@@ -19,7 +19,12 @@ public class ServerUploader extends ServerConnector implements ServerUpload{
             Channel channel = mySession.openChannel(CONNECTION_PROTOCOL);
             channel.connect();
             ChannelSftp sftpChannel = (ChannelSftp) channel;
-            sftpChannel.put(filePath, destinationPath);
+            if(useDefaultPath){
+                sftpChannel.put(filePath, HOST_PATH + destinationPath);
+            }
+            else {
+                sftpChannel.put(filePath, destinationPath);
+            }
             sftpChannel.exit();
             mySession.disconnect();
         }
@@ -30,5 +35,11 @@ public class ServerUploader extends ServerConnector implements ServerUpload{
             System.out.println("Error");
         }
     }
+
+//    public static void main(String args[]){
+//        ServerUploader upload = new ServerUploader();
+//        upload.connectServer("vcm", "vcm-7456.vm.duke.edu", 22,"afcas8amYf");
+//        upload.uploadFile("/Users/jonathannakagawa/Desktop/Stuff/CompSci308/voogasalad_printstacktrace/src/database/resources/blah.txt", "/home/vcm/public_html" );
+//    }
 
 }

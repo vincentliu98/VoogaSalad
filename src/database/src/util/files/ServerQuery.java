@@ -20,4 +20,16 @@ public interface ServerQuery {
      * @param fileDestination The path of the download destination
      */
     void downloadFile(String filePath, String fileDestination);
+
+    /**
+     * Sets up the class to use the full path passed in the uploadFile parameters.
+     * Not default setting.
+     */
+    void useFullPath();
+
+    /**
+     * Sets up the class to use the preset path defined internally.
+     * Default setting.
+     */
+    void usePresetPath();
 }

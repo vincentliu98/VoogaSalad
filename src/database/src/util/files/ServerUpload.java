@@ -20,4 +20,16 @@ public interface ServerUpload {
      * @param fileDestination The path of the upload destination
      */
     void uploadFile(String filePath, String fileDestination);
+
+    /**
+     * Sets up the class to use the full path passed in the uploadFile parameters.
+     * Not default setting.
+     */
+    void useFullPath();
+
+    /**
+     * Sets up the class to use the preset path defined internally.
+     * Default setting.
+     */
+    void usePresetPath();
 }
