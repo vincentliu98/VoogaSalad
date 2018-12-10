@@ -1,8 +1,10 @@
 package utils.serializer;
 
 import gameObjects.entity.EntityInstance;
+import javafx.fxml.LoadException;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import java.util.*;
 
@@ -25,11 +27,17 @@ public class RawClass implements Comparable<RawClass> {
     private String imageSelector;
     private Set<Integer> gameObjectInstanceIDs;
 
-    public RawClass(Element entry) {
+    public RawClass(Element entry) throws CRUDLoadException {
         rootElement = entry;
         type = entry.getTagName();
-        classID = Integer.parseInt(entry.getElementsByTagName("classID").item(0).getTextContent());
-        className = entry.getElementsByTagName("className").item(0).getTextContent();
+        if (!containsChildElement("classID")) {
+            throw new CRUDLoadException("One GameObjectClass does not have Class ID");
+        }
+        classID = Integer.parseInt(getChildElement("classID").getTextContent());
+        if (!containsChildElement("className")) {
+            throw new CRUDLoadException("One GameObjectClass does not have Class Name");
+        }
+        className = getChildElement("className");
         Element heightElement = (Element) entry.getElementsByTagName("height").item(0);
         if (entry.getElementsByTagName("height").item(0) != null) {
             height = Integer.parseInt(entry.getElementsByTagName("height").item(0).getTextContent());
@@ -73,8 +81,12 @@ public class RawClass implements Comparable<RawClass> {
         return rootElement.getElementsByTagName(name).getLength() != 0;
     }
 
-    private Element getChildElement(String name) {
-        return (Element) rootElement.getElementsByTagName(name).item(0);
+    private Element getChildElement(String name) throws CRUDLoadException {
+        NodeList candidates = rootElement.getElementsByTagName(name);
+        if (candidates.getLength() == 0) {
+            throw new CRUDLoadException("GameObjectClass(es) do not have " + name);
+        }
+        return (Element) candidates.item(0);
     }
 
     public String getClassName() {
