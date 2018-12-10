@@ -11,7 +11,6 @@ import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import social.User;
 
-import java.awt.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.Optional;
@@ -40,24 +39,28 @@ public class MainPlayer {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == loadButton) {
             if (myUser != null ){
-                String xmlString = myUser.getGameState(myReferencePath.substring(0, myReferencePath.length() - 4));
+                String xmlString = myUser.getGameState(myReferencePath);
                 if (xmlString.equals("")){
                     myFile = getNewGameFile();
+                    System.out.println("Did't get the sword file");
                 } else {
                     try {
                         myFile = new File(getClass().getClassLoader().getResource("GameProgress.xml").getFile());
                         FileWriter fileWriter = new FileWriter(myFile);
                         fileWriter.write(xmlString);
                         fileWriter.close();
+                        System.out.println("Got the sword file and reading it!");
                     } catch (Exception e){ }
                 }
             } else {
                 myFile = getNewGameFile();
+                System.out.println("User is null");
             }
             launchGame();
         } else if (result.get() == newGameButton) {
             myFile = getNewGameFile();
             launchGame();
+            System.out.println("Clicked new one");
         }
     }
 
@@ -76,7 +79,7 @@ public class MainPlayer {
         saveButton.setMinWidth(View.GAME_WIDTH);
         saveButton.setOnMouseClicked(e -> {
             try{
-                myUser.setGameState(myReferencePath, GameData.saveGameData());
+                myUser.saveGameState(myReferencePath, GameData.saveGameData());
             } catch (Exception ex){ }
         });
         myInitializer.getRoot().getChildren().add(saveButton);

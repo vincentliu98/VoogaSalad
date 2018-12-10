@@ -52,7 +52,7 @@ public class User {
         myFavoriteGames.remove(gameName);
     }
 
-    public void setGameState(String gameName, String xmlString){
+    public void saveGameState(String gameName, String xmlString){
         myProgress.put(gameName, xmlString);
     }
 
