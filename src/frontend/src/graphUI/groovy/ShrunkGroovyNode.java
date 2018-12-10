@@ -17,8 +17,8 @@ public class ShrunkGroovyNode extends GroovyNode {
     private List<Pair<Double, Double>> originalPos;
     public ShrunkGroovyNode(String description, double xPos, double yPos, double width, double height, double labelSize, Color color, Set<GroovyNode> nodes) {
         super(new RawGroovyBlock(xPos, yPos, description), width, height, labelSize, color, List.of());
-        setCenterX(xPos);
-        setCenterY(yPos);
+        setCenterX(xPos, false);
+        setCenterY(yPos, false);
         this.nodes = new ArrayList<>(nodes);
         originalPos = this.nodes.stream().map(n ->
             new Pair<>(n.getCenterX()-getCenterX(), n.getCenterY()-getCenterY())).collect(Collectors.toList()
@@ -29,8 +29,8 @@ public class ShrunkGroovyNode extends GroovyNode {
 
     public void updatePosition() {
         this.nodes.forEach(n -> {
-            n.setCenterX(getCenterX());
-            n.setCenterY(getCenterY());
+            n.setCenterX(getCenterX(), false);
+            n.setCenterY(getCenterY(), false);
         });
     }
 
@@ -39,8 +39,8 @@ public class ShrunkGroovyNode extends GroovyNode {
     public void unShrink() {
         this.nodes.forEach(n -> n.setMouseTransparent(false));
         for(int i = 0 ; i < originalPos.size() ; i ++) {
-            nodes.get(i).setCenterX(originalPos.get(i).getKey()+getCenterX());
-            nodes.get(i).setCenterY(originalPos.get(i).getValue()+getCenterY());
+            nodes.get(i).setCenterX(originalPos.get(i).getKey()+getCenterX(), true);
+            nodes.get(i).setCenterY(originalPos.get(i).getValue()+getCenterY(), true);
         }
     }
 }

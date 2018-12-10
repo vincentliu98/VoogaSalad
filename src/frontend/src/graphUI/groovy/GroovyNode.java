@@ -154,13 +154,16 @@ public class GroovyNode extends StackPane {
     public Rectangle inner() { return inner; }
     public double getCenterX() { return getLayoutX() + getTranslateX() + rectangle.getWidth()/2; }
     public double getCenterY() { return getLayoutY() + getTranslateY() + rectangle.getHeight()/2; }
-    public void setCenterX(double x) {
-        model.setXY(x-rectangle.getWidth()/2, model.y());
+    public void setCenterX(double x) { setCenterX(x, true);}
+    public void setCenterY(double y) { setCenterY(y, true); }
+
+    public void setCenterX(double x, boolean modifyModel) {
+        if(modifyModel) model.setXY(x-rectangle.getWidth()/2, model.y());
         setLayoutX(x-rectangle.getWidth()/2);
         setTranslateX(0);
     }
-    public void setCenterY(double y) {
-        model.setXY(model.x(), y-rectangle.getHeight()/2);
+    public void setCenterY(double y, boolean modifyModel) {
+        if(modifyModel) model.setXY(model.x(), y-rectangle.getHeight()/2);
         setLayoutY(y-rectangle.getHeight()/2);
         setTranslateY(0);
     }

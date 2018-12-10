@@ -7,6 +7,7 @@ import groovy.api.BlockEdge;
 import groovy.api.BlockGraph;
 import groovy.api.Ports;
 import groovy.graph.blocks.core.GroovyBlock;
+import groovy.graph.blocks.core.IfBlock;
 import groovy.graph.blocks.core.RawGroovyBlock;
 import groovy.graph.blocks.core.SourceBlock;
 

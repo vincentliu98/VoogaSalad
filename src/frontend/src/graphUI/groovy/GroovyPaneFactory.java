@@ -5,6 +5,7 @@ import authoringInterface.spritechoosingwindow.PopUpWindow;
 import groovy.api.BlockGraph;
 import groovy.api.GroovyFactory;
 import groovy.api.Ports;
+import groovy.graph.blocks.core.GroovyBlock;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -22,10 +23,7 @@ import javafx.stage.Stage;
 import javafx.util.Pair;
 import utils.ErrorWindow;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -102,7 +100,6 @@ public class GroovyPaneFactory {
 
             lines = new HashMap<>();
             nodes = new HashSet<>();
-            createNode(nodeFactory.toView(graph.source()));
 
             newNodeX = new SimpleDoubleProperty();
             newNodeY = new SimpleDoubleProperty();
@@ -171,7 +168,28 @@ public class GroovyPaneFactory {
             });
 
             initializeUI();
+            buildFromGraph();
             showWindow();
+        }
+
+        // private Map<Pair<GroovyNode, Ports>, Pair<GroovyNode, Line>> lines;
+        private void buildFromGraph() {
+            for(var block : graph.keySet()) {
+                createNode(nodeFactory.toView(block));
+            }
+            for(var block : graph.keySet()) {
+                for(var edge : graph.get(block)) {
+                    var node1 = getNodeWithModel(edge.from());
+                    var node2 = getNodeWithModel(edge.to());
+                    if(node1.isPresent() && node2.isPresent()) {
+                        connectNodes(node1.get(), edge.fromPort(), node2.get());
+                    }
+                }
+            }
+        }
+
+        private Optional<GroovyNode> getNodeWithModel(GroovyBlock<?> block) {
+            return nodes.stream().filter(p -> p.model() == block).findFirst();
         }
 
         @Override
