@@ -22,6 +22,15 @@ public interface ServerQuery {
     void downloadFile(String filePath, String fileDestination);
 
     /**
+     * Downloads a directory from the server defined in the connectServer call to a destination.
+     * connectServer must be called first.
+     *
+     * @param directoryPath The path of the directory on the server
+     * @param directoryDestination The path of the destination
+     */
+    void dowloadDirectory(String directoryPath, String directoryDestination, String directoryName);
+
+    /**
      * Sets up the class to use the full path passed in the uploadFile parameters.
      * Not default setting.
      */
