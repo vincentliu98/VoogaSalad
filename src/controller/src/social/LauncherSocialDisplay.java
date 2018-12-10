@@ -21,16 +21,21 @@ public class LauncherSocialDisplay implements Sortable, Searchable, Subscriber {
 
     private static LauncherSocialDisplay single_instance = null;
 
-    public LauncherSocialDisplay(){
-        myUser = null;
+    public LauncherSocialDisplay(User user){
+        myUser = user;
+        if (myUser != null){
+            System.out.println("socialdisplay user is initalizied to " + myUser.getUsername());
+        } else {
+            System.out.println("socialdisplay user is initalizied to null user");
+        }
         initTiles();
         initUsers();
         EventBus.getInstance().register(EngineEvent.CHANGE_USER, this);
     }
 
-    public static LauncherSocialDisplay getInstance(){
+    public static LauncherSocialDisplay getInstance(User user){
         if (single_instance == null){
-            single_instance = new LauncherSocialDisplay();
+            single_instance = new LauncherSocialDisplay(user);
         }
         return single_instance;
     }
@@ -108,7 +113,7 @@ public class LauncherSocialDisplay implements Sortable, Searchable, Subscriber {
     public void update(EngineEvent engineEvent, Object ... args) {
         if (engineEvent.equals(EngineEvent.CHANGE_USER) && args[0].getClass().equals(User.class)){
             myUser = (User) args[0];
-            System.out.println("myUser is (social display) is " + myUser.getUsername());
+            System.out.println("myUser has changed, in social display, to " + myUser.getUsername());
         }
     }
 }

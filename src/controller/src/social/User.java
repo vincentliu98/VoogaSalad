@@ -85,13 +85,13 @@ public class User {
 
     public void addFollower(String username){
         myFollowing.add(username);
-        System.out.println("MyFollowing of " + myUsername + "is now " + myFollowing.toString());
+        System.out.println("MyFollowing of " + myUsername + " is now " + myFollowing.toString());
     }
 
     public void removeFollower(String username){
         if (!myFollowing.contains(username)) return;
         myFollowing.remove(username);
-        System.out.println("MyFollowing of " + myUsername + "is now " + myFollowing.toString());
+        System.out.println("MyFollowing of " + myUsername + " is now " + myFollowing.toString());
     }
 
     public Set<String> getFollowing(){
