@@ -16,7 +16,9 @@ import java.io.File;
 public class SerializationTest {
     public static void main(String[] args) {
         XMLParser parser = new XMLParser();
-        File file = new File("default.xml");
+        String fileName = "test.xml";
+        ClassLoader classLoader = SerializationTest.class.getClassLoader();
+        File file = new File(classLoader.getResource(fileName).getPath());
         System.out.println(file.getAbsolutePath());
         try {
             parser.loadXML(file);
@@ -28,5 +30,6 @@ public class SerializationTest {
         System.out.println(parser.getGridDimension());
         System.out.println(parser.getGameObjectClasses());
         System.out.println(parser.getGameObjectInstances());
+        parser.getGameObjectInstances().forEach(rawInstance -> System.out.println(rawInstance.getInstanceName() + "," + rawInstance.getxCoord() + "," + rawInstance.getyCoord()));
     }
 }

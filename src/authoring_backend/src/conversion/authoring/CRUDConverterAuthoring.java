@@ -71,6 +71,11 @@ public class CRUDConverterAuthoring implements Converter {
             writer.setValue(entityClass.getClassName().get());
             writer.endNode();
 
+            // className
+            writer.startNode("classID");
+            writer.setValue(String.valueOf(entityClass.getClassId().getValue()));
+            writer.endNode();
+
             // props
             var toEval = mapToString(entityClass.getPropertiesMap());
             writer.startNode("props");
@@ -172,7 +177,7 @@ public class CRUDConverterAuthoring implements Converter {
 
         // TilePrototype
         for (TileClass tileClass: db.getTileClasses()) {
-            writer.startNode("tilePrototype");
+            writer.startNode("tileClass");
             // ID
             writer.startNode("classID");
             writer.setValue(tileClass.getClassId().getValue().toString());
@@ -314,7 +319,7 @@ public class CRUDConverterAuthoring implements Converter {
             writer.startNode("soundClass");
 
             // Class Name
-            writer.startNode("soundName");
+            writer.startNode("className");
             writer.setValue(soundClass.getClassName().getValue());
             writer.endNode();
 
