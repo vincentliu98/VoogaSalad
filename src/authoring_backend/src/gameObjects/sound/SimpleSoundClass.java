@@ -30,6 +30,7 @@ public class SimpleSoundClass implements SoundClass {
     public SimpleSoundClass(String className) {
         this.className = new ReadOnlyStringWrapper(className);
         classId = new ReadOnlyIntegerWrapper();
+        duration = new SimpleDoubleProperty();
         mediaPath = new SimpleStringProperty();
         propertiesMap = FXCollections.observableHashMap();
     }
