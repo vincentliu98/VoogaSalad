@@ -12,6 +12,8 @@ import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -20,10 +22,10 @@ import java.util.function.Function;
  * @author Haotian Wang
  */
 public class SimpleCategoryClass implements CategoryClass {
-    private ReadOnlyStringWrapper className;
-    private ReadOnlyIntegerWrapper classId;
-    private SimpleStringProperty imagePath;
-    private ObservableMap<String, String> propertiesMap;
+    private String className;
+    private int classId;
+    private String imagePath;
+    private Map<String, String> propertiesMap;
 
     private CategoryInstanceFactory myFactory;
     private ThrowingBiConsumer<String, String, InvalidOperationException> changeCategoryClassNameFunc;
@@ -31,10 +33,10 @@ public class SimpleCategoryClass implements CategoryClass {
     private Function<Integer, Boolean> deleteCategoryInstanceFunc;
 
     public SimpleCategoryClass(String className) {
-        this.className = new ReadOnlyStringWrapper(className);
-        classId = new ReadOnlyIntegerWrapper();
-        imagePath = new SimpleStringProperty();
-        propertiesMap = FXCollections.observableHashMap();
+        this.className = className;
+        classId = 0;
+        imagePath = "";
+        propertiesMap = new HashMap<>();
     }
 
     public SimpleCategoryClass(
@@ -55,20 +57,15 @@ public class SimpleCategoryClass implements CategoryClass {
      * @return classId
      */
     @Override
-    public ReadOnlyIntegerProperty getClassId() {
-        return classId.getReadOnlyProperty();
-    }
+    public int getClassId() { return classId; }
 
     /**
      * This method receives a function that sets the id of the GameObject Class.
      * The id of the GameObject Class is set by the received function.
      *
-     * @param setFunc the function from IdManager that sets the id
      */
     @Override
-    public void setClassId(Consumer<SimpleIntegerProperty> setFunc) {
-        setFunc.accept(classId);
-    }
+    public void setClassId(int newId) { classId = newId; }
 
     /**
      * This method gets the name of this GameObject Class.
@@ -76,20 +73,16 @@ public class SimpleCategoryClass implements CategoryClass {
      * @return class name
      */
     @Override
-    public ReadOnlyStringProperty getClassName() {
-        return className.getReadOnlyProperty();
-    }
+    public String getClassName() { return className; }
 
     @Override
     public void changeClassName(String newClassName)
             throws InvalidOperationException {
-        changeCategoryClassNameFunc.accept(className.getValue(), newClassName);
+        changeCategoryClassNameFunc.accept(className, newClassName);
     }
 
     @Override
-    public void setClassName(String newClassName) {
-        className.setValue(newClassName);
-    }
+    public void setClassName(String newClassName) { className = newClassName; }
 
 
     /**
@@ -98,9 +91,7 @@ public class SimpleCategoryClass implements CategoryClass {
      * @return properties map
      */
     @Override
-    public ObservableMap<String, String> getPropertiesMap() {
-        return propertiesMap;
-    }
+    public Map<String, String> getPropertiesMap() { return propertiesMap; }
 
     /**
      * This method adds the property to the GameObject Class and to all instances of the class.
@@ -150,7 +141,7 @@ public class SimpleCategoryClass implements CategoryClass {
     @Override
     public Set<CategoryInstance> getAllInstances() {
         ObservableSet<CategoryInstance> s = FXCollections.observableSet();
-        Collection<GameObjectInstance> instances = getAllCategoryInstancesFunc.apply(getClassName().getValue());
+        Collection<GameObjectInstance> instances = getAllCategoryInstancesFunc.apply(getClassName());
         for (GameObjectInstance i : instances) {
             if (i.getType() == GameObjectType.CATEGORY) {
                 s.add((CategoryInstance) i);
@@ -177,12 +168,10 @@ public class SimpleCategoryClass implements CategoryClass {
     }
 
     @Override
-    public SimpleStringProperty getImagePath() {
+    public String getImagePath() {
         return imagePath;
     }
 
     @Override
-    public void setImagePath(String newImagePath) {
-        imagePath.setValue(newImagePath);
-    }
+    public void setImagePath(String newImagePath) { imagePath = newImagePath; }
 }

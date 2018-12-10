@@ -13,25 +13,20 @@ import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
 
-import java.util.Collection;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class SimpleTileClass implements TileClass {
-    private int numRow, numCol;
-
-    private static final String CONST_CLASSNAME = "className";
-    private static final String CONST_ID = "id";
-    private static final String CONST_ENTITYCONTAINABLE = "entityContainable";
     private static final int DEFAULT_WIDTH = 1;
     private static final int DEFAULT_HEIGHT = 1;
 
-    private ReadOnlyStringWrapper className;
-    private ReadOnlyIntegerWrapper classId;
-    private SimpleBooleanProperty entityContainable;
-    private SimpleIntegerProperty width, height;
-    private ObservableList<String> imagePathList;
-    private ObservableMap<String, String> propertiesMap;
+    private String className;
+    private int classId;
+    private boolean entityContainable;
+    private int width, height;
+    private List<String> imagePathList;
+    private Map<String, String> propertiesMap;
     private String imageSelector;
 
     private TileInstanceFactory myFactory;
@@ -40,14 +35,14 @@ public class SimpleTileClass implements TileClass {
     private Function<Integer, Boolean> deleteTileInstanceFunc;
 
     public SimpleTileClass(String name) {
-        className = new ReadOnlyStringWrapper(this, CONST_CLASSNAME, name);
-        classId = new ReadOnlyIntegerWrapper(this, CONST_ID);
-        entityContainable = new SimpleBooleanProperty(this, CONST_ENTITYCONTAINABLE);
-        imagePathList = FXCollections.observableArrayList();
-        propertiesMap = FXCollections.observableHashMap();
+        className = name;
+        classId = 0;
+        entityContainable = true;
+        imagePathList = new ArrayList<>();
+        propertiesMap = new HashMap<>();
         imageSelector = "";
-        width = new SimpleIntegerProperty(DEFAULT_WIDTH);
-        height = new SimpleIntegerProperty(DEFAULT_HEIGHT);
+        width = DEFAULT_WIDTH;
+        height = DEFAULT_HEIGHT;
     }
 
     public SimpleTileClass(
@@ -64,36 +59,28 @@ public class SimpleTileClass implements TileClass {
     }
 
     @Override
-    public ReadOnlyIntegerProperty getClassId() {
-        return classId.getReadOnlyProperty();
-    }
+    public int getClassId() { return classId; }
 
     @Override
-    public void setClassId(Consumer<SimpleIntegerProperty> setFunc) {
-        setFunc.accept(classId);
-    }
+    public void setClassId(int newId) { classId = newId; }
 
     @Override
-    public ReadOnlyStringProperty getClassName() {
-        return className.getReadOnlyProperty();
-    }
+    public String getClassName() { return className; }
 
 
     @Override
     public void changeClassName(String newClassName)
             throws InvalidOperationException {
-        changeTileClassNameFunc.accept(className.getValue(), newClassName);
+        changeTileClassNameFunc.accept(className, newClassName);
     }
 
     @Override
     public void setClassName(String newClassName) {
-        className.setValue(newClassName);
+        className = newClassName;
     }
 
     @Override
-    public ObservableMap<String, String> getPropertiesMap() {
-        return propertiesMap;
-    }
+    public Map<String, String> getPropertiesMap() { return propertiesMap; }
 
     @Override
     public boolean addProperty(String propertyName, String defaultValue) {
@@ -123,7 +110,7 @@ public class SimpleTileClass implements TileClass {
 
 
     @Override
-    public ObservableList<String> getImagePathList() {
+    public List<String> getImagePathList() {
         return imagePathList;
     }
 
@@ -163,14 +150,10 @@ public class SimpleTileClass implements TileClass {
     }
 
     @Override
-    public void setHeight(int height) {
-        this.height.set(height);
-    }
+    public void setHeight(int height) { this.height = height; }
 
     @Override
-    public void setWidth(int width) {
-        this.width.set(width);
-    }
+    public void setWidth(int width) { this.width = width; }
 
     public boolean deleteInstance(int tileInstanceId) {
         return deleteTileInstanceFunc.apply(tileInstanceId);
@@ -179,7 +162,7 @@ public class SimpleTileClass implements TileClass {
     @Override
     public Collection<TileInstance> getAllInstances() {
         ObservableSet<TileInstance> s = FXCollections.observableSet();
-        Collection<GameObjectInstance> instances = getAllTileInstancesFunc.apply(getClassName().getValue());
+        Collection<GameObjectInstance> instances = getAllTileInstancesFunc.apply(getClassName());
         for (GameObjectInstance i : instances) {
             if (i.getType() == GameObjectType.TILE) {
                 s.add((TileInstance) i);
@@ -189,19 +172,19 @@ public class SimpleTileClass implements TileClass {
     }
 
     @Override
-    public SimpleIntegerProperty getWidth() { return width; }
+    public int getWidth() { return width; }
 
     @Override
-    public SimpleIntegerProperty getHeight() { return height; }
+    public int getHeight() { return height; }
 
 
     @Override
-    public SimpleBooleanProperty isEntityContainable() {
+    public boolean isEntityContainable() {
         return entityContainable;
     }
 
     @Override
     public void setEntityContainable(boolean contains) {
-        entityContainable.setValue(contains);
+        entityContainable = contains;
     }
 }

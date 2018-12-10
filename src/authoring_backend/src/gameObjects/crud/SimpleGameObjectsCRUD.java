@@ -1,6 +1,7 @@
 package gameObjects.crud;
 
 import authoringUtils.exception.*;
+import conversion.authoring.SerializerCRUD;
 import gameObjects.*;
 import gameObjects.category.*;
 import gameObjects.entity.*;
@@ -8,7 +9,6 @@ import gameObjects.gameObject.*;
 import gameObjects.player.*;
 import gameObjects.sound.*;
 import gameObjects.tile.*;
-import gameObjects.turn.*;
 import grids.Point;
 import javafx.collections.*;
 
@@ -17,16 +17,11 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
-
-    private static final String DEFAULT_PLAYER_CLASS = "$defaultPlayerClass$";
-    private static final String DEFAULT_PLAYER_NAME = "$default$";
-
     private int numRows;
     private int numCols;
     private ObservableMap<String, GameObjectClass> gameObjectClassMapByName;
     private ObservableMap<Integer, GameObjectClass> gameObjectClassMapById;
     private ObservableMap<Integer, GameObjectInstance> gameObjectInstanceMapById;
-    private ObservableMap<String, Turn> turnMap;
 
     private TileInstanceFactory myTileInstanceFactory;
     private EntityInstanceFactory myEntityInstanceFactory;
@@ -35,10 +30,6 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     private PlayerInstanceFactory myPlayerInstanceFactory;
 
     private IdManager myIdManager;
-
-    // Just a placeholder
-    public SimpleGameObjectsCRUD(String xml) { this(3, 3); }
-    public String toXML() { return ""; }
 
     public SimpleGameObjectsCRUD(int numRows, int numCols) {
         this.numRows = numRows;
@@ -330,31 +321,6 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         }
     }
 
-    @Override
-    public Turn createTurn(String phaseName) {
-        Turn t = new SimpleTurn(phaseName);
-        turnMap.put(phaseName, t);
-        return t;
-    }
-
-    @Override
-    public Turn getTurn(String phaseName)
-            throws TurnNotFoundException {
-        if (!turnMap.containsKey(phaseName)) {
-            throw new TurnNotFoundException("Turn not found in map");
-        }
-        return turnMap.get(phaseName);
-    }
-
-    @Override
-    public boolean deleteTurn(String phaseName) {
-        if (!turnMap.containsKey(phaseName)) {
-            return false;
-        }
-        turnMap.remove(phaseName);
-        return true;
-    }
-
     @SuppressWarnings("unchecked")
     @Override
     public <T extends GameObjectClass> T getGameObjectClass(String className)
@@ -374,6 +340,9 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         }
         return (T) gameObjectInstanceMapById.get(instanceId);
     }
+
+    @Override
+    public Collection<GameObjectInstance> getAllInstances() { return gameObjectInstanceMapById.values(); }
 
     @Override
     public Collection<GameObjectClass> getAllClasses() {
@@ -648,14 +617,12 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
         numRows = height;
     }
 
+    public void setWidth(int width) { numCols = width; }
+    public void setHeight(int height) { numRows = height; }
+
     public int getWidth() { return numCols; }
     public int getHeight() { return numRows; }
 
-    /**
-     * Getters
-     *
-     * @return ObservableList of things
-     */
     @Override
     public Iterable<EntityClass> getEntityClasses() {
         return getSpecificClasses(GameObjectType.ENTITY);
@@ -730,5 +697,10 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
                 .filter(gameObjectClass -> ((PlayerClass) gameObjectClass).isOwnedByPlayer(gameObjectInstance))
                 .map(gameObjectClass -> gameObjectClass.getClassName().getValue())
                 .collect(Collectors.toSet());
+    }
+
+    @Override
+    public String toXML() {
+        return new SerializerCRUD().getXMLString(this);
     }
 }

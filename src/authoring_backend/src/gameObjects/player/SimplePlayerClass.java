@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 
 
 public class SimplePlayerClass implements PlayerClass {
-
     private ReadOnlyStringWrapper className;
     private ReadOnlyIntegerWrapper classId;
     private SimpleStringProperty imagePath;

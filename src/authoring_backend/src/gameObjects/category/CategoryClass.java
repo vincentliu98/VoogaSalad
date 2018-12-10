@@ -24,7 +24,7 @@ public interface CategoryClass extends GameObjectClass {
      * The method returns the path of the image stored in the Category Class.
      * @return the image path
      */
-    SimpleStringProperty getImagePath();
+    String getImagePath();
 
     /**
      *

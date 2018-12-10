@@ -13,13 +13,13 @@ public interface SoundClass extends GameObjectClass {
 
     SoundInstance createInstance() throws GameObjectTypeException, InvalidIdException;
 
-    SimpleStringProperty getMediaFilePath();
+    String getMediaFilePath();
 
     void setMediaFilePath(String mediaFilePath);
 
-    SimpleDoubleProperty getDuration();
+    double getDuration();
 
-    public void setDuration(double newDuration);
+    void setDuration(double newDuration);
 
     @Override
     default GameObjectType getType() {

@@ -10,9 +10,11 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
 
+import java.util.List;
+
 public interface EntityClass extends GameObjectClass {
 
-    SimpleBooleanProperty isMovable();
+    boolean isMovable();
 
     void setMovable(boolean move);
 
@@ -29,7 +31,7 @@ public interface EntityClass extends GameObjectClass {
      * This method gets the image path list of the GameObject Class.
      * @return a list of the file paths of the images
      */
-    ObservableList<String> getImagePathList();
+    List<String> getImagePathList();
 
     /**
      * This method removes the image path from the Entity Class and from all instances of the class.
@@ -56,9 +58,9 @@ public interface EntityClass extends GameObjectClass {
         return GameObjectType.ENTITY;
     }
 
-    SimpleIntegerProperty getHeight();
+    int getHeight();
 
-    SimpleIntegerProperty getWidth();
+    int getWidth();
 
 
     void setHeight(int newHeight);

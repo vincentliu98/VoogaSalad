@@ -6,20 +6,18 @@ import authoringUtils.exception.InvalidOperationException;
 import gameObjects.ThrowingBiConsumer;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
-import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
 
 import java.util.Collection;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class SimpleSoundClass implements SoundClass {
-    private ReadOnlyStringWrapper className;
-    private ReadOnlyIntegerWrapper classId;
-    private SimpleStringProperty mediaPath;
-    private SimpleDoubleProperty duration;
+    private String className;
+    private int classId;
+    private String mediaPath;
+    private double duration;
     private ObservableMap<String, String> propertiesMap;
 
     private SoundInstanceFactory myFactory;
@@ -28,12 +26,12 @@ public class SimpleSoundClass implements SoundClass {
     private Function<Integer, Boolean> deleteSoundInstanceFunc;
 
     public SimpleSoundClass(String className) {
-        this.className = new ReadOnlyStringWrapper(className);
-        classId = new ReadOnlyIntegerWrapper();
-        duration = new SimpleDoubleProperty();
-        mediaPath = new SimpleStringProperty();
+        this.className = className;
+        classId = 0;
+        duration = 0;
+        mediaPath = "";
         propertiesMap = FXCollections.observableHashMap();
-        duration = new SimpleDoubleProperty();
+        duration = 0;
     }
 
     public SimpleSoundClass(
@@ -56,20 +54,14 @@ public class SimpleSoundClass implements SoundClass {
      * @return classId
      */
     @Override
-    public ReadOnlyIntegerProperty getClassId() {
-        return classId.getReadOnlyProperty();
-    }
+    public int getClassId() { return classId; }
 
     /**
      * This method receives a function that sets the id of the GameObject Class.
      * The id of the GameObject Class is set by the received function.
-     *
-     * @param setFunc the function from IdManager that sets the id
      */
     @Override
-    public void setClassId(Consumer<SimpleIntegerProperty> setFunc) {
-        setFunc.accept(classId);
-    }
+    public void setClassId(int classId) { this.classId = classId; }
 
     /**
      * This method gets the name of this GameObject Class.
@@ -77,20 +69,15 @@ public class SimpleSoundClass implements SoundClass {
      * @return class name
      */
     @Override
-    public ReadOnlyStringProperty getClassName() {
-        return className.getReadOnlyProperty();
+    public String getClassName() { return className; }
+
+    @Override
+    public void changeClassName(String newClassName) throws InvalidOperationException {
+        changeSoundClassNameFunc.accept(className, newClassName);
     }
 
     @Override
-    public void changeClassName(String newClassName)
-            throws InvalidOperationException {
-        changeSoundClassNameFunc.accept(className.getValue(), newClassName);
-    }
-
-    @Override
-    public void setClassName(String newClassName) {
-        className.setValue(newClassName);
-    }
+    public void setClassName(String newClassName) { className = newClassName; }
 
     /**
      * This method gets the properties map of the GameObject Class.
@@ -149,7 +136,7 @@ public class SimpleSoundClass implements SoundClass {
     @Override
     public Collection<SoundInstance> getAllInstances() {
         ObservableSet<SoundInstance> s = FXCollections.observableSet();
-        Collection<GameObjectInstance> instances = getAllSoundInstancesFunc.apply(getClassName().getValue());
+        Collection<GameObjectInstance> instances = getAllSoundInstancesFunc.apply(getClassName());
         for (GameObjectInstance i : instances) {
             if (i.getType() == GameObjectType.SOUND) {
                 s.add((SoundInstance) i);
@@ -176,7 +163,7 @@ public class SimpleSoundClass implements SoundClass {
     }
 
     @Override
-    public SimpleStringProperty getMediaFilePath() {
+    public String getMediaFilePath() {
         return mediaPath;
     }
 
@@ -186,12 +173,10 @@ public class SimpleSoundClass implements SoundClass {
     }
 
     @Override
-    public SimpleDoubleProperty getDuration() {
+    public double getDuration() {
         return duration;
     }
 
     @Override
-    public void setDuration(double newDuration) {
-        duration.setValue(newDuration);
-    }
+    public void setDuration(double newDuration) { duration = newDuration; }
 }

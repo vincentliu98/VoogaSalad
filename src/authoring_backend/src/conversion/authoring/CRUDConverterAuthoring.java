@@ -68,12 +68,12 @@ public class CRUDConverterAuthoring implements Converter {
 
             // name
             writer.startNode("className");
-            writer.setValue(entityClass.getClassName().get());
+            writer.setValue(entityClass.getClassName());
             writer.endNode();
 
             // className
             writer.startNode("classID");
-            writer.setValue(String.valueOf(entityClass.getClassId().getValue()));
+            writer.setValue(String.valueOf(entityClass.getClassId()));
             writer.endNode();
 
             // props
@@ -387,7 +387,7 @@ public class CRUDConverterAuthoring implements Converter {
     }
 
     @Override
-    public Object unmarshal(HierarchicalStreamReader hierarchicalStreamReader, UnmarshallingContext unmarshallingContext) {
+    public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext ctx) {
         return null;
     }
 

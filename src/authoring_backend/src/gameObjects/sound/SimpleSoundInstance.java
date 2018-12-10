@@ -3,80 +3,67 @@ package gameObjects.sound;
 import javafx.beans.property.*;
 import javafx.collections.ObservableMap;
 
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class SimpleSoundInstance implements SoundInstance {
-    private ReadOnlyStringWrapper className;
-    private SimpleStringProperty instanceName;
-    private ReadOnlyIntegerWrapper instanceId;
+    private String className;
+    private String instanceName;
+    private int instanceId;
 
-    private SimpleDoubleProperty duration;
-    private SimpleStringProperty mediaFilePath;
-    private ObservableMap<String, String> propertiesMap;
+    private double duration;
+    private String mediaFilePath;
+    private Map<String, String> propertiesMap;
     private Supplier<SoundClass> getSoundClassFunc;
 
     public SimpleSoundInstance(
             String className,
-            SimpleStringProperty mediaFilePath,
-            ObservableMap<String, String> properties,
-            SimpleDoubleProperty duration,
+            String mediaFilePath,
+            Map<String, String> properties,
+            double duration,
             Supplier<SoundClass> getSoundClassFunc) {
-        this.className = new ReadOnlyStringWrapper();
-        this.className.setValue(className);
-        this.duration = new SimpleDoubleProperty();
-        this.instanceName = new SimpleStringProperty(className);
+        this.className = className;
+        this.duration = 0;
+        this.instanceName = className;
         this.mediaFilePath = mediaFilePath;
         this.propertiesMap = properties;
         this.getSoundClassFunc = getSoundClassFunc;
         this.duration = duration;
-        instanceId = new ReadOnlyIntegerWrapper();
+        instanceId = 0;
     }
 
     /**
      * @return
      */
     @Override
-    public ReadOnlyIntegerProperty getInstanceId() {
-        return instanceId.getReadOnlyProperty();
-    }
+    public int getInstanceId() { return instanceId; }
 
-    /**
-     * @param setFunc
-     */
     @Override
-    public void setInstanceId(Consumer<SimpleIntegerProperty> setFunc) {
-        setFunc.accept(instanceId);
-    }
+    public void setInstanceId(int newId) { instanceId = newId; }
 
     /**
      * @return
      */
     @Override
-    public ReadOnlyStringProperty getClassName() {
-        return className.getReadOnlyProperty();
-    }
+    public String getClassName() { return className; }
 
     /**
      * @param name
      */
     @Override
-    public void setClassName(String name) {
-        className.setValue(name);
-    }
+    public void setClassName(String name) { className = name; }
 
     @Override
-    public SimpleStringProperty getInstanceName() {
+    public String getInstanceName() {
         return instanceName;
     }
 
     @Override
-    public void setInstanceName(String newInstanceName) {
-        instanceName.setValue(newInstanceName);
-    }
+    public void setInstanceName(String newInstanceName) { instanceName = newInstanceName; }
 
     @Override
-    public ObservableMap<String, String> getPropertiesMap() { return propertiesMap; }
+    public Map<String, String> getPropertiesMap() { return propertiesMap; }
 
 
     /**
@@ -108,24 +95,20 @@ public class SimpleSoundInstance implements SoundInstance {
     }
 
     @Override
-    public SimpleStringProperty getMediaFilePath() {
+    public String getMediaFilePath() {
         return mediaFilePath;
     }
 
     @Override
-    public void setMediaFilePath(String newMediaFilePath) {
-        mediaFilePath.setValue(newMediaFilePath);
-    }
+    public void setMediaFilePath(String newMediaFilePath) { mediaFilePath = newMediaFilePath; }
 
     @Override
-    public SimpleDoubleProperty getDuration() {
+    public double getDuration() {
         return duration;
     }
 
     @Override
-    public void setDuration(double newDuration) {
-        duration.setValue(newDuration);
-    }
+    public void setDuration(double newDuration) { duration = newDuration; }
 
     @Override
     public SoundClass getGameObjectClass() {

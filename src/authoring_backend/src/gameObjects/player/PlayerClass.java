@@ -27,7 +27,7 @@ public interface PlayerClass extends GameObjectClass {
 
     Set<Integer> getAllGameObjectInstanceIDs();
 
-    SimpleStringProperty getImagePath();
+    String getImagePath();
 
     void setImagePath(String newImagePath);
 

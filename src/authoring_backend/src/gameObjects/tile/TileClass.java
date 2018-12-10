@@ -9,13 +9,15 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
 
+import java.util.List;
+
 public interface TileClass extends GameObjectClass {
 
-    SimpleIntegerProperty getWidth();
+    int getWidth();
 
-    SimpleIntegerProperty getHeight();
+    int getHeight();
 
-    SimpleBooleanProperty isEntityContainable();
+    boolean isEntityContainable();
 
     void setEntityContainable(boolean contains);
 
@@ -30,7 +32,7 @@ public interface TileClass extends GameObjectClass {
      * This method gets the image path list of the GameObject Class.
      * @return a list of the file paths of the images
      */
-    ObservableList<String> getImagePathList();
+    List<String> getImagePathList();
 
     /**
      * This method removes the image path from the Entity Class and from all instances of the class.
