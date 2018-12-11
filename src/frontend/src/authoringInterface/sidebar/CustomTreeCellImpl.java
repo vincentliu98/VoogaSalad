@@ -56,7 +56,6 @@ public class CustomTreeCellImpl extends TreeCell<String> {
                 AbstractGameObjectEditor editor = EditorFactory.makeEditor(getItem(), manager, imageSelectorController);
                 dialogStage.setScene(new Scene(editor.getView(), 600, 620));
                 dialogStage.show();
-                dialogStage.toFront();
                 editor.addTreeItem(getTreeItem());
 
             } catch (GameObjectTypeException e1) {
@@ -111,7 +110,6 @@ public class CustomTreeCellImpl extends TreeCell<String> {
             }
             dialogStage.setScene(new Scene(editor.getView(), 600, 620));
             dialogStage.show();
-            dialogStage.toFront();
             //noinspection unchecked
             editor.editTreeItem(getTreeItem(), objectClass);
         });
