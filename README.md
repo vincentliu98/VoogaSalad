@@ -24,16 +24,16 @@ Hours Spent: 100 hours per person
 
 ### Primary Roles
 
-* Vincent Liu : Frontend developer. <Add description here>
-* Haotian Wang : Frontend developer. <Add description here>
-* Amy Kim : Frontend developer. <Add description here>
+* **Vincent Liu** : *Frontend developer.* <Add description here>
+* **Haotian Wang** : *Frontend developer.* <Add description here>
+* **Amy Kim** : *Frontend developer.* <Add description here>
 
-* Natalie Le : Backend engine developer. <Add description here>
-* Jonathan Nakagawa : Backend engine developer. <Add description here>
+* **Natalie Le** : *Backend engine developer.* Created the engine/gameplay infrastructure and the social center extension.
+* **Jonathan Nakagawa** : *Frontend engine developer.* <Add description here>
 
-* Inchan Hwang : Backend authoring engine developer. Worked on the Groove part of the authoring engine.
-* Jason Zhou : Backend authoring engine developer. Worked on GameObjectCRUD and various specific game objects such as Entity, Tile and Sound.
-* Yunhao Qing : Backend authoring engine developer. Worked on GameObjeectCRUD and Player component.
+* **Inchan Hwang** : *Backend authoring engine developer.* Worked on the Groove part of the authoring engine.
+* **Jason Zhou** : *Backend authoring engine developer.* Worked on GameObjectCRUD and various specific game objects such as Entity, Tile and Sound.
+* **Yunhao Qing** : *Backend authoring engine developer.* Worked on GameObjeectCRUD and Player component.
 
 ### Resources Used
 
@@ -93,7 +93,8 @@ Hours Spent: 100 hours per person
 
 ### files used to start the project
 
-* src/frontend/src/authoringInterface/MainAuthoringProgram.java
+* **Authoring:** src/frontend/src/authoringInterface/MainAuthoringProgram.java
+* **Engine:** src/controller/src/launching/GameLauncher.java
 
 ### files used to test the project
 
@@ -169,8 +170,11 @@ TO BE ADDED
 ![UI View](doc/<name>.png)
 
 ### How to use the program
+**Authoring Environment:**
+Run the MainAuthoringProgram.java to access the authoring program.
 
-* Run the src/frontend/src/authoringInterface/MainAuthoringProgram.java to get access to the authoring program.
+**Engine:**
+Run the GameLauncher.java to access the game launcher. Click any game's "Play" button the play the game. Sign in to access social center functionality under the "Social" tag.
 
 ### Known Bugs
 
@@ -189,18 +193,19 @@ TO BE ADDED
 
 ### Impression
 
-* Vincent Liu : VoogaSalad is more challenging compared to the previous 3 projects, Breakout, Cell Society and SLogo. I learnt how to work with a team by using interfaces and I truly feel I can work better in a team setting in the future.
+* **Vincent Liu :** VoogaSalad is more challenging compared to the previous 3 projects, Breakout, Cell Society and SLogo. I learnt how to work with a team by using interfaces and I truly feel I can work better in a team setting in the future.
 
-* Haotian Wang : I have been working on connecting backend and the UI. I enjoyed the process a lot, it is so fun to see how much changes I made and how flexible our codes become after I re-construct the structure of our project. I feel I understand the 'Open For Extension,Closed for Modification' much more after this project.
+* **Haotian Wang :** I have been working on connecting backend and the UI. I enjoyed the process a lot, it is so fun to see how much changes I made and how flexible our codes become after I re-construct the structure of our project. I feel I understand the 'Open For Extension,Closed for Modification' much more after this project.
 
-* Amy Kim : I have been working on the GUI and I really like the experience. Learning how all the UI components work, how the UI components are connected to the back-end and learning how to handle user input were challenging but fun as well. I have also been doing a lot of testing and debugging, it feels great to see how the UI becomes more perfect and beautiful over time.
+* **Amy Kim :** I have been working on the GUI and I really like the experience. Learning how all the UI components work, how the UI components are connected to the back-end and learning how to handle user input were challenging but fun as well. I have also been doing a lot of testing and debugging, it feels great to see how the UI becomes more perfect and beautiful over time.
 
-* Natalie Le : I am so glad that our program works eventually! This project has been fun and I had a great time with my teammates who are amazing! I feel I have learnt much about API and it is going to be super helpful for my future.
+* **Natalie Le :** I had a really great time working on this project. I learned a lot about module dependencies,
+external libraries, and design patterns like Pub-Sub. My team and I also learned a lot about technical collaboration and best practices for engineering groupwork. It was awesome working with such great teammates!
 
-* Jonathan Nakagawa : I am truly happy with working on the sole of our program - the game engine. I spent some time on UI as well. I have learnt a lot and I believe the skills and friendship I obtained from the project will last.
+* **Jonathan Nakagawa :** I am truly happy with working on the sole of our program - the game engine frontend. I spent some time on UI as well. I have learnt a lot and I believe the skills and friendship I obtained from the project will last.
 
-* Inchan Hwang : This project is very challenging but I learnt so much about APIs and Reflection and I truly appreciate the power of JavaFX now! Although it is time-consuming, the project is definitely worth doing. I realise how much I enjoy backend coding and I aspire to be a backend engineer in the future!
+* **Inchan Hwang :** This project is very challenging but I learnt so much about APIs and Reflection and I truly appreciate the power of JavaFX now! Although it is time-consuming, the project is definitely worth doing. I realise how much I enjoy backend coding and I aspire to be a backend engineer in the future!
 
-* Jason Zhou :  The project is challenging in its concept and design. I learn a lot about APIs, Lambda, and Reflection. I had a great time design and implementing the front end and also learn how to connect the front end and the back end, which is very valuable for me.
+* **Jason Zhou :**  The project is challenging in its concept and design. I learn a lot about APIs, Lambda, and Reflection. I had a great time design and implementing the front end and also learn how to connect the front end and the back end, which is very valuable for me.
 
-* Yunhao Qing : Building Voogasalad is very time-consuming. I get much more used to using Git as a part of a team through doing this project. I am responsible for authoring engine backend coding and I am very satisfied with working on backend.I learn about how flexibility of codes is important as making changes on flexible codes is much easier and changing codes is what we do all the time.
+* **Yunhao Qing :** Building Voogasalad is very time-consuming. I get much more used to using Git as a part of a team through doing this project. I am responsible for authoring engine backend coding and I am very satisfied with working on backend.I learn about how flexibility of codes is important as making changes on flexible codes is much easier and changing codes is what we do all the time.

@@ -8,6 +8,7 @@ import authoringInterface.editor.menuBarView.EditorMenuBarView;
 import authoringInterface.sidebar.SideView;
 import authoringInterface.sidebar.StatusView;
 import gameObjects.crud.GameObjectsCRUDInterface;
+import gameObjects.tileGeneration.TileGenerator;
 import graphUI.groovy.GroovyPaneFactory;
 import grids.Point;
 import grids.PointImpl;
@@ -81,7 +82,7 @@ public class View implements ParentView<SubView> {
         editView = new EditView(tools, groovyPaneFactory, gameObjectManager.getNumRows(), gameObjectManager.getNumCols(), gameObjectManager, nodeInstanceController);
         statusView = new StatusView(gameObjectManager);
         editView.addUpdateStatusEventListener(statusView);
-        menuBar = new EditorMenuBarView(tools, primaryStage::close, this::updateGridDimension, editView);
+        menuBar = new EditorMenuBarView(tools, primaryStage::close, this::updateGridDimension, editView, gameObjectManager, primaryStage);
         sidebar.addColumn(0, sideView.getView(), statusView.getView());
         mainView.getColumnConstraints().addAll(new ColumnConstraints(MainAuthoringProgram.SCREEN_WIDTH - SIDEBAR_WIDTH));
         mainView.addColumn(0, editView.getView());

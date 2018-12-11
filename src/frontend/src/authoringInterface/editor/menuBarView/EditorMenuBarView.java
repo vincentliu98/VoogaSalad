@@ -5,16 +5,19 @@ import authoring.AuthoringTools;
 import authoringInterface.View;
 import authoringInterface.editor.editView.EditView;
 import authoringInterface.editor.menuBarView.subMenuBarView.*;
+import authoringUtils.exception.GameObjectClassNotFoundException;
+import authoringUtils.exception.NumericalException;
+import gameObjects.crud.GameObjectsCRUDInterface;
+import gameObjects.tileGeneration.TileGenerator;
 import gameplay.Initializer;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import runningGame.GameWindow;
@@ -23,6 +26,7 @@ import conversion.authoring.SerializerCRUD;
 
 import java.io.*;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import static authoringInterface.MainAuthoringProgram.SCREEN_HEIGHT;
 import static authoringInterface.MainAuthoringProgram.SCREEN_WIDTH;
@@ -44,19 +48,26 @@ public class EditorMenuBarView implements SubView<MenuBar> {
     private SerializerCRUD serializer;
     private SoundView soundView;
     private Runnable closeWindow; //For each window closable
+    private TileGenerator tileGenerator;
+    private GameObjectsCRUDInterface gameObjectManager;
 
     private File currentFile;
+    private Stage primaryStage;
 
     public EditorMenuBarView(
             AuthoringTools authTools,
             Runnable closeWindow,
             BiConsumer<Integer, Integer> updateGridDimension,
-            EditView editView
+            EditView editView,
+            GameObjectsCRUDInterface gameObjectManager,
+            Stage primaryStage
     ) {
         serializer = new SerializerCRUD();
         this.authTools = authTools;
         this.closeWindow = closeWindow;
         this.editView = editView;
+        this.primaryStage = primaryStage;
+        this.gameObjectManager = gameObjectManager;
         fileName = "TicTacToe.xml";
 
         menuBar = new MenuBar();
@@ -80,6 +91,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         MenuItem setBGM = new MenuItem("BGM");
         MenuItem helpDoc = new MenuItem("Help");
         MenuItem about = new MenuItem("About");
+        MenuItem tileSetting = new MenuItem("Tile Setting");
 
         save.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
         saveAs.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN));
@@ -100,13 +112,32 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         setBGM.setOnAction(e -> soundView.show());
         helpDoc.setOnAction(this::handleHelpDoc);
         about.setOnAction(this::handleAbout);
+        tileSetting.setOnAction(this::handleTileSetting);
 
         file.getItems().addAll(newFile, open, export, save, saveAs, close);
         run.getItems().addAll(runProject);
-        settings.getItems().addAll(resizeGrid, setBGM);
+        settings.getItems().addAll(resizeGrid, setBGM, tileSetting);
         help.getItems().addAll(helpDoc, about);
 
         menuBar.getMenus().addAll(file, settings, run, help);
+    }
+
+    void handleTileSetting(ActionEvent actionEvent) {
+        var tileSettingWindow = new TileSettingDialog(gameObjectManager, primaryStage);
+        tileSettingWindow.showWindow();
+        try {
+            tileGenerator = new TileGenerator(tileSettingWindow.retrieveInfo().getKey(), gameObjectManager,
+                    tileSettingWindow.retrieveInfo().getValue());
+        } catch (GameObjectClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (NumericalException e) {
+            e.printStackTrace();
+        }
+        try {
+            tileGenerator.generateTiles();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     void handleSave(ActionEvent event) {
