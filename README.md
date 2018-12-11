@@ -115,16 +115,16 @@ Hours Spent: 100 hours per person
 
 Authoring_backend
 
-* src/authoring_backend/src/authoringUtils/exception/DuplicateGameObjectClassException.java
-* src/authoring_backend/src/authoringUtils/exception/DuplicateIdException.java
-* src/authoring_backend/src/authoringUtils/exception/GameObjectClassException.java
-* src/authoring_backend/src/authoringUtils/exception/GameObjectClassNotFoundException.java
-* src/authoring_backend/src/authoringUtils/exception/GameObjectInstanceException.java
-* src/authoring_backend/src/authoringUtils/exception/GameObjectInstanceNotFoundException.java
-* src/authoring_backend/src/authoringUtils/exception/GameObjectTypeException.java
-* src/authoring_backend/src/authoringUtils/exception/IdException.java
-* src/authoring_backend/src/authoringUtils/exception/InvalidGameObjectClassException.java
-* src/authoring_backend/src/authoringUtils/exception/InvalidGameObjectInstanceException.java
+* src/authoring_backend/src/authoringUtils/exception/DuplicateGameObjectClassException.java : This class handles the exception of having duplicate game object class in the CRUD.
+* src/authoring_backend/src/authoringUtils/exception/DuplicateIdException.java : This class handles the exception of duplicating id being used in the CRUD.
+* src/authoring_backend/src/authoringUtils/exception/GameObjectClassException.java : This class is extended by specific game object class exception.
+* src/authoring_backend/src/authoringUtils/exception/GameObjectClassNotFoundException.java : This file handles the exception of calling a game object class that is not found.
+* src/authoring_backend/src/authoringUtils/exception/GameObjectInstanceException.java : This class is extended by specific game object instance exception.
+* src/authoring_backend/src/authoringUtils/exception/GameObjectInstanceNotFoundException.java :  : This file handles the exception of calling a game object instance that is not found.
+* src/authoring_backend/src/authoringUtils/exception/GameObjectTypeException.java : This class hanldes exception of game object type conflict.
+* src/authoring_backend/src/authoringUtils/exception/IdException.java : This class is extended by specific id class exception.
+* src/authoring_backend/src/authoringUtils/exception/InvalidGameObjectClassException.java : This file handles invalid game object class exception.
+* src/authoring_backend/src/authoringUtils/exception/InvalidGameObjectInstanceException.java : This file handles invalid game object instance exception.
 * src/authoring_backend/src/authoringUtils/exception/InvalidIdException.java
 * src/authoring_backend/src/authoringUtils/exception/InvalidOperationException.java
 * src/authoring_backend/src/authoringUtils/exception/InvalidPointsException.java
