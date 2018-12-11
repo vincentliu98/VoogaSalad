@@ -14,7 +14,7 @@ public class LauncherGamesDisplay implements Searchable, Sortable, Subscriber {
     public static final String CSS_PATH = "launcher-games-display";
     public static final int COLUMN_NUMBER = 4;
     public static final String CURRENT_FOLDER_KEY = "user.dir";
-    public static final String GAMES_PATH = "/src/controller/resources/games/";
+    public static final String GAMES_PATH = "/src/controller/resources/game-descriptions/";
 
 
     public static final double HOR_SPACING = 29;
