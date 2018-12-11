@@ -11,6 +11,7 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import utils.imageManipulation.ImageManager;
@@ -43,6 +44,7 @@ public class TileSettingDialog extends PopUpWindow {
 
         gModeChoice = new ComboBox();
         gModeChoice.getItems().addAll("Random", "Repeating");
+        gModeChoice.setValue("Random");
         gModeChoice.valueProperty().addListener((ov, t, t1) -> {
             if (t1.equals("Random")) gMode = GenerationMode.RANDOM;
             else gMode = GenerationMode.REPEATING;
@@ -55,6 +57,7 @@ public class TileSettingDialog extends PopUpWindow {
                 p.setProb(Double.parseDouble(p.probText.getText()));
                 tileClasses.put(p.prob, p.tileClass);
             });
+            closeWindow();
         });
         dialogPane.getChildren().addAll(addTile, gModeChoice, apply);
     }
