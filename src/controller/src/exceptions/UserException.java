@@ -1,11 +1,10 @@
-package social;
+package exceptions;
 
-public class UserException extends RuntimeException {
+public class UserException extends ExtendedException {
 
     /**
      * Exceptions related to User login
      */
-    public UserException (String message, Object ... values) {
-        super(String.format(message, values));
-    }
-}
+    public UserException (String message, String warning, Object ... values) {
+        super(message, warning, values);
+    }}
