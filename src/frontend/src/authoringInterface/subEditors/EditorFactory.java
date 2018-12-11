@@ -28,8 +28,8 @@ public class EditorFactory {
                 return (T) new PlayerEditor(gameObjectManager);
             case TILE:
                 return (T) new TileEditor(gameObjectManager);
-            case SOUND:
-                return (T) new SoundEditor(gameObjectManager);
+//            case SOUND:
+//                return (T) new SoundEditor(gameObjectManager);
             case UNSPECIFIED:
                 // TODO
                 break;
