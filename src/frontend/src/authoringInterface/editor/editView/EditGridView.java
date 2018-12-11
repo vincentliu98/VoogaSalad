@@ -6,6 +6,7 @@ import authoringInterface.subEditors.AbstractGameObjectEditor;
 import authoringInterface.subEditors.EditorFactory;
 import authoringInterface.subEditors.exception.MissingEditorForTypeException;
 import authoringUtils.exception.GameObjectClassNotFoundException;
+import authoringUtils.exception.GameObjectInstanceNotFoundException;
 import authoringUtils.exception.GameObjectTypeException;
 import authoringUtils.exception.InvalidIdException;
 import gameObjects.crud.GameObjectsCRUDInterface;
@@ -294,6 +295,7 @@ public class EditGridView implements SubView<ScrollPane> {
             e.printStackTrace();
         }
         try {
+            gameObjectManager.deleteGameObjectInstance(nodeInstanceController.getGameObjectInstance(targetNode).getInstanceId());
             nodeInstanceController.removeNode(targetNode);
         } catch (NodeNotFoundException e) {
             // TODO: proper error handling
@@ -324,7 +326,7 @@ public class EditGridView implements SubView<ScrollPane> {
      */
     private void setUpHoveringColorDraggedOver(DragEvent dragEvent, Paint hoveringFill, Pane cell) {
         dragEvent.acceptTransferModes(TransferMode.ANY);
-        if (dragEvent.getGestureSource() instanceof TreeCell) {
+        if (!dragEvent.getDragboard().getString().isEmpty()) {
             cell.setBackground(new Background(new BackgroundFill(hoveringFill, CornerRadii.EMPTY, Insets.EMPTY)));
         }
         dragEvent.consume();
@@ -356,7 +358,7 @@ public class EditGridView implements SubView<ScrollPane> {
      * @param cell: The Pane where the hovering exits.
      */
     private void setUpDragExit(DragEvent dragEvent, Pane cell) {
-        if (dragEvent.getGestureSource() instanceof TreeCell) {
+        if (!dragEvent.getDragboard().getString().isEmpty()) {
             cell.setBackground(Background.EMPTY);
         }
         dragEvent.consume();
@@ -391,6 +393,13 @@ public class EditGridView implements SubView<ScrollPane> {
             } else {
                 handleDoubleClick(e, finalNodeOnGrid);
             }
+        });
+        finalNodeOnGrid.setOnDragDetected(e -> {
+            Dragboard db = finalNodeOnGrid.startDragAndDrop(TransferMode.MOVE);
+            ClipboardContent cc = new ClipboardContent();
+            cc.putString(String.valueOf(gameObjectInstance.getInstanceId()));
+            db.setContent(cc);
+            db.setDragView(finalNodeOnGrid.getImage());
         });
         int height = 0;
         int width = 0;
@@ -448,6 +457,25 @@ public class EditGridView implements SubView<ScrollPane> {
                 e.printStackTrace();
             }
             createInstanceAtGridCell(objectClass, cell);
+        } else if (!dragEvent.getDragboard().getString().isEmpty()) {
+            GameObjectInstance draggedInstance = null;
+            try {
+                draggedInstance = gameObjectManager.getGameObjectInstance(Integer.valueOf(dragEvent.getDragboard().getString()));
+            } catch (GameObjectInstanceNotFoundException ignored) {}
+            try {
+                JavaFxOperation.removeFromParent(nodeInstanceController.getNode(draggedInstance));
+            } catch (UnremovableNodeException | GameObjectInstanceNotFoundException ignored) {
+            }
+            try {
+                nodeInstanceController.removeGameObjectInstance(draggedInstance);
+            } catch (GameObjectInstanceNotFoundException ignored) {
+            }
+            createInstanceAtGridCell(draggedInstance, cell);
+            if (draggedInstance instanceof EntityInstance) {
+                ((EntityInstance) draggedInstance).setCoord(new PointImpl(GridPane.getColumnIndex(cell), GridPane.getRowIndex(cell)));
+            } else if (draggedInstance instanceof TileInstance) {
+                ((TileInstance) draggedInstance).setCoord(new PointImpl(GridPane.getColumnIndex(cell), GridPane.getRowIndex(cell)));
+            }
         }
         dragEvent.consume();
     }
