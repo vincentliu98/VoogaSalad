@@ -131,7 +131,6 @@ public class EditorMenuBarView implements SubView<MenuBar> {
             writer.close();
         } catch (IOException e) {
             ErrorWindow.display("Error", "Something went wrong when writing to the file");
-            e.printStackTrace();
         }
     }
 
@@ -153,7 +152,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
                 newWindow.setScene(newScene);
                 newWindow.show();
                 reader.close();
-            } catch (IOException e) { e.printStackTrace(); }
+            } catch (IOException e) { ErrorWindow.display("IOException", e.toString()); }
         }
     }
 
@@ -172,7 +171,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
             initializer.setScreenSize(View.GAME_WIDTH, View.GAME_HEIGHT);
             newWindow.show();
         } catch (Exception e){
-            e.printStackTrace();
+            ErrorWindow.display("Exception", e.toString());
         }
     }
 
