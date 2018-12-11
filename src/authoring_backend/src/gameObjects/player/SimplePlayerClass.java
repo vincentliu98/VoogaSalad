@@ -222,4 +222,9 @@ public class SimplePlayerClass implements PlayerClass {
         this.getAllPlayerInstancesFunc = getAllPlayerInstancesFunc;
         this.deletePlayerInstanceFunc = deletePlayerInstanceFunc;
     }
+
+    @Override
+    public String toString() {
+        return className;
+    }
 }

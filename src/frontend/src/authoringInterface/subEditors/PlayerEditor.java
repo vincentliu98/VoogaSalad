@@ -18,6 +18,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import utils.ErrorWindow;
 import utils.exception.PreviewUnavailableException;
 import utils.imageManipulation.ImageManager;
 import utils.imageManipulation.JavaFxOperation;
@@ -43,7 +44,6 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
     private Set<String> toRemovePath;
     private String imagePath;
     private Label entityText;
-    private CheckBox entitybox;
 
     PlayerEditor(GameObjectsCRUDInterface manager) {
         super(manager);
@@ -68,15 +68,10 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
         });
         imagePanel = new HBox(IMAGE_PANEL_GAP);
 
-        entityText = new Label("Assign Entities");
-        entitybox = new CheckBox();
-
         confirm.setStyle("-fx-text-fill: white;"
                 + "-fx-background-color: #343a40;");
         layout.addRow(0, imageText, chooseImage);
         layout.addRow(1, imagePanel);
-        layout.addRow(2, entityText);
-        layout.addRow(3, entitybox);
 
         rootPane.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.DELETE || e.getCode() == KeyCode.BACK_SPACE) {
@@ -86,6 +81,7 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
     }
 
     private void presentImages() {
+        if(imagePath.isEmpty()) return;
         imagePanel.getChildren().clear();
         ImageView preview = new ImageView(imagePath);
         preview.setFitWidth(ICON_WIDTH);
@@ -108,6 +104,7 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
         readInstanceProperties();
         nameField.setText(gameObjectInstance.getClassName());
         imagePath = gameObjectInstance.getImagePath();
+        presentImages();
         System.out.print(imagePath);
     }
 
@@ -116,6 +113,7 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
         readClassProperties();
         nameField.setText(gameObjectClass.getClassName());
         imagePath = gameObjectClass.getImagePath();
+        presentImages();
         System.out.print(imagePath);
     }
 
@@ -132,7 +130,6 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
         JavaFxOperation.setWidthAndHeight(icon, ICON_WIDTH, ICON_HEIGHT);
         newItem.setGraphic(icon);
         treeItem.getChildren().add(newItem);
-        System.out.print(treeItem.getChildren());
     }
 
     /**
