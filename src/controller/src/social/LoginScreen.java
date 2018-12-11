@@ -1,7 +1,12 @@
 package social;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import exceptions.ExtendedException;
+import exceptions.LoginException;
+import exceptions.RegistrationException;
+import exceptions.ServerException;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -17,17 +22,24 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import util.data.DatabaseDownloader;
 import util.data.DatabaseUploader;
+import util.files.ServerDownloader;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ResourceBundle;
+import java.util.Scanner;
 
 public class LoginScreen {
     public static final String LOGO_PATH = "duke_logo.png";
     public static final String MOTO = "Your Home for Games";
 
-
     private GridPane myPane;
     private Scene myScene;
     private Stage myStage;
+    private ResourceBundle myErrors = ResourceBundle.getBundle("Errors");
 
     public LoginScreen() { }
 
@@ -102,692 +114,16 @@ public class LoginScreen {
         //Text forgotPassword = new Text("Forgot your password?");
 
         btn.setOnMouseClicked(e -> {
-            // throw exceptions for invalid password, username
-            // assuming a valid user was retrieved from the database (myUser)
             try {
-                DatabaseDownloader databaseDownloader = new DatabaseDownloader("client", "store",
-                        "e.printstacktrace", "vcm-7456.vm.duke.edu", 3306);
-                ResultSet result = databaseDownloader.queryServer(String.format("SELECT id FROM logins WHERE " +
-                        "username='%s' AND password='%s'", usernameField.getText(), passwordField.getText()));
-                if (!result.next()){
-                    // throw error here
-                }
-                result.last();
-                int id = result.getInt("id");
-                result = databaseDownloader.queryServer(String.format("SELECT profilePath, avatarPath FROM" +
-                        " userReferences WHERE id='%d'", id));
-                result.last();
-                System.out.println("size is " + result.getFetchSize());
-                System.out.println("profilePath is " + result.getString("profilePath") + ", avatarPath " + result.getString("avatarPath"));
-                // Deserialize here
-                return;
+                loginUser(usernameField.getText(), passwordField.getText());
             } catch (Exception ex){
-                ex.printStackTrace();
+                ExtendedException exception = (ExtendedException) ex;
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setHeaderText(exception.getMessage());
+                alert.setContentText(exception.getWarning());
+                alert.showAndWait();
+                return;
             }
-            User myUser = new User(10, "bloop");// TODO: Remove later (just a placeholder)
-            myUser.changeAvatar("ocean.jpeg");
-            // TODO: Remove - just for testing that loading the gamestate works
-            myUser.saveGameState("SwordAndArrow.xml", "\n" +
-                    "<game>\n" +
-                    "    <gameplay.Node>\n" +
-                    "        <myPhaseName>A</myPhaseName>\n" +
-                    "        <myName>b</myName>\n" +
-                    "        <myExecution>selected = $clicked</myExecution>\n" +
-                    "    </gameplay.Node>\n" +
-                    "    <gameplay.Node>\n" +
-                    "        <myPhaseName>A</myPhaseName>\n" +
-                    "        <myName>d</myName>\n" +
-                    "        <myExecution>$clicked.props.hp = $clicked.props.hp - selected.props.dmg\n" +
-                    "            if($clicked.props.hp &lt;= 0) { GameMethods.removeEntity($clicked) }\n" +
-                    "            GameMethods.toNextPlayer()\n" +
-                    "            GameMethods.$goto(&apos;A&apos;)</myExecution>\n" +
-                    "    </gameplay.Node>\n" +
-                    "    <gameplay.Node>\n" +
-                    "        <myPhaseName>A</myPhaseName>\n" +
-                    "        <myName>c</myName>\n" +
-                    "        <myExecution>GameMethods.moveEntity(selected, $clicked)\n" +
-                    "            GameMethods.toNextPlayer()\n" +
-                    "            GameMethods.$goto(&apos;A&apos;)</myExecution>\n" +
-                    "    </gameplay.Node>\n" +
-                    "    <gameplay.Node>\n" +
-                    "        <myPhaseName>A</myPhaseName>\n" +
-                    "        <myName>A</myName>\n" +
-                    "        <myExecution></myExecution>\n" +
-                    "    </gameplay.Node>\n" +
-                    "    <gameplay.Edge>\n" +
-                    "        <myPhaseName>A</myPhaseName>\n" +
-                    "        <myStartNodeName>b</myStartNodeName>\n" +
-                    "        <myEndNodeName>A</myEndNodeName>\n" +
-                    "        <myTrigger class=\"phase.api.GameEvent$KeyPress\">\n" +
-                    "            <code>ESCAPE</code>\n" +
-                    "        </myTrigger>\n" +
-                    "        <myGuard>GameMethods.$return(true)</myGuard>\n" +
-                    "    </gameplay.Edge>\n" +
-                    "    <gameplay.Edge>\n" +
-                    "        <myPhaseName>A</myPhaseName>\n" +
-                    "        <myStartNodeName>b</myStartNodeName>\n" +
-                    "        <myEndNodeName>d</myEndNodeName>\n" +
-                    "        <myTrigger class=\"phase.api.GameEvent$MouseClick\"/>\n" +
-                    "        <myGuard>GameMethods.$return(GameMethods.isEntity($clicked) &amp;&amp; !GameMethods.getCurrentPlayer().isMyEntity($clicked) &amp;&amp; GameMethods.distance($clicked, selected) &lt;= selected.props.attackRange)</myGuard>\n" +
-                    "    </gameplay.Edge>\n" +
-                    "    <gameplay.Edge>\n" +
-                    "        <myPhaseName>A</myPhaseName>\n" +
-                    "        <myStartNodeName>b</myStartNodeName>\n" +
-                    "        <myEndNodeName>c</myEndNodeName>\n" +
-                    "        <myTrigger class=\"phase.api.GameEvent$MouseClick\"/>\n" +
-                    "        <myGuard>GameMethods.$return(GameMethods.isTile($clicked) &amp;&amp; GameMethods.distance($clicked, selected) &lt;= 1)</myGuard>\n" +
-                    "    </gameplay.Edge>\n" +
-                    "    <gameplay.Edge>\n" +
-                    "        <myPhaseName>A</myPhaseName>\n" +
-                    "        <myStartNodeName>A</myStartNodeName>\n" +
-                    "        <myEndNodeName>b</myEndNodeName>\n" +
-                    "        <myTrigger class=\"phase.api.GameEvent$MouseClick\"/>\n" +
-                    "        <myGuard>if(((GameMethods.isEntity($clicked)) &amp;&amp; (GameMethods.getCurrentPlayer().isMyEntity($clicked)))) {\n" +
-                    "            $return = true\n" +
-                    "\n" +
-                    "            }\n" +
-                    "            else {\n" +
-                    "            $return = false\n" +
-                    "\n" +
-                    "            }\n" +
-                    "        </myGuard>\n" +
-                    "    </gameplay.Edge>\n" +
-                    "    <gameplay.Phase>\n" +
-                    "        <myStartNodeName>A</myStartNodeName>\n" +
-                    "        <myCurrentNodeName>A</myCurrentNodeName>\n" +
-                    "        <myNodeNames>\n" +
-                    "            <string>b</string>\n" +
-                    "            <string>d</string>\n" +
-                    "            <string>c</string>\n" +
-                    "            <string>A</string>\n" +
-                    "        </myNodeNames>\n" +
-                    "    </gameplay.Phase>\n" +
-                    "    <winCondition>if(GameMethods.hasNoEntities(GameMethods.getCurrentPlayerName())) {   GameMethods.endGame(GameMethods.getCurrentPlayerName() + &apos; LOST!&apos;)}</winCondition>\n" +
-                    "    <grid-width>5</grid-width>\n" +
-                    "    <grid-height>5</grid-height>\n" +
-                    "    <gameplay.EntityPrototype>\n" +
-                    "        <name>bowman</name>\n" +
-                    "        <props>\n" +
-                    "            <entry>\n" +
-                    "                <string>attackRange</string>\n" +
-                    "                <int>3</int>\n" +
-                    "            </entry>\n" +
-                    "            <entry>\n" +
-                    "                <string>hp</string>\n" +
-                    "                <int>5</int>\n" +
-                    "            </entry>\n" +
-                    "            <entry>\n" +
-                    "                <string>dmg</string>\n" +
-                    "                <int>1</int>\n" +
-                    "            </entry>\n" +
-                    "        </props>\n" +
-                    "        <myWidth>2</myWidth>\n" +
-                    "        <myHeight>2</myHeight>\n" +
-                    "        <myImagePaths>\n" +
-                    "            <string>bowman1.png</string>\n" +
-                    "            <string>bowman2.png</string>\n" +
-                    "            <string>bowman3.png</string>\n" +
-                    "            <string>bowman4.png</string>\n" +
-                    "            <string>bowman5.png</string>\n" +
-                    "        </myImagePaths>\n" +
-                    "        <myImageSelector>$return = $this.props.hp-1</myImageSelector>\n" +
-                    "    </gameplay.EntityPrototype>\n" +
-                    "    <gameplay.EntityPrototype>\n" +
-                    "        <name>swordman</name>\n" +
-                    "        <props>\n" +
-                    "            <entry>\n" +
-                    "                <string>attackRange</string>\n" +
-                    "                <int>1</int>\n" +
-                    "            </entry>\n" +
-                    "            <entry>\n" +
-                    "                <string>hp</string>\n" +
-                    "                <int>5</int>\n" +
-                    "            </entry>\n" +
-                    "            <entry>\n" +
-                    "                <string>dmg</string>\n" +
-                    "                <int>3</int>\n" +
-                    "            </entry>\n" +
-                    "        </props>\n" +
-                    "        <myWidth>1</myWidth>\n" +
-                    "        <myHeight>1</myHeight>\n" +
-                    "        <myImagePaths>\n" +
-                    "            <string>swordman1.png</string>\n" +
-                    "            <string>swordman2.png</string>\n" +
-                    "            <string>swordman3.png</string>\n" +
-                    "            <string>swordman4.png</string>\n" +
-                    "            <string>swordman5.png</string>\n" +
-                    "        </myImagePaths>\n" +
-                    "        <myImageSelector>$return = $this.props.hp-1</myImageSelector>\n" +
-                    "    </gameplay.EntityPrototype>\n" +
-                    "    <gameplay.Entity>\n" +
-                    "        <myID>27</myID>\n" +
-                    "        <name>swordman</name>\n" +
-                    "        <props>\n" +
-                    "            <entry>\n" +
-                    "                <string>attackRange</string>\n" +
-                    "                <int>1</int>\n" +
-                    "            </entry>\n" +
-                    "            <entry>\n" +
-                    "                <string>hp</string>\n" +
-                    "                <int>5</int>\n" +
-                    "            </entry>\n" +
-                    "            <entry>\n" +
-                    "                <string>dmg</string>\n" +
-                    "                <int>3</int>\n" +
-                    "            </entry>\n" +
-                    "        </props>\n" +
-                    "        <myWidth>1</myWidth>\n" +
-                    "        <myHeight>1</myHeight>\n" +
-                    "        <myCoord>\n" +
-                    "            <x>0</x>\n" +
-                    "            <y>1</y>\n" +
-                    "        </myCoord>\n" +
-                    "        <myImagePaths>\n" +
-                    "            <string>swordman1.png</string>\n" +
-                    "            <string>swordman2.png</string>\n" +
-                    "            <string>swordman3.png</string>\n" +
-                    "            <string>swordman4.png</string>\n" +
-                    "            <string>swordman5.png</string>\n" +
-                    "        </myImagePaths>\n" +
-                    "        <myImageSelector>$return = $this.props.hp-1</myImageSelector>\n" +
-                    "    </gameplay.Entity>\n" +
-                    "    <gameplay.Entity>\n" +
-                    "        <myID>28</myID>\n" +
-                    "        <name>bowman</name>\n" +
-                    "        <props>\n" +
-                    "            <entry>\n" +
-                    "                <string>attackRange</string>\n" +
-                    "                <int>3</int>\n" +
-                    "            </entry>\n" +
-                    "            <entry>\n" +
-                    "                <string>hp</string>\n" +
-                    "                <int>5</int>\n" +
-                    "            </entry>\n" +
-                    "            <entry>\n" +
-                    "                <string>dmg</string>\n" +
-                    "                <int>1</int>\n" +
-                    "            </entry>\n" +
-                    "        </props>\n" +
-                    "        <myWidth>2</myWidth>\n" +
-                    "        <myHeight>2</myHeight>\n" +
-                    "        <myCoord>\n" +
-                    "            <x>1</x>\n" +
-                    "            <y>3</y>\n" +
-                    "        </myCoord>\n" +
-                    "        <myImagePaths>\n" +
-                    "            <string>bowman1.png</string>\n" +
-                    "            <string>bowman2.png</string>\n" +
-                    "            <string>bowman3.png</string>\n" +
-                    "            <string>bowman4.png</string>\n" +
-                    "            <string>bowman5.png</string>\n" +
-                    "        </myImagePaths>\n" +
-                    "        <myImageSelector>$return = $this.props.hp-1</myImageSelector>\n" +
-                    "    </gameplay.Entity>\n" +
-                    "    <gameplay.Entity>\n" +
-                    "        <myID>29</myID>\n" +
-                    "        <name>bowman</name>\n" +
-                    "        <props>\n" +
-                    "            <entry>\n" +
-                    "                <string>attackRange</string>\n" +
-                    "                <int>3</int>\n" +
-                    "            </entry>\n" +
-                    "            <entry>\n" +
-                    "                <string>hp</string>\n" +
-                    "                <int>5</int>\n" +
-                    "            </entry>\n" +
-                    "            <entry>\n" +
-                    "                <string>dmg</string>\n" +
-                    "                <int>1</int>\n" +
-                    "            </entry>\n" +
-                    "        </props>\n" +
-                    "        <myWidth>2</myWidth>\n" +
-                    "        <myHeight>2</myHeight>\n" +
-                    "        <myCoord>\n" +
-                    "            <x>3</x>\n" +
-                    "            <y>3</y>\n" +
-                    "        </myCoord>\n" +
-                    "        <myImagePaths>\n" +
-                    "            <string>bowman1.png</string>\n" +
-                    "            <string>bowman2.png</string>\n" +
-                    "            <string>bowman3.png</string>\n" +
-                    "            <string>bowman4.png</string>\n" +
-                    "            <string>bowman5.png</string>\n" +
-                    "        </myImagePaths>\n" +
-                    "        <myImageSelector>$return = $this.props.hp-1</myImageSelector>\n" +
-                    "    </gameplay.Entity>\n" +
-                    "    <gameplay.Entity>\n" +
-                    "        <myID>26</myID>\n" +
-                    "        <name>swordman</name>\n" +
-                    "        <props>\n" +
-                    "            <entry>\n" +
-                    "                <string>attackRange</string>\n" +
-                    "                <int>1</int>\n" +
-                    "            </entry>\n" +
-                    "            <entry>\n" +
-                    "                <string>hp</string>\n" +
-                    "                <int>5</int>\n" +
-                    "            </entry>\n" +
-                    "            <entry>\n" +
-                    "                <string>dmg</string>\n" +
-                    "                <int>3</int>\n" +
-                    "            </entry>\n" +
-                    "        </props>\n" +
-                    "        <myWidth>1</myWidth>\n" +
-                    "        <myHeight>1</myHeight>\n" +
-                    "        <myCoord>\n" +
-                    "            <x>0</x>\n" +
-                    "            <y>0</y>\n" +
-                    "        </myCoord>\n" +
-                    "        <myImagePaths>\n" +
-                    "            <string>swordman1.png</string>\n" +
-                    "            <string>swordman2.png</string>\n" +
-                    "            <string>swordman3.png</string>\n" +
-                    "            <string>swordman4.png</string>\n" +
-                    "            <string>swordman5.png</string>\n" +
-                    "        </myImagePaths>\n" +
-                    "        <myImageSelector>$return = $this.props.hp-1</myImageSelector>\n" +
-                    "    </gameplay.Entity>\n" +
-                    "    <gameplay.Tile>\n" +
-                    "        <myID>12</myID>\n" +
-                    "        <name>box</name>\n" +
-                    "        <props/>\n" +
-                    "        <myWidth>1</myWidth>\n" +
-                    "        <myHeight>1</myHeight>\n" +
-                    "        <myCoord>\n" +
-                    "            <x>2</x>\n" +
-                    "            <y>1</y>\n" +
-                    "        </myCoord>\n" +
-                    "        <myImagePaths>\n" +
-                    "            <string>square.png</string>\n" +
-                    "        </myImagePaths>\n" +
-                    "        <myImageSelector></myImageSelector>\n" +
-                    "    </gameplay.Tile>\n" +
-                    "    <gameplay.Tile>\n" +
-                    "        <myID>10</myID>\n" +
-                    "        <name>box</name>\n" +
-                    "        <props/>\n" +
-                    "        <myWidth>1</myWidth>\n" +
-                    "        <myHeight>1</myHeight>\n" +
-                    "        <myCoord>\n" +
-                    "            <x>1</x>\n" +
-                    "            <y>4</y>\n" +
-                    "        </myCoord>\n" +
-                    "        <myImagePaths>\n" +
-                    "            <string>square.png</string>\n" +
-                    "        </myImagePaths>\n" +
-                    "        <myImageSelector></myImageSelector>\n" +
-                    "    </gameplay.Tile>\n" +
-                    "    <gameplay.Tile>\n" +
-                    "        <myID>8</myID>\n" +
-                    "        <name>box</name>\n" +
-                    "        <props/>\n" +
-                    "        <myWidth>1</myWidth>\n" +
-                    "        <myHeight>1</myHeight>\n" +
-                    "        <myCoord>\n" +
-                    "            <x>1</x>\n" +
-                    "            <y>2</y>\n" +
-                    "        </myCoord>\n" +
-                    "        <myImagePaths>\n" +
-                    "            <string>square.png</string>\n" +
-                    "        </myImagePaths>\n" +
-                    "        <myImageSelector></myImageSelector>\n" +
-                    "    </gameplay.Tile>\n" +
-                    "    <gameplay.Tile>\n" +
-                    "        <myID>22</myID>\n" +
-                    "        <name>box</name>\n" +
-                    "        <props/>\n" +
-                    "        <myWidth>1</myWidth>\n" +
-                    "        <myHeight>1</myHeight>\n" +
-                    "        <myCoord>\n" +
-                    "            <x>4</x>\n" +
-                    "            <y>1</y>\n" +
-                    "        </myCoord>\n" +
-                    "        <myImagePaths>\n" +
-                    "            <string>square.png</string>\n" +
-                    "        </myImagePaths>\n" +
-                    "        <myImageSelector></myImageSelector>\n" +
-                    "    </gameplay.Tile>\n" +
-                    "    <gameplay.Tile>\n" +
-                    "        <myID>4</myID>\n" +
-                    "        <name>box</name>\n" +
-                    "        <props/>\n" +
-                    "        <myWidth>1</myWidth>\n" +
-                    "        <myHeight>1</myHeight>\n" +
-                    "        <myCoord>\n" +
-                    "            <x>0</x>\n" +
-                    "            <y>3</y>\n" +
-                    "        </myCoord>\n" +
-                    "        <myImagePaths>\n" +
-                    "            <string>square.png</string>\n" +
-                    "        </myImagePaths>\n" +
-                    "        <myImageSelector></myImageSelector>\n" +
-                    "    </gameplay.Tile>\n" +
-                    "    <gameplay.Tile>\n" +
-                    "        <myID>9</myID>\n" +
-                    "        <name>box</name>\n" +
-                    "        <props/>\n" +
-                    "        <myWidth>1</myWidth>\n" +
-                    "        <myHeight>1</myHeight>\n" +
-                    "        <myCoord>\n" +
-                    "            <x>1</x>\n" +
-                    "            <y>3</y>\n" +
-                    "        </myCoord>\n" +
-                    "        <myImagePaths>\n" +
-                    "            <string>square.png</string>\n" +
-                    "        </myImagePaths>\n" +
-                    "        <myImageSelector></myImageSelector>\n" +
-                    "    </gameplay.Tile>\n" +
-                    "    <gameplay.Tile>\n" +
-                    "        <myID>24</myID>\n" +
-                    "        <name>box</name>\n" +
-                    "        <props/>\n" +
-                    "        <myWidth>1</myWidth>\n" +
-                    "        <myHeight>1</myHeight>\n" +
-                    "        <myCoord>\n" +
-                    "            <x>4</x>\n" +
-                    "            <y>3</y>\n" +
-                    "        </myCoord>\n" +
-                    "        <myImagePaths>\n" +
-                    "            <string>square.png</string>\n" +
-                    "        </myImagePaths>\n" +
-                    "        <myImageSelector></myImageSelector>\n" +
-                    "    </gameplay.Tile>\n" +
-                    "    <gameplay.Tile>\n" +
-                    "        <myID>15</myID>\n" +
-                    "        <name>box</name>\n" +
-                    "        <props/>\n" +
-                    "        <myWidth>1</myWidth>\n" +
-                    "        <myHeight>1</myHeight>\n" +
-                    "        <myCoord>\n" +
-                    "            <x>2</x>\n" +
-                    "            <y>4</y>\n" +
-                    "        </myCoord>\n" +
-                    "        <myImagePaths>\n" +
-                    "            <string>square.png</string>\n" +
-                    "        </myImagePaths>\n" +
-                    "        <myImageSelector></myImageSelector>\n" +
-                    "    </gameplay.Tile>\n" +
-                    "    <gameplay.Tile>\n" +
-                    "        <myID>23</myID>\n" +
-                    "        <name>box</name>\n" +
-                    "        <props/>\n" +
-                    "        <myWidth>1</myWidth>\n" +
-                    "        <myHeight>1</myHeight>\n" +
-                    "        <myCoord>\n" +
-                    "            <x>4</x>\n" +
-                    "            <y>2</y>\n" +
-                    "        </myCoord>\n" +
-                    "        <myImagePaths>\n" +
-                    "            <string>square.png</string>\n" +
-                    "        </myImagePaths>\n" +
-                    "        <myImageSelector></myImageSelector>\n" +
-                    "    </gameplay.Tile>\n" +
-                    "    <gameplay.Tile>\n" +
-                    "        <myID>16</myID>\n" +
-                    "        <name>box</name>\n" +
-                    "        <props/>\n" +
-                    "        <myWidth>1</myWidth>\n" +
-                    "        <myHeight>1</myHeight>\n" +
-                    "        <myCoord>\n" +
-                    "            <x>3</x>\n" +
-                    "            <y>0</y>\n" +
-                    "        </myCoord>\n" +
-                    "        <myImagePaths>\n" +
-                    "            <string>square.png</string>\n" +
-                    "        </myImagePaths>\n" +
-                    "        <myImageSelector></myImageSelector>\n" +
-                    "    </gameplay.Tile>\n" +
-                    "    <gameplay.Tile>\n" +
-                    "        <myID>18</myID>\n" +
-                    "        <name>box</name>\n" +
-                    "        <props/>\n" +
-                    "        <myWidth>1</myWidth>\n" +
-                    "        <myHeight>1</myHeight>\n" +
-                    "        <myCoord>\n" +
-                    "            <x>3</x>\n" +
-                    "            <y>2</y>\n" +
-                    "        </myCoord>\n" +
-                    "        <myImagePaths>\n" +
-                    "            <string>square.png</string>\n" +
-                    "        </myImagePaths>\n" +
-                    "        <myImageSelector></myImageSelector>\n" +
-                    "    </gameplay.Tile>\n" +
-                    "    <gameplay.Tile>\n" +
-                    "        <myID>1</myID>\n" +
-                    "        <name>box</name>\n" +
-                    "        <props/>\n" +
-                    "        <myWidth>1</myWidth>\n" +
-                    "        <myHeight>1</myHeight>\n" +
-                    "        <myCoord>\n" +
-                    "            <x>0</x>\n" +
-                    "            <y>0</y>\n" +
-                    "        </myCoord>\n" +
-                    "        <myImagePaths>\n" +
-                    "            <string>square.png</string>\n" +
-                    "        </myImagePaths>\n" +
-                    "        <myImageSelector></myImageSelector>\n" +
-                    "    </gameplay.Tile>\n" +
-                    "    <gameplay.Tile>\n" +
-                    "        <myID>2</myID>\n" +
-                    "        <name>box</name>\n" +
-                    "        <props/>\n" +
-                    "        <myWidth>1</myWidth>\n" +
-                    "        <myHeight>1</myHeight>\n" +
-                    "        <myCoord>\n" +
-                    "            <x>0</x>\n" +
-                    "            <y>1</y>\n" +
-                    "        </myCoord>\n" +
-                    "        <myImagePaths>\n" +
-                    "            <string>square.png</string>\n" +
-                    "        </myImagePaths>\n" +
-                    "        <myImageSelector></myImageSelector>\n" +
-                    "    </gameplay.Tile>\n" +
-                    "    <gameplay.Tile>\n" +
-                    "        <myID>5</myID>\n" +
-                    "        <name>box</name>\n" +
-                    "        <props/>\n" +
-                    "        <myWidth>1</myWidth>\n" +
-                    "        <myHeight>1</myHeight>\n" +
-                    "        <myCoord>\n" +
-                    "            <x>0</x>\n" +
-                    "            <y>4</y>\n" +
-                    "        </myCoord>\n" +
-                    "        <myImagePaths>\n" +
-                    "            <string>square.png</string>\n" +
-                    "        </myImagePaths>\n" +
-                    "        <myImageSelector></myImageSelector>\n" +
-                    "    </gameplay.Tile>\n" +
-                    "    <gameplay.Tile>\n" +
-                    "        <myID>25</myID>\n" +
-                    "        <name>box</name>\n" +
-                    "        <props/>\n" +
-                    "        <myWidth>1</myWidth>\n" +
-                    "        <myHeight>1</myHeight>\n" +
-                    "        <myCoord>\n" +
-                    "            <x>4</x>\n" +
-                    "            <y>4</y>\n" +
-                    "        </myCoord>\n" +
-                    "        <myImagePaths>\n" +
-                    "            <string>square.png</string>\n" +
-                    "        </myImagePaths>\n" +
-                    "        <myImageSelector></myImageSelector>\n" +
-                    "    </gameplay.Tile>\n" +
-                    "    <gameplay.Tile>\n" +
-                    "        <myID>13</myID>\n" +
-                    "        <name>box</name>\n" +
-                    "        <props/>\n" +
-                    "        <myWidth>1</myWidth>\n" +
-                    "        <myHeight>1</myHeight>\n" +
-                    "        <myCoord>\n" +
-                    "            <x>2</x>\n" +
-                    "            <y>2</y>\n" +
-                    "        </myCoord>\n" +
-                    "        <myImagePaths>\n" +
-                    "            <string>square.png</string>\n" +
-                    "        </myImagePaths>\n" +
-                    "        <myImageSelector></myImageSelector>\n" +
-                    "    </gameplay.Tile>\n" +
-                    "    <gameplay.Tile>\n" +
-                    "        <myID>17</myID>\n" +
-                    "        <name>box</name>\n" +
-                    "        <props/>\n" +
-                    "        <myWidth>1</myWidth>\n" +
-                    "        <myHeight>1</myHeight>\n" +
-                    "        <myCoord>\n" +
-                    "            <x>3</x>\n" +
-                    "            <y>1</y>\n" +
-                    "        </myCoord>\n" +
-                    "        <myImagePaths>\n" +
-                    "            <string>square.png</string>\n" +
-                    "        </myImagePaths>\n" +
-                    "        <myImageSelector></myImageSelector>\n" +
-                    "    </gameplay.Tile>\n" +
-                    "    <gameplay.Tile>\n" +
-                    "        <myID>20</myID>\n" +
-                    "        <name>box</name>\n" +
-                    "        <props/>\n" +
-                    "        <myWidth>1</myWidth>\n" +
-                    "        <myHeight>1</myHeight>\n" +
-                    "        <myCoord>\n" +
-                    "            <x>3</x>\n" +
-                    "            <y>4</y>\n" +
-                    "        </myCoord>\n" +
-                    "        <myImagePaths>\n" +
-                    "            <string>square.png</string>\n" +
-                    "        </myImagePaths>\n" +
-                    "        <myImageSelector></myImageSelector>\n" +
-                    "    </gameplay.Tile>\n" +
-                    "    <gameplay.Tile>\n" +
-                    "        <myID>21</myID>\n" +
-                    "        <name>box</name>\n" +
-                    "        <props/>\n" +
-                    "        <myWidth>1</myWidth>\n" +
-                    "        <myHeight>1</myHeight>\n" +
-                    "        <myCoord>\n" +
-                    "            <x>4</x>\n" +
-                    "            <y>0</y>\n" +
-                    "        </myCoord>\n" +
-                    "        <myImagePaths>\n" +
-                    "            <string>square.png</string>\n" +
-                    "        </myImagePaths>\n" +
-                    "        <myImageSelector></myImageSelector>\n" +
-                    "    </gameplay.Tile>\n" +
-                    "    <gameplay.Tile>\n" +
-                    "        <myID>6</myID>\n" +
-                    "        <name>box</name>\n" +
-                    "        <props/>\n" +
-                    "        <myWidth>1</myWidth>\n" +
-                    "        <myHeight>1</myHeight>\n" +
-                    "        <myCoord>\n" +
-                    "            <x>1</x>\n" +
-                    "            <y>0</y>\n" +
-                    "        </myCoord>\n" +
-                    "        <myImagePaths>\n" +
-                    "            <string>square.png</string>\n" +
-                    "        </myImagePaths>\n" +
-                    "        <myImageSelector></myImageSelector>\n" +
-                    "    </gameplay.Tile>\n" +
-                    "    <gameplay.Tile>\n" +
-                    "        <myID>11</myID>\n" +
-                    "        <name>box</name>\n" +
-                    "        <props/>\n" +
-                    "        <myWidth>1</myWidth>\n" +
-                    "        <myHeight>1</myHeight>\n" +
-                    "        <myCoord>\n" +
-                    "            <x>2</x>\n" +
-                    "            <y>0</y>\n" +
-                    "        </myCoord>\n" +
-                    "        <myImagePaths>\n" +
-                    "            <string>square.png</string>\n" +
-                    "        </myImagePaths>\n" +
-                    "        <myImageSelector></myImageSelector>\n" +
-                    "    </gameplay.Tile>\n" +
-                    "    <gameplay.Tile>\n" +
-                    "        <myID>19</myID>\n" +
-                    "        <name>box</name>\n" +
-                    "        <props/>\n" +
-                    "        <myWidth>1</myWidth>\n" +
-                    "        <myHeight>1</myHeight>\n" +
-                    "        <myCoord>\n" +
-                    "            <x>3</x>\n" +
-                    "            <y>3</y>\n" +
-                    "        </myCoord>\n" +
-                    "        <myImagePaths>\n" +
-                    "            <string>square.png</string>\n" +
-                    "        </myImagePaths>\n" +
-                    "        <myImageSelector></myImageSelector>\n" +
-                    "    </gameplay.Tile>\n" +
-                    "    <gameplay.Tile>\n" +
-                    "        <myID>7</myID>\n" +
-                    "        <name>box</name>\n" +
-                    "        <props/>\n" +
-                    "        <myWidth>1</myWidth>\n" +
-                    "        <myHeight>1</myHeight>\n" +
-                    "        <myCoord>\n" +
-                    "            <x>1</x>\n" +
-                    "            <y>1</y>\n" +
-                    "        </myCoord>\n" +
-                    "        <myImagePaths>\n" +
-                    "            <string>square.png</string>\n" +
-                    "        </myImagePaths>\n" +
-                    "        <myImageSelector></myImageSelector>\n" +
-                    "    </gameplay.Tile>\n" +
-                    "    <gameplay.Tile>\n" +
-                    "        <myID>3</myID>\n" +
-                    "        <name>box</name>\n" +
-                    "        <props/>\n" +
-                    "        <myWidth>1</myWidth>\n" +
-                    "        <myHeight>1</myHeight>\n" +
-                    "        <myCoord>\n" +
-                    "            <x>0</x>\n" +
-                    "            <y>2</y>\n" +
-                    "        </myCoord>\n" +
-                    "        <myImagePaths>\n" +
-                    "            <string>square.png</string>\n" +
-                    "        </myImagePaths>\n" +
-                    "        <myImageSelector></myImageSelector>\n" +
-                    "    </gameplay.Tile>\n" +
-                    "    <gameplay.Tile>\n" +
-                    "        <myID>14</myID>\n" +
-                    "        <name>box</name>\n" +
-                    "        <props/>\n" +
-                    "        <myWidth>1</myWidth>\n" +
-                    "        <myHeight>1</myHeight>\n" +
-                    "        <myCoord>\n" +
-                    "            <x>2</x>\n" +
-                    "            <y>3</y>\n" +
-                    "        </myCoord>\n" +
-                    "        <myImagePaths>\n" +
-                    "            <string>square.png</string>\n" +
-                    "        </myImagePaths>\n" +
-                    "        <myImageSelector></myImageSelector>\n" +
-                    "    </gameplay.Tile>\n" +
-                    "    <gameplay.Player>\n" +
-                    "        <myName>classB</myName>\n" +
-                    "        <myStats/>\n" +
-                    "        <myEntityIDs>\n" +
-                    "            <int>28</int>\n" +
-                    "            <int>29</int>\n" +
-                    "        </myEntityIDs>\n" +
-                    "    </gameplay.Player>\n" +
-                    "    <gameplay.Player>\n" +
-                    "        <myName>classA</myName>\n" +
-                    "        <myStats/>\n" +
-                    "        <myEntityIDs>\n" +
-                    "            <int>26</int>\n" +
-                    "            <int>27</int>\n" +
-                    "        </myEntityIDs>\n" +
-                    "    </gameplay.Player>\n" +
-                    "    <gameplay.Turn>\n" +
-                    "        <myCurrentPhaseName>A</myCurrentPhaseName>\n" +
-                    "        <playersOrder>\n" +
-                    "            <string>classB</string>\n" +
-                    "            <string>classA</string>\n" +
-                    "        </playersOrder>\n" +
-                    "    </gameplay.Turn>\n" +
-                    "</game>\n");
-            EventBus.getInstance().sendMessage(EngineEvent.CHANGE_USER, myUser);
-            myStage.close();
         });
 
         myPane.add(usernameField, 0, 2, 4, 1);
@@ -797,4 +133,75 @@ public class LoginScreen {
         myPane.add(register, 0, 6);
         // grid.add(forgotPassword, 2, 6);
     }
+
+    private void loginUser(String myUsername, String myPassword) throws SQLException, FileNotFoundException {
+        try {
+            checkForBlankFields(myUsername, myPassword);
+            int id = retrieveUserID(myUsername, myPassword);
+            String profilePath = getProfilePath(id);
+            String fileName = downloadRemoteXML(profilePath); // filename of local version
+            User user = deserializeUser(fileName);
+            EventBus.getInstance().sendMessage(EngineEvent.CHANGE_USER, user);
+            myStage.close();
+            //User myUser = new User(10, "bloop");// TODO: Remove later (just a placeholder)
+            //myUser.changeAvatar("ocean.jpeg");
+            //EventBus.getInstance().sendMessage(EngineEvent.CHANGE_USER, myUser);
+            //myStage.close();
+        } catch (SQLException | LoginException | FileNotFoundException ex){
+            if (!ex.getClass().equals(LoginException.class)){
+                throw new ServerException(myErrors.getString("ServerError"), myErrors.getString("ServerErrorWarning"));
+            }
+            throw ex; // rethrowing the LoginException
+        }
+    }
+
+    private String getProfilePath(int id) throws SQLException {
+        DatabaseDownloader databaseDownloader = new DatabaseDownloader("client", "store",
+                "e.printstacktrace", "vcm-7456.vm.duke.edu", 3306);
+        ResultSet result = databaseDownloader.queryServer(String.format("SELECT profilePath, avatarPath FROM" +
+                " userReferences WHERE id='%d'", id));
+        result.last();
+        return result.getString("profilePath");
+    }
+
+    private String downloadRemoteXML(String profilePath) throws SQLException {
+        ServerDownloader downloader = new ServerDownloader();
+        downloader.connectServer("vcm", "vcm-7456.vm.duke.edu", 22,"afcas8amYf");
+        File directory = new File("src/database/resources/");
+        downloader.downloadFile(profilePath,directory.getAbsolutePath());
+        String[] filePathArray = profilePath.split("/");
+        return filePathArray[filePathArray.length - 1];
+    }
+
+    private User deserializeUser(String fileName) throws FileNotFoundException {
+        XStream serializer = new XStream(new DomDriver());
+        File file = new File("src/database/resources/" + fileName);
+        Scanner scanner = new Scanner(file, "UTF-8" );
+        String text = scanner.useDelimiter("\\A").next();
+        scanner.close();
+        text = text.trim().replaceFirst("^([\\W]+)<","<");
+        file.delete();
+        return (User) serializer.fromXML(text);
+    }
+
+    private int retrieveUserID(String myUsername, String myPassword) throws SQLException {
+        DatabaseDownloader databaseDownloader = new DatabaseDownloader("client", "store",
+                "e.printstacktrace", "vcm-7456.vm.duke.edu", 3306);
+        ResultSet result = databaseDownloader.queryServer(String.format("SELECT id FROM logins WHERE " +
+                "username='%s' AND password='%s'", myUsername, myPassword));
+        if (!result.next()){
+            throw new LoginException(myErrors.getString("NonexistentAccount"), myErrors.getString(
+                    "NonexistentAccountWarning"));
+        }
+        result.last();
+        return result.getInt("id");
+    }
+
+    private void checkForBlankFields(String myUsername, String myPassword) {
+        if (myUsername.isEmpty() || myPassword.isEmpty()){
+            throw new LoginException(myErrors.getString("BlankField"), myErrors.getString(
+                    "BlankFieldWarning"));
+        }
+    }
+
 }
