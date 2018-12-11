@@ -6,13 +6,13 @@ import gameObjects.tile.TileClass;
 import gameObjects.tileGeneration.GenerationMode;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import utils.imageManipulation.ImageManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,15 +23,13 @@ public class TileSettingDialog extends PopUpWindow {
     private Map<Double, TileClass> tileClasses;
     private GenerationMode gMode;
     private List<TileProbPair> pairList;
-//    private Double bottomPairLoc;
-//    public static final Double pairHeight = 50.0;
+    private DialogPane myPane;
 
     public TileSettingDialog(GameObjectsCRUDInterface gameObjectManager, Stage primaryStage) {
         super(primaryStage);
         this.gameObjectManager = gameObjectManager;
         pairList = new ArrayList<>();
-        DialogPane myPane = setUpTilePane();
-        dialog.setScene(new Scene(myPane, 500.0, 500.0));
+        myPane = setUpTilePane();
     }
 
     private DialogPane setUpTilePane() {
@@ -42,7 +40,7 @@ public class TileSettingDialog extends PopUpWindow {
     }
 
     private TileProbPair addPair() {
-        TileProbPair newPair = new TileProbPair(gameObjectManager);
+        TileProbPair newPair = new TileProbPair();
         pairList.add(newPair);
         return newPair;
     }
@@ -63,6 +61,7 @@ public class TileSettingDialog extends PopUpWindow {
 
     @Override
     public void showWindow() {
+        dialog.setScene(new Scene(myPane, 500.0, 500.0));
         dialog.showAndWait();
     }
 
@@ -76,7 +75,7 @@ public class TileSettingDialog extends PopUpWindow {
         private Double prob;
         private ImageView tileView;
 
-        TileProbPair(GameObjectsCRUDInterface gameObjectManager) {
+        TileProbPair() {
             Pane wrapper = new Pane();
             wrapper.setPrefSize(200.0, 200.0);
             wrapper.setBorder(new Border(new BorderStroke(Color.BLACK,
@@ -94,6 +93,7 @@ public class TileSettingDialog extends PopUpWindow {
                 prob = Double.parseDouble(newValue);
             });
 
+            setPrefSize(300, 300);
             getChildren().addAll(wrapper, probLabel, probText);
         }
 
@@ -102,7 +102,7 @@ public class TileSettingDialog extends PopUpWindow {
             dragEvent.acceptTransferModes(TransferMode.ANY);
             try {
                 tileClass = gameObjectManager.getGameObjectClass(dragEvent.getDragboard().getString());
-                tileView.setImage(new Image(getClass().getResourceAsStream(tileClass.getImagePathList().get(0))));
+                tileView.setImage(ImageManager.getPreview(tileClass));
                 System.out.println("drag event image set");
             } catch (Exception e) {
                 e.printStackTrace();
