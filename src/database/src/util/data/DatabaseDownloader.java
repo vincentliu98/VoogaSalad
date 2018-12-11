@@ -1,5 +1,7 @@
 package util.data;
 
+import javafx.scene.control.Alert;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,11 +15,9 @@ public class DatabaseDownloader extends DatabaseConnector implements DatabaseQue
     }
 
     public ResultSet queryServer(String command) {
-        try (
-                Connection conn = myDataSrc.getConnection();
-                Statement stmt = conn.createStatement();
-        )
-        {
+        try {
+            Connection conn = myDataSrc.getConnection();
+            Statement stmt = conn.createStatement();
             mySet = stmt.executeQuery(command);
             return mySet;
         }
