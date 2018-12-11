@@ -6,6 +6,7 @@ import authoringInterface.View;
 import authoringInterface.editor.editView.EditView;
 import authoringInterface.editor.menuBarView.subMenuBarView.*;
 import authoringUtils.exception.GameObjectClassNotFoundException;
+import authoringUtils.exception.InvalidOperationException;
 import authoringUtils.exception.NumericalException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.tileGeneration.TileGenerator;
@@ -128,7 +129,8 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         try {
             tileGenerator = new TileGenerator(tileSettingWindow.retrieveInfo().getKey(), gameObjectManager,
                     tileSettingWindow.retrieveInfo().getValue());
-        } catch (GameObjectClassNotFoundException e) {
+            tileGenerator.getTileGenerationArea(tileSettingWindow.getStart(), tileSettingWindow.getNumRow(), tileSettingWindow.getNumCol());
+        } catch (GameObjectClassNotFoundException | InvalidOperationException e) {
             e.printStackTrace();
         } catch (NumericalException e) {
             e.printStackTrace();

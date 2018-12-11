@@ -4,6 +4,9 @@ import authoringInterface.spritechoosingwindow.PopUpWindow;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.tile.TileClass;
 import gameObjects.tileGeneration.GenerationMode;
+import grids.Point;
+import grids.PointImpl;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -11,7 +14,6 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import utils.imageManipulation.ImageManager;
@@ -24,11 +26,30 @@ import java.util.Map;
 public class TileSettingDialog extends PopUpWindow {
     private GameObjectsCRUDInterface gameObjectManager;
     private Map<Double, TileClass> tileClasses;
+    private Point start;
+    private int numRow;
+    private int numCol;
     private GenerationMode gMode;
     private ComboBox gModeChoice;
     private List<TileProbPair> pairList;
     private VBox myPane;
     private VBox dialogPane;
+    private TextField xText;
+    private TextField yText;
+    private TextField xSText;
+    private TextField ySText;
+
+    public Point getStart() {
+        return start;
+    }
+
+    public int getNumRow() {
+        return numRow;
+    }
+
+    public int getNumCol() {
+        return numCol;
+    }
 
     public TileSettingDialog(GameObjectsCRUDInterface gameObjectManager, Stage primaryStage) {
         super(primaryStage);
@@ -50,16 +71,34 @@ public class TileSettingDialog extends PopUpWindow {
             else gMode = GenerationMode.REPEATING;
         });
 
+        HBox xyBox = new HBox();
+        HBox xSySBox = new HBox();
+        Label xLabel = new Label("X Pos: ");
+        Label yLabel = new Label("Y Pos: ");
+        Label xSLabel = new Label("X Span: ");
+        Label ySLabel = new Label("Y Span: ");
+        TextField xText = new TextField();
+        TextField yText = new TextField();
+        TextField xSText = new TextField();
+        TextField ySText = new TextField();
+        xyBox.getChildren().addAll(xLabel, xText, yLabel, yText);
+        xSySBox.getChildren().addAll(xSLabel, xSText, ySLabel, ySText);
+
         dialogPane = new VBox(myPane);
         Button apply = new Button("Apply");
         apply.setOnAction(e -> {
+            start = new PointImpl(Integer.parseInt(xText.getText()), Integer.parseInt(yText.getText()));
+            numRow = Integer.parseInt(xSText.getText());
+            numCol = Integer.parseInt(ySText.getText());
             pairList.forEach(p -> {
                 p.setProb(Double.parseDouble(p.probText.getText()));
                 tileClasses.put(p.prob, p.tileClass);
             });
             closeWindow();
         });
-        dialogPane.getChildren().addAll(addTile, gModeChoice, apply);
+        dialogPane.getChildren().addAll(addTile, gModeChoice, xyBox, xSySBox, apply);
+        dialogPane.setPadding(new Insets(10, 50, 50, 50));
+        dialogPane.setSpacing(30);
     }
 
     private TileProbPair addPair() {

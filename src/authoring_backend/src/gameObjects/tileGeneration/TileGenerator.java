@@ -64,7 +64,6 @@ public class TileGenerator {
         if (rightLimit > crudInterface.getNumCols() || bottomLimit > crudInterface.getNumRows()) {
             throw new InvalidOperationException("Area out of bounds");
         }
-
     }
 
     public void generateTiles() throws Exception {
