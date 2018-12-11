@@ -183,7 +183,6 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
      */
     @Override
     protected void confirmEditTreeItem() throws IllegalGameObjectNamingException, IllegalGeometryException, InvalidOperationException, PreviewUnavailableException {
-        gameObjectClass.setClassName(getValidClassName());
         int width = outputPositiveInteger(widthText);
         int height = outputPositiveInteger(heightText);
         try {
@@ -193,7 +192,7 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
         gameObjectClass.getImagePathList().addAll(imagePaths);
         gameObjectClass.setWidth(width);
         gameObjectClass.setHeight(height);
-        gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName(), nameField.getText());
+        gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName(), getValidClassName());
         ImageView icon2 = new ImageView(ImageManager.getPreview(gameObjectClass));
         JavaFxOperation.setWidthAndHeight(icon2, ICON_WIDTH, ICON_HEIGHT);
         treeItem.setValue(nameField.getText());

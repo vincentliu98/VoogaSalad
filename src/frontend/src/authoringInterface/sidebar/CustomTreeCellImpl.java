@@ -206,6 +206,7 @@ public class CustomTreeCellImpl extends TreeCell<String> {
                     // TODO
                     e.printStackTrace();
                 }
+                System.out.println("yes");
                 GameObjectClass gameObjectClass = null;
                 try {
                     gameObjectClass = objectManager.getGameObjectClass(textField.getText());
@@ -214,9 +215,7 @@ public class CustomTreeCellImpl extends TreeCell<String> {
                 }
                 try {
                     ImageManager.removeClassImage(gameObjectClass);
-                } catch (GameObjectClassNotFoundException e) {
-                    e.printStackTrace();
-                }
+                } catch (GameObjectClassNotFoundException ignored) {}
                 ImageView icon = null;
                 try {
                     icon = new ImageView(ImageManager.getPreview(gameObjectClass));
