@@ -58,6 +58,7 @@ public class GroovyPaneFactory {
     }
 
     public GroovyPane gen(BlockGraph model) { return new GroovyPane(primaryStage, model); }
+    public GroovyPane gen(BlockGraph model, boolean openImmediately) { return new GroovyPane(primaryStage, model, openImmediately); }
     public GroovyPane winCondition() { return winCondition; }
 
     public class GroovyPane extends PopUpWindow implements SubView<GridPane> {
@@ -90,6 +91,10 @@ public class GroovyPaneFactory {
         private SimpleObjectProperty<GroovyNode> selectedNode;
 
         private GroovyPane(Stage primaryStage, BlockGraph graph) {
+            this(primaryStage, graph, true);
+        }
+
+        private GroovyPane(Stage primaryStage, BlockGraph graph, Boolean openImmediately) {
             super(primaryStage);
             myScene = new Scene(root, WIDTH, HEIGHT);
 
@@ -169,7 +174,8 @@ public class GroovyPaneFactory {
 
             initializeUI();
             buildFromGraph();
-            showWindow();
+
+            if(openImmediately) showWindow();
         }
 
         // private Map<Pair<GroovyNode, Ports>, Pair<GroovyNode, Line>> lines;
