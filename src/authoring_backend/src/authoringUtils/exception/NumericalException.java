@@ -1,5 +1,8 @@
 package authoringUtils.exception;
 
+/**
+ * @author Jason Zhou
+ */
 public class NumericalException extends Exception {
     public NumericalException(String message) {
         super(message);

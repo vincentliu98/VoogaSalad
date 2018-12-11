@@ -35,6 +35,8 @@ public class EditorFactory {
                 return (T) new TileEditor(gameObjectManager, imageSelectorController);
             case SOUND:
                 return (T) new SoundEditor(gameObjectManager);
+//            case SOUND:
+//                return (T) new SoundEditor(gameObjectManager);
             case UNSPECIFIED:
                 // TODO
                 break;

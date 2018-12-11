@@ -6,5 +6,5 @@ package authoringInterface.sidebar.treeItemEntries;
  * @author Haotian Wang
  */
 public enum TreeItemType {
-    SOUND, PLAYER, ENTITY, TILE, CATEGORY
+    PLAYER, ENTITY, TILE, CATEGORY
 }

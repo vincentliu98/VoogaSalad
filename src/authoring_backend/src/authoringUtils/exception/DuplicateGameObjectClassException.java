@@ -1,5 +1,9 @@
 package authoringUtils.exception;
 
+/**
+ * @author Jason Zhou
+ * @author Yunhao Qing
+ */
 public class DuplicateGameObjectClassException extends GameObjectClassException {
     public DuplicateGameObjectClassException() {
         super("Another class with the same name exists");

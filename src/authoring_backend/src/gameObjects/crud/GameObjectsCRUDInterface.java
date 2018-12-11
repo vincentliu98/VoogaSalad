@@ -127,35 +127,35 @@ public interface GameObjectsCRUDInterface {
      */
     CategoryInstance createCategoryInstance(CategoryClass categoryClass) throws GameObjectTypeException;
 
-    /**
-     * This method creates an Sound Class and adds it to the map.
-     * @param className the name of the Class to be created
-     * @return the Sound Class if there is no name collision and the method is successful
-     * @throws DuplicateGameObjectClassException if a class with the same name exists
-     */
-    SoundClass createSoundClass(String className) throws DuplicateGameObjectClassException;
+//    /**
+//     * This method creates an Sound Class and adds it to the map.
+//     * @param className the name of the Class to be created
+//     * @return the Sound Class if there is no name collision and the method is successful
+//     * @throws DuplicateGameObjectClassException if a class with the same name exists
+//     */
+//    SoundClass createSoundClass(String className) throws DuplicateGameObjectClassException;
+//
+//    /**
+//     * This method gets the Sound Class from the map.
+//     * @param className the name of the Class to be retrieved
+//     * @return the Sound Class with the name
+//     * @throws GameObjectClassNotFoundException if there is no such Sound Class
+//     */
+//    SoundClass getSoundClass(String className) throws GameObjectClassNotFoundException;
 
-    /**
-     * This method gets the Sound Class from the map.
-     * @param className the name of the Class to be retrieved
-     * @return the Sound Class with the name
-     * @throws GameObjectClassNotFoundException if there is no such Sound Class
-     */
-    SoundClass getSoundClass(String className) throws GameObjectClassNotFoundException;
-
-    /**
-     *
-     * @param className
-     * @return
-     */
-    SoundInstance createSoundInstance(String className) throws GameObjectClassNotFoundException, GameObjectTypeException;
-
-    /**
-     *
-     * @param soundClass
-     * @return
-     */
-    SoundInstance createSoundInstance(SoundClass soundClass) throws GameObjectTypeException;
+//    /**
+//     *
+//     * @param className
+//     * @return
+//     */
+//    SoundInstance createSoundInstance(String className) throws GameObjectClassNotFoundException, GameObjectTypeException;
+//
+//    /**
+//     *
+//     * @param soundClass
+//     * @return
+//     */
+//    SoundInstance createSoundInstance(SoundClass soundClass) throws GameObjectTypeException;
 
     PlayerClass createPlayerClass(String className)
             throws DuplicateGameObjectClassException;
@@ -308,13 +308,13 @@ public interface GameObjectsCRUDInterface {
 
     Iterable<TileClass> getTileClasses();
     Iterable<CategoryClass> getCategoryClasses();
-    Iterable<SoundClass> getSoundClasses();
+//    Iterable<SoundClass> getSoundClasses();
     Iterable<PlayerClass> getPlayerClasses();
 
     Iterable<EntityInstance> getEntityInstances();
     Iterable<TileInstance> getTileInstances();
     Iterable<CategoryInstance> getCategoryInstances();
-    Iterable<SoundInstance> getSoundInstances();
+//    Iterable<SoundInstance> getSoundInstances();
 
     @Deprecated
     Iterable<PlayerInstance> getPlayerInstances();

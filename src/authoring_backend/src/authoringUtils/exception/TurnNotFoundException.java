@@ -1,5 +1,8 @@
 package authoringUtils.exception;
 
+/**
+ * @author Jason Zhou
+ */
 public class TurnNotFoundException extends Exception {
     public TurnNotFoundException(String message) {
         super(message);

@@ -82,7 +82,7 @@ public class FunctionBlock extends SimpleNode implements GroovyBlock<FunctionBlo
     }
 
     @Override
-    public String name() { return op; }
+    public String name() { return op.replace("GameMethods.", ""); }
 
     @Override
     public Map<String, Object> params() {

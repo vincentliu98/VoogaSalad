@@ -1,5 +1,10 @@
 package authoringUtils.exception;
 
+/**
+ * @author Jason Zhou
+ * @author Yunhao Qing
+ */
+
 public class GameObjectClassNotFoundException extends GameObjectClassException {
     public GameObjectClassNotFoundException(String message) {
         super(message + "Class Not Found");
