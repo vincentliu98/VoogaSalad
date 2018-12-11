@@ -273,7 +273,7 @@ public class EditGridView implements SubView<ScrollPane> {
         AbstractGameObjectEditor editor = null;
         try {
             assert userObject != null;
-            editor = EditorFactory.makeEditor(userObject.getType(), gameObjectManager);
+            editor = EditorFactory.makeEditor(userObject.getType(), gameObjectManager, null); // safe, since we're not using it on instances
         } catch (MissingEditorForTypeException e) {
             ErrorWindow.display("Missing Editor Type", e.toString());
         }
@@ -281,6 +281,7 @@ public class EditGridView implements SubView<ScrollPane> {
         editor.editNode(targetNode, nodeInstanceController);
         dialogStage.setScene(new Scene(editor.getView(), 600, 620));
         dialogStage.show();
+        dialogStage.toFront();
     }
 
     /**

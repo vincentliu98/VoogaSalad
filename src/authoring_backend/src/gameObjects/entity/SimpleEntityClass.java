@@ -128,7 +128,10 @@ public class SimpleEntityClass implements EntityClass {
     }
 
     @Override
-    public String getImageSelectorCode() { return imageSelector.transformToGroovy().get(""); }
+    public BlockGraph getImageSelector() { return imageSelector; }
+
+    @Override
+    public void setImageSelector(BlockGraph graph) { this.imageSelector = graph; }
 
     @Override
     public int getHeight() {

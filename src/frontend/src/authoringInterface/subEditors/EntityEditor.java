@@ -10,6 +10,7 @@ import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.entity.EntityClass;
 import gameObjects.entity.EntityInstance;
 import gameObjects.player.PlayerClass;
+import graphUI.groovy.GroovyPaneFactory.GroovyPane;
 import grids.PointImpl;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -22,14 +23,15 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import utils.ErrorWindow;
 import utils.exception.GridIndexOutOfBoundsException;
 import utils.exception.PreviewUnavailableException;
 import utils.exception.UnremovableNodeException;
 import utils.imageManipulation.ImageManager;
 import utils.imageManipulation.JavaFxOperation;
+import utils.imageSelector.ImageSelectorController;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -61,8 +63,11 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     private TextField colInput;
     private Label playerText;
     private ComboBox<PlayerClass> playerBox;
+    private ImageSelectorController imageSelectorController;
+    private Button imageSelectorButton;
+    private GroovyPane imageSelectorPane;
 
-    EntityEditor(GameObjectsCRUDInterface manager) {
+    EntityEditor(GameObjectsCRUDInterface manager, ImageSelectorController imageSelectorController) {
         super(manager);
         toRemove = new HashSet<>();
         toRemovePath = new HashSet<>();
@@ -99,6 +104,9 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                 imagePaths.add(imagePath);
             }
         });
+        this.imageSelectorController = imageSelectorController;
+        imageSelectorButton = new Button("Image Selector");
+
         setupLayout();
         rootPane.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.DELETE || e.getCode() == KeyCode.BACK_SPACE) {
@@ -255,14 +263,24 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         imagePaths.addAll(gameObjectClass.getImagePathList());
         widthInput.setText(String.valueOf(gameObjectClass.getWidth()));
         heightInput.setText(String.valueOf(gameObjectClass.getHeight()));
+
+        if(imageSelectorController != null)
+            imageSelectorPane = imageSelectorController.groovyPaneOf(gameObjectClass);
+
+        imageSelectorButton.setOnAction(e -> {
+            if(imageSelectorPane == null) {
+                ErrorWindow.display("Warning!", "You can only specify imageSelector on classes, not instances");
+            } else imageSelectorPane.showWindow();
+        });
     }
 
     private void setupLayout() {
         layout.addRow(0, size);
         layout.addRow(1, playerText, playerBox);
         layout.addRow(2, imageText, chooseImage);
-        layout.addRow(3, imagePanel);
-        layout.addRow(4, propLabel, addProperties);
-        layout.addRow(5, listProp);
+        layout.addRow(3, imageSelectorButton);
+        layout.addRow(4, imagePanel);
+        layout.addRow(5, propLabel, addProperties);
+        layout.addRow(6, listProp);
     }
 }

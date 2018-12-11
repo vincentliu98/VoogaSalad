@@ -108,7 +108,7 @@ public class IconLoader {
 
                 var icon = draggableIcon.apply(
                     new Image(IconLoader.class.getClassLoader().getResourceAsStream("AutoGen.png")),
-                    method.getName(),
+                    "GameMethods."+method.getName(),
                     false,
                     assignParameters(method.getParameters())
                 );

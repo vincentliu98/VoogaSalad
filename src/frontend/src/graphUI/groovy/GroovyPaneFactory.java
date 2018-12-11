@@ -195,6 +195,7 @@ public class GroovyPaneFactory {
         public void showWindow() {
             dialog.setScene(myScene);
             dialog.show();
+            dialog.toFront();
         }
 
         /**

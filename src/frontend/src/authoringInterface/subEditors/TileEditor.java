@@ -9,9 +9,8 @@ import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.tile.TileClass;
 import gameObjects.tile.TileInstance;
+import graphUI.groovy.GroovyPaneFactory.GroovyPane;
 import grids.PointImpl;
-import javafx.beans.property.ReadOnlyStringProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -23,11 +22,13 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import utils.ErrorWindow;
 import utils.exception.GridIndexOutOfBoundsException;
 import utils.exception.PreviewUnavailableException;
 import utils.exception.UnremovableNodeException;
 import utils.imageManipulation.ImageManager;
 import utils.imageManipulation.JavaFxOperation;
+import utils.imageSelector.ImageSelectorController;
 
 import java.io.File;
 import java.util.HashSet;
@@ -60,8 +61,11 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
     private Set<ImageView> toRemoveImageView;
     private TextField xInput;
     private TextField yInput;
+    private ImageSelectorController imageSelectorController;
+    private Button imageSelectorButton;
+    private GroovyPane imageSelectorPane;
 
-    TileEditor(GameObjectsCRUDInterface manager) {
+    TileEditor(GameObjectsCRUDInterface manager, ImageSelectorController imageSelectorController) {
         super(manager);
         toRemovePath = new HashSet<>();
         toRemoveImageView = new HashSet<>();
@@ -107,6 +111,10 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
             });
         });
 
+
+        this.imageSelectorController = imageSelectorController;
+        imageSelectorButton = new Button("Image Selector");
+
         rootPane.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.DELETE || e.getCode() == KeyCode.BACK_SPACE) {
                 imagePaths.removeAll(toRemovePath);
@@ -147,6 +155,15 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
     public void readGameObjectClass() {
         readCommonTileCharacteristic(gameObjectClass.getClassName(), gameObjectClass.getImagePathList(), gameObjectClass.getWidth(), gameObjectClass.getHeight());
         readClassProperties();
+
+        if(imageSelectorController != null)
+            imageSelectorPane = imageSelectorController.groovyPaneOf(gameObjectClass);
+
+        imageSelectorButton.setOnAction(e -> {
+            if(imageSelectorPane == null) {
+                ErrorWindow.display("Warning!", "You can only specify imageSelector on classes, not instances");
+            } else imageSelectorPane.showWindow();
+        });
     }
 
     /**
@@ -236,8 +253,9 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
     private void setupLayout() {
         layout.addRow(0, geometry);
         layout.addRow(1, imageLabel, chooseButton);
-        layout.addRow(2, imagePanel);
-        layout.addRow(3, propLabel, addProperties);
-        layout.addRow(4, listProp);
+        layout.addRow(2, imageSelectorButton);
+        layout.addRow(3, imagePanel);
+        layout.addRow(4, propLabel, addProperties);
+        layout.addRow(5, listProp);
     }
 }

@@ -8,6 +8,7 @@ import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import grids.Point;
+import groovy.api.BlockGraph;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
@@ -46,17 +47,9 @@ public interface TileClass extends GameObjectClass {
      */
     boolean removeImagePath(int index);
 
-    /**
-     * This method sets the GroovyCode for choosing the image to display from the list of images.
-     * @param blockCode GroovyCode
-     */
-    void setImageSelector(String blockCode);
 
-    /**
-     * This method gets the image selector code.
-     * @return image selector code
-     */
-    String getImageSelectorCode();
+    BlockGraph getImageSelector();
+    void setImageSelector(BlockGraph graph);
 
     TileInstance createInstance(Point topLeftCoord) throws GameObjectTypeException, InvalidIdException;
 

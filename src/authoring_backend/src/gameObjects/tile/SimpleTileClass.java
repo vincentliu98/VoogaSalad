@@ -8,6 +8,7 @@ import gameObjects.ThrowingBiConsumer;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import grids.Point;
+import groovy.api.BlockGraph;
 
 import java.util.*;
 import java.util.function.Function;
@@ -22,7 +23,7 @@ public class SimpleTileClass implements TileClass {
     private int width, height;
     private List<String> imagePathList;
     private Map<String, String> propertiesMap;
-    private String imageSelector;
+    private BlockGraph imageSelector;
 
     @XStreamOmitField
     private transient TileInstanceFactory myFactory;
@@ -39,7 +40,6 @@ public class SimpleTileClass implements TileClass {
         entityContainable = true;
         imagePathList = new ArrayList<>();
         propertiesMap = new HashMap<>();
-        imageSelector = "";
         width = DEFAULT_WIDTH;
         height = DEFAULT_HEIGHT;
     }
@@ -131,14 +131,10 @@ public class SimpleTileClass implements TileClass {
     }
 
     @Override
-    public void setImageSelector(String blockCode) {
-        imageSelector = blockCode;
-    }
+    public BlockGraph getImageSelector() { return imageSelector; }
 
     @Override
-    public String getImageSelectorCode() {
-        return imageSelector;
-    }
+    public void setImageSelector(BlockGraph graph) { this.imageSelector = graph; }
 
 
     @Override

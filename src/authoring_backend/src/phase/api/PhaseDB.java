@@ -38,7 +38,7 @@ public class PhaseDB {
     public PhaseDB(GroovyFactory factory) {
         this();
         this.factory = factory;
-        winningCondition = factory.createGroovyGraph();
+        winningCondition = factory.createEmptyGraph();
     }
 
     /**
@@ -74,12 +74,12 @@ public class PhaseDB {
     public Try<Phase> createPhase(double x, double y, String name) { return createPhase(x, y, name, false); }
     public Try<Phase> createPhase(double x, double y, String name, boolean isSource) {
         if (!phaseNames.contains(name)) {
-            return Try.success(new PhaseImpl(x, y, factory.createGroovyGraph(), name, isSource));
+            return Try.success(new PhaseImpl(x, y, factory.createEmptyGraph(), name, isSource));
         } else return Try.failure(new NamespaceException(name));
     }
 
     public Transition createTransition(Phase from, GameEvent trigger, Phase to) {
-        return new TransitionImpl(from, trigger, to, factory.createGroovyGraph());
+        return new TransitionImpl(from, trigger, to, factory.createDefaultGuard());
     }
 
     public List<PhaseGraph> phaseGraphs() { return phaseGraphs; }

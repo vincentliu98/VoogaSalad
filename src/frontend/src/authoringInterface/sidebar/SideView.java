@@ -1,26 +1,17 @@
 package authoringInterface.sidebar;
 
 import api.SubView;
-import authoringUtils.exception.DuplicateGameObjectClassException;
 import gameObjects.crud.GameObjectsCRUDInterface;
-import gameObjects.entity.SimpleEntityClass;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectType;
-import gameObjects.player.SimplePlayerClass;
-import gameObjects.sound.SimpleSoundClass;
-import gameObjects.tile.SimpleTileClass;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
-import utils.exception.PreviewUnavailableException;
 import utils.imageManipulation.ImageManager;
 import utils.imageManipulation.JavaFxOperation;
+import utils.imageSelector.ImageSelectorController;
 import utils.nodeInstance.NodeInstanceController;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * This class represents a new SideView implementation that has a JavaFx TreeView object inside, but with cleaner implementation.
@@ -38,7 +29,7 @@ public class SideView implements SubView<StackPane> {
     private NodeInstanceController nodeInstanceController;
     private static final String ROOT_NAME = "Game Objects";
 
-    public SideView(GameObjectsCRUDInterface manager, NodeInstanceController controller) {
+    public SideView(GameObjectsCRUDInterface manager, NodeInstanceController controller, ImageSelectorController imageSelectorController) {
         gameObjectsManager = manager;
         nodeInstanceController = controller;
         sidePane = new StackPane();
@@ -47,7 +38,7 @@ public class SideView implements SubView<StackPane> {
 
         TreeView<String> treeView = new TreeView<>(rootNode);
         treeView.setEditable(true);
-        treeView.setCellFactory(e -> new CustomTreeCellImpl(gameObjectsManager, nodeInstanceController));
+        treeView.setCellFactory(e -> new CustomTreeCellImpl(gameObjectsManager, nodeInstanceController, imageSelectorController));
 
         for (GameObjectClass item : gameObjectsManager.getAllClasses()) {
             TreeItem<String> objectLeaf = new TreeItem<>(item.getClassName());

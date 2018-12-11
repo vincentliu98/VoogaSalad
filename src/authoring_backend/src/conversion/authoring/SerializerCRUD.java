@@ -20,7 +20,6 @@ public class SerializerCRUD {
     public SerializerCRUD() {
         xstream = new XStream(new DomDriver());
         xstream.alias("CRUD", SimpleGameObjectsCRUD.class);
-        xstream.registerConverter(new CRUDConverterAuthoring(xstream.getMapper()));
     }
 
     /**

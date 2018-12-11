@@ -9,6 +9,7 @@ import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import grids.Point;
+import groovy.api.BlockGraph;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
@@ -46,10 +47,12 @@ public interface EntityClass extends GameObjectClass {
     boolean removeImagePath(int index);
 
     /**
-     * This method gets the image selector code.
-     * @return image selector code
+     * This method gets the image selector.
+     * @return image selector
      */
-    String getImageSelectorCode();
+    BlockGraph getImageSelector();
+
+    void setImageSelector(BlockGraph graph);
 
 
     @Override

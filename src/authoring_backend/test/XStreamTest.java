@@ -10,7 +10,7 @@ public class XStreamTest {
 
         var authTools = new AuthoringTools(1, 1);
         var groovyFactory = authTools.factory();
-        var graph = groovyFactory.createGroovyGraph();
+        var graph = groovyFactory.createEmptyGraph();
 
         var source = graph.source();
         var doBlock = groovyFactory.functionBlock(0, 0, "doSomething", null);

@@ -21,7 +21,35 @@ public class GroovyFactory {
     /**
      *  Makes an createPhaseGraph BlockGraph with one source node
      */
-    public BlockGraph createGroovyGraph() { return new BlockGraphImpl(); }
+    public BlockGraph createEmptyGraph() { return new BlockGraphImpl(); }
+
+    public BlockGraph createDefaultGuard() {
+        try {
+            var graph = new BlockGraphImpl();
+            var returnBlock = functionBlock(1000, 1200, "GameMethods.$return", Map.of(Ports.A, "Object retVal"));
+            var trueBlock = booleanBlock(1200, 1200, "true").get();
+            graph.addNode(returnBlock);
+            graph.addNode(trueBlock);
+            graph.addEdge(createEdge(returnBlock, Ports.A, trueBlock));
+            graph.addEdge(createEdge(graph.source(), Ports.FLOW_OUT, returnBlock));
+            return graph;
+        } catch (Throwable throwable) { throwable.printStackTrace(); } // can't fail!
+        return createEmptyGraph();
+    }
+
+    public BlockGraph createDefaultImageSelector() {
+        try {
+            var graph = new BlockGraphImpl();
+            var returnBlock = functionBlock(1000, 1200, "GameMethods.$return", Map.of(Ports.A, "Object retVal"));
+            var zeroBlock = integerBlock(1200, 1200, "0").get();
+            graph.addNode(returnBlock);
+            graph.addNode(zeroBlock);
+            graph.addEdge(createEdge(returnBlock, Ports.A, zeroBlock));
+            graph.addEdge(createEdge(graph.source(), Ports.FLOW_OUT, returnBlock));
+            return graph;
+        } catch (Throwable throwable) { throwable.printStackTrace(); } // can't fail!
+        return createEmptyGraph();
+    }
 
     /**
      *  Makes an edge

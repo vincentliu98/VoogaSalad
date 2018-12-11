@@ -19,6 +19,8 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import org.xml.sax.SAXException;
 import utils.exception.XMLParsingException;
+import utils.imageSelector.ImageSelectorController;
+import utils.imageSelector.SimpleImageSelectorController;
 import utils.nodeInstance.CrappyNodeInstanceController;
 import utils.nodeInstance.NodeInstanceController;
 import utils.serializer.CRUDLoadException;
@@ -47,6 +49,7 @@ public class View implements ParentView<SubView> {
     private GridPane sidebar;
     private GridPane mainView;
 
+    private ImageSelectorController imageSelectorController;
     private NodeInstanceController nodeInstanceController;
     private GameObjectsCRUDInterface gameObjectManager;
     public static final double MENU_BAR_HEIGHT = 30;
@@ -71,6 +74,7 @@ public class View implements ParentView<SubView> {
         gameObjectManager = tools.entityDB();
         groovyPaneFactory = new GroovyPaneFactory(primaryStage, tools.factory(), tools.phaseDB().winCondition());
         nodeInstanceController = new CrappyNodeInstanceController();
+        imageSelectorController = new SimpleImageSelectorController(tools.factory(), groovyPaneFactory);
         initializeElements();
         setElements();
         addElements();
@@ -78,8 +82,8 @@ public class View implements ParentView<SubView> {
 
     private void initializeElements() {
         sidebar = new GridPane();
-        sideView = new SideView(gameObjectManager, nodeInstanceController);
-        editView = new EditView(tools, groovyPaneFactory, gameObjectManager.getNumRows(), gameObjectManager.getNumCols(), gameObjectManager, nodeInstanceController);
+        sideView = new SideView(gameObjectManager, nodeInstanceController, imageSelectorController);
+        editView = new EditView(tools, groovyPaneFactory, gameObjectManager.getNumRows(), gameObjectManager.getNumCols(), gameObjectManager, nodeInstanceController, imageSelectorController);
         statusView = new StatusView(gameObjectManager);
         editView.addUpdateStatusEventListener(statusView);
         menuBar = new EditorMenuBarView(tools, primaryStage::close, this::updateGridDimension, editView, gameObjectManager, primaryStage);
