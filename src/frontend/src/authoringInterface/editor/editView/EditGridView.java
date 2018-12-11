@@ -210,7 +210,7 @@ public class EditGridView implements SubView<ScrollPane> {
         listView.setGridLinesVisible(true);
         listView.addRow(0, new Label("ID"), new Label("Instance"), new Label("Class"));
         cell.getChildrenUnmodifiable().forEach(node -> {
-            GameObjectInstance instance = null;
+            GameObjectInstance instance;
             try {
                 instance = nodeInstanceController.getGameObjectInstance(node);
                 Text instanceID = new Text(String.valueOf(instance.getInstanceId()));
@@ -400,6 +400,7 @@ public class EditGridView implements SubView<ScrollPane> {
             cc.putString(String.valueOf(gameObjectInstance.getInstanceId()));
             db.setContent(cc);
             db.setDragView(finalNodeOnGrid.getImage());
+            e.consume();
         });
         int height = 0;
         int width = 0;

@@ -60,10 +60,6 @@ public class CustomTreeCellImpl extends TreeCell<String> {
         });
         addMenu.getItems().add(addMenuItem);
         setOnDragDetected(e -> {
-            Dragboard db = startDragAndDrop(TransferMode.ANY);
-            ClipboardContent cc = new ClipboardContent();
-            cc.putString(getString());
-            db.setContent(cc);
             GameObjectClass draggedClass = null;
             try {
                 draggedClass = objectManager.getGameObjectClass(getString());
@@ -71,12 +67,22 @@ public class CustomTreeCellImpl extends TreeCell<String> {
                 // TODO
                 e1.printStackTrace();
             }
+            assert draggedClass != null;
+            if (draggedClass.getType() == GameObjectType.PLAYER || draggedClass.getType() == GameObjectType.CATEGORY) {
+                e.consume();
+                return;
+            }
+            Dragboard db = startDragAndDrop(TransferMode.ANY);
+            ClipboardContent cc = new ClipboardContent();
+            cc.putString(getString());
+            db.setContent(cc);
             try {
                 db.setDragView(ImageManager.getPreview(draggedClass));
             } catch (PreviewUnavailableException e1) {
                 // TODO: proper error handling.
                 e1.printStackTrace();
             }
+            e.consume();
         });
         MenuItem editMenuItem = new MenuItem("Edit this GameObject");
         MenuItem deleteMenuItem = new MenuItem("Delete this GameObject");
