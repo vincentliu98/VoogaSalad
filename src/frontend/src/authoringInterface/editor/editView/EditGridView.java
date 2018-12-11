@@ -15,6 +15,7 @@ import gameObjects.entity.EntityInstance;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
+import gameObjects.tile.TileClass;
 import gameObjects.tile.TileInstance;
 import gameObjects.tileGeneration.GenerationMode;
 import grids.Point;
