@@ -216,6 +216,12 @@ public class EditGridView implements SubView<ScrollPane> {
                 Text className = new Text(instance.getClassName());
                 Button edit = new Button("Edit");
                 Button delete = new Button("Delete");
+                edit.setStyle("-fx-text-fill: white;"
+                        + "-fx-background-insets: 1;"
+                        + "-fx-background-color: #343a40;");
+                delete.setStyle("-fx-text-fill: white;"
+                        + "-fx-background-insets: 1;"
+                        + "-fx-background-color: #343a40;");
                 GridPane control = new GridPane();
                 control.addColumn(0, edit, delete);
                 instanceID.setOnMouseClicked(e -> handleDoubleClick(e, node));
