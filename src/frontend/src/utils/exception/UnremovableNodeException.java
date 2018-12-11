@@ -10,7 +10,11 @@ public class UnremovableNodeException extends Exception {
         super(message);
     }
 
-    public UnremovableNodeException(String message, Throwable cause) { super(message, cause); }
+    public UnremovableNodeException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-    public UnremovableNodeException(Throwable cause) { super(cause); }
+    public UnremovableNodeException(Throwable cause) {
+        super(cause);
+    }
 }

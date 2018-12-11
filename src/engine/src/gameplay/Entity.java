@@ -50,7 +50,7 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
     }
 
     /**
-     *  Fills out the transient parts
+     * Fills out the transient parts
      */
     public void setupView() {
         myImageView = new ImageView();
@@ -65,23 +65,23 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
     }
 
     /**
-     *  Adjusts the size of this tile in pixels with respect to screen dimensions
-     *  TODO: test whether "addListener" replaces the old one
+     * Adjusts the size of this tile in pixels with respect to screen dimensions
+     * TODO: test whether "addListener" replaces the old one
      */
     public void adjustViewSize(double screenWidth, double screenHeight) {
         myImageView.setY((screenHeight * yCoord.get()) / GameMethods.gridHeight());
         myImageView.setX((screenWidth * xCoord.get()) / GameMethods.gridWidth());
-        myImageView.setFitWidth(screenWidth * myWidth /GameMethods.gridWidth());
-        myImageView.setFitHeight(screenHeight * myHeight /GameMethods.gridHeight());
+        myImageView.setFitWidth(screenWidth * myWidth / GameMethods.gridWidth());
+        myImageView.setFitHeight(screenHeight * myHeight / GameMethods.gridHeight());
 
         myImages = myImagePaths.stream()
-                               .map(path ->
-                                   new Image(
-                                       this.getClass().getClassLoader().getResourceAsStream(path),
-                                       screenWidth/GameMethods.gridWidth(), screenHeight/GameMethods.gridHeight(),
-                                       false, true
-                                   )
-                               ).collect(Collectors.toList());
+                .map(path ->
+                        new Image(
+                                this.getClass().getClassLoader().getResourceAsStream(path),
+                                screenWidth / GameMethods.gridWidth(), screenHeight / GameMethods.gridHeight(),
+                                false, true
+                        )
+                ).collect(Collectors.toList());
 
         xCoord.addListener((e, oldVal, newVal) -> {
             myImageView.setX(screenWidth * newVal.doubleValue() / GameMethods.gridWidth());
@@ -94,33 +94,51 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
     }
 
     /**
-     *  Since all image selectors assume that $this refers to THIS specific instance of a tile,
-     *  we set the variable $this to this.
+     * Since all image selectors assume that $this refers to THIS specific instance of a tile,
+     * we set the variable $this to this.
      */
     public void updateView() {
-        if(!myImageSelector.isEmpty()) {
+        if (!myImageSelector.isEmpty()) {
             GameData.shell().setVariable("$this", this);
             GameData.shell().evaluate(myImageSelector);
             imgIndex.set(Integer.parseInt(GameData.shell().getVariable("$return").toString()));
         } else imgIndex.set(0);
     }
 
-    public void setLocation(double x, double y){
+    public void setLocation(double x, double y) {
         this.xCoord.set(x);
         this.yCoord.set(y);
     }
 
-    public ImageView getImageView(){ return myImageView; }
-    public int getID(){ return myID; }
-    public String getName() { return name; }
-    public double getX() { return xCoord.get(); }
-    public double getY() { return yCoord.get(); }
+    public ImageView getImageView() {
+        return myImageView;
+    }
+
+    public int getID() {
+        return myID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getX() {
+        return xCoord.get();
+    }
+
+    public double getY() {
+        return yCoord.get();
+    }
 
     @Override
-    public double getWidth() { return myWidth; }
+    public double getWidth() {
+        return myWidth;
+    }
 
     @Override
-    public double getHeight() { return myHeight; }
+    public double getHeight() {
+        return myHeight;
+    }
 
     @Override
     public void handle(MouseEvent event) {

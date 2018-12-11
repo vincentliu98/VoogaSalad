@@ -23,8 +23,8 @@ import java.util.function.Function;
 
 /**
  * PhaseChooserPane
- *  - Parent Pane of PhasePane.
- *
+ * - Parent Pane of PhasePane.
+ * <p>
  * It is the entire tab that contains the listView of all the Phase on the right and the pane of nodes on the right
  *
  * @author Amy
@@ -59,7 +59,7 @@ public class PhaseChooserPane implements SubView<GridPane> {
     private void setupLeft() {
         var vbox = new VBox();
         var stack = new StackPane();
-        var createPhaseBtn =  new Button("New PHASE");
+        var createPhaseBtn = new Button("New PHASE");
         stack.getChildren().add(createPhaseBtn);
         vbox.getStyleClass().add("vboxPhase");
         createPhaseBtn.getStyleClass().add("phaseBtn");
@@ -78,8 +78,8 @@ public class PhaseChooserPane implements SubView<GridPane> {
 
     private void clearRightPane() {
         var toRemove = new ArrayList<Node>();
-        for(var node : view.getChildren()) {
-            if(GridPane.getColumnIndex(node) == 1) {
+        for (var node : view.getChildren()) {
+            if (GridPane.getColumnIndex(node) == 1) {
                 toRemove.add(node);
             }
         }
@@ -94,7 +94,7 @@ public class PhaseChooserPane implements SubView<GridPane> {
 
     private void createPhasePane(String name) {
         var tryGraph = phaseDB.createPhaseGraph(name);
-        if(tryGraph.isSuccess()) {
+        if (tryGraph.isSuccess()) {
             try {
                 createPhasePane(tryGraph.get());
             } catch (Throwable t) {
@@ -106,7 +106,7 @@ public class PhaseChooserPane implements SubView<GridPane> {
 
     private void createPhasePane(PhaseGraph graph) {
         phasePaneList.add(new PhasePane(phaseDB, genGroovyPane, graph));
-        phaseNameListView.getSelectionModel().select(phasePaneList.size()-1);
+        phaseNameListView.getSelectionModel().select(phasePaneList.size() - 1);
     }
 
     @Override

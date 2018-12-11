@@ -10,7 +10,6 @@ import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectType;
-import gameplay.GameObject;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
@@ -38,11 +37,11 @@ import utils.nodeInstance.NodeInstanceController;
  * @author Haotian Wang
  */
 public class CustomTreeCellImpl extends TreeCell<String> {
+    private static final double ICON_HEIGHT = 50;
+    private static final double ICON_WIDTH = 50;
     private TextField textField;
     private ContextMenu addMenu = new ContextMenu();
     private ContextMenu editMenu = new ContextMenu();
-    private static final double ICON_HEIGHT = 50;
-    private static final double ICON_WIDTH = 50;
     private GameObjectsCRUDInterface objectManager;
     private NodeInstanceController nodeInstanceController;
 
@@ -191,7 +190,8 @@ public class CustomTreeCellImpl extends TreeCell<String> {
                     } else {
                         setContextMenu(editMenu);
                     }
-                } catch (GameObjectClassNotFoundException ignored) {}
+                } catch (GameObjectClassNotFoundException ignored) {
+                }
             }
         }
     }
@@ -216,7 +216,8 @@ public class CustomTreeCellImpl extends TreeCell<String> {
                 }
                 try {
                     ImageManager.removeClassImage(gameObjectClass);
-                } catch (GameObjectClassNotFoundException ignored) {}
+                } catch (GameObjectClassNotFoundException ignored) {
+                }
                 ImageView icon = null;
                 try {
                     icon = new ImageView(ImageManager.getPreview(gameObjectClass));

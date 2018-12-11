@@ -5,7 +5,6 @@ import java.sql.ResultSet;
 public interface DatabaseQuery {
 
     /**
-     *
      * @param username
      * @param databasename
      * @param password
@@ -17,6 +16,7 @@ public interface DatabaseQuery {
     /**
      * Allows the query of the server through a mysql command.
      * setConnection must be called first.
+     *
      * @param command The mysql command
      * @return The result of the query
      */

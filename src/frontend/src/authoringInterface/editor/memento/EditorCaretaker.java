@@ -21,6 +21,6 @@ public class EditorCaretaker {
     public EditorMemento getMemento(Integer index) {
         if (0 <= index && index < mementos.size()) {
             return mementos.get(index);
-        } else return mementos.get(mementos.size()-1);
+        } else return mementos.get(mementos.size() - 1);
     }
 }

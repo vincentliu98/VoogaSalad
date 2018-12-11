@@ -22,19 +22,22 @@ public class SimpleImageSelectorController implements ImageSelectorController {
     @Override
     public GroovyPane groovyPaneOf(EntityClass entityClass) {
         System.out.println(entityClass);
-        if(entityClass.getImageSelector() == null) entityClass.setImageSelector(graphFactory.createDefaultImageSelector());
-        if(!cachedPanes.containsKey(entityClass)) {
+        if (entityClass.getImageSelector() == null)
+            entityClass.setImageSelector(graphFactory.createDefaultImageSelector());
+        if (!cachedPanes.containsKey(entityClass)) {
             var pane = paneFactory.gen(entityClass.getImageSelector(), false);
             cachedPanes.put(entityClass, pane);
-        } return cachedPanes.get(entityClass);
+        }
+        return cachedPanes.get(entityClass);
     }
 
     @Override
     public GroovyPane groovyPaneOf(TileClass tileClass) {
-        if(tileClass.getImageSelector() == null) tileClass.setImageSelector(graphFactory.createDefaultImageSelector());
-        if(!cachedPanes.containsKey(tileClass)) {
+        if (tileClass.getImageSelector() == null) tileClass.setImageSelector(graphFactory.createDefaultImageSelector());
+        if (!cachedPanes.containsKey(tileClass)) {
             var pane = paneFactory.gen(tileClass.getImageSelector(), false);
             cachedPanes.put(tileClass, pane);
-        } return cachedPanes.get(tileClass);
+        }
+        return cachedPanes.get(tileClass);
     }
 }

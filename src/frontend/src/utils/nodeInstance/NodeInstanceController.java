@@ -14,7 +14,7 @@ public interface NodeInstanceController {
     /**
      * Establishes a one-to-one correspondence between a JavaFx Node and a GameObjectInstance.
      *
-     * @param node: A JavaFx Node
+     * @param node:               A JavaFx Node
      * @param gameObjectInstance: A GameObjectInstance.
      */
     void addLink(Node node, GameObjectInstance gameObjectInstance);

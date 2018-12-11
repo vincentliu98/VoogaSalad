@@ -20,14 +20,14 @@ public class EntityView implements Viewable, PropertyChangeListener {
 
     private PropertyChangeSupport mySupport;
 
-    public EntityView(){
+    public EntityView() {
         mySupport = new PropertyChangeSupport(this);
         myImage = new ImageView();
         posX = 0.0;
         posY = 0.0;
     }
 
-    public EntityView(String imagePath, double xpos, double ypos){
+    public EntityView(String imagePath, double xpos, double ypos) {
         mySupport = new PropertyChangeSupport(this);
         myImage = new ImageView(imagePath);
         changeCoordinates(xpos, ypos);
@@ -45,13 +45,11 @@ public class EntityView implements Viewable, PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if(evt.getPropertyName().equals(CHANGE_IMAGE_KEY)){
+        if (evt.getPropertyName().equals(CHANGE_IMAGE_KEY)) {
             changeImage((String) evt.getNewValue());
-        }
-        else if(evt.getPropertyName().equals(MOVE_KEY)){
+        } else if (evt.getPropertyName().equals(MOVE_KEY)) {
             changeCoordinates(((Pair<Double, Double>) evt.getNewValue()).getData1(), ((Pair<Double, Double>) evt.getNewValue()).getData2());
-        }
-        else if(evt.getPropertyName().equals(REMOVE_KEY)){
+        } else if (evt.getPropertyName().equals(REMOVE_KEY)) {
             removeEntity();
         }
     }
@@ -77,6 +75,6 @@ public class EntityView implements Viewable, PropertyChangeListener {
         Consumer<DisplayData> cons = (disp) -> {
             disp.removeEntity(this);
         };
-        mySupport.firePropertyChange(REMOVE_KEY,this, cons);
+        mySupport.firePropertyChange(REMOVE_KEY, this, cons);
     }
 }

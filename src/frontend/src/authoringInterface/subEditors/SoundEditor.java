@@ -3,7 +3,6 @@ package authoringInterface.subEditors;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.sound.SoundClass;
 import gameObjects.sound.SoundInstance;
-import javafx.collections.ObservableList;
 
 /**
  * This class provides an editor for sound files used in the editor.

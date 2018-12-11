@@ -17,25 +17,26 @@ public class Edge implements ArgumentListener {
         this.myGuard = guard;
     }
 
-    private boolean checkValidity(){
-        if(myGuard.isEmpty()) return false;
-        try{
+    private boolean checkValidity() {
+        if (myGuard.isEmpty()) return false;
+        try {
             GameData.shell().evaluate(myGuard);
             return (boolean) GameData.shell().getVariable("$return");
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             // TODO: throw an actual error
             return false;
         }
     }
 
-    public String getMyStartNodeName() { return myStartNodeName; }
+    public String getMyStartNodeName() {
+        return myStartNodeName;
+    }
 
     @Override
     public String trigger(Event event) {
-        if(myTrigger.matches(event) && checkValidity()) {
+        if (myTrigger.matches(event) && checkValidity()) {
             return myEndNodeName;
-        }
-        else return DONT_PASS;
+        } else return DONT_PASS;
     }
 }

@@ -20,7 +20,7 @@ public class ControlOptions {
     private Button myMinButton;
     private Stage myStage;
 
-    public ControlOptions(Stage stage){
+    public ControlOptions(Stage stage) {
         myStage = stage;
 
         initBox();
@@ -28,13 +28,13 @@ public class ControlOptions {
         initClose();
     }
 
-    private void initBox(){
+    private void initBox() {
         myBox = new HBox();
 
         myBox.setAlignment(Pos.TOP_RIGHT);
     }
 
-    private void initClose(){
+    private void initClose() {
         myCloseButton = new Button();
 
         javafx.scene.image.Image image = new Image(getClass().getResourceAsStream(CROSS_PATH));
@@ -52,7 +52,7 @@ public class ControlOptions {
         myBox.getChildren().add(myCloseButton);
     }
 
-    private void initMinimize(){
+    private void initMinimize() {
         myMinButton = new Button();
 
         javafx.scene.image.Image image = new Image(getClass().getResourceAsStream(MINIMIZE_PATH));

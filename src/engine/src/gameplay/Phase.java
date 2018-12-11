@@ -7,19 +7,21 @@ public class Phase {
     private String myCurrentNodeName;
     private Set<String> myNodeNames;
 
-    public Phase(String startNodeName, Set<String> nodeNames){
+    public Phase(String startNodeName, Set<String> nodeNames) {
         this.myStartNodeName = startNodeName;
         this.myNodeNames = nodeNames;
     }
 
-    public void step(String nodeName){
+    public void step(String nodeName) {
         myCurrentNodeName = nodeName;
         GameData.getNode(myCurrentNodeName).execute();
     }
 
-    public void startTraversal(){
+    public void startTraversal() {
         step(myStartNodeName);
     }
 
-    public String getName(){ return myStartNodeName; }
+    public String getName() {
+        return myStartNodeName;
+    }
 }

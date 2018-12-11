@@ -7,14 +7,12 @@ import gameObjects.ThrowingBiConsumer;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleStringProperty;
 
 import java.util.Collection;
 import java.util.function.Function;
 
 /**
- * @author  Haotian Wang
+ * @author Haotian Wang
  */
 public interface SoundClass extends GameObjectClass {
 
@@ -29,10 +27,10 @@ public interface SoundClass extends GameObjectClass {
     void setDuration(double newDuration);
 
     void equipContext(
-        SoundInstanceFactory soundInstanceFactory,
-        ThrowingBiConsumer<String, String, InvalidOperationException> changeSoundClassNameFunc,
-        Function<String, Collection<GameObjectInstance>> getAllSoundInstancesFunc,
-        Function<Integer, Boolean> deleteSoundInstanceFunc
+            SoundInstanceFactory soundInstanceFactory,
+            ThrowingBiConsumer<String, String, InvalidOperationException> changeSoundClassNameFunc,
+            Function<String, Collection<GameObjectInstance>> getAllSoundInstancesFunc,
+            Function<Integer, Boolean> deleteSoundInstanceFunc
     );
 
     @Override

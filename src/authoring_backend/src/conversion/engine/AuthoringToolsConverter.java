@@ -11,7 +11,6 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.mapper.Mapper;
 import gameObjects.crud.SimpleGameObjectsCRUD;
 import gameObjects.gameObject.GameObjectClass;
-import gameObjects.gameObject.GameObjectInstance;
 import phase.api.PhaseDB;
 
 import java.util.stream.Collectors;

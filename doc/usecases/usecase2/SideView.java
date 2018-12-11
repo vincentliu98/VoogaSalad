@@ -26,7 +26,7 @@ public class SideView implements SubView {
         entityTreeView = new EntitySubTreeView(primaryStage).getRootItem();
         soundTreeView = new SoundSubTreeView(primaryStage).getRootItem();
         tileSetsTreeView = new TileSetsSubTreeView(primaryStage).getRootItem();
-        rootTreeItem.getChildren().addAll(entityTreeView,soundTreeView,tileSetsTreeView);
+        rootTreeItem.getChildren().addAll(entityTreeView, soundTreeView, tileSetsTreeView);
         rootTreeView = new TreeView<>(rootTreeItem);
         rootTreeView.setOnMouseClicked(event -> new EntityWindow(primaryStage));
 

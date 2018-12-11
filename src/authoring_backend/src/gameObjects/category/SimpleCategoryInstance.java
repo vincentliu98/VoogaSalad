@@ -28,33 +28,48 @@ public class SimpleCategoryInstance implements CategoryInstance {
      * @return
      */
     @Override
-    public int getInstanceId() { return instanceId; }
+    public int getInstanceId() {
+        return instanceId;
+    }
 
     /**
+     *
      */
     @Override
-    public void setInstanceId(int newId) { instanceId = newId; }
+    public void setInstanceId(int newId) {
+        instanceId = newId;
+    }
 
     /**
      * @return
      */
     @Override
-    public String getClassName() { return className; }
+    public String getClassName() {
+        return className;
+    }
 
     /**
      * @param name
      */
     @Override
-    public void setClassName(String name) { className = name; }
+    public void setClassName(String name) {
+        className = name;
+    }
 
     @Override
-    public String getInstanceName() { return instanceName; }
+    public String getInstanceName() {
+        return instanceName;
+    }
 
     @Override
-    public void setInstanceName(String newInstanceName) { instanceName = newInstanceName; }
+    public void setInstanceName(String newInstanceName) {
+        instanceName = newInstanceName;
+    }
 
     @Override
-    public Map<String, String> getPropertiesMap() { return propertiesMap; }
+    public Map<String, String> getPropertiesMap() {
+        return propertiesMap;
+    }
 
     /**
      * @param propertyName
@@ -95,6 +110,8 @@ public class SimpleCategoryInstance implements CategoryInstance {
     }
 
     @Override
-    public CategoryClass getGameObjectClass() { return categoryClass; }
+    public CategoryClass getGameObjectClass() {
+        return categoryClass;
+    }
 
 }

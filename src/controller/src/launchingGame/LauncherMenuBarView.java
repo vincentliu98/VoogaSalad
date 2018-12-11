@@ -24,7 +24,7 @@ public class LauncherMenuBarView {
 
         Menu LaunchGame = new Menu("Launch Game");
 
-       // MenuItem newFile = new MenuItem("New");
+        // MenuItem newFile = new MenuItem("New");
 
 //        newFile.setOnAction(this::handleNewFile);
 //

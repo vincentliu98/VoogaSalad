@@ -26,10 +26,10 @@ public class DraggableGroovyIconFactory {
     private DraggableGroovyIcon draggingIcon;
 
     public DraggableGroovyIconFactory(
-        Scene myScene,
-        GroovyNodeFactory nodeFactory,
-        DoubleProperty newNodeX,
-        DoubleProperty newNodeY
+            Scene myScene,
+            GroovyNodeFactory nodeFactory,
+            DoubleProperty newNodeX,
+            DoubleProperty newNodeY
     ) {
         this.myScene = myScene;
         this.nodeFactory = nodeFactory;
@@ -42,9 +42,35 @@ public class DraggableGroovyIconFactory {
     }
 
     public DraggableGroovyIcon genWithInfo(
-        Image img, String blockType, boolean fetchArg, Map<Ports, String> additionalInfo
+            Image img, String blockType, boolean fetchArg, Map<Ports, String> additionalInfo
     ) {
         return new DraggableGroovyIcon(img, blockType, fetchArg, additionalInfo);
+    }
+
+    public void dropHandler(DragEvent event, Consumer<GroovyNode> createNode) {
+        Dragboard db = event.getDragboard();
+        boolean success = false;
+        if (db.hasImage()) {
+            success = true;
+            try {
+                String arg = "";
+                if (draggingIcon.fetchArg()) {
+                    var dialog = new TextInputDialog();
+                    dialog.setHeaderText("Type the parameter to initialize " + draggingIcon.blockType());
+                    arg = dialog.showAndWait().get();
+                }
+                createNode.accept(
+                        nodeFactory.makeNode(
+                                draggingIcon.blockType, draggingIcon.portInfo, newNodeX.get(), newNodeY.get(), arg
+                        ).get()
+                );
+            } catch (Throwable t) {
+                t.printStackTrace();
+                ErrorWindow.display("Error while creating groovy node", t.toString());
+            }
+        }
+        event.setDropCompleted(success);
+        event.consume();
     }
 
     public class DraggableGroovyIcon extends ImageView {
@@ -77,33 +103,12 @@ public class DraggableGroovyIconFactory {
             });
         }
 
-        public boolean fetchArg() { return fetchArg; }
-        public String blockType() { return blockType; }
-    }
-
-    public void dropHandler(DragEvent event, Consumer<GroovyNode> createNode) {
-        Dragboard db = event.getDragboard();
-        boolean success = false;
-        if (db.hasImage()) {
-            success = true;
-            try {
-                String arg = "";
-                if (draggingIcon.fetchArg()) {
-                    var dialog = new TextInputDialog();
-                    dialog.setHeaderText("Type the parameter to initialize " + draggingIcon.blockType());
-                    arg = dialog.showAndWait().get();
-                }
-                createNode.accept(
-                    nodeFactory.makeNode(
-                        draggingIcon.blockType, draggingIcon.portInfo, newNodeX.get(), newNodeY.get(), arg
-                    ).get()
-                );
-            } catch (Throwable t) {
-                t.printStackTrace();
-                ErrorWindow.display("Error while creating groovy node", t.toString());
-            }
+        public boolean fetchArg() {
+            return fetchArg;
         }
-        event.setDropCompleted(success);
-        event.consume();
+
+        public String blockType() {
+            return blockType;
+        }
     }
 }

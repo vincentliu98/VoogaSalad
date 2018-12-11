@@ -6,9 +6,15 @@ package utils.exception;
  * @author Haotian Wang
  */
 public class XMLParsingException extends Exception {
-    public XMLParsingException(String msg) { super(msg); }
+    public XMLParsingException(String msg) {
+        super(msg);
+    }
 
-    public XMLParsingException(String msg, Throwable cause) { super(msg, cause); }
+    public XMLParsingException(String msg, Throwable cause) {
+        super(msg, cause);
+    }
 
-    public XMLParsingException(Throwable cause) { super(cause); }
+    public XMLParsingException(Throwable cause) {
+        super(cause);
+    }
 }

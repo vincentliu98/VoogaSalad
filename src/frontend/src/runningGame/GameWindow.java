@@ -5,7 +5,7 @@ import javafx.scene.layout.AnchorPane;
 
 /**
  * A new window for running the game.
- *
+ * <p>
  * Takes in data from back end.
  *
  * @author jl729

@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *  Generic representation of a graph.
- *  https://docs.oracle.com/javase/tutorial/java/generics/index.html
+ * Generic representation of a graph.
+ * https://docs.oracle.com/javase/tutorial/java/generics/index.html
  */
 public interface Graph<N extends Node, E extends Edge<N>> extends Map<N, List<E>> {
     /**

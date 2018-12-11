@@ -12,7 +12,6 @@ import phase.api.Phase;
 import phase.api.PhaseDB;
 
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * A factory that produces a node in a phase graph
@@ -58,7 +57,7 @@ public class PhaseNodeFactory {
             circle = new Circle(xPos, yPos, PHASE_NODE_RADIUS);
             circle.setFill(model.isSource() ? Color.GRAY : Color.DIMGRAY);
 
-            inner = new Circle(PHASE_NODE_RADIUS, PHASE_NODE_RADIUS, PHASE_NODE_RADIUS-PADDING);
+            inner = new Circle(PHASE_NODE_RADIUS, PHASE_NODE_RADIUS, PHASE_NODE_RADIUS - PADDING);
             inner.setFill((model.isSource() ? Color.BLACK : Color.WHITE).darker());
 
             text = new Label(model.name());
@@ -78,16 +77,36 @@ public class PhaseNodeFactory {
             layout();
         }
 
-        public Phase model() { return model; }
-        public Circle inner() { return inner; }
+        public Phase model() {
+            return model;
+        }
+
+        public Circle inner() {
+            return inner;
+        }
 
         public String getName() {
             return name;
         }
-        public double getCenterX() { return getLayoutX() + getTranslateX() + PHASE_NODE_RADIUS; }
-        public double getCenterY() { return getLayoutY() + getTranslateY() + PHASE_NODE_RADIUS; }
-        public double getX() { return getLayoutX() + getTranslateX(); }
-        public double getY() { return getLayoutY() + getTranslateY(); }
-        public void showGraph() { groovyPane.showWindow(); }
+
+        public double getCenterX() {
+            return getLayoutX() + getTranslateX() + PHASE_NODE_RADIUS;
+        }
+
+        public double getCenterY() {
+            return getLayoutY() + getTranslateY() + PHASE_NODE_RADIUS;
+        }
+
+        public double getX() {
+            return getLayoutX() + getTranslateX();
+        }
+
+        public double getY() {
+            return getLayoutY() + getTranslateY();
+        }
+
+        public void showGraph() {
+            groovyPane.showWindow();
+        }
     }
 }

@@ -15,14 +15,14 @@ import javafx.scene.layout.AnchorPane;
 
 /**
  * EditView Class (TabPane > ScrollPane)
- *      - holding scroll views
+ * - holding scroll views
  *
  * @author Amy Kim
  */
 public class EditView implements SubView {
-    private AnchorPane anchorPane;
     private final TabPane tabPane = new TabPane();
-//    private EntityScrollView entityScrollView;
+    private AnchorPane anchorPane;
+    //    private EntityScrollView entityScrollView;
     private GridScrollView gridScrollView;
     private Button addButton;
     private int index = 1;
@@ -32,7 +32,7 @@ public class EditView implements SubView {
      *
      * @return A tabView Node to be displayed at the left side of the empty window.
      */
-    public EditView(){
+    public EditView() {
 //        entityScrollView = new EntityScrollView();
         gridScrollView = new GridScrollView();
         initializeAnchorPane();
@@ -63,7 +63,7 @@ public class EditView implements SubView {
         });
     }
 
-    private void addTab(){
+    private void addTab() {
         Tab tempTab = new Tab("Tab" + index);
         tempTab.setClosable(true);
         // need to be changed to make the content differ3ent

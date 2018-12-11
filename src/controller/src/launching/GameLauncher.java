@@ -13,6 +13,10 @@ public class GameLauncher extends Application {
 
     public static final String STAGE_TITLE = "Game Launcher";
 
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     @Override
     public void start(Stage primaryStage) {
 
@@ -30,10 +34,5 @@ public class GameLauncher extends Application {
         primaryStage.show();
 
 
-
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }

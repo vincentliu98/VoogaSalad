@@ -56,14 +56,18 @@ public class SimpleSoundClass implements SoundClass {
      * @return classId
      */
     @Override
-    public int getClassId() { return classId; }
+    public int getClassId() {
+        return classId;
+    }
 
     /**
      * This method receives a function that sets the id of the GameObject Class.
      * The id of the GameObject Class is set by the received function.
      */
     @Override
-    public void setClassId(int classId) { this.classId = classId; }
+    public void setClassId(int classId) {
+        this.classId = classId;
+    }
 
     /**
      * This method gets the name of this GameObject Class.
@@ -71,15 +75,19 @@ public class SimpleSoundClass implements SoundClass {
      * @return class name
      */
     @Override
-    public String getClassName() { return className; }
+    public String getClassName() {
+        return className;
+    }
+
+    @Override
+    public void setClassName(String newClassName) {
+        className = newClassName;
+    }
 
     @Override
     public void changeClassName(String newClassName) throws InvalidOperationException {
         changeSoundClassNameFunc.accept(className, newClassName);
     }
-
-    @Override
-    public void setClassName(String newClassName) { className = newClassName; }
 
     /**
      * This method gets the properties map of the GameObject Class.
@@ -180,14 +188,16 @@ public class SimpleSoundClass implements SoundClass {
     }
 
     @Override
-    public void setDuration(double newDuration) { duration = newDuration; }
+    public void setDuration(double newDuration) {
+        duration = newDuration;
+    }
 
     @Override
     public void equipContext(
-        SoundInstanceFactory soundInstanceFactory,
-        ThrowingBiConsumer<String, String, InvalidOperationException> changeSoundClassNameFunc,
-        Function<String, Collection<GameObjectInstance>> getAllSoundInstancesFunc,
-        Function<Integer, Boolean> deleteSoundInstanceFunc
+            SoundInstanceFactory soundInstanceFactory,
+            ThrowingBiConsumer<String, String, InvalidOperationException> changeSoundClassNameFunc,
+            Function<String, Collection<GameObjectInstance>> getAllSoundInstancesFunc,
+            Function<Integer, Boolean> deleteSoundInstanceFunc
     ) {
         this.myFactory = soundInstanceFactory;
         this.changeSoundClassNameFunc = changeSoundClassNameFunc;

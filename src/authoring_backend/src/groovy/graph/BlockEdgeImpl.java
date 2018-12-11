@@ -14,7 +14,11 @@ public class BlockEdgeImpl extends SimpleEdge<GroovyBlock> implements BlockEdge 
     }
 
     @Override
-    public BlockEdge replicate() { return new BlockEdgeImpl(from().replicate(), fromPort, to().replicate()); }
+    public BlockEdge replicate() {
+        return new BlockEdgeImpl(from().replicate(), fromPort, to().replicate());
+    }
 
-    public Ports fromPort() { return fromPort; }
+    public Ports fromPort() {
+        return fromPort;
+    }
 }

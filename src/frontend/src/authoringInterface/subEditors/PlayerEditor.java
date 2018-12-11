@@ -6,19 +6,16 @@ import authoringUtils.exception.GameObjectClassNotFoundException;
 import authoringUtils.exception.GameObjectInstanceNotFoundException;
 import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
-import gameObjects.entity.EntityClass;
 import gameObjects.player.PlayerClass;
 import gameObjects.player.PlayerInstance;
-import grids.PointImpl;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TreeItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import utils.ErrorWindow;
 import utils.exception.PreviewUnavailableException;
 import utils.imageManipulation.ImageManager;
 import utils.imageManipulation.JavaFxOperation;
@@ -82,7 +79,7 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
     }
 
     private void presentImages() {
-        if(imagePath == null) return;
+        if (imagePath == null) return;
         imagePanel.getChildren().clear();
         if (!imagePath.isEmpty()) {
             ImageView preview = new ImageView(imagePath);

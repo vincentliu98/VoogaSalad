@@ -7,8 +7,8 @@ import phase.api.Phase;
 import phase.api.Transition;
 
 /**
- *  The implementation of Transition initializes
- *  guard -> createPhaseGraph guard that passes everything in
+ * The implementation of Transition initializes
+ * guard -> createPhaseGraph guard that passes everything in
  */
 public class TransitionImpl extends SimpleEdge<Phase> implements Transition {
     private GameEvent trigger;
@@ -21,7 +21,12 @@ public class TransitionImpl extends SimpleEdge<Phase> implements Transition {
     }
 
     @Override
-    public GameEvent trigger() { return trigger; }
+    public GameEvent trigger() {
+        return trigger;
+    }
+
     @Override
-    public BlockGraph guard() { return guard; }
+    public BlockGraph guard() {
+        return guard;
+    }
 }

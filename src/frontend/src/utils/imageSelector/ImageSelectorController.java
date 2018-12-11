@@ -6,5 +6,6 @@ import graphUI.groovy.GroovyPaneFactory.GroovyPane;
 
 public interface ImageSelectorController {
     GroovyPane groovyPaneOf(EntityClass entityClass);
+
     GroovyPane groovyPaneOf(TileClass tileClass);
 }
