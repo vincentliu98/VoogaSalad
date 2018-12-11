@@ -12,9 +12,11 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 import utils.imageManipulation.ImageManager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,21 +24,39 @@ public class TileSettingDialog extends PopUpWindow {
     private GameObjectsCRUDInterface gameObjectManager;
     private Map<Double, TileClass> tileClasses;
     private GenerationMode gMode;
+    private ComboBox gModeChoice;
     private List<TileProbPair> pairList;
-    private DialogPane myPane;
+    private VBox myPane;
+    private VBox dialogPane;
 
     public TileSettingDialog(GameObjectsCRUDInterface gameObjectManager, Stage primaryStage) {
         super(primaryStage);
         this.gameObjectManager = gameObjectManager;
+        tileClasses = new HashMap<>();
         pairList = new ArrayList<>();
-        myPane = setUpTilePane();
-    }
+        myPane = setUpTileBox();
 
-    private DialogPane setUpTilePane() {
-        DialogPane myPane = new DialogPane();
-        VBox myBox = setUpTileBox();
-        myPane.setContent(myBox);
-        return myPane;
+        Button addTile = new Button("Add A Tile");
+        addTile.setOnAction(e -> {
+            myPane.getChildren().add(addPair());
+        });
+
+        gModeChoice = new ComboBox();
+        gModeChoice.getItems().addAll("Random", "Repeating");
+        gModeChoice.valueProperty().addListener((ov, t, t1) -> {
+            if (t1.equals("Random")) gMode = GenerationMode.RANDOM;
+            else gMode = GenerationMode.REPEATING;
+        });
+
+        dialogPane = new VBox(myPane);
+        Button apply = new Button("Apply");
+        apply.setOnAction(e -> {
+            pairList.forEach(p -> {
+                p.setProb(Double.parseDouble(p.probText.getText()));
+                tileClasses.put(p.prob, p.tileClass);
+            });
+        });
+        dialogPane.getChildren().addAll(addTile, gModeChoice, apply);
     }
 
     private TileProbPair addPair() {
@@ -48,20 +68,16 @@ public class TileSettingDialog extends PopUpWindow {
     private VBox setUpTileBox() {
         VBox vb = new VBox();
         vb.getChildren().add(addPair());
-        Button apply = new Button("Apply");
-        vb.getChildren().add(apply);
-        apply.setOnAction(e -> {
-            pairList.forEach(p -> {
-                tileClasses.put(p.prob, p.tileClass);
-                System.out.printf("Now should display " + p.tileClass.getImagePathList() + "with p = " + p.prob);
-            });
-        });
         return vb;
+    }
+
+    public Pair<Map<Double, TileClass>, GenerationMode> retrieveInfo() {
+        return new Pair<>(tileClasses, gMode);
     }
 
     @Override
     public void showWindow() {
-        dialog.setScene(new Scene(myPane, 500.0, 500.0));
+        dialog.setScene(new Scene(dialogPane, 500.0, 500.0));
         dialog.showAndWait();
     }
 
@@ -74,26 +90,28 @@ public class TileSettingDialog extends PopUpWindow {
         private TileClass tileClass;
         private Double prob;
         private ImageView tileView;
+        private TextField probText;
+
+        public void setProb(Double prob) {
+            this.prob = prob;
+        }
 
         TileProbPair() {
             Pane wrapper = new Pane();
-            wrapper.setPrefSize(200.0, 200.0);
+            wrapper.setPrefSize(100.0, 100.0);
             wrapper.setBorder(new Border(new BorderStroke(Color.BLACK,
                     BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
             tileView = new ImageView();
-            tileView.setFitHeight(200);
-            tileView.setFitWidth(200);
+            tileView.setFitHeight(100);
+            tileView.setFitWidth(100);
             wrapper.getChildren().add(tileView);
             wrapper.setOnDragOver(e -> setUpHoveringColorDraggedOver(e));
             wrapper.setOnDragDropped(e -> handleDragFromSideView(e));
 
             Label probLabel = new Label("Probability: ");
-            TextField probText = new TextField();
-            probText.textProperty().addListener((observable, oldValue, newValue) -> {
-                prob = Double.parseDouble(newValue);
-            });
+            probText = new TextField();
 
-            setPrefSize(300, 300);
+            setPrefSize(100, 100);
             getChildren().addAll(wrapper, probLabel, probText);
         }
 

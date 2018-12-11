@@ -5,6 +5,8 @@ import authoring.AuthoringTools;
 import authoringInterface.View;
 import authoringInterface.editor.editView.EditView;
 import authoringInterface.editor.menuBarView.subMenuBarView.*;
+import authoringUtils.exception.GameObjectClassNotFoundException;
+import authoringUtils.exception.NumericalException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.tileGeneration.TileGenerator;
 import gameplay.Initializer;
@@ -123,8 +125,20 @@ public class EditorMenuBarView implements SubView<MenuBar> {
     void handleTileSetting(ActionEvent actionEvent) {
         var tileSettingWindow = new TileSettingDialog(gameObjectManager, primaryStage);
         tileSettingWindow.showWindow();
+        try {
+            tileGenerator = new TileGenerator(tileSettingWindow.retrieveInfo().getKey(), gameObjectManager,
+                    tileSettingWindow.retrieveInfo().getValue());
+        } catch (GameObjectClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (NumericalException e) {
+            e.printStackTrace();
+        }
+        try {
+            tileGenerator.generateTiles();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-
 
     void handleSave(ActionEvent event) {
         if(currentFile == null) handleSaveAs(event);
