@@ -29,6 +29,7 @@ public class TileGenerator {
         this.crudInterface = crudInterface;
         this.mode = mode;
         this.noOfClasses = 0;
+        cdf = new ArrayList<>();
         Double checkInput = 0.0;
         if (tileClasses.isEmpty()) {
             throw new GameObjectClassNotFoundException("Map is empty");

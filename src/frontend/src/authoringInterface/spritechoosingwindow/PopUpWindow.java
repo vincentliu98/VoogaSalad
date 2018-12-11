@@ -16,7 +16,7 @@ public abstract class PopUpWindow {
     protected PopUpWindow(Stage primaryStage) {
         this.primaryStage = primaryStage;
         dialog = new Stage();
-        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initModality(Modality.NONE);
         dialog.initOwner(primaryStage);
     }
 
