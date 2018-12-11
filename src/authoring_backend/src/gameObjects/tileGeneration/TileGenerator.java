@@ -5,9 +5,11 @@ import authoringUtils.exception.GameObjectTypeException;
 import authoringUtils.exception.InvalidOperationException;
 import authoringUtils.exception.NumericalException;
 import gameObjects.crud.GameObjectsCRUDInterface;
+import gameObjects.gameObject.GameObjectClass;
 import gameObjects.tile.TileClass;
 import grids.Point;
 import grids.PointImpl;
+import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -64,7 +66,6 @@ public class TileGenerator {
         if (rightLimit > crudInterface.getNumCols() || bottomLimit > crudInterface.getNumRows()) {
             throw new InvalidOperationException("Area out of bounds");
         }
-
     }
 
     public void generateTiles() throws Exception {

@@ -132,6 +132,12 @@ public class EditGridView implements SubView<ScrollPane> {
         });
     }
 
+    public void generateTiles(){
+        // TODO: 12/11/18 Generate Tiles in front end
+//        createInstanceAtGridCell(GameObjectInstance gameObjectInstance, Pane cell)
+
+    }
+
     private Pane getCellAt(int r, int c) {
         for(var child : gridScrollView.getChildren()) {
             if(r == GridPane.getRowIndex(child) && c == GridPane.getColumnIndex(child)) {
