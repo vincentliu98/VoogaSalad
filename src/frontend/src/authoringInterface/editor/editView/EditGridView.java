@@ -2,7 +2,6 @@ package authoringInterface.editor.editView;
 
 import api.SubView;
 import authoringInterface.customEvent.UpdateStatusEventListener;
-import authoringInterface.sidebar.treeItemEntries.Tile;
 import authoringInterface.subEditors.AbstractGameObjectEditor;
 import authoringInterface.subEditors.EditorFactory;
 import authoringInterface.subEditors.exception.MissingEditorForTypeException;
@@ -16,7 +15,6 @@ import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import gameObjects.tile.TileInstance;
-import gameObjects.tileGeneration.GenerationMode;
 import grids.Point;
 import grids.PointImpl;
 import javafx.geometry.Insets;
@@ -40,10 +38,10 @@ import utils.imageManipulation.JavaFxOperation;
 import utils.nodeInstance.NodeInstanceController;
 import utils.simpleAnimation.SingleNodeFade;
 
-import java.util.*;
-import java.util.stream.IntStream;
-
-import static java.util.stream.IntStream.range;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * EditGridView Class (ScrollPane)
@@ -132,56 +130,11 @@ public class EditGridView implements SubView<ScrollPane> {
         });
     }
 
-    public void generateTiles(Map<Double, TileClass> map, GenerationMode mode, Point start, int X, int Y){
-        switch (mode) {
-            // TODO: 12/11/18 Save Tile Setting in MenuBar
-            case REPEATING:
-                 // TODO: 12/11/18 Don't know what this means
-                break;
-            case RANDOM:
-                // TODO: 12/11/18 make sure X and Y smaller than rowNum and colNum
-                int pointerX = start.getX();
-                int pointerY = start.getY();
-                int rowNum = gridScrollView.getRowCount();
-                int colNum = gridScrollView.getColumnCount();
-                ArrayList<Integer> cellNum = new ArrayList<>();
-                for (int i=pointerX; i<pointerX+X; i++) {
-                    for (int j = pointerY; j < pointerY+Y; j++) {
-                        cellNum.add(i * colNum + j);
-                    }
-                }
-                Collections.shuffle(cellNum);
-                int i = 0;
-                while (i < cellNum.size()){
-                    for (Map.Entry<Double, TileClass> entry : map.entrySet()) {
-                        var prob = entry.getKey();
-                        Double temp = prob*cellNum.size();
-                        int increment = (int)Math.round(temp.doubleValue());
-                        var sub = cellNum.subList(i, i + increment);
-                        sub.forEach(e -> createInstanceAtGridCell(entry.getValue(), (Pane) gridScrollView.getChildren().get(e)));
-                        i += increment;
-                    }
-                    }
-                break;
-
-//                    System.out.println(Arrays.toString(Arrays.copyOfRange(original, i, Math.min(original.length,i+chunk))));
-
-//
-//                cellNum.forEach(cell -> {
-//                            double p = Math.random();
-//                            double cumulativeProbability = 0.0;
-//                            for (Map.Entry<Double, TileClass> entry : map.entrySet()) {
-//                                cumulativeProbability += entry.getKey();
-//                                if (p <= cumulativeProbability) {
-//                                    createInstanceAtGridCell(entry.getValue(), (Pane) gridScrollView.getChildren().get(cell));
-//                                }
-//                                else {
-//                                    createInstanceAtGridCell(entry.getValue(), (Pane) gridScrollView.getChildren().get(cell));
-//                                }
-//                            }
-//                        });
-        }
-    }
+    public void generateTiles(TileInstance tileInstance) {
+        int colNum = gridScrollView.getColumnCount();
+        var index = tileInstance.getCoord().getX()*colNum + tileInstance.getCoord().getY();
+        createInstanceAtGridCell(tileInstance, (Pane) gridScrollView.getChildren().get(index));
+}
 
     private Pane getCellAt(int r, int c) {
         for (var child : gridScrollView.getChildren()) {
