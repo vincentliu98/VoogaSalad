@@ -8,7 +8,7 @@ import playingGame.DisplayData;
 public class Communicator implements Communicable {
     DisplayData myDisplayData;
 
-    public Communicator(DisplayData displayData){
+    public Communicator(DisplayData displayData) {
         myDisplayData = displayData;
 
     }

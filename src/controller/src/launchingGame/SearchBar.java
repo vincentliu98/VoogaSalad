@@ -23,7 +23,7 @@ public class SearchBar {
     private Button myCloseButton;
     private Searchable mySearchable;
 
-    public SearchBar(Searchable searchable){
+    public SearchBar(Searchable searchable) {
         mySearchable = searchable;
 
         initField();
@@ -34,13 +34,13 @@ public class SearchBar {
         myBox.getChildren().add(myTextField);
     }
 
-    private void initBox(){
+    private void initBox() {
         myBox = new HBox();
         myBox.setAlignment(Pos.CENTER_LEFT);
 
     }
 
-    private void initField(){
+    private void initField() {
         myTextField = new TextField();
         myTextField.setPromptText(PROMPT_MESSAGE);
 
@@ -51,7 +51,7 @@ public class SearchBar {
 
 
         myTextField.setOnKeyPressed(event -> {
-            if(event.getCode() == KeyCode.ENTER){
+            if (event.getCode() == KeyCode.ENTER) {
                 String txt = myTextField.getCharacters().toString();
                 mySearchable.showByTag(txt);
                 myTextField.clear();
@@ -59,7 +59,7 @@ public class SearchBar {
         });
     }
 
-    private void initButton(){
+    private void initButton() {
         Image image = new Image(getClass().getResourceAsStream(CROSS_PATH));
         ImageView imageView = new ImageView(image);
 

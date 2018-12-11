@@ -19,14 +19,16 @@ public class GameLoader {
     /**
      * This method handles the saving of game progress.
      */
-    public void saveGame() {}
+    public void saveGame() {
+    }
 
     /**
      * This method loads pre-saved gaming files.
      *
      * @param file: A saved game in the appropriate format.
      */
-    void loadGame(File file) throws IllegalSavedGameException {}
+    void loadGame(File file) throws IllegalSavedGameException {
+    }
 
     /**
      * This method returns the Node representing a previously saved game.

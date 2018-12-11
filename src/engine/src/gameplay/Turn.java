@@ -11,22 +11,30 @@ public class Turn {
     private int playerIdx;
     private List<String> playersOrder;
 
-    public Turn(String phaseID, List<String> playersOrder){
+    public Turn(String phaseID, List<String> playersOrder) {
         myCurrentPhaseName = phaseID;
         this.playersOrder = playersOrder;
         this.playerIdx = 0;
     }
 
-    public String getCurrentPlayerName(){ return playersOrder.get(playerIdx); }
-    public void setPhase(String phaseName){ myCurrentPhaseName = phaseName; }
-    public String nextPlayerName() {
-        return playersOrder.get((playerIdx+1)%playersOrder.size());
-    }
-    public String toNextPlayer() { // returns id of the next player after changing current player to that player
-        playerIdx = (++playerIdx)%playersOrder.size();
+    public String getCurrentPlayerName() {
         return playersOrder.get(playerIdx);
     }
-    public void setPlayerOrder(List<String> newOrder){
+
+    public void setPhase(String phaseName) {
+        myCurrentPhaseName = phaseName;
+    }
+
+    public String nextPlayerName() {
+        return playersOrder.get((playerIdx + 1) % playersOrder.size());
+    }
+
+    public String toNextPlayer() { // returns id of the next player after changing current player to that player
+        playerIdx = (++playerIdx) % playersOrder.size();
+        return playersOrder.get(playerIdx);
+    }
+
+    public void setPlayerOrder(List<String> newOrder) {
         playersOrder = newOrder;
         playerIdx = 0;
     }
@@ -35,17 +43,20 @@ public class Turn {
         playerIdx = playersOrder.indexOf(playerName);
     }
 
-    public void startPhase(){ GameData.getPhase(myCurrentPhaseName).startTraversal(); }
+    public void startPhase() {
+        GameData.getPhase(myCurrentPhaseName).startTraversal();
+    }
 
-    public void endGame(String message){
+    public void endGame(String message) {
         // end the game
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation Dialog");
         alert.setHeaderText(message);
         alert.setContentText("Restart?");
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK){
+        if (result.get() == ButtonType.OK) {
             GameData.restartGame();
-        } else { }
+        } else {
+        }
     }
 }

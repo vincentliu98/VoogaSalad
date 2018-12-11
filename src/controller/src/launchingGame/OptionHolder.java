@@ -19,36 +19,36 @@ public class OptionHolder extends HBox {
 
     private Text myText;
 
-    public OptionHolder(String string){
+    public OptionHolder(String string) {
         mySupport = new PropertyChangeSupport(this);
         initContainer();
         initText(string);
     }
 
-    public void addListener(TextOptions option){
+    public void addListener(TextOptions option) {
         mySupport.addPropertyChangeListener(CHANGE_EVENT_KEY, option);
     }
 
-    public void select(){
+    public void select() {
         setStyle(SELECT_CSS);
     }
 
-    public void deselect(){
+    public void deselect() {
         setStyle(DESELECT_CSS);
     }
 
-    private void initText(String string){
+    private void initText(String string) {
         myText = new Text(string);
         myText.getStyleClass().add(TEXT_CSS);
         myText.setFill(Color.WHITE);
         getChildren().add(myText);
     }
 
-    public void setOnClickListener(EventHandler eventHandler){
+    public void setOnClickListener(EventHandler eventHandler) {
         myText.setOnMouseClicked(eventHandler);
     }
 
-    private void initContainer(){
+    private void initContainer() {
         setAlignment(Pos.CENTER_LEFT);
         getStyleClass().add(CONTAINER_CSS);
 

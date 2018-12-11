@@ -11,6 +11,10 @@ public class MainAuthoringProgram extends Application {
     public static final String STYLESHEET = "style.css";
     private static final String GROOVE = "GROOVE";
 
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     /**
      * The main entry point for all JavaFX applications.
      * The start method is called after the init method has returned,
@@ -35,10 +39,6 @@ public class MainAuthoringProgram extends Application {
         myScene.getStylesheets().add(STYLESHEET);
         primaryStage.setScene(myScene);
         primaryStage.show();
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }
 

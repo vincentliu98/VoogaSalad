@@ -9,7 +9,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
@@ -41,17 +40,9 @@ import java.util.stream.Stream;
 public class PhasePane implements SubView<StackPane> {
     public static final Double ICON_WIDTH = 95.0;
     public static final Double ICON_HEIGHT = 95.0;
-
-    private enum DRAG_PURPOSE {
-        NOTHING,
-        CHANGE_POS,
-        CONNECT_LINE
-    }
-
     private DRAG_PURPOSE draggingPurpose;
     private double orgSceneX, orgSceneY;
     private double orgTranslateX, orgTranslateY;
-
     private StackPane root = new StackPane();
     private Pane pane = new Pane();
     private Pane graphBox = new Pane();
@@ -61,31 +52,28 @@ public class PhasePane implements SubView<StackPane> {
     private PhaseDB phaseDB;
     private PhaseNodeFactory factory;
     private TransitionLineFactory trFactory;
-
     private Set<TransitionLine> lines;
     private Set<PhaseNode> nodes;
     private SimpleObjectProperty<TransitionLine> selectedEdge;
     private SimpleObjectProperty<PhaseNode> selectedNode;
-
     private PhaseNode edgeFrom;
     private Line tmpLine;
     private PhaseGraph graph;
-
     public PhasePane(
-        PhaseDB phaseDB,
-        Function<BlockGraph, GroovyPane> genGroovyPane,
-        PhaseGraph graph
+            PhaseDB phaseDB,
+            Function<BlockGraph, GroovyPane> genGroovyPane,
+            PhaseGraph graph
     ) {
         this.graph = graph;
         this.phaseDB = phaseDB;
 
         factory = new PhaseNodeFactory(phaseDB, genGroovyPane);
         trFactory = new TransitionLineFactory(
-            phaseDB,
-            genGroovyPane,
-            group.getChildren()::add,
-            group.getChildren()::remove,
-            this::countOverlap
+                phaseDB,
+                genGroovyPane,
+                group.getChildren()::add,
+                group.getChildren()::remove,
+                this::countOverlap
         );
 
         lines = new HashSet<>();
@@ -128,7 +116,6 @@ public class PhasePane implements SubView<StackPane> {
         buildFromGraph();
     }
 
-
     private void initializeUI() {
         graphBox.getChildren().add(group);
         graphBox.setPrefSize(2000, 2000);
@@ -149,12 +136,12 @@ public class PhasePane implements SubView<StackPane> {
     }
 
     private void buildFromGraph() {
-        for(var phase : graph.keySet()) createNode(factory.toView(phase));
-        for(var phase : graph.keySet()) {
-            for(var transition : graph.get(phase)) {
+        for (var phase : graph.keySet()) createNode(factory.toView(phase));
+        for (var phase : graph.keySet()) {
+            for (var transition : graph.get(phase)) {
                 var node1 = findNodeWithModel(transition.from());
                 var node2 = findNodeWithModel(transition.to());
-                if(node1.isPresent() && node2.isPresent()) {
+                if (node1.isPresent() && node2.isPresent()) {
                     connectNodes(trFactory.toView(transition, node1.get(), node2.get()));
                 }
             }
@@ -163,10 +150,10 @@ public class PhasePane implements SubView<StackPane> {
 
     private int countOverlap(Phase from, Phase to) {
         var cnts = lines.stream()
-                        .filter(p -> p.start().model() == from &&
-                            p.end().model() == to)
-                        .map(TransitionLine::cnt)
-                        .collect(Collectors.toSet());
+                .filter(p -> p.start().model() == from &&
+                        p.end().model() == to)
+                .map(TransitionLine::cnt)
+                .collect(Collectors.toSet());
         return Stream.iterate(0, x -> x + 1).dropWhile(cnts::contains).findFirst().get();
     }
 
@@ -243,7 +230,6 @@ public class PhasePane implements SubView<StackPane> {
             graph.removeNode(selectedNode.get().model());
         }
     }
-
 
     private void connectNodes(TransitionLine trLine) {
         try {
@@ -331,11 +317,11 @@ public class PhasePane implements SubView<StackPane> {
                 }
             }
             group.getChildren().remove(tmpLine);
-        } else if(draggingPurpose == DRAG_PURPOSE.CHANGE_POS){
+        } else if (draggingPurpose == DRAG_PURPOSE.CHANGE_POS) {
             double offsetX = t.getSceneX() - orgSceneX;
             double offsetY = t.getSceneY() - orgSceneY;
             PhaseNode node = (PhaseNode) t.getSource();
-            node.model().setXY(node.model().x()+offsetX, node.model().y()+offsetY);
+            node.model().setXY(node.model().x() + offsetX, node.model().y() + offsetY);
         }
         draggingPurpose = DRAG_PURPOSE.NOTHING;
     }
@@ -376,6 +362,12 @@ public class PhasePane implements SubView<StackPane> {
     @Override
     public StackPane getView() {
         return root;
+    }
+
+    private enum DRAG_PURPOSE {
+        NOTHING,
+        CHANGE_POS,
+        CONNECT_LINE
     }
 }
 

@@ -22,9 +22,10 @@ public class LoginScreen {
     private Scene myScene;
     private Stage myStage;
 
-    public LoginScreen() { }
+    public LoginScreen() {
+    }
 
-    public Stage launchLogin(){
+    public Stage launchLogin() {
         myStage = new Stage();
 
         initPane();
@@ -38,13 +39,13 @@ public class LoginScreen {
         return myStage;
     }
 
-    private void initPane(){
+    private void initPane() {
         myPane = new GridPane();
         myPane.setAlignment(Pos.TOP_CENTER);
         myPane.setVgap(15.0D);
         myPane.setPadding(new Insets(40.0D, 70.0D, 40.0D, 70.0D));
 
-        for(int i = 0; i < 4; ++i) {
+        for (int i = 0; i < 4; ++i) {
             ColumnConstraints col = new ColumnConstraints();
             col.setPercentWidth(25.0D);
             myPane.getColumnConstraints().add(col);
@@ -53,11 +54,11 @@ public class LoginScreen {
         myPane.setGridLinesVisible(false);
     }
 
-    private void initScene(){
+    private void initScene() {
         myScene = new Scene(myPane, 400.0D, 500.0D);
     }
 
-    private void initLogo(){
+    private void initLogo() {
         Image logoStream = new Image(LOGO_PATH);
         ImageView logo = new ImageView(logoStream);
         logo.setFitWidth(100.0D);
@@ -70,7 +71,7 @@ public class LoginScreen {
         myPane.add(imageBox, 1, 0, 2, 1);
     }
 
-    private void initMoto(){
+    private void initMoto() {
         Text motoText = new Text(MOTO);
         HBox motoBox = new HBox();
         motoBox.getChildren().add(motoText);
@@ -79,7 +80,7 @@ public class LoginScreen {
         myPane.add(motoBox, 0, 1, 4, 1);
     }
 
-    private void initFields(){
+    private void initFields() {
         TextField usernameField = new TextField();
         usernameField.setPromptText("username");
         TextField passwordField = new TextField();

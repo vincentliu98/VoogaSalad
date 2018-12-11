@@ -5,33 +5,30 @@ import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.SftpException;
 
-public class ServerUploader extends ServerConnector implements ServerUpload{
+public class ServerUploader extends ServerConnector implements ServerUpload {
 
     public static final String CONNECTION_PROTOCOL = "sftp";
 
-    public ServerUploader(){
+    public ServerUploader() {
         super();
     }
 
-    public void uploadFile(String filePath, String destinationPath){
-        try{
+    public void uploadFile(String filePath, String destinationPath) {
+        try {
             mySession.connect();
             Channel channel = mySession.openChannel(CONNECTION_PROTOCOL);
             channel.connect();
             ChannelSftp sftpChannel = (ChannelSftp) channel;
-            if(useDefaultPath){
+            if (useDefaultPath) {
                 sftpChannel.put(filePath, HOST_PATH + destinationPath);
-            }
-            else {
+            } else {
                 sftpChannel.put(filePath, destinationPath);
             }
             sftpChannel.exit();
             mySession.disconnect();
-        }
-        catch (JSchException e) {
+        } catch (JSchException e) {
             System.out.println("Error");
-        }
-        catch (SftpException e) {
+        } catch (SftpException e) {
             System.out.println("Error");
         }
     }

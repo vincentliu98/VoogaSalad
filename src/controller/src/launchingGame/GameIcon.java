@@ -3,12 +3,13 @@ package launchingGame;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import playing.MainPlayer;
-import social.*;
+import social.Icon;
+import social.User;
 
 public class GameIcon extends Icon {
 
     public GameIcon(String gameName, String description, String reference, String color, String imagePath,
-                    String tags, User user){
+                    String tags, User user) {
         super(gameName, description, reference, color, imagePath, tags, user, "Play", "/game-images/");
     }
 

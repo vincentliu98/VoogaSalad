@@ -18,9 +18,10 @@ public class RegisterScreen {
     private Scene myScene;
     private Stage myStage;
 
-    public RegisterScreen() { }
+    public RegisterScreen() {
+    }
 
-    public Stage launchRegistration(){
+    public Stage launchRegistration() {
         myStage = new Stage();
 
         initPane();
@@ -33,13 +34,13 @@ public class RegisterScreen {
         return myStage;
     }
 
-    private void initPane(){
+    private void initPane() {
         myPane = new GridPane();
         myPane.setAlignment(Pos.TOP_CENTER);
         myPane.setVgap(15.0D);
         myPane.setPadding(new Insets(40.0D, 70.0D, 40.0D, 70.0D));
 
-        for(int i = 0; i < 4; ++i) {
+        for (int i = 0; i < 4; ++i) {
             ColumnConstraints col = new ColumnConstraints();
             col.setPercentWidth(25.0D);
             myPane.getColumnConstraints().add(col);
@@ -48,11 +49,11 @@ public class RegisterScreen {
         myPane.setGridLinesVisible(false);
     }
 
-    private void initScene(){
+    private void initScene() {
         myScene = new Scene(myPane, 400.0D, 500.0D);
     }
 
-    private void initMotto(){
+    private void initMotto() {
         Text mottoText = new Text(MOTTO);
         HBox mottoBox = new HBox();
         mottoBox.getChildren().add(mottoText);
@@ -61,7 +62,7 @@ public class RegisterScreen {
         myPane.add(mottoBox, 0, 1, 4, 1);
     }
 
-    private void initFields(){
+    private void initFields() {
         TextField usernameField = new TextField();
         usernameField.setPromptText("username");
         TextField passwordField = new TextField();

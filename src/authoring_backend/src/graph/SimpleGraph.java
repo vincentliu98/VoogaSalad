@@ -10,15 +10,19 @@ import java.util.List;
  */
 public class SimpleGraph<N extends Node, E extends Edge<N>>
         extends HashMap<N, List<E>> implements Graph<N, E> {
-    public SimpleGraph() { super(); }
+    public SimpleGraph() {
+        super();
+    }
 
     @Override
-    public void addNode(N n) { if(!containsKey(n)) put(n, new ArrayList<>()); }
+    public void addNode(N n) {
+        if (!containsKey(n)) put(n, new ArrayList<>());
+    }
 
     @Override
     public void removeNode(N n) {
         remove(n);
-        for(var v: keySet()) get(v).removeIf(e -> e.to() == n);
+        for (var v : keySet()) get(v).removeIf(e -> e.to() == n);
     }
 
     @Override
@@ -32,7 +36,7 @@ public class SimpleGraph<N extends Node, E extends Edge<N>>
 
     @Override
     public void removeEdge(E e) {
-        for(var v: keySet()) get(v).removeIf(edge -> edge == e);
+        for (var v : keySet()) get(v).removeIf(edge -> edge == e);
     }
 }
 

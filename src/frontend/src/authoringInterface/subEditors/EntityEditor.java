@@ -154,7 +154,8 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         int height = outputPositiveInteger(heightInput);
         try {
             ImageManager.removeClassImage(gameObjectClass);
-        } catch (GameObjectClassNotFoundException ignored) {}
+        } catch (GameObjectClassNotFoundException ignored) {
+        }
         gameObjectClass.getImagePathList().clear();
         gameObjectClass.getImagePathList().addAll(imagePaths);
         gameObjectClass.getPropertiesMap().clear();
@@ -184,14 +185,15 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         int height = outputPositiveInteger(heightInput);
         try {
             ImageManager.removeInstanceImage(gameObjectInstance);
-        } catch (GameObjectInstanceNotFoundException ignored) {}
+        } catch (GameObjectInstanceNotFoundException ignored) {
+        }
         gameObjectInstance.getImagePathList().clear();
         gameObjectInstance.getImagePathList().addAll(imagePaths);
         gameObjectInstance.getPropertiesMap().clear();
         gameObjectInstance.setWidth(width);
         gameObjectInstance.setHeight(height);
         var chosenPlayer = playerBox.getValue();
-        if(chosenPlayer != null) chosenPlayer.addGameObjectInstances(gameObjectInstance);
+        if (chosenPlayer != null) chosenPlayer.addGameObjectInstances(gameObjectInstance);
         ((ImageView) nodeEdited).setImage(ImageManager.getPreview(gameObjectInstance));
         Tooltip.install(nodeEdited, new Tooltip(String.format("Width: %s\nHeight: %s\nSingle Click to toggle Deletion\nDouble Click or Right Click to edit\nInstance ID: %s\nClass Name: %s", width, height, gameObjectInstance.getInstanceId(), gameObjectInstance.getClassName())));
         int row = Integer.parseInt(rowInput.getText());
@@ -238,7 +240,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         widthInput.setText(String.valueOf(gameObjectInstance.getWidth()));
         heightInput.setText(String.valueOf(gameObjectInstance.getHeight()));
         gameObjectManager.getPlayerClasses().forEach(p -> {
-            if(p.isOwnedByPlayer(gameObjectInstance)) {
+            if (p.isOwnedByPlayer(gameObjectInstance)) {
                 playerBox.getSelectionModel().select(p);
             }
         });
@@ -264,11 +266,11 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         widthInput.setText(String.valueOf(gameObjectClass.getWidth()));
         heightInput.setText(String.valueOf(gameObjectClass.getHeight()));
 
-        if(imageSelectorController != null)
+        if (imageSelectorController != null)
             imageSelectorPane = imageSelectorController.groovyPaneOf(gameObjectClass);
 
         imageSelectorButton.setOnAction(e -> {
-            if(imageSelectorPane == null) {
+            if (imageSelectorPane == null) {
                 ErrorWindow.display("Warning!", "You can only specify imageSelector on classes, not instances");
             } else imageSelectorPane.showWindow();
         });

@@ -4,7 +4,6 @@ import grids.Point;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.Supplier;
 
 public class SimpleTileInstance implements TileInstance {
     private String className;

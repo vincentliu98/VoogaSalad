@@ -4,8 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- *
- *
  * @author Jason Zhou
  */
 public interface Point {
@@ -16,15 +14,6 @@ public interface Point {
 
 
     /**
-     *
-     * @param numRows
-     * @param numCols
-     * @return
-     */
-    boolean outOfBounds(int numRows, int numCols);
-
-    /**
-     *
      * @param points
      * @param numRow
      * @param numCol
@@ -44,7 +33,6 @@ public interface Point {
     }
 
     /**
-     *
      * @param p
      * @param numRow
      * @param numCol
@@ -52,29 +40,33 @@ public interface Point {
      */
     static Set<Point> getNeighborsOfAPoint(Point p, int numRow, int numCol) {
         Set<Point> neighbors = new HashSet<>();
-            for (Directions.EightDirections d : Directions.EightDirections.values()) {
-                Point newPoint = p.add(d.getDirection());
-                if (!newPoint.outOfBounds(numRow, numCol)) {
-                    neighbors.add(newPoint);
-                }
+        for (Directions.EightDirections d : Directions.EightDirections.values()) {
+            Point newPoint = p.add(d.getDirection());
+            if (!newPoint.outOfBounds(numRow, numCol)) {
+                neighbors.add(newPoint);
             }
+        }
         return neighbors;
     }
 
     /**
-     *
+     * @param numRows
+     * @param numCols
+     * @return
+     */
+    boolean outOfBounds(int numRows, int numCols);
+
+    /**
      * @return
      */
     int getX();
 
     /**
-     *
      * @return
      */
     int getY();
 
     /**
-     *
      * @param x
      * @param y
      * @return
@@ -82,27 +74,23 @@ public interface Point {
     Point add(int x, int y);
 
     /**
-     *
      * @param p
      * @return
      */
     Point add(Point p);
 
     /**
-     *
      * @param p
      * @return
      */
     boolean equals(Object p);
 
     /**
-     *
      * @return
      */
     int hashCode();
 
     /**
-     *
      * @return
      */
     String toString();

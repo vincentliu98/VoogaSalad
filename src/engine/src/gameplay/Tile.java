@@ -30,11 +30,11 @@ public class Tile extends PropertyHolder<Tile> implements GameObject, EventHandl
     private transient ImageView myImageView;
 
     /**
-     *  Fills out the transient parts
+     * Fills out the transient parts
      */
     public void setupView() {
         myImages = new ArrayList<>();
-        for (String filepath : myImagePaths){
+        for (String filepath : myImagePaths) {
             myImages.add(new Image(filepath));
         }
         myImageView = new ImageView();
@@ -45,53 +45,68 @@ public class Tile extends PropertyHolder<Tile> implements GameObject, EventHandl
     }
 
     /**
-     *  Adjusts the size of this tile in pixels with respect to screen dimensions
+     * Adjusts the size of this tile in pixels with respect to screen dimensions
      */
     public void adjustViewSize(double screenWidth, double screenHeight) {
-        myImageView.setX((screenWidth*myCoord.getX())/GameMethods.gridWidth());
-        myImageView.setY((screenHeight*myCoord.getY())/GameMethods.gridHeight());
-        myImageView.setFitWidth((screenWidth*myWidth)/GameMethods.gridWidth());
-        myImageView.setFitHeight((screenHeight*myHeight)/GameMethods.gridHeight());
+        myImageView.setX((screenWidth * myCoord.getX()) / GameMethods.gridWidth());
+        myImageView.setY((screenHeight * myCoord.getY()) / GameMethods.gridHeight());
+        myImageView.setFitWidth((screenWidth * myWidth) / GameMethods.gridWidth());
+        myImageView.setFitHeight((screenHeight * myHeight) / GameMethods.gridHeight());
 
         myImages = myImagePaths.stream()
-                               .map(path ->
-                                   new Image(
-                                       this.getClass().getClassLoader().getResourceAsStream(path),
-                                       (screenWidth*myWidth)/GameMethods.gridWidth(),
-                                       (screenHeight*myHeight)/GameMethods.gridHeight(),
-                                       false, true
-                                   )
-                               ).collect(Collectors.toList());
+                .map(path ->
+                        new Image(
+                                this.getClass().getClassLoader().getResourceAsStream(path),
+                                (screenWidth * myWidth) / GameMethods.gridWidth(),
+                                (screenHeight * myHeight) / GameMethods.gridHeight(),
+                                false, true
+                        )
+                ).collect(Collectors.toList());
     }
 
     /**
-     *  Since all image selectors assume that $this refers to THIS specific instance of a tile,
-     *  we set the variable $this to this.
+     * Since all image selectors assume that $this refers to THIS specific instance of a tile,
+     * we set the variable $this to this.
      */
     public void updateView() {
-        if(!myImageSelector.isEmpty()) {
+        if (!myImageSelector.isEmpty()) {
             GameData.shell().setVariable("$this", this);
             GameData.shell().evaluate(myImageSelector);
             imgIndex.set(Integer.parseInt(GameData.shell().getVariable("$return").toString()));
         } else imgIndex.set(0);
     }
 
-    public ImageView getImageView(){ return myImageView; }
+    public ImageView getImageView() {
+        return myImageView;
+    }
 
-    public int getID(){ return myID; }
-    public String getName() { return name; }
+    public int getID() {
+        return myID;
+    }
 
-    @Override
-    public double getX() { return myCoord.getX(); }
-
-    @Override
-    public double getY() { return myCoord.getY(); }
-
-    @Override
-    public double getWidth() { return myWidth; }
+    public String getName() {
+        return name;
+    }
 
     @Override
-    public double getHeight() { return myHeight; }
+    public double getX() {
+        return myCoord.getX();
+    }
+
+    @Override
+    public double getY() {
+        return myCoord.getY();
+    }
+
+    @Override
+    public double getWidth() {
+        return myWidth;
+    }
+
+    @Override
+    public double getHeight() {
+        return myHeight;
+    }
 
     @Override
     public void handle(MouseEvent event) {

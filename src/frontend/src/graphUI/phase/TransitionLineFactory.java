@@ -15,13 +15,11 @@ import phase.api.Transition;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
-
-import static graphUI.phase.PhaseNodeFactory.PHASE_NODE_RADIUS;
 
 /**
- *TransitionLineFactory
- *  -Handling the lines (i.e arrows)
+ * TransitionLineFactory
+ * -Handling the lines (i.e arrows)
+ *
  * @author Amy
  */
 public class TransitionLineFactory {
@@ -32,11 +30,11 @@ public class TransitionLineFactory {
     private BiFunction<Phase, Phase, Integer> countOverlap;
 
     public TransitionLineFactory(
-        PhaseDB phaseDB,
-        Function<BlockGraph, GroovyPane> genGroovyPane,
-        Consumer<Node> addToScreen,
-        Consumer<Node> removeFromScreen,
-        BiFunction<Phase, Phase, Integer> countOverlap
+            PhaseDB phaseDB,
+            Function<BlockGraph, GroovyPane> genGroovyPane,
+            Consumer<Node> addToScreen,
+            Consumer<Node> removeFromScreen,
+            BiFunction<Phase, Phase, Integer> countOverlap
     ) {
         this.phaseDB = phaseDB;
         this.genGroovyPane = genGroovyPane;
@@ -51,14 +49,14 @@ public class TransitionLineFactory {
     }
 
     /**
-     *  (from, event, to) ----> Model
+     * (from, event, to) ----> Model
      */
     public Transition toModel(Phase from, GameEvent event, Phase to) {
         return phaseDB.createTransition(from, event, to);
     }
 
     /**
-     *  (model, node view, node view) ----> View
+     * (model, node view, node view) ----> View
      */
     public TransitionLine toView(Transition transition, PhaseNode node1, PhaseNode node2) {
         return new TransitionLine(countOverlap.apply(node1.model(), node2.model()), transition, node1, node2);
@@ -161,12 +159,32 @@ public class TransitionLineFactory {
             label.setStroke(c);
         }
 
-        public PhaseNode start() { return node1; }
-        public PhaseNode end() { return node2; }
-        public GameEvent trigger() { return model.trigger(); }
-        public Text label() { return label; }
-        public int cnt() { return cnt; }
-        public void showGraph() { groovyPane.showWindow(); }
-        public Transition model() { return model; }
+        public PhaseNode start() {
+            return node1;
+        }
+
+        public PhaseNode end() {
+            return node2;
+        }
+
+        public GameEvent trigger() {
+            return model.trigger();
+        }
+
+        public Text label() {
+            return label;
+        }
+
+        public int cnt() {
+            return cnt;
+        }
+
+        public void showGraph() {
+            groovyPane.showWindow();
+        }
+
+        public Transition model() {
+            return model;
+        }
     }
 }

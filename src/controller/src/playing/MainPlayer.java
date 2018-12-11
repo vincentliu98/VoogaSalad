@@ -38,9 +38,9 @@ public class MainPlayer {
         alert.getButtonTypes().setAll(loadButton, newGameButton, cancelButton);
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == loadButton) {
-            if (myUser != null ){
+            if (myUser != null) {
                 String xmlString = myUser.getGameState(myReferencePath);
-                if (xmlString.equals("")){
+                if (xmlString.equals("")) {
                     myFile = getNewGameFile();
                     System.out.println("Did't get the sword file");
                 } else {
@@ -50,7 +50,8 @@ public class MainPlayer {
                         fileWriter.write(xmlString);
                         fileWriter.close();
                         System.out.println("Got the sword file and reading it!");
-                    } catch (Exception e){ }
+                    } catch (Exception e) {
+                    }
                 }
             } else {
                 myFile = getNewGameFile();
@@ -64,11 +65,15 @@ public class MainPlayer {
         }
     }
 
-    private File getNewGameFile(){
+    public static void main(String[] args) {
+        //launch(args);
+    }
+
+    private File getNewGameFile() {
         return new File(getClass().getClassLoader().getResource(myReferencePath).getFile());
     }
 
-    public void launchGame(){
+    public void launchGame() {
         myInitializer = new Initializer(myFile);
         myStage = new Stage();
         myInitializer.setScreenSize(700, 500);
@@ -78,18 +83,14 @@ public class MainPlayer {
         saveButton.setMinHeight(50);
         saveButton.setMinWidth(View.GAME_WIDTH);
         saveButton.setOnMouseClicked(e -> {
-            try{
+            try {
                 // TODO: saveGameData Needs to be fixed
                 myUser.saveGameState(myReferencePath, GameData.saveGameData());
-            } catch (Exception ex){ }
+            } catch (Exception ex) {
+            }
         });
         myInitializer.getRoot().getChildren().add(saveButton);
         myStage.setScene(newScene);
         myStage.show();
-    }
-
-
-    public static void main(String[] args) {
-        //launch(args);
     }
 }

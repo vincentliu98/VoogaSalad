@@ -10,39 +10,44 @@ public class Initializer {
     Pane myRoot;
     File myFile;
 
-    public Initializer(File file){
+    public Initializer(File file) {
         myFile = file;
         myXMLParser = new XMLParser();
         myRoot = new Pane();
         initGameData();
     }
 
-    public void initGameData(){
+    public void initGameData() {
         myXMLParser.loadFile(myFile);
         GameData.setGameData(
-            myXMLParser.getDimension(), myXMLParser.getPlayers(), myXMLParser.getEntities(),
-            myXMLParser.getEntityPrototypes(), myXMLParser.getTiles(),
-            myXMLParser.getPhases(), myXMLParser.getWinCondition(),
-            myXMLParser.getNodes(), myXMLParser.getEdges(), myXMLParser.getTurn(), myRoot, this);
-        for (Tile tile : GameData.getTiles().values()){
+                myXMLParser.getDimension(), myXMLParser.getPlayers(), myXMLParser.getEntities(),
+                myXMLParser.getEntityPrototypes(), myXMLParser.getTiles(),
+                myXMLParser.getPhases(), myXMLParser.getWinCondition(),
+                myXMLParser.getNodes(), myXMLParser.getEdges(), myXMLParser.getTurn(), myRoot, this);
+        for (Tile tile : GameData.getTiles().values()) {
             tile.setupView();
             myRoot.getChildren().add(tile.getImageView());
         }
-        for (Entity entity : GameData.getEntities().values()){
+        for (Entity entity : GameData.getEntities().values()) {
             entity.setupView();
             myRoot.getChildren().add(entity.getImageView());
         }
         startGame();
     }
 
-    public String getFileName(){
+    public String getFileName() {
         String filename = myFile.getName();
         return filename.substring(0, filename.length() - 4); // .xml is 4 letters long
     }
 
-    public Pane getRoot(){ return myRoot; }
+    public Pane getRoot() {
+        return myRoot;
+    }
 
-    public void keyFilter(KeyEvent ev) { GameData.addArgument(ev, new KeyTag(ev.getCode())); }
+    public void keyFilter(KeyEvent ev) {
+        GameData.addArgument(ev, new KeyTag(ev.getCode()));
+    }
+
     public void setScreenSize(double screenWidth, double screenHeight) {
         myRoot.setPrefWidth(screenWidth);
         myRoot.setPrefHeight(screenHeight);
@@ -51,13 +56,15 @@ public class Initializer {
         GameData.updateViews();
     }
 
-    public void resetRoot() { myRoot.getChildren().clear(); }
+    public void resetRoot() {
+        myRoot.getChildren().clear();
+    }
 
-    public void startGame(){
+    public void startGame() {
         myXMLParser.getTurn().startPhase();
     }
 
-    public void saveGame(){
+    public void saveGame() {
         String xmlString = GameData.saveGameData();
     }
 }

@@ -3,7 +3,6 @@ package launchingGame;
 import javafx.geometry.Pos;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import social.*;
 
 import java.beans.PropertyChangeEvent;
@@ -26,7 +25,7 @@ public class TextOptions implements PropertyChangeListener, Subscriber {
     private BorderPane myPane;
     private User myUser;
 
-    public TextOptions(BorderPane pane){
+    public TextOptions(BorderPane pane) {
         initBox();
         initText();
         myPane = pane;
@@ -34,24 +33,23 @@ public class TextOptions implements PropertyChangeListener, Subscriber {
         EventBus.getInstance().register(EngineEvent.CHANGE_USER, this);
     }
 
-    public void toggleSelected(OptionHolder selcted){
-        for(OptionHolder option: myOptions){
-            if(option.equals(selcted)){
+    public void toggleSelected(OptionHolder selcted) {
+        for (OptionHolder option : myOptions) {
+            if (option.equals(selcted)) {
                 option.select();
-            }
-            else{
+            } else {
                 option.deselect();
             }
         }
     }
 
-    private void initBox(){
+    private void initBox() {
         myHbox = new HBox();
         myHbox.setSpacing(20);
         myHbox.setAlignment(Pos.CENTER_LEFT);
     }
 
-    private void initText(){
+    private void initText() {
         myOptions = new ArrayList<>();
 
         myGames = new OptionHolder(MY_GAME_TEXT);
@@ -89,7 +87,7 @@ public class TextOptions implements PropertyChangeListener, Subscriber {
 
     @Override
     public void update(EngineEvent engineEvent, Object... args) {
-        if (engineEvent.equals(EngineEvent.CHANGE_USER) && args[0].getClass().equals(User.class)){
+        if (engineEvent.equals(EngineEvent.CHANGE_USER) && args[0].getClass().equals(User.class)) {
             myUser = (User) args[0];
         }
     }

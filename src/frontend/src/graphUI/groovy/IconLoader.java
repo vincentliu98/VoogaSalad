@@ -1,5 +1,6 @@
 package graphUI.groovy;
 
+import graphUI.groovy.DraggableGroovyIconFactory.DraggableGroovyIcon;
 import groovy.api.Ports;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -15,7 +16,6 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Parameter;
 import java.util.*;
 import java.util.stream.Collectors;
-import graphUI.groovy.DraggableGroovyIconFactory.DraggableGroovyIcon;
 
 import static groovy.api.Ports.*;
 
@@ -26,16 +26,16 @@ public class IconLoader {
     private static final int ICONS_IN_ROW = 9;
 
     private static List<Node> loadIcons(
-        String category,
-        Functions.Function3<Image, String, Boolean, DraggableGroovyIcon> draggableIcon
+            String category,
+            Functions.Function3<Image, String, Boolean, DraggableGroovyIcon> draggableIcon
     ) {
         var ret = new ArrayList<Node>();
         ret.add(new Text(category));
         ret.add(new Separator());
         var reader = new BufferedReader(
-            new InputStreamReader(
-                IconLoader.class.getClassLoader().getResourceAsStream(category + ".properties")
-            )
+                new InputStreamReader(
+                        IconLoader.class.getClassLoader().getResourceAsStream(category + ".properties")
+                )
         );
         var map = new LinkedHashMap<String, String>();
         for (var line : reader.lines().collect(Collectors.toList())) {
@@ -55,7 +55,7 @@ public class IconLoader {
             }
             var val = Boolean.parseBoolean(map.get(key));
             var icon = draggableIcon.apply(
-                new Image(IconLoader.class.getClassLoader().getResourceAsStream(key + ".png")), key, val
+                    new Image(IconLoader.class.getClassLoader().getResourceAsStream(key + ".png")), key, val
             );
             var tooltip = new Tooltip(key);
             Tooltip.install(icon, tooltip);
@@ -72,69 +72,73 @@ public class IconLoader {
     }
 
     public static List<Node> loadControls(
-        Functions.Function3<Image, String, Boolean, DraggableGroovyIcon> draggableIcon
+            Functions.Function3<Image, String, Boolean, DraggableGroovyIcon> draggableIcon
     ) {
         return loadIcons("control", draggableIcon);
     }
 
     public static List<Node> loadBinaries(
-        Functions.Function3<Image, String, Boolean, DraggableGroovyIcon> draggableIcon
+            Functions.Function3<Image, String, Boolean, DraggableGroovyIcon> draggableIcon
     ) {
         return loadIcons("binary", draggableIcon);
     }
 
     public static List<Node> loadLiterals(
-        Functions.Function3<Image, String, Boolean, DraggableGroovyIcon> draggableIcon
+            Functions.Function3<Image, String, Boolean, DraggableGroovyIcon> draggableIcon
     ) {
         return loadIcons("literal", draggableIcon);
     }
 
     public static List<Node> loadFunctions(
-        Functions.Function3<Image, String, Boolean, DraggableGroovyIcon> draggableIcon
+            Functions.Function3<Image, String, Boolean, DraggableGroovyIcon> draggableIcon
     ) {
         return loadIcons("function", draggableIcon);
     }
 
     public static List<Node> loadGameMethods(
-        Functions.Function4<Image, String, Boolean, Map<Ports, String>, DraggableGroovyIcon> draggableIcon
+            Functions.Function4<Image, String, Boolean, Map<Ports, String>, DraggableGroovyIcon> draggableIcon
     ) {
         try {
             var c = Class.forName("gameplay.GameMethods");
             var list = new ArrayList<Node>();
             list.add(new Text("GameMethods"));
             list.add(new Separator());
-            for(var method : c.getDeclaredMethods()) {
-                if(method.getName().contains("lambda")) continue; // no lambdas!
+            for (var method : c.getDeclaredMethods()) {
+                if (method.getName().contains("lambda")) continue; // no lambdas!
 
                 var icon = draggableIcon.apply(
-                    new Image(IconLoader.class.getClassLoader().getResourceAsStream("AutoGen.png")),
-                    "GameMethods."+method.getName(),
-                    false,
-                    assignParameters(method.getParameters())
+                        new Image(IconLoader.class.getClassLoader().getResourceAsStream("AutoGen.png")),
+                        "GameMethods." + method.getName(),
+                        false,
+                        assignParameters(method.getParameters())
                 );
 
                 var label = new Label(
-                    method.getReturnType().getSimpleName() + " " +
-                    method.getName() +
-                    formatParameters(method.getParameters())
+                        method.getReturnType().getSimpleName() + " " +
+                                method.getName() +
+                                formatParameters(method.getParameters())
                 );
                 list.add(new HBox(icon, label));
-            } return list;
-        } catch (ClassNotFoundException ignored) { return List.of(); }
+            }
+            return list;
+        } catch (ClassNotFoundException ignored) {
+            return List.of();
+        }
     }
 
     private static Map<Ports, String> assignParameters(Parameter[] params) {
         var lst = List.of(A, B, C, D, E);
         var map = new HashMap<Ports, String>();
-        for(int i = 0 ; i < params.length ; i ++) {
+        for (int i = 0; i < params.length; i++) {
             map.put(lst.get(i), params[i].getType().getSimpleName() + " " + params[i].getName());
-        } return map;
+        }
+        return map;
     }
 
     private static String formatParameters(Parameter[] params) {
-        var paramTypes =  Arrays.stream(params)
-                                .map(p -> p.getType().getSimpleName() + " " + p.getName())
-                                .collect(Collectors.toList());
+        var paramTypes = Arrays.stream(params)
+                .map(p -> p.getType().getSimpleName() + " " + p.getName())
+                .collect(Collectors.toList());
         return "(" + String.join(",", paramTypes) + ")";
     }
 }

@@ -24,7 +24,8 @@ public class Tile implements EditTreeItem<ImageView> {
         this.name = name;
     }
 
-    public Tile(){}
+    public Tile() {
+    }
 
     public Image getSprite() {
         return sprite;

@@ -13,7 +13,7 @@ public class DisplayData implements PropertyChangeListener {
     List<Viewable> myDisplayedEntities;
     Group myGroup;
 
-    public DisplayData(Group group){
+    public DisplayData(Group group) {
         myDisplayedEntities = new ArrayList<>();
         myGroup = group;
     }
@@ -26,13 +26,13 @@ public class DisplayData implements PropertyChangeListener {
         consumer.accept(this);
     }
 
-    public void addNewEntity(Viewable nwEntity){
+    public void addNewEntity(Viewable nwEntity) {
         nwEntity.addListener(this);
         myDisplayedEntities.add(nwEntity);
         myGroup.getChildren().add(nwEntity.getImageView());
     }
 
-    public void removeEntity(Viewable rmEntity){
+    public void removeEntity(Viewable rmEntity) {
         myDisplayedEntities.remove(rmEntity);
         myGroup.getChildren().remove(rmEntity);
     }

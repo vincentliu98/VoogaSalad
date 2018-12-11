@@ -5,7 +5,6 @@ import graph.SimpleNode;
 import groovy.api.BlockGraph;
 import groovy.api.Ports;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 

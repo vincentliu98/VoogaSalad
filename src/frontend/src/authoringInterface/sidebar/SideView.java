@@ -15,7 +15,7 @@ import utils.nodeInstance.NodeInstanceController;
 
 /**
  * This class represents a new SideView implementation that has a JavaFx TreeView object inside, but with cleaner implementation.
- *
+ * <p>
  * It sources from gameObjectsManager to initialize its items
  *
  * @author Haotian Wang
@@ -23,11 +23,10 @@ import utils.nodeInstance.NodeInstanceController;
 public class SideView implements SubView<StackPane> {
     private static final double ICON_WIDTH = 50;
     private static final double ICON_HEIGHT = 50;
-
+    private static final String ROOT_NAME = "Game Objects";
     private StackPane sidePane;
     private GameObjectsCRUDInterface gameObjectsManager;
     private NodeInstanceController nodeInstanceController;
-    private static final String ROOT_NAME = "Game Objects";
 
     public SideView(GameObjectsCRUDInterface manager, NodeInstanceController controller, ImageSelectorController imageSelectorController) {
         gameObjectsManager = manager;
@@ -68,7 +67,8 @@ public class SideView implements SubView<StackPane> {
             var icon = new ImageView(ImageManager.getPreview(item));
             JavaFxOperation.setWidthAndHeight(icon, ICON_WIDTH, ICON_HEIGHT);
             objectLeaf.setGraphic(icon);
-        } catch (Exception ignored) { } // if it doesn't, i dunno
+        } catch (Exception ignored) {
+        } // if it doesn't, i dunno
     }
 
     /**

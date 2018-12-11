@@ -2,7 +2,6 @@ package gameObjects.category;
 
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
-import javafx.beans.property.SimpleStringProperty;
 
 /**
  * CategoryInstance is a dummy interface to ensure consistency in the structure of the CRUD interface.

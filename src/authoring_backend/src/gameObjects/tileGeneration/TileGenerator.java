@@ -5,11 +5,9 @@ import authoringUtils.exception.GameObjectTypeException;
 import authoringUtils.exception.InvalidOperationException;
 import authoringUtils.exception.NumericalException;
 import gameObjects.crud.GameObjectsCRUDInterface;
-import gameObjects.gameObject.GameObjectClass;
 import gameObjects.tile.TileClass;
 import grids.Point;
 import grids.PointImpl;
-import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -54,6 +52,7 @@ public class TileGenerator {
 
     /**
      * topLeftCoord inclusive
+     *
      * @param topLeftCoord
      * @param numRows
      * @param numCols
@@ -74,8 +73,7 @@ public class TileGenerator {
         }
         if (mode == GenerationMode.REPEATING) {
             generateRepeatingTiles();
-        }
-        else if (mode == GenerationMode.RANDOM) {
+        } else if (mode == GenerationMode.RANDOM) {
             generateRandomTiles();
         }
     }

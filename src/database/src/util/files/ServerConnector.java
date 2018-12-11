@@ -18,29 +18,28 @@ public class ServerConnector {
     protected JSch myJsch;
     protected Session mySession;
 
-    public ServerConnector(){
+    public ServerConnector() {
         myJsch = new JSch();
         mySession = null;
         useDefaultPath = true;
     }
 
-    public void connectServer(String username, String host, int port, String password){
-        try{
+    public void connectServer(String username, String host, int port, String password) {
+        try {
             mySession = myJsch.getSession(username, host, port);
             mySession.setConfig("StrictHostKeyChecking", "no");
             mySession.setPassword(password);
-        }
-        catch (JSchException e){
+        } catch (JSchException e) {
             System.out.println("Failed to Connect");
         }
 
     }
 
-    public void useFullPath(){
+    public void useFullPath() {
         useDefaultPath = false;
     }
 
-    public void usePresetPath(){
+    public void usePresetPath() {
         useDefaultPath = true;
     }
 }

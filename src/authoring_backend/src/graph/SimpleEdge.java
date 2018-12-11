@@ -8,12 +8,19 @@ package graph;
  */
 public class SimpleEdge<N extends Node> implements Edge<N> {
     private N from, to;
+
     public SimpleEdge(N from, N to) {
         this.from = from;
         this.to = to;
     }
+
     @Override
-    public N from() { return from; }
+    public N from() {
+        return from;
+    }
+
     @Override
-    public N to() { return to; }
+    public N to() {
+        return to;
+    }
 }
