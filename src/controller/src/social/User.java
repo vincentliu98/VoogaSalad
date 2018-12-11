@@ -1,5 +1,6 @@
 package social;
 
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import twitter4j.Twitter;
@@ -17,13 +18,15 @@ public class User {
     private int myID;
     private String myUsername;
     private Set<String> myFavoriteGames;
-    private ImageView myAvatar;
     private Twitter myTwitter;
-    private ResourceBundle myErrors;
     private Set<String> myFollowing;
     private Map<String, String> myProgress;
     private String myImageReference;
     private String myStatus;
+
+    @XStreamOmitField
+    private ResourceBundle myErrors;
+
     private static final String IMAGES_FOLDER_PATH = "/profile-images/";
 
     public User(int id, String username){
@@ -35,13 +38,13 @@ public class User {
         myProgress = new HashMap<>();
         myImageReference = "person_logo.png";
         myStatus = "";
-        myAvatar = new ImageView();
-        myAvatar.setImage(new Image(getClass().getResourceAsStream(IMAGES_FOLDER_PATH + myImageReference)));
         //myErrors = ResourceBundle.getBundle("resources/errors/Errors");
     }
 
     public ImageView getAvatar(){
-        return myAvatar;
+        ImageView imageView = new ImageView();
+        imageView.setImage(new Image(getClass().getResourceAsStream(IMAGES_FOLDER_PATH + myImageReference)));
+        return imageView;
     }
 
     public void updateStatus(String message){
@@ -58,7 +61,6 @@ public class User {
 
     public void changeAvatar(String imageReference){
         myImageReference = imageReference;
-        myAvatar.setImage(new Image(getClass().getResourceAsStream(IMAGES_FOLDER_PATH + myImageReference)));
     }
 
     public void addFavorite(String gameName){
