@@ -43,18 +43,6 @@ public class TileSettingDialog extends PopUpWindow {
     private VBox myPane;
     private VBox dialogPane;
 
-    public Point getStart() {
-        return start;
-    }
-
-    public int getNumRow() {
-        return numRow;
-    }
-
-    public int getNumCol() {
-        return numCol;
-    }
-
     public TileSettingDialog(GameObjectsCRUDInterface gameObjectManager, Stage primaryStage) {
         super(primaryStage);
         this.gameObjectManager = gameObjectManager;
@@ -105,6 +93,18 @@ public class TileSettingDialog extends PopUpWindow {
         dialogPane.setSpacing(30);
     }
 
+    public Point getStart() {
+        return start;
+    }
+
+    public int getNumRow() {
+        return numRow;
+    }
+
+    public int getNumCol() {
+        return numCol;
+    }
+
     private TileProbPair addPair() {
         TileProbPair newPair = new TileProbPair();
         pairList.add(newPair);
@@ -138,10 +138,6 @@ public class TileSettingDialog extends PopUpWindow {
         private ImageView tileView;
         private TextField probText;
 
-        public void setProb(Double prob) {
-            this.prob = prob;
-        }
-
         TileProbPair() {
             Pane wrapper = new Pane();
             wrapper.setPrefSize(100.0, 100.0);
@@ -159,6 +155,10 @@ public class TileSettingDialog extends PopUpWindow {
 
             setPrefSize(100, 100);
             getChildren().addAll(wrapper, probLabel, probText);
+        }
+
+        public void setProb(Double prob) {
+            this.prob = prob;
         }
 
         private void handleDragFromSideView(DragEvent dragEvent) {

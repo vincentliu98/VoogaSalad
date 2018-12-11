@@ -26,21 +26,27 @@ public class ForEachBlock extends SimpleNode implements GroovyBlock<ForEachBlock
 
         return tryList.flatMap(list ->
                 tryBody.flatMap(body ->
-                    tryOut.map(out ->
-                        String.format("(%s).each({%s ->\n%s\n})\n%s", list, loopvar, body, out)
-                    )
+                        tryOut.map(out ->
+                                String.format("(%s).each({%s ->\n%s\n})\n%s", list, loopvar, body, out)
+                        )
                 )
         );
     }
 
     @Override
-    public ForEachBlock replicate() { return new ForEachBlock(x(), y(), loopvar); }
+    public ForEachBlock replicate() {
+        return new ForEachBlock(x(), y(), loopvar);
+    }
 
     @Override
-    public Set<Ports> ports() { return Set.of(FOREACH_LIST, FOREACH_BODY, FLOW_OUT); }
+    public Set<Ports> ports() {
+        return Set.of(FOREACH_LIST, FOREACH_BODY, FLOW_OUT);
+    }
 
     @Override
-    public String name() { return "each: "+loopvar; }
+    public String name() {
+        return "each: " + loopvar;
+    }
 
     @Override
     public Map<String, Object> params() {

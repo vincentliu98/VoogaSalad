@@ -17,7 +17,7 @@ abstract class SubTreeView {
         return rootItem;
     }
 
-    public Stage getPrimaryStage(){
+    public Stage getPrimaryStage() {
         return primaryStage;
     }
 }

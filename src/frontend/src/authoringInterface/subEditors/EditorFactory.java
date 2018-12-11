@@ -22,9 +22,9 @@ public class EditorFactory {
      */
     @SuppressWarnings("unchecked")
     public static <T extends AbstractGameObjectEditor> T makeEditor(
-        GameObjectType gameObjectType,
-        GameObjectsCRUDInterface gameObjectManager,
-        ImageSelectorController imageSelectorController
+            GameObjectType gameObjectType,
+            GameObjectsCRUDInterface gameObjectManager,
+            ImageSelectorController imageSelectorController
     ) throws MissingEditorForTypeException {
         switch (gameObjectType) {
             case ENTITY:
@@ -56,9 +56,9 @@ public class EditorFactory {
      * @throws MissingEditorForTypeException
      */
     public static <T extends AbstractGameObjectEditor> T makeEditor(
-        String gameObjectType,
-        GameObjectsCRUDInterface gameObjectManager,
-        ImageSelectorController imageSelectorController
+            String gameObjectType,
+            GameObjectsCRUDInterface gameObjectManager,
+            ImageSelectorController imageSelectorController
     ) throws GameObjectTypeException, MissingEditorForTypeException {
         GameObjectType type;
         try {

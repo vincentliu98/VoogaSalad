@@ -42,10 +42,10 @@ public class SimplePlayerClass implements PlayerClass {
     }
 
     public SimplePlayerClass(String className,
-                      PlayerInstanceFactory playerInstanceFactory,
-                      ThrowingBiConsumer<String, String, InvalidOperationException> changePlayerClassNameFunc,
-                      Function<String, Collection<GameObjectInstance>> getAllPlayerInstancesFunc,
-                      Function<Integer, Boolean> deletePlayerInstanceFunc
+                             PlayerInstanceFactory playerInstanceFactory,
+                             ThrowingBiConsumer<String, String, InvalidOperationException> changePlayerClassNameFunc,
+                             Function<String, Collection<GameObjectInstance>> getAllPlayerInstancesFunc,
+                             Function<Integer, Boolean> deletePlayerInstanceFunc
     ) {
         this(className);
         this.myFactory = playerInstanceFactory;
@@ -60,16 +60,19 @@ public class SimplePlayerClass implements PlayerClass {
      * @return classId
      */
     @Override
-    public int getClassId() { return classId; }
+    public int getClassId() {
+        return classId;
+    }
 
 
     /**
      * This method receives a function that sets the id of the GameObject Class.
      * The id of the GameObject Class is set by the received function.
-     *
      */
     @Override
-    public void setClassId(int newId) { classId = newId; }
+    public void setClassId(int newId) {
+        classId = newId;
+    }
 
     /**
      * This method gets the name of this GameObject Class.
@@ -77,7 +80,14 @@ public class SimplePlayerClass implements PlayerClass {
      * @return class name
      */
     @Override
-    public String getClassName() { return className; }
+    public String getClassName() {
+        return className;
+    }
+
+    @Override
+    public void setClassName(String newClassName) {
+        className = newClassName;
+    }
 
     @Override
     public void changeClassName(String newClassName)
@@ -85,18 +95,15 @@ public class SimplePlayerClass implements PlayerClass {
         changePlayerClassNameFunc.accept(className, newClassName);
     }
 
-
-    @Override
-    public void setClassName(String newClassName) { className = newClassName; }
-
-
     /**
      * This method gets the properties map of the GameObject Class.
      *
      * @return properties map
      */
     @Override
-    public Map<String, String> getPropertiesMap() { return propertiesMap; }
+    public Map<String, String> getPropertiesMap() {
+        return propertiesMap;
+    }
 
     /**
      * This method adds the property to the GameObject Class and to all instances of the class.
@@ -117,8 +124,6 @@ public class SimplePlayerClass implements PlayerClass {
         }
         return true;
     }
-
-
 
 
     /**
@@ -177,11 +182,10 @@ public class SimplePlayerClass implements PlayerClass {
 
     @Override
     public boolean addGameObjectInstances(GameObjectInstance gameObjectInstance) {
-        if (!gameObjectInstancesSet.contains(gameObjectInstance)){
+        if (!gameObjectInstancesSet.contains(gameObjectInstance)) {
             gameObjectInstancesSet.add(gameObjectInstance);
             return true;
-        }
-        else return false;
+        } else return false;
     }
 
     @Override
@@ -205,17 +209,21 @@ public class SimplePlayerClass implements PlayerClass {
     }
 
     @Override
-    public String getImagePath() { return imagePath; }
+    public String getImagePath() {
+        return imagePath;
+    }
 
     @Override
-    public void setImagePath(String newImagePath) { imagePath = newImagePath; }
+    public void setImagePath(String newImagePath) {
+        imagePath = newImagePath;
+    }
 
     @Override
     public void equipContext(
-        PlayerInstanceFactory playerInstanceFactory,
-        ThrowingBiConsumer<String, String, InvalidOperationException> changePlayerClassNameFunc,
-        Function<String, Collection<GameObjectInstance>> getAllPlayerInstancesFunc,
-        Function<Integer, Boolean> deletePlayerInstanceFunc
+            PlayerInstanceFactory playerInstanceFactory,
+            ThrowingBiConsumer<String, String, InvalidOperationException> changePlayerClassNameFunc,
+            Function<String, Collection<GameObjectInstance>> getAllPlayerInstancesFunc,
+            Function<Integer, Boolean> deletePlayerInstanceFunc
     ) {
         this.myFactory = playerInstanceFactory;
         this.changePlayerClassNameFunc = changePlayerClassNameFunc;

@@ -13,13 +13,14 @@ import static authoringInterface.MainAuthoringProgram.SCREEN_WIDTH;
 
 /**
  * NewWindowView
+ *
  * @author Amy Kim
  */
 
 public class NewWindowView {
     public static final String STYLESHEET = "style.css";
 
-    public NewWindowView(){
+    public NewWindowView() {
         ButtonType new_window = new ButtonType("New window");
         Optional<ButtonType> result = customizeMsg(new_window).showAndWait();
         if (result.get() == new_window) {
@@ -36,7 +37,7 @@ public class NewWindowView {
         return alert;
     }
 
-    private void popUpWindow(){
+    private void popUpWindow() {
         Stage newWindow = new Stage();
         newWindow.setTitle("VoogaSalad!");
         View myView = new View(newWindow);
