@@ -1,8 +1,11 @@
 package social;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -12,6 +15,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import util.data.DatabaseDownloader;
+import util.data.DatabaseUploader;
+
+import java.sql.ResultSet;
 
 public class LoginScreen {
     public static final String LOGO_PATH = "duke_logo.png";
@@ -97,6 +104,26 @@ public class LoginScreen {
         btn.setOnMouseClicked(e -> {
             // throw exceptions for invalid password, username
             // assuming a valid user was retrieved from the database (myUser)
+            try {
+                DatabaseDownloader databaseDownloader = new DatabaseDownloader("client", "store",
+                        "e.printstacktrace", "vcm-7456.vm.duke.edu", 3306);
+                ResultSet result = databaseDownloader.queryServer(String.format("SELECT id FROM logins WHERE " +
+                        "username='%s' AND password='%s'", usernameField.getText(), passwordField.getText()));
+                if (!result.next()){
+                    // throw error here
+                }
+                result.last();
+                int id = result.getInt("id");
+                result = databaseDownloader.queryServer(String.format("SELECT profilePath, avatarPath FROM" +
+                        " userReferences WHERE id='%d'", id));
+                result.last();
+                System.out.println("size is " + result.getFetchSize());
+                System.out.println("profilePath is " + result.getString("profilePath") + ", avatarPath " + result.getString("avatarPath"));
+                // Deserialize here
+                return;
+            } catch (Exception ex){
+                ex.printStackTrace();
+            }
             User myUser = new User(10, "bloop");// TODO: Remove later (just a placeholder)
             myUser.changeAvatar("ocean.jpeg");
             // TODO: Remove - just for testing that loading the gamestate works
