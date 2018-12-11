@@ -3,7 +3,6 @@ package util.data;
 public interface DatabaseUpload {
 
     /**
-     *
      * @param username
      * @param databasename
      * @param password

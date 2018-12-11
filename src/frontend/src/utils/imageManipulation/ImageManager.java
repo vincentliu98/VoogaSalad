@@ -38,6 +38,7 @@ public class ImageManager {
     private static final double Y_OFFSET = 10;
     private static Map<GameObjectClass, Image> classImageMap;
     private static Map<GameObjectInstance, Image> instanceImageMap;
+
     static {
         classImageMap = new HashMap<>();
         instanceImageMap = new HashMap<>();
@@ -84,7 +85,7 @@ public class ImageManager {
     /**
      * Refactored code to remove duplicates.
      *
-     * @param imagePaths: A List of String that contains file paths to images.
+     * @param imagePaths:    A List of String that contains file paths to images.
      * @param textToDisplay: The input String if image file is not available.
      * @return An Image for this GameObject Instance or Class.
      */
@@ -122,8 +123,8 @@ public class ImageManager {
      * @return A resultant Image representing the stack of images.
      */
     private static Image stackImageFromMultipleImages(List<Image> images) {
-        double width = (images.size()-1) * X_OFFSET + IMAGE_WIDTH;
-        double height = (images.size()-1) * Y_OFFSET + IMAGE_HEIGHT;
+        double width = (images.size() - 1) * X_OFFSET + IMAGE_WIDTH;
+        double height = (images.size() - 1) * Y_OFFSET + IMAGE_HEIGHT;
         Canvas canvas = new Canvas();
         canvas.setWidth(width);
         canvas.setHeight(height);
@@ -135,7 +136,7 @@ public class ImageManager {
             gc.fillRect(x, y, IMAGE_WIDTH, IMAGE_HEIGHT);
             gc.drawImage(images.get(i), x, y, IMAGE_WIDTH, IMAGE_HEIGHT);
         }
-        SnapshotParameters sp =  new SnapshotParameters();
+        SnapshotParameters sp = new SnapshotParameters();
         sp.setFill(Color.TRANSPARENT);
         return canvas.snapshot(sp, null);
     }
@@ -147,7 +148,7 @@ public class ImageManager {
      * @return An Image that has the input String as content.
      */
     private static Image composeImageFromString(String value) {
-        SnapshotParameters sp =  new SnapshotParameters();
+        SnapshotParameters sp = new SnapshotParameters();
         sp.setTransform(Transform.scale(IMAGE_WIDTH, IMAGE_HEIGHT));
         sp.setFill(Color.TRANSPARENT);
         return new Text(value).snapshot(sp, null);

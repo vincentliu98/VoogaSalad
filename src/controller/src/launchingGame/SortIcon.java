@@ -19,20 +19,20 @@ public class SortIcon {
     private Sortable mySortable;
 
 
-    public SortIcon(Sortable sortable){
+    public SortIcon(Sortable sortable) {
         mySortable = sortable;
         initImage();
         initButton();
     }
 
-    private void initImage(){
+    private void initImage() {
         Image image = new Image(getClass().getResourceAsStream("/graphics/A_icon.png"));
         myImage = new ImageView(image);
         myImage.setFitHeight(BUTTON_HEIGHT);
         myImage.setFitWidth(BUTTON_WIDTH);
     }
 
-    private void initButton(){
+    private void initButton() {
         myButton = new Button();
         myButton.getStyleClass().add("sort-button");
         myButton.setPrefWidth(BUTTON_WIDTH);
@@ -41,16 +41,16 @@ public class SortIcon {
         myButton.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-               // myPlayButton.getStyleClass().remove(PLAYBUTTON_CSS_NORMAL);
-               // myPlayButton.getStyleClass().add(PLAYBUTTON_CSS_HOVER);
+                // myPlayButton.getStyleClass().remove(PLAYBUTTON_CSS_NORMAL);
+                // myPlayButton.getStyleClass().add(PLAYBUTTON_CSS_HOVER);
             }
         });
 
         myButton.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-               // myPlayButton.getStyleClass().remove(PLAYBUTTON_CSS_HOVER);
-               // myPlayButton.getStyleClass().add(PLAYBUTTON_CSS_NORMAL);
+                // myPlayButton.getStyleClass().remove(PLAYBUTTON_CSS_HOVER);
+                // myPlayButton.getStyleClass().add(PLAYBUTTON_CSS_NORMAL);
             }
         });
         myButton.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
@@ -68,7 +68,7 @@ public class SortIcon {
         //myButtonHolder.getStyleClass().add(BUTTON_HOLDER_CSS);
     }
 
-    public HBox getView(){
+    public HBox getView() {
         return myButtonHolder;
     }
 }

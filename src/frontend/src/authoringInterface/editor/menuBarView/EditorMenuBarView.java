@@ -8,26 +8,26 @@ import authoringInterface.editor.menuBarView.subMenuBarView.*;
 import authoringUtils.exception.GameObjectClassNotFoundException;
 import authoringUtils.exception.InvalidOperationException;
 import authoringUtils.exception.NumericalException;
+import conversion.authoring.SerializerCRUD;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.tileGeneration.TileGenerator;
 import gameplay.Initializer;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import runningGame.GameWindow;
 import utils.ErrorWindow;
-import conversion.authoring.SerializerCRUD;
 
 import java.io.*;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 import static authoringInterface.MainAuthoringProgram.SCREEN_HEIGHT;
 import static authoringInterface.MainAuthoringProgram.SCREEN_WIDTH;
@@ -145,7 +145,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
     }
 
     void handleSave(ActionEvent event) {
-        if(currentFile == null) handleSaveAs(event);
+        if (currentFile == null) handleSaveAs(event);
         currentFile.delete();
         writeToFile(currentFile);
     }
@@ -169,7 +169,9 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         }
     }
 
-    void handleExport(ActionEvent event) { new SaveFileView(authTools::toEngineXML); }
+    void handleExport(ActionEvent event) {
+        new SaveFileView(authTools::toEngineXML);
+    }
 
     void handleOpen(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
@@ -180,14 +182,16 @@ public class EditorMenuBarView implements SubView<MenuBar> {
                 Stage newWindow = new Stage();
                 newWindow.setTitle("VoogaSalad!");
                 var reader = new BufferedReader(new FileReader(file));
-                String xml = reader.lines().reduce((s1, s2) -> s1+"\n"+s2).get();
+                String xml = reader.lines().reduce((s1, s2) -> s1 + "\n" + s2).get();
                 View myView = new View(newWindow, xml);
                 Scene newScene = new Scene(myView.getRootPane(), SCREEN_WIDTH, SCREEN_HEIGHT);
                 newScene.getStylesheets().add(STYLESHEET);
                 newWindow.setScene(newScene);
                 newWindow.show();
                 reader.close();
-            } catch (IOException e) { ErrorWindow.display("IOException", e.toString()); }
+            } catch (IOException e) {
+                ErrorWindow.display("IOException", e.toString());
+            }
         }
     }
 
@@ -195,24 +199,27 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         Stage newWindow = new Stage();
         newWindow.setTitle("Your Game");
         gameWindow = new GameWindow();
-        try{
+        try {
             Initializer initializer =
-                new Initializer(new File(getClass().getClassLoader().getResource(fileName).getFile()));
+                    new Initializer(new File(getClass().getClassLoader().getResource(fileName).getFile()));
             Scene newScene = new Scene(initializer.getRoot(), View.GAME_WIDTH, View.GAME_HEIGHT);
             newScene.addEventFilter(KeyEvent.KEY_RELEASED, initializer::keyFilter);
             newWindow.setScene(newScene);
-            newWindow.setX(SCREEN_WIDTH*0.5 - View.GAME_WIDTH*0.5);
-            newWindow.setY(SCREEN_HEIGHT*0.5 - View.GAME_HEIGHT*0.5);
+            newWindow.setX(SCREEN_WIDTH * 0.5 - View.GAME_WIDTH * 0.5);
+            newWindow.setY(SCREEN_HEIGHT * 0.5 - View.GAME_HEIGHT * 0.5);
             initializer.setScreenSize(View.GAME_WIDTH, View.GAME_HEIGHT);
             newWindow.show();
-        } catch (Exception e){
+        } catch (Exception e) {
             ErrorWindow.display("Exception", e.toString());
         }
     }
 
 
-    void handleHelpDoc(ActionEvent event) {}
-    void handleAbout(ActionEvent event) {}
+    void handleHelpDoc(ActionEvent event) {
+    }
+
+    void handleAbout(ActionEvent event) {
+    }
 
     @Override
     public MenuBar getView() {

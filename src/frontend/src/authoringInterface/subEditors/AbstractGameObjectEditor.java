@@ -4,7 +4,6 @@ import api.SubView;
 import authoringInterface.subEditors.exception.IllegalGameObjectNamingException;
 import authoringInterface.subEditors.exception.IllegalGeometryException;
 import authoringUtils.exception.DuplicateGameObjectClassException;
-import authoringUtils.exception.GameObjectClassNotFoundException;
 import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.gameObject.GameObjectClass;
@@ -38,7 +37,6 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
     Label nameLabel;
     TextField nameField;
     Button confirm;
-    private Button cancel;
     TreeItem<String> treeItem;
     GameObjectsCRUDInterface gameObjectManager;
     NodeInstanceController nodeInstanceController;
@@ -52,6 +50,7 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
     GridPane listProp;
     FlowPane listview;
     ObservableSet<PropertyBox> propBoxes;
+    private Button cancel;
 
     AbstractGameObjectEditor(GameObjectsCRUDInterface manager) {
         editingMode = EditingMode.NONE;
@@ -77,7 +76,7 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
         listview.setHgap(10);
         propBoxes = FXCollections.observableSet();
         propBoxes.addListener((SetChangeListener<? super PropertyBox>) e -> {
-            if(e.wasAdded()) listview.getChildren().add(e.getElementAdded());
+            if (e.wasAdded()) listview.getChildren().add(e.getElementAdded());
             else listview.getChildren().remove(e.getElementRemoved());
         });
 
@@ -88,13 +87,13 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
                 + "-fx-background-color: #343a40;");
         addProperties.setOnAction(e -> new PropertyInputDialog().showAndWait().ifPresent(prop -> {
             boolean added = false;
-            for(var box : propBoxes) {
-                if(box.getKey().equals(prop.getKey())) {
+            for (var box : propBoxes) {
+                if (box.getKey().equals(prop.getKey())) {
                     box.setValue(prop.getValue());
                     added = true;
                 }
             }
-            if(!added) propBoxes.add(new PropertyBox(prop.getKey(), prop.getValue(), propBoxes::remove));
+            if (!added) propBoxes.add(new PropertyBox(prop.getKey(), prop.getValue(), propBoxes::remove));
         }));
         rootPane.getChildren().addAll(nameLabel, nameField, layout, confirm, cancel);
         setupBasicLayout();
@@ -202,7 +201,8 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
         nodeInstanceController = controller;
         try {
             this.gameObjectInstance = controller.getGameObjectInstance(node);
-        } catch (NodeNotFoundException ignored) {}
+        } catch (NodeNotFoundException ignored) {
+        }
         readGameObjectInstance();
         confirm.setOnAction(e -> {
             try {
@@ -295,6 +295,7 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
      * @throws UnremovableNodeException
      */
     protected abstract void confirmEditNode() throws IllegalGameObjectNamingException, IllegalGeometryException, PreviewUnavailableException, GridIndexOutOfBoundsException, UnremovableNodeException;
+
     /**
      * This method closes the editor.
      */

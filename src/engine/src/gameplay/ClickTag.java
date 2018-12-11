@@ -4,16 +4,16 @@ public class ClickTag {
     private Class myType;
     private int myID;
 
-    public ClickTag(Class type, int id){
+    public ClickTag(Class type, int id) {
         this.myType = type;
         this.myID = id;
     }
 
-    public Class getType(){
+    public Class getType() {
         return myType;
     }
 
-    public int getID(){
+    public int getID() {
         return myID;
     }
 }

@@ -5,16 +5,18 @@ import java.util.Objects;
 /**
  * Abstract representation of a position in the grid.
  * Can be used as keys in a hashmap
+ *
  * @author jz192
  */
 
 public class PointImpl implements Point {
+    public static final PointImpl ZERO = new PointImpl(0, 0);
     private final int x;
     private final int y;
-    public static final PointImpl ZERO = new PointImpl(0, 0);
 
     /**
      * Instantiate a point given x and y coordinates.
+     *
      * @param x is the x-coord
      * @param y is the y-coord
      */
@@ -32,6 +34,7 @@ public class PointImpl implements Point {
     public int getY() {
         return y;
     }
+
     @Override
     public Point add(int x, int y) {
         return new PointImpl(this.x + x, this.y + y);

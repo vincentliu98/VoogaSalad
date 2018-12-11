@@ -22,7 +22,14 @@ public class SoundView {
     public static final int WIDTH = 280;
     public static final Double ICON_WIDTH = 50.0;
     public static final Double ICON_HEIGHT = 50.0;
-
+    Image startImg = new Image(
+            this.getClass().getClassLoader().getResourceAsStream("startAudio.png"),
+            ICON_WIDTH, ICON_HEIGHT, true, true
+    );
+    Image stopImg = new Image(
+            this.getClass().getClassLoader().getResourceAsStream("stopAudio.png"),
+            ICON_WIDTH, ICON_HEIGHT, true, true
+    );
     private File file;
     private Media media;
     private MediaPlayer mediaPlayer;
@@ -31,15 +38,6 @@ public class SoundView {
     private VBox root;
     private HBox audioRoot;
     private String path;
-
-    Image startImg = new Image(
-            this.getClass().getClassLoader().getResourceAsStream("startAudio.png"),
-            ICON_WIDTH, ICON_HEIGHT, true, true
-    );
-    Image stopImg = new Image(
-                this.getClass().getClassLoader().getResourceAsStream("stopAudio.png"),
-            ICON_WIDTH, ICON_HEIGHT, true, true
-    );
 
 
     public SoundView() {
@@ -83,14 +81,13 @@ public class SoundView {
         fileChooser.getExtensionFilters().add(filter);
         fileChooser.setTitle("Select Background Music");
         file = fileChooser.showOpenDialog(new Stage());
-        try{
+        try {
             this.label.setText(file.getName());
             var image = new ImageView(startImg);
             image.setStyle("-fx-cursor: hand;");
             audioRoot.getChildren().addAll(image, label);
             image.setOnMouseClicked(this::playMusic);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             audioRoot.getChildren().clear();
         }
     }

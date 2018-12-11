@@ -6,9 +6,15 @@ package authoringInterface.subEditors.exception;
  * @author Haotian Wang
  */
 public class IllegalGeometryException extends Exception {
-    public IllegalGeometryException(String msg) { super(msg); }
+    public IllegalGeometryException(String msg) {
+        super(msg);
+    }
 
-    public IllegalGeometryException(String msg, Throwable cause) { super(msg, cause); }
+    public IllegalGeometryException(String msg, Throwable cause) {
+        super(msg, cause);
+    }
 
-    public IllegalGeometryException(Throwable cause) { super(cause); }
+    public IllegalGeometryException(Throwable cause) {
+        super(cause);
+    }
 }

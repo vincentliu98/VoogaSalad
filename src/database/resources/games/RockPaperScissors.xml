@@ -119,9 +119,11 @@
             GameMethods.createEntity(entityName, $clicked.getID(), turn);
             if (turn == 1){
             def firstTileSet = [] as HashSet;
-            for (Integer i : GameMethods.getPlayer(1-turn).getMyEntities()){ firstTileSet.add(GameMethods.getEntity(i).getTileID()); }
+            for (Integer i : GameMethods.getPlayer(1-turn).getMyEntities()){
+            firstTileSet.add(GameMethods.getEntity(i).getTileID()); }
             def secondTileSet = [] as HashSet;
-            for (Integer i : GameMethods.getPlayer(turn).getMyEntities()){ secondTileSet.add(GameMethods.getEntity(i).getTileID()); }
+            for (Integer i : GameMethods.getPlayer(turn).getMyEntities()){
+            secondTileSet.add(GameMethods.getEntity(i).getTileID()); }
             if ((firstTileSet.contains(1) &amp;&amp; secondTileSet.contains(3)) ||
             (firstTileSet.contains(2) &amp;&amp; secondTileSet.contains(1)) ||
             (firstTileSet.contains(3) &amp;&amp; secondTileSet.contains(2))) {

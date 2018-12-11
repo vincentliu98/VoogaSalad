@@ -15,7 +15,7 @@ public class SaveFileView {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open project files");
         File file = fileChooser.showSaveDialog(new Stage());
-        if(file != null) {
+        if (file != null) {
             try {
                 var fs = new BufferedWriter(new FileWriter(file));
                 fs.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");

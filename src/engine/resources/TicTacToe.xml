@@ -200,10 +200,10 @@
         <myExecution>
             turn = GameMethods.getCurrentPlayerID()
             if(turn == 0) {
-                entityName = "X";
+            entityName = "X";
             }
             else {
-                entityName = "O";
+            entityName = "O";
             }
             GameMethods.createEntity(entityName, $clicked.getID(), turn);
             GameMethods.updateViews();
@@ -211,15 +211,15 @@
             def tileSet = [] as HashSet;
             for (Integer i : entities){ tileSet.add(GameMethods.getEntity(i).getTileID()); }
             if ((tileSet.contains(1) &amp;&amp; tileSet.contains(2) &amp;&amp; tileSet.contains(3)) ||
-                (tileSet.contains(4) &amp;&amp; tileSet.contains(5) &amp;&amp; tileSet.contains(6)) ||
-                (tileSet.contains(7) &amp;&amp; tileSet.contains(8) &amp;&amp; tileSet.contains(9)) ||
-                (tileSet.contains(1) &amp;&amp; tileSet.contains(4) &amp;&amp; tileSet.contains(7)) ||
-                (tileSet.contains(2) &amp;&amp; tileSet.contains(5) &amp;&amp; tileSet.contains(8)) ||
-                (tileSet.contains(3) &amp;&amp; tileSet.contains(6) &amp;&amp; tileSet.contains(9)) ||
-                (tileSet.contains(1) &amp;&amp; tileSet.contains(5) &amp;&amp; tileSet.contains(9)) ||
-                (tileSet.contains(3) &amp;&amp; tileSet.contains(5) &amp;&amp; tileSet.contains(7))) {
-                    GameMethods.getTurn().endGame(turn);
-                    return;
+            (tileSet.contains(4) &amp;&amp; tileSet.contains(5) &amp;&amp; tileSet.contains(6)) ||
+            (tileSet.contains(7) &amp;&amp; tileSet.contains(8) &amp;&amp; tileSet.contains(9)) ||
+            (tileSet.contains(1) &amp;&amp; tileSet.contains(4) &amp;&amp; tileSet.contains(7)) ||
+            (tileSet.contains(2) &amp;&amp; tileSet.contains(5) &amp;&amp; tileSet.contains(8)) ||
+            (tileSet.contains(3) &amp;&amp; tileSet.contains(6) &amp;&amp; tileSet.contains(9)) ||
+            (tileSet.contains(1) &amp;&amp; tileSet.contains(5) &amp;&amp; tileSet.contains(9)) ||
+            (tileSet.contains(3) &amp;&amp; tileSet.contains(5) &amp;&amp; tileSet.contains(7))) {
+            GameMethods.getTurn().endGame(turn);
+            return;
             }
             GameMethods.goTo(1);
             GameMethods.toNextPlayer();

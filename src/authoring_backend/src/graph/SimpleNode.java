@@ -16,10 +16,14 @@ public class SimpleNode implements Node {
     }
 
     @Override
-    public double x() { return x; }
+    public double x() {
+        return x;
+    }
 
     @Override
-    public double y() { return y; }
+    public double y() {
+        return y;
+    }
 
     @Override
     public void setXY(double x, double y) {
@@ -28,5 +32,7 @@ public class SimpleNode implements Node {
     }
 
     @Override
-    public SimpleStringProperty description() { return description; }
+    public SimpleStringProperty description() {
+        return description;
+    }
 }

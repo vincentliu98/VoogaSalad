@@ -8,7 +8,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.function.Supplier;
 
 /**
  * This is responsible for saving Grid and GameObjects currently only.

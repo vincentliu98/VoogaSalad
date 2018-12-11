@@ -4,7 +4,7 @@ public class Pair<A, B> {
     private A data1;
     private B data2;
 
-    public Pair(A dat1, B dat2){
+    public Pair(A dat1, B dat2) {
         data1 = dat1;
         data2 = dat2;
     }

@@ -17,11 +17,17 @@ public class PhaseImpl extends SimpleNode implements Phase {
     }
 
     @Override
-    public String name() { return name; }
+    public String name() {
+        return name;
+    }
 
     @Override
-    public BlockGraph exec() { return exec; }
+    public BlockGraph exec() {
+        return exec;
+    }
 
     @Override
-    public boolean isSource() { return isSource; }
+    public boolean isSource() {
+        return isSource;
+    }
 }

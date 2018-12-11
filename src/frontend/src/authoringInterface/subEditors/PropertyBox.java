@@ -11,6 +11,7 @@ import java.util.function.Consumer;
  */
 public class PropertyBox extends HBox {
     private Text keyText, valueText;
+
     public PropertyBox(String key, String value, Consumer<PropertyBox> deleteThis) {
         setSpacing(20);
         var delete = new Button("X");
@@ -21,11 +22,19 @@ public class PropertyBox extends HBox {
         keyText = new Text(key);
         valueText = new Text(value);
         setStyle("-fx-padding: 5;"
-                +"-fx-border-style: dashed");
+                + "-fx-border-style: dashed");
         getChildren().addAll(delete, keyText, valueText);
     }
 
-    public String getKey() { return keyText.getText(); }
-    public String getValue() { return valueText.getText(); }
-    public void setValue(String value) { valueText.setText(value); }
+    public String getKey() {
+        return keyText.getText();
+    }
+
+    public String getValue() {
+        return valueText.getText();
+    }
+
+    public void setValue(String value) {
+        valueText.setText(value);
+    }
 }

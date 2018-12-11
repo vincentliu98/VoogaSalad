@@ -4,7 +4,6 @@ import grids.Point;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.Supplier;
 
 public class SimpleEntityInstance implements EntityInstance {
     private String className;
@@ -36,15 +35,23 @@ public class SimpleEntityInstance implements EntityInstance {
     }
 
     @Override
-    public int getInstanceId() { return instanceId; }
+    public int getInstanceId() {
+        return instanceId;
+    }
 
     @Override
-    public void setInstanceId(int newId) { instanceId = newId; }
+    public void setInstanceId(int newId) {
+        instanceId = newId;
+    }
 
     @Override
-    public String getClassName() { return className; }
+    public String getClassName() {
+        return className;
+    }
 
-    public void setClassName(String name) { className = name; }
+    public void setClassName(String name) {
+        className = name;
+    }
 
     @Override
     public String getInstanceName() {
@@ -52,10 +59,14 @@ public class SimpleEntityInstance implements EntityInstance {
     }
 
     @Override
-    public void setInstanceName(String newInstanceName) { instanceName = newInstanceName; }
+    public void setInstanceName(String newInstanceName) {
+        instanceName = newInstanceName;
+    }
 
     @Override
-    public Map<String, String> getPropertiesMap() { return propertiesMap; }
+    public Map<String, String> getPropertiesMap() {
+        return propertiesMap;
+    }
 
     @Override
     public void addProperty(String propertyName, String defaultValue) {
@@ -92,8 +103,7 @@ public class SimpleEntityInstance implements EntityInstance {
         try {
             imagePathList.remove(index);
             return true;
-        }
-        catch (IndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException e) {
             return false;
         }
     }
@@ -109,7 +119,9 @@ public class SimpleEntityInstance implements EntityInstance {
     }
 
     @Override
-    public EntityClass getGameObjectClass() { return entityClass; }
+    public EntityClass getGameObjectClass() {
+        return entityClass;
+    }
 
 
     @Override
@@ -118,19 +130,25 @@ public class SimpleEntityInstance implements EntityInstance {
     }
 
     @Override
+    public void setHeight(int newHeight) {
+        height = newHeight;
+    }
+
+    @Override
     public int getWidth() {
         return width;
     }
 
     @Override
-    public void setHeight(int newHeight) { height = newHeight; }
+    public void setWidth(int newWidth) {
+        width = newWidth;
+    }
+
 
     @Override
-    public void setWidth(int newWidth) { width = newWidth; }
-
-
-    @Override
-    public Point getCoord() { return coord; }
+    public Point getCoord() {
+        return coord;
+    }
 
     @Override
     public void setCoord(Point coord) {

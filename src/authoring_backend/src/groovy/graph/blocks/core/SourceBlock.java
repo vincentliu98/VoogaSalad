@@ -11,10 +11,14 @@ import java.util.Set;
 import static groovy.api.Ports.FLOW_OUT;
 
 public class SourceBlock extends SimpleNode implements GroovyBlock<SourceBlock> {
-    public SourceBlock(double x, double y) { super(x, y); }
+    public SourceBlock(double x, double y) {
+        super(x, y);
+    }
 
     @Override
-    public Set<Ports> ports() { return Set.of(FLOW_OUT); }
+    public Set<Ports> ports() {
+        return Set.of(FLOW_OUT);
+    }
 
     @Override
     public Try<String> toGroovy(BlockGraph graph) {
@@ -22,11 +26,17 @@ public class SourceBlock extends SimpleNode implements GroovyBlock<SourceBlock> 
     }
 
     @Override
-    public SourceBlock replicate() { return new SourceBlock(x(), y()); }
+    public SourceBlock replicate() {
+        return new SourceBlock(x(), y());
+    }
 
     @Override
-    public String name() { return "source"; }
+    public String name() {
+        return "source";
+    }
 
     @Override
-    public Map<String, Object> params() { return null; }
+    public Map<String, Object> params() {
+        return null;
+    }
 }

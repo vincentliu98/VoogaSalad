@@ -56,8 +56,8 @@ public class SwitchingPaneTest extends Application {
 
     private void clearRightPane() {
         var toRemove = new ArrayList<Node>();
-        for(var node : testPane.getChildren()) {
-            if(GridPane.getColumnIndex(node) == 1) {
+        for (var node : testPane.getChildren()) {
+            if (GridPane.getColumnIndex(node) == 1) {
                 toRemove.add(node);
             }
         }

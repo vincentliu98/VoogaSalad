@@ -11,12 +11,10 @@ import authoringUtils.exception.GameObjectInstanceNotFoundException;
 import authoringUtils.exception.GameObjectTypeException;
 import authoringUtils.exception.InvalidIdException;
 import gameObjects.crud.GameObjectsCRUDInterface;
-import gameObjects.entity.EntityClass;
 import gameObjects.entity.EntityInstance;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
-import gameObjects.tile.TileClass;
 import gameObjects.tile.TileInstance;
 import gameObjects.tileGeneration.GenerationMode;
 import grids.Point;
@@ -49,31 +47,31 @@ import static java.util.stream.IntStream.range;
 
 /**
  * EditGridView Class (ScrollPane)
- *      - Representation of the game's grid setting
- *      - It should support Zoom in and zoom out
+ * - Representation of the game's grid setting
+ * - It should support Zoom in and zoom out
  *
  * @author Haotian Wang
  * @author Amy Kim
  */
 public class EditGridView implements SubView<ScrollPane> {
+    private static final double NODE_HEIGHT = 75;
+    private static final double NODE_WIDTH = 75;
+    private static final double INDICATOR_FADE_TIME = 3000;
+    private static final double INITIAL_INDICATOR_FADE_TIME = 15000;
+    private static final double CELL_HEIGHT = 100;
+    private static final double CELL_WIDTH = 100;
+    private static final double HALF_OPACITY = 0.5;
+    private static final double FULL_OPACITY = 1;
     private GridPane gridScrollView;
     private ScrollPane scrollPane;
     private GameObjectsCRUDInterface gameObjectManager;
     private NodeInstanceController nodeInstanceController;
     private List<UpdateStatusEventListener<Node>> listeners;
-    private static final double NODE_HEIGHT = 75;
-    private static final double NODE_WIDTH = 75;
     private boolean isControlDown;
     private boolean isShiftDown;
     private Label batchMode;
     private Label deleteMode;
-    private static final double INDICATOR_FADE_TIME = 3000;
-    private static final double INITIAL_INDICATOR_FADE_TIME = 15000;
-    private static final double CELL_HEIGHT = 100;
-    private static final double CELL_WIDTH = 100;
     private Set<Node> toRemove;
-    private static final double HALF_OPACITY = 0.5;
-    private static final double FULL_OPACITY = 1;
 
     public EditGridView(int row, int col, GameObjectsCRUDInterface manager, NodeInstanceController controller) {
         gameObjectManager = manager;
@@ -120,16 +118,16 @@ public class EditGridView implements SubView<ScrollPane> {
         // Fill grids with what we have
         manager.getAllInstances().forEach(instance -> {
             Point p = null;
-            switch(instance.getType()) {
+            switch (instance.getType()) {
                 case ENTITY:
                     p = ((EntityInstance) instance).getCoord();
                     break;
                 case TILE:
                     p = ((TileInstance) instance).getCoord();
             }
-            if(p == null) return;
+            if (p == null) return;
             var cell = getCellAt(p.getY(), p.getX());
-            if(cell == null) return;
+            if (cell == null) return;
             createInstanceAtGridCell(instance, cell);
         });
     }
@@ -186,11 +184,12 @@ public class EditGridView implements SubView<ScrollPane> {
     }
 
     private Pane getCellAt(int r, int c) {
-        for(var child : gridScrollView.getChildren()) {
-            if(r == GridPane.getRowIndex(child) && c == GridPane.getColumnIndex(child)) {
+        for (var child : gridScrollView.getChildren()) {
+            if (r == GridPane.getRowIndex(child) && c == GridPane.getColumnIndex(child)) {
                 return (StackPane) child;
             }
-        } return null;
+        }
+        return null;
     }
 
     /**
@@ -301,7 +300,7 @@ public class EditGridView implements SubView<ScrollPane> {
     /**
      * This method opens an editor window if the user wishes to double click on an object already dropped on the grid.
      *
-     * @param event: A MouseEvent event, which is a double click.
+     * @param event:      A MouseEvent event, which is a double click.
      * @param targetNode: The JavaFx Node where this double click occurs.
      */
     private void handleDoubleClick(MouseEvent event, Node targetNode) {
@@ -334,7 +333,6 @@ public class EditGridView implements SubView<ScrollPane> {
         editor.editNode(targetNode, nodeInstanceController);
         dialogStage.setScene(new Scene(editor.getView(), 600, 620));
         dialogStage.show();
-        dialogStage.toFront();
     }
 
     /**
@@ -373,9 +371,9 @@ public class EditGridView implements SubView<ScrollPane> {
     /**
      * This method accepts a Region as input and another Paint variable as input to set up a hovering coloring scheme. The region that is inputted will change to the defined color when hovered over.
      *
-     * @param dragEvent: A DragEvent which should be DraggedOver
+     * @param dragEvent:    A DragEvent which should be DraggedOver
      * @param hoveringFill: The JavaFx Color scheme applied to the hovering.
-     * @param cell: The Pane where the hovering occurs.
+     * @param cell:         The Pane where the hovering occurs.
      */
     private void setUpHoveringColorDraggedOver(DragEvent dragEvent, Paint hoveringFill, Pane cell) {
         dragEvent.acceptTransferModes(TransferMode.ANY);
@@ -389,7 +387,7 @@ public class EditGridView implements SubView<ScrollPane> {
      * This method sets up a right click handler on a Node that allows the user to edit or delete this node.
      *
      * @param event: A MouseEvent that is RightClick.
-     * @param node: A JavaFx Node where the right-click context menu will be set up.
+     * @param node:  A JavaFx Node where the right-click context menu will be set up.
      */
     private void setUpRightClickMenu(MouseEvent event, Node node) {
         if (event.getButton() != MouseButton.SECONDARY) {
@@ -408,7 +406,7 @@ public class EditGridView implements SubView<ScrollPane> {
      * This method sets the Background of a cell back to empty once the hovering exits the cell.
      *
      * @param dragEvent: A DragEvent which should be DragExited.
-     * @param cell: The Pane where the hovering exits.
+     * @param cell:      The Pane where the hovering exits.
      */
     private void setUpDragExit(DragEvent dragEvent, Pane cell) {
         if (!dragEvent.getDragboard().getString().isEmpty()) {
@@ -421,7 +419,7 @@ public class EditGridView implements SubView<ScrollPane> {
      * Create an instance at a specific Grid cell, which is a Pane from a GameObjectClass
      *
      * @param gameObjectInstance: A GameObjectInstance that is created on the grid.
-     * @param cell: The Pane where an instance will be created.
+     * @param cell:               The Pane where an instance will be created.
      */
     private void createInstanceAtGridCell(GameObjectInstance gameObjectInstance, Pane cell) {
         ImageView nodeOnGrid = null;
@@ -495,7 +493,7 @@ public class EditGridView implements SubView<ScrollPane> {
      * This method sets up a region so that it accepts a MouseDragEvent Released event from the sideview. The Release event will create an instance according to the GameObjectClass from which the drag is initiated.
      *
      * @param dragEvent: A DragEvent that should be DragDropped.
-     * @param cell: The region where the event handler will be set up.
+     * @param cell:      The region where the event handler will be set up.
      */
     private void handleDragFromSideView(DragEvent dragEvent, Pane cell) {
         if (dragEvent.getGestureSource() instanceof TreeCell) {
@@ -511,7 +509,8 @@ public class EditGridView implements SubView<ScrollPane> {
             GameObjectInstance draggedInstance = null;
             try {
                 draggedInstance = gameObjectManager.getGameObjectInstance(Integer.valueOf(dragEvent.getDragboard().getString()));
-            } catch (GameObjectInstanceNotFoundException ignored) {}
+            } catch (GameObjectInstanceNotFoundException ignored) {
+            }
             try {
                 JavaFxOperation.removeFromParent(nodeInstanceController.getNode(draggedInstance));
             } catch (UnremovableNodeException | GameObjectInstanceNotFoundException ignored) {
@@ -534,7 +533,7 @@ public class EditGridView implements SubView<ScrollPane> {
      * This method creates many sequences on the Grid if the user drag a GameObjectClass while Shift is being pressed down.
      *
      * @param dragEvent: A DragEvent that should be DragEntered.
-     * @param cell: A Pane where the GameObjectInstance will be created.
+     * @param cell:      A Pane where the GameObjectInstance will be created.
      */
     private void setUpBatchInstanceDrag(DragEvent dragEvent, Pane cell) {
         if (isShiftDown) {

@@ -61,13 +61,24 @@ public class SimpleEntityClass implements EntityClass {
 
 
     @Override
-    public int getClassId() { return classId; }
+    public int getClassId() {
+        return classId;
+    }
 
     @Override
-    public void setClassId(int newId) { classId = newId; }
+    public void setClassId(int newId) {
+        classId = newId;
+    }
 
     @Override
-    public String getClassName() { return className; }
+    public String getClassName() {
+        return className;
+    }
+
+    @Override
+    public void setClassName(String newClassName) {
+        className = newClassName;
+    }
 
     @Override
     public void changeClassName(String newClassName)
@@ -76,10 +87,9 @@ public class SimpleEntityClass implements EntityClass {
     }
 
     @Override
-    public void setClassName(String newClassName) { className = newClassName; }
-
-    @Override
-    public Map<String, String> getPropertiesMap() { return propertiesMap; }
+    public Map<String, String> getPropertiesMap() {
+        return propertiesMap;
+    }
 
     @Override
     public boolean addProperty(String propertyName, String defaultValue) {
@@ -113,7 +123,9 @@ public class SimpleEntityClass implements EntityClass {
     }
 
     @Override
-    public void addImagePath(String path) { imagePathList.add(path); }
+    public void addImagePath(String path) {
+        imagePathList.add(path);
+    }
 
 
     @Override
@@ -121,21 +133,29 @@ public class SimpleEntityClass implements EntityClass {
         try {
             imagePathList.remove(index);
             return true;
-        }
-        catch (IndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException e) {
             return false;
         }
     }
 
     @Override
-    public BlockGraph getImageSelector() { return imageSelector; }
+    public BlockGraph getImageSelector() {
+        return imageSelector;
+    }
 
     @Override
-    public void setImageSelector(BlockGraph graph) { this.imageSelector = graph; }
+    public void setImageSelector(BlockGraph graph) {
+        this.imageSelector = graph;
+    }
 
     @Override
     public int getHeight() {
         return height;
+    }
+
+    @Override
+    public void setHeight(int newHeight) {
+        height = newHeight;
     }
 
     @Override
@@ -144,17 +164,16 @@ public class SimpleEntityClass implements EntityClass {
     }
 
     @Override
-    public void setHeight(int newHeight) { height = newHeight; }
-
-    @Override
-    public void setWidth(int newWidth) { width = newWidth; }
+    public void setWidth(int newWidth) {
+        width = newWidth;
+    }
 
     @Override
     public void equipContext(
-        EntityInstanceFactory entityInstanceFactory,
-        ThrowingBiConsumer<String, String, InvalidOperationException> changeEntityClassNameFunc,
-        Function<String, Collection<GameObjectInstance>> getAllEntityInstancesFunc,
-        Function<Integer, Boolean> deleteEntityInstanceFunc
+            EntityInstanceFactory entityInstanceFactory,
+            ThrowingBiConsumer<String, String, InvalidOperationException> changeEntityClassNameFunc,
+            Function<String, Collection<GameObjectInstance>> getAllEntityInstancesFunc,
+            Function<Integer, Boolean> deleteEntityInstanceFunc
     ) {
         myFactory = entityInstanceFactory;
         this.changeEntityClassNameFunc = changeEntityClassNameFunc;
@@ -185,8 +204,12 @@ public class SimpleEntityClass implements EntityClass {
     }
 
     @Override
-    public boolean isMovable() { return movable; }
+    public boolean isMovable() {
+        return movable;
+    }
 
     @Override
-    public void setMovable(boolean move) { movable = move; }
+    public void setMovable(boolean move) {
+        movable = move;
+    }
 }

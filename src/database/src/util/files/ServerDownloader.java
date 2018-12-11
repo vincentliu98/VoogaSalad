@@ -5,14 +5,13 @@ import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.SftpException;
 
-
 import java.io.File;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
-public class ServerDownloader extends ServerConnector implements ServerQuery{
+public class ServerDownloader extends ServerConnector implements ServerQuery {
 
     public static final String CONNECTION_PROTOCOL = "sftp";
     public static final String BLACKLIST_PATH = "properties/BlackListForDownload";
@@ -20,42 +19,46 @@ public class ServerDownloader extends ServerConnector implements ServerQuery{
     private ResourceBundle myResource;
     private HashSet myBlackList;
 
-    public ServerDownloader(){
+    public ServerDownloader() {
         super();
 
         myResource = ResourceBundle.getBundle(BLACKLIST_PATH);
         createMap();
     }
 
+    public static void main(String args[]) {
+        ServerDownloader downloader = new ServerDownloader();
+        downloader.connectServer("vcm", "vcm-7456.vm.duke.edu", 22, "afcas8amYf");
+        //downloader.downloadFile("/tester.txt","/Users/jonathannakagawa/Desktop/Stuff/CompSci308/voogasalad_printstacktrace/src/database/resources");
+        downloader.dowloadDirectory("/games", "/Users/jonathannakagawa/Desktop/Stuff/CompSci308/voogasalad_printstacktrace/src/database/resources", "games");
+    }
+
     @Override
-    public void downloadFile(String filePath, String fileDestination){
+    public void downloadFile(String filePath, String fileDestination) {
         System.out.println(filePath);
         System.out.println(fileDestination);
-        try{
+        try {
             mySession.connect();
             Channel channel = mySession.openChannel(CONNECTION_PROTOCOL);
             channel.connect();
             ChannelSftp sftpChannel = (ChannelSftp) channel;
-            if(useDefaultPath){
+            if (useDefaultPath) {
                 sftpChannel.get(HOST_PATH + filePath, fileDestination);
-            }
-            else {
+            } else {
                 sftpChannel.get(filePath, fileDestination);
             }
             sftpChannel.exit();
             mySession.disconnect();
-        }
-        catch (JSchException e) {
+        } catch (JSchException e) {
             System.out.println("Error");
-        }
-        catch (SftpException e) {
+        } catch (SftpException e) {
             System.out.println("Error");
         }
     }
 
     @Override
     public void dowloadDirectory(String directoryPath, String directoryDestination, String directoryName) {
-        try{
+        try {
             mySession.connect();
             Channel channel = mySession.openChannel(CONNECTION_PROTOCOL);
             channel.connect();
@@ -63,7 +66,7 @@ public class ServerDownloader extends ServerConnector implements ServerQuery{
 
             String srcPath = directoryPath;
 
-            if(useDefaultPath){
+            if (useDefaultPath) {
                 srcPath = HOST_PATH + directoryPath;
             }
 
@@ -74,9 +77,9 @@ public class ServerDownloader extends ServerConnector implements ServerQuery{
 
 
             System.out.println(files.size());
-            for(ChannelSftp.LsEntry entry: files){
+            for (ChannelSftp.LsEntry entry : files) {
                 System.out.println(entry.getFilename());
-                if(!validDowload(entry.getFilename())){
+                if (!validDowload(entry.getFilename())) {
                     continue;
                 }
                 sftpChannel.get(srcPath + '/' + entry.getFilename(), directoryDestination + "/" + directoryName);
@@ -85,35 +88,26 @@ public class ServerDownloader extends ServerConnector implements ServerQuery{
             sftpChannel.exit();
             mySession.disconnect();
 
-        }
-        catch (JSchException e) {
+        } catch (JSchException e) {
             System.out.println("Error");
-        }
-        catch (SftpException e) {
+        } catch (SftpException e) {
             System.out.println("Error");
         }
     }
 
-    private boolean validDowload(String name){
+    private boolean validDowload(String name) {
         return !myBlackList.contains(name);
     }
 
-    private void createMap(){
+    private void createMap() {
         myBlackList = new HashSet();
 
         for (var key : Collections.list(myResource.getKeys())) {
             String[] vals = myResource.getString(key).split("\\|");
-            for(String val: vals){
+            for (String val : vals) {
                 myBlackList.add(val);
             }
         }
-    }
-
-    public static void main(String args[]){
-        ServerDownloader downloader = new ServerDownloader();
-        downloader.connectServer("vcm", "vcm-7456.vm.duke.edu", 22,"afcas8amYf");
-        //downloader.downloadFile("/tester.txt","/Users/jonathannakagawa/Desktop/Stuff/CompSci308/voogasalad_printstacktrace/src/database/resources");
-        downloader.dowloadDirectory("/games", "/Users/jonathannakagawa/Desktop/Stuff/CompSci308/voogasalad_printstacktrace/src/database/resources", "games");
     }
 
 }

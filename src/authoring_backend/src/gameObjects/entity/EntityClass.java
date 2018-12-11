@@ -10,9 +10,6 @@ import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import grids.Point;
 import groovy.api.BlockGraph;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.collections.ObservableList;
 
 import java.util.Collection;
 import java.util.List;
@@ -29,18 +26,21 @@ public interface EntityClass extends GameObjectClass {
 
     /**
      * This method adds the image path to the GameObject Class and to all instances of the class.
+     *
      * @param path file path of the image
      */
     void addImagePath(String path);
 
     /**
      * This method gets the image path list of the GameObject Class.
+     *
      * @return a list of the file paths of the images
      */
     List<String> getImagePathList();
 
     /**
      * This method removes the image path from the Entity Class and from all instances of the class.
+     *
      * @param index index of the image file path in the list
      * @return true if the image file path successfully removed
      */
@@ -48,6 +48,7 @@ public interface EntityClass extends GameObjectClass {
 
     /**
      * This method gets the image selector.
+     *
      * @return image selector
      */
     BlockGraph getImageSelector();
@@ -62,17 +63,16 @@ public interface EntityClass extends GameObjectClass {
 
     int getHeight();
 
-    int getWidth();
-
-
     void setHeight(int newHeight);
+
+    int getWidth();
 
     void setWidth(int newWidth);
 
     void equipContext(
-        EntityInstanceFactory entityInstanceFactory,
-        ThrowingBiConsumer<String, String, InvalidOperationException> changeEntityClassNameFunc,
-        Function<String, Collection<GameObjectInstance>> getAllEntityInstancesFunc,
-        Function<Integer, Boolean> deleteEntityInstanceFunc
+            EntityInstanceFactory entityInstanceFactory,
+            ThrowingBiConsumer<String, String, InvalidOperationException> changeEntityClassNameFunc,
+            Function<String, Collection<GameObjectInstance>> getAllEntityInstancesFunc,
+            Function<Integer, Boolean> deleteEntityInstanceFunc
     );
 }

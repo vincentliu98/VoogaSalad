@@ -6,9 +6,15 @@ package authoringInterface.subEditors.exception;
  * @author Haotian Wang
  */
 public class IllegalGameObjectNamingException extends Exception {
-    public IllegalGameObjectNamingException(String msg) { super(msg); }
+    public IllegalGameObjectNamingException(String msg) {
+        super(msg);
+    }
 
-    public IllegalGameObjectNamingException(String msg, Throwable cause) { super(msg, cause); }
+    public IllegalGameObjectNamingException(String msg, Throwable cause) {
+        super(msg, cause);
+    }
 
-    public IllegalGameObjectNamingException(Throwable cause) { super(cause); }
+    public IllegalGameObjectNamingException(Throwable cause) {
+        super(cause);
+    }
 }

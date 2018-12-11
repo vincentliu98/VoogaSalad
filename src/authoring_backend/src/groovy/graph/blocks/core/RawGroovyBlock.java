@@ -17,16 +17,24 @@ public class RawGroovyBlock extends SimpleNode implements GroovyBlock<RawGroovyB
     }
 
     @Override
-    public Try<String> toGroovy(BlockGraph graph) { return Try.success(src); }
+    public Try<String> toGroovy(BlockGraph graph) {
+        return Try.success(src);
+    }
 
     @Override
-    public RawGroovyBlock replicate() { return new RawGroovyBlock(x(), y(), src); }
+    public RawGroovyBlock replicate() {
+        return new RawGroovyBlock(x(), y(), src);
+    }
 
     @Override
-    public Set<Ports> ports() { return Set.of(); }
+    public Set<Ports> ports() {
+        return Set.of();
+    }
 
     @Override
-    public String name() { return src; }
+    public String name() {
+        return src;
+    }
 
     @Override
     public Map<String, Object> params() {

@@ -45,7 +45,7 @@ public abstract class Icon implements Subscriber {
 
 
     public Icon(String gameName, String description, String reference, String color, String imagePath,
-                String tags, User user, String buttonText, String imgFolderPath){
+                String tags, User user, String buttonText, String imgFolderPath) {
         myName = gameName;
         myDescriptionString = description;
         myReferencePath = reference;
@@ -64,24 +64,24 @@ public abstract class Icon implements Subscriber {
         EventBus.getInstance().register(EngineEvent.CHANGE_USER, this);
     }
 
-    public Boolean checkTag(String tag){
-        if(myName.equals(tag)){
+    public Boolean checkTag(String tag) {
+        if (myName.equals(tag)) {
             return true;
         }
-        for(String tg: myTags){
-            if(tg.equals(tag)){
+        for (String tg : myTags) {
+            if (tg.equals(tag)) {
                 return true;
             }
         }
         return false;
     }
 
-    public Boolean checkName(String name){
+    public Boolean checkName(String name) {
         if (myName.equals(name)) return true;
         return false;
     }
 
-    protected void initPane(){
+    protected void initPane() {
         myPane = new StackPane();
 
         myPane.setOnMouseEntered(event -> {
@@ -98,7 +98,7 @@ public abstract class Icon implements Subscriber {
 
     }
 
-    public void initBackground(){
+    public void initBackground() {
         Image image = new Image(getClass().getResourceAsStream(IMAGES_FOLDER_PATH + myImagePath));
         myBackground = new ImageView(image);
         myBackground.setFitWidth(ICON_WIDTH);
@@ -106,7 +106,7 @@ public abstract class Icon implements Subscriber {
         myPane.getChildren().add(myBackground);
     }
 
-    public void initTitle(){
+    public void initTitle() {
         myTitle = new Text(myName);
         myTitle.setFill(Color.BLACK);
 
@@ -118,7 +118,7 @@ public abstract class Icon implements Subscriber {
         myPane.getChildren().add(myTitleHolder);
     }
 
-    protected void initDescription(){
+    protected void initDescription() {
         myDescriptionHolder = new HBox();
         myDescriptionHolder.setAlignment(Pos.CENTER);
         myDescriptionHolder.getStyleClass().add(DESCRIPTION_CSS);
@@ -134,7 +134,7 @@ public abstract class Icon implements Subscriber {
 
     public abstract void initButtonHandlers();
 
-    protected void initButton(){
+    protected void initButton() {
         myButton = new Button(BUTTON_TEXT);
         myButton.setTextFill(Color.WHITE);
         myButton.getStyleClass().add(BUTTON_CSS_NORMAL);
@@ -146,7 +146,7 @@ public abstract class Icon implements Subscriber {
         myButtonHolder.getStyleClass().add(BUTTON_HOLDER_CSS);
     }
 
-    public String getName(){
+    public String getName() {
         return myName;
     }
 
@@ -156,7 +156,7 @@ public abstract class Icon implements Subscriber {
 
     @Override
     public void update(EngineEvent engineEvent, Object... args) {
-        if (engineEvent.equals(EngineEvent.CHANGE_USER) && args[0].getClass().equals(User.class)){
+        if (engineEvent.equals(EngineEvent.CHANGE_USER) && args[0].getClass().equals(User.class)) {
             myUser = (User) args[0];
         }
     }

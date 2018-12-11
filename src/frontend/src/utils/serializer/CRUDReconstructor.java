@@ -1,11 +1,8 @@
 package utils.serializer;
 
-import authoring.AuthoringTools;
-import authoringInterface.editor.editView.EditView;
 import authoringUtils.exception.DuplicateGameObjectClassException;
 import gameObjects.category.CategoryClass;
 import gameObjects.crud.GameObjectsCRUDInterface;
-import gameObjects.gameObject.GameObjectClass;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.GridPane;
 import org.xml.sax.SAXException;
@@ -15,7 +12,6 @@ import utils.nodeInstance.NodeInstanceController;
 
 import java.io.File;
 import java.util.Objects;
-import java.util.TreeSet;
 import java.util.function.BiConsumer;
 
 /**

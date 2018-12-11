@@ -31,7 +31,7 @@ public class LauncherTopBarView implements Subscriber {
     private double yOffset;
 
 
-    public LauncherTopBarView(double height, Stage stage, BorderPane pane, Searchable searched){
+    public LauncherTopBarView(double height, Stage stage, BorderPane pane, Searchable searched) {
         myUser = null;
         initHeight = height;
         myStage = stage;
@@ -57,7 +57,7 @@ public class LauncherTopBarView implements Subscriber {
         EventBus.getInstance().register(EngineEvent.CHANGE_USER, this);
     }
 
-    private void initBox(){
+    private void initBox() {
         myBox = new HBox();
         myBox.setPrefHeight(initHeight);
         myBox.getStyleClass().add("launcher-top-bar");
@@ -69,7 +69,7 @@ public class LauncherTopBarView implements Subscriber {
     }
 
 
-    private void initDivider(){
+    private void initDivider() {
         Image image = new Image(getClass().getResourceAsStream(DIVIDER_PATH));
         myDivider = new ImageView(image);
 
@@ -78,12 +78,12 @@ public class LauncherTopBarView implements Subscriber {
 
     }
 
-    private void initSpacer(){
+    private void initSpacer() {
         mySpacer = new Pane();
         myBox.setHgrow(mySpacer, Priority.ALWAYS);
     }
 
-    private void makeDraggable(){
+    private void makeDraggable() {
         myBox.setOnMousePressed(event -> {
             xOffset = myStage.getX() - event.getScreenX();
             yOffset = myStage.getY() - event.getScreenY();
@@ -102,7 +102,7 @@ public class LauncherTopBarView implements Subscriber {
 
     @Override
     public void update(EngineEvent engineEvent, Object... args) {
-        if (engineEvent.equals(EngineEvent.CHANGE_USER) && args[0].getClass().equals(User.class)){
+        if (engineEvent.equals(EngineEvent.CHANGE_USER) && args[0].getClass().equals(User.class)) {
             myUser = (User) args[0];
         }
     }

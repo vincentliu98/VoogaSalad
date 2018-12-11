@@ -8,27 +8,15 @@ import authoringInterface.editor.menuBarView.EditorMenuBarView;
 import authoringInterface.sidebar.SideView;
 import authoringInterface.sidebar.StatusView;
 import gameObjects.crud.GameObjectsCRUDInterface;
-import gameObjects.tileGeneration.TileGenerator;
 import graphUI.groovy.GroovyPaneFactory;
-import grids.Point;
-import grids.PointImpl;
-import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import org.xml.sax.SAXException;
-import utils.exception.XMLParsingException;
 import utils.imageSelector.ImageSelectorController;
 import utils.imageSelector.SimpleImageSelectorController;
 import utils.nodeInstance.CrappyNodeInstanceController;
 import utils.nodeInstance.NodeInstanceController;
-import utils.serializer.CRUDLoadException;
-import utils.serializer.XMLParser;
-
-import java.io.File;
-import java.util.Objects;
-import java.util.function.Supplier;
 
 /**
  * This class provides an createPhaseGraph skeleton window with the basic menu items, and basic editing interfaces.
@@ -38,6 +26,12 @@ import java.util.function.Supplier;
  * @author Amy
  */
 public class View implements ParentView<SubView> {
+    public static final double MENU_BAR_HEIGHT = 30;
+    public static final double GAME_WIDTH = 700;
+    public static final double GAME_HEIGHT = 500;
+    private static final int ROW_NUMBER = 10;
+    private static final int COL_NUMBER = 7;
+    private static final double SIDEBAR_WIDTH = 250;
     private AnchorPane rootPane;
     private EditorMenuBarView menuBar;
     private SideView sideView;
@@ -48,22 +42,21 @@ public class View implements ParentView<SubView> {
     private StatusView statusView;
     private GridPane sidebar;
     private GridPane mainView;
-
     private ImageSelectorController imageSelectorController;
     private NodeInstanceController nodeInstanceController;
     private GameObjectsCRUDInterface gameObjectManager;
-    public static final double MENU_BAR_HEIGHT = 30;
-    public static final double GAME_WIDTH = 700;
-    public static final double GAME_HEIGHT = 500;
-    private static final int ROW_NUMBER = 10;
-    private static final int COL_NUMBER = 7;
-    private static final double SIDEBAR_WIDTH = 250;
 
     /**
      * Constructor for an createPhaseGraph window, with an AnchorPane as the root Node, and the AnchorPane constraints on top, left and right are 0.
      */
-    public View(Stage primaryStage) { this(primaryStage, new AuthoringTools(ROW_NUMBER, COL_NUMBER)); }
-    public View(Stage primaryStage, String xml) { this(primaryStage, new AuthoringTools(xml)); }
+    public View(Stage primaryStage) {
+        this(primaryStage, new AuthoringTools(ROW_NUMBER, COL_NUMBER));
+    }
+
+    public View(Stage primaryStage, String xml) {
+        this(primaryStage, new AuthoringTools(xml));
+    }
+
     public View(Stage primaryStage, AuthoringTools authTools) {
         this.primaryStage = primaryStage;
         mainView = new GridPane();

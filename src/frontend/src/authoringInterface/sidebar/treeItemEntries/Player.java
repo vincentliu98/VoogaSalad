@@ -2,10 +2,10 @@ package authoringInterface.sidebar.treeItemEntries;
 
 import javafx.scene.text.Text;
 
-public class Player implements EditTreeItem<Text>{
+public class Player implements EditTreeItem<Text> {
+    private static final TreeItemType type = TreeItemType.PLAYER;
     private Integer id;
     private String name;
-    private static final TreeItemType type = TreeItemType.PLAYER;
 
     public Player(Integer id, String name) {
         this.id = id;

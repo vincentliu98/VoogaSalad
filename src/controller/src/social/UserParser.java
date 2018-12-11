@@ -9,7 +9,7 @@ public class UserParser {
     private List<UserIcon> allUsers;
     private User myUser;
 
-    public UserParser(User user){
+    public UserParser(User user) {
         allUsers = new ArrayList<>();
         myUser = user;
         // TODO: Get all users from database and pass into generateUserIcons
@@ -26,24 +26,24 @@ public class UserParser {
         generateUserIcons(users);
     }
 
-    private void generateUserIcons(Set<User> users){
-        try{
-            for (User u : users){
+    private void generateUserIcons(Set<User> users) {
+        try {
+            for (User u : users) {
                 UserIcon userIcon;
-                if (myUser == null){
-                    userIcon = new UserIcon(u.getUsername(), u.getStatus(),"","",
-                            u.getImageReference(),  "", u, "", "");
+                if (myUser == null) {
+                    userIcon = new UserIcon(u.getUsername(), u.getStatus(), "", "",
+                            u.getImageReference(), "", u, "", "");
                 } else {
-                    userIcon = new UserIcon(u.getUsername(), u.getStatus(),"","",
-                            u.getImageReference(),  "", myUser, "", "");
+                    userIcon = new UserIcon(u.getUsername(), u.getStatus(), "", "",
+                            u.getImageReference(), "", myUser, "", "");
                 }
                 allUsers.add(userIcon);
             }
+        } catch (Exception e) {
         }
-        catch (Exception e){ }
     }
 
-    public List<UserIcon> getAllUsers(){
+    public List<UserIcon> getAllUsers() {
         return allUsers;
     }
 

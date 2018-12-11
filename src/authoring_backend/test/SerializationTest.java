@@ -21,8 +21,8 @@ public class SerializationTest {
         var box = db.createTileClass("box");
         box.getImagePathList().add("square.png");
         var boxes = new ArrayList<GameObjectInstance>();
-        for(int i = 0 ; i < 5 ; i ++) {
-            for(int j = 0 ; j < 5 ; j ++) {
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
                 boxes.add(box.createInstance(new PointImpl(i, j)));
             }
         }
@@ -51,8 +51,8 @@ public class SerializationTest {
         bowmanClass.addImagePath("bowman4.png");
         bowmanClass.addImagePath("bowman5.png");
 
-        playerClassA.addGameObjectInstances(swordmanClass.createInstance(new PointImpl(0,0)));
-        playerClassA.addGameObjectInstances(swordmanClass.createInstance(new PointImpl(0,1)));
+        playerClassA.addGameObjectInstances(swordmanClass.createInstance(new PointImpl(0, 0)));
+        playerClassA.addGameObjectInstances(swordmanClass.createInstance(new PointImpl(0, 1)));
         playerClassB.addGameObjectInstances(bowmanClass.createInstance(new PointImpl(1, 3)));
         playerClassB.addGameObjectInstances(bowmanClass.createInstance(new PointImpl(3, 3)));
 
@@ -64,9 +64,9 @@ public class SerializationTest {
 
         var hbSource = phaseDB.winCondition().source();
         var hbScript = factory.rawBlock(0, 0,
-            "if(GameMethods.hasNoEntities(GameMethods.getCurrentPlayerName())) {" +
-            "   GameMethods.endGame(GameMethods.getCurrentPlayerName() + ' LOST!')" +
-            "}"
+                "if(GameMethods.hasNoEntities(GameMethods.getCurrentPlayerName())) {" +
+                        "   GameMethods.endGame(GameMethods.getCurrentPlayerName() + ' LOST!')" +
+                        "}"
         );
         phaseDB.winCondition().addEdge(factory.createEdge(hbSource, Ports.FLOW_OUT, hbScript));
 
@@ -91,7 +91,7 @@ public class SerializationTest {
         graph.addEdge(edge24);
 
         var edge21graph = edge21.guard();
-        var noGuard = factory.rawBlock(0, 0,"GameMethods.$return(true)");
+        var noGuard = factory.rawBlock(0, 0, "GameMethods.$return(true)");
         edge21graph.addNode(noGuard);
         edge21graph.addEdge(factory.createEdge(edge21graph.source(), Ports.FLOW_OUT, noGuard));
 
@@ -99,7 +99,7 @@ public class SerializationTest {
 
         // this is properly done, but I'm gonna cheat afterwards
         var n1 = factory.ifBlock(0, 0);
-        var n2 = factory.functionBlock(0, 0,"GameMethods.isEntity", null);
+        var n2 = factory.functionBlock(0, 0, "GameMethods.isEntity", null);
         var n3 = factory.refBlock(0, 0, "$clicked").get();
         var n4 = factory.binaryBlock(0, 0, "&&");
         var n5 = factory.functionBlock(0, 0, "GameMethods.getCurrentPlayer().isMyEntity", null);
@@ -150,19 +150,19 @@ public class SerializationTest {
         node2.exec().addEdge(factory.createEdge(node2.exec().source(), Ports.FLOW_OUT, exec2));
 
         var exec3 = factory.rawBlock(0, 0,
-            "GameMethods.moveEntity(selected, $clicked)\n" +
-            "GameMethods.toNextPlayer()\n" +
-            "GameMethods.$goto('A')"
+                "GameMethods.moveEntity(selected, $clicked)\n" +
+                        "GameMethods.toNextPlayer()\n" +
+                        "GameMethods.$goto('A')"
         );
         node3.exec().addNode(exec3);
         node3.exec().addEdge(factory.createEdge(node3.exec().source(), Ports.FLOW_OUT, exec3));
 
 
         var exec4 = factory.rawBlock(0, 0,
-            "$clicked.props.hp = $clicked.props.hp - selected.props.dmg\n" +
-            "if($clicked.props.hp <= 0) { GameMethods.removeEntity($clicked) }\n" +
-            "GameMethods.toNextPlayer()\n" +
-            "GameMethods.$goto('A')"
+                "$clicked.props.hp = $clicked.props.hp - selected.props.dmg\n" +
+                        "if($clicked.props.hp <= 0) { GameMethods.removeEntity($clicked) }\n" +
+                        "GameMethods.toNextPlayer()\n" +
+                        "GameMethods.$goto('A')"
         );
         node4.exec().addNode(exec4);
         node4.exec().addEdge(factory.createEdge(node4.exec().source(), Ports.FLOW_OUT, exec4));

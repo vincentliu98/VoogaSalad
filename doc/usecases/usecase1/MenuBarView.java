@@ -21,10 +21,10 @@ import javafx.stage.Stage;
  * @author Haotian Wang
  */
 public class MenuBarView implements SubView, ParentView<Menu> {
-    private static final double DEFAULT_HEIGHT = 30;
     public static final int WIDTH = 800;
     public static final int GAME_WIDTH = WIDTH;
     public static final int GAME_HEIGHT = 600;
+    private static final double DEFAULT_HEIGHT = 30;
     private MenuBar menuBar;
     private Stage primaryStage;
 
@@ -34,7 +34,7 @@ public class MenuBarView implements SubView, ParentView<Menu> {
     }
 
     public MenuBarView(Stage primaryStage) {
-        this(primaryStage,DEFAULT_HEIGHT);
+        this(primaryStage, DEFAULT_HEIGHT);
     }
 
     /**
@@ -86,25 +86,43 @@ public class MenuBarView implements SubView, ParentView<Menu> {
         return menuBar;
     }
 
-    void handleNewFile(ActionEvent event) {}
-    void handleOpen(ActionEvent event) {}
-    void handleSave(ActionEvent event) {}
-    void handeSaveAs(ActionEvent event) {}
-    void handleClose(ActionEvent event) {}
-    void handleUndo(ActionEvent event) {}
-    void handleRedo(ActionEvent event) {}
+    void handleNewFile(ActionEvent event) {
+    }
+
+    void handleOpen(ActionEvent event) {
+    }
+
+    void handleSave(ActionEvent event) {
+    }
+
+    void handeSaveAs(ActionEvent event) {
+    }
+
+    void handleClose(ActionEvent event) {
+    }
+
+    void handleUndo(ActionEvent event) {
+    }
+
+    void handleRedo(ActionEvent event) {
+    }
+
     void handleRunProject(ActionEvent event) {
         Stage newWindow = new Stage();
         newWindow.setTitle("Your Game");
         Group group = new Group();
         Scene newScene = new Scene(group, GAME_WIDTH, GAME_HEIGHT);
         newWindow.setScene(newScene);
-        newWindow.setX(MainAuthoringProgram.SCREEN_WIDTH*0.5 - GAME_WIDTH*0.5);
-        newWindow.setY(MainAuthoringProgram.SCREEN_HEIGHT*0.5 - GAME_HEIGHT*0.5);
+        newWindow.setX(MainAuthoringProgram.SCREEN_WIDTH * 0.5 - GAME_WIDTH * 0.5);
+        newWindow.setY(MainAuthoringProgram.SCREEN_HEIGHT * 0.5 - GAME_HEIGHT * 0.5);
         newWindow.show();
     }
-    void handleHelpDoc(ActionEvent event) {}
-    void handleAbout(ActionEvent event) {}
+
+    void handleHelpDoc(ActionEvent event) {
+    }
+
+    void handleAbout(ActionEvent event) {
+    }
 
     /**
      * This method returns the responsible JavaFx Node responsible to be added or deleted from other graphical elements.

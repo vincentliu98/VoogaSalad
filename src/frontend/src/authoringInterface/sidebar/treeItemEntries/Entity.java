@@ -10,10 +10,10 @@ import javafx.scene.text.Text;
  * @author Haotian Wang
  */
 public class Entity implements EditTreeItem<ImageView> {
+    private static final TreeItemType type = TreeItemType.ENTITY;
     private Image sprite;
     private int id;
     private String name;
-    private static final TreeItemType type = TreeItemType.ENTITY;
 
     public Entity(Image sprite, int id, String name) {
         this.sprite = sprite;
@@ -21,7 +21,8 @@ public class Entity implements EditTreeItem<ImageView> {
         this.name = name;
     }
 
-    public Entity() {}
+    public Entity() {
+    }
 
     public Entity(int id, String name) {
         this.id = id;

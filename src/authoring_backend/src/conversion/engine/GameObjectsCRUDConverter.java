@@ -21,8 +21,9 @@ import java.util.TreeSet;
 @SuppressWarnings("Duplicates")
 public class GameObjectsCRUDConverter implements Converter {
     private Mapper mapper;
+
     public GameObjectsCRUDConverter(Mapper mapper) {
-       this.mapper = mapper;
+        this.mapper = mapper;
     }
 
     @Override
@@ -55,7 +56,7 @@ public class GameObjectsCRUDConverter implements Converter {
         }
 
         // EntityPrototypes
-        for(var entityClass : db.getEntityClasses()) {
+        for (var entityClass : db.getEntityClasses()) {
             writer.startNode("gameplay.EntityPrototype");
 
             // name
@@ -98,11 +99,12 @@ public class GameObjectsCRUDConverter implements Converter {
         }
 
         // EntityInstance
-        for(var entityInstance : db.getEntityInstances()) {
+        for (var entityInstance : db.getEntityInstances()) {
             EntityClass entityClass = null;
             try {
                 entityClass = db.getEntityClass(entityInstance.getClassName());
-            } catch (GameObjectClassNotFoundException ignored) { }
+            } catch (GameObjectClassNotFoundException ignored) {
+            }
 
             writer.startNode("gameplay.Entity");
 
@@ -164,7 +166,7 @@ public class GameObjectsCRUDConverter implements Converter {
         }
 
         // TilePrototype
-        for (TileClass tileClass: db.getTileClasses()) {
+        for (TileClass tileClass : db.getTileClasses()) {
             writer.startNode("gameplay.TilePrototype");
             // ID
             writer.startNode("myID");
@@ -209,7 +211,7 @@ public class GameObjectsCRUDConverter implements Converter {
         }
 
         // TileInstance
-        for(var tileInstance : db.getTileInstances()) {
+        for (var tileInstance : db.getTileInstances()) {
             writer.startNode("gameplay.Tile");
 
             // myID
@@ -269,7 +271,7 @@ public class GameObjectsCRUDConverter implements Converter {
             writer.endNode();
         }
 
-        for(var player : db.getPlayerClasses()) {
+        for (var player : db.getPlayerClasses()) {
             writer.startNode("gameplay.Player");
 
             writer.startNode("myName");
@@ -292,12 +294,12 @@ public class GameObjectsCRUDConverter implements Converter {
     private <K, V> String mapToString(Map<K, V> map) {
         String toEval = "[";
         boolean first = true;
-        for(var entry: map.entrySet()) {
-            if(!first) toEval += ", ";
+        for (var entry : map.entrySet()) {
+            if (!first) toEval += ", ";
             else first = false;
             toEval += String.format("%s:%s", entry.getKey(), entry.getValue());
         }
-        if(first) toEval += ":";
+        if (first) toEval += ":";
         toEval += "]";
         return toEval;
     }

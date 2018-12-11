@@ -49,21 +49,25 @@ public class SimpleCategoryClass implements CategoryClass {
         this.getAllCategoryInstancesFunc = getAllCategoryInstancesFunc;
         this.deleteCategoryInstanceFunc = deleteCategoryInstanceFunc;
     }
+
     /**
      * This method sets the id of the GameObject Class.
      *
      * @return classId
      */
     @Override
-    public int getClassId() { return classId; }
+    public int getClassId() {
+        return classId;
+    }
 
     /**
      * This method receives a function that sets the id of the GameObject Class.
      * The id of the GameObject Class is set by the received function.
-     *
      */
     @Override
-    public void setClassId(int newId) { classId = newId; }
+    public void setClassId(int newId) {
+        classId = newId;
+    }
 
     /**
      * This method gets the name of this GameObject Class.
@@ -71,7 +75,14 @@ public class SimpleCategoryClass implements CategoryClass {
      * @return class name
      */
     @Override
-    public String getClassName() { return className; }
+    public String getClassName() {
+        return className;
+    }
+
+    @Override
+    public void setClassName(String newClassName) {
+        className = newClassName;
+    }
 
     @Override
     public void changeClassName(String newClassName)
@@ -79,17 +90,15 @@ public class SimpleCategoryClass implements CategoryClass {
         changeCategoryClassNameFunc.accept(className, newClassName);
     }
 
-    @Override
-    public void setClassName(String newClassName) { className = newClassName; }
-
-
     /**
      * This method gets the properties map of the GameObject Class.
      *
      * @return properties map
      */
     @Override
-    public Map<String, String> getPropertiesMap() { return propertiesMap; }
+    public Map<String, String> getPropertiesMap() {
+        return propertiesMap;
+    }
 
     /**
      * This method adds the property to the GameObject Class and to all instances of the class.
@@ -171,14 +180,16 @@ public class SimpleCategoryClass implements CategoryClass {
     }
 
     @Override
-    public void setImagePath(String newImagePath) { imagePath = newImagePath; }
+    public void setImagePath(String newImagePath) {
+        imagePath = newImagePath;
+    }
 
     @Override
     public void equipContext(
-        CategoryInstanceFactory categoryInstanceFactory,
-        ThrowingBiConsumer<String, String, InvalidOperationException> changeCategoryClassNameFunc,
-        Function<String, Collection<GameObjectInstance>> getAllCategoryInstancesFunc,
-        Function<Integer, Boolean> deleteCategoryInstanceFunc
+            CategoryInstanceFactory categoryInstanceFactory,
+            ThrowingBiConsumer<String, String, InvalidOperationException> changeCategoryClassNameFunc,
+            Function<String, Collection<GameObjectInstance>> getAllCategoryInstancesFunc,
+            Function<Integer, Boolean> deleteCategoryInstanceFunc
     ) {
         this.myFactory = categoryInstanceFactory;
         this.changeCategoryClassNameFunc = changeCategoryClassNameFunc;

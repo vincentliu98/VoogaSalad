@@ -1,12 +1,10 @@
 package conversion.engine;
 
-import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-import com.thoughtworks.xstream.io.xml.DomDriver;
 import phase.PhaseGraphImpl;
 import phase.api.GameEvent;
 
@@ -15,19 +13,19 @@ import java.util.stream.Collectors;
 
 public class PhaseGraphConverter implements Converter {
     /**
-     *  We convert all node names to hashCode, and we replace goTo('A') to goTo('A'.hashCode());
-     *  It's a dirty hack that might fail if hashCodes collide but ... it's not likely
+     * We convert all node names to hashCode, and we replace goTo('A') to goTo('A'.hashCode());
+     * It's a dirty hack that might fail if hashCodes collide but ... it's not likely
      */
     @Override
     public void marshal(Object o, HierarchicalStreamWriter writer, MarshallingContext ctx) {
         var graph = (PhaseGraphImpl) o;
         var nodes = graph.keySet();
         var edges = graph.values()
-                         .stream()
-                         .flatMap(Collection::stream)
-                         .collect(Collectors.toSet());
+                .stream()
+                .flatMap(Collection::stream)
+                .collect(Collectors.toSet());
 
-        for(var node : nodes) {
+        for (var node : nodes) {
             writer.startNode("gameplay.Node");
 
             writer.startNode("myPhaseName");
@@ -47,7 +45,7 @@ public class PhaseGraphConverter implements Converter {
             writer.endNode();
         }
 
-        for(var edge : edges) {
+        for (var edge : edges) {
             writer.startNode("gameplay.Edge");
 
             writer.startNode("myPhaseName");
@@ -64,7 +62,7 @@ public class PhaseGraphConverter implements Converter {
 
             writer.startNode("myTrigger");
             writer.addAttribute("class", edge.trigger().getClass().getName());
-            if(edge.trigger() instanceof GameEvent.KeyPress) {
+            if (edge.trigger() instanceof GameEvent.KeyPress) {
                 writer.startNode("code");
                 writer.setValue(((GameEvent.KeyPress) edge.trigger()).getCode().name());
                 writer.endNode();
@@ -90,7 +88,7 @@ public class PhaseGraphConverter implements Converter {
         writer.endNode();
 
         writer.startNode("myNodeNames");
-        for(var node: nodes) {
+        for (var node : nodes) {
             writer.startNode("string");
             writer.setValue(node.name());
             writer.endNode();

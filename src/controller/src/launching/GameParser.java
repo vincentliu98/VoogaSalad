@@ -28,30 +28,29 @@ public class GameParser implements Subscriber {
     private DocumentBuilder myDocumentBuilder;
     private User myUser;
 
-    public GameParser(String path, User user){
+    public GameParser(String path, User user) {
         mySourcePath = path;
         myUser = user;
         myGames = new ArrayList<>();
         findFiles();
-        try{
+        try {
             myDocumentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            for(File file: myFiles){
+            for (File file : myFiles) {
                 generateGame(file);
             }
-        }
-        catch (Exception e){
+        } catch (Exception e) {
 
         }
         EventBus.getInstance().register(EngineEvent.CHANGE_USER, this);
     }
 
-    private void findFiles(){
+    private void findFiles() {
         File folder = new File(mySourcePath);
         myFiles = folder.listFiles();
     }
 
-    private void generateGame(File file){
-        try{
+    private void generateGame(File file) {
+        try {
             Document myDocTree = myDocumentBuilder.parse(file);
             myDocTree.getDocumentElement().normalize();
             FileInputStream fis = new FileInputStream(file);
@@ -67,20 +66,19 @@ public class GameParser implements Subscriber {
 
             GameIcon nwIcon = new GameIcon(name, description, reference, color, image, tags, myUser);
             myGames.add(nwIcon);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
 
         }
     }
 
-    public List<GameIcon> getMyGames(){
+    public List<GameIcon> getMyGames() {
         return myGames;
     }
 
 
     @Override
     public void update(EngineEvent engineEvent, Object... args) {
-        if (engineEvent.equals(EngineEvent.CHANGE_USER) && args[0].getClass().equals(User.class)){
+        if (engineEvent.equals(EngineEvent.CHANGE_USER) && args[0].getClass().equals(User.class)) {
             myUser = (User) args[0];
         }
     }

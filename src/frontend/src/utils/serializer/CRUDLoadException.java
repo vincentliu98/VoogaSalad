@@ -6,9 +6,15 @@ package utils.serializer;
  * @author Haotian Wang
  */
 public class CRUDLoadException extends Exception {
-    public CRUDLoadException(String msg, Throwable cause) { super(msg, cause); }
+    public CRUDLoadException(String msg, Throwable cause) {
+        super(msg, cause);
+    }
 
-    public CRUDLoadException(String msg) { super(msg); }
+    public CRUDLoadException(String msg) {
+        super(msg);
+    }
 
-    public CRUDLoadException(Throwable cause) { super(cause); }
+    public CRUDLoadException(Throwable cause) {
+        super(cause);
+    }
 }

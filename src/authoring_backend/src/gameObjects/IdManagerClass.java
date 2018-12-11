@@ -4,7 +4,7 @@ package gameObjects;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
 
-import java.util.*;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -13,6 +13,7 @@ import java.util.stream.Stream;
  * This Class implements the IdManager Interface.
  * This Class assigns an id to every GameObject Class and Tile or Sprite Instance.
  * It maintains lists of returned ids for classes, tile instances and sprite instances.
+ *
  * @author Jason Zhou
  */
 
@@ -63,22 +64,23 @@ public class IdManagerClass implements IdManager {
     }
 
     private int newClassID() {
-        return Stream.iterate(1, a -> a+1).filter(this::notIssuedClassID).findFirst().get();
+        return Stream.iterate(1, a -> a + 1).filter(this::notIssuedClassID).findFirst().get();
     }
 
     private int newInstanceID() {
-        return Stream.iterate(1, a -> a+1).filter(this::notIssuedInstanceID).findFirst().get();
+        return Stream.iterate(1, a -> a + 1).filter(this::notIssuedInstanceID).findFirst().get();
     }
 
     private boolean notIssuedClassID(int id) {
         return gameObjectClassMap.values()
-                                 .stream()
-                                 .noneMatch(c -> c.getClassId() == id);
+                .stream()
+                .noneMatch(c -> c.getClassId() == id);
     }
+
     private boolean notIssuedInstanceID(int id) {
         return gameObjectInstanceMap.values()
-                                    .stream()
-                                    .noneMatch(c -> c.getInstanceId() == id);
+                .stream()
+                .noneMatch(c -> c.getInstanceId() == id);
     }
 
     @Override
