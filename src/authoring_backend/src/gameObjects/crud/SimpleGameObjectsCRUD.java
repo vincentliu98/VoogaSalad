@@ -39,8 +39,8 @@ import java.util.stream.Collectors;
 public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     private static final String ROOT_NAME = "Game Objects";
 
-    private int numRows;
     private int numCols;
+    private int numRows;
     private Map<String, GameObjectClass> gameObjectClassMapByName;
     private Map<Integer, GameObjectClass> gameObjectClassMapById;
     private Map<Integer, GameObjectInstance> gameObjectInstanceMapById;
@@ -53,9 +53,9 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
 
     private IdManager myIdManager;
 
-    public SimpleGameObjectsCRUD(int numRows, int numCols, boolean fromXML) {
-        this.numRows = numRows;
+    public SimpleGameObjectsCRUD(int numCols, int numRows, boolean fromXML) {
         this.numCols = numCols;
+        this.numRows = numRows;
         gameObjectClassMapByName = new HashMap<>();
         gameObjectClassMapById = new HashMap<>();
         gameObjectInstanceMapById = new HashMap<>();
@@ -95,7 +95,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     }
 
     public SimpleGameObjectsCRUD(SavedEntityDB saved) {
-        this(saved.numRows(), saved.numCols(), true);
+        this(saved.numCols(),saved.numRows(), true);
         for (var c : saved.classes()) {
             switch (c.getType()) {
                 case CATEGORY: createCategoryClass((CategoryClass) c); break;

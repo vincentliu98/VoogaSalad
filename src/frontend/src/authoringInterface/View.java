@@ -58,7 +58,7 @@ public class View implements ParentView<SubView> {
     /**
      * Constructor for an createPhaseGraph window, with an AnchorPane as the root Node, and the AnchorPane constraints on top, left and right are 0.
      */
-    public View(Stage primaryStage) { this(primaryStage, new AuthoringTools(COL_NUMBER, ROW_NUMBER)); }
+    public View(Stage primaryStage) { this(primaryStage, new AuthoringTools(ROW_NUMBER, COL_NUMBER)); }
     public View(Stage primaryStage, String xml) { this(primaryStage, new AuthoringTools(xml)); }
     public View(Stage primaryStage, AuthoringTools authTools) {
         this.primaryStage = primaryStage;

@@ -99,8 +99,8 @@ public class EditGridView implements SubView<ScrollPane> {
             }
         }
         gridScrollView.setGridLinesVisible(true);
-        gridScrollView.add(batchMode, 0, 0, 3, 2);
-        gridScrollView.add(deleteMode, 0, 1, 3, 2);
+//        gridScrollView.add(batchMode, 0, 0, 3, 2);
+//        gridScrollView.add(deleteMode, 0, 1, 3, 2);
         SingleNodeFade.getNodeFadeOut(batchMode, INITIAL_INDICATOR_FADE_TIME).playFromStart();
         SingleNodeFade.getNodeFadeOut(deleteMode, INITIAL_INDICATOR_FADE_TIME).playFromStart();
         scrollPane = new ScrollPane(gridScrollView);
