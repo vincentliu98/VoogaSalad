@@ -124,6 +124,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
     }
 
     void handleTileSetting(ActionEvent actionEvent) {
+        // TODO: 12/11/18 Save Tile Setting in MenuBar
         var tileSettingWindow = new TileSettingDialog(gameObjectManager, primaryStage);
         tileSettingWindow.showWindow();
         try {
@@ -135,10 +136,10 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         } catch (NumericalException e) {
             e.printStackTrace();
         }
-        editView.getGridView().generateTiles(tileSettingWindow.retrieveInfo().getKey(), tileSettingWindow.retrieveInfo().getValue(),
-                tileSettingWindow.getStart(), tileSettingWindow.getNumRow(), tileSettingWindow.getNumCol());
         try {
-            tileGenerator.generateTiles();
+            tileGenerator.generateTiles(); //backend generation
+            gameObjectManager.getTileInstances(). // frontend generation
+                    forEach(e -> editView.getGridView().generateTiles(e));
         } catch (Exception e) {
             e.printStackTrace();
         }
