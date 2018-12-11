@@ -149,13 +149,13 @@ Frontend
 * src/frontend/src/authoringInterface/subEditors/exception/IllegalGameObjectNamingException.java : This file handles invalid naming for game objects exception.
 * src/frontend/src/authoringInterface/subEditors/exception/IllegalGeometryException.java : This file handles illegal geometry exception.
 * src/frontend/src/authoringInterface/subEditors/exception/MissingEditorForTypeException.java : This file handles missing editor for type exception.
-* src/frontend/src/runningGame/IllegalSavedGameException.java
-* src/frontend/src/utils/exception/GridIndexOutOfBoundsException.java
-* src/frontend/src/utils/exception/NodeNotFoundException.java
-* src/frontend/src/utils/exception/PreviewUnavailableException.java
-* src/frontend/src/utils/exception/UnhandledCoordinatesClassException.java
-* src/frontend/src/utils/exception/UnremovableNodeException.java
-* src/frontend/src/utils/exception/XMLParsingException.java
+* src/frontend/src/runningGame/IllegalSavedGameException.java : This class handles inappropriate saved game exception.
+* src/frontend/src/utils/exception/GridIndexOutOfBoundsException.java : This class handles grid index out of bound exception.
+* src/frontend/src/utils/exception/NodeNotFoundException.java : This class handles a specific node is not found exception.
+* src/frontend/src/utils/exception/PreviewUnavailableException.java : This class handles preview unavailable excepton.
+* src/frontend/src/utils/exception/UnhandledCoordinatesClassException.java : This class handles coordinates class unhandled exception. 
+* src/frontend/src/utils/exception/UnremovableNodeException.java : This class handles a certain node is unremovable exception.
+* src/frontend/src/utils/exception/XMLParsingException.java : This class handles any issue in paring the XML.
 
 
 
