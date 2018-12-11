@@ -1,5 +1,8 @@
 package authoringUtils.exception;
 
+/**
+ * @author Jason Zhou
+ */
 public class DuplicateIdException extends IdException {
     public DuplicateIdException(String message) {
         super(message);

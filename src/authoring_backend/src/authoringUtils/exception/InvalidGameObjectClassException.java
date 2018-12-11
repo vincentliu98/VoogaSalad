@@ -1,5 +1,8 @@
 package authoringUtils.exception;
 
+/**
+ * @author Jason Zhou
+ */
 public class InvalidGameObjectClassException extends GameObjectClassException {
     public InvalidGameObjectClassException(String message) {
         super(message);

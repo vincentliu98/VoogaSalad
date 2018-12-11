@@ -2,6 +2,9 @@ package authoringUtils.exception;
 
 import gameObjects.gameObject.GameObjectType;
 
+/**
+ * @author Yunhao Qing
+ */
 public class GameObjectTypeException extends Exception {
 
 
