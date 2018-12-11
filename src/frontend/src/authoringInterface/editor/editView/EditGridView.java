@@ -31,6 +31,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import utils.ErrorWindow;
 import utils.exception.NodeNotFoundException;
 import utils.exception.PreviewUnavailableException;
 import utils.exception.UnremovableNodeException;
@@ -189,14 +190,11 @@ public class EditGridView implements SubView<ScrollPane> {
         try {
             gameObjectManager.deleteAllInstances();
         } catch (InvalidIdException e) {
-            // TODO: error handling
-            e.printStackTrace();
+            ErrorWindow.display("Invalid Exception", e.toString());
         } catch (GameObjectClassNotFoundException e) {
-            // TODO: error handling
-            e.printStackTrace();
+            ErrorWindow.display("GameObjectClass not found", e.toString());
         } catch (GameObjectTypeException e) {
-            // TODO: error handling
-            e.printStackTrace();
+            ErrorWindow.display("GameObjectType Error", e.toString());
         }
     }
 
@@ -235,8 +233,7 @@ public class EditGridView implements SubView<ScrollPane> {
                 listView.getChildrenUnmodifiable().forEach(node1 -> GridPane.setHgrow(node1, Priority.ALWAYS));
 
             } catch (NodeNotFoundException e) {
-                // TODO: Proper error handling.
-                e.printStackTrace();
+                ErrorWindow.display("Node Not Found", e.toString());
             }
         });
         return listView;
@@ -264,8 +261,7 @@ public class EditGridView implements SubView<ScrollPane> {
         try {
             userObject = nodeInstanceController.getGameObjectInstance(targetNode);
         } catch (NodeNotFoundException e) {
-            // TODO: proper error handling
-            e.printStackTrace();
+            ErrorWindow.display("Node Not Found", e.toString());
         }
         Stage dialogStage = new Stage();
         AbstractGameObjectEditor editor = null;
@@ -273,8 +269,7 @@ public class EditGridView implements SubView<ScrollPane> {
             assert userObject != null;
             editor = EditorFactory.makeEditor(userObject.getType(), gameObjectManager);
         } catch (MissingEditorForTypeException e) {
-            // TODO
-            e.printStackTrace();
+            ErrorWindow.display("Missing Editor Type", e.toString());
         }
         assert editor != null;
         editor.editNode(targetNode, nodeInstanceController);
@@ -291,15 +286,13 @@ public class EditGridView implements SubView<ScrollPane> {
         try {
             JavaFxOperation.removeFromParent(targetNode);
         } catch (UnremovableNodeException e) {
-            // TODO: proper error handling
-            e.printStackTrace();
+            ErrorWindow.display("Unremovable Node", e.toString());
         }
         try {
             gameObjectManager.deleteGameObjectInstance(nodeInstanceController.getGameObjectInstance(targetNode).getInstanceId());
             nodeInstanceController.removeNode(targetNode);
         } catch (NodeNotFoundException e) {
-            // TODO: proper error handling
-            e.printStackTrace();
+            ErrorWindow.display("Node Not Found", e.toString());
         }
     }
 
@@ -375,10 +368,8 @@ public class EditGridView implements SubView<ScrollPane> {
         try {
             nodeOnGrid = new ImageView(ImageManager.getPreview(gameObjectInstance));
         } catch (PreviewUnavailableException e) {
-            // TODO: proper error handling
-            e.printStackTrace();
+            ErrorWindow.display("Preview Unavailable", e.toString());
         }
-        // TODO: smarter resizing
         assert nodeOnGrid != null;
         nodeOnGrid.setFitHeight(NODE_HEIGHT);
         nodeOnGrid.setFitWidth(NODE_WIDTH);
@@ -421,8 +412,7 @@ public class EditGridView implements SubView<ScrollPane> {
         try {
             gameObjectInstance = gameObjectManager.createGameObjectInstance(gameObjectClass, new PointImpl(GridPane.getColumnIndex(cell), GridPane.getRowIndex(cell)));
         } catch (GameObjectTypeException e) {
-            // TODO: proper error handling
-            e.printStackTrace();
+            ErrorWindow.display("GameObject Type", e.toString());
         }
         createInstanceAtGridCell(gameObjectInstance, cell);
     }
@@ -454,8 +444,7 @@ public class EditGridView implements SubView<ScrollPane> {
             try {
                 objectClass = gameObjectManager.getGameObjectClass(dragEvent.getDragboard().getString());
             } catch (GameObjectClassNotFoundException e) {
-                // TODO
-                e.printStackTrace();
+                ErrorWindow.display("GameObjectClass Not Found", e.toString());
             }
             createInstanceAtGridCell(objectClass, cell);
         } else if (!dragEvent.getDragboard().getString().isEmpty()) {
