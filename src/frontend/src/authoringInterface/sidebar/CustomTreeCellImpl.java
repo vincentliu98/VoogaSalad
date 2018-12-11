@@ -23,6 +23,7 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.TransferMode;
 import javafx.stage.Stage;
+import utils.ErrorWindow;
 import utils.exception.PreviewUnavailableException;
 import utils.exception.UnremovableNodeException;
 import utils.imageManipulation.ImageManager;
@@ -57,20 +58,19 @@ public class CustomTreeCellImpl extends TreeCell<String> {
                 editor.addTreeItem(getTreeItem());
 
             } catch (GameObjectTypeException e1) {
-                // TODO
+                ErrorWindow.display("GameObjectType Error", e1.toString());
             } catch (MissingEditorForTypeException e1) {
-                // TODO
-                e1.printStackTrace();
+                ErrorWindow.display("Missing Editor for Type", e1.toString());
             }
         });
         addMenu.getItems().add(addMenuItem);
         setOnDragDetected(e -> {
-            GameObjectClass draggedClass = null;
+            GameObjectClass draggedClass;
             try {
                 draggedClass = objectManager.getGameObjectClass(getString());
             } catch (GameObjectClassNotFoundException e1) {
-                // TODO
-                e1.printStackTrace();
+                ErrorWindow.display("GameObjectClass Not Found", e1.toString());
+                return;
             }
             assert draggedClass != null;
             if (draggedClass.getType() == GameObjectType.PLAYER || draggedClass.getType() == GameObjectType.CATEGORY) {
@@ -84,60 +84,59 @@ public class CustomTreeCellImpl extends TreeCell<String> {
             try {
                 db.setDragView(ImageManager.getPreview(draggedClass));
             } catch (PreviewUnavailableException e1) {
-                // TODO: proper error handling.
-                e1.printStackTrace();
+                ErrorWindow.display("PreviewUnavailable", e1.toString());
+                return;
             }
             e.consume();
         });
         MenuItem editMenuItem = new MenuItem("Edit this GameObject");
         MenuItem deleteMenuItem = new MenuItem("Delete this GameObject");
         editMenuItem.setOnAction(e -> {
-            GameObjectClass objectClass = null;
+            GameObjectClass objectClass;
             try {
                 objectClass = objectManager.getGameObjectClass(getItem());
             } catch (GameObjectClassNotFoundException e1) {
-                // TODO
-                e1.printStackTrace();
+                ErrorWindow.display("GameObjectClass Not Found", e1.toString());
+                return;
             }
             Stage dialogStage = new Stage();
-            AbstractGameObjectEditor editor = null;
+            AbstractGameObjectEditor editor;
             try {
                 editor = EditorFactory.makeEditor(objectClass.getType(), manager);
             } catch (MissingEditorForTypeException e1) {
-                // TODO
-                e1.printStackTrace();
+                ErrorWindow.display("Missing Editor for Type", e1.toString());
+                return;
             }
             dialogStage.setScene(new Scene(editor.getView(), 600, 620));
             dialogStage.show();
+            //noinspection unchecked
             editor.editTreeItem(getTreeItem(), objectClass);
         });
         deleteMenuItem.setOnAction(e -> {
             try {
                 objectManager.getGameObjectClass(getItem()).getAllInstances().forEach(gameObjectInstance -> {
-                    Node node = null;
+                    Node node;
                     try {
                         node = nodeInstanceController.getNode(gameObjectInstance);
                     } catch (GameObjectInstanceNotFoundException e1) {
-                        // TODO: proper error handling
-                        e1.printStackTrace();
+                        ErrorWindow.display("GameObjectInstance Not Found", e1.toString());
+                        return;
                     }
                     try {
-                        assert node != null;
                         JavaFxOperation.removeFromParent(node);
                     } catch (UnremovableNodeException e1) {
-                        // TODO: proper error handling
-                        e1.printStackTrace();
+                        ErrorWindow.display("Unremovable Node", e1.toString());
+                        return;
                     }
                     try {
                         nodeInstanceController.removeGameObjectInstance(gameObjectInstance);
                     } catch (GameObjectInstanceNotFoundException e1) {
-                        // TODO: proper error handling
-                        e1.printStackTrace();
+                        ErrorWindow.display("GameObjectInstance Not Found", e1.toString());
                     }
                 });
             } catch (GameObjectClassNotFoundException e1) {
-                // TODO: proper error handling
-                e1.printStackTrace();
+                ErrorWindow.display("GameObjectClass Not Found", e1.toString());
+                return;
             }
             objectManager.deleteGameObjectClass(getItem());
             getTreeItem().getParent().getChildren().remove(getTreeItem());
@@ -204,14 +203,15 @@ public class CustomTreeCellImpl extends TreeCell<String> {
                     objectManager.changeGameObjectClassName(getItem(), textField.getText());
 
                 } catch (InvalidOperationException e) {
-                    // TODO
-                    e.printStackTrace();
+                    ErrorWindow.display("Invalid Operation", e.toString());
+                    return;
                 }
-                GameObjectClass gameObjectClass = null;
+                GameObjectClass gameObjectClass;
                 try {
                     gameObjectClass = objectManager.getGameObjectClass(textField.getText());
                 } catch (GameObjectClassNotFoundException e) {
-                    e.printStackTrace();
+                    ErrorWindow.display("GameObjectClass Not Found", e.toString());
+                    return;
                 }
                 try {
                     ImageManager.removeClassImage(gameObjectClass);
@@ -220,9 +220,9 @@ public class CustomTreeCellImpl extends TreeCell<String> {
                 try {
                     icon = new ImageView(ImageManager.getPreview(gameObjectClass));
                 } catch (PreviewUnavailableException e) {
-                    e.printStackTrace();
+                    ErrorWindow.display("Preview Unavailable", e.toString());
+                    return;
                 }
-                assert icon != null;
                 JavaFxOperation.setWidthAndHeight(icon, ICON_WIDTH, ICON_HEIGHT);
                 getTreeItem().setGraphic(icon);
                 commitEdit(textField.getText());
