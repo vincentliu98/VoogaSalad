@@ -324,7 +324,7 @@ public class EditGridView implements SubView<ScrollPane> {
      */
     private void setUpHoveringColorDraggedOver(DragEvent dragEvent, Paint hoveringFill, Pane cell) {
         dragEvent.acceptTransferModes(TransferMode.ANY);
-        if (dragEvent.getGestureSource() instanceof TreeCell) {
+        if (!dragEvent.getDragboard().getString().isEmpty()) {
             cell.setBackground(new Background(new BackgroundFill(hoveringFill, CornerRadii.EMPTY, Insets.EMPTY)));
         }
         dragEvent.consume();
@@ -356,7 +356,7 @@ public class EditGridView implements SubView<ScrollPane> {
      * @param cell: The Pane where the hovering exits.
      */
     private void setUpDragExit(DragEvent dragEvent, Pane cell) {
-        if (dragEvent.getGestureSource() instanceof TreeCell) {
+        if (!dragEvent.getDragboard().getString().isEmpty()) {
             cell.setBackground(Background.EMPTY);
         }
         dragEvent.consume();
