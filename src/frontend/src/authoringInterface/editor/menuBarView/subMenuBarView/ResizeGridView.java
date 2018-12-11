@@ -14,7 +14,7 @@ import static java.lang.Integer.parseInt;
 /**
  * @author Amy
  */
-public class ResizeGridView{
+public class ResizeGridView {
     private Dialog<Pair<Integer, Integer>> dialog;
 
     public ResizeGridView() {
@@ -42,8 +42,7 @@ public class ResizeGridView{
                 if (dialogButton == resizeBtn) {
                     return new Pair<>(parseInt(col.getText()), parseInt(row.getText()));
                 }
-            }
-            catch(NumberFormatException e){
+            } catch (NumberFormatException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText("Wrong input values");

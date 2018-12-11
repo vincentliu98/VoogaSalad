@@ -37,7 +37,9 @@ public class SimpleTileInstance implements TileInstance {
 
 
     @Override
-    public int getInstanceId() { return instanceId; }
+    public int getInstanceId() {
+        return instanceId;
+    }
 
     @Override
     public void setInstanceId(int newId) {
@@ -45,23 +47,29 @@ public class SimpleTileInstance implements TileInstance {
     }
 
     @Override
-    public String getClassName() { return className; }
+    public String getClassName() {
+        return className;
+    }
 
     @Override
-    public void setClassName(String name) { className = name; }
+    public void setClassName(String name) {
+        className = name;
+    }
 
 
     @Override
-    public int getHeight() { return height; }
-
-    @Override
-    public int getWidth() {
-        return width;
+    public int getHeight() {
+        return height;
     }
 
     @Override
     public void setHeight(int newHeight) {
         height = newHeight;
+    }
+
+    @Override
+    public int getWidth() {
+        return width;
     }
 
     @Override
@@ -76,10 +84,14 @@ public class SimpleTileInstance implements TileInstance {
     }
 
     @Override
-    public void setInstanceName(String newInstanceName) { instanceName = newInstanceName; }
+    public void setInstanceName(String newInstanceName) {
+        instanceName = newInstanceName;
+    }
 
     @Override
-    public Map<String, String> getPropertiesMap() { return propertiesMap; }
+    public Map<String, String> getPropertiesMap() {
+        return propertiesMap;
+    }
 
     @Override
     public void addProperty(String propertyName, String defaultValue) {
@@ -116,8 +128,7 @@ public class SimpleTileInstance implements TileInstance {
         try {
             imagePathList.remove(index);
             return true;
-        }
-        catch (IndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException e) {
             return false;
         }
     }
@@ -134,11 +145,17 @@ public class SimpleTileInstance implements TileInstance {
 
 
     @Override
-    public Point getCoord() { return coord; }
+    public Point getCoord() {
+        return coord;
+    }
 
     @Override
-    public void setCoord(Point coord) { this.coord = coord; }
+    public void setCoord(Point coord) {
+        this.coord = coord;
+    }
 
     @Override
-    public TileClass getGameObjectClass() { return tileClass; }
+    public TileClass getGameObjectClass() {
+        return tileClass;
+    }
 }

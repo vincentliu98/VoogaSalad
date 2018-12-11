@@ -11,25 +11,21 @@ import gameObjects.gameObject.GameObjectType;
 public interface CategoryInstance extends GameObjectInstance {
 
     /**
-     *
      * @return
      */
     String getImagePath();
 
     /**
-     *
      * @param newImagePath
      */
     void setImagePath(String newImagePath);
 
     /**
-     *
      * @return
      */
     CategoryClass getGameObjectClass();
 
     /**
-     *
      * @return
      */
     @Override

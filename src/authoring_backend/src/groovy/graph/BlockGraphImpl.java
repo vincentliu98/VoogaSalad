@@ -12,29 +12,35 @@ import groovy.graph.blocks.core.SourceBlock;
 
 public class BlockGraphImpl extends SimpleGraph<GroovyBlock, BlockEdge> implements BlockGraph {
     private SourceBlock source;
+
     public BlockGraphImpl() {
         super();
         source = new SourceBlock(1000, 1000); // this dirty little secret should be fixed
-        try { addNode(source); } catch (Throwable ignored) {}
+        try {
+            addNode(source);
+        } catch (Throwable ignored) {
+        }
     }
 
     @Override
-    public SourceBlock source() { return source; }
+    public SourceBlock source() {
+        return source;
+    }
 
     /**
-     *  When adding an edge, the graph will check
-     *  1. If the edge is syntactically correct
-     *  2. Whether there's already an edge from the port
-     *  It will throw an exception if it fails these checks
+     * When adding an edge, the graph will check
+     * 1. If the edge is syntactically correct
+     * 2. Whether there's already an edge from the port
+     * It will throw an exception if it fails these checks
      */
     @Override
     public void addEdge(BlockEdge edge) throws Throwable {
-        if(get(edge.from()).stream().noneMatch(p -> p.fromPort() == edge.fromPort())) super.addEdge(edge);
+        if (get(edge.from()).stream().noneMatch(p -> p.fromPort() == edge.fromPort())) super.addEdge(edge);
         else throw new PortAlreadyFilledException(edge.from(), edge.fromPort());
     }
 
     /**
-     *  Testing the "fromPort" is enough.
+     * Testing the "fromPort" is enough.
      */
     @Override
     public void removeEdge(BlockEdge edge) {
@@ -42,7 +48,9 @@ public class BlockGraphImpl extends SimpleGraph<GroovyBlock, BlockEdge> implemen
     }
 
     @Override
-    public Try<String> transformToGroovy() { return source.toGroovy(this); }
+    public Try<String> transformToGroovy() {
+        return source.toGroovy(this);
+    }
 
 
     @Override
@@ -53,7 +61,7 @@ public class BlockGraphImpl extends SimpleGraph<GroovyBlock, BlockEdge> implemen
                 .findFirst()
                 .orElseThrow(Try.supplyThrow(new PortNotConnectedException(from, fromPort))));
 
-        if(find.isFailure() && canBeEmpty) { // handle can-be-empties
+        if (find.isFailure() && canBeEmpty) { // handle can-be-empties
             return Try.success(new RawGroovyBlock(0, 0, ""));
         } else return find.map(Edge::to);
     }

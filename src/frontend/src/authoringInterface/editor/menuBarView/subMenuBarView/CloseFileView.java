@@ -8,24 +8,25 @@ import java.util.Optional;
 
 /**
  * LoadFileView opens alertMessage to select the options btw save, not save and cancel to close files.
+ *
  * @author Amy Kim
  */
 
 public class CloseFileView {
     private Runnable closeWindow;
-    public CloseFileView(Runnable closeWindow){
+
+    public CloseFileView(Runnable closeWindow) {
         this.closeWindow = closeWindow;
         alertMsg();
     }
 
-    private void alertMsg(){
+    private void alertMsg() {
         ButtonType save = new ButtonType("Save");
         ButtonType notSave = new ButtonType("Don't Save");
         Optional<ButtonType> result = customizeMsg(save, notSave).showAndWait();
         if (result.get() == save) {
             //TODO: Saving function
-        }
-       else if (result.get() == notSave) {
+        } else if (result.get() == notSave) {
             closeWindow.run();
         }
     }

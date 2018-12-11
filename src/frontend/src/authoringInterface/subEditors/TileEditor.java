@@ -156,11 +156,11 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
         readCommonTileCharacteristic(gameObjectClass.getClassName(), gameObjectClass.getImagePathList(), gameObjectClass.getWidth(), gameObjectClass.getHeight());
         readClassProperties();
 
-        if(imageSelectorController != null)
+        if (imageSelectorController != null)
             imageSelectorPane = imageSelectorController.groovyPaneOf(gameObjectClass);
 
         imageSelectorButton.setOnAction(e -> {
-            if(imageSelectorPane == null) {
+            if (imageSelectorPane == null) {
                 ErrorWindow.display("Warning!", "You can only specify imageSelector on classes, not instances");
             } else imageSelectorPane.showWindow();
         });
@@ -204,7 +204,8 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
         int height = outputPositiveInteger(heightText);
         try {
             ImageManager.removeClassImage(gameObjectClass);
-        } catch (GameObjectClassNotFoundException ignored) {}
+        } catch (GameObjectClassNotFoundException ignored) {
+        }
         gameObjectClass.getImagePathList().clear();
         gameObjectClass.getImagePathList().addAll(imagePaths);
         gameObjectClass.setWidth(width);
@@ -233,7 +234,8 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
         int height = outputPositiveInteger(heightText);
         try {
             ImageManager.removeInstanceImage(gameObjectInstance);
-        } catch (GameObjectInstanceNotFoundException ignored) {}
+        } catch (GameObjectInstanceNotFoundException ignored) {
+        }
         gameObjectInstance.getImagePathList().clear();
         gameObjectInstance.getImagePathList().addAll(imagePaths);
         gameObjectInstance.setWidth(width);
