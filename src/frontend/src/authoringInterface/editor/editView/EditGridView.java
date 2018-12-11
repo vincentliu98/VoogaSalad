@@ -458,11 +458,24 @@ public class EditGridView implements SubView<ScrollPane> {
             }
             createInstanceAtGridCell(objectClass, cell);
         } else if (!dragEvent.getDragboard().getString().isEmpty()) {
-            GameObjectInstance draggedInstance;
+            GameObjectInstance draggedInstance = null;
             try {
                 draggedInstance = gameObjectManager.getGameObjectInstance(Integer.valueOf(dragEvent.getDragboard().getString()));
             } catch (GameObjectInstanceNotFoundException ignored) {}
-            handleNodeDeleting(draggedInstance);
+            try {
+                JavaFxOperation.removeFromParent(nodeInstanceController.getNode(draggedInstance));
+            } catch (UnremovableNodeException | GameObjectInstanceNotFoundException ignored) {
+            }
+            try {
+                nodeInstanceController.removeGameObjectInstance(draggedInstance);
+            } catch (GameObjectInstanceNotFoundException ignored) {
+            }
+            createInstanceAtGridCell(draggedInstance, cell);
+            if (draggedInstance instanceof EntityInstance) {
+                ((EntityInstance) draggedInstance).setCoord(new PointImpl(GridPane.getColumnIndex(cell), GridPane.getRowIndex(cell)));
+            } else if (draggedInstance instanceof TileInstance) {
+                ((TileInstance) draggedInstance).setCoord(new PointImpl(GridPane.getColumnIndex(cell), GridPane.getRowIndex(cell)));
+            }
         }
         dragEvent.consume();
     }
