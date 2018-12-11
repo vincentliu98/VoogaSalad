@@ -202,11 +202,11 @@ public class CustomTreeCellImpl extends TreeCell<String> {
             if (t.getCode() == KeyCode.ENTER) {
                 try {
                     objectManager.changeGameObjectClassName(getItem(), textField.getText());
+
                 } catch (InvalidOperationException e) {
                     // TODO
                     e.printStackTrace();
                 }
-                System.out.println("yes");
                 GameObjectClass gameObjectClass = null;
                 try {
                     gameObjectClass = objectManager.getGameObjectClass(textField.getText());
