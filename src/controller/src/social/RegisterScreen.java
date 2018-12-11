@@ -101,54 +101,72 @@ public class RegisterScreen {
         myPane.add(btn, 0, 5, 4, 1);
     }
 
-    private void registerUser(String myUsername, String password) throws IOException, SQLException {
+    private void registerUser(String myUsername, String myPassword) throws IOException, SQLException {
         try {
-            // Check for blank fields
-            if (myUsername.isEmpty() || password.isEmpty()){
-                throw new RegistrationException(myErrors.getString("BlankField"), myErrors.getString(
-                        "BlankFieldWarning"));
-            }
-            // Verify unique username
-            DatabaseDownloader databaseDownloader = new DatabaseDownloader("client", "store",
-                    "e.printstacktrace", "vcm-7456.vm.duke.edu", 3306);
-            ResultSet result = databaseDownloader.queryServer("SELECT username, id FROM logins");
-            while (result.next()){
-                String remoteUsername = result.getString("username");
-                if (remoteUsername.equals(myUsername)){
-                    throw new RegistrationException(myErrors.getString("UsernameAlreadyExists"),
-                            myErrors.getString("UsernameAlreadyExistsWarning"));
-                }
-            }
-            // Create new User
-            result.last();
+            checkForBlankFields(myUsername, myPassword);
+            ResultSet result = verifyUniqueUsername(myUsername);
             int id = result.getInt("id") + 1; // TODO: Add case for no users in database
             User user = new User(id, myUsername);
-            // Add user ID, username, and password to logins table
-            DatabaseUploader databaseUploader = new DatabaseUploader("client", "store",
-                    "e.printstacktrace", "vcm-7456.vm.duke.edu", 3306);
-            databaseUploader.upload(String.format("INSERT INTO logins (username, id, password) VALUES ('%s','%d'," +
-                    "'%s')", myUsername, id, password));
-            // Populate the remote userReferences table w/ serialized User
-            XStream serializer = new XStream(new DomDriver());
-            File userFile=new File("src/database/resources/" + myUsername + ".xml");
-            userFile.createNewFile();
-            FileWriter fileWriter = new FileWriter(userFile);
-            fileWriter.write(serializer.toXML(user));
-            fileWriter.close();
-            ServerUploader upload = new ServerUploader();
-            upload.connectServer("vcm", "vcm-7456.vm.duke.edu", 22,"afcas8amYf");
-            upload.uploadFile(userFile.getAbsolutePath(), "/users/profiles");
-            databaseUploader.upload(String.format("INSERT INTO userReferences (id, profilePath) VALUES ('%d', " +
-                    "'%s')", id, "/home/vcm/public_html/users/profiles/" + myUsername + ".xml"));
+            DatabaseUploader databaseUploader = updateLoginsTable(myUsername, myPassword, id);
+            File userFile = uploadSerializedUserFile(myUsername, user);
+            updateUserReferencesTable(myUsername, id, databaseUploader);
             userFile.delete();
         } catch (IOException | SQLException | RegistrationException ex){
             if (!ex.getClass().equals(RegistrationException.class)){
                 throw new ServerException(myErrors.getString("ServerError"), myErrors.getString("ServerErrorWarning"));
             }
-            throw ex; // rethrowing the RegistratinoException
+            throw ex; // rethrowing the RegistrationException
         }
         //resetDatabases();
         myStage.close();
+    }
+
+    private void updateUserReferencesTable(String myUsername, int id, DatabaseUploader databaseUploader) {
+        databaseUploader.upload(String.format("INSERT INTO userReferences (id, profilePath) VALUES ('%d', " +
+                "'%s')", id, "/home/vcm/public_html/users/profiles/" + myUsername + ".xml"));
+    }
+
+    private File uploadSerializedUserFile(String myUsername, User user) throws IOException {
+        XStream serializer = new XStream(new DomDriver());
+        File userFile=new File("src/database/resources/" + myUsername + ".xml");
+        userFile.createNewFile();
+        FileWriter fileWriter = new FileWriter(userFile);
+        fileWriter.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + serializer.toXML(user));
+        fileWriter.close();
+        ServerUploader upload = new ServerUploader();
+        upload.connectServer("vcm", "vcm-7456.vm.duke.edu", 22,"afcas8amYf");
+        upload.uploadFile(userFile.getAbsolutePath(), "/users/profiles");
+        return userFile;
+    }
+
+    private DatabaseUploader updateLoginsTable(String myUsername, String myPassword, int id) {
+        DatabaseUploader databaseUploader = new DatabaseUploader("client", "store",
+                "e.printstacktrace", "vcm-7456.vm.duke.edu", 3306);
+        databaseUploader.upload(String.format("INSERT INTO logins (username, id, password) VALUES ('%s','%d'," +
+                "'%s')", myUsername, id, myPassword));
+        return databaseUploader;
+    }
+
+    private ResultSet verifyUniqueUsername(String myUsername) throws SQLException {
+        DatabaseDownloader databaseDownloader = new DatabaseDownloader("client", "store",
+                "e.printstacktrace", "vcm-7456.vm.duke.edu", 3306);
+        ResultSet result = databaseDownloader.queryServer("SELECT username, id FROM logins");
+        while (result.next()){
+            String remoteUsername = result.getString("username");
+            if (remoteUsername.equals(myUsername)){
+                throw new RegistrationException(myErrors.getString("UsernameAlreadyExists"),
+                        myErrors.getString("UsernameAlreadyExistsWarning"));
+            }
+        }
+        result.last();
+        return result;
+    }
+
+    private void checkForBlankFields(String myUsername, String myPassword) {
+        if (myUsername.isEmpty() || myPassword.isEmpty()){
+            throw new RegistrationException(myErrors.getString("BlankField"), myErrors.getString(
+                    "BlankFieldWarning"));
+        }
     }
 
     /**
