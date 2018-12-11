@@ -2,6 +2,9 @@ package social;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import exceptions.ExtendedException;
+import exceptions.RegistrationException;
+import exceptions.ServerException;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -19,8 +22,10 @@ import util.files.ServerUploader;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ResourceBundle;
 
 public class RegisterScreen {
     public static final String MOTTO = "Enter a username and password below.";
@@ -28,6 +33,7 @@ public class RegisterScreen {
     private GridPane myPane;
     private Scene myScene;
     private Stage myStage;
+    private ResourceBundle myErrors = ResourceBundle.getBundle("Errors");
 
     public RegisterScreen() { }
 
@@ -79,51 +85,70 @@ public class RegisterScreen {
         passwordField.setPromptText("password");
         Button btn = new Button("CREATE ACCOUNT");
         btn.setPrefWidth(260.0D);
-
         btn.setOnMouseClicked(e -> {
-            // TODO: Check for username not taken, add user
-            DatabaseDownloader databaseDownloader = new DatabaseDownloader("client", "store",
-                    "e.printstacktrace", "vcm-7456.vm.duke.edu", 3306);
-            ResultSet result = databaseDownloader.queryServer("SELECT username, id FROM logins");
             try {
-                while (result.next()){
-                    String username = result.getString("username");
-                    if (username.equals(usernameField.getText())){
-                        Alert alert = new Alert(Alert.AlertType.WARNING);
-                        alert.setHeaderText("Username already taken.");
-                        alert.setContentText("Choose a new username.");
-                        alert.showAndWait();
-                        return;
-                    }
-                }
-                result.last();
-                int id = result.getInt("id") + 1; // TODO: Add case for no users in database
-                DatabaseUploader databaseUploader = new DatabaseUploader("client", "store",
-                        "e.printstacktrace", "vcm-7456.vm.duke.edu", 3306);
-                databaseUploader.upload(String.format("INSERT INTO logins (username, id, password) VALUES ('%s','%d'," +
-                                "'%s')", usernameField.getText(), id, passwordField.getText()));
-                User user = new User(id, usernameField.getText());
-                XStream serializer = new XStream(new DomDriver());
-                File userFile=new File("src/database/resources/" + usernameField.getText() + ".xml");
-                userFile.createNewFile();
-                FileWriter fileWriter = new FileWriter(userFile);
-                fileWriter.write(serializer.toXML(user));
-                fileWriter.close();
-                ServerUploader upload = new ServerUploader();
-                upload.connectServer("vcm", "vcm-7456.vm.duke.edu", 22,"afcas8amYf");
-                upload.uploadFile(userFile.getAbsolutePath(), "/users/profiles");
-                databaseUploader.upload(String.format("INSERT INTO userReferences (id, profilePath) VALUES ('%d', " +
-                        "'%s')", id, "/home/vcm/public_html/users/profiles/" + usernameField.getText() + ".xml"));
-                userFile.delete();
+                registerUser(usernameField.getText(), passwordField.getText());
             } catch (Exception ex){
-                ex.printStackTrace();
+                ExtendedException exception = (ExtendedException) ex;
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setHeaderText(exception.getMessage());
+                alert.setContentText(exception.getWarning());
+                alert.showAndWait();
             }
-            //resetDatabases();
-            myStage.close();
         });
         myPane.add(usernameField, 0, 2, 4, 1);
         myPane.add(passwordField, 0, 3, 4, 1);
         myPane.add(btn, 0, 5, 4, 1);
+    }
+
+    private void registerUser(String myUsername, String password) throws IOException, SQLException {
+        try {
+            // Check for blank fields
+            if (myUsername.isEmpty() || password.isEmpty()){
+                throw new RegistrationException(myErrors.getString("BlankField"), myErrors.getString(
+                        "BlankFieldWarning"));
+            }
+            // Verify unique username
+            DatabaseDownloader databaseDownloader = new DatabaseDownloader("client", "store",
+                    "e.printstacktrace", "vcm-7456.vm.duke.edu", 3306);
+            ResultSet result = databaseDownloader.queryServer("SELECT username, id FROM logins");
+            while (result.next()){
+                String remoteUsername = result.getString("username");
+                if (remoteUsername.equals(myUsername)){
+                    throw new RegistrationException(myErrors.getString("UsernameAlreadyExists"),
+                            myErrors.getString("UsernameAlreadyExistsWarning"));
+                }
+            }
+            // Create new User
+            result.last();
+            int id = result.getInt("id") + 1; // TODO: Add case for no users in database
+            User user = new User(id, myUsername);
+            // Add user ID, username, and password to logins table
+            DatabaseUploader databaseUploader = new DatabaseUploader("client", "store",
+                    "e.printstacktrace", "vcm-7456.vm.duke.edu", 3306);
+            databaseUploader.upload(String.format("INSERT INTO logins (username, id, password) VALUES ('%s','%d'," +
+                    "'%s')", myUsername, id, password));
+            // Populate the remote userReferences table w/ serialized User
+            XStream serializer = new XStream(new DomDriver());
+            File userFile=new File("src/database/resources/" + myUsername + ".xml");
+            userFile.createNewFile();
+            FileWriter fileWriter = new FileWriter(userFile);
+            fileWriter.write(serializer.toXML(user));
+            fileWriter.close();
+            ServerUploader upload = new ServerUploader();
+            upload.connectServer("vcm", "vcm-7456.vm.duke.edu", 22,"afcas8amYf");
+            upload.uploadFile(userFile.getAbsolutePath(), "/users/profiles");
+            databaseUploader.upload(String.format("INSERT INTO userReferences (id, profilePath) VALUES ('%d', " +
+                    "'%s')", id, "/home/vcm/public_html/users/profiles/" + myUsername + ".xml"));
+            userFile.delete();
+        } catch (IOException | SQLException | RegistrationException ex){
+            if (!ex.getClass().equals(RegistrationException.class)){
+                throw new ServerException(myErrors.getString("ServerError"), myErrors.getString("ServerErrorWarning"));
+            }
+            throw ex; // rethrowing the RegistratinoException
+        }
+        //resetDatabases();
+        myStage.close();
     }
 
     /**
