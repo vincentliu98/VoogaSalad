@@ -4,6 +4,7 @@ import authoringInterface.subEditors.exception.MissingEditorForTypeException;
 import authoringUtils.exception.GameObjectTypeException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.gameObject.GameObjectType;
+import utils.imageSelector.ImageSelectorController;
 
 /**
  * This Factory class is responsible for creating respective AbstractGameObjectEditors by taking in some arguments.
@@ -20,14 +21,18 @@ public class EditorFactory {
      * @throws MissingEditorForTypeException
      */
     @SuppressWarnings("unchecked")
-    public static <T extends AbstractGameObjectEditor> T makeEditor(GameObjectType gameObjectType, GameObjectsCRUDInterface gameObjectManager) throws MissingEditorForTypeException {
+    public static <T extends AbstractGameObjectEditor> T makeEditor(
+        GameObjectType gameObjectType,
+        GameObjectsCRUDInterface gameObjectManager,
+        ImageSelectorController imageSelectorController
+    ) throws MissingEditorForTypeException {
         switch (gameObjectType) {
             case ENTITY:
-                return (T) new EntityEditor(gameObjectManager);
+                return (T) new EntityEditor(gameObjectManager, imageSelectorController);
             case PLAYER:
                 return (T) new PlayerEditor(gameObjectManager);
             case TILE:
-                return (T) new TileEditor(gameObjectManager);
+                return (T) new TileEditor(gameObjectManager, imageSelectorController);
             case SOUND:
                 return (T) new SoundEditor(gameObjectManager);
             case UNSPECIFIED:
@@ -48,13 +53,17 @@ public class EditorFactory {
      * @throws GameObjectTypeException
      * @throws MissingEditorForTypeException
      */
-    public static <T extends AbstractGameObjectEditor> T makeEditor(String gameObjectType, GameObjectsCRUDInterface gameObjectManager) throws GameObjectTypeException, MissingEditorForTypeException {
+    public static <T extends AbstractGameObjectEditor> T makeEditor(
+        String gameObjectType,
+        GameObjectsCRUDInterface gameObjectManager,
+        ImageSelectorController imageSelectorController
+    ) throws GameObjectTypeException, MissingEditorForTypeException {
         GameObjectType type;
         try {
             type = GameObjectType.valueOf(gameObjectType);
         } catch (IllegalArgumentException e) {
             throw new GameObjectTypeException(String.format("%s is not a valid GameObjectType", gameObjectType), e);
         }
-        return makeEditor(type, gameObjectManager);
+        return makeEditor(type, gameObjectManager, imageSelectorController);
     }
 }

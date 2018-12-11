@@ -18,6 +18,7 @@ import javafx.scene.control.TabPane.TabDragPolicy;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import utils.imageSelector.ImageSelectorController;
 import utils.nodeInstance.NodeInstanceController;
 
 /**
@@ -42,6 +43,7 @@ public class EditView implements SubView<TabPane> {
     private int rowNumber;
     private int colNumber;
     private EditGridView gridView;
+    private ImageSelectorController imageSelectorController;
     private NodeInstanceController nodeInstanceController;
     private PhaseChooserPane phaseView;
     private Tab mainTab;
@@ -56,10 +58,18 @@ public class EditView implements SubView<TabPane> {
      *
      * @return A tabView Node to be displayed at the left side of the createPhaseGraph window.
      */
-    public EditView(AuthoringTools authTools, GroovyPaneFactory groovyPaneFactory, int row, int col, GameObjectsCRUDInterface manager, NodeInstanceController controller) {
+    public EditView(
+        AuthoringTools authTools,
+        GroovyPaneFactory groovyPaneFactory,
+        int row, int col,
+        GameObjectsCRUDInterface manager,
+        NodeInstanceController controller,
+        ImageSelectorController imageSelectorController
+    ) {
         this.authTools = authTools;
         this.groovyPaneFactory = groovyPaneFactory;
         nodeInstanceController = controller;
+        this.imageSelectorController = imageSelectorController;
         objectManager = manager;
         rowNumber = row;
         colNumber = col;

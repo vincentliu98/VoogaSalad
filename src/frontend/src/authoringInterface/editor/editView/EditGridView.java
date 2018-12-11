@@ -271,7 +271,7 @@ public class EditGridView implements SubView<ScrollPane> {
         AbstractGameObjectEditor editor = null;
         try {
             assert userObject != null;
-            editor = EditorFactory.makeEditor(userObject.getType(), gameObjectManager);
+            editor = EditorFactory.makeEditor(userObject.getType(), gameObjectManager, null); // safe, since we're not using it on instances
         } catch (MissingEditorForTypeException e) {
             // TODO
             e.printStackTrace();

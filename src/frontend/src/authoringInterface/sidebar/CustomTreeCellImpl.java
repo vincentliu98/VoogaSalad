@@ -27,6 +27,7 @@ import utils.exception.PreviewUnavailableException;
 import utils.exception.UnremovableNodeException;
 import utils.imageManipulation.ImageManager;
 import utils.imageManipulation.JavaFxOperation;
+import utils.imageSelector.ImageSelectorController;
 import utils.nodeInstance.NodeInstanceController;
 
 
@@ -44,14 +45,14 @@ public class CustomTreeCellImpl extends TreeCell<String> {
     private GameObjectsCRUDInterface objectManager;
     private NodeInstanceController nodeInstanceController;
 
-    public CustomTreeCellImpl(GameObjectsCRUDInterface manager, NodeInstanceController controller) {
+    public CustomTreeCellImpl(GameObjectsCRUDInterface manager, NodeInstanceController controller, ImageSelectorController imageSelectorController) {
         objectManager = manager;
         nodeInstanceController = controller;
         MenuItem addMenuItem = new MenuItem("Add an entry");
         addMenuItem.setOnAction(e -> {
             try {
                 Stage dialogStage = new Stage();
-                AbstractGameObjectEditor editor = EditorFactory.makeEditor(getItem(), manager);
+                AbstractGameObjectEditor editor = EditorFactory.makeEditor(getItem(), manager, imageSelectorController);
                 dialogStage.setScene(new Scene(editor.getView(), 600, 620));
                 dialogStage.show();
                 editor.addTreeItem(getTreeItem());
@@ -102,7 +103,7 @@ public class CustomTreeCellImpl extends TreeCell<String> {
             Stage dialogStage = new Stage();
             AbstractGameObjectEditor editor = null;
             try {
-                editor = EditorFactory.makeEditor(objectClass.getType(), manager);
+                editor = EditorFactory.makeEditor(objectClass.getType(), manager, imageSelectorController);
             } catch (MissingEditorForTypeException e1) {
                 // TODO
                 e1.printStackTrace();

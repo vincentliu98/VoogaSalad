@@ -91,7 +91,7 @@ public class GameObjectsCRUDConverter implements Converter {
 
             // imageSelector
             writer.startNode("myImageSelector");
-            writer.setValue(entityClass.getImageSelectorCode());
+            writer.setValue(entityClass.getImageSelector().transformToGroovy().get(""));
             writer.endNode();
 
             writer.endNode();
@@ -157,7 +157,7 @@ public class GameObjectsCRUDConverter implements Converter {
 
             // imageSelector
             writer.startNode("myImageSelector");
-            writer.setValue(entityClass.getImageSelectorCode());
+            writer.setValue(entityClass.getImageSelector().transformToGroovy().get(""));
             writer.endNode();
 
             writer.endNode();
@@ -203,7 +203,7 @@ public class GameObjectsCRUDConverter implements Converter {
 
             // myImageSelector
             writer.startNode("myImageSelector");
-            writer.setValue(tileClass.getImageSelectorCode());
+            writer.setValue(tileClass.getImageSelector().transformToGroovy().get(""));
             writer.endNode();
             writer.endNode();
         }
