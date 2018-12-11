@@ -78,4 +78,14 @@ public class RegisterScreen {
         myPane.add(passwordField, 0, 3, 4, 1);
         myPane.add(btn, 0, 5, 4, 1);
     }
+
+    /**
+     * For debugging purposes only
+     */
+    private void resetDatabases(){
+        DatabaseUploader databaseUploader = new DatabaseUploader("client", "store",
+        "e.printstacktrace", "vcm-7456.vm.duke.edu", 3306);
+        databaseUploader.upload("DELETE FROM logins WHERE id!='1'");
+        databaseUploader.upload("DELETE FROM userReferences WHERE id!='1'");
+    }
 }
