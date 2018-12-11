@@ -1,5 +1,8 @@
 package authoringUtils.exception;
 
+/**
+ * @author Jason Zhou
+ */
 public class InvalidOperationException extends Exception {
     public InvalidOperationException(String message) {
         super(message);

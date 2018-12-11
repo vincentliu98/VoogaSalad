@@ -1,5 +1,9 @@
 package authoringUtils.exception;
 
+/**
+ * @author Jason Zhou
+ * @author Yunhao Qing
+ */
 public class InvalidIdException extends IdException {
     public InvalidIdException() {
         super("GameObject Instance has an invalid Id");

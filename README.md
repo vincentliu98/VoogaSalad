@@ -115,20 +115,20 @@ Hours Spent: 100 hours per person
 
 Authoring_backend
 
-* src/authoring_backend/src/authoringUtils/exception/DuplicateGameObjectClassException.java
-* src/authoring_backend/src/authoringUtils/exception/DuplicateIdException.java
-* src/authoring_backend/src/authoringUtils/exception/GameObjectClassException.java
-* src/authoring_backend/src/authoringUtils/exception/GameObjectClassNotFoundException.java
-* src/authoring_backend/src/authoringUtils/exception/GameObjectInstanceException.java
-* src/authoring_backend/src/authoringUtils/exception/GameObjectInstanceNotFoundException.java
-* src/authoring_backend/src/authoringUtils/exception/GameObjectTypeException.java
-* src/authoring_backend/src/authoringUtils/exception/IdException.java
-* src/authoring_backend/src/authoringUtils/exception/InvalidGameObjectClassException.java
-* src/authoring_backend/src/authoringUtils/exception/InvalidGameObjectInstanceException.java
-* src/authoring_backend/src/authoringUtils/exception/InvalidIdException.java
-* src/authoring_backend/src/authoringUtils/exception/InvalidOperationException.java
-* src/authoring_backend/src/authoringUtils/exception/InvalidPointsException.java
-* src/authoring_backend/src/authoringUtils/exception/TurnNotFoundException.java
+* src/authoring_backend/src/authoringUtils/exception/DuplicateGameObjectClassException.java : This class handles the exception of having duplicate game object class in the CRUD.
+* src/authoring_backend/src/authoringUtils/exception/DuplicateIdException.java : This class handles the exception of duplicating id being used in the CRUD.
+* src/authoring_backend/src/authoringUtils/exception/GameObjectClassException.java : This class is extended by specific game object class exception.
+* src/authoring_backend/src/authoringUtils/exception/GameObjectClassNotFoundException.java : This file handles the exception of calling a game object class that is not found.
+* src/authoring_backend/src/authoringUtils/exception/GameObjectInstanceException.java : This class is extended by specific game object instance exception.
+* src/authoring_backend/src/authoringUtils/exception/GameObjectInstanceNotFoundException.java :  : This file handles the exception of calling a game object instance that is not found.
+* src/authoring_backend/src/authoringUtils/exception/GameObjectTypeException.java : This class hanldes exception of game object type conflict.
+* src/authoring_backend/src/authoringUtils/exception/IdException.java : This class is extended by specific id class exception.
+* src/authoring_backend/src/authoringUtils/exception/InvalidGameObjectClassException.java : This file handles invalid game object class exception.
+* src/authoring_backend/src/authoringUtils/exception/InvalidGameObjectInstanceException.java : This file handles invalid game object instance exception.
+* src/authoring_backend/src/authoringUtils/exception/InvalidIdException.java : This class handles invalid id exceptions.
+* src/authoring_backend/src/authoringUtils/exception/InvalidOperationException.java : This file handles invalid operations on id in CRUD.
+* src/authoring_backend/src/authoringUtils/exception/InvalidPointsException.java : This class handles invalid point exception in CRUD.
+* src/authoring_backend/src/authoringUtils/exception/TurnNotFoundException.java : This class handles the exception of a certain turn not found in CRUD.
 
 * src/authoring_backend/src/groovy/graph/blocks/core/ArgNumberMismatchException.java
 * src/authoring_backend/src/groovy/graph/blocks/small_factory/ListParseException.java
@@ -145,17 +145,17 @@ Controller
 
 Frontend
 
-* src/frontend/src/authoringInterface/sidebar/RedundantNamingException.java
-* src/frontend/src/authoringInterface/subEditors/exception/IllegalGameObjectNamingException.java
-* src/frontend/src/authoringInterface/subEditors/exception/IllegalGeometryException.java
-* src/frontend/src/authoringInterface/subEditors/exception/MissingEditorForTypeException.java
-* src/frontend/src/runningGame/IllegalSavedGameException.java
-* src/frontend/src/utils/exception/GridIndexOutOfBoundsException.java
-* src/frontend/src/utils/exception/NodeNotFoundException.java
-* src/frontend/src/utils/exception/PreviewUnavailableException.java
-* src/frontend/src/utils/exception/UnhandledCoordinatesClassException.java
-* src/frontend/src/utils/exception/UnremovableNodeException.java
-* src/frontend/src/utils/exception/XMLParsingException.java
+* src/frontend/src/authoringInterface/sidebar/RedundantNamingException.java : This file handles duplicate naming exception.
+* src/frontend/src/authoringInterface/subEditors/exception/IllegalGameObjectNamingException.java : This file handles invalid naming for game objects exception.
+* src/frontend/src/authoringInterface/subEditors/exception/IllegalGeometryException.java : This file handles illegal geometry exception.
+* src/frontend/src/authoringInterface/subEditors/exception/MissingEditorForTypeException.java : This file handles missing editor for type exception.
+* src/frontend/src/runningGame/IllegalSavedGameException.java : This class handles inappropriate saved game exception.
+* src/frontend/src/utils/exception/GridIndexOutOfBoundsException.java : This class handles grid index out of bound exception.
+* src/frontend/src/utils/exception/NodeNotFoundException.java : This class handles a specific node is not found exception.
+* src/frontend/src/utils/exception/PreviewUnavailableException.java : This class handles preview unavailable excepton.
+* src/frontend/src/utils/exception/UnhandledCoordinatesClassException.java : This class handles coordinates class unhandled exception. 
+* src/frontend/src/utils/exception/UnremovableNodeException.java : This class handles a certain node is unremovable exception.
+* src/frontend/src/utils/exception/XMLParsingException.java : This class handles any issue in paring the XML.
 
 
 
