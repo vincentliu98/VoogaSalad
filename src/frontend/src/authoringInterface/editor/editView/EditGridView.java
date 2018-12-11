@@ -392,6 +392,13 @@ public class EditGridView implements SubView<ScrollPane> {
                 handleDoubleClick(e, finalNodeOnGrid);
             }
         });
+        finalNodeOnGrid.setOnDragDetected(e -> {
+            Dragboard db = finalNodeOnGrid.startDragAndDrop(TransferMode.MOVE);
+            ClipboardContent cc = new ClipboardContent();
+            cc.putString(gameObjectInstance.getInstanceName());
+            db.setContent(cc);
+            db.setDragView(finalNodeOnGrid.getImage());
+        });
         int height = 0;
         int width = 0;
         if (gameObjectInstance.getType() == GameObjectType.ENTITY) {
