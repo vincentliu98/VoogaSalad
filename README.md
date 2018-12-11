@@ -170,10 +170,10 @@ TO BE ADDED
 ![UI View](doc/<name>.png)
 
 ### How to use the program
-**Authoring Environment**
+**Authoring Environment:**
 Run the MainAuthoringProgram.java to access the authoring program.
 
-**Engine**
+**Engine:**
 Run the GameLauncher.java to access the game launcher. Click any game's "Play" button the play the game. Sign in to access social center functionality under the "Social" tag.
 
 ### Known Bugs
@@ -199,7 +199,8 @@ Run the GameLauncher.java to access the game launcher. Click any game's "Play" b
 
 * **Amy Kim :** I have been working on the GUI and I really like the experience. Learning how all the UI components work, how the UI components are connected to the back-end and learning how to handle user input were challenging but fun as well. I have also been doing a lot of testing and debugging, it feels great to see how the UI becomes more perfect and beautiful over time.
 
-* Natalie Le : I had a really great time working on this project. I learned a lot about module dependencies, external libraries, and design patterns like Pub-Sub. My team and I also learned a lot about technical collaboration and best practices for engineering groupwork. It was awesome working with such great teammates!
+* **Natalie Le :** I had a really great time working on this project. I learned a lot about module dependencies,
+external libraries, and design patterns like Pub-Sub. My team and I also learned a lot about technical collaboration and best practices for engineering groupwork. It was awesome working with such great teammates!
 
 * **Jonathan Nakagawa :** I am truly happy with working on the sole of our program - the game engine frontend. I spent some time on UI as well. I have learnt a lot and I believe the skills and friendship I obtained from the project will last.
 
