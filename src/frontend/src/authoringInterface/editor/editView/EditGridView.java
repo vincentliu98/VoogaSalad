@@ -6,6 +6,7 @@ import authoringInterface.subEditors.AbstractGameObjectEditor;
 import authoringInterface.subEditors.EditorFactory;
 import authoringInterface.subEditors.exception.MissingEditorForTypeException;
 import authoringUtils.exception.GameObjectClassNotFoundException;
+import authoringUtils.exception.GameObjectInstanceNotFoundException;
 import authoringUtils.exception.GameObjectTypeException;
 import authoringUtils.exception.InvalidIdException;
 import gameObjects.crud.GameObjectsCRUDInterface;
@@ -294,6 +295,7 @@ public class EditGridView implements SubView<ScrollPane> {
             e.printStackTrace();
         }
         try {
+            gameObjectManager.deleteGameObjectInstance(nodeInstanceController.getGameObjectInstance(targetNode).getInstanceId());
             nodeInstanceController.removeNode(targetNode);
         } catch (NodeNotFoundException e) {
             // TODO: proper error handling
@@ -395,7 +397,7 @@ public class EditGridView implements SubView<ScrollPane> {
         finalNodeOnGrid.setOnDragDetected(e -> {
             Dragboard db = finalNodeOnGrid.startDragAndDrop(TransferMode.MOVE);
             ClipboardContent cc = new ClipboardContent();
-            cc.putString(gameObjectInstance.getInstanceName());
+            cc.putString(String.valueOf(gameObjectInstance.getInstanceId()));
             db.setContent(cc);
             db.setDragView(finalNodeOnGrid.getImage());
         });
@@ -455,6 +457,12 @@ public class EditGridView implements SubView<ScrollPane> {
                 e.printStackTrace();
             }
             createInstanceAtGridCell(objectClass, cell);
+        } else if (!dragEvent.getDragboard().getString().isEmpty()) {
+            GameObjectInstance draggedInstance;
+            try {
+                draggedInstance = gameObjectManager.getGameObjectInstance(Integer.valueOf(dragEvent.getDragboard().getString()));
+            } catch (GameObjectInstanceNotFoundException ignored) {}
+            handleNodeDeleting(draggedInstance);
         }
         dragEvent.consume();
     }
