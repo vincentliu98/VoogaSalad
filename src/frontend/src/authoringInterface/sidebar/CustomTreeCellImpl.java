@@ -10,12 +10,14 @@ import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectType;
+import gameplay.GameObject;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeCell;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.KeyCode;
@@ -27,6 +29,7 @@ import utils.imageManipulation.ImageManager;
 import utils.imageManipulation.JavaFxOperation;
 import utils.nodeInstance.NodeInstanceController;
 
+
 /**
  * This class organizes the cell factory call back methods into a nicer format.
  *
@@ -36,6 +39,8 @@ public class CustomTreeCellImpl extends TreeCell<String> {
     private TextField textField;
     private ContextMenu addMenu = new ContextMenu();
     private ContextMenu editMenu = new ContextMenu();
+    private static final double ICON_HEIGHT = 50;
+    private static final double ICON_WIDTH = 50;
     private GameObjectsCRUDInterface objectManager;
     private NodeInstanceController nodeInstanceController;
 
@@ -60,10 +65,6 @@ public class CustomTreeCellImpl extends TreeCell<String> {
         });
         addMenu.getItems().add(addMenuItem);
         setOnDragDetected(e -> {
-            Dragboard db = startDragAndDrop(TransferMode.ANY);
-            ClipboardContent cc = new ClipboardContent();
-            cc.putString(getString());
-            db.setContent(cc);
             GameObjectClass draggedClass = null;
             try {
                 draggedClass = objectManager.getGameObjectClass(getString());
@@ -71,12 +72,22 @@ public class CustomTreeCellImpl extends TreeCell<String> {
                 // TODO
                 e1.printStackTrace();
             }
+            assert draggedClass != null;
+            if (draggedClass.getType() == GameObjectType.PLAYER || draggedClass.getType() == GameObjectType.CATEGORY) {
+                e.consume();
+                return;
+            }
+            Dragboard db = startDragAndDrop(TransferMode.ANY);
+            ClipboardContent cc = new ClipboardContent();
+            cc.putString(getString());
+            db.setContent(cc);
             try {
                 db.setDragView(ImageManager.getPreview(draggedClass));
             } catch (PreviewUnavailableException e1) {
                 // TODO: proper error handling.
                 e1.printStackTrace();
             }
+            e.consume();
         });
         MenuItem editMenuItem = new MenuItem("Edit this GameObject");
         MenuItem deleteMenuItem = new MenuItem("Delete this GameObject");
@@ -111,6 +122,7 @@ public class CustomTreeCellImpl extends TreeCell<String> {
                         e1.printStackTrace();
                     }
                     try {
+                        assert node != null;
                         JavaFxOperation.removeFromParent(node);
                     } catch (UnremovableNodeException e1) {
                         // TODO: proper error handling
@@ -190,10 +202,29 @@ public class CustomTreeCellImpl extends TreeCell<String> {
             if (t.getCode() == KeyCode.ENTER) {
                 try {
                     objectManager.changeGameObjectClassName(getItem(), textField.getText());
+
                 } catch (InvalidOperationException e) {
                     // TODO
                     e.printStackTrace();
                 }
+                GameObjectClass gameObjectClass = null;
+                try {
+                    gameObjectClass = objectManager.getGameObjectClass(textField.getText());
+                } catch (GameObjectClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    ImageManager.removeClassImage(gameObjectClass);
+                } catch (GameObjectClassNotFoundException ignored) {}
+                ImageView icon = null;
+                try {
+                    icon = new ImageView(ImageManager.getPreview(gameObjectClass));
+                } catch (PreviewUnavailableException e) {
+                    e.printStackTrace();
+                }
+                assert icon != null;
+                JavaFxOperation.setWidthAndHeight(icon, ICON_WIDTH, ICON_HEIGHT);
+                getTreeItem().setGraphic(icon);
                 commitEdit(textField.getText());
             } else if (t.getCode() == KeyCode.ESCAPE) {
                 cancelEdit();

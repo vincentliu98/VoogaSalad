@@ -36,6 +36,7 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
     private static final double ICON_WIDTH = 50;
     private static final double ICON_HEIGHT = 50;
     private static final double REMOVE_OPACITY = 0.5;
+    private static final double FULL_OPACITY = 1;
     private static final double IMAGE_PANEL_GAP = 10;
     private Label imageText;
     private Button chooseImage;
@@ -83,20 +84,22 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
     private void presentImages() {
         if(imagePath == null) return;
         imagePanel.getChildren().clear();
-        ImageView preview = new ImageView(imagePath);
-        preview.setFitWidth(ICON_WIDTH);
-        preview.setFitHeight(ICON_HEIGHT);
-        imagePanel.getChildren().add(preview);
-        preview.setOnMouseClicked(e -> {
-            if (!toRemoveImage.remove(preview)) {
-                toRemoveImage.add(preview);
-                toRemovePath.add(imagePath);
-                preview.setOpacity(REMOVE_OPACITY);
-            } else {
-                toRemovePath.remove(imagePath);
-                preview.setOpacity(1);
-            }
-        });
+        if (!imagePath.isEmpty()) {
+            ImageView preview = new ImageView(imagePath);
+            preview.setFitWidth(ICON_WIDTH);
+            preview.setFitHeight(ICON_HEIGHT);
+            imagePanel.getChildren().add(preview);
+            preview.setOnMouseClicked(e -> {
+                if (!toRemoveImage.remove(preview)) {
+                    toRemoveImage.add(preview);
+                    toRemovePath.add(imagePath);
+                    preview.setOpacity(REMOVE_OPACITY);
+                } else {
+                    toRemovePath.remove(imagePath);
+                    preview.setOpacity(FULL_OPACITY);
+                }
+            });
+        }
     }
 
     @Override
@@ -137,13 +140,12 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
      */
     @Override
     protected void confirmEditTreeItem() throws IllegalGameObjectNamingException, InvalidOperationException, PreviewUnavailableException {
-        gameObjectClass.setClassName(getValidClassName());
         try {
             ImageManager.removeClassImage(gameObjectClass);
         } catch (GameObjectClassNotFoundException ignored) {
         }
         gameObjectClass.setImagePath(imagePath);
-        gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName(), nameField.getText());
+        gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName(), getValidClassName());
         ImageView icon2 = new ImageView(ImageManager.getPreview(gameObjectClass));
         JavaFxOperation.setWidthAndHeight(icon2, ICON_WIDTH, ICON_HEIGHT);
         treeItem.setValue(nameField.getText());

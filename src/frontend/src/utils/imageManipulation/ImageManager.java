@@ -108,7 +108,7 @@ public class ImageManager {
      * @return
      */
     private static Image getPlayerImage(String imagePaths, String textToDisplay) {
-        if (imagePaths == null) {
+        if (imagePaths == null || imagePaths.isEmpty()) {
             return composeImageFromString(textToDisplay);
         } else {
             return new Image(imagePaths);
