@@ -23,27 +23,27 @@ public class ServerDownloader extends ServerConnector implements ServerQuery{
             Channel channel = mySession.openChannel(CONNECTION_PROTOCOL);
             channel.connect();
             ChannelSftp sftpChannel = (ChannelSftp) channel;
-            if(useDefaultPath){
-                sftpChannel.get(filePath, HOST_PATH + fileDestination);
-            }
-            else {
-                sftpChannel.get(filePath, fileDestination);
-            }
+            sftpChannel.get(filePath, fileDestination);
             sftpChannel.exit();
             mySession.disconnect();
         }
         catch (JSchException e) {
             System.out.println("Error");
+            e.printStackTrace();
         }
         catch (SftpException e) {
             System.out.println("Error");
+            e.printStackTrace();
+
         }
     }
 
 //    public static void main(String args[]){
 //        ServerDownloader downloader = new ServerDownloader();
 //        downloader.connectServer("vcm", "vcm-7456.vm.duke.edu", 22,"afcas8amYf");
-//        downloader.downloadFile("/home/vcm/public_html/tester.txt","/Users/jonathannakagawa/Desktop/Stuff/CompSci308/voogasalad_printstacktrace/src/database/resources");
+//        downloader.downloadFile("/home/vcm/public_html/users/profiles/JonathanNakagawa.xml","/Users/Natalie" +
+//                "/CompSci308" +
+//                "/Projects/voogasalad_printstacktrace/src/database/resources");
 //    }
 
 }
