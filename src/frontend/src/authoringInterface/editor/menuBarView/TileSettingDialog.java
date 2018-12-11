@@ -37,7 +37,7 @@ public class TileSettingDialog extends PopUpWindow {
     private Point start;
     private int numRow;
     private int numCol;
-    private GenerationMode gMode;
+    private GenerationMode gMode = GenerationMode.RANDOM;
     private ComboBox gModeChoice;
     private List<TileProbPair> pairList;
     private VBox myPane;
@@ -69,7 +69,7 @@ public class TileSettingDialog extends PopUpWindow {
 
         gModeChoice = new ComboBox();
         gModeChoice.getItems().addAll("Random", "Repeating");
-        gModeChoice.setValue("Random");
+        gModeChoice.setPromptText("Choose Mode");
         gModeChoice.valueProperty().addListener((ov, t, t1) -> {
             if (t1.equals("Random")) gMode = GenerationMode.RANDOM;
             else gMode = GenerationMode.REPEATING;

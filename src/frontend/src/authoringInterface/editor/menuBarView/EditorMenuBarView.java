@@ -135,7 +135,8 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         } catch (NumericalException e) {
             e.printStackTrace();
         }
-        editView.getGridView().generateTiles();
+        editView.getGridView().generateTiles(tileSettingWindow.retrieveInfo().getKey(), tileSettingWindow.retrieveInfo().getValue(),
+                tileSettingWindow.getStart(), tileSettingWindow.getNumRow(), tileSettingWindow.getNumCol());
         try {
             tileGenerator.generateTiles();
         } catch (Exception e) {
