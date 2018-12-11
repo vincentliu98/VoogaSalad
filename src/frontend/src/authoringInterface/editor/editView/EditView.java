@@ -72,6 +72,10 @@ public class EditView implements SubView<TabPane> {
         return phaseView;
     }
 
+    public EditGridView getGridView() {
+        return gridView;
+    }
+
     private void initializeTab(){
         mainTab = new Tab();
         Label mainLabel = new Label("Main");

@@ -23,6 +23,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Pop-up window for the user to add information about the tile generation.
+ * The user could add multiple tiles, select mode of generation (random/repeating), and specify the
+ * starting position and span for the tiles.
+ *
+ * @author jl729
+ */
+
 public class TileSettingDialog extends PopUpWindow {
     private GameObjectsCRUDInterface gameObjectManager;
     private Map<Double, TileClass> tileClasses;
@@ -34,10 +42,6 @@ public class TileSettingDialog extends PopUpWindow {
     private List<TileProbPair> pairList;
     private VBox myPane;
     private VBox dialogPane;
-    private TextField xText;
-    private TextField yText;
-    private TextField xSText;
-    private TextField ySText;
 
     public Point getStart() {
         return start;
