@@ -1,4 +1,4 @@
-# voogasalad
+# VoogaSalad
 
 A Java program using JavaFX that provides a game authoring environment allowing game designers, people with no programming skills, to build turn-based strategy games, using a variety of visual tools and requiring minimal programming.
 
@@ -13,31 +13,31 @@ Names:
 * Jason Zhou (jz192)
 * Yunhao Qing (yq50)
 
-
-### Timeline
+## Timeline
 
 Start Date: 10/30/2018
 
 Finish Date: 12/9/2018
 
-Hours Spent: 100 hours per person
+Hours Spent: ~800
 
-### Primary Roles
+## Primary Roles
 
-* **Vincent Liu** : *Frontend developer.* <Add description here>
-* **Haotian Wang** : *Frontend developer.* <Add description here>
-* **Amy Kim** : *Frontend developer.* <Add description here>
+* Authoring Environment
+  * **Vincent Liu** : *Frontend developer.* Created basic front-end layout; Created basic graph with drag and drop functionality; Worked on save and load function for phase graph; Enabled tile generation in the front end;
+  * **Haotian Wang** : *Frontend developer.* <Add description here>
+  * **Amy Kim** : *Frontend developer.* <Add description here>
+* Game Engine
+  * **Natalie Le** : *Backend engine developer.* Created the engine/gameplay infrastructure and the social center extension.
+  * **Jonathan Nakagawa** : *Frontend engine developer.* <Add description here>
+* Authoring Engine
+  * **Inchan Hwang** : *Backend authoring engine developer.* Worked on the Groove part of the authoring engine.
+  * **Jason Zhou** : *Backend authoring engine developer.* Worked on GameObjectCRUD and various specific game objects such as Entity, Tile and Sound.
+  * **Yunhao Qing** : *Backend authoring engine developer.* Worked on GameObjeectCRUD and Player component.
 
-* **Natalie Le** : *Backend engine developer.* Created the engine/gameplay infrastructure and the social center extension.
-* **Jonathan Nakagawa** : *Frontend engine developer.* <Add description here>
+## Resources Used
 
-* **Inchan Hwang** : *Backend authoring engine developer.* Worked on the Groove part of the authoring engine.
-* **Jason Zhou** : *Backend authoring engine developer.* Worked on GameObjectCRUD and various specific game objects such as Entity, Tile and Sound.
-* **Yunhao Qing** : *Backend authoring engine developer.* Worked on GameObjeectCRUD and Player component.
-
-### Resources Used
-
-###### Images
+### Images
 
 * [checkbackground.jpg](https://images.chesscomfiles.com/uploads/v1/article/22566.abcddeab.630x354o.5e85b70e72f4@2x.jpeg)
 * [RockPaperScissors_Background.jpg](https://i.ytimg.com/vi/Dvn-WbCQb70/maxresdefault.jpg)
@@ -52,8 +52,7 @@ Hours Spent: 100 hours per person
 * [scissor.png](https://cdn0.iconfinder.com/data/icons/rock-paper-scissors-emoji/792/rock-paper-scissors-emoji-cartoon-001-512.png)
 * [image_not_found.png](https://2.bp.blogspot.com/-zAN0xLpS5vo/WYPWp2_nDHI/AAAAAAAAEyg/ppWmfkMbkc8CiT-0EElAE9ePaTkEDVqbACLcBGAs/s800/image-not-found.png)
 
-###### Articles
-
+### Articles
 
 * [Initialize a static final field in the constructor](https://stackoverflow.com/questions/5093744/initialize-a-static-final-field-in-the-constructor)
 * [Integer.class vs int.class](https://l.messenger.com/l.php?u=https%3A%2F%2Fstackoverflow.com%2Fquestions%2F22470985%2Finteger-class-vs-int-class&h=AT0oxh3T6S7cgm3CMzhRzM-bvukfJYa5z3dXlGkvSAJkB-cd-ucubCPXM4pLevC69Rc95Srq_DW-I0h1FdTZsHNwYd470REraRFeRU-z1YK_47OpJFGXvmkI6ulIDw)
@@ -90,13 +89,17 @@ Hours Spent: 100 hours per person
 * [Line Chart Documentation](https://docs.oracle.com/javafx/2/charts/line-chart.htm#CIHGBCFI)
 * [Line Chart Live Updates](https://stackoverflow.com/questions/22089022/line-chart-live-update)
 
-
-### files used to start the project
+## Files used to start the project
 
 * **Authoring:** src/frontend/src/authoringInterface/MainAuthoringProgram.java
 * **Engine:** src/controller/src/launching/GameLauncher.java
+* **VM Configuration:**
+  > --add-opens java.base/java.lang.reflect=xstream --add-opens java.base/java.util=xstream --add-opens java.base/java.text=xstream --add-opens java.desktop/java.awt.font=xstream --add-opens javafx.base/com.sun.javafx.collections=xstream --add-opens javafx.base/javafx.beans.binding=xstream --add-opens javafx.base/javafx.beans.property=xstream
 
-### files used to test the project
+
+## Files used to test the project
+
+### Back end
 
 * src/authoring_backend/test/CRUDTest.java : This file tests whether the game object CRUD is functioning correctly.
 * src/authoring_backend/test/GroovyBlockTest.java : This file tests whether the groove components, such as the graph and nodes are working appropriately and whether grooveblock is functioning correctly.
@@ -105,45 +108,48 @@ Hours Spent: 100 hours per person
 * src/authoring_backend/test/ValidationTest.java : This file tests whether validation is running.
 * src/authoring_backend/test/XStreamTest.java : This file tests the XStream.
 
+### Front end
+
 * src/frontend/test/GroovyShellTest.java : This class tests the functionality of the Groovy Shell.
 * src/frontend/test/ImageSelectorTest.java : This class tests wheteher image selector is working.
 * src/frontend/test/SerializationTest.java : This class tests the serialization of CRUD interface.
 * src/frontend/test/SwitchingPaneTest.java : This class tests whether switching pane is successful.
 * src/frontend/test/TestGameData.java : This class tests game data.
 
-### files for error handling
+## Files for error handling
 
-Authoring_backend
+### Authoring_backend
 
-* src/authoring_backend/src/authoringUtils/exception/DuplicateGameObjectClassException.java : This class handles the exception of having duplicate game object class in the CRUD.
-* src/authoring_backend/src/authoringUtils/exception/DuplicateIdException.java : This class handles the exception of duplicating id being used in the CRUD.
-* src/authoring_backend/src/authoringUtils/exception/GameObjectClassException.java : This class is extended by specific game object class exception.
-* src/authoring_backend/src/authoringUtils/exception/GameObjectClassNotFoundException.java : This file handles the exception of calling a game object class that is not found.
-* src/authoring_backend/src/authoringUtils/exception/GameObjectInstanceException.java : This class is extended by specific game object instance exception.
-* src/authoring_backend/src/authoringUtils/exception/GameObjectInstanceNotFoundException.java :  : This file handles the exception of calling a game object instance that is not found.
-* src/authoring_backend/src/authoringUtils/exception/GameObjectTypeException.java : This class hanldes exception of game object type conflict.
-* src/authoring_backend/src/authoringUtils/exception/IdException.java : This class is extended by specific id class exception.
-* src/authoring_backend/src/authoringUtils/exception/InvalidGameObjectClassException.java : This file handles invalid game object class exception.
-* src/authoring_backend/src/authoringUtils/exception/InvalidGameObjectInstanceException.java : This file handles invalid game object instance exception.
-* src/authoring_backend/src/authoringUtils/exception/InvalidIdException.java : This class handles invalid id exceptions.
-* src/authoring_backend/src/authoringUtils/exception/InvalidOperationException.java : This file handles invalid operations on id in CRUD.
-* src/authoring_backend/src/authoringUtils/exception/InvalidPointsException.java : This class handles invalid point exception in CRUD.
-* src/authoring_backend/src/authoringUtils/exception/TurnNotFoundException.java : This class handles the exception of a certain turn not found in CRUD.
+* Authoring Utils
+  * src/authoring_backend/src/authoringUtils/exception/DuplicateGameObjectClassException.java : This class handles the exception of having duplicate game object class in the CRUD.
+  * src/authoring_backend/src/authoringUtils/exception/DuplicateIdException.java : This class handles the exception of duplicating id being used in the CRUD.
+  * src/authoring_backend/src/authoringUtils/exception/GameObjectClassException.java : This class is extended by specific game object class exception.
+  * src/authoring_backend/src/authoringUtils/exception/GameObjectClassNotFoundException.java : This file handles the exception of calling a game object class that is not found.
+  * src/authoring_backend/src/authoringUtils/exception/GameObjectInstanceException.java : This class is extended by specific game object instance exception.
+  * src/authoring_backend/src/authoringUtils/exception/GameObjectInstanceNotFoundException.java :  : This file handles the exception of calling a game object instance that is not found.
+  * src/authoring_backend/src/authoringUtils/exception/GameObjectTypeException.java : This class hanldes exception of game object type conflict.
+  * src/authoring_backend/src/authoringUtils/exception/IdException.java : This class is extended by specific id class exception.
+  * src/authoring_backend/src/authoringUtils/exception/InvalidGameObjectClassException.java : This file handles invalid game object class exception.
+  * src/authoring_backend/src/authoringUtils/exception/InvalidGameObjectInstanceException.java : This file handles invalid game object instance exception.
+  * src/authoring_backend/src/authoringUtils/exception/InvalidIdException.java : This class handles invalid id exceptions.
+  * src/authoring_backend/src/authoringUtils/exception/InvalidOperationException.java : This file handles invalid operations on id in CRUD.
+  * src/authoring_backend/src/authoringUtils/exception/InvalidPointsException.java : This class handles invalid point exception in CRUD.
+  * src/authoring_backend/src/authoringUtils/exception/TurnNotFoundException.java : This class handles the exception of a certain turn not found in CRUD.
+* Groovy
+  * src/authoring_backend/src/groovy/graph/blocks/core/ArgNumberMismatchException.java
+  * src/authoring_backend/src/groovy/graph/blocks/small_factory/ListParseException.java
+  * src/authoring_backend/src/groovy/graph/blocks/small_factory/MapParseException.java
+  * src/authoring_backend/src/groovy/graph/blocks/small_factory/NoSuchPropertyException.java
+  * src/authoring_backend/src/groovy/graph/blocks/small_factory/ReferenceParseException.java
+  * src/authoring_backend/src/groovy/graph/PortAlreadyFilledException.java
+  * src/authoring_backend/src/groovy/graph/PortNotConnectedException.java
+  * src/authoring_backend/src/phase/NamespaceException.java
 
-* src/authoring_backend/src/groovy/graph/blocks/core/ArgNumberMismatchException.java
-* src/authoring_backend/src/groovy/graph/blocks/small_factory/ListParseException.java
-* src/authoring_backend/src/groovy/graph/blocks/small_factory/MapParseException.java
-* src/authoring_backend/src/groovy/graph/blocks/small_factory/NoSuchPropertyException.java
-* src/authoring_backend/src/groovy/graph/blocks/small_factory/ReferenceParseException.java
-* src/authoring_backend/src/groovy/graph/PortAlreadyFilledException.java
-* src/authoring_backend/src/groovy/graph/PortNotConnectedException.java
-* src/authoring_backend/src/phase/NamespaceException.java
-
-Controller
+### Controller
 
 * src/controller/src/social/UserException.java
 
-Frontend
+### Frontend
 
 * src/frontend/src/authoringInterface/sidebar/RedundantNamingException.java : This file handles duplicate naming exception.
 * src/frontend/src/authoringInterface/subEditors/exception/IllegalGameObjectNamingException.java : This file handles invalid naming for game objects exception.
@@ -153,45 +159,48 @@ Frontend
 * src/frontend/src/utils/exception/GridIndexOutOfBoundsException.java : This class handles grid index out of bound exception.
 * src/frontend/src/utils/exception/NodeNotFoundException.java : This class handles a specific node is not found exception.
 * src/frontend/src/utils/exception/PreviewUnavailableException.java : This class handles preview unavailable excepton.
-* src/frontend/src/utils/exception/UnhandledCoordinatesClassException.java : This class handles coordinates class unhandled exception. 
+* src/frontend/src/utils/exception/UnhandledCoordinatesClassException.java : This class handles coordinates class unhandled exception.
 * src/frontend/src/utils/exception/UnremovableNodeException.java : This class handles a certain node is unremovable exception.
 * src/frontend/src/utils/exception/XMLParsingException.java : This class handles any issue in paring the XML.
 
-
-
-### data or resource files required by the project
+## Data or resource files required by the project
 
 The user can to customize images for entity, tile and user avatars. The user need to prepare these images and set the appropriate image for respective image objects in building the game.
 
-### UI Layout of the project
+## UI Layout of the project
 
-TO BE ADDED
+`TO BE ADDED`
 
 ![UI View](doc/<name>.png)
 
-### How to use the program
+## How to use the program
+
 **Authoring Environment:**
 Run the MainAuthoringProgram.java to access the authoring program.
 
 **Engine:**
 Run the GameLauncher.java to access the game launcher. Click any game's "Play" button the play the game. Sign in to access social center functionality under the "Social" tag.
 
-### Known Bugs
+`Anything else?`
 
-* Redo and Undo are too difficult with our current framework and we did not manage to finish it before the deadline.
+## Known Bugs
 
+* Redo and Undo are too difficult with our current framework and we did not manage to finish it before the deadline. However, basic framework (Memento Pattern) is set up in our project
+* `TO BE ADDED`
 
-### Design decision
+## Design decision
 
 * Initially we were unsure about how to build the authoring engine so the author can build a game with little code. We carefully studied the game TicTacToe and came up with the idea of having a grid and various game objects such as entities and tiles. We later decided to also have players, turns and categories as game objects too. After making the TicTacToe works, we started to think about how to make other games work. Inchan came up with the idea of Groovy, through which all kinds of logic can be converted from graphics such as nodes and lines to codes that can be run. These two components form the foundation of the authoring backend.
 
-### Extra features
+## Extra features
 
 * User can connect to social media such as Twitter and share result of playing the game instantly.
 
 * User can customize background music for the game and also customize sound effect on actions in playing the game.
 
-### Impression
+* `TO BE ADDED`
+
+## Impression
 
 * **Vincent Liu :** VoogaSalad is more challenging compared to the previous 3 projects, Breakout, Cell Society and SLogo. I learnt how to work with a team by using interfaces and I truly feel I can work better in a team setting in the future.
 
@@ -199,8 +208,7 @@ Run the GameLauncher.java to access the game launcher. Click any game's "Play" b
 
 * **Amy Kim :** I have been working on the GUI and I really like the experience. Learning how all the UI components work, how the UI components are connected to the back-end and learning how to handle user input were challenging but fun as well. I have also been doing a lot of testing and debugging, it feels great to see how the UI becomes more perfect and beautiful over time.
 
-* **Natalie Le :** I had a really great time working on this project. I learned a lot about module dependencies,
-external libraries, and design patterns like Pub-Sub. My team and I also learned a lot about technical collaboration and best practices for engineering groupwork. It was awesome working with such great teammates!
+* **Natalie Le :** I had a really great time working on this project. I learned a lot about module dependencies, external libraries, and design patterns like Pub-Sub. My team and I also learned a lot about technical collaboration and best practices for engineering groupwork. It was awesome working with such great teammates!
 
 * **Jonathan Nakagawa :** I am truly happy with working on the sole of our program - the game engine frontend. I spent some time on UI as well. I have learnt a lot and I believe the skills and friendship I obtained from the project will last.
 
