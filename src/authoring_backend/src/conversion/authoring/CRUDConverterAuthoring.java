@@ -20,6 +20,8 @@ import groovy.lang.GroovyShell;
 import java.util.Map;
 import java.util.TreeSet;
 
+import static javafx.scene.input.KeyCode.V;
+
 /**
  * This Converter is for the authoring GameObjectsCRUD saving and loading.
  *
@@ -314,63 +316,63 @@ public class CRUDConverterAuthoring implements Converter {
             writer.endNode();
         }
 
-        // SoundClass
-        for (SoundClass soundClass : db.getSoundClasses()) {
-            writer.startNode("soundClass");
+//        // SoundClass
+//        for (SoundClass soundClass : db.getSoundClasses()) {
+//            writer.startNode("soundClass");
+//
+//            // Class Name
+//            writer.startNode("className");
+//            writer.setValue(soundClass.getClassName());
+//            writer.endNode();
+//
+//            writer.startNode("classID");
+//            writer.setValue(String.valueOf(soundClass.getClassId()));
+//            writer.endNode();
+//
+//            writer.startNode("mediaFilePath");
+//            if (!soundClass.getMediaFilePath().isEmpty()) {
+//                writer.setValue(soundClass.getMediaFilePath());
+//            }
+//            writer.endNode();
+//
+//            writer.startNode("duration");
+//            writer.setValue(String.valueOf(soundClass.getDuration()));
+//            writer.endNode();
+//
+//            writer.endNode();
+//        }
+//
+//        // SoundInstance
+//        for (SoundInstance soundInstance : db.getSoundInstances()) {
+//            writer.startNode("soundInstance");
+//
+//            // ClassName
+//            writer.startNode("className");
+//            writer.setValue(soundInstance.getClassName());
+//            writer.endNode();
+//
+//            // Instance name
+//            writer.startNode("instanceName");
+//            writer.setValue(soundInstance.getInstanceName());
+//            writer.endNode();
+//
+//            // Instance ID
+//            writer.startNode("instanceID");
+//            writer.setValue(String.valueOf(soundInstance.getInstanceId()));
+//            writer.endNode();
+//
+//            // duration
+//            writer.startNode("duration");
+//            writer.setValue(String.valueOf(soundInstance.getDuration()));
+//            writer.endNode();
 
-            // Class Name
-            writer.startNode("className");
-            writer.setValue(soundClass.getClassName());
-            writer.endNode();
-
-            writer.startNode("classID");
-            writer.setValue(String.valueOf(soundClass.getClassId()));
-            writer.endNode();
-
-            writer.startNode("mediaFilePath");
-            if (!soundClass.getMediaFilePath().isEmpty()) {
-                writer.setValue(soundClass.getMediaFilePath());
-            }
-            writer.endNode();
-
-            writer.startNode("duration");
-            writer.setValue(String.valueOf(soundClass.getDuration()));
-            writer.endNode();
-
-            writer.endNode();
-        }
-
-        // SoundInstance
-        for (SoundInstance soundInstance : db.getSoundInstances()) {
-            writer.startNode("soundInstance");
-
-            // ClassName
-            writer.startNode("className");
-            writer.setValue(soundInstance.getClassName());
-            writer.endNode();
-
-            // Instance name
-            writer.startNode("instanceName");
-            writer.setValue(soundInstance.getInstanceName());
-            writer.endNode();
-
-            // Instance ID
-            writer.startNode("instanceID");
-            writer.setValue(String.valueOf(soundInstance.getInstanceId()));
-            writer.endNode();
-
-            // duration
-            writer.startNode("duration");
-            writer.setValue(String.valueOf(soundInstance.getDuration()));
-            writer.endNode();
-
-            // file path
-            writer.startNode("mediaFilePath");
-            if (!soundInstance.getMediaFilePath().isEmpty()) {
-                writer.setValue(soundInstance.getMediaFilePath());
-            }
-            writer.endNode();
-        }
+//            // file path
+//            writer.startNode("mediaFilePath");
+//            if (!soundInstance.getMediaFilePath().isEmpty()) {
+//                writer.setValue(soundInstance.getMediaFilePath());
+//            }
+//            writer.endNode();
+//        }
     }
 
     private <K, V> String mapToString(Map<K, V> map) {
