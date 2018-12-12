@@ -107,9 +107,7 @@ public class UserProfile {
         setHoverListeners(btn);
         //CheckBox cBox = new CheckBox("Remember me"); TODO: Do we need this?
         Text logout = new Text("Log Out");
-        logout.setOnMouseClicked(e -> {
-            EventBus.getInstance().sendMessage(EngineEvent.CHANGE_USER); // sets to null user
-        });
+        logout.setOnMouseClicked(e -> logout());
         setHoverListeners(logout);
         //Text forgotPassword = new Text("Forgot your password?");
 
@@ -122,6 +120,11 @@ public class UserProfile {
         myPane.add(btn, 0, 5, 4, 1);
         myPane.add(logout, 0, 6);
         // grid.add(forgotPassword, 2, 6);
+    }
+
+    private void logout(){
+        EventBus.getInstance().sendMessage(EngineEvent.LOGGED_OUT); // sets to null user
+        myStage.close();
     }
 
     private void setHoverListeners(Node node){
