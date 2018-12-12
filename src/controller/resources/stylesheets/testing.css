@@ -23,7 +23,7 @@
 
 .text-option {
     -fx-font-family: "Arial Black";
-    -fx-font-size: 18pt;
+    -fx-font-size: 18 pt;
 
 }
 
@@ -42,13 +42,13 @@
 .title-box {
     -fx-padding: 0 0 5 10;
     -fx-font-family: "Arial";
-    -fx-font-size: 15pt;
+    -fx-font-size: 15 pt;
 }
 
 .description-box {
     -fx-padding: 0 0 10 8;
     -fx-font-family: "Arial";
-    -fx-font-size: 12pt;
+    -fx-font-size: 12 pt;
 }
 
 .button-holder {
