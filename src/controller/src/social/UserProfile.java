@@ -13,9 +13,14 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import util.data.DatabaseUploader;
+import util.files.ServerUploader;
 
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.ResourceBundle;
 
 public class UserProfile {
@@ -28,9 +33,13 @@ public class UserProfile {
     private ResourceBundle myErrors = ResourceBundle.getBundle("Errors");
     private User myUser;
     private Text myStatus;
+    private FileChooser myFileChooser;
 
     public UserProfile(User user) {
         myUser = user;
+        myFileChooser = new FileChooser();
+        myFileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files",
+                "*.png", "*.jpg", "*.jpeg"));
     }
 
     public Stage launchUserProfile() {
@@ -41,7 +50,7 @@ public class UserProfile {
         initStatus();
         initFields();
         myStage.setScene(myScene);
-        myStage.setTitle("Login");
+        myStage.setTitle("User Profile");
         return myStage;
     }
 
@@ -56,7 +65,6 @@ public class UserProfile {
             col.setPercentWidth(25.0D);
             myPane.getColumnConstraints().add(col);
         }
-
         myPane.setGridLinesVisible(false);
     }
 
@@ -69,7 +77,7 @@ public class UserProfile {
         if (myUser.getAvatar() == null){
             avatar = new ImageView(new Image(getClass().getResourceAsStream(PERSON_PATH)));
         } else {
-            avatar = myUser.getAvatar();
+            avatar = new ImageView(myUser.getAvatar().getImage());
         }
         avatar.setFitWidth(100.0D);
         avatar.setPreserveRatio(true);
@@ -77,10 +85,41 @@ public class UserProfile {
         imageBox.getChildren().add(avatar);
         imageBox.setAlignment(Pos.CENTER);
         imageBox.setOnMouseClicked(e -> {
-            // set listener here
+            File file = myFileChooser.showOpenDialog(myStage);
+            if (file != null){
+                System.out.println(file.getName());
+                String[] fullName = file.getName().split("\\.");
+                String extension = fullName[fullName.length - 1];
+                File localAvatarFile = new File("src/controller/resources/profile-images/" + myUser.getUsername() + "-Avatar." + extension);
+                try {
+                    if (!localAvatarFile.exists()) {
+                        localAvatarFile.createNewFile();
+                    }
+                    file.renameTo(localAvatarFile);
+                    updateRemoteAvatar(localAvatarFile);
+                    myUser.changeAvatar(localAvatarFile.getName());
+                    avatar.setImage(myUser.getAvatar().getImage());
+                    EventBus.getInstance().sendMessage(EngineEvent.CHANGE_USER, myUser);
+                } catch (Exception ex){
+                    ex.printStackTrace();
+                }
+            }
         });
         setHoverListeners(imageBox);
         myPane.add(imageBox, 1, 1, 2, 1);
+    }
+
+    private void updateRemoteAvatar(File localAvatarFile) throws IOException {
+        // upload image file
+        ServerUploader upload = new ServerUploader();
+        upload.connectServer("vcm", "vcm-7456.vm.duke.edu", 22,"afcas8amYf");
+        upload.uploadFile(localAvatarFile.getAbsolutePath(), "/users/avatars");
+        // update reference
+        DatabaseUploader databaseUploader = new DatabaseUploader("client", "store",
+                "e.printstacktrace", "vcm-7456.vm.duke.edu", 3306);
+        databaseUploader.upload(String.format("UPDATE userReferences " +
+                "SET avatarPath='%s' WHERE id='%d'", "/home/vcm/public_html/users/avatars/" + localAvatarFile.getName(),
+                myUser.getID()));
     }
 
     private void initStatus() {

@@ -1,6 +1,7 @@
 package social;
 
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -14,6 +15,7 @@ public class ProfileView {
     private HBox myBox;
     private Button myButton;
     private User myUser;
+    private ImageView myImageView;
 
     public ProfileView(User user) {
         myUser = user;
@@ -32,6 +34,7 @@ public class ProfileView {
         myButton = new Button();
         myButton.getStyleClass().add("profile-button");
         setDefaultIcon();
+        myBox.getChildren().add(myButton);
         myButton.setOnAction(event -> {
             if (myUser == null){
                 LoginScreen myLogin = new LoginScreen();
@@ -41,13 +44,13 @@ public class ProfileView {
                 userProfile.launchUserProfile().show();
             }
         });
-        myBox.getChildren().add(myButton);
     }
 
     private void changeIcon(ImageView imageView) {
-        imageView.setFitWidth(ICON_WIDTH);
-        imageView.setFitHeight(ICON_HEIGHT);
-        myButton.setGraphic(imageView);
+        myImageView = imageView;
+        myImageView.setFitWidth(ICON_WIDTH);
+        myImageView.setFitHeight(ICON_HEIGHT);
+        myButton.setGraphic(myImageView);
     }
 
     private void setDefaultIcon(){

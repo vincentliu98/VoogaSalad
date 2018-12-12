@@ -41,8 +41,11 @@ public class User {
         myProgress = new HashMap<>();
         myImageReference = "person_logo.png";
         myStatus = "";
-        myAvatar = getAvatar();
+        myAvatar = new ImageView();
+        changeAvatar("person_logo.png");
     }
+
+    public int getID(){ return myID; }
 
     public ImageView getAvatar(){
         return myAvatar;
@@ -62,10 +65,9 @@ public class User {
 
     public void changeAvatar(String imageReference) {
         myImageReference = imageReference;
-        myAvatar = new ImageView();
         try {
-            Image image = new Image(new FileInputStream(IMAGES_FOLDER_PATH + myImageReference));
-            myAvatar.setImage(image);
+            if (myAvatar == null) myAvatar = new ImageView();
+            myAvatar.setImage(new Image(new FileInputStream(IMAGES_FOLDER_PATH + myImageReference)));
         } catch (Exception e){
             e.printStackTrace();
         }
