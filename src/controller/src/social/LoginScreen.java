@@ -143,10 +143,11 @@ public class LoginScreen {
             String remoteProfilePath = getProfilePath(id);
             String remoteAvatarPath = getAvatarPath(id);
             String profileFilename = downloadRemoteXML(remoteProfilePath); // filename of local XML (to be deleted)
-            String avatarFilename = downloadRemoteAvatar(remoteAvatarPath); // filename of local image
             User user = deserializeUser(profileFilename);
-            System.out.println("avatarFilename is " + avatarFilename);
-            user.changeAvatar(avatarFilename);
+            if (remoteAvatarPath != null){
+                String avatarFilename = downloadRemoteAvatar(remoteAvatarPath); // filename of local image
+                user.changeAvatar(avatarFilename);
+            }
             EventBus.getInstance().sendMessage(EngineEvent.CHANGE_USER, user);
             myStage.close();
             //User myUser = new User(10, "bloop");// TODO: Remove later (just a placeholder)
@@ -192,7 +193,6 @@ public class LoginScreen {
         ServerDownloader downloader = new ServerDownloader();
         downloader.connectServer("vcm", "vcm-7456.vm.duke.edu", 22,"afcas8amYf");
         File directory = new File("src/controller/resources/profile-images/");
-        System.out.println("avatar path is " + avatarPath);
         downloader.downloadFile(avatarPath, directory.getAbsolutePath());
         String[] filePathArray = avatarPath.split("/");
         return filePathArray[filePathArray.length - 1];
