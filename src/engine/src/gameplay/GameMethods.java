@@ -62,23 +62,19 @@ public class GameMethods {
         return ENTITIES.get(entityID);
     }
 
-    public static Entity createEntity(String entityName, int x, int y, int ownerID) {
+    public static Entity createEntity(String entityName, int x, int y, String ownerName) {
         var nextID = ENTITIES.keySet().stream().max(Comparator.comparingInt(a -> a)).orElse(0) + 1;
         var newEntity = ENTITY_PROTOTYPES.get(entityName).build(nextID, x, y);
         newEntity.adjustViewSize(ROOT.getWidth(), ROOT.getHeight());
         ENTITIES.put(nextID, newEntity);
-        PLAYERS.get(ownerID).addEntity(nextID);
+    PLAYERS.get(ownerName).addEntity(nextID);
         newEntity.setLocation(x, y);
         ROOT.getChildren().add(newEntity.getImageView());
         return newEntity;
     }
 
-    public static Entity createEntity(String entityName, int x, int y) {
-        return createEntity(entityName, x, y, DEFAULT_PLAYER_ID);
-    }
-
-    public static Entity createEntity(String entityName, Tile tile) {
-        return createEntity(entityName, (int) Math.round(tile.getX()), (int) Math.round(tile.getY()));
+    public static Entity createEntity(String entityName, Tile tile, String ownerName) {
+        return createEntity(entityName, (int) Math.round(tile.getX()), (int) Math.round(tile.getY()), ownerName);
     }
 
     public static void removeEntity(Entity entity) {

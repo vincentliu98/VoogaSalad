@@ -75,13 +75,14 @@ public class XMLParser {
     }
 
     public Map<String, Player> getPlayers() {
-        NodeList players = myDocTree.getElementsByTagName("gameplay.PlayerPrototype");
+        NodeList players = myDocTree.getElementsByTagName("gameplay.Player");
         Map<String, Player> myPlayers = new HashMap<>();
         for (int i = 0; i < players.getLength(); i++) {
             String currentPlayer = nodeToString(players.item(i));
             Player player = (Player) mySerializer.fromXML(currentPlayer);
             myPlayers.put(player.getName(), player);
         }
+        System.out.println(myPlayers);
         return myPlayers;
     }
 
