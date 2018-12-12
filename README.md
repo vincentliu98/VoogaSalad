@@ -136,10 +136,10 @@ Hours Spent: ~800
   * src/authoring_backend/src/authoringUtils/exception/InvalidPointsException.java : This class handles invalid point exception in CRUD.
   * src/authoring_backend/src/authoringUtils/exception/TurnNotFoundException.java : This class handles the exception of a certain turn not found in CRUD.
 * Groovy
-  * src/authoring_backend/src/groovy/graph/blocks/core/ArgNumberMismatchException.java
-  * src/authoring_backend/src/groovy/graph/blocks/small_factory/ListParseException.java
-  * src/authoring_backend/src/groovy/graph/blocks/small_factory/MapParseException.java
-  * src/authoring_backend/src/groovy/graph/blocks/small_factory/NoSuchPropertyException.java
+  * src/authoring_backend/src/groovy/graph/blocks/core/ArgNumberMismatchException.java : This class handles argument number mismatch exception.
+  * src/authoring_backend/src/groovy/graph/blocks/small_factory/ListParseException.java : This class handles list parse exception.
+  * src/authoring_backend/src/groovy/graph/blocks/small_factory/MapParseException.java : This class handles all kinds of map parse exception.
+  * src/authoring_backend/src/groovy/graph/blocks/small_factory/NoSuchPropertyException.java : This class handles no such property exception.
   * src/authoring_backend/src/groovy/graph/blocks/small_factory/ReferenceParseException.java
   * src/authoring_backend/src/groovy/graph/PortAlreadyFilledException.java
   * src/authoring_backend/src/groovy/graph/PortNotConnectedException.java
