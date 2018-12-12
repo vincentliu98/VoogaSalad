@@ -10,7 +10,8 @@ public class GameIcon extends Icon {
 
     public GameIcon(String gameName, String description, String reference, String color, String imagePath,
                     String tags, User user) {
-        super(gameName, description, reference, color, imagePath, tags, user, "Play", "/game-images/");
+        super(gameName, description, reference, color, imagePath, tags, user, "Play", "src/controller/resources/game" +
+                "-images/");
     }
 
     @Override
