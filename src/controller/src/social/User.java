@@ -160,6 +160,7 @@ public class User {
 
     public void tweet(String message) {
         try {
+            if (myTwitter == null) return;
             myTwitter.updateStatus(message);
         } catch (TwitterException e) {
             e.printStackTrace();
