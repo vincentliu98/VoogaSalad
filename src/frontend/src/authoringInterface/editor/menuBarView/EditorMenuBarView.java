@@ -89,6 +89,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         MenuItem close = new MenuItem("Close");
         MenuItem runProject = new MenuItem("Run");
         MenuItem resizeGrid = new MenuItem("Resize Grid");
+        MenuItem cellSize = new MenuItem("Resize Individual Cell");
         MenuItem setBGM = new MenuItem("BGM");
         MenuItem helpDoc = new MenuItem("Help");
         MenuItem about = new MenuItem("About");
@@ -115,9 +116,11 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         about.setOnAction(this::handleAbout);
         tileSetting.setOnAction(this::handleTileSetting);
 
+        cellSize.setOnAction(this::handleCellSize);
+
         file.getItems().addAll(newFile, open, export, save, saveAs, close);
         run.getItems().addAll(runProject);
-        settings.getItems().addAll(resizeGrid, setBGM, tileSetting);
+        settings.getItems().addAll(resizeGrid, cellSize, setBGM, tileSetting);
         help.getItems().addAll(helpDoc, about);
 
         menuBar.getMenus().addAll(file, settings, run, help);
@@ -143,6 +146,10 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void handleCellSize(ActionEvent event) {
+
     }
 
     void handleSave(ActionEvent event) {

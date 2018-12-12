@@ -466,4 +466,19 @@ public class EditGridView implements SubView<ScrollPane> {
             handleDragFromSideView(dragEvent, cell);
         }
     }
+
+    /**
+     * This method changes the sizes and widths of an individual cell.
+     *
+     * @param width: The width to be set for a cell.
+     * @param height: The height to be set for a cell.
+     */
+    public void changeCellSize(double width, double height) {
+        gridScrollView.getChildrenUnmodifiable().forEach(cell -> {
+            if (cell instanceof StackPane) {
+                ((StackPane) cell).setPrefHeight(height);
+                ((StackPane) cell).setPrefWidth(width);
+            }
+        });
+    }
 }
