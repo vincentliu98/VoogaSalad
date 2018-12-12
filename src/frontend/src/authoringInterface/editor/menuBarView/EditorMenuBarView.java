@@ -149,7 +149,9 @@ public class EditorMenuBarView implements SubView<MenuBar> {
     }
 
     private void handleCellSize(ActionEvent event) {
-
+        new ChangeCellSizeView().showAndWait().ifPresent(doubleDoublePair -> {
+            editView.getGridView().changeCellSize(doubleDoublePair.getKey(), doubleDoublePair.getValue());
+        });
     }
 
     void handleSave(ActionEvent event) {
