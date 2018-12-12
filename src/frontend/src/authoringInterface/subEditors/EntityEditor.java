@@ -32,6 +32,7 @@ import utils.imageManipulation.JavaFxOperation;
 import utils.imageSelector.ImageSelectorController;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -100,8 +101,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
             FileChooser fileChooser = new FileChooser();
             File file = fileChooser.showOpenDialog(new Stage());
             if (file != null) {
-                String imagePath = file.toURI().toString();
-                imagePaths.add(imagePath);
+                imagePaths.add(ImageManager.getRelativePath(file));
             }
         });
         this.imageSelectorController = imageSelectorController;
@@ -151,6 +151,17 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
      */
     @Override
     protected void confirmEditTreeItem() throws IllegalGameObjectNamingException, IllegalGeometryException, InvalidOperationException, PreviewUnavailableException, DuplicateGameObjectClassException {
+        String newName = null;
+        try {
+            newName = getValidClassName();
+        } catch (DuplicateGameObjectClassException e) {
+            if (!nameField.getText().trim().equals(gameObjectClass.getClassName())) {
+                throw e;
+            }
+        }
+        if (newName == null) {
+            newName = nameField.getText().trim();
+        }
         int width = outputPositiveInteger(widthInput);
         int height = outputPositiveInteger(heightInput);
         try {
@@ -162,10 +173,10 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         gameObjectClass.getPropertiesMap().clear();
         gameObjectClass.setWidth(width);
         gameObjectClass.setHeight(height);
-        gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName(), getValidClassName());
+        gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName(), newName);
         ImageView icon2 = new ImageView(ImageManager.getPreview(gameObjectClass));
         JavaFxOperation.setWidthAndHeight(icon2, ICON_WIDTH, ICON_HEIGHT);
-        treeItem.setValue(getValidClassName());
+        treeItem.setValue(newName);
         treeItem.setGraphic(icon2);
         writeClassProperties();
     }
@@ -213,7 +224,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     private void presentImages() {
         imagePanel.getChildren().clear();
         imagePaths.forEach(path -> {
-            ImageView preview = new ImageView(path);
+            ImageView preview = new ImageView(ImageManager.getAbsoluteURL(path));
             preview.setFitWidth(ICON_WIDTH);
             preview.setFitHeight(ICON_HEIGHT);
             imagePanel.getChildren().add(preview);
