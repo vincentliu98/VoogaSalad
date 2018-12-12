@@ -137,15 +137,23 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
      */
     @Override
     protected void confirmEditTreeItem() throws IllegalGameObjectNamingException, InvalidOperationException, PreviewUnavailableException, DuplicateGameObjectClassException {
+        String newName = null;
+        try {
+            newName = getValidClassName();
+        } catch (DuplicateGameObjectClassException e) {
+            if (!nameField.getText().trim().equals(gameObjectClass.getClassName())) {
+                throw e;
+            }
+        }
         try {
             ImageManager.removeClassImage(gameObjectClass);
         } catch (GameObjectClassNotFoundException ignored) {
         }
         gameObjectClass.setImagePath(imagePath);
-        gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName(), getValidClassName());
+        gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName(), newName);
         ImageView icon2 = new ImageView(ImageManager.getPreview(gameObjectClass));
         JavaFxOperation.setWidthAndHeight(icon2, ICON_WIDTH, ICON_HEIGHT);
-        treeItem.setValue(nameField.getText());
+        treeItem.setValue(newName);
         treeItem.setGraphic(icon2);
     }
 
