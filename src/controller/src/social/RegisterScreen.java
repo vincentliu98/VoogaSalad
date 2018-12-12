@@ -1,5 +1,11 @@
 package social;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
+import exceptions.ErrorMessage;
+import exceptions.ExtendedException;
+import exceptions.RegistrationException;
+import exceptions.ServerException;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -10,6 +16,16 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import util.data.DatabaseDownloader;
+import util.data.DatabaseUploader;
+import util.files.ServerUploader;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ResourceBundle;
 
 public class RegisterScreen {
     public static final String MOTTO = "Enter a username and password below.";
@@ -17,6 +33,7 @@ public class RegisterScreen {
     private GridPane myPane;
     private Scene myScene;
     private Stage myStage;
+    private ResourceBundle myErrors = ResourceBundle.getBundle("Errors");
 
     public RegisterScreen() {
     }
@@ -69,14 +86,52 @@ public class RegisterScreen {
         passwordField.setPromptText("password");
         Button btn = new Button("CREATE ACCOUNT");
         btn.setPrefWidth(260.0D);
-
         btn.setOnMouseClicked(e -> {
-            // TODO: Check for username not taken, add user
-            myStage.close();
+            try {
+                registerUser(usernameField.getText(), passwordField.getText());
+            } catch (Exception ex){
+                ExtendedException exception = (ExtendedException) ex;
+                new ErrorMessage(exception);
+            }
         });
-
         myPane.add(usernameField, 0, 2, 4, 1);
         myPane.add(passwordField, 0, 3, 4, 1);
         myPane.add(btn, 0, 5, 4, 1);
+    }
+
+    private void registerUser(String myUsername, String myPassword) throws IOException, SQLException {
+        try {
+            checkForBlankFields(myUsername, myPassword);
+            DatabaseHelper.verifyUniqueUsername(myUsername);
+            int id = DatabaseHelper.getNextUserID();
+            User user = new User(id, myUsername);
+            DatabaseHelper.updateLoginsTable(myUsername, myPassword, id);
+            DatabaseHelper.uploadSerializedUserFile(myUsername, user);
+            DatabaseHelper.updateRemoteProfileReferences(myUsername, id);
+        } catch (IOException | SQLException | RegistrationException ex){
+            if (!ex.getClass().equals(RegistrationException.class)){
+                throw new ServerException(myErrors.getString("ServerError"), myErrors.getString("ServerErrorWarning"));
+            }
+            throw ex; // rethrowing the RegistrationException
+        }
+//       resetDatabases();
+        myStage.close();
+    }
+
+    private void checkForBlankFields(String myUsername, String myPassword) {
+        if (myUsername.isEmpty() || myPassword.isEmpty()){
+            throw new RegistrationException(myErrors.getString("BlankField"), myErrors.getString(
+                    "BlankFieldWarning"));
+        }
+    }
+
+    /**
+     * For debugging purposes only
+     */
+    private void resetDatabases(){
+        DatabaseUploader databaseUploader = new DatabaseUploader("client", "store",
+        "e.printstacktrace", "vcm-7456.vm.duke.edu", 3306);
+        databaseUploader.upload("DELETE FROM logins WHERE id!='0'");
+        databaseUploader.upload("DELETE FROM userReferences WHERE id!='0'");
     }
 }

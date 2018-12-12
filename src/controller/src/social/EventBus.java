@@ -33,7 +33,7 @@ public class EventBus { // pub-sub
     public void sendMessage(EngineEvent engineEvent, Object... args) {
         if (!myEventMap.containsKey(engineEvent)) return;
         for (Subscriber s : myEventMap.get(engineEvent)) {
-            s.update(engineEvent, args);
+            s.update(args);
         }
     }
 

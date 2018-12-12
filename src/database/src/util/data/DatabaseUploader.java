@@ -13,12 +13,13 @@ public class DatabaseUploader extends DatabaseConnector implements DatabaseUploa
 
     @Override
     public void upload(String command) {
-        try (
-                Connection conn = myDataSrc.getConnection();
-                Statement stmt = conn.createStatement();
-        ) {
-            mySet = stmt.executeQuery(command);
-        } catch (SQLException ex) {
+        try {
+            Connection conn = myDataSrc.getConnection();
+            Statement stmt = conn.createStatement();
+            stmt.executeUpdate(command);
+        }
+        catch (SQLException ex) {
+            ex.printStackTrace();
             System.out.println("Invalid SQl Command");
         }
     }

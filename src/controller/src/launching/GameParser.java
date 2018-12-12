@@ -14,7 +14,7 @@ import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameParser implements Subscriber {
+public class GameParser {
     public static final String NAME_TAG = "name";
     public static final String DESCRIPTION_TAG = "info";
     public static final String IMAGE_TAG = "displaygraphic";
@@ -41,7 +41,8 @@ public class GameParser implements Subscriber {
         } catch (Exception e) {
 
         }
-        EventBus.getInstance().register(EngineEvent.CHANGE_USER, this);
+        EventBus.getInstance().register(EngineEvent.CHANGE_USER, this::reassignUser);
+        EventBus.getInstance().register(EngineEvent.LOGGED_OUT, this::resetUser);
     }
 
     private void findFiles() {
@@ -75,11 +76,11 @@ public class GameParser implements Subscriber {
         return myGames;
     }
 
+    private void reassignUser(Object... args) {
+        myUser = (User) args[0];
+    }
 
-    @Override
-    public void update(EngineEvent engineEvent, Object... args) {
-        if (engineEvent.equals(EngineEvent.CHANGE_USER) && args[0].getClass().equals(User.class)) {
-            myUser = (User) args[0];
-        }
+    private void resetUser(Object... args) {
+        myUser = null;
     }
 }

@@ -1,5 +1,7 @@
 package social;
 
+import exceptions.ErrorMessage;
+import exceptions.UserException;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import twitter4j.Twitter;
@@ -9,19 +11,17 @@ import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
 import twitter4j.conf.ConfigurationBuilder;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.FileInputStream;
 import java.util.*;
 
 public class User {
-    private static final String IMAGES_FOLDER_PATH = "/profile-images/";
+    private static final String IMAGES_FOLDER_PATH = "src/controller/resources/profile-images/";
     private int myID;
     private String myUsername;
     private Set<String> myFavoriteGames;
-    private ImageView myAvatar;
     private Twitter myTwitter;
-    private ResourceBundle myErrors;
     private Set<String> myFollowing;
+    private Set<String> myFollowers;
     private Map<String, String> myProgress;
     private String myImageReference;
     private String myStatus;
@@ -31,22 +31,23 @@ public class User {
         myUsername = username;
         myFavoriteGames = new HashSet<>();
         myFollowing = new HashSet<>();
+        myFollowers = new HashSet<>();
         myTwitter = null;
         myProgress = new HashMap<>();
         myImageReference = "person_logo.png";
         myStatus = "";
-        myAvatar = new ImageView();
-        myAvatar.setImage(new Image(getClass().getResourceAsStream(IMAGES_FOLDER_PATH + myImageReference)));
-        //myErrors = ResourceBundle.getBundle("resources/errors/Errors");
+        changeAvatar("person_logo.png");
     }
 
-    public static void main(String[] args) { // TODO: Delete (for testing only)
-        User testUser = new User(1, "vooga");
-        testUser.configureTwitter();
-    }
+    public int getID(){ return myID; }
 
-    public ImageView getAvatar() {
-        return myAvatar;
+    public ImageView getAvatar(){
+        try {
+            ImageView imageView = new ImageView(new Image(new FileInputStream(IMAGES_FOLDER_PATH + myImageReference)));
+            return imageView;
+        } catch (Exception e){
+            return new ImageView();
+        }
     }
 
     public void updateStatus(String message) {
@@ -63,7 +64,6 @@ public class User {
 
     public void changeAvatar(String imageReference) {
         myImageReference = imageReference;
-        myAvatar.setImage(new Image(getClass().getResourceAsStream(IMAGES_FOLDER_PATH + myImageReference)));
     }
 
     public void addFavorite(String gameName) {
@@ -88,20 +88,29 @@ public class User {
         return myUsername;
     }
 
-    public void addFollower(String username) {
+    public void follow(String username) {
         myFollowing.add(username);
-        System.out.println("MyFollowing of " + myUsername + " is now " + myFollowing.toString());
+    }
+
+    public void unfollow(String username) {
+        if (!myFollowing.contains(username)) return;
+        myFollowing.remove(username);
+    }
+
+    public void addFollower(String username) {
+        myFollowers.add(username);
     }
 
     public void removeFollower(String username) {
-        if (!myFollowing.contains(username)) return;
-        myFollowing.remove(username);
-        System.out.println("MyFollowing of " + myUsername + " is now " + myFollowing.toString());
+        if (!myFollowers.contains(username)) return;
+        myFollowers.remove(username);
     }
 
     public Set<String> getFollowing() {
         return myFollowing;
     }
+
+    public Set<String> getFollowers() { return myFollowers; }
 
     public Set<String> getFavorites() {
         return myFavoriteGames;
@@ -110,43 +119,44 @@ public class User {
     /**
      * Taken from https://xmeng.wordpress.com/2011/07/10/how-to-handle-sign-in-with-twitter-using-twitter4j/
      */
-    public void configureTwitter() {
+    public RequestToken getTwitterRequestToken(){
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
-                .setOAuthConsumerKey("Djd5Tus6kdSCXWC471CrJTE7O")
+                .setOAuthConsumerKey("Djd5Tus6kdSCXWC471CrJTE7O") // Specific to my (Natalie) developer account
                 .setOAuthConsumerSecret("qKdKyeWvbmOWTe1ZDXfLQT34p8GEmWNMoaVbLdde6V5T6MhCTo");
         TwitterFactory tf = new TwitterFactory(cb.build());
         myTwitter = tf.getInstance();
-        AccessToken accessToken = null;
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        try {
-            RequestToken requestToken = myTwitter.getOAuthRequestToken("oob"); // directs to pin page
-            while (null == accessToken) {
-                System.out.println("Open the following URL and grant access to your account:");
-                System.out.println(requestToken.getAuthorizationURL());
-                System.out.print("Enter the PIN(if available) and hit enter after you granted access.[PIN]:");
-                String pin = br.readLine();
-                try {
-                    if (pin.length() > 0) {
-                        accessToken = myTwitter.getOAuthAccessToken(requestToken, pin);
-                    } else {
-                        accessToken = myTwitter.getOAuthAccessToken(requestToken);
-                    }
-                } catch (Exception e) {
-                    //throw new UserException(myErrors.getString("InvalidTwitterPin"));
-                    e.printStackTrace();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        try{
+            return myTwitter.getOAuthRequestToken("oob"); // directs to pin page
+        } catch (Exception e){
+            new ErrorMessage(new UserException("Can not establish connection with Twitter.", "Check authorization consumer keys"));
+            return null;
         }
+    }
+
+    public void removeTwitter(){
+        myTwitter = null;
+    }
+
+    public void verifyPin(String pin, RequestToken requestToken){
+        try{
+            AccessToken accessToken = myTwitter.getOAuthAccessToken(requestToken, pin);
+        } catch (Exception e){
+            myTwitter = null;
+            new ErrorMessage(new UserException("Invalid pin.", "No Twitter access granted."));
+        }
+    }
+
+    public boolean isTwitterConfigured(){
+        return myTwitter != null;
     }
 
     public void tweet(String message) {
         try {
+            if (myTwitter == null) return;
             myTwitter.updateStatus(message);
         } catch (TwitterException e) {
-            e.printStackTrace();
+            new ErrorMessage(new UserException("Can not establish connection with Twitter.", "Check authorization consumer keys"));
         }
     }
 
