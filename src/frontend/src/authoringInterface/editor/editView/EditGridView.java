@@ -52,8 +52,8 @@ import java.util.Set;
  * @author Amy Kim
  */
 public class EditGridView implements SubView<ScrollPane> {
-    private static final double NODE_HEIGHT = 75;
-    private static final double NODE_WIDTH = 75;
+    private static final double NODE_TO_CELL_WIDTH_RATIO = 0.8;
+    private static final double NODE_TO_CELL_HEIGHT_RATIO = 0.8;
     private static final double CELL_HEIGHT = 100;
     private static final double CELL_WIDTH = 100;
     private static final double HALF_OPACITY = 0.5;
@@ -67,7 +67,7 @@ public class EditGridView implements SubView<ScrollPane> {
     private boolean isShiftDown;
     private Set<Node> toRemove;
 
-    public EditGridView(int row, int col, GameObjectsCRUDInterface manager, NodeInstanceController controller) {
+    EditGridView(int row, int col, GameObjectsCRUDInterface manager, NodeInstanceController controller) {
         gameObjectManager = manager;
         nodeInstanceController = controller;
         toRemove = new HashSet<>();
@@ -347,15 +347,15 @@ public class EditGridView implements SubView<ScrollPane> {
      * @param cell:               The Pane where an instance will be created.
      */
     private void createInstanceAtGridCell(GameObjectInstance gameObjectInstance, Pane cell) {
-        ImageView nodeOnGrid = null;
+        ImageView nodeOnGrid;
         try {
             nodeOnGrid = new ImageView(ImageManager.getPreview(gameObjectInstance));
         } catch (PreviewUnavailableException e) {
             ErrorWindow.display("Preview Unavailable", e.toString());
+            return;
         }
-        assert nodeOnGrid != null;
-        nodeOnGrid.setFitHeight(NODE_HEIGHT);
-        nodeOnGrid.setFitWidth(NODE_WIDTH);
+        nodeOnGrid.fitHeightProperty().bind(cell.heightProperty().multiply(NODE_TO_CELL_HEIGHT_RATIO));
+        nodeOnGrid.fitWidthProperty().bind(cell.widthProperty().multiply(NODE_TO_CELL_WIDTH_RATIO));
         ImageView finalNodeOnGrid = nodeOnGrid;
         cell.getChildren().add(finalNodeOnGrid);
         nodeInstanceController.addLink(finalNodeOnGrid, gameObjectInstance);
@@ -391,11 +391,12 @@ public class EditGridView implements SubView<ScrollPane> {
     }
 
     private void createInstanceAtGridCell(GameObjectClass gameObjectClass, Pane cell) {
-        GameObjectInstance gameObjectInstance = null;
+        GameObjectInstance gameObjectInstance;
         try {
             gameObjectInstance = gameObjectManager.createGameObjectInstance(gameObjectClass, new PointImpl(GridPane.getColumnIndex(cell), GridPane.getRowIndex(cell)));
         } catch (GameObjectTypeException e) {
             ErrorWindow.display("GameObject Type", e.toString());
+            return;
         }
         createInstanceAtGridCell(gameObjectInstance, cell);
     }
