@@ -306,6 +306,8 @@ public interface GameObjectsCRUDInterface {
      */
     Iterable<EntityClass> getEntityClasses();
 
+    String getBGMpath();
+    void setBGMpath(String path);
 
     Iterable<TileClass> getTileClasses();
 

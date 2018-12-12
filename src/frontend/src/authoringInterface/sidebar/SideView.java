@@ -2,8 +2,10 @@ package authoringInterface.sidebar;
 
 import api.SubView;
 import gameObjects.crud.GameObjectsCRUDInterface;
+import gameObjects.entity.EntityClass;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectType;
+import gameObjects.tile.TileClass;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
@@ -40,6 +42,17 @@ public class SideView implements SubView<StackPane> {
         treeView.setCellFactory(e -> new CustomTreeCellImpl(gameObjectsManager, nodeInstanceController, imageSelectorController));
 
         for (GameObjectClass item : gameObjectsManager.getAllClasses()) {
+            switch(item.getType()) {
+                case ENTITY:
+                    var entityClass = ((EntityClass) item);
+                    imageSelectorController.groovyPaneOf(entityClass); // just to register
+                    break;
+                case TILE:
+                    var tileClass = ((TileClass) item);
+                    imageSelectorController.groovyPaneOf(tileClass); // just to register
+                    break;
+            }
+
             TreeItem<String> objectLeaf = new TreeItem<>(item.getClassName());
             boolean found = false;
             for (TreeItem<String> categoryNode : rootNode.getChildren()) {

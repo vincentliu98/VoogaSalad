@@ -28,6 +28,13 @@ import utils.exception.PreviewUnavailableException;
 import utils.exception.UnremovableNodeException;
 import utils.nodeInstance.NodeInstanceController;
 
+import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Objects;
+
 /**
  * This abstract class provides a boiler plate for different editors because they are pretty similar.
  *

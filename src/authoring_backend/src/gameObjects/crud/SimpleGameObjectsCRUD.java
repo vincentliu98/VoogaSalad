@@ -37,6 +37,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
 
     private int numCols;
     private int numRows;
+    private String bgmPath;
     private Map<String, GameObjectClass> gameObjectClassMapByName;
     private Map<Integer, GameObjectClass> gameObjectClassMapById;
     private Map<Integer, GameObjectInstance> gameObjectInstanceMapById;
@@ -92,6 +93,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
 
     public SimpleGameObjectsCRUD(SavedEntityDB saved) {
         this(saved.numCols(), saved.numRows(), true);
+        bgmPath = saved.bgmPath();
         for (var c : saved.classes()) {
             switch (c.getType()) {
                 case CATEGORY:
@@ -767,6 +769,16 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
     @Override
     public Iterable<EntityClass> getEntityClasses() {
         return getSpecificClasses(GameObjectType.ENTITY);
+    }
+
+    @Override
+    public String getBGMpath() {
+        return bgmPath;
+    }
+
+    @Override
+    public void setBGMpath(String path) {
+        bgmPath = path;
     }
 
     @Override

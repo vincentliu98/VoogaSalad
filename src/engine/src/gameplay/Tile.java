@@ -7,7 +7,11 @@ import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import org.xml.sax.InputSource;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,6 +19,7 @@ import java.util.stream.Collectors;
 public class Tile extends PropertyHolder<Tile> implements GameObject, EventHandler<MouseEvent> {
     private int myID;
     private String name;
+    private String instanceName;
     private int myWidth, myHeight;
     private PointImpl myCoord; // ugh interfaces are hard to use with XStream
     private List<String> myImagePaths;
@@ -33,10 +38,7 @@ public class Tile extends PropertyHolder<Tile> implements GameObject, EventHandl
      * Fills out the transient parts
      */
     public void setupView() {
-        myImages = new ArrayList<>();
-        for (String filepath : myImagePaths) {
-            myImages.add(new Image(filepath));
-        }
+        loadImages();
         myImageView = new ImageView();
         myImageView.setPreserveRatio(true);
         myImageView.setOnMouseClicked(this);
@@ -53,15 +55,15 @@ public class Tile extends PropertyHolder<Tile> implements GameObject, EventHandl
         myImageView.setFitWidth((screenWidth * myWidth) / GameMethods.gridWidth());
         myImageView.setFitHeight((screenHeight * myHeight) / GameMethods.gridHeight());
 
-        myImages = myImagePaths.stream()
-                .map(path ->
-                        new Image(
-                                this.getClass().getClassLoader().getResourceAsStream(path),
-                                (screenWidth * myWidth) / GameMethods.gridWidth(),
-                                (screenHeight * myHeight) / GameMethods.gridHeight(),
-                                false, true
-                        )
-                ).collect(Collectors.toList());
+        loadImages();
+    }
+
+    private void loadImages() {
+        myImages = new ArrayList<>();
+        for (var path : myImagePaths) {
+            var img = new Image(path);
+            myImages.add(img);
+        }
     }
 
     /**
@@ -87,6 +89,8 @@ public class Tile extends PropertyHolder<Tile> implements GameObject, EventHandl
     public String getName() {
         return name;
     }
+
+    public String getInstanceName() { return instanceName; }
 
     @Override
     public double getX() {

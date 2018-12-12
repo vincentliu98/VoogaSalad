@@ -6,18 +6,19 @@ import grids.Point;
 import grids.PointImpl;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.StringWriter;
+import java.io.*;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -48,15 +49,18 @@ public class XMLParser {
         return sw.toString();
     }
 
+    public void loadXML(String xml) {
+        try {
+            myDocumentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            myDocTree = myDocumentBuilder.parse(new InputSource(new StringReader(xml)));
+        } catch (ParserConfigurationException | IOException | SAXException e) { e.printStackTrace(); }
+    }
+
     public void loadFile(File file) {
         try {
             myDocumentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             myDocTree = myDocumentBuilder.parse(file);
             myDocTree.getDocumentElement().normalize();
-            FileInputStream fis = new FileInputStream(file);
-            byte[] data = new byte[(int) file.length()];
-            fis.read(data);
-            fis.close();
         } catch (Exception e) {
         }
     }
@@ -64,6 +68,10 @@ public class XMLParser {
     public Point getDimension() {
         return new PointImpl(Integer.parseInt(myDocTree.getElementsByTagName("grid-width").item(0).getTextContent()),
                 Integer.parseInt(myDocTree.getElementsByTagName("grid-height").item(0).getTextContent()));
+    }
+
+    public String getBGMpath() {
+        return myDocTree.getElementsByTagName("bgmPath").item(0).getTextContent();
     }
 
     public Map<String, Player> getPlayers() {
