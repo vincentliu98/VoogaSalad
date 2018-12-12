@@ -8,7 +8,7 @@ import launchingGame.Sortable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LauncherSocialDisplay implements Sortable, Searchable, Subscriber {
+public class LauncherSocialDisplay implements Sortable, Searchable {
     public static final String CSS_PATH = "launcher-games-display";
     public static final int COLUMN_NUMBER = 4;
     public static final double HOR_SPACING = 29;
@@ -21,14 +21,10 @@ public class LauncherSocialDisplay implements Sortable, Searchable, Subscriber {
 
     public LauncherSocialDisplay(User user) {
         myUser = user;
-        if (myUser != null) {
-            System.out.println("socialdisplay user is initalizied to " + myUser.getUsername());
-        } else {
-            System.out.println("socialdisplay user is initalizied to null user");
-        }
         initTiles();
         initUsers();
-        EventBus.getInstance().register(EngineEvent.CHANGE_USER, this);
+        EventBus.getInstance().register(EngineEvent.CHANGE_USER, this::reassignUser);
+        EventBus.getInstance().register(EngineEvent.CHANGE_USER, this::resetUser);
     }
 
     public static LauncherSocialDisplay getInstance(User user) {
@@ -108,11 +104,11 @@ public class LauncherSocialDisplay implements Sortable, Searchable, Subscriber {
         return myPane;
     }
 
-    @Override
-    public void update(EngineEvent engineEvent, Object... args) {
-        if (engineEvent.equals(EngineEvent.CHANGE_USER) && args[0].getClass().equals(User.class)) {
-            myUser = (User) args[0];
-            System.out.println("myUser has changed, in social display, to " + myUser.getUsername());
-        }
+    private void reassignUser(Object... args) {
+        myUser = (User) args[0];
+    }
+
+    private void resetUser(Object... args) {
+        myUser = null;
     }
 }

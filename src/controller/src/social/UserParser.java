@@ -26,6 +26,8 @@ public class UserParser {
         users.add(u);
         users.add(u2);
         generateUserIcons(users);
+        EventBus.getInstance().register(EngineEvent.CHANGE_USER, this::reassignUser);
+        EventBus.getInstance().register(EngineEvent.LOGGED_OUT, this::resetUser);
     }
 
     private void generateUserIcons(Set<User> users) {
@@ -47,6 +49,14 @@ public class UserParser {
 
     public List<UserIcon> getAllUsers() {
         return allUsers;
+    }
+
+    private void reassignUser(Object... args) {
+        myUser = (User) args[0];
+    }
+
+    private void resetUser(Object... args) {
+        myUser = null;
     }
 
 

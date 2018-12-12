@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 import social.*;
 
 
-public class LauncherTopBarView implements Subscriber {
+public class LauncherTopBarView {
     public static final String DIVIDER_PATH = "/graphics/gray-line.png";
     public static final double DIVIDER_RATIO = 0.7;
     public static final double SPACING = 25;
@@ -54,7 +54,8 @@ public class LauncherTopBarView implements Subscriber {
         myBox.getChildren().add(mySpacer);
         myBox.getChildren().add(myProfile.getView());
         myBox.getChildren().add(myControlOptions.getView());
-        EventBus.getInstance().register(EngineEvent.CHANGE_USER, this);
+        EventBus.getInstance().register(EngineEvent.CHANGE_USER, this::reassignUser);
+        EventBus.getInstance().register(EngineEvent.LOGGED_OUT, this::resetUser);
     }
 
     private void initBox() {
@@ -95,15 +96,15 @@ public class LauncherTopBarView implements Subscriber {
         });
     }
 
+    private void reassignUser(Object... args) {
+        myUser = (User) args[0];
+    }
+
+    private void resetUser(Object... args) {
+        myUser = null;
+    }
 
     public HBox getView() {
         return myBox;
-    }
-
-    @Override
-    public void update(EngineEvent engineEvent, Object... args) {
-        if (engineEvent.equals(EngineEvent.CHANGE_USER) && args[0].getClass().equals(User.class)) {
-            myUser = (User) args[0];
-        }
     }
 }

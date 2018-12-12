@@ -11,7 +11,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
 
-public abstract class Icon implements Subscriber {
+public abstract class Icon {
     public static final String TEXT_CSS = "title-box";
     public static final String DESCRIPTION_CSS = "description-box";
     public static final double DESCRIPTION_INSET = 10;
@@ -61,7 +61,8 @@ public abstract class Icon implements Subscriber {
         initDescription();
         initButton();
         initButtonHandlers();
-        EventBus.getInstance().register(EngineEvent.CHANGE_USER, this);
+        EventBus.getInstance().register(EngineEvent.CHANGE_USER, this::reassignUser);
+        EventBus.getInstance().register(EngineEvent.CHANGE_USER, this::resetUser);
     }
 
     public Boolean checkTag(String tag) {
@@ -154,11 +155,13 @@ public abstract class Icon implements Subscriber {
         return myPane;
     }
 
-    @Override
-    public void update(EngineEvent engineEvent, Object... args) {
-        if (engineEvent.equals(EngineEvent.CHANGE_USER) && args[0].getClass().equals(User.class)) {
-            myUser = (User) args[0];
-        }
+    protected void reassignUser(Object... args) {
+        myUser = (User) args[0];
     }
+
+    protected void resetUser(Object... args) {
+        myUser = null;
+    }
+
 }
 

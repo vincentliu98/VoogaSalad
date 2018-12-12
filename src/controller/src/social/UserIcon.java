@@ -23,7 +23,7 @@ public class UserIcon extends Icon {
         myButton.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if (myUser.getUsername().equals(myName)) { // TODO: Turn into an error
+                if (myUser == null) { // TODO: Turn into an error
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setHeaderText("Cannot follow others without a profile.");
                     alert.setContentText("Log in or create a new profile.");

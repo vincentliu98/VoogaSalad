@@ -4,13 +4,12 @@ import javafx.scene.layout.TilePane;
 import launching.GameParser;
 import social.EngineEvent;
 import social.EventBus;
-import social.Subscriber;
 import social.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class LauncherGamesDisplay implements Searchable, Sortable, Subscriber {
+public class LauncherGamesDisplay implements Searchable, Sortable {
     public static final String CSS_PATH = "launcher-games-display";
     public static final int COLUMN_NUMBER = 4;
     public static final String CURRENT_FOLDER_KEY = "user.dir";
@@ -28,7 +27,8 @@ public class LauncherGamesDisplay implements Searchable, Sortable, Subscriber {
     public LauncherGamesDisplay() {
         initTiles();
         initGames();
-        EventBus.getInstance().register(EngineEvent.CHANGE_USER, this);
+        EventBus.getInstance().register(EngineEvent.CHANGE_USER, this::reassignUser);
+        EventBus.getInstance().register(EngineEvent.LOGGED_OUT, this::resetUser);
     }
 
     private void initTiles() {
@@ -107,10 +107,11 @@ public class LauncherGamesDisplay implements Searchable, Sortable, Subscriber {
         return myPane;
     }
 
-    @Override
-    public void update(EngineEvent engineEvent, Object... args) {
-        if (engineEvent.equals(EngineEvent.CHANGE_USER) && args[0].getClass().equals(User.class)) {
-            myUser = (User) args[0];
-        }
+    private void reassignUser(Object... args) {
+        myUser = (User) args[0];
+    }
+
+    private void resetUser(Object... args) {
+        myUser = null;
     }
 }

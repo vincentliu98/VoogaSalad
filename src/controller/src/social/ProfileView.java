@@ -6,7 +6,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
-public class ProfileView implements Subscriber {
+public class ProfileView {
     public static final String PERSON_PATH = "/profile-images/person_logo.png";
     public static final double ICON_WIDTH = 20;
     public static final double ICON_HEIGHT = 20;
@@ -20,7 +20,8 @@ public class ProfileView implements Subscriber {
         myBox = new HBox();
         myBox.setAlignment(Pos.CENTER_LEFT);
         initButton();
-        EventBus.getInstance().register(EngineEvent.CHANGE_USER, this);
+        EventBus.getInstance().register(EngineEvent.CHANGE_USER, this::reassignUser);
+        EventBus.getInstance().register(EngineEvent.LOGGED_OUT, this::resetUser);
     }
 
     public HBox getView() {
@@ -54,15 +55,17 @@ public class ProfileView implements Subscriber {
         changeIcon(new ImageView(image));
     }
 
-    @Override
-    public void update(EngineEvent engineEvent, Object... args) {
-        if (engineEvent.equals(EngineEvent.CHANGE_USER) && args[0].getClass().equals(User.class)) {
-            myUser = (User) args[0];
-            if (myUser.getAvatar() != null) {
-                changeIcon(myUser.getAvatar());
-            } else {
-                setDefaultIcon();
-            }
+    private void reassignUser(Object... args) {
+        myUser = (User) args[0];
+        if (myUser.getAvatar() != null) {
+            changeIcon(myUser.getAvatar());
+        } else {
+            setDefaultIcon();
         }
+    }
+
+    private void resetUser(Object... args){
+        myUser = null;
+        setDefaultIcon();
     }
 }
