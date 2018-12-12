@@ -10,22 +10,19 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import utils.simpleAnimation.SingleNodeFade;
 
-import java.awt.event.KeyEvent;
 
 /**
  * This class is the status window when the user clicks on some element on the editing grid. It shows basic stats when the user clicks on some GUI element.
  *
  * @author Haotian Wang
  */
-public class StatusView implements SubView<AnchorPane>, UpdateStatusEventListener<Node> {
-    private AnchorPane rootPane = new AnchorPane();
+public class StatusView implements SubView<GridPane>, UpdateStatusEventListener<Node> {
+    private GridPane rootPane = new GridPane();
     private GameObjectsCRUDInterface objectsManager;
     private VBox modeIndicators;
     private VBox instanceBox;
     private static final double INDICATOR_FADE_TIME = 3000;
     private static final double INITIAL_INDICATOR_FADE_TIME = 15000;
-    private boolean isControlDown;
-    private boolean isShiftDown;
     private Label batchMode;
     private Label deleteMode;
 
@@ -43,7 +40,8 @@ public class StatusView implements SubView<AnchorPane>, UpdateStatusEventListene
         SingleNodeFade.getNodeFadeOut(batchMode, INITIAL_INDICATOR_FADE_TIME).playFromStart();
         SingleNodeFade.getNodeFadeOut(deleteMode, INITIAL_INDICATOR_FADE_TIME).playFromStart();
         instanceBox = new VBox();
-        rootPane.getChildren().addAll(modeIndicators, instanceBox);
+        rootPane.addColumn(0, modeIndicators, instanceBox);
+        rootPane.setVgap(20);
     }
 
     /**
@@ -52,7 +50,7 @@ public class StatusView implements SubView<AnchorPane>, UpdateStatusEventListene
      * @return A "root" JavaFx Node representative of this object.
      */
     @Override
-    public AnchorPane getView() {
+    public GridPane getView() {
         return rootPane;
     }
 
@@ -65,17 +63,15 @@ public class StatusView implements SubView<AnchorPane>, UpdateStatusEventListene
     public void setOnUpdateStatusEvent(Node view) {
         instanceBox.getChildren().clear();
         instanceBox.getChildren().add(view);
-        AnchorPane.setLeftAnchor(view, 0.0);
-        AnchorPane.setRightAnchor(view, 0.0);
     }
 
     /**
-     * Set up a key toggle for toggling for the Shift key.
+     * This method sets up the view of for the batch mode button
      *
-     * @param keyEvent: A KeyEvent that is the shift key being pressed down.
+     * @param isShiftDown: A boolean passed from other places that indicate whether Shift is being pressed down.
      */
-    private void setUpShift(KeyEvent keyEvent) {
-        isShiftDown = !isShiftDown;
+    @Override
+    public void setBatchMode(boolean isShiftDown) {
         if (isShiftDown) {
             batchMode.setText("Batch Mode: On");
             batchMode.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, null, null)));
@@ -87,12 +83,12 @@ public class StatusView implements SubView<AnchorPane>, UpdateStatusEventListene
     }
 
     /**
-     * Set up a key toggle and attach the this boolean toggle to some boolean variable of this class.
+     * This method sets up the view of the delete mode button.
      *
-     * @param keyEvent: A KeyEvent that is the control key being pressed down.
+     * @param isControlDown: A boolean passed from other places that indicate whether Control is being pressed down.
      */
-    public void setUpControl(KeyEvent keyEvent) {
-        isControlDown = !isControlDown;
+    @Override
+    public void setDeleteMode(boolean isControlDown) {
         if (isControlDown) {
             deleteMode.setText("Delete Mode: On");
             deleteMode.setBackground(new Background(new BackgroundFill(Color.LIGHTYELLOW, null, null)));

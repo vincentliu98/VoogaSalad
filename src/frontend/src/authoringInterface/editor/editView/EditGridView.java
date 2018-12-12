@@ -89,15 +89,15 @@ public class EditGridView implements SubView<ScrollPane> {
         }
         gridScrollView.setGridLinesVisible(true);
         scrollPane = new ScrollPane(gridScrollView);
-//        scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, keyEvent -> {
-//            if (keyEvent.getCode() == KeyCode.CONTROL) {
-//                setUpControl();
-//            } else if (keyEvent.getCode() == KeyCode.SHIFT) {
-//                setUpShift();
-//            } else if (keyEvent.getCode() == KeyCode.DELETE || keyEvent.getCode() == KeyCode.BACK_SPACE) {
-//                toRemove.forEach(this::handleNodeDeleting);
-//            }
-//        });
+        scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.CONTROL) {
+                setUpControl();
+            } else if (keyEvent.getCode() == KeyCode.SHIFT) {
+                setUpShift();
+            } else if (keyEvent.getCode() == KeyCode.DELETE || keyEvent.getCode() == KeyCode.BACK_SPACE) {
+                toRemove.forEach(this::handleNodeDeleting);
+            }
+        });
 
         // Fill grids with what we have
         manager.getAllInstances().forEach(instance -> {
@@ -114,6 +114,22 @@ public class EditGridView implements SubView<ScrollPane> {
             if (cell == null) return;
             createInstanceAtGridCell(instance, cell);
         });
+    }
+
+    /**
+     * Set up a key toggle for toggling for the Shift key.
+     */
+    private void setUpShift() {
+        isShiftDown = !isShiftDown;
+        listeners.forEach(listener -> listener.setBatchMode(isShiftDown));
+    }
+
+    /**
+     * Set up a key toggle and attach the this boolean toggle to some boolean variable of this class.
+     */
+    private void setUpControl() {
+        isControlDown = !isControlDown;
+        listeners.forEach(listener -> listener.setDeleteMode(isControlDown));
     }
 
     public void generateTiles(TileInstance tileInstance) {
