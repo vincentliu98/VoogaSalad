@@ -74,7 +74,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         menuBar = new MenuBar();
         menuBar.setPrefHeight(View.MENU_BAR_HEIGHT);
 
-        if(gameObjectManager.getBGMpath() == null) soundView = new SoundView();
+        if (gameObjectManager.getBGMpath() == null) soundView = new SoundView();
         else soundView = new SoundView(gameObjectManager.getBGMpath());
 
         Menu file = new Menu("File");
@@ -108,9 +108,13 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         saveAs.setOnAction(this::handleSaveAs);
         close.setOnAction(e -> new CloseFileView(closeWindow));
         runProject.setOnAction(this::handleRunProject);
-        resizeGrid.setOnAction(e -> new ResizeGridView(editView.getGridView().getGridDimension()).showAndWait().ifPresent(dimension ->
-                updateGridDimension.accept(dimension.getKey(), dimension.getValue())
-        ));
+        resizeGrid.setOnAction(e -> new ResizeGridView(editView.getGridView().getGridDimension()).showAndWait().ifPresent(
+                dimension -> {
+                    updateGridDimension.accept(dimension.getKey(), dimension.getValue());
+                    editView.updateDimension(dimension.getKey(), dimension.getValue());
+                }
+                )
+        );
         setBGM.setOnAction(e -> {
             var path = soundView.showAndWait();
             gameObjectManager.setBGMpath(path);
