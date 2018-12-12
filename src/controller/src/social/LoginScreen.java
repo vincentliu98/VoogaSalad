@@ -118,6 +118,7 @@ public class LoginScreen {
             try {
                 loginUser(usernameField.getText(), passwordField.getText());
             } catch (Exception ex){
+                ex.printStackTrace();
                 ExtendedException exception = (ExtendedException) ex;
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setHeaderText(exception.getMessage());
@@ -139,9 +140,13 @@ public class LoginScreen {
         try {
             checkForBlankFields(myUsername, myPassword);
             int id = retrieveUserID(myUsername, myPassword);
-            String profilePath = getProfilePath(id);
-            String fileName = downloadRemoteXML(profilePath); // filename of local version
-            User user = deserializeUser(fileName);
+            String remoteProfilePath = getProfilePath(id);
+            String remoteAvatarPath = getAvatarPath(id);
+            String profileFilename = downloadRemoteXML(remoteProfilePath); // filename of local XML (to be deleted)
+            String avatarFilename = downloadRemoteAvatar(remoteAvatarPath); // filename of local image
+            User user = deserializeUser(profileFilename);
+            System.out.println("avatarFilename is " + avatarFilename);
+            user.changeAvatar(avatarFilename);
             EventBus.getInstance().sendMessage(EngineEvent.CHANGE_USER, user);
             myStage.close();
             //User myUser = new User(10, "bloop");// TODO: Remove later (just a placeholder)
@@ -159,10 +164,19 @@ public class LoginScreen {
     private String getProfilePath(int id) throws SQLException {
         DatabaseDownloader databaseDownloader = new DatabaseDownloader("client", "store",
                 "e.printstacktrace", "vcm-7456.vm.duke.edu", 3306);
-        ResultSet result = databaseDownloader.queryServer(String.format("SELECT profilePath, avatarPath FROM" +
+        ResultSet result = databaseDownloader.queryServer(String.format("SELECT profilePath FROM" +
                 " userReferences WHERE id='%d'", id));
         result.last();
         return result.getString("profilePath");
+    }
+
+    private String getAvatarPath(int id) throws SQLException {
+        DatabaseDownloader databaseDownloader = new DatabaseDownloader("client", "store",
+                "e.printstacktrace", "vcm-7456.vm.duke.edu", 3306);
+        ResultSet result = databaseDownloader.queryServer(String.format("SELECT avatarPath FROM" +
+                " userReferences WHERE id='%d'", id));
+        result.last();
+        return result.getString("avatarPath");
     }
 
     private String downloadRemoteXML(String profilePath) throws SQLException {
@@ -171,6 +185,16 @@ public class LoginScreen {
         File directory = new File("src/database/resources/");
         downloader.downloadFile(profilePath,directory.getAbsolutePath());
         String[] filePathArray = profilePath.split("/");
+        return filePathArray[filePathArray.length - 1];
+    }
+
+    private String downloadRemoteAvatar(String avatarPath) throws SQLException {
+        ServerDownloader downloader = new ServerDownloader();
+        downloader.connectServer("vcm", "vcm-7456.vm.duke.edu", 22,"afcas8amYf");
+        File directory = new File("src/controller/resources/profile-images/");
+        System.out.println("avatar path is " + avatarPath);
+        downloader.downloadFile(avatarPath, directory.getAbsolutePath());
+        String[] filePathArray = avatarPath.split("/");
         return filePathArray[filePathArray.length - 1];
     }
 
