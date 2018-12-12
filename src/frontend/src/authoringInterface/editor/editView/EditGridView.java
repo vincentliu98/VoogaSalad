@@ -52,6 +52,7 @@ import java.util.Set;
  *
  * @author Haotian Wang
  * @author Amy Kim
+ * @author jl729
  */
 public class EditGridView implements SubView<ScrollPane> {
     private static final double NODE_TO_CELL_WIDTH_RATIO = 0.8;

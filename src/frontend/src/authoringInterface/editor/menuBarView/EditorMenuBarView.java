@@ -112,7 +112,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         resizeGrid.setOnAction(e -> new ResizeGridView(editView.getGridView().getGridDimension()).showAndWait().ifPresent(
                 dimension -> {
                     updateGridDimension.accept(dimension.getKey(), dimension.getValue());
-                    gameObjectManager.setDimension(dimension.getKey(), dimension.getValue());
+                    editView.updateDimension(dimension.getKey(), dimension.getValue());
                 }
                 )
         );
