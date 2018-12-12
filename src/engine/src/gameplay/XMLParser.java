@@ -82,7 +82,6 @@ public class XMLParser {
             Player player = (Player) mySerializer.fromXML(currentPlayer);
             myPlayers.put(player.getName(), player);
         }
-        System.out.println(myPlayers);
         return myPlayers;
     }
 

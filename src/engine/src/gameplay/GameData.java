@@ -50,7 +50,6 @@ public class GameData {
             media = new Media(new File(bgmPath).toURI().toString());
             mediaPlayer = new MediaPlayer(media);
             mediaPlayer.setOnReady(() -> {
-                System.out.println(media.getDuration().toMinutes());
                 mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
                 mediaPlayer.play();
             });
@@ -168,8 +167,6 @@ public class GameData {
                 "<grid-width>" + GRID_WIDTH + "</grid-width>\n" +
                 "<grid-height>" + GRID_HEIGHT + "</grid-height>\n" +
                 "<winCondition>" + WIN_CONDITION + "</winCondition>\n";
-        System.out.println("from savegamedata");
-        System.out.println(xmlString);
         return xmlString;
     }
 

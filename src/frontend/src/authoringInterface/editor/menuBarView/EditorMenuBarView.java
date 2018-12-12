@@ -215,7 +215,6 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         gameWindow = new GameWindow();
         try {
             String xml = authTools.toEngineXML();
-            System.out.println(xml);
             Initializer initializer = new Initializer(xml);
             Scene newScene = new Scene(initializer.getRoot(), View.GAME_WIDTH, View.GAME_HEIGHT);
             newScene.addEventFilter(KeyEvent.KEY_RELEASED, initializer::keyFilter);

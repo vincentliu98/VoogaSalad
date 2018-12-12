@@ -162,10 +162,13 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         gameObjectClass.getPropertiesMap().clear();
         gameObjectClass.setWidth(width);
         gameObjectClass.setHeight(height);
-        gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName(), getValidClassName());
+            gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName(), getValidClassName());
         ImageView icon2 = new ImageView(ImageManager.getPreview(gameObjectClass));
         JavaFxOperation.setWidthAndHeight(icon2, ICON_WIDTH, ICON_HEIGHT);
-        treeItem.setValue(getValidClassName());
+        System.out.println("previous: " + gameObjectClass.getClassName());
+        System.out.println("current: " + nameField.getText());
+
+            treeItem.setValue(getValidClassName());
         treeItem.setGraphic(icon2);
         writeClassProperties();
     }
