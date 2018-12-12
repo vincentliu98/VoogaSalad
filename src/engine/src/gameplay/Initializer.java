@@ -8,19 +8,30 @@ import java.io.File;
 public class Initializer {
     XMLParser myXMLParser;
     Pane myRoot;
-    File myFile;
+    String myFileName;
 
-    public Initializer(File file) {
-        myFile = file;
+    public Initializer() {
         myXMLParser = new XMLParser();
         myRoot = new Pane();
+    }
+
+    public Initializer(File file) {
+        this();
+        myFileName = file.getName().substring(0, file.getName().length() - 4);
+        myXMLParser.loadFile(file);
+        initGameData();
+    }
+
+    public Initializer(String xml) {
+        this();
+        myFileName = "";
+        myXMLParser.loadXML(xml);
         initGameData();
     }
 
     public void initGameData() {
-        myXMLParser.loadFile(myFile);
         GameData.setGameData(
-                myXMLParser.getDimension(), myXMLParser.getPlayers(), myXMLParser.getEntities(),
+                myXMLParser.getDimension(), myXMLParser.getBGMpath(), myXMLParser.getPlayers(), myXMLParser.getEntities(),
                 myXMLParser.getEntityPrototypes(), myXMLParser.getTiles(),
                 myXMLParser.getPhases(), myXMLParser.getWinCondition(),
                 myXMLParser.getNodes(), myXMLParser.getEdges(), myXMLParser.getTurn(), myRoot, this);
@@ -35,10 +46,10 @@ public class Initializer {
         startGame();
     }
 
-    public String getFileName() {
-        String filename = myFile.getName();
-        return filename.substring(0, filename.length() - 4); // .xml is 4 letters long
-    }
+    /**
+     *  SHOULD NOT BE USED WHEN RUNNING FROM AUTHORING ENV
+     */
+    public String getFileName() { return myFileName; }
 
     public Pane getRoot() {
         return myRoot;
@@ -67,4 +78,6 @@ public class Initializer {
     public void saveGame() {
         String xmlString = GameData.saveGameData();
     }
+
+    public void stopMusic() { GameData.stopMusic(); }
 }

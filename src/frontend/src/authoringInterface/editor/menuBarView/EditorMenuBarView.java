@@ -74,7 +74,8 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         menuBar = new MenuBar();
         menuBar.setPrefHeight(View.MENU_BAR_HEIGHT);
 
-        soundView = new SoundView();
+        if(gameObjectManager.getBGMpath() == null) soundView = new SoundView();
+        else soundView = new SoundView(gameObjectManager.getBGMpath());
 
         Menu file = new Menu("File");
         Menu settings = new Menu("Settings");
@@ -110,7 +111,10 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         resizeGrid.setOnAction(e -> new ResizeGridView().showAndWait().ifPresent(dimension ->
                 updateGridDimension.accept(dimension.getKey(), dimension.getValue())
         ));
-        setBGM.setOnAction(e -> soundView.show());
+        setBGM.setOnAction(e -> {
+            var path = soundView.showAndWait();
+            gameObjectManager.setBGMpath(path);
+        });
         helpDoc.setOnAction(this::handleHelpDoc);
         about.setOnAction(this::handleAbout);
         tileSetting.setOnAction(this::handleTileSetting);
@@ -154,7 +158,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
     void handleSaveAs(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open project files");
-        File file = fileChooser.showOpenDialog(new Stage());
+        File file = fileChooser.showSaveDialog(new Stage());
         if (file != null) writeToFile(file);
         else ErrorWindow.display("Error", "Empty File");
     }
@@ -181,7 +185,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         if (file != null) {
             try {
                 Stage newWindow = new Stage();
-                newWindow.setTitle("VoogaSalad!");
+                newWindow.setTitle(file.getName());
                 var reader = new BufferedReader(new FileReader(file));
                 String xml = reader.lines().reduce((s1, s2) -> s1 + "\n" + s2).get();
                 View myView = new View(newWindow, xml);
@@ -201,8 +205,9 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         newWindow.setTitle("Your Game");
         gameWindow = new GameWindow();
         try {
-            Initializer initializer =
-                    new Initializer(new File(getClass().getClassLoader().getResource(fileName).getFile()));
+            String xml = authTools.toEngineXML();
+            System.out.println(xml);
+            Initializer initializer = new Initializer(xml);
             Scene newScene = new Scene(initializer.getRoot(), View.GAME_WIDTH, View.GAME_HEIGHT);
             newScene.addEventFilter(KeyEvent.KEY_RELEASED, initializer::keyFilter);
             newWindow.setScene(newScene);
@@ -210,7 +215,11 @@ public class EditorMenuBarView implements SubView<MenuBar> {
             newWindow.setY(SCREEN_HEIGHT * 0.5 - View.GAME_HEIGHT * 0.5);
             initializer.setScreenSize(View.GAME_WIDTH, View.GAME_HEIGHT);
             newWindow.show();
+            newWindow.setOnCloseRequest(e -> {
+                initializer.stopMusic();
+            });
         } catch (Exception e) {
+            e.printStackTrace();
             ErrorWindow.display("Exception", e.toString());
         }
     }
