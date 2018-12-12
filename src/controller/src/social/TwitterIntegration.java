@@ -66,7 +66,7 @@ public class TwitterIntegration {
     }
 
     private void initScene() {
-        myScene = new Scene(myPane, 350.0D, 150.0D);
+        myScene = new Scene(myPane, 500.0D, 150.0D);
     }
 
     private void initFields() {
@@ -92,7 +92,7 @@ public class TwitterIntegration {
             try {
                 myUser.verifyPin(pin.getText(), requestToken);
                 if (myUser.isTwitterConfigured()) {
-                    uploadSerializedUserFile();
+                    DatabaseHelper.uploadSerializedUserFile(myUser.getUsername(), myUser);
                     EventBus.getInstance().sendMessage(EngineEvent.INTEGRATED_TWITTER, myUser);
                 }
                 myStage.close();
@@ -104,22 +104,6 @@ public class TwitterIntegration {
         myPane.add(instructions, 0, 0, 4, 1);
         myPane.add(pin, 0, 2, 4, 1);
         myPane.add(buttonBox, 0, 3, 4, 1);
-    }
-
-    private void uploadSerializedUserFile() throws IOException {
-        System.out.println("serializing...success!");
-        XStream serializer = new XStream(new DomDriver());
-        File userFile=new File("src/database/resources/" + myUser.getUsername() + ".xml");
-        if (!userFile.exists()){
-            userFile.createNewFile();
-        }
-        FileWriter fileWriter = new FileWriter(userFile);
-        fileWriter.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + serializer.toXML(myUser));
-        fileWriter.close();
-        ServerUploader upload = new ServerUploader();
-        upload.connectServer("vcm", "vcm-7456.vm.duke.edu", 22,"afcas8amYf");
-        upload.uploadFile(userFile.getAbsolutePath(), "/users/profiles");
-        userFile.delete();
     }
 
     private void setHoverListeners(Node node){

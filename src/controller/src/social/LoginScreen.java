@@ -1,13 +1,9 @@
 package social;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.annotations.XStreamOmitField;
-import com.thoughtworks.xstream.io.xml.DomDriver;
 import exceptions.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -17,17 +13,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import util.data.DatabaseDownloader;
-import util.data.DatabaseUploader;
-import util.files.ServerDownloader;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
-import java.util.Scanner;
+
 
 public class LoginScreen {
     public static final String LOGO_PATH = "duke_logo.png";
@@ -122,86 +109,19 @@ public class LoginScreen {
         myPane.add(register, 0, 6);
     }
 
-    private void loginUser(String myUsername, String myPassword) throws SQLException, FileNotFoundException {
+    private void loginUser(String myUsername, String myPassword) {
         try {
             checkForBlankFields(myUsername, myPassword);
-            int id = retrieveUserID(myUsername, myPassword);
-            String remoteProfilePath = getProfilePath(id);
-            String remoteAvatarPath = getAvatarPath(id);
-            String profileFilename = downloadRemoteXML(remoteProfilePath); // filename of local XML (to be deleted)
-            User user = deserializeUser(profileFilename);
-            if (remoteAvatarPath != null){
-                String avatarFilename = downloadRemoteAvatar(remoteAvatarPath); // filename of local image
-                user.changeAvatar(avatarFilename);
-            }
+            int id = DatabaseHelper.getIDByUsernameAndPassword(myUsername, myPassword);
+            User user = DatabaseHelper.fetchUserFromDatabase(id);
             EventBus.getInstance().sendMessage(EngineEvent.CHANGE_USER, user);
             myStage.close();
-        } catch (SQLException | LoginException | FileNotFoundException ex){
+        } catch (Exception ex){
             if (!ex.getClass().equals(LoginException.class)){
                 throw new ServerException(myErrors.getString("ServerError"), myErrors.getString("ServerErrorWarning"));
             }
             throw ex;
         }
-    }
-
-    private String getProfilePath(int id) throws SQLException {
-        DatabaseDownloader databaseDownloader = new DatabaseDownloader("client", "store",
-                "e.printstacktrace", "vcm-7456.vm.duke.edu", 3306);
-        ResultSet result = databaseDownloader.queryServer(String.format("SELECT profilePath FROM" +
-                " userReferences WHERE id='%d'", id));
-        result.last();
-        return result.getString("profilePath");
-    }
-
-    private String getAvatarPath(int id) throws SQLException {
-        DatabaseDownloader databaseDownloader = new DatabaseDownloader("client", "store",
-                "e.printstacktrace", "vcm-7456.vm.duke.edu", 3306);
-        ResultSet result = databaseDownloader.queryServer(String.format("SELECT avatarPath FROM" +
-                " userReferences WHERE id='%d'", id));
-        result.last();
-        return result.getString("avatarPath");
-    }
-
-    private String downloadRemoteXML(String profilePath) throws SQLException {
-        ServerDownloader downloader = new ServerDownloader();
-        downloader.connectServer("vcm", "vcm-7456.vm.duke.edu", 22,"afcas8amYf");
-        File directory = new File("src/database/resources/");
-        downloader.downloadFile(profilePath,directory.getAbsolutePath());
-        String[] filePathArray = profilePath.split("/");
-        return filePathArray[filePathArray.length - 1];
-    }
-
-    private String downloadRemoteAvatar(String avatarPath) throws SQLException {
-        ServerDownloader downloader = new ServerDownloader();
-        downloader.connectServer("vcm", "vcm-7456.vm.duke.edu", 22,"afcas8amYf");
-        File directory = new File("src/controller/resources/profile-images/");
-        downloader.downloadFile(avatarPath, directory.getAbsolutePath());
-        String[] filePathArray = avatarPath.split("/");
-        return filePathArray[filePathArray.length - 1];
-    }
-
-    private User deserializeUser(String fileName) throws FileNotFoundException {
-        XStream serializer = new XStream(new DomDriver());
-        File file = new File("src/database/resources/" + fileName);
-        Scanner scanner = new Scanner(file, "UTF-8" );
-        String text = scanner.useDelimiter("\\A").next();
-        scanner.close();
-        text = text.trim().replaceFirst("^([\\W]+)<","<");
-        file.delete();
-        return (User) serializer.fromXML(text);
-    }
-
-    private int retrieveUserID(String myUsername, String myPassword) throws SQLException {
-        DatabaseDownloader databaseDownloader = new DatabaseDownloader("client", "store",
-                "e.printstacktrace", "vcm-7456.vm.duke.edu", 3306);
-        ResultSet result = databaseDownloader.queryServer(String.format("SELECT id FROM logins WHERE " +
-                "username='%s' AND password='%s'", myUsername, myPassword));
-        if (!result.next()){
-            throw new LoginException(myErrors.getString("NonexistentAccount"), myErrors.getString(
-                    "NonexistentAccountWarning"));
-        }
-        result.last();
-        return result.getInt("id");
     }
 
     private void checkForBlankFields(String myUsername, String myPassword) {

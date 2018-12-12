@@ -79,7 +79,7 @@ public class StatusUpdate {
         post.setOnMouseClicked(e -> {
             try {
                 myUser.updateStatus(status.getText());
-                uploadSerializedUserFile();
+                DatabaseHelper.uploadSerializedUserFile(myUser.getUsername(), myUser);
                 EventBus.getInstance().sendMessage(EngineEvent.UPDATED_STATUS, myUser);
                 myStage.close();
             } catch (Exception ex){
@@ -90,21 +90,6 @@ public class StatusUpdate {
         myPane.add(instructions, 0, 0, 4, 1);
         myPane.add(status, 0, 2, 4, 1);
         myPane.add(motoBox, 0, 3, 4, 1);
-    }
-
-    private void uploadSerializedUserFile() throws IOException {
-        XStream serializer = new XStream(new DomDriver());
-        File userFile=new File("src/database/resources/" + myUser.getUsername() + ".xml");
-        if (!userFile.exists()){
-            userFile.createNewFile();
-        }
-        FileWriter fileWriter = new FileWriter(userFile);
-        fileWriter.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + serializer.toXML(myUser));
-        fileWriter.close();
-        ServerUploader upload = new ServerUploader();
-        upload.connectServer("vcm", "vcm-7456.vm.duke.edu", 22,"afcas8amYf");
-        upload.uploadFile(userFile.getAbsolutePath(), "/users/profiles");
-        userFile.delete();
     }
 
     private void setHoverListeners(Node node){

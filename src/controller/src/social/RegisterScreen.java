@@ -9,7 +9,6 @@ import exceptions.ServerException;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.ColumnConstraints;
@@ -91,6 +90,7 @@ public class RegisterScreen {
             try {
                 registerUser(usernameField.getText(), passwordField.getText());
             } catch (Exception ex){
+                ex.printStackTrace();
                 ExtendedException exception = (ExtendedException) ex;
                 new ErrorMessage(exception);
             }
@@ -103,12 +103,12 @@ public class RegisterScreen {
     private void registerUser(String myUsername, String myPassword) throws IOException, SQLException {
         try {
             checkForBlankFields(myUsername, myPassword);
-            ResultSet result = verifyUniqueUsername(myUsername);
-            int id = getNextID(result);
+            DatabaseHelper.verifyUniqueUsername(myUsername);
+            int id = DatabaseHelper.getNextUserID();
             User user = new User(id, myUsername);
-            DatabaseUploader databaseUploader = updateLoginsTable(myUsername, myPassword, id);
-            uploadSerializedUserFile(myUsername, user);
-            updateUserReferencesTable(myUsername, id, databaseUploader);
+            DatabaseHelper.updateLoginsTable(myUsername, myPassword, id);
+            DatabaseHelper.uploadSerializedUserFile(myUsername, user);
+            DatabaseHelper.updateRemoteProfileReferences(myUsername, id);
         } catch (IOException | SQLException | RegistrationException ex){
             if (!ex.getClass().equals(RegistrationException.class)){
                 throw new ServerException(myErrors.getString("ServerError"), myErrors.getString("ServerErrorWarning"));
@@ -117,60 +117,6 @@ public class RegisterScreen {
         }
        //resetDatabases();
         myStage.close();
-    }
-
-    private void updateUserReferencesTable(String myUsername, int id, DatabaseUploader databaseUploader) {
-        databaseUploader.upload(String.format("INSERT INTO userReferences (id, profilePath) " +
-                        "VALUES ('%d','%s')", id, "/home/vcm/public_html/users/profiles/" + myUsername + ".xml"));
-    }
-
-    private void uploadSerializedUserFile(String myUsername, User user) throws IOException {
-        XStream serializer = new XStream(new DomDriver());
-        File userFile=new File("src/database/resources/" + myUsername + ".xml");
-        userFile.createNewFile();
-        FileWriter fileWriter = new FileWriter(userFile);
-        fileWriter.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + serializer.toXML(user));
-        fileWriter.close();
-        ServerUploader upload = new ServerUploader();
-        upload.connectServer("vcm", "vcm-7456.vm.duke.edu", 22,"afcas8amYf");
-        upload.uploadFile(userFile.getAbsolutePath(), "/users/profiles");
-        userFile.delete();
-    }
-
-    private DatabaseUploader updateLoginsTable(String myUsername, String myPassword, int id) {
-        DatabaseUploader databaseUploader = new DatabaseUploader("client", "store",
-                "e.printstacktrace", "vcm-7456.vm.duke.edu", 3306);
-        databaseUploader.upload(String.format("INSERT INTO logins (username, id, password) VALUES ('%s','%d'," +
-                "'%s')", myUsername, id, myPassword));
-        return databaseUploader;
-    }
-
-    private ResultSet verifyUniqueUsername(String myUsername) throws SQLException {
-        DatabaseDownloader databaseDownloader = new DatabaseDownloader("client", "store",
-                "e.printstacktrace", "vcm-7456.vm.duke.edu", 3306);
-        ResultSet result = databaseDownloader.queryServer("SELECT username, id FROM logins");
-        while (result.next()){
-            String remoteUsername = result.getString("username");
-            if (remoteUsername.equals(myUsername)){
-                throw new RegistrationException(myErrors.getString("UsernameAlreadyExists"),
-                        myErrors.getString("UsernameAlreadyExistsWarning"));
-            }
-        }
-        return result;
-    }
-
-    private int getNextID(ResultSet resultSet){
-        try {
-            resultSet.beforeFirst();
-            if (!resultSet.next()){
-                return 1;
-            } else {
-                resultSet.last();
-                return resultSet.getInt("id") + 1;
-            }
-        } catch (SQLException ex){
-            throw new RegistrationException(myErrors.getString("SQLError"), myErrors.getString("SQLErrorWarning"));
-        }
     }
 
     private void checkForBlankFields(String myUsername, String myPassword) {

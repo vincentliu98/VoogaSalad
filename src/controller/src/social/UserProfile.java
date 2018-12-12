@@ -92,7 +92,6 @@ public class UserProfile {
         imageBox.setOnMouseClicked(e -> {
             File file = myFileChooser.showOpenDialog(myStage);
             if (file != null){
-                System.out.println(file.getName());
                 String[] fullName = file.getName().split("\\.");
                 String extension = fullName[fullName.length - 1];
                 File localAvatarFile = new File("src/controller/resources/profile-images/" + myUser.getUsername() + "-Avatar." + extension);
@@ -101,7 +100,7 @@ public class UserProfile {
                         localAvatarFile.createNewFile();
                     }
                     file.renameTo(localAvatarFile);
-                    updateRemoteAvatar(localAvatarFile);
+                    DatabaseHelper.updateRemoteAvatar(localAvatarFile, myUser.getID());
                     myUser.changeAvatar(localAvatarFile.getName());
                     avatar.setImage(myUser.getAvatar().getImage());
                     EventBus.getInstance().sendMessage(EngineEvent.CHANGE_USER, myUser);
@@ -113,19 +112,6 @@ public class UserProfile {
         });
         setHoverListeners(imageBox);
         myPane.add(imageBox, 1, 1, 2, 1);
-    }
-
-    private void updateRemoteAvatar(File localAvatarFile) throws IOException {
-        // upload image file
-        ServerUploader upload = new ServerUploader();
-        upload.connectServer("vcm", "vcm-7456.vm.duke.edu", 22,"afcas8amYf");
-        upload.uploadFile(localAvatarFile.getAbsolutePath(), "/users/avatars");
-        // update reference
-        DatabaseUploader databaseUploader = new DatabaseUploader("client", "store",
-                "e.printstacktrace", "vcm-7456.vm.duke.edu", 3306);
-        databaseUploader.upload(String.format("UPDATE userReferences " +
-                "SET avatarPath='%s' WHERE id='%d'", "/home/vcm/public_html/users/avatars/" + localAvatarFile.getName(),
-                myUser.getID()));
     }
 
     private void initStatus() {
@@ -161,7 +147,7 @@ public class UserProfile {
             myTwitterButton.setOnMouseClicked(e -> {
                 myUser.removeTwitter();
                 try {
-                    uploadSerializedUserFile();
+                    DatabaseHelper.uploadSerializedUserFile(myUser.getUsername(), myUser);
                     EventBus.getInstance().sendMessage(EngineEvent.INTEGRATED_TWITTER, myUser);
                 } catch (Exception ex){
                     new ErrorMessage(new UserException(myErrors.getString("IOError"), myErrors.getString(
@@ -173,21 +159,6 @@ public class UserProfile {
             myTwitterButton.setStyle("-fx-background-color: #38A1F3");
             myTwitterButton.setOnMouseClicked(e -> new TwitterIntegration(myUser).launchTwitterIntegration().show());
         }
-    }
-
-    private void uploadSerializedUserFile() throws IOException {
-        XStream serializer = new XStream(new DomDriver());
-        File userFile=new File("src/database/resources/" + myUser.getUsername() + ".xml");
-        if (!userFile.exists()){
-            userFile.createNewFile();
-        }
-        FileWriter fileWriter = new FileWriter(userFile);
-        fileWriter.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + serializer.toXML(myUser));
-        fileWriter.close();
-        ServerUploader upload = new ServerUploader();
-        upload.connectServer("vcm", "vcm-7456.vm.duke.edu", 22,"afcas8amYf");
-        upload.uploadFile(userFile.getAbsolutePath(), "/users/profiles");
-        userFile.delete();
     }
 
     private void initFields() {
