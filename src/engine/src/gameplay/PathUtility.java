@@ -1,8 +1,20 @@
 package gameplay;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+
 public class PathUtility {
-    public static String extractLast(String url) {
-        var split = url.split("/");
-        return split[split.length-1];
+    public static File getResourceAsFile(String url) {
+        return new File(url.replace("../../../../", ""));
+    }
+
+    public static InputStream getResourceAsStream(String url) {
+        try {
+            return new FileInputStream(getResourceAsFile(url));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } return null;
     }
 }
