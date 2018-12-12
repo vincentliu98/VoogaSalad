@@ -26,6 +26,9 @@ public class User {
     private String myStatus;
 
     @XStreamOmitField
+    private ImageView myAvatar;
+
+    @XStreamOmitField
     private ResourceBundle myErrors;
 
     public User(int id, String username) {
@@ -37,12 +40,11 @@ public class User {
         myProgress = new HashMap<>();
         myImageReference = "person_logo.png";
         myStatus = "";
+        myAvatar = getAvatar();
     }
 
     public ImageView getAvatar(){
-        ImageView imageView = new ImageView();
-        imageView.setImage(new Image(getClass().getResourceAsStream(IMAGES_FOLDER_PATH + myImageReference)));
-        return imageView;
+        return myAvatar;
     }
 
     public void updateStatus(String message) {
@@ -59,6 +61,8 @@ public class User {
 
     public void changeAvatar(String imageReference) {
         myImageReference = imageReference;
+        myAvatar = new ImageView();
+        myAvatar.setImage(new Image(getClass().getResourceAsStream(IMAGES_FOLDER_PATH + myImageReference)));
     }
 
     public void addFavorite(String gameName) {
