@@ -110,7 +110,8 @@ public class RegisterScreen {
             User user = new User(id, myUsername);
             DatabaseUploader databaseUploader = updateLoginsTable(myUsername, myPassword, id);
             File userFile = uploadSerializedUserFile(myUsername, user);
-            updateUserReferencesTable(myUsername, id, databaseUploader);
+            uploadAvatarImage(myUsername + "-Avatar.jpg");
+            updateUserReferencesTable(myUsername, myUsername + "-Avatar.jpg", id, databaseUploader);
             userFile.delete();
         } catch (IOException | SQLException | RegistrationException ex){
             if (!ex.getClass().equals(RegistrationException.class)){
@@ -118,13 +119,14 @@ public class RegisterScreen {
             }
             throw ex; // rethrowing the RegistrationException
         }
-        //resetDatabases();
+       //resetDatabases();
         myStage.close();
     }
 
-    private void updateUserReferencesTable(String myUsername, int id, DatabaseUploader databaseUploader) {
-        databaseUploader.upload(String.format("INSERT INTO userReferences (id, profilePath) VALUES ('%d', " +
-                "'%s')", id, "/home/vcm/public_html/users/profiles/" + myUsername + ".xml"));
+    private void updateUserReferencesTable(String myUsername, String avatarFilename, int id, DatabaseUploader databaseUploader) {
+        databaseUploader.upload(String.format("INSERT INTO userReferences (id, profilePath, avatarPath) " +
+                "VALUES ('%d','%s','%s')", id, "/home/vcm/public_html/users/profiles/" + myUsername + ".xml",
+                "/home/vcm/public_html/users/avatars/" + avatarFilename));
     }
 
     private File uploadSerializedUserFile(String myUsername, User user) throws IOException {
@@ -138,6 +140,15 @@ public class RegisterScreen {
         upload.connectServer("vcm", "vcm-7456.vm.duke.edu", 22,"afcas8amYf");
         upload.uploadFile(userFile.getAbsolutePath(), "/users/profiles");
         return userFile;
+    }
+
+    private File uploadAvatarImage(String imageName) throws IOException {
+        File avatarFile=new File("src/controller/resources/profile-images/" + imageName);
+        ServerUploader upload = new ServerUploader();
+        upload.connectServer("vcm", "vcm-7456.vm.duke.edu", 22,"afcas8amYf");
+        upload.uploadFile(avatarFile.getAbsolutePath(), "/users/avatars");
+        avatarFile.delete();
+        return avatarFile;
     }
 
     private DatabaseUploader updateLoginsTable(String myUsername, String myPassword, int id) {
