@@ -197,8 +197,7 @@ public class GroovyPaneFactory {
                     var node1 = getNodeWithModel(edge.from());
                     var node2 = getNodeWithModel(edge.to());
                     if (node1.isPresent() && node2.isPresent()) {
-                        graph.removeEdge(edge); // since connectNodes is going to connect it
-                        connectNodes(node1.get(), edge.fromPort(), node2.get());
+                        connectNodes(node1.get(), edge.fromPort(), node2.get(), true);
                     }
                 }
             }
@@ -354,6 +353,9 @@ public class GroovyPaneFactory {
         }
 
         private void connectNodes(GroovyNode node1, Ports port, GroovyNode node2) {
+            connectNodes(node1, port, node2, false);
+        }
+        private void connectNodes(GroovyNode node1, Ports port, GroovyNode node2, boolean useExistingEdge) {
             if (node1 == node2 || node2 instanceof ShrunkGroovyNode || isInsideShrunkNode(node2)) return;
             try {
                 var p = node1.portXY(port);
@@ -363,7 +365,7 @@ public class GroovyPaneFactory {
                 edgeLine.setOnMouseExited(e -> myScene.setCursor(Cursor.DEFAULT));
                 edgeLine.setOnMouseClicked(e -> selectedEdge.set(new Pair<>(node1, port)));
 
-                graph.addEdge(factory.createEdge(node1.model(), port, node2.model()));
+                if(!useExistingEdge) graph.addEdge(factory.createEdge(node1.model(), port, node2.model()));
                 lines.put(new Pair<>(node1, port), new Pair<>(node2, edgeLine));
 
                 group.getChildren().addAll(edgeLine);

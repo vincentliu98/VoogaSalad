@@ -345,6 +345,7 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
         if (nameField.getText().trim().isEmpty()) {
             throw new IllegalGameObjectNamingException("GameObjectClass cannot have an empty name");
         }
+        if(gameObjectClass == null || gameObjectClass.getClassName().equals(nameField.getText().trim())) return nameField.getText().trim();
         try {
             gameObjectManager.getGameObjectClass(nameField.getText().trim());
         } catch (GameObjectClassNotFoundException e) {

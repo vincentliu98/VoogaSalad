@@ -11,7 +11,9 @@ public class Node {
     }
 
     public void execute() {
-        System.out.printf("On Node %s\n", myName);
+        System.out.printf("-----------------On Node %s----------------\n", myName);
+        System.out.println("executing script");
+        System.out.println(myExecution);
         GameData.clearArgumentListeners(); // clear previous listeners
         GameData.getEdges()
                 .stream()
@@ -21,8 +23,6 @@ public class Node {
         try {
             GameData.shell().evaluate(myExecution);
             GameData.shell().evaluate(GameData.WIN_CONDITION);
-            System.out.println(GameMethods.hasNoEntities(GameMethods.getCurrentPlayerName()));
-            System.out.println(GameMethods.getCurrentPlayer().getMyEntities());
             GameData.updateViews();
         } catch (Exception e) {
             e.printStackTrace();
