@@ -84,7 +84,6 @@ public class LauncherSocialDisplay implements Sortable, Searchable {
     public void showAll() {
         clearIcons();
         myActiveUsers = new ArrayList<>();
-        System.out.println("myUsers is size " + myUsers.size());
         for (UserIcon icon : myUsers) {
             myActiveUsers.add(icon);
             myPane.getChildren().add(icon.getView());
@@ -129,14 +128,12 @@ public class LauncherSocialDisplay implements Sortable, Searchable {
     }
 
     private void reassignUser(Object... args) {
-        System.out.println("Reassigned");
         myUser = (User) args[0];
         clearIcons();
         initUsers();
     }
 
     private void resetUser(Object... args) {
-        System.out.println("Set to null");
         myUser = null;
         clearIcons();
         initUsers();

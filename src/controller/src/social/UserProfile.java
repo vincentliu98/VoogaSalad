@@ -2,6 +2,8 @@ package social;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import exceptions.ErrorMessage;
+import exceptions.UserException;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -63,7 +65,6 @@ public class UserProfile {
         myPane.setAlignment(Pos.TOP_CENTER);
         myPane.setVgap(15.0D);
         myPane.setPadding(new Insets(40.0D, 70.0D, 40.0D, 70.0D));
-
         for (int i = 0; i < 4; ++i) {
             ColumnConstraints col = new ColumnConstraints();
             col.setPercentWidth(25.0D);
@@ -104,8 +105,9 @@ public class UserProfile {
                     myUser.changeAvatar(localAvatarFile.getName());
                     avatar.setImage(myUser.getAvatar().getImage());
                     EventBus.getInstance().sendMessage(EngineEvent.CHANGE_USER, myUser);
-                } catch (Exception ex){
-                    ex.printStackTrace();
+                } catch (IOException ex){
+                    new ErrorMessage(new UserException(myErrors.getString("IOError"), myErrors.getString(
+                            "IOErrorWarning")));
                 }
             }
         });
@@ -160,10 +162,11 @@ public class UserProfile {
                 myUser.removeTwitter();
                 try {
                     uploadSerializedUserFile();
+                    EventBus.getInstance().sendMessage(EngineEvent.INTEGRATED_TWITTER, myUser);
                 } catch (Exception ex){
-                    ex.printStackTrace();
+                    new ErrorMessage(new UserException(myErrors.getString("IOError"), myErrors.getString(
+                            "IOErrorWarning")));
                 }
-                EventBus.getInstance().sendMessage(EngineEvent.INTEGRATED_TWITTER, myUser);
             });
         } else {
             myTwitterButton.setText("Add Twitter account");
@@ -197,19 +200,12 @@ public class UserProfile {
         myTwitterButton.setPrefWidth(260.0D);
         configureTwitterButton();
         setHoverListeners(myTwitterButton);
-        //CheckBox cBox = new CheckBox("Remember me"); TODO: Do we need this?
         Text logout = new Text("Log Out");
         logout.setOnMouseClicked(e -> logout());
         setHoverListeners(logout);
-        //Text forgotPassword = new Text("Forgot your password?");
-
-//        myPane.add(updateStatusField, 0, 2, 4, 1);
-//        myPane.add(passwordField, 0, 3, 4, 1);
-        //myPane.add(cBox, 0, 4, 2, 1);
         myPane.add(nameBox, 0, 0, 4, 1);
         myPane.add(myTwitterButton, 0, 5, 4, 1);
         myPane.add(logout, 0, 6);
-        // grid.add(forgotPassword, 2, 6);
     }
 
     private void logout(){

@@ -1,6 +1,8 @@
 package social;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
+import exceptions.ErrorMessage;
+import exceptions.UserException;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import twitter4j.Twitter;
@@ -10,9 +12,7 @@ import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
 import twitter4j.conf.ConfigurationBuilder;
 
-import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.InputStreamReader;
 import java.util.*;
 
 public class User {
@@ -28,7 +28,7 @@ public class User {
     private String myStatus;
 
     @XStreamOmitField
-    private ResourceBundle myErrors;
+    private ResourceBundle myErrors = ResourceBundle.getBundle("Errors");
 
     public User(int id, String username) {
         myID = id;
@@ -50,9 +50,8 @@ public class User {
             ImageView imageView = new ImageView(new Image(new FileInputStream(IMAGES_FOLDER_PATH + myImageReference)));
             return imageView;
         } catch (Exception e){
-            e.printStackTrace();
+            return new ImageView();
         }
-        return null;
     }
 
     public void updateStatus(String message) {
@@ -127,15 +126,15 @@ public class User {
     public RequestToken getTwitterRequestToken(){
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
-                .setOAuthConsumerKey("Djd5Tus6kdSCXWC471CrJTE7O")
+                .setOAuthConsumerKey("Djd5Tus6kdSCXWC471CrJTE7O") // Specific to my (Natalie) developer account
                 .setOAuthConsumerSecret("qKdKyeWvbmOWTe1ZDXfLQT34p8GEmWNMoaVbLdde6V5T6MhCTo");
         TwitterFactory tf = new TwitterFactory(cb.build());
         myTwitter = tf.getInstance();
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         try{
             return myTwitter.getOAuthRequestToken("oob"); // directs to pin page
         } catch (Exception e){
-            e.printStackTrace();
+            new ErrorMessage(new UserException(myErrors.getString("TwitterConnection"), myErrors.getString(
+                    "TwitterConnectionWarning")));
             return null;
         }
     }
@@ -148,9 +147,9 @@ public class User {
         try{
             AccessToken accessToken = myTwitter.getOAuthAccessToken(requestToken, pin);
         } catch (Exception e){
-            // invalid pin
-            e.printStackTrace();
             myTwitter = null;
+            new ErrorMessage(new UserException(myErrors.getString("InvalidTwitterPin"), myErrors.getString(
+                    "InvalidTwitterPinWarning")));
         }
     }
 

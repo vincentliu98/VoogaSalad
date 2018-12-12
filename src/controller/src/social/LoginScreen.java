@@ -3,10 +3,7 @@ package social;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import com.thoughtworks.xstream.io.xml.DomDriver;
-import exceptions.ExtendedException;
-import exceptions.LoginException;
-import exceptions.RegistrationException;
-import exceptions.ServerException;
+import exceptions.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -35,11 +32,11 @@ import java.util.Scanner;
 public class LoginScreen {
     public static final String LOGO_PATH = "duke_logo.png";
     public static final String MOTO = "Your Home for Games";
+    private ResourceBundle myErrors = ResourceBundle.getBundle("Errors");
 
     private GridPane myPane;
     private Scene myScene;
     private Stage myStage;
-    private ResourceBundle myErrors = ResourceBundle.getBundle("Errors");
 
     public LoginScreen() {
     }
@@ -106,34 +103,23 @@ public class LoginScreen {
         passwordField.setPromptText("password");
         Button btn = new Button("LOGIN");
         btn.setPrefWidth(260.0D);
-        //CheckBox cBox = new CheckBox("Remember me"); TODO: Do we need this?
         Text register = new Text("Register");
         register.setOnMouseClicked(e -> {
             RegisterScreen myRegistration = new RegisterScreen();
             myRegistration.launchRegistration().show();
         });
-        //Text forgotPassword = new Text("Forgot your password?");
-
         btn.setOnMouseClicked(e -> {
             try {
                 loginUser(usernameField.getText(), passwordField.getText());
             } catch (Exception ex){
-                ex.printStackTrace();
                 ExtendedException exception = (ExtendedException) ex;
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setHeaderText(exception.getMessage());
-                alert.setContentText(exception.getWarning());
-                alert.showAndWait();
-                return;
+                new ErrorMessage(exception);
             }
         });
-
         myPane.add(usernameField, 0, 2, 4, 1);
         myPane.add(passwordField, 0, 3, 4, 1);
-        //myPane.add(cBox, 0, 4, 2, 1);
         myPane.add(btn, 0, 5, 4, 1);
         myPane.add(register, 0, 6);
-        // grid.add(forgotPassword, 2, 6);
     }
 
     private void loginUser(String myUsername, String myPassword) throws SQLException, FileNotFoundException {
@@ -150,15 +136,11 @@ public class LoginScreen {
             }
             EventBus.getInstance().sendMessage(EngineEvent.CHANGE_USER, user);
             myStage.close();
-            //User myUser = new User(10, "bloop");// TODO: Remove later (just a placeholder)
-            //myUser.changeAvatar("ocean.jpeg");
-            //EventBus.getInstance().sendMessage(EngineEvent.CHANGE_USER, myUser);
-            //myStage.close();
         } catch (SQLException | LoginException | FileNotFoundException ex){
             if (!ex.getClass().equals(LoginException.class)){
                 throw new ServerException(myErrors.getString("ServerError"), myErrors.getString("ServerErrorWarning"));
             }
-            throw ex; // rethrowing the LoginException
+            throw ex;
         }
     }
 

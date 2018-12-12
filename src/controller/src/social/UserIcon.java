@@ -2,9 +2,11 @@ package social;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import exceptions.ErrorMessage;
+import exceptions.ExtendedException;
+import exceptions.UserException;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import util.data.DatabaseDownloader;
@@ -17,11 +19,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ResourceBundle;
 import java.util.Scanner;
 
 public class UserIcon extends Icon {
 
     public static final String UNFOLLOW_TEXT = "Following";
+    private ResourceBundle myErrors = ResourceBundle.getBundle("Errors");
     private boolean isFollowing;
 
     public UserIcon(String gameName, String description, String reference, String color, String imagePath,
@@ -38,10 +42,8 @@ public class UserIcon extends Icon {
             @Override
             public void handle(MouseEvent event) {
                 if (myUser == null || myUser.getUsername().equals(myName)) { // TODO: Turn into an error
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setHeaderText("Cannot follow others without a profile.");
-                    alert.setContentText("Log in or create a new profile.");
-                    alert.showAndWait();
+                    new ErrorMessage(new ExtendedException(myErrors.getString("NoUser"), myErrors.getString(
+                            "NoUserWarning")));
                 } else {
                     isFollowing = !isFollowing;
                     changeButtonDisplay();
@@ -52,17 +54,14 @@ public class UserIcon extends Icon {
 
     protected void initPane() {
         myPane = new StackPane();
-
         myPane.setOnMouseEntered(event -> { // always want username
             myPane.getChildren().add(myDescriptionHolder);
             myPane.getChildren().add(myButtonHolder);
         });
-
         myPane.setOnMouseExited(event -> {
             myPane.getChildren().remove(myDescriptionHolder);
             myPane.getChildren().remove(myButtonHolder);
         });
-
     }
 
     private void changeButtonDisplay() {
@@ -83,8 +82,6 @@ public class UserIcon extends Icon {
                 myUser.follow(myName);
                 u.addFollower(myUser.getUsername());
                 uploadSerializedUserFile(u);
-                // get MyName from database and follow
-
             } else {
                 myButton.getStyleClass().remove(BUTTON_CSS_NORMAL);
                 myButton.getStyleClass().add(BUTTON_CSS_HOVER);
@@ -94,7 +91,8 @@ public class UserIcon extends Icon {
                 uploadSerializedUserFile(u);
             }
         } catch (Exception e){
-            e.printStackTrace();
+            new ErrorMessage(new UserException(myErrors.getString("SerializationError"), myErrors.getString(
+                    "SerializationErrorWarning")));
         }
 
     }

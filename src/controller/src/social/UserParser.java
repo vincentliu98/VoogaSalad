@@ -2,7 +2,8 @@ package social;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
-import javafx.scene.image.Image;
+import exceptions.ErrorMessage;
+import exceptions.UserException;
 import util.data.DatabaseDownloader;
 import util.files.ServerDownloader;
 
@@ -15,13 +16,12 @@ import java.util.*;
 public class UserParser {
     private List<UserIcon> allUsers;
     private User myUser;
+    private ResourceBundle myErrors = ResourceBundle.getBundle("Errors");
 
     public UserParser(User user) {
         allUsers = new ArrayList<>();
         myUser = user;
         generateUserIcons(getUsers());
-//        EventBus.getInstance().register(EngineEvent.CHANGE_USER, this::reassignUser);
-//        EventBus.getInstance().register(EngineEvent.LOGGED_OUT, this::resetUser);
     }
 
     private Set<User> getUsers(){
@@ -53,42 +53,29 @@ public class UserParser {
                 users.add(u);
             }
         } catch (Exception e){
-            e.printStackTrace();
+            new ErrorMessage(new UserException(myErrors.getString("SQLError"), myErrors.getString("SQLErrorWarning")));
         }
         return users;
     }
 
     private void generateUserIcons(Set<User> users) {
-        try {
-            for (User u : users) {
-                System.out.println("Creating icon for user " + u.getID());
-                UserIcon userIcon;
-                if (myUser == null) {
-                    userIcon = new UserIcon(u.getUsername(), u.getStatus(), "", "",
-                            u.getImageReference(), "", u, "", "");
-                } else {
-                    userIcon = new UserIcon(u.getUsername(), u.getStatus(), "", "",
-                            u.getImageReference(), "", myUser, "", "");
-                }
-                allUsers.add(userIcon);
+        for (User u : users) {
+            System.out.println("Creating icon for user " + u.getID());
+            UserIcon userIcon;
+            if (myUser == null) {
+                userIcon = new UserIcon(u.getUsername(), u.getStatus(), "", "",
+                        u.getImageReference(), "", u, "", "");
+            } else {
+                userIcon = new UserIcon(u.getUsername(), u.getStatus(), "", "",
+                        u.getImageReference(), "", myUser, "", "");
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+            allUsers.add(userIcon);
         }
     }
 
     public List<UserIcon> getAllUsers() {
         return allUsers;
     }
-//
-//    private void reassignUser(Object... args) {
-//        myUser = (User) args[0];
-//        generateUserIcons(getUsers());
-//    }
-//
-//    private void resetUser(Object... args) {
-//        myUser = null;
-//    }
 
     private String getProfilePath(int id) throws SQLException {
         DatabaseDownloader databaseDownloader = new DatabaseDownloader("client", "store",

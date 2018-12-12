@@ -2,7 +2,9 @@ package social;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import exceptions.ErrorMessage;
 import exceptions.ExtendedException;
+import exceptions.UserException;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -81,7 +83,8 @@ public class StatusUpdate {
                 EventBus.getInstance().sendMessage(EngineEvent.UPDATED_STATUS, myUser);
                 myStage.close();
             } catch (Exception ex){
-                ex.printStackTrace();
+                new ErrorMessage(new UserException(myErrors.getString("SerializationError"), myErrors.getString(
+                        "SerializationErrorWarning")));
             }
         });
         myPane.add(instructions, 0, 0, 4, 1);

@@ -2,6 +2,7 @@ package social;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import exceptions.ErrorMessage;
 import exceptions.ExtendedException;
 import exceptions.RegistrationException;
 import exceptions.ServerException;
@@ -91,10 +92,7 @@ public class RegisterScreen {
                 registerUser(usernameField.getText(), passwordField.getText());
             } catch (Exception ex){
                 ExtendedException exception = (ExtendedException) ex;
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setHeaderText(exception.getMessage());
-                alert.setContentText(exception.getWarning());
-                alert.showAndWait();
+                new ErrorMessage(exception);
             }
         });
         myPane.add(usernameField, 0, 2, 4, 1);
@@ -170,10 +168,9 @@ public class RegisterScreen {
                 resultSet.last();
                 return resultSet.getInt("id") + 1;
             }
-        } catch (Exception ex){
-            ex.printStackTrace();
+        } catch (SQLException ex){
+            throw new RegistrationException(myErrors.getString("SQLError"), myErrors.getString("SQLErrorWarning"));
         }
-        return -1;
     }
 
     private void checkForBlankFields(String myUsername, String myPassword) {
