@@ -32,6 +32,7 @@ import utils.imageManipulation.JavaFxOperation;
 import utils.imageSelector.ImageSelectorController;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -100,9 +101,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
             FileChooser fileChooser = new FileChooser();
             File file = fileChooser.showOpenDialog(new Stage());
             if (file != null) {
-                System.out.println(file.getPath());
-                String imagePath = file.toURI().toString();
-                imagePaths.add(imagePath);
+                imagePaths.add(ImageManager.getRelativePath(file));
             }
         });
         this.imageSelectorController = imageSelectorController;
@@ -225,7 +224,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     private void presentImages() {
         imagePanel.getChildren().clear();
         imagePaths.forEach(path -> {
-            ImageView preview = new ImageView(path);
+            ImageView preview = new ImageView(ImageManager.getAbsoluteURL(path));
             preview.setFitWidth(ICON_WIDTH);
             preview.setFitHeight(ICON_HEIGHT);
             imagePanel.getChildren().add(preview);
