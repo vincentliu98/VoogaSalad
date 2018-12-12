@@ -183,7 +183,9 @@ public class GameMethods {
     }
 
     public static int numberOfInstances(String entityName) {
-        return (int) ENTITIES.values().stream().filter(e -> e.getName().equals(entityName)).count();
+        var count = (int) ENTITIES.values().stream().filter(e -> e.getName().equals(entityName)).count();
+        System.out.println("Instance Count: " + count);
+        return count;
     }
 
     /**
@@ -297,6 +299,7 @@ public class GameMethods {
                 }
             }
         });
+        System.out.println("Board Size + " + ENTITIES.keySet().size());
     }
 
     public static int roundDouble(double i){
