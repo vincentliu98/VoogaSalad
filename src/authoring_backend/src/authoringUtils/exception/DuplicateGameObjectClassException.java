@@ -9,6 +9,8 @@ public class DuplicateGameObjectClassException extends GameObjectClassException 
         super("Another class with the same name exists");
     }
 
+    public DuplicateGameObjectClassException(String msg) { super(msg); }
+
     public DuplicateGameObjectClassException(Throwable e) {
         super(e);
     }

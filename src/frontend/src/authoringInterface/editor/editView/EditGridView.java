@@ -29,6 +29,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 import utils.ErrorWindow;
 import utils.exception.NodeNotFoundException;
 import utils.exception.PreviewUnavailableException;
@@ -52,10 +53,8 @@ import java.util.Set;
  * @author Amy Kim
  */
 public class EditGridView implements SubView<ScrollPane> {
-    private static final double NODE_HEIGHT = 75;
-    private static final double NODE_WIDTH = 75;
-    private static final double INDICATOR_FADE_TIME = 3000;
-    private static final double INITIAL_INDICATOR_FADE_TIME = 15000;
+    private static final double NODE_TO_CELL_WIDTH_RATIO = 0.8;
+    private static final double NODE_TO_CELL_HEIGHT_RATIO = 0.8;
     private static final double CELL_HEIGHT = 100;
     private static final double CELL_WIDTH = 100;
     private static final double HALF_OPACITY = 0.5;
@@ -67,22 +66,14 @@ public class EditGridView implements SubView<ScrollPane> {
     private List<UpdateStatusEventListener<Node>> listeners;
     private boolean isControlDown;
     private boolean isShiftDown;
-    private Label batchMode;
-    private Label deleteMode;
     private Set<Node> toRemove;
 
-    public EditGridView(int row, int col, GameObjectsCRUDInterface manager, NodeInstanceController controller) {
+    EditGridView(int row, int col, GameObjectsCRUDInterface manager, NodeInstanceController controller) {
         gameObjectManager = manager;
         nodeInstanceController = controller;
         toRemove = new HashSet<>();
         scrollPane = new ScrollPane();
         listeners = new ArrayList<>();
-        batchMode = new Label("Batch Mode: Off\nPress Shift to Toggle");
-        batchMode.setFont(Font.font(20));
-        batchMode.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, null, null)));
-        deleteMode = new Label("Delete Mode: Off\nPress Control to Toggle");
-        deleteMode.setFont(Font.font(20));
-        deleteMode.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, null, null)));
         gridScrollView = new GridPane();
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
@@ -98,10 +89,6 @@ public class EditGridView implements SubView<ScrollPane> {
             }
         }
         gridScrollView.setGridLinesVisible(true);
-//        gridScrollView.add(batchMode, 0, 0, 3, 2);
-//        gridScrollView.add(deleteMode, 0, 1, 3, 2);
-        SingleNodeFade.getNodeFadeOut(batchMode, INITIAL_INDICATOR_FADE_TIME).playFromStart();
-        SingleNodeFade.getNodeFadeOut(deleteMode, INITIAL_INDICATOR_FADE_TIME).playFromStart();
         scrollPane = new ScrollPane(gridScrollView);
         scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, keyEvent -> {
             if (keyEvent.getCode() == KeyCode.CONTROL) {
@@ -130,6 +117,22 @@ public class EditGridView implements SubView<ScrollPane> {
         });
     }
 
+    /**
+     * Set up a key toggle for toggling for the Shift key.
+     */
+    private void setUpShift() {
+        isShiftDown = !isShiftDown;
+        listeners.forEach(listener -> listener.setBatchMode(isShiftDown));
+    }
+
+    /**
+     * Set up a key toggle and attach the this boolean toggle to some boolean variable of this class.
+     */
+    private void setUpControl() {
+        isControlDown = !isControlDown;
+        listeners.forEach(listener -> listener.setDeleteMode(isControlDown));
+    }
+
     public void generateTiles(TileInstance tileInstance) {
         int colNum = gridScrollView.getColumnCount();
         var index = tileInstance.getCoord().getX()*colNum + tileInstance.getCoord().getY();
@@ -143,36 +146,6 @@ public class EditGridView implements SubView<ScrollPane> {
             }
         }
         return null;
-    }
-
-    /**
-     * Set up a key toggle and attach the this boolean toggle to some boolean variable of this class.
-     */
-    private void setUpControl() {
-        isControlDown = !isControlDown;
-        if (isControlDown) {
-            deleteMode.setText("Delete Mode: On");
-            deleteMode.setBackground(new Background(new BackgroundFill(Color.LIGHTYELLOW, null, null)));
-        } else {
-            deleteMode.setText("Delete Mode: Off");
-            deleteMode.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, null, null)));
-        }
-        SingleNodeFade.getNodeFadeInAndOut(deleteMode, INDICATOR_FADE_TIME).playFromStart();
-    }
-
-    /**
-     * Set up a key toggle for toggling for the Shift key.
-     */
-    private void setUpShift() {
-        isShiftDown = !isShiftDown;
-        if (isShiftDown) {
-            batchMode.setText("Batch Mode: On");
-            batchMode.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, null, null)));
-        } else {
-            batchMode.setText("Batch Mode: Off");
-            batchMode.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, null, null)));
-        }
-        SingleNodeFade.getNodeFadeInAndOut(batchMode, INDICATOR_FADE_TIME).playFromStart();
     }
 
     public void updateDimension(int row, int col) {
@@ -375,15 +348,15 @@ public class EditGridView implements SubView<ScrollPane> {
      * @param cell:               The Pane where an instance will be created.
      */
     private void createInstanceAtGridCell(GameObjectInstance gameObjectInstance, Pane cell) {
-        ImageView nodeOnGrid = null;
+        ImageView nodeOnGrid;
         try {
             nodeOnGrid = new ImageView(ImageManager.getPreview(gameObjectInstance));
         } catch (PreviewUnavailableException e) {
             ErrorWindow.display("Preview Unavailable", e.toString());
+            return;
         }
-        assert nodeOnGrid != null;
-        nodeOnGrid.setFitHeight(NODE_HEIGHT);
-        nodeOnGrid.setFitWidth(NODE_WIDTH);
+        nodeOnGrid.fitHeightProperty().bind(cell.prefHeightProperty().multiply(NODE_TO_CELL_HEIGHT_RATIO));
+        nodeOnGrid.fitWidthProperty().bind(cell.prefWidthProperty().multiply(NODE_TO_CELL_WIDTH_RATIO));
         ImageView finalNodeOnGrid = nodeOnGrid;
         cell.getChildren().add(finalNodeOnGrid);
         nodeInstanceController.addLink(finalNodeOnGrid, gameObjectInstance);
@@ -419,11 +392,12 @@ public class EditGridView implements SubView<ScrollPane> {
     }
 
     private void createInstanceAtGridCell(GameObjectClass gameObjectClass, Pane cell) {
-        GameObjectInstance gameObjectInstance = null;
+        GameObjectInstance gameObjectInstance;
         try {
             gameObjectInstance = gameObjectManager.createGameObjectInstance(gameObjectClass, new PointImpl(GridPane.getColumnIndex(cell), GridPane.getRowIndex(cell)));
         } catch (GameObjectTypeException e) {
             ErrorWindow.display("GameObject Type", e.toString());
+            return;
         }
         createInstanceAtGridCell(gameObjectInstance, cell);
     }
@@ -492,5 +466,40 @@ public class EditGridView implements SubView<ScrollPane> {
         if (isShiftDown) {
             handleDragFromSideView(dragEvent, cell);
         }
+    }
+
+    /**
+     * This method changes the sizes and widths of an individual cell.
+     *
+     * @param width: The width to be set for a cell.
+     * @param height: The height to be set for a cell.
+     */
+    public void changeCellSize(double width, double height) {
+        gridScrollView.getChildrenUnmodifiable().forEach(cell -> {
+            if (cell instanceof StackPane) {
+                ((StackPane) cell).setPrefHeight(height);
+                ((StackPane) cell).setPrefWidth(width);
+            }
+        });
+    }
+
+    /**
+     * This method returns a current Grid dimension of the Grid.
+     *
+     * @return A Pair that is in the format of Pair(Row_number, Column_number).
+     */
+    public Pair<Integer, Integer> getGridDimension() {
+        return new Pair<>(gridScrollView.getRowCount(), gridScrollView.getColumnCount());
+    }
+
+    /**
+     * This method returns a pair of current cell sizes.
+     *
+     * @return A Pair that is in the format of Pair(width, height).
+     */
+    public Pair<Double, Double> getCellSize() {
+        StackPane cell = (StackPane) getCellAt(0, 0);
+        assert cell != null;
+        return new Pair<>(cell.getPrefWidth(), cell.getPrefHeight());
     }
 }

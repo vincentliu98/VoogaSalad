@@ -4,6 +4,7 @@ import api.SubView;
 import authoringInterface.subEditors.exception.IllegalGameObjectNamingException;
 import authoringInterface.subEditors.exception.IllegalGeometryException;
 import authoringUtils.exception.DuplicateGameObjectClassException;
+import authoringUtils.exception.GameObjectClassNotFoundException;
 import authoringUtils.exception.InvalidOperationException;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.gameObject.GameObjectClass;
@@ -157,6 +158,9 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
             } catch (IllegalGameObjectNamingException e1) {
                 new ErrorWindow("Illegal Naming", e1.toString()).showAndWait();
                 return;
+            } catch (DuplicateGameObjectClassException e1) {
+                ErrorWindow.display("Duplicate Class Name", e1.toString());
+                return;
             }
             closeEditor();
         });
@@ -283,7 +287,7 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
      * @throws InvalidOperationException
      * @throws PreviewUnavailableException
      */
-    protected abstract void confirmEditTreeItem() throws IllegalGameObjectNamingException, IllegalGeometryException, InvalidOperationException, PreviewUnavailableException;
+    protected abstract void confirmEditTreeItem() throws IllegalGameObjectNamingException, IllegalGeometryException, InvalidOperationException, PreviewUnavailableException, DuplicateGameObjectClassException;
 
     /**
      * This method sets up the confirm logic of editing existing Node.
@@ -328,12 +332,18 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
      *
      * @return A String name for the GameObjectClass.
      * @throws IllegalGameObjectNamingException
+     * @throws DuplicateGameObjectClassException
      */
-    String getValidClassName() throws IllegalGameObjectNamingException {
+    String getValidClassName() throws IllegalGameObjectNamingException, DuplicateGameObjectClassException {
         if (nameField.getText().trim().isEmpty()) {
             throw new IllegalGameObjectNamingException("GameObjectClass cannot have an empty name");
         }
-        return nameField.getText();
+        try {
+            gameObjectManager.getGameObjectClass(nameField.getText().trim());
+        } catch (GameObjectClassNotFoundException e) {
+            return nameField.getText().trim();
+        }
+        throw new DuplicateGameObjectClassException(nameField.getText().trim() + " already exists, please rename your GameObjectClass");
     }
 
     /**
@@ -346,6 +356,6 @@ public abstract class AbstractGameObjectEditor<T extends GameObjectClass, V exte
         if (nameField.getText().trim().isEmpty()) {
             throw new IllegalGameObjectNamingException("GameObjectInstance cannot have an empty name");
         }
-        return nameField.getText();
+        return nameField.getText().trim();
     }
 }
