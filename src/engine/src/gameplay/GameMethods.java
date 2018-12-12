@@ -295,4 +295,6 @@ public class GameMethods {
     public static int randInt(int upperBound) {
         return new Random().nextInt(upperBound);
     }
+
+
 }
