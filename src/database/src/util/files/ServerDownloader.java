@@ -45,11 +45,9 @@ public class ServerDownloader extends ServerConnector implements ServerQuery {
             sftpChannel.get(filePath, fileDestination);
             sftpChannel.exit();
             mySession.disconnect();
-        } catch (JSchException e) {
-            System.out.println("Error");
-        } catch (SftpException e) {
-            System.out.println("Error");
+        } catch (JSchException | SftpException e) {
             e.printStackTrace();
+            System.out.println("An error is happening here");
         }
     }
 
