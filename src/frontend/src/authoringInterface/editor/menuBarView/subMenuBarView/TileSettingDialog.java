@@ -51,6 +51,9 @@ public class TileSettingDialog extends PopUpWindow {
         myPane = setUpTileBox();
 
         Button addTile = new Button("Add A Tile");
+        addTile.setStyle("-fx-background-color: #343a40;"
+                + "-fx-text-fill: white;"
+                + "-fx-cursor: hand;");
         addTile.setOnAction(e -> {
             myPane.getChildren().add(addPair());
         });
@@ -77,7 +80,12 @@ public class TileSettingDialog extends PopUpWindow {
         xSySBox.getChildren().addAll(xSLabel, xSText, ySLabel, ySText);
 
         dialogPane = new VBox(myPane);
+        dialogPane.setStyle("-fx-text-fill: white;"
+                + "-fx-background-color: #868c87;");
         Button apply = new Button("Apply");
+        apply.setStyle("-fx-background-color: #343a40;"
+                + "-fx-text-fill: white;"
+                + "-fx-cursor: hand;");
         apply.setOnAction(e -> {
             start = new PointImpl(Integer.parseInt(xText.getText()), Integer.parseInt(yText.getText()));
             numRow = Integer.parseInt(xSText.getText());
