@@ -29,6 +29,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 import utils.ErrorWindow;
 import utils.exception.NodeNotFoundException;
 import utils.exception.PreviewUnavailableException;
@@ -480,5 +481,24 @@ public class EditGridView implements SubView<ScrollPane> {
                 ((StackPane) cell).setPrefWidth(width);
             }
         });
+    }
+
+    /**
+     * This method returns a current Grid dimension of the Grid.
+     *
+     * @return A Pair that is in the format of Pair(Row_number, Column_number).
+     */
+    public Pair<Integer, Integer> getGridDimension() {
+        return new Pair<>(gridScrollView.getRowCount(), gridScrollView.getColumnCount());
+    }
+
+    /**
+     * This method returns a pair of current cell sizes.
+     *
+     * @return A Pair that is in the format of Pair(width, height).
+     */
+    public Pair<Double, Double> getCellSize() {
+        StackPane cell = (StackPane) getCellAt(0, 0);
+        return new Pair<>(cell.getPrefWidth(), cell.getPrefHeight());
     }
 }
