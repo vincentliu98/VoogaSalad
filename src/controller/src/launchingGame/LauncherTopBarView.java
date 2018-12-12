@@ -46,7 +46,7 @@ public class LauncherTopBarView implements Subscriber {
 
         myControlOptions = new ControlOptions(stage);
 
-        myProfile = new ProfileView();
+        myProfile = new ProfileView(null);
 
         myBox.getChildren().add(mySearchBar.getView());
         myBox.getChildren().add(myDivider);

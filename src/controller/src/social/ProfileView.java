@@ -13,8 +13,10 @@ public class ProfileView implements Subscriber {
 
     private HBox myBox;
     private Button myButton;
+    private User myUser;
 
-    public ProfileView() {
+    public ProfileView(User user) {
+        myUser = user;
         myBox = new HBox();
         myBox.setAlignment(Pos.CENTER_LEFT);
         initButton();
@@ -30,8 +32,13 @@ public class ProfileView implements Subscriber {
         myButton.getStyleClass().add("profile-button");
         setDefaultIcon();
         myButton.setOnAction(event -> {
-            LoginScreen myLogin = new LoginScreen();
-            myLogin.launchLogin().show();
+            if (myUser == null){
+                LoginScreen myLogin = new LoginScreen();
+                myLogin.launchLogin().show();
+            } else {
+                UserProfile userProfile = new UserProfile(myUser);
+                userProfile.launchUserProfile().show();
+            }
         });
         myBox.getChildren().add(myButton);
     }
@@ -50,9 +57,9 @@ public class ProfileView implements Subscriber {
     @Override
     public void update(EngineEvent engineEvent, Object... args) {
         if (engineEvent.equals(EngineEvent.CHANGE_USER) && args[0].getClass().equals(User.class)) {
-            User user = (User) args[0];
-            if (user.getAvatar() != null) {
-                changeIcon(user.getAvatar());
+            myUser = (User) args[0];
+            if (myUser.getAvatar() != null) {
+                changeIcon(myUser.getAvatar());
             } else {
                 setDefaultIcon();
             }
