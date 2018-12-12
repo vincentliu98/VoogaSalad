@@ -50,7 +50,7 @@ public class ProfileView implements Subscriber {
     public void update(EngineEvent engineEvent, Object... args) {
         if (engineEvent.equals(EngineEvent.CHANGE_USER) && args[0].getClass().equals(User.class)) {
             User user = (User) args[0];
-            changeIcon(user.getAvatar());
+            if (user.getAvatar() != null) changeIcon(user.getAvatar());
         }
     }
 }
