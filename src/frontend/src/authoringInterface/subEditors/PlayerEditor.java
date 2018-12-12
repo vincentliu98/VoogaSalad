@@ -136,7 +136,7 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
      * This method sets up the confirm logic of editing existing TreeItem.
      */
     @Override
-    protected void confirmEditTreeItem() throws IllegalGameObjectNamingException, InvalidOperationException, PreviewUnavailableException {
+    protected void confirmEditTreeItem() throws IllegalGameObjectNamingException, InvalidOperationException, PreviewUnavailableException, DuplicateGameObjectClassException {
         try {
             ImageManager.removeClassImage(gameObjectClass);
         } catch (GameObjectClassNotFoundException ignored) {
