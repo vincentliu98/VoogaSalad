@@ -354,8 +354,8 @@ public class EditGridView implements SubView<ScrollPane> {
             ErrorWindow.display("Preview Unavailable", e.toString());
             return;
         }
-        nodeOnGrid.fitHeightProperty().bind(cell.heightProperty().multiply(NODE_TO_CELL_HEIGHT_RATIO));
-        nodeOnGrid.fitWidthProperty().bind(cell.widthProperty().multiply(NODE_TO_CELL_WIDTH_RATIO));
+        nodeOnGrid.fitHeightProperty().bind(cell.prefHeightProperty().multiply(NODE_TO_CELL_HEIGHT_RATIO));
+        nodeOnGrid.fitWidthProperty().bind(cell.prefWidthProperty().multiply(NODE_TO_CELL_WIDTH_RATIO));
         ImageView finalNodeOnGrid = nodeOnGrid;
         cell.getChildren().add(finalNodeOnGrid);
         nodeInstanceController.addLink(finalNodeOnGrid, gameObjectInstance);
