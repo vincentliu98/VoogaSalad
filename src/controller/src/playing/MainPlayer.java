@@ -74,6 +74,8 @@ public class MainPlayer {
     }
 
     public void launchGame() {
+        String gameName = myReferencePath.split(".")[0];
+        myUser.tweet(String.format("Currently playing %s!", gameName));
         myInitializer = new Initializer(myFile);
         myStage = new Stage();
         myInitializer.setScreenSize(700, 500);
