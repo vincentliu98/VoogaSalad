@@ -218,9 +218,9 @@ Run the GameLauncher.java to access the game launcher. Click any game's "Play" b
 ## Game Showcase
 1. Goblin vs troll game (Inchan)
 2. TicTacToe (Natalie)
-3. Connect4 (?)
+3. Connect4 (Yunhao Qing)
 4. Reversi (Vincent)
-5.
+5. 
 Mega-TicTacToe??
 
 ## Basics
