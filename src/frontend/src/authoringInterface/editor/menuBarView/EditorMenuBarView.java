@@ -219,14 +219,13 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         gameWindow = new GameWindow();
         try {
             String xml = authTools.toEngineXML();
-            System.out.println(xml);
             Initializer initializer = new Initializer(xml);
+            initializer.setScreenSize(View.GAME_WIDTH, View.GAME_HEIGHT);
             Scene newScene = new Scene(initializer.getRoot(), View.GAME_WIDTH, View.GAME_HEIGHT);
             newScene.addEventFilter(KeyEvent.KEY_RELEASED, initializer::keyFilter);
             newWindow.setScene(newScene);
             newWindow.setX(SCREEN_WIDTH * 0.5 - View.GAME_WIDTH * 0.5);
             newWindow.setY(SCREEN_HEIGHT * 0.5 - View.GAME_HEIGHT * 0.5);
-            initializer.setScreenSize(View.GAME_WIDTH, View.GAME_HEIGHT);
             newWindow.show();
             newWindow.setOnCloseRequest(e -> {
                 initializer.stopMusic();

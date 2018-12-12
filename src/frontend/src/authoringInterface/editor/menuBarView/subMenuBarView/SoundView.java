@@ -14,6 +14,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
+import utils.path.PathUtility;
 
 import java.io.File;
 
@@ -79,8 +80,8 @@ public class SoundView {
 
     public String showAndWait() {
         stage.showAndWait();
-        mediaPlayer.dispose();
-        return path;
+        if(mediaPlayer != null) mediaPlayer.dispose();
+        return PathUtility.getRelativePath(file);
     }
 
     private void musicChooser(MouseEvent mouseEvent) {

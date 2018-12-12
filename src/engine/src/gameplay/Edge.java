@@ -20,7 +20,10 @@ public class Edge implements ArgumentListener {
     private boolean checkValidity() {
         if (myGuard.isEmpty()) return false;
         try {
+            System.out.printf("-------------trying guard %s -> %s ------------\n", myStartNodeName, myEndNodeName);
+            System.out.println(myGuard);
             GameData.shell().evaluate(myGuard);
+            System.out.println("result: " + GameData.shell().getVariable("$return"));
             return (boolean) GameData.shell().getVariable("$return");
         } catch (Exception e) {
             e.printStackTrace();

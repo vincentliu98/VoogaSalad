@@ -47,10 +47,11 @@ public class GameData {
         GameData.GRID_HEIGHT = grid_dimension.getY();
 
         try {
-            media = new Media(new File(bgmPath).toURI().toString());
+            var mediaPath = GameData.class.getClassLoader().getResource(PathUtility.extractLast(bgmPath)).getPath();
+            System.out.println(mediaPath);
+            media = new Media(new File(mediaPath).toURI().toString());
             mediaPlayer = new MediaPlayer(media);
             mediaPlayer.setOnReady(() -> {
-                System.out.println(media.getDuration().toMinutes());
                 mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
                 mediaPlayer.play();
             });
@@ -168,8 +169,6 @@ public class GameData {
                 "<grid-width>" + GRID_WIDTH + "</grid-width>\n" +
                 "<grid-height>" + GRID_HEIGHT + "</grid-height>\n" +
                 "<winCondition>" + WIN_CONDITION + "</winCondition>\n";
-        System.out.println("from savegamedata");
-        System.out.println(xmlString);
         return xmlString;
     }
 
@@ -188,6 +187,7 @@ public class GameData {
     }
 
     public static void restartGame() {
+        if(mediaPlayer!= null) mediaPlayer.dispose();
         myInitializer.resetRoot();
         myInitializer.initGameData();
         myInitializer.setScreenSize(700, 500);

@@ -1,6 +1,5 @@
 package utils.imageManipulation;
 
-import authoringInterface.subEditors.AbstractGameObjectEditor;
 import authoringUtils.exception.GameObjectClassNotFoundException;
 import authoringUtils.exception.GameObjectInstanceNotFoundException;
 import gameObjects.entity.EntityClass;
@@ -19,10 +18,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Transform;
 import utils.exception.PreviewUnavailableException;
+import utils.path.PathUtility;
 
-import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
 /**
@@ -39,32 +36,11 @@ public class ImageManager {
     private static final double Y_OFFSET = 10;
     private static Map<GameObjectClass, Image> classImageMap;
     private static Map<GameObjectInstance, Image> instanceImageMap;
-    private static final Path anchorPath = Paths.get(Objects.requireNonNull(AbstractGameObjectEditor.class.getClassLoader().getResource("anchor.txt")).toString().substring(5));
 
 
     static {
         classImageMap = new HashMap<>();
         instanceImageMap = new HashMap<>();
-    }
-
-    /**
-     * This method returns the relative path of the File.
-     *
-     * @param file: A File whose relative path will be returned.
-     * @return A relative path in the form of String.
-     */
-    public static String getRelativePath(File file) {
-        return anchorPath.relativize(file.toPath()).toString();
-    }
-
-    /**
-     * This method returns the absolute URL path of the file.
-     *
-     * @param relativePath: A relative path of a file.
-     * @return An absolute path that JavaFx understands.
-     */
-    public static String getAbsoluteURL(String relativePath) {
-        return "file:" + anchorPath.resolve(relativePath).normalize();
     }
 
     /**
@@ -97,7 +73,7 @@ public class ImageManager {
                 // TODO
                 break;
             case PLAYER:
-                String paths3 = getAbsoluteURL(((PlayerClass) gameObjectClass).getImagePath());
+                String paths3 = PathUtility.getAbsoluteURL(((PlayerClass) gameObjectClass).getImagePath());
                 ret = getPlayerImage(paths3, gameObjectClass.getClassName());
                 break;
         }
@@ -116,10 +92,10 @@ public class ImageManager {
         if (imagePaths == null || imagePaths.isEmpty()) {
             return composeImageFromString(textToDisplay);
         } else if (imagePaths.size() == 1) {
-            return new Image(getAbsoluteURL(imagePaths.get(0)));
+            return new Image(PathUtility.getAbsoluteURL(imagePaths.get(0)));
         } else {
             List<Image> images = new ArrayList<>();
-            imagePaths.forEach(uri -> images.add(new Image(getAbsoluteURL(uri))));
+            imagePaths.forEach(uri -> images.add(new Image(PathUtility.getAbsoluteURL(uri))));
             return stackImageFromMultipleImages(images);
         }
     }
@@ -207,7 +183,7 @@ public class ImageManager {
                 // TODO
                 break;
             case PLAYER:
-                String paths3 = getAbsoluteURL(((PlayerClass) gameObjectInstance).getImagePath());
+                String paths3 = PathUtility.getAbsoluteURL(((PlayerClass) gameObjectInstance).getImagePath());
                 ret = getPlayerImage(paths3, gameObjectInstance.getClassName());
                 break;
         }

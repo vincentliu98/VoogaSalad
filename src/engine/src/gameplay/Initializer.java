@@ -35,6 +35,7 @@ public class Initializer {
                 myXMLParser.getEntityPrototypes(), myXMLParser.getTiles(),
                 myXMLParser.getPhases(), myXMLParser.getWinCondition(),
                 myXMLParser.getNodes(), myXMLParser.getEdges(), myXMLParser.getTurn(), myRoot, this);
+
         for (Tile tile : GameData.getTiles().values()) {
             tile.setupView();
             myRoot.getChildren().add(tile.getImageView());

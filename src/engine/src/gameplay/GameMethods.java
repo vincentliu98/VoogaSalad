@@ -62,23 +62,19 @@ public class GameMethods {
         return ENTITIES.get(entityID);
     }
 
-    public static Entity createEntity(String entityName, int x, int y, int ownerID) {
+    public static Entity createEntity(String entityName, int x, int y, String ownerName) {
         var nextID = ENTITIES.keySet().stream().max(Comparator.comparingInt(a -> a)).orElse(0) + 1;
         var newEntity = ENTITY_PROTOTYPES.get(entityName).build(nextID, x, y);
         newEntity.adjustViewSize(ROOT.getWidth(), ROOT.getHeight());
         ENTITIES.put(nextID, newEntity);
-        PLAYERS.get(ownerID).addEntity(nextID);
+    PLAYERS.get(ownerName).addEntity(nextID);
         newEntity.setLocation(x, y);
         ROOT.getChildren().add(newEntity.getImageView());
         return newEntity;
     }
 
-    public static Entity createEntity(String entityName, int x, int y) {
-        return createEntity(entityName, x, y, DEFAULT_PLAYER_ID);
-    }
-
-    public static Entity createEntity(String entityName, Tile tile) {
-        return createEntity(entityName, (int) Math.round(tile.getX()), (int) Math.round(tile.getY()));
+    public static Entity createEntity(String entityName, Tile tile, String ownerName) {
+        return createEntity(entityName, (int) Math.round(tile.getX()), (int) Math.round(tile.getY()), ownerName);
     }
 
     public static void removeEntity(Entity entity) {
@@ -122,12 +118,20 @@ public class GameMethods {
         });
     }
 
-    public static boolean hasNoEntities(int x, int y) {
+    public static boolean hasNoEntityAt(int x, int y) {
         return ENTITIES.values().stream().noneMatch(e -> {
             boolean verdictX = (e.getX() <= x && x < e.getX() + e.getWidth());
             boolean verdictY = (e.getY() <= y && y < e.getY() + e.getHeight());
             return verdictX && verdictY;
         });
+    }
+
+    public static Tile getTileAt(double x, double y) {
+        return TILES.values().stream().filter(t -> t.getX() == x && t.getY() == y).findFirst().get();
+    }
+
+    public static Tile getTileUnder(Entity entity) {
+        return getTileAt(entity.getX(), entity.getY());
     }
 
     /**
@@ -165,8 +169,16 @@ public class GameMethods {
         return PLAYERS.get(playerName).getMyEntities().size() == 0;
     }
 
+    public static boolean isEntityOf(String playerName, Entity entity) {
+        return PLAYERS.get(playerName).getMyEntities().contains(entity.getID());
+    }
+
     public static void endGame(String endingMessage) {
         TURN.endGame(endingMessage);
+    }
+
+    public static int numberOfInstances(String entityName) {
+        return (int) ENTITIES.values().stream().filter(e -> e.getName().equals(entityName)).count();
     }
 
     /**
@@ -182,9 +194,11 @@ public class GameMethods {
     public static double distance(GameObject a, GameObject b) {
         double dx = a.getX() - b.getX();
         double dy = a.getY() - b.getY();
-        System.out.println(Math.sqrt(dx * dx + dy * dy));
+        System.out.println("Distance: " + Math.sqrt(dx * dx + dy * dy));
         return Math.sqrt(dx * dx + dy * dy);
     }
+
+    public static void $print(Object obj) { System.out.println("[DEBUG]: "+ obj); }
 
     public static void $return(Object retVal) {
         GameData.shell().setVariable("$return", retVal);
@@ -193,4 +207,10 @@ public class GameMethods {
     public static GameObject $this() {
         return (GameObject) GameData.shell().getVariable("$this");
     }
+
+    public static boolean isNull(Object obj) { return obj == null; }
+
+    public static boolean not(boolean bool) { return !bool; }
+
+    public static void DO_LOT_OF_THINGS() { }
 }
