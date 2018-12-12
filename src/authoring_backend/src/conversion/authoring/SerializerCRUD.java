@@ -34,8 +34,8 @@ public class SerializerCRUD {
     public String getXMLString(SimpleGameObjectsCRUD entityDB) {
         return xstream.toXML(
                 new SavedEntityDB(
-                        entityDB.getHeight(),
                         entityDB.getWidth(),
+                        entityDB.getHeight(),
                         entityDB.getBGMpath(),
                         new HashSet<>(entityDB.getAllClasses()),
                         new HashSet<>(entityDB.getAllInstances())
