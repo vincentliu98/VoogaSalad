@@ -147,9 +147,10 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
      * @throws IllegalGeometryException
      * @throws InvalidOperationException
      * @throws PreviewUnavailableException
+     * @throws DuplicateGameObjectClassException
      */
     @Override
-    protected void confirmEditTreeItem() throws IllegalGameObjectNamingException, IllegalGeometryException, InvalidOperationException, PreviewUnavailableException {
+    protected void confirmEditTreeItem() throws IllegalGameObjectNamingException, IllegalGeometryException, InvalidOperationException, PreviewUnavailableException, DuplicateGameObjectClassException {
         int width = outputPositiveInteger(widthInput);
         int height = outputPositiveInteger(heightInput);
         try {
