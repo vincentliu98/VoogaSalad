@@ -64,7 +64,6 @@ public class GameParser {
             String image = myDocTree.getElementsByTagName(IMAGE_TAG).item(0).getTextContent().trim();
             String reference = myDocTree.getElementsByTagName(REFERENCE_TAG).item(0).getTextContent().trim();
             String tags = myDocTree.getElementsByTagName(TAGS_TAG).item(0).getTextContent().trim();
-
             GameIcon nwIcon = new GameIcon(name, description, reference, color, image, tags, myUser);
             myGames.add(nwIcon);
         } catch (Exception e) {

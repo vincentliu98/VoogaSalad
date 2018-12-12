@@ -142,7 +142,7 @@ GameMethods.endGame(&quot;Player A Won!!!&quot;)
 </winCondition>
   <grid-width>10</grid-width>
   <grid-height>10</grid-height>
-  <bgmPath>../../../../src/engine/goblins_and_trolls/bgm.128.mp3</bgmPath>
+  <bgmPath>src/engine/goblins_and_trolls/bgm.128.mp3</bgmPath>
   <gamePlay.CategoryPrototype>
     <name>TILE</name>
     <myID>3</myID>
