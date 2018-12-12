@@ -10,6 +10,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
+import java.io.FileInputStream;
+
 
 public abstract class Icon {
     public static final String TEXT_CSS = "title-box";
@@ -100,11 +102,15 @@ public abstract class Icon {
     }
 
     public void initBackground() {
-        Image image = new Image(getClass().getResourceAsStream(IMAGES_FOLDER_PATH + myImagePath));
-        myBackground = new ImageView(image);
-        myBackground.setFitWidth(ICON_WIDTH);
-        myBackground.setFitHeight(ICON_HEIGHT);
-        myPane.getChildren().add(myBackground);
+        try{
+            Image image = new Image(new FileInputStream(IMAGES_FOLDER_PATH + myImagePath));
+            myBackground = new ImageView(image);
+            myBackground.setFitWidth(ICON_WIDTH);
+            myBackground.setFitHeight(ICON_HEIGHT);
+            myPane.getChildren().add(myBackground);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void initTitle() {

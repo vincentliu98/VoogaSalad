@@ -53,7 +53,7 @@ public class UserParser {
                 users.add(u);
             }
         } catch (Exception e){
-
+            e.printStackTrace();
         }
         return users;
     }
@@ -73,6 +73,7 @@ public class UserParser {
                 allUsers.add(userIcon);
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
