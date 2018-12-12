@@ -113,36 +113,38 @@ public class User {
     /**
      * Taken from https://xmeng.wordpress.com/2011/07/10/how-to-handle-sign-in-with-twitter-using-twitter4j/
      */
-    public void configureTwitter() {
+    public RequestToken getTwitterRequestToken(){
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
                 .setOAuthConsumerKey("Djd5Tus6kdSCXWC471CrJTE7O")
                 .setOAuthConsumerSecret("qKdKyeWvbmOWTe1ZDXfLQT34p8GEmWNMoaVbLdde6V5T6MhCTo");
         TwitterFactory tf = new TwitterFactory(cb.build());
         myTwitter = tf.getInstance();
-        AccessToken accessToken = null;
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        try {
-            RequestToken requestToken = myTwitter.getOAuthRequestToken("oob"); // directs to pin page
-            while (null == accessToken) {
-                System.out.println("Open the following URL and grant access to your account:");
-                System.out.println(requestToken.getAuthorizationURL());
-                System.out.print("Enter the PIN(if available) and hit enter after you granted access.[PIN]:");
-                String pin = br.readLine();
-                try {
-                    if (pin.length() > 0) {
-                        accessToken = myTwitter.getOAuthAccessToken(requestToken, pin);
-                    } else {
-                        accessToken = myTwitter.getOAuthAccessToken(requestToken);
-                    }
-                } catch (Exception e) {
-                    //throw new UserException(myErrors.getString("InvalidTwitterPin"));
-                    e.printStackTrace();
-                }
-            }
-        } catch (Exception e) {
+        try{
+            return myTwitter.getOAuthRequestToken("oob"); // directs to pin page
+        } catch (Exception e){
             e.printStackTrace();
+            return null;
         }
+    }
+
+    public void removeTwitter(){
+        myTwitter = null;
+    }
+
+    public void verifyPin(String pin, RequestToken requestToken){
+        try{
+            AccessToken accessToken = myTwitter.getOAuthAccessToken(requestToken, pin);
+        } catch (Exception e){
+            // invalid pin
+            e.printStackTrace();
+            myTwitter = null;
+        }
+    }
+
+    public boolean isTwitterConfigured(){
+        return myTwitter != null;
     }
 
     public void tweet(String message) {

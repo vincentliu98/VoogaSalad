@@ -38,6 +38,7 @@ public class UserProfile {
     private ResourceBundle myErrors = ResourceBundle.getBundle("Errors");
     private User myUser;
     private Text myStatus;
+    private Button myTwitterButton;
     private FileChooser myFileChooser;
 
     public UserProfile(User user) {
@@ -46,6 +47,7 @@ public class UserProfile {
         myFileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files",
                 "*.png", "*.jpg", "*.jpeg"));
         EventBus.getInstance().register(EngineEvent.UPDATED_STATUS, this::updateStatus);
+        EventBus.getInstance().register(EngineEvent.INTEGRATED_TWITTER, this::updateTwitterButton);
     }
 
     public Stage launchUserProfile() {
@@ -147,29 +149,69 @@ public class UserProfile {
         if (user.equals(myUser)) myStatus.setText("Status: " + myUser.getStatus());
     }
 
+    private void updateTwitterButton(Object... args){
+        User user = (User) args[0];
+        if (user.equals(myUser)) {
+            configureTwitterButton();
+        }
+    }
+
+    private void configureTwitterButton(){
+        if (myUser.isTwitterConfigured()){
+            myTwitterButton.setText("Remove Twitter account");
+            myTwitterButton.setStyle("-fx-background-color: #adbbd1");
+            myTwitterButton.setOnMouseClicked(e -> {
+                myUser.removeTwitter();
+                try {
+                    uploadSerializedUserFile();
+                } catch (Exception ex){
+                    ex.printStackTrace();
+                }
+                EventBus.getInstance().sendMessage(EngineEvent.INTEGRATED_TWITTER, myUser);
+            });
+        } else {
+            myTwitterButton.setText("Add Twitter account");
+            myTwitterButton.setStyle("-fx-background-color: #38A1F3");
+            myTwitterButton.setOnMouseClicked(e -> new TwitterIntegration(myUser).launchTwitterIntegration().show());
+        }
+    }
+
+    private void uploadSerializedUserFile() throws IOException {
+        XStream serializer = new XStream(new DomDriver());
+        File userFile=new File("src/database/resources/" + myUser.getUsername() + ".xml");
+        if (!userFile.exists()){
+            userFile.createNewFile();
+        }
+        FileWriter fileWriter = new FileWriter(userFile);
+        fileWriter.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + serializer.toXML(myUser));
+        fileWriter.close();
+        ServerUploader upload = new ServerUploader();
+        upload.connectServer("vcm", "vcm-7456.vm.duke.edu", 22,"afcas8amYf");
+        upload.uploadFile(userFile.getAbsolutePath(), "/users/profiles");
+        userFile.delete();
+    }
+
     private void initFields() {
         Text username = new Text(myUser.getUsername());
         username.setFont(Font.font ("Arial", 30));
         HBox nameBox = new HBox();
         nameBox.getChildren().add(username);
         nameBox.setAlignment(Pos.CENTER);
-        Button btn = new Button("Add Twitter");
-        btn.setPrefWidth(260.0D);
-        btn.setStyle("-fx-background-color: #38A1F3");
-        setHoverListeners(btn);
+        myTwitterButton = new Button();
+        myTwitterButton.setPrefWidth(260.0D);
+        configureTwitterButton();
+        setHoverListeners(myTwitterButton);
         //CheckBox cBox = new CheckBox("Remember me"); TODO: Do we need this?
         Text logout = new Text("Log Out");
         logout.setOnMouseClicked(e -> logout());
         setHoverListeners(logout);
         //Text forgotPassword = new Text("Forgot your password?");
 
-        btn.setOnMouseClicked(e -> myUser.configureTwitter());
-
 //        myPane.add(updateStatusField, 0, 2, 4, 1);
 //        myPane.add(passwordField, 0, 3, 4, 1);
         //myPane.add(cBox, 0, 4, 2, 1);
         myPane.add(nameBox, 0, 0, 4, 1);
-        myPane.add(btn, 0, 5, 4, 1);
+        myPane.add(myTwitterButton, 0, 5, 4, 1);
         myPane.add(logout, 0, 6);
         // grid.add(forgotPassword, 2, 6);
     }
