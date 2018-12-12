@@ -36,6 +36,7 @@ public class SerializerCRUD {
                 new SavedEntityDB(
                         entityDB.getHeight(),
                         entityDB.getWidth(),
+                        entityDB.getBGMpath(),
                         new HashSet<>(entityDB.getAllClasses()),
                         new HashSet<>(entityDB.getAllInstances())
                 )

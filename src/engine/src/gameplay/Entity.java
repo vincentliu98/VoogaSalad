@@ -9,6 +9,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -16,6 +20,7 @@ import java.util.stream.Collectors;
 public class Entity extends PropertyHolder<Entity> implements GameObject, EventHandler<MouseEvent> {
     private int myID;
     private String name;
+    private String instanceName;
     private List<String> myImagePaths;
     private String myImageSelector; // Groovy code
     private int myWidth, myHeight;
@@ -53,6 +58,8 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
      * Fills out the transient parts
      */
     public void setupView() {
+        loadImages();
+
         myImageView = new ImageView();
         myImageView.setPreserveRatio(true);
         myImageView.setOnMouseClicked(this);
@@ -74,14 +81,7 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
         myImageView.setFitWidth(screenWidth * myWidth / GameMethods.gridWidth());
         myImageView.setFitHeight(screenHeight * myHeight / GameMethods.gridHeight());
 
-        myImages = myImagePaths.stream()
-                .map(path ->
-                        new Image(
-                                this.getClass().getClassLoader().getResourceAsStream(path),
-                                screenWidth / GameMethods.gridWidth(), screenHeight / GameMethods.gridHeight(),
-                                false, true
-                        )
-                ).collect(Collectors.toList());
+        loadImages();
 
         xCoord.addListener((e, oldVal, newVal) -> {
             myImageView.setX(screenWidth * newVal.doubleValue() / GameMethods.gridWidth());
@@ -91,6 +91,14 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
             myImageView.setY(screenHeight * newVal.doubleValue() / GameMethods.gridHeight());
         });
 
+    }
+
+    private void loadImages() {
+        myImages = new ArrayList<>();
+        for (var path : myImagePaths) {
+            var img = new Image(path);
+            myImages.add(img);
+        }
     }
 
     /**
@@ -121,6 +129,8 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
     public String getName() {
         return name;
     }
+
+    public String getInstanceName() { return instanceName; }
 
     public double getX() {
         return xCoord.get();

@@ -40,7 +40,9 @@ public class SoundView {
     private String path;
 
 
-    public SoundView() {
+    public SoundView() { this(null); }
+
+    public SoundView(String bgmPath) {
         root = new VBox();
         root.setStyle("-fx-text-fill: white;"
                 + "-fx-background-color: #868c87;");
@@ -68,28 +70,40 @@ public class SoundView {
         Scene scene = new Scene(root, WIDTH, HEIGHT);
         stage.setTitle("Select Background Music");
         stage.setScene(scene);
+
+        path = bgmPath;
+        System.out.println(bgmPath);
+        if(path != null) loadMusic(new File(path));
+
     }
 
-    public void show() {
-        stage.show();
+    public String showAndWait() {
+        stage.showAndWait();
+        mediaPlayer.dispose();
+        return path;
     }
 
     private void musicChooser(MouseEvent mouseEvent) {
-        ExtensionFilter filter = new ExtensionFilter(
-                "Audio files", "*.mp3", "*.m4a");
+        ExtensionFilter filter = new ExtensionFilter("Audio files", "*.mp3", "*.m4a");
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(filter);
         fileChooser.setTitle("Select Background Music");
         file = fileChooser.showOpenDialog(new Stage());
         try {
-            this.label.setText(file.getName());
-            var image = new ImageView(startImg);
-            image.setStyle("-fx-cursor: hand;");
-            audioRoot.getChildren().addAll(image, label);
-            image.setOnMouseClicked(this::playMusic);
+            loadMusic(file);
         } catch (Exception e) {
             audioRoot.getChildren().clear();
         }
+    }
+
+    private void loadMusic(File file) {
+        this.label.setText(file.getName());
+        var image = new ImageView(startImg);
+        image.setStyle("-fx-cursor: hand;");
+        audioRoot.getChildren().addAll(image, label);
+        image.setOnMouseClicked(this::playMusic);
+        path = file.getAbsolutePath();
+        path = path.replace("\\", "/");
     }
 
     private void playMusic(MouseEvent mouseEvent) {
@@ -98,8 +112,6 @@ public class SoundView {
         audioRoot.getChildren().clear();
         audioRoot.getChildren().addAll(image, label);
 
-        path = file.getAbsolutePath();
-        path = path.replace("\\", "/");
         media = new Media(new File(path).toURI().toString());
         mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
@@ -117,5 +129,4 @@ public class SoundView {
 
         image.setOnMouseClicked(this::playMusic);
     }
-
 }
