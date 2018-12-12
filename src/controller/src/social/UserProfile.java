@@ -1,5 +1,8 @@
 package social;
 
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
+import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -15,11 +18,13 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import util.data.DatabaseUploader;
 import util.files.ServerUploader;
 
 import java.awt.*;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ResourceBundle;
 
@@ -40,6 +45,7 @@ public class UserProfile {
         myFileChooser = new FileChooser();
         myFileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files",
                 "*.png", "*.jpg", "*.jpeg"));
+        EventBus.getInstance().register(EngineEvent.UPDATED_STATUS, this::updateStatus);
     }
 
     public Stage launchUserProfile() {
@@ -128,10 +134,17 @@ public class UserProfile {
         motoBox.getChildren().add(myStatus);
         motoBox.setAlignment(Pos.CENTER);
         motoBox.setOnMouseClicked(e -> {
-            // set listener here
+            StatusUpdate statusUpdate = new StatusUpdate(myUser);
+            Stage suStage = statusUpdate.launchStatusUpdate();
+            suStage.show();
         });
         setHoverListeners(motoBox);
         myPane.add(motoBox, 0, 3, 4, 1);
+    }
+
+    private void updateStatus(Object... args){
+        User user = (User) args[0];
+        if (user.equals(myUser)) myStatus.setText("Status: " + myUser.getStatus());
     }
 
     private void initFields() {
