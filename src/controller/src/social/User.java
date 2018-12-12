@@ -22,6 +22,7 @@ public class User {
     private Set<String> myFavoriteGames;
     private Twitter myTwitter;
     private Set<String> myFollowing;
+    private Set<String> myFollowers;
     private Map<String, String> myProgress;
     private String myImageReference;
     private String myStatus;
@@ -34,6 +35,7 @@ public class User {
         myUsername = username;
         myFavoriteGames = new HashSet<>();
         myFollowing = new HashSet<>();
+        myFollowers = new HashSet<>();
         myTwitter = null;
         myProgress = new HashMap<>();
         myImageReference = "person_logo.png";
@@ -91,20 +93,29 @@ public class User {
         return myUsername;
     }
 
-    public void addFollower(String username) {
+    public void follow(String username) {
         myFollowing.add(username);
-        System.out.println("MyFollowing of " + myUsername + " is now " + myFollowing.toString());
+    }
+
+    public void unfollow(String username) {
+        if (!myFollowing.contains(username)) return;
+        myFollowing.remove(username);
+    }
+
+    public void addFollower(String username) {
+        myFollowers.add(username);
     }
 
     public void removeFollower(String username) {
-        if (!myFollowing.contains(username)) return;
-        myFollowing.remove(username);
-        System.out.println("MyFollowing of " + myUsername + " is now " + myFollowing.toString());
+        if (!myFollowers.contains(username)) return;
+        myFollowers.remove(username);
     }
 
     public Set<String> getFollowing() {
         return myFollowing;
     }
+
+    public Set<String> getFollowers() { return myFollowers; }
 
     public Set<String> getFavorites() {
         return myFavoriteGames;
