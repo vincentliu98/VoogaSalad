@@ -25,7 +25,7 @@ Hours Spent: ~800
 
 * Authoring Environment
   * **Vincent Liu** : *Frontend developer.* Created basic front-end layout; Created basic graph with drag and drop functionality; Worked on save and load function for phase graph; Enabled tile generation in the front end;
-  * **Haotian Wang** : *Frontend developer.* Created the frameworks of back-end and middle-end integration with backend. Worked on (de)-serialization, event handling, data passing, convenient features and error handling.
+  * **Haotian Wang** : *Frontend developer.* Created the frameworks for front-end and for middle-end integration with back-end. Worked on (de)-serialization, event handling, data passing, convenient features and error handling.
   * **Amy Kim** : *Frontend developer.* <Add description here>
 * Game Engine
   * **Natalie Le** : *Backend engine developer.* Created the engine/gameplay infrastructure and the social center extension.
