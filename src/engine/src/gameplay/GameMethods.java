@@ -1,7 +1,11 @@
 package gameplay;
 
+import javafx.util.Pair;
+
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static gameplay.GameData.*;
 
@@ -154,6 +158,7 @@ public class GameMethods {
     }
 
     public static String getNextPlayerName() {
+        System.out.println("next play: " + TURN.nextPlayerName());
         return TURN.nextPlayerName();
     }
 
@@ -214,54 +219,106 @@ public class GameMethods {
 
     public static void DO_LOT_OF_THINGS() { }
 
+    private static Map<Pair<Integer, Integer>, Integer> createMap(){
+        Map<Pair<Integer, Integer>, Integer> map = new HashMap<>();
+        ENTITIES.entrySet().forEach(a -> {
+            var id = a.getKey();
+            var entity = a.getValue();
+            var x = roundDouble(entity.getX());
+            var y = roundDouble(entity.getY());
+            map.put(new Pair<>(x, y), id);
+        });
+        return map;
+    }
+
+    private static Map<Pair<Integer, Integer>, String> intMap(Map<Pair<Integer, Integer>, Integer> entityMap){
+        Map<Pair<Integer, Integer>, String> map = new HashMap<>();
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (!hasNoEntityAt(i, j)){
+                    map.put(new Pair<>(i, j), ENTITIES.get(entityMap.get(new Pair<>(i,j))).getName());
+                }
+            }
+        }
+        return map;
+    }
 
     public static void checkNeighbor(GameObject a, String currentPlayer){
+        var entityMap = createMap();
+        System.out.println("entityMap: " + entityMap);
+        var numMap = intMap(entityMap);
+        System.out.println("numMap: " + numMap);
         var x = (int) Math.round(a.getX());
         var y = (int) Math.round(a.getY());
         var myId = a.getID();
+        var type = a.getName();
         System.out.println("ID: " + myId + "current x: " + x + " current y: " + y);
-        if (a.getName().equals("r_black")){
-            var otherEntities = ENTITIES.values();
-            otherEntities.remove(a);
-            otherEntities.forEach(e -> {
-                var xx = (int) Math.round(e.getX());
-                var yy = (int) Math.round(e.getY());
-                var id = e.getID();
-                if (x == xx && y != yy){
-                    System.out.println("ID: " + id + "current xx: " + xx + " current yy: " + yy);
-                    var minY = Math.min(y , yy);
+        numMap.keySet().forEach(e -> {
+            var xx = e.getKey();
+            var yy = e.getValue();
+            if (numMap.get(e).equals(type)){
+                if (x == xx && y != yy) {
+                    System.out.println("current xx: " + xx + " current yy: " + yy);
+                    var minY = Math.min(y, yy);
                     var maxY = Math.max(y, yy);
                     boolean flanked = true;
-                    for (int i = minY+1; i < maxY; i++) {
+                    for (int i = minY + 1; i < maxY; i++) {
                         if (hasNoEntityAt(x, i)) flanked = false;
                     }
-                    if (flanked){
-                        for (int j = minY+1; j < maxY; j++) {
-                            createEntity("r_black", x, j, currentPlayer);
+                    if (flanked) {
+                        System.out.println("flank detected along Y");
+                        for (int j = minY + 1; j < maxY; j++) {
+                            System.out.println("trying to create an entity at: " + x + ", " + j);
+                            System.out.println("entity map: " + ENTITIES);
+                            var entityID = entityMap.get(new Pair<>(x,j));
+                            removeEntity(ENTITIES.get(entityID));
+                            if (type.equals("r_black")) replaceEntity("r_black", x, j, currentPlayer, entityID);
+                            else replaceEntity("r_white", x, j, currentPlayer, entityID);
                         }
                     }
-                }
-                else if (y == yy && x != xx){
-                    System.out.println("ID: " + id + "current xx: " + xx + " current yy: " + yy);
-                    var minX = Math.min(x , xx);
+                } else if (y == yy && x != xx) {
+                    System.out.println("current xx: " + xx + " current yy: " + yy);
+                    var minX = Math.min(x, xx);
                     var maxX = Math.max(x, xx);
                     boolean flanked = true;
-                    for (int i = minX+1; i < maxX; i++) {
+                    for (int i = minX + 1; i < maxX; i++) {
                         if (hasNoEntityAt(i, y)) flanked = false;
                     }
-                    if (flanked){
-                        for (int j = minX+1; j < maxX; j++) {
-                            createEntity("r_white", j, y, currentPlayer);
+                    if (flanked) {
+                        System.out.println("flanked detected along X");
+                        for (int j = minX + 1; j < maxX; j++) {
+                            var id = entityMap.get(new Pair<>(j,y));
+                            removeEntity(ENTITIES.get(id));
+                            System.out.println("trying to create an entity at: " + j + ", " + y );
+                            if (type.equals("r_black")) replaceEntity("r_black", j, y, currentPlayer, id);
+                            else replaceEntity("r_white", j, y, currentPlayer, id);
                         }
                     }
                 }
-            });
-        }
+            }
+        });
     }
 
     public static int roundDouble(double i){
         return (int) Math.round(i);
     }
 
+    public static boolean stringComp(String a, String b){
+        return a.equals(b);
+    }
+
+    private static Entity replaceEntity(String entityName, int x, int y, String ownerName, int nextID) {
+        var newEntity = ENTITY_PROTOTYPES.get(entityName).build(nextID, x, y);
+        newEntity.adjustViewSize(ROOT.getWidth(), ROOT.getHeight());
+        ENTITIES.put(nextID, newEntity);
+        PLAYERS.get(ownerName).addEntity(nextID);
+        newEntity.setLocation(x, y);
+        ROOT.getChildren().add(newEntity.getImageView());
+        return newEntity;
+    }
+
+    public static int boardSize(){
+        return ENTITIES.keySet().size();
+    }
 
 }
