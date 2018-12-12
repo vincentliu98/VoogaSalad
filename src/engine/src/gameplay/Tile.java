@@ -38,7 +38,7 @@ public class Tile extends PropertyHolder<Tile> implements GameObject, EventHandl
         loadImages(true);
         
         myImageView = new ImageView();
-        myImageView.setPreserveRatio(true);
+        myImageView.setPreserveRatio(false);
         myImageView.setOnMouseClicked(this);
         imgIndex = new SimpleIntegerProperty(-1);
         imgIndex.addListener((e, oldVal, newVal) -> myImageView.setImage(myImages.get(newVal.intValue())));
@@ -54,6 +54,8 @@ public class Tile extends PropertyHolder<Tile> implements GameObject, EventHandl
         myImageView.setFitHeight((screenHeight * myHeight) / GameMethods.gridHeight());
 
         loadImages(false);
+
+        updateView();
     }
 
     private void loadImages(boolean useNaturalImageSize) {
@@ -74,7 +76,8 @@ public class Tile extends PropertyHolder<Tile> implements GameObject, EventHandl
         if (!myImageSelector.isEmpty()) {
             GameData.shell().setVariable("$this", this);
             GameData.shell().evaluate(myImageSelector);
-            imgIndex.set(Integer.parseInt(GameData.shell().getVariable("$return").toString()));
+            var ret = Integer.parseInt(GameData.shell().getVariable("$return").toString());
+            imgIndex.set(ret);
         } else imgIndex.set(0);
     }
 
