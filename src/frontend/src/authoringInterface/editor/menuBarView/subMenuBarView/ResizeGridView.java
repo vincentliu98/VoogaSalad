@@ -17,12 +17,15 @@ import static java.lang.Integer.parseInt;
 public class ResizeGridView {
     private Dialog<Pair<Integer, Integer>> dialog;
 
-    public ResizeGridView() {
+    public ResizeGridView(Pair<Integer, Integer> gridDimension) {
         GridPane grid = setUpGridPane();
         TextField col = new TextField();
         col.setPromptText("Column");
         TextField row = new TextField();
         row.setPromptText("Row");
+
+        row.setText(gridDimension.getKey().toString());
+        col.setText(gridDimension.getValue().toString());
 
         addElements(grid, col, row);
 

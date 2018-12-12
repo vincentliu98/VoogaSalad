@@ -29,6 +29,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 import utils.ErrorWindow;
 import utils.exception.NodeNotFoundException;
 import utils.exception.PreviewUnavailableException;
@@ -52,8 +53,8 @@ import java.util.Set;
  * @author Amy Kim
  */
 public class EditGridView implements SubView<ScrollPane> {
-    private static final double NODE_HEIGHT = 75;
-    private static final double NODE_WIDTH = 75;
+    private static final double NODE_TO_CELL_WIDTH_RATIO = 0.8;
+    private static final double NODE_TO_CELL_HEIGHT_RATIO = 0.8;
     private static final double CELL_HEIGHT = 100;
     private static final double CELL_WIDTH = 100;
     private static final double HALF_OPACITY = 0.5;
@@ -67,7 +68,7 @@ public class EditGridView implements SubView<ScrollPane> {
     private boolean isShiftDown;
     private Set<Node> toRemove;
 
-    public EditGridView(int row, int col, GameObjectsCRUDInterface manager, NodeInstanceController controller) {
+    EditGridView(int row, int col, GameObjectsCRUDInterface manager, NodeInstanceController controller) {
         gameObjectManager = manager;
         nodeInstanceController = controller;
         toRemove = new HashSet<>();
@@ -347,15 +348,15 @@ public class EditGridView implements SubView<ScrollPane> {
      * @param cell:               The Pane where an instance will be created.
      */
     private void createInstanceAtGridCell(GameObjectInstance gameObjectInstance, Pane cell) {
-        ImageView nodeOnGrid = null;
+        ImageView nodeOnGrid;
         try {
             nodeOnGrid = new ImageView(ImageManager.getPreview(gameObjectInstance));
         } catch (PreviewUnavailableException e) {
             ErrorWindow.display("Preview Unavailable", e.toString());
+            return;
         }
-        assert nodeOnGrid != null;
-        nodeOnGrid.setFitHeight(NODE_HEIGHT);
-        nodeOnGrid.setFitWidth(NODE_WIDTH);
+        nodeOnGrid.fitHeightProperty().bind(cell.prefHeightProperty().multiply(NODE_TO_CELL_HEIGHT_RATIO));
+        nodeOnGrid.fitWidthProperty().bind(cell.prefWidthProperty().multiply(NODE_TO_CELL_WIDTH_RATIO));
         ImageView finalNodeOnGrid = nodeOnGrid;
         cell.getChildren().add(finalNodeOnGrid);
         nodeInstanceController.addLink(finalNodeOnGrid, gameObjectInstance);
@@ -391,11 +392,12 @@ public class EditGridView implements SubView<ScrollPane> {
     }
 
     private void createInstanceAtGridCell(GameObjectClass gameObjectClass, Pane cell) {
-        GameObjectInstance gameObjectInstance = null;
+        GameObjectInstance gameObjectInstance;
         try {
             gameObjectInstance = gameObjectManager.createGameObjectInstance(gameObjectClass, new PointImpl(GridPane.getColumnIndex(cell), GridPane.getRowIndex(cell)));
         } catch (GameObjectTypeException e) {
             ErrorWindow.display("GameObject Type", e.toString());
+            return;
         }
         createInstanceAtGridCell(gameObjectInstance, cell);
     }
@@ -464,5 +466,40 @@ public class EditGridView implements SubView<ScrollPane> {
         if (isShiftDown) {
             handleDragFromSideView(dragEvent, cell);
         }
+    }
+
+    /**
+     * This method changes the sizes and widths of an individual cell.
+     *
+     * @param width: The width to be set for a cell.
+     * @param height: The height to be set for a cell.
+     */
+    public void changeCellSize(double width, double height) {
+        gridScrollView.getChildrenUnmodifiable().forEach(cell -> {
+            if (cell instanceof StackPane) {
+                ((StackPane) cell).setPrefHeight(height);
+                ((StackPane) cell).setPrefWidth(width);
+            }
+        });
+    }
+
+    /**
+     * This method returns a current Grid dimension of the Grid.
+     *
+     * @return A Pair that is in the format of Pair(Row_number, Column_number).
+     */
+    public Pair<Integer, Integer> getGridDimension() {
+        return new Pair<>(gridScrollView.getRowCount(), gridScrollView.getColumnCount());
+    }
+
+    /**
+     * This method returns a pair of current cell sizes.
+     *
+     * @return A Pair that is in the format of Pair(width, height).
+     */
+    public Pair<Double, Double> getCellSize() {
+        StackPane cell = (StackPane) getCellAt(0, 0);
+        assert cell != null;
+        return new Pair<>(cell.getPrefWidth(), cell.getPrefHeight());
     }
 }

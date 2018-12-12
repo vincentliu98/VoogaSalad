@@ -1,4 +1,4 @@
-package authoringInterface.editor.menuBarView;
+package authoringInterface.editor.menuBarView.subMenuBarView;
 
 import authoringInterface.spritechoosingwindow.PopUpWindow;
 import gameObjects.crud.GameObjectsCRUDInterface;

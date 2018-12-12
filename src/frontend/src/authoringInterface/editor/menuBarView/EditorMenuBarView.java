@@ -89,6 +89,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         MenuItem close = new MenuItem("Close");
         MenuItem runProject = new MenuItem("Run");
         MenuItem resizeGrid = new MenuItem("Resize Grid");
+        MenuItem cellSize = new MenuItem("Resize Individual Cell");
         MenuItem setBGM = new MenuItem("BGM");
         MenuItem helpDoc = new MenuItem("Help");
         MenuItem about = new MenuItem("About");
@@ -107,7 +108,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         saveAs.setOnAction(this::handleSaveAs);
         close.setOnAction(e -> new CloseFileView(closeWindow));
         runProject.setOnAction(this::handleRunProject);
-        resizeGrid.setOnAction(e -> new ResizeGridView().showAndWait().ifPresent(dimension ->
+        resizeGrid.setOnAction(e -> new ResizeGridView(editView.getGridView().getGridDimension()).showAndWait().ifPresent(dimension ->
                 updateGridDimension.accept(dimension.getKey(), dimension.getValue())
         ));
         setBGM.setOnAction(e -> soundView.show());
@@ -115,9 +116,11 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         about.setOnAction(this::handleAbout);
         tileSetting.setOnAction(this::handleTileSetting);
 
+        cellSize.setOnAction(this::handleCellSize);
+
         file.getItems().addAll(newFile, open, export, save, saveAs, close);
         run.getItems().addAll(runProject);
-        settings.getItems().addAll(resizeGrid, setBGM, tileSetting);
+        settings.getItems().addAll(resizeGrid, cellSize, setBGM, tileSetting);
         help.getItems().addAll(helpDoc, about);
 
         menuBar.getMenus().addAll(file, settings, run, help);
@@ -143,6 +146,12 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void handleCellSize(ActionEvent event) {
+        new ChangeCellSizeView(editView.getGridView().getCellSize()).showAndWait().ifPresent(doubleDoublePair -> {
+            editView.getGridView().changeCellSize(doubleDoublePair.getKey(), doubleDoublePair.getValue());
+        });
     }
 
     void handleSave(ActionEvent event) {
