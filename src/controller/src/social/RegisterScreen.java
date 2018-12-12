@@ -106,13 +106,11 @@ public class RegisterScreen {
         try {
             checkForBlankFields(myUsername, myPassword);
             ResultSet result = verifyUniqueUsername(myUsername);
-            int id = result.getInt("id") + 1; // TODO: Add case for no users in database
+            int id = getNextID(result);
             User user = new User(id, myUsername);
             DatabaseUploader databaseUploader = updateLoginsTable(myUsername, myPassword, id);
-            File userFile = uploadSerializedUserFile(myUsername, user);
-            //uploadAvatarImage(myUsername + "-Avatar.jpg");
+            uploadSerializedUserFile(myUsername, user);
             updateUserReferencesTable(myUsername, id, databaseUploader);
-            userFile.delete();
         } catch (IOException | SQLException | RegistrationException ex){
             if (!ex.getClass().equals(RegistrationException.class)){
                 throw new ServerException(myErrors.getString("ServerError"), myErrors.getString("ServerErrorWarning"));
@@ -128,7 +126,7 @@ public class RegisterScreen {
                         "VALUES ('%d','%s')", id, "/home/vcm/public_html/users/profiles/" + myUsername + ".xml"));
     }
 
-    private File uploadSerializedUserFile(String myUsername, User user) throws IOException {
+    private void uploadSerializedUserFile(String myUsername, User user) throws IOException {
         XStream serializer = new XStream(new DomDriver());
         File userFile=new File("src/database/resources/" + myUsername + ".xml");
         userFile.createNewFile();
@@ -138,16 +136,7 @@ public class RegisterScreen {
         ServerUploader upload = new ServerUploader();
         upload.connectServer("vcm", "vcm-7456.vm.duke.edu", 22,"afcas8amYf");
         upload.uploadFile(userFile.getAbsolutePath(), "/users/profiles");
-        return userFile;
-    }
-
-    private File uploadAvatarImage(String imageName) throws IOException {
-        File avatarFile=new File("src/controller/resources/profile-images/" + imageName);
-        ServerUploader upload = new ServerUploader();
-        upload.connectServer("vcm", "vcm-7456.vm.duke.edu", 22,"afcas8amYf");
-        upload.uploadFile(avatarFile.getAbsolutePath(), "/users/avatars");
-        avatarFile.delete();
-        return avatarFile;
+        userFile.delete();
     }
 
     private DatabaseUploader updateLoginsTable(String myUsername, String myPassword, int id) {
@@ -169,8 +158,22 @@ public class RegisterScreen {
                         myErrors.getString("UsernameAlreadyExistsWarning"));
             }
         }
-        result.last();
         return result;
+    }
+
+    private int getNextID(ResultSet resultSet){
+        try {
+            resultSet.beforeFirst();
+            if (!resultSet.next()){
+                return 1;
+            } else {
+                resultSet.last();
+                return resultSet.getInt("id") + 1;
+            }
+        } catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return -1;
     }
 
     private void checkForBlankFields(String myUsername, String myPassword) {
@@ -186,7 +189,7 @@ public class RegisterScreen {
     private void resetDatabases(){
         DatabaseUploader databaseUploader = new DatabaseUploader("client", "store",
         "e.printstacktrace", "vcm-7456.vm.duke.edu", 3306);
-        databaseUploader.upload("DELETE FROM logins WHERE id!='1'");
-        databaseUploader.upload("DELETE FROM userReferences WHERE id!='1'");
+        databaseUploader.upload("DELETE FROM logins WHERE id!='0'");
+        databaseUploader.upload("DELETE FROM userReferences WHERE id!='0'");
     }
 }
