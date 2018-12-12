@@ -131,36 +131,6 @@ public class EditGridView implements SubView<ScrollPane> {
         return null;
     }
 
-//    /**
-//     * Set up a key toggle and attach the this boolean toggle to some boolean variable of this class.
-//     */
-//    private void setUpControl() {
-//        isControlDown = !isControlDown;
-//        if (isControlDown) {
-//            deleteMode.setText("Delete Mode: On");
-//            deleteMode.setBackground(new Background(new BackgroundFill(Color.LIGHTYELLOW, null, null)));
-//        } else {
-//            deleteMode.setText("Delete Mode: Off");
-//            deleteMode.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, null, null)));
-//        }
-//        SingleNodeFade.getNodeFadeInAndOut(deleteMode, INDICATOR_FADE_TIME).playFromStart();
-//    }
-//
-//    /**
-//     * Set up a key toggle for toggling for the Shift key.
-//     */
-//    private void setUpShift() {
-//        isShiftDown = !isShiftDown;
-//        if (isShiftDown) {
-//            batchMode.setText("Batch Mode: On");
-//            batchMode.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, null, null)));
-//        } else {
-//            batchMode.setText("Batch Mode: Off");
-//            batchMode.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, null, null)));
-//        }
-//        SingleNodeFade.getNodeFadeInAndOut(batchMode, INDICATOR_FADE_TIME).playFromStart();
-//    }
-
     public void updateDimension(int row, int col) {
         gridScrollView.getChildren().removeIf(c -> c instanceof StackPane);
         for (int i = 0; i < row; i++) {
