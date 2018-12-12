@@ -182,6 +182,11 @@ Run the GameLauncher.java to access the game launcher. Click any game's "Play" b
 * Redo and Undo are too difficult with our current framework and we did not manage to finish it before the deadline. However, basic framework (Memento Pattern) is set up in our project
 * If the user try to delete the default player, the player will be deleted on the backend but not the front end. When user click on the front end button, it will give a game object class not found error.
 
+## Unimplemented Features
+
+* Loading player image in the game.
+
+
 ## Design decision
 
 * Initially we were unsure about how to build the authoring engine so the author can build a game with little code. We carefully studied the game TicTacToe and came up with the idea of having a grid and various game objects such as entities and tiles. We later decided to also have players, turns and categories as game objects too. After making the TicTacToe works, we started to think about how to make other games work. Inchan came up with the idea of Groovy, through which all kinds of logic can be converted from graphics such as nodes and lines to codes that can be run. These two components form the foundation of the authoring backend.
