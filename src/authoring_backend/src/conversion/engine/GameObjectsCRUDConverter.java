@@ -38,6 +38,10 @@ public class GameObjectsCRUDConverter implements Converter {
         writer.setValue(String.valueOf(db.getHeight()));
         writer.endNode();
 
+        writer.startNode("bgmPath");
+        writer.setValue(db.getBGMpath());
+        writer.endNode();
+
         // CategoryPrototypes
         for (CategoryClass categoryClass : db.getCategoryClasses()) {
             writer.startNode("gamePlay.CategoryPrototype");
@@ -265,7 +269,7 @@ public class GameObjectsCRUDConverter implements Converter {
 
             // myImageSelector
             writer.startNode("myImageSelector");
-            writer.setValue(tileInstance.getImageSelectorCode());
+            writer.setValue(tileInstance.getGameObjectClass().getImageSelector().transformToGroovy().get(""));
             writer.endNode();
 
             writer.endNode();

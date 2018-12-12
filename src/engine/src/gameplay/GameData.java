@@ -9,7 +9,10 @@ import javafx.event.Event;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
+import java.io.File;
 import java.util.*;
 
 public class GameData {
@@ -29,8 +32,11 @@ public class GameData {
 
     static GroovyShell shell;
 
+    static Media media;
+    static MediaPlayer mediaPlayer;
+
     public static void setGameData(
-            Point grid_dimension,
+            Point grid_dimension, String bgmPath,
             Map<String, Player> players, Map<Integer, Entity> entities,
             Map<String, EntityPrototype> entityPrototypes,
             Map<Integer, Tile> tiles, Map<String, Phase> phases,
@@ -39,6 +45,16 @@ public class GameData {
     ) {
         GameData.GRID_WIDTH = grid_dimension.getX();
         GameData.GRID_HEIGHT = grid_dimension.getY();
+
+        try {
+            media = new Media(new File(bgmPath).toURI().toString());
+            mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.setOnReady(() -> {
+                System.out.println(media.getDuration().toMinutes());
+                mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+                mediaPlayer.play();
+            });
+        } catch(Exception e) { e.printStackTrace(); }
 
         PLAYERS = players;
         ENTITIES = entities;
@@ -177,8 +193,7 @@ public class GameData {
         myInitializer.setScreenSize(700, 500);
     }
 
-    public static String getName() {
-        return myInitializer.getFileName();
+    public static void stopMusic() {
+        mediaPlayer.dispose();
     }
-
 }
