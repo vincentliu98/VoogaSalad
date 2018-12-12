@@ -110,8 +110,8 @@ public class RegisterScreen {
             User user = new User(id, myUsername);
             DatabaseUploader databaseUploader = updateLoginsTable(myUsername, myPassword, id);
             File userFile = uploadSerializedUserFile(myUsername, user);
-            uploadAvatarImage(myUsername + "-Avatar.jpg");
-            updateUserReferencesTable(myUsername, myUsername + "-Avatar.jpg", id, databaseUploader);
+            //uploadAvatarImage(myUsername + "-Avatar.jpg");
+            updateUserReferencesTable(myUsername, id, databaseUploader);
             userFile.delete();
         } catch (IOException | SQLException | RegistrationException ex){
             if (!ex.getClass().equals(RegistrationException.class)){
@@ -123,10 +123,9 @@ public class RegisterScreen {
         myStage.close();
     }
 
-    private void updateUserReferencesTable(String myUsername, String avatarFilename, int id, DatabaseUploader databaseUploader) {
-        databaseUploader.upload(String.format("INSERT INTO userReferences (id, profilePath, avatarPath) " +
-                "VALUES ('%d','%s','%s')", id, "/home/vcm/public_html/users/profiles/" + myUsername + ".xml",
-                "/home/vcm/public_html/users/avatars/" + avatarFilename));
+    private void updateUserReferencesTable(String myUsername, int id, DatabaseUploader databaseUploader) {
+        databaseUploader.upload(String.format("INSERT INTO userReferences (id, profilePath) " +
+                        "VALUES ('%d','%s')", id, "/home/vcm/public_html/users/profiles/" + myUsername + ".xml"));
     }
 
     private File uploadSerializedUserFile(String myUsername, User user) throws IOException {
