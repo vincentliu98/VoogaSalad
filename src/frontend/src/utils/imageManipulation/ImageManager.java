@@ -97,7 +97,7 @@ public class ImageManager {
                 // TODO
                 break;
             case PLAYER:
-                String paths3 = ((PlayerClass) gameObjectClass).getImagePath();
+                String paths3 = getAbsoluteURL(((PlayerClass) gameObjectClass).getImagePath());
                 ret = getPlayerImage(paths3, gameObjectClass.getClassName());
                 break;
         }
@@ -116,10 +116,10 @@ public class ImageManager {
         if (imagePaths == null || imagePaths.isEmpty()) {
             return composeImageFromString(textToDisplay);
         } else if (imagePaths.size() == 1) {
-            return new Image(imagePaths.get(0));
+            return new Image(getAbsoluteURL(imagePaths.get(0)));
         } else {
             List<Image> images = new ArrayList<>();
-            imagePaths.forEach(uri -> images.add(new Image(uri)));
+            imagePaths.forEach(uri -> images.add(new Image(getAbsoluteURL(uri))));
             return stackImageFromMultipleImages(images);
         }
     }
@@ -207,7 +207,7 @@ public class ImageManager {
                 // TODO
                 break;
             case PLAYER:
-                String paths3 = ((PlayerClass) gameObjectInstance).getImagePath();
+                String paths3 = getAbsoluteURL(((PlayerClass) gameObjectInstance).getImagePath());
                 ret = getPlayerImage(paths3, gameObjectInstance.getClassName());
                 break;
         }
