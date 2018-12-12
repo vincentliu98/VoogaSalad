@@ -55,12 +55,36 @@ public class LauncherSocialDisplay implements Sortable, Searchable {
 
     @Override
     public void showByTag(String tag) {
+        if (myUser == null) return;
+        clearIcons();
+        myActiveUsers = new ArrayList<>();
+        if (tag.toLowerCase().equals("following") || tag.toLowerCase().equals("follow")){
+            for (String name : myUser.getFollowing()) {
+                for (UserIcon icon : myUsers) {
+                    if (icon.getName().equals(name)) {
+                        myActiveUsers.add(icon);
+                        myPane.getChildren().add(icon.getView());
+                    }
+                }
+            }
+        }
+        if (tag.toLowerCase().equals("followers") || tag.toLowerCase().equals("followed by") || tag.toLowerCase().equals("follower")){
+            for (String name : myUser.getFollowers()) {
+                for (UserIcon icon : myUsers) {
+                    if (icon.getName().equals(name)) {
+                        myActiveUsers.add(icon);
+                        myPane.getChildren().add(icon.getView());
+                    }
+                }
+            }
+        }
     }
 
     @Override
     public void showAll() {
         clearIcons();
         myActiveUsers = new ArrayList<>();
+        System.out.println("myUsers is size " + myUsers.size());
         for (UserIcon icon : myUsers) {
             myActiveUsers.add(icon);
             myPane.getChildren().add(icon.getView());
