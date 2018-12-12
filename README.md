@@ -167,12 +167,6 @@ Hours Spent: ~800
 
 The user can to customize images for entity, tile and user avatars. The user need to prepare these images and set the appropriate image for respective image objects in building the game.
 
-## UI Layout of the project
-
-`TO BE ADDED`
-
-![UI View](doc/<name>.png)
-
 ## How to use the program
 
 **Authoring Environment:**
