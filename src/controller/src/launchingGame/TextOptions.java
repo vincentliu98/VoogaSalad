@@ -60,6 +60,7 @@ public class TextOptions implements PropertyChangeListener {
             LauncherGamesDisplay myGameDisplay = new LauncherGamesDisplay();
             myPane.setCenter(myGameDisplay.getView());
             myPane.setLeft(new LauncherSideBarView(SIDE_WIDTH, myGameDisplay).getView());
+            EventBus.getInstance().sendMessage(EngineEvent.SWITCH_SEARCHABLE, myGameDisplay);
         });
         myStore = new OptionHolder(STORE_TEXT);
         myStore.addListener(this);
@@ -69,6 +70,7 @@ public class TextOptions implements PropertyChangeListener {
             LauncherSocialDisplay mySocialDisplay = LauncherSocialDisplay.getInstance(myUser);
             myPane.setCenter(mySocialDisplay.getView());
             myPane.setLeft(new LauncherSideBarView(SIDE_WIDTH, mySocialDisplay).getView());
+            EventBus.getInstance().sendMessage(EngineEvent.SWITCH_SEARCHABLE, mySocialDisplay);
         });
 
         myOptions.add(myGames);
