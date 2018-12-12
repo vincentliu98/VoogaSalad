@@ -9,14 +9,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 public class Entity extends PropertyHolder<Entity> implements GameObject, EventHandler<MouseEvent> {
     private int myID;
@@ -97,9 +94,8 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
         myImages = new ArrayList<>();
         for (var path : myImagePaths) {
             Image img;
-            InputStream is = getClass().getClassLoader().getResourceAsStream(PathUtility.extractLast(path));
-            if(useNaturalImageSize) img = new Image(is);
-            else img = new Image(is, myImageView.getFitWidth(), myImageView.getFitHeight(), false, true);
+            if(useNaturalImageSize) img = new Image(Objects.requireNonNull(PathUtility.getResourceAsStream(path)));
+            else img = new Image(Objects.requireNonNull(PathUtility.getResourceAsStream(path)), myImageView.getFitWidth(), myImageView.getFitHeight(), false, true);
             myImages.add(img);
         }
     }
