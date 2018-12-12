@@ -73,7 +73,7 @@ public class ImageManager {
                 // TODO
                 break;
             case PLAYER:
-                String paths3 = PathUtility.getAbsoluteURL(((PlayerClass) gameObjectClass).getImagePath());
+                String paths3 = ((PlayerClass) gameObjectClass).getImagePath();
                 ret = getPlayerImage(paths3, gameObjectClass.getClassName());
                 break;
         }
@@ -111,7 +111,7 @@ public class ImageManager {
         if (imagePaths == null || imagePaths.isEmpty()) {
             return composeImageFromString(textToDisplay);
         } else {
-            return new Image(imagePaths);
+            return new Image(PathUtility.getAbsoluteURL(imagePaths));
         }
     }
 
