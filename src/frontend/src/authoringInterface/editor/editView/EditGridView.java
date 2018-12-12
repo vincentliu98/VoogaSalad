@@ -54,8 +54,6 @@ import java.util.Set;
 public class EditGridView implements SubView<ScrollPane> {
     private static final double NODE_HEIGHT = 75;
     private static final double NODE_WIDTH = 75;
-    private static final double INDICATOR_FADE_TIME = 3000;
-    private static final double INITIAL_INDICATOR_FADE_TIME = 15000;
     private static final double CELL_HEIGHT = 100;
     private static final double CELL_WIDTH = 100;
     private static final double HALF_OPACITY = 0.5;
@@ -67,8 +65,6 @@ public class EditGridView implements SubView<ScrollPane> {
     private List<UpdateStatusEventListener<Node>> listeners;
     private boolean isControlDown;
     private boolean isShiftDown;
-    private Label batchMode;
-    private Label deleteMode;
     private Set<Node> toRemove;
 
     public EditGridView(int row, int col, GameObjectsCRUDInterface manager, NodeInstanceController controller) {
@@ -77,12 +73,6 @@ public class EditGridView implements SubView<ScrollPane> {
         toRemove = new HashSet<>();
         scrollPane = new ScrollPane();
         listeners = new ArrayList<>();
-        batchMode = new Label("Batch Mode: Off\nPress Shift to Toggle");
-        batchMode.setFont(Font.font(20));
-        batchMode.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, null, null)));
-        deleteMode = new Label("Delete Mode: Off\nPress Control to Toggle");
-        deleteMode.setFont(Font.font(20));
-        deleteMode.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, null, null)));
         gridScrollView = new GridPane();
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
@@ -98,10 +88,6 @@ public class EditGridView implements SubView<ScrollPane> {
             }
         }
         gridScrollView.setGridLinesVisible(true);
-//        gridScrollView.add(batchMode, 0, 0, 3, 2);
-//        gridScrollView.add(deleteMode, 0, 1, 3, 2);
-        SingleNodeFade.getNodeFadeOut(batchMode, INITIAL_INDICATOR_FADE_TIME).playFromStart();
-        SingleNodeFade.getNodeFadeOut(deleteMode, INITIAL_INDICATOR_FADE_TIME).playFromStart();
         scrollPane = new ScrollPane(gridScrollView);
         scrollPane.addEventFilter(KeyEvent.KEY_PRESSED, keyEvent -> {
             if (keyEvent.getCode() == KeyCode.CONTROL) {
@@ -130,6 +116,22 @@ public class EditGridView implements SubView<ScrollPane> {
         });
     }
 
+    /**
+     * Set up a key toggle for toggling for the Shift key.
+     */
+    private void setUpShift() {
+        isShiftDown = !isShiftDown;
+        listeners.forEach(listener -> listener.setBatchMode(isShiftDown));
+    }
+
+    /**
+     * Set up a key toggle and attach the this boolean toggle to some boolean variable of this class.
+     */
+    private void setUpControl() {
+        isControlDown = !isControlDown;
+        listeners.forEach(listener -> listener.setDeleteMode(isControlDown));
+    }
+
     public void generateTiles(TileInstance tileInstance) {
         int colNum = gridScrollView.getColumnCount();
         var index = tileInstance.getCoord().getX()*colNum + tileInstance.getCoord().getY();
@@ -143,36 +145,6 @@ public class EditGridView implements SubView<ScrollPane> {
             }
         }
         return null;
-    }
-
-    /**
-     * Set up a key toggle and attach the this boolean toggle to some boolean variable of this class.
-     */
-    private void setUpControl() {
-        isControlDown = !isControlDown;
-        if (isControlDown) {
-            deleteMode.setText("Delete Mode: On");
-            deleteMode.setBackground(new Background(new BackgroundFill(Color.LIGHTYELLOW, null, null)));
-        } else {
-            deleteMode.setText("Delete Mode: Off");
-            deleteMode.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, null, null)));
-        }
-        SingleNodeFade.getNodeFadeInAndOut(deleteMode, INDICATOR_FADE_TIME).playFromStart();
-    }
-
-    /**
-     * Set up a key toggle for toggling for the Shift key.
-     */
-    private void setUpShift() {
-        isShiftDown = !isShiftDown;
-        if (isShiftDown) {
-            batchMode.setText("Batch Mode: On");
-            batchMode.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, null, null)));
-        } else {
-            batchMode.setText("Batch Mode: Off");
-            batchMode.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, null, null)));
-        }
-        SingleNodeFade.getNodeFadeInAndOut(batchMode, INDICATOR_FADE_TIME).playFromStart();
     }
 
     public void updateDimension(int row, int col) {
