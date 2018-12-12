@@ -46,10 +46,6 @@ public class StatusUpdate {
         return myStage;
     }
 
-    public boolean isOpen(){
-        return myStage.isShowing();
-    }
-
     private void initPane() {
         myPane = new GridPane();
         myPane.setAlignment(Pos.TOP_CENTER);
