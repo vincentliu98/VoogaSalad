@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<game>
+    <name>
+        Connect 4
+    </name>
+    <info>
+        A strategy game where opponents do their best to sink each other's ships.
+    </info>
+    <reference>
+        src/engine/connect4/Connect4.xml
+    </reference>
+    <color>
+        Black
+    </color>
+    <displaygraphic>
+        connect4_background.jpeg
+    </displaygraphic>
+    <tags>
+        Strategy Guessing Grid
+    </tags>
+</game>
