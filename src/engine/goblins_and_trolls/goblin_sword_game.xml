@@ -1,0 +1,4113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<game>
+  <gameplay.Node>
+    <myPhaseName>a</myPhaseName>
+    <myName>d</myName>
+    <myExecution>hpAfterHeal = ((GameMethods.getProperty($clicked,&quot;hp&quot;)) + (GameMethods.getProperty(selected,&quot;healAmount&quot;)))
+if(((GameMethods.getProperty($clicked,&quot;max_hp&quot;)) &lt; (hpAfterHeal))) {
+GameMethods.setProperty($clicked,&quot;hp&quot;,GameMethods.getProperty($clicked,&quot;max_hp&quot;))
+}
+else {
+GameMethods.setProperty($clicked,&quot;hp&quot;,hpAfterHeal)
+}
+GameMethods.toNextPlayer();
+GameMethods.$goto(&quot;a&quot;)</myExecution>
+  </gameplay.Node>
+  <gameplay.Node>
+    <myPhaseName>a</myPhaseName>
+    <myName>f</myName>
+    <myExecution></myExecution>
+  </gameplay.Node>
+  <gameplay.Node>
+    <myPhaseName>a</myPhaseName>
+    <myName>c</myName>
+    <myExecution>GameMethods.setProperty($clicked,&quot;hp&quot;,((GameMethods.getProperty($clicked,&quot;hp&quot;)) - (GameMethods.getProperty(selected,&quot;dmg&quot;))));
+if(((GameMethods.getProperty($clicked,&quot;hp&quot;)) &lt;= (0))) {
+GameMethods.setProperty(GameMethods.getTileUnder($clicked),&quot;dead&quot;,((GameMethods.getProperty(GameMethods.getTileUnder($clicked),&quot;dead&quot;)) + (1)));
+GameMethods.removeEntity($clicked)
+}
+GameMethods.toNextPlayer();
+GameMethods.$goto(&quot;a&quot;)</myExecution>
+  </gameplay.Node>
+  <gameplay.Node>
+    <myPhaseName>a</myPhaseName>
+    <myName>b</myName>
+    <myExecution>selected = $clicked
+</myExecution>
+  </gameplay.Node>
+  <gameplay.Node>
+    <myPhaseName>a</myPhaseName>
+    <myName>e</myName>
+    <myExecution>GameMethods.moveEntity(selected,$clicked);
+GameMethods.toNextPlayer();
+GameMethods.$goto(&quot;a&quot;)</myExecution>
+  </gameplay.Node>
+  <gameplay.Node>
+    <myPhaseName>a</myPhaseName>
+    <myName>g</myName>
+    <myExecution>GameMethods.createEntity(&quot;Goblin_king&quot;,$clicked,&quot;A&quot;);
+GameMethods.toNextPlayer();
+GameMethods.$goto(&quot;a&quot;)</myExecution>
+  </gameplay.Node>
+  <gameplay.Node>
+    <myPhaseName>a</myPhaseName>
+    <myName>a</myName>
+    <myExecution></myExecution>
+  </gameplay.Node>
+  <gameplay.Edge>
+    <myPhaseName>a</myPhaseName>
+    <myStartNodeName>f</myStartNodeName>
+    <myEndNodeName>g</myEndNodeName>
+    <myTrigger class="phase.api.GameEvent$MouseClick"/>
+    <myGuard>GameMethods.$return(((((GameMethods.isTile($clicked)) &amp;&amp; (GameMethods.hasNoIntersectingEntities($clicked)))) &amp;&amp; (((GameMethods.distance($clicked,selected)) &lt;= (1)))))</myGuard>
+  </gameplay.Edge>
+  <gameplay.Edge>
+    <myPhaseName>a</myPhaseName>
+    <myStartNodeName>b</myStartNodeName>
+    <myEndNodeName>a</myEndNodeName>
+    <myTrigger class="phase.api.GameEvent$KeyPress">
+      <code>ESCAPE</code>
+    </myTrigger>
+    <myGuard>GameMethods.$return(true)</myGuard>
+  </gameplay.Edge>
+  <gameplay.Edge>
+    <myPhaseName>a</myPhaseName>
+    <myStartNodeName>b</myStartNodeName>
+    <myEndNodeName>d</myEndNodeName>
+    <myTrigger class="phase.api.GameEvent$MouseClick"/>
+    <myGuard>GameMethods.$print(((GameMethods.getName(selected)) == (&quot;Troll_shaman&quot;)));
+GameMethods.$print(((GameMethods.distance($clicked,selected)) &lt;= (GameMethods.getProperty(selected,&quot;heal_range&quot;))));
+GameMethods.$return(((((((GameMethods.isEntity($clicked)) &amp;&amp; (((GameMethods.getName(selected)) == (&quot;Troll_shaman&quot;))))) &amp;&amp; (GameMethods.isEntityOf(GameMethods.getCurrentPlayerName(),$clicked)))) &amp;&amp; (((GameMethods.distance($clicked,selected)) &lt;= (GameMethods.getProperty(selected,&quot;heal_range&quot;))))))</myGuard>
+  </gameplay.Edge>
+  <gameplay.Edge>
+    <myPhaseName>a</myPhaseName>
+    <myStartNodeName>b</myStartNodeName>
+    <myEndNodeName>e</myEndNodeName>
+    <myTrigger class="phase.api.GameEvent$MouseClick"/>
+    <myGuard>GameMethods.$print(((GameMethods.distance($clicked,selected)) &lt;= (GameMethods.getProperty(selected,&quot;move_range&quot;))));
+GameMethods.$print(GameMethods.getProperty(selected,&quot;move_range&quot;));
+GameMethods.$return(((((GameMethods.isTile($clicked)) &amp;&amp; (GameMethods.hasNoIntersectingEntities($clicked)))) &amp;&amp; (((GameMethods.distance($clicked,selected)) &lt;= (GameMethods.getProperty(selected,&quot;move_range&quot;))))))</myGuard>
+  </gameplay.Edge>
+  <gameplay.Edge>
+    <myPhaseName>a</myPhaseName>
+    <myStartNodeName>f</myStartNodeName>
+    <myEndNodeName>a</myEndNodeName>
+    <myTrigger class="phase.api.GameEvent$KeyPress">
+      <code>ESCAPE</code>
+    </myTrigger>
+    <myGuard>GameMethods.$return(true)</myGuard>
+  </gameplay.Edge>
+  <gameplay.Edge>
+    <myPhaseName>a</myPhaseName>
+    <myStartNodeName>b</myStartNodeName>
+    <myEndNodeName>c</myEndNodeName>
+    <myTrigger class="phase.api.GameEvent$MouseClick"/>
+    <myGuard>GameMethods.$return(((((GameMethods.isEntity($clicked)) &amp;&amp; (GameMethods.isEntityOf(GameMethods.getNextPlayerName(),$clicked)))) &amp;&amp; (((GameMethods.distance(selected,$clicked)) &lt;= (GameMethods.getProperty(selected,&quot;attack_range&quot;))))))</myGuard>
+  </gameplay.Edge>
+  <gameplay.Edge>
+    <myPhaseName>a</myPhaseName>
+    <myStartNodeName>a</myStartNodeName>
+    <myEndNodeName>b</myEndNodeName>
+    <myTrigger class="phase.api.GameEvent$MouseClick"/>
+    <myGuard>GameMethods.$return(((GameMethods.isEntity($clicked)) &amp;&amp; (GameMethods.isEntityOf(GameMethods.getCurrentPlayerName(),$clicked))))</myGuard>
+  </gameplay.Edge>
+  <gameplay.Edge>
+    <myPhaseName>a</myPhaseName>
+    <myStartNodeName>b</myStartNodeName>
+    <myEndNodeName>f</myEndNodeName>
+    <myTrigger class="phase.api.GameEvent$KeyPress">
+      <code>SPACE</code>
+    </myTrigger>
+    <myGuard>GameMethods.$return(((GameMethods.getName(selected)) == (&quot;Goblin_king&quot;)))</myGuard>
+  </gameplay.Edge>
+  <gameplay.Phase>
+    <myStartNodeName>a</myStartNodeName>
+    <myCurrentNodeName>a</myCurrentNodeName>
+    <myNodeNames>
+      <string>d</string>
+      <string>f</string>
+      <string>c</string>
+      <string>b</string>
+      <string>e</string>
+      <string>g</string>
+      <string>a</string>
+    </myNodeNames>
+  </gameplay.Phase>
+  <winCondition>if(((GameMethods.numberOfInstances(&quot;Goblin_king&quot;)) == (0))) {
+GameMethods.endGame(&quot;Player B Won!! &quot;)
+}
+if(((GameMethods.numberOfInstances(&quot;Troll_queen&quot;)) == (0))) {
+GameMethods.endGame(&quot;Player A Won!!!&quot;)
+}
+</winCondition>
+  <grid-width>10</grid-width>
+  <grid-height>10</grid-height>
+  <bgmPath>src/engine/goblins_and_trolls/bgm.128.mp3</bgmPath>
+  <gamePlay.CategoryPrototype>
+    <name>TILE</name>
+    <myID>3</myID>
+  </gamePlay.CategoryPrototype>
+  <gamePlay.CategoryPrototype>
+    <name>PLAYER</name>
+    <myID>4</myID>
+  </gamePlay.CategoryPrototype>
+  <gamePlay.CategoryPrototype>
+    <name>Game Objects</name>
+    <myID>1</myID>
+  </gamePlay.CategoryPrototype>
+  <gamePlay.CategoryPrototype>
+    <name>ENTITY</name>
+    <myID>2</myID>
+  </gamePlay.CategoryPrototype>
+  <gameplay.EntityPrototype>
+    <name>Goblin_archer</name>
+    <props>
+      <entry>
+        <string>attack_range</string>
+        <big-decimal>5.1</big-decimal>
+      </entry>
+      <entry>
+        <string>hp</string>
+        <int>4</int>
+      </entry>
+      <entry>
+        <string>move_range</string>
+        <big-decimal>1.1</big-decimal>
+      </entry>
+      <entry>
+        <string>dmg</string>
+        <int>1</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_archer_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_archer_3.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_archer_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_archer_5.png</string>
+    </myImagePaths>
+    <myImageSelector>GameMethods.$return(((GameMethods.getProperty(GameMethods.$this(),&quot;hp&quot;)) - (1)))</myImageSelector>
+  </gameplay.EntityPrototype>
+  <gameplay.EntityPrototype>
+    <name>Troll_shaman</name>
+    <props>
+      <entry>
+        <string>healAmount</string>
+        <int>2</int>
+      </entry>
+      <entry>
+        <string>hp</string>
+        <int>2</int>
+      </entry>
+      <entry>
+        <string>max_hp</string>
+        <int>2</int>
+      </entry>
+      <entry>
+        <string>move_range</string>
+        <big-decimal>1.1</big-decimal>
+      </entry>
+      <entry>
+        <string>heal_range</string>
+        <big-decimal>3.1</big-decimal>
+      </entry>
+      <entry>
+        <string>dmg</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/troll_shaman_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/troll_shaman_2.png</string>
+    </myImagePaths>
+    <myImageSelector>GameMethods.$return(((GameMethods.getProperty(GameMethods.$this(),&quot;hp&quot;)) - (1)))</myImageSelector>
+  </gameplay.EntityPrototype>
+  <gameplay.EntityPrototype>
+    <name>Goblin_king</name>
+    <props>
+      <entry>
+        <string>attack_range</string>
+        <int>0</int>
+      </entry>
+      <entry>
+        <string>hp</string>
+        <int>2</int>
+      </entry>
+      <entry>
+        <string>move_range</string>
+        <big-decimal>1.1</big-decimal>
+      </entry>
+      <entry>
+        <string>dmg</string>
+        <int>1</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_king_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_king_2.png</string>
+    </myImagePaths>
+    <myImageSelector>GameMethods.$return(((GameMethods.getProperty(GameMethods.$this(),&quot;hp&quot;)) - (1)))</myImageSelector>
+  </gameplay.EntityPrototype>
+  <gameplay.EntityPrototype>
+    <name>Goblin_swordsman</name>
+    <props>
+      <entry>
+        <string>attack_range</string>
+        <big-decimal>1.1</big-decimal>
+      </entry>
+      <entry>
+        <string>hp</string>
+        <int>5</int>
+      </entry>
+      <entry>
+        <string>move_range</string>
+        <big-decimal>1.1</big-decimal>
+      </entry>
+      <entry>
+        <string>dmg</string>
+        <int>2</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_sword_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_sword_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_sword_3.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_sword_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_sword_5.png</string>
+    </myImagePaths>
+    <myImageSelector>GameMethods.$return(((GameMethods.getProperty(GameMethods.$this(),&quot;hp&quot;)) - (1)))</myImageSelector>
+  </gameplay.EntityPrototype>
+  <gameplay.EntityPrototype>
+    <name>Troll_swordman</name>
+    <props>
+      <entry>
+        <string>attack_range</string>
+        <big-decimal>1.1</big-decimal>
+      </entry>
+      <entry>
+        <string>hp</string>
+        <int>3</int>
+      </entry>
+      <entry>
+        <string>max_hp</string>
+        <int>3</int>
+      </entry>
+      <entry>
+        <string>move_range</string>
+        <big-decimal>3.1</big-decimal>
+      </entry>
+      <entry>
+        <string>dmg</string>
+        <int>4</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/troll_sword_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/troll_sword_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/troll_sword_3.png</string>
+    </myImagePaths>
+    <myImageSelector>GameMethods.$return(((GameMethods.getProperty(GameMethods.$this(),&quot;hp&quot;)) - (1)))</myImageSelector>
+  </gameplay.EntityPrototype>
+  <gameplay.EntityPrototype>
+    <name>Troll_queen</name>
+    <props>
+      <entry>
+        <string>attack_range</string>
+        <big-decimal>1.1</big-decimal>
+      </entry>
+      <entry>
+        <string>hp</string>
+        <int>8</int>
+      </entry>
+      <entry>
+        <string>max_hp</string>
+        <int>8</int>
+      </entry>
+      <entry>
+        <string>move_range</string>
+        <big-decimal>1.1</big-decimal>
+      </entry>
+      <entry>
+        <string>dmg</string>
+        <int>5</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_queen_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_queen_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_queen_3.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_queen_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_queen_5.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_queen_6.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_queen_7.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/troll_queen_8.png</string>
+    </myImagePaths>
+    <myImageSelector>GameMethods.$return(((GameMethods.getProperty(GameMethods.$this(),&quot;hp&quot;)) - (1)))</myImageSelector>
+  </gameplay.EntityPrototype>
+  <gameplay.Entity>
+    <myID>43</myID>
+    <name>Goblin_archer</name>
+    <instanceName>Goblin_archer</instanceName>
+    <props>
+      <entry>
+        <string>attack_range</string>
+        <big-decimal>5.1</big-decimal>
+      </entry>
+      <entry>
+        <string>hp</string>
+        <int>4</int>
+      </entry>
+      <entry>
+        <string>move_range</string>
+        <big-decimal>1.1</big-decimal>
+      </entry>
+      <entry>
+        <string>dmg</string>
+        <int>1</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>1</x>
+      <y>0</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_archer_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_archer_3.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_archer_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_archer_5.png</string>
+    </myImagePaths>
+    <myImageSelector>GameMethods.$return(((GameMethods.getProperty(GameMethods.$this(),&quot;hp&quot;)) - (1)))</myImageSelector>
+  </gameplay.Entity>
+  <gameplay.Entity>
+    <myID>118</myID>
+    <name>Troll_queen</name>
+    <instanceName>Troll_queen</instanceName>
+    <props>
+      <entry>
+        <string>attack_range</string>
+        <big-decimal>1.1</big-decimal>
+      </entry>
+      <entry>
+        <string>hp</string>
+        <int>8</int>
+      </entry>
+      <entry>
+        <string>max_hp</string>
+        <int>8</int>
+      </entry>
+      <entry>
+        <string>move_range</string>
+        <big-decimal>1.1</big-decimal>
+      </entry>
+      <entry>
+        <string>dmg</string>
+        <int>5</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>9</x>
+      <y>9</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_queen_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_queen_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_queen_3.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_queen_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_queen_5.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_queen_6.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_queen_7.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/troll_queen_8.png</string>
+    </myImagePaths>
+    <myImageSelector>GameMethods.$return(((GameMethods.getProperty(GameMethods.$this(),&quot;hp&quot;)) - (1)))</myImageSelector>
+  </gameplay.Entity>
+  <gameplay.Entity>
+    <myID>106</myID>
+    <name>Goblin_swordsman</name>
+    <instanceName>Goblin_swordsman</instanceName>
+    <props>
+      <entry>
+        <string>attack_range</string>
+        <int>1</int>
+      </entry>
+      <entry>
+        <string>hp</string>
+        <int>5</int>
+      </entry>
+      <entry>
+        <string>move_range</string>
+        <int>1</int>
+      </entry>
+      <entry>
+        <string>dmg</string>
+        <int>2</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>2</x>
+      <y>1</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_sword_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_sword_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_sword_3.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_sword_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_sword_5.png</string>
+    </myImagePaths>
+    <myImageSelector>GameMethods.$return(((GameMethods.getProperty(GameMethods.$this(),&quot;hp&quot;)) - (1)))</myImageSelector>
+  </gameplay.Entity>
+  <gameplay.Entity>
+    <myID>107</myID>
+    <name>Goblin_swordsman</name>
+    <instanceName>Goblin_swordsman</instanceName>
+    <props>
+      <entry>
+        <string>attack_range</string>
+        <int>1</int>
+      </entry>
+      <entry>
+        <string>hp</string>
+        <int>5</int>
+      </entry>
+      <entry>
+        <string>move_range</string>
+        <int>1</int>
+      </entry>
+      <entry>
+        <string>dmg</string>
+        <int>2</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>2</x>
+      <y>2</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_sword_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_sword_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_sword_3.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_sword_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_sword_5.png</string>
+    </myImagePaths>
+    <myImageSelector>GameMethods.$return(((GameMethods.getProperty(GameMethods.$this(),&quot;hp&quot;)) - (1)))</myImageSelector>
+  </gameplay.Entity>
+  <gameplay.Entity>
+    <myID>109</myID>
+    <name>Goblin_swordsman</name>
+    <instanceName>Goblin_swordsman</instanceName>
+    <props>
+      <entry>
+        <string>attack_range</string>
+        <int>1</int>
+      </entry>
+      <entry>
+        <string>hp</string>
+        <int>5</int>
+      </entry>
+      <entry>
+        <string>move_range</string>
+        <int>1</int>
+      </entry>
+      <entry>
+        <string>dmg</string>
+        <int>2</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>0</x>
+      <y>2</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_sword_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_sword_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_sword_3.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_sword_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_sword_5.png</string>
+    </myImagePaths>
+    <myImageSelector>GameMethods.$return(((GameMethods.getProperty(GameMethods.$this(),&quot;hp&quot;)) - (1)))</myImageSelector>
+  </gameplay.Entity>
+  <gameplay.Entity>
+    <myID>113</myID>
+    <name>Troll_swordman</name>
+    <instanceName>Troll_swordman</instanceName>
+    <props>
+      <entry>
+        <string>attack_range</string>
+        <big-decimal>1.1</big-decimal>
+      </entry>
+      <entry>
+        <string>hp</string>
+        <int>3</int>
+      </entry>
+      <entry>
+        <string>max_hp</string>
+        <int>3</int>
+      </entry>
+      <entry>
+        <string>move_range</string>
+        <big-decimal>3.1</big-decimal>
+      </entry>
+      <entry>
+        <string>dmg</string>
+        <int>4</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>8</x>
+      <y>7</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/troll_sword_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/troll_sword_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/troll_sword_3.png</string>
+    </myImagePaths>
+    <myImageSelector>GameMethods.$return(((GameMethods.getProperty(GameMethods.$this(),&quot;hp&quot;)) - (1)))</myImageSelector>
+  </gameplay.Entity>
+  <gameplay.Entity>
+    <myID>117</myID>
+    <name>Troll_swordman</name>
+    <instanceName>Troll_swordman</instanceName>
+    <props>
+      <entry>
+        <string>attack_range</string>
+        <big-decimal>1.1</big-decimal>
+      </entry>
+      <entry>
+        <string>hp</string>
+        <int>3</int>
+      </entry>
+      <entry>
+        <string>max_hp</string>
+        <int>3</int>
+      </entry>
+      <entry>
+        <string>move_range</string>
+        <big-decimal>3.1</big-decimal>
+      </entry>
+      <entry>
+        <string>dmg</string>
+        <int>4</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>7</x>
+      <y>9</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/troll_sword_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/troll_sword_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/troll_sword_3.png</string>
+    </myImagePaths>
+    <myImageSelector>GameMethods.$return(((GameMethods.getProperty(GameMethods.$this(),&quot;hp&quot;)) - (1)))</myImageSelector>
+  </gameplay.Entity>
+  <gameplay.Entity>
+    <myID>11</myID>
+    <name>Goblin_king</name>
+    <instanceName>Goblin_king</instanceName>
+    <props>
+      <entry>
+        <string>attack_range</string>
+        <int>0</int>
+      </entry>
+      <entry>
+        <string>hp</string>
+        <int>2</int>
+      </entry>
+      <entry>
+        <string>move_range</string>
+        <big-decimal>1.1</big-decimal>
+      </entry>
+      <entry>
+        <string>dmg</string>
+        <int>1</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>0</x>
+      <y>0</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_king_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_king_2.png</string>
+    </myImagePaths>
+    <myImageSelector>GameMethods.$return(((GameMethods.getProperty(GameMethods.$this(),&quot;hp&quot;)) - (1)))</myImageSelector>
+  </gameplay.Entity>
+  <gameplay.Entity>
+    <myID>108</myID>
+    <name>Goblin_swordsman</name>
+    <instanceName>Goblin_swordsman</instanceName>
+    <props>
+      <entry>
+        <string>attack_range</string>
+        <int>1</int>
+      </entry>
+      <entry>
+        <string>hp</string>
+        <int>5</int>
+      </entry>
+      <entry>
+        <string>move_range</string>
+        <int>1</int>
+      </entry>
+      <entry>
+        <string>dmg</string>
+        <int>2</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>1</x>
+      <y>2</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_sword_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_sword_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_sword_3.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_sword_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_sword_5.png</string>
+    </myImagePaths>
+    <myImageSelector>GameMethods.$return(((GameMethods.getProperty(GameMethods.$this(),&quot;hp&quot;)) - (1)))</myImageSelector>
+  </gameplay.Entity>
+  <gameplay.Entity>
+    <myID>110</myID>
+    <name>Troll_shaman</name>
+    <instanceName>Troll_shaman</instanceName>
+    <props>
+      <entry>
+        <string>healAmount</string>
+        <int>2</int>
+      </entry>
+      <entry>
+        <string>hp</string>
+        <int>2</int>
+      </entry>
+      <entry>
+        <string>max_hp</string>
+        <int>2</int>
+      </entry>
+      <entry>
+        <string>move_range</string>
+        <big-decimal>1.1</big-decimal>
+      </entry>
+      <entry>
+        <string>dmg</string>
+        <int>0</int>
+      </entry>
+      <entry>
+        <string>heal_range</string>
+        <big-decimal>3.1</big-decimal>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>9</x>
+      <y>8</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/troll_shaman_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/troll_shaman_2.png</string>
+    </myImagePaths>
+    <myImageSelector>GameMethods.$return(((GameMethods.getProperty(GameMethods.$this(),&quot;hp&quot;)) - (1)))</myImageSelector>
+  </gameplay.Entity>
+  <gameplay.Entity>
+    <myID>114</myID>
+    <name>Troll_swordman</name>
+    <instanceName>Troll_swordman</instanceName>
+    <props>
+      <entry>
+        <string>attack_range</string>
+        <big-decimal>1.1</big-decimal>
+      </entry>
+      <entry>
+        <string>hp</string>
+        <int>3</int>
+      </entry>
+      <entry>
+        <string>max_hp</string>
+        <int>3</int>
+      </entry>
+      <entry>
+        <string>move_range</string>
+        <big-decimal>3.1</big-decimal>
+      </entry>
+      <entry>
+        <string>dmg</string>
+        <int>4</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>8</x>
+      <y>8</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/troll_sword_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/troll_sword_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/troll_sword_3.png</string>
+    </myImagePaths>
+    <myImageSelector>GameMethods.$return(((GameMethods.getProperty(GameMethods.$this(),&quot;hp&quot;)) - (1)))</myImageSelector>
+  </gameplay.Entity>
+  <gameplay.Entity>
+    <myID>116</myID>
+    <name>Troll_swordman</name>
+    <instanceName>Troll_swordman</instanceName>
+    <props>
+      <entry>
+        <string>attack_range</string>
+        <big-decimal>1.1</big-decimal>
+      </entry>
+      <entry>
+        <string>hp</string>
+        <int>3</int>
+      </entry>
+      <entry>
+        <string>max_hp</string>
+        <int>3</int>
+      </entry>
+      <entry>
+        <string>move_range</string>
+        <big-decimal>3.1</big-decimal>
+      </entry>
+      <entry>
+        <string>dmg</string>
+        <int>4</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>7</x>
+      <y>8</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/troll_sword_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/troll_sword_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/troll_sword_3.png</string>
+    </myImagePaths>
+    <myImageSelector>GameMethods.$return(((GameMethods.getProperty(GameMethods.$this(),&quot;hp&quot;)) - (1)))</myImageSelector>
+  </gameplay.Entity>
+  <gameplay.Entity>
+    <myID>44</myID>
+    <name>Goblin_archer</name>
+    <instanceName>Goblin_archer</instanceName>
+    <props>
+      <entry>
+        <string>attack_range</string>
+        <big-decimal>5.1</big-decimal>
+      </entry>
+      <entry>
+        <string>hp</string>
+        <int>4</int>
+      </entry>
+      <entry>
+        <string>move_range</string>
+        <big-decimal>1.1</big-decimal>
+      </entry>
+      <entry>
+        <string>dmg</string>
+        <int>1</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>0</x>
+      <y>1</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_archer_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_archer_3.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_archer_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_archer_5.png</string>
+    </myImagePaths>
+    <myImageSelector>GameMethods.$return(((GameMethods.getProperty(GameMethods.$this(),&quot;hp&quot;)) - (1)))</myImageSelector>
+  </gameplay.Entity>
+  <gameplay.Entity>
+    <myID>115</myID>
+    <name>Troll_swordman</name>
+    <instanceName>Troll_swordman</instanceName>
+    <props>
+      <entry>
+        <string>attack_range</string>
+        <big-decimal>1.1</big-decimal>
+      </entry>
+      <entry>
+        <string>hp</string>
+        <int>3</int>
+      </entry>
+      <entry>
+        <string>max_hp</string>
+        <int>3</int>
+      </entry>
+      <entry>
+        <string>move_range</string>
+        <big-decimal>3.1</big-decimal>
+      </entry>
+      <entry>
+        <string>dmg</string>
+        <int>4</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>7</x>
+      <y>7</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/troll_sword_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/troll_sword_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/troll_sword_3.png</string>
+    </myImagePaths>
+    <myImageSelector>GameMethods.$return(((GameMethods.getProperty(GameMethods.$this(),&quot;hp&quot;)) - (1)))</myImageSelector>
+  </gameplay.Entity>
+  <gameplay.Entity>
+    <myID>112</myID>
+    <name>Troll_swordman</name>
+    <instanceName>Troll_swordman</instanceName>
+    <props>
+      <entry>
+        <string>attack_range</string>
+        <big-decimal>1.1</big-decimal>
+      </entry>
+      <entry>
+        <string>hp</string>
+        <int>3</int>
+      </entry>
+      <entry>
+        <string>max_hp</string>
+        <int>3</int>
+      </entry>
+      <entry>
+        <string>move_range</string>
+        <big-decimal>3.1</big-decimal>
+      </entry>
+      <entry>
+        <string>dmg</string>
+        <int>4</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>9</x>
+      <y>7</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/troll_sword_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/troll_sword_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/troll_sword_3.png</string>
+    </myImagePaths>
+    <myImageSelector>GameMethods.$return(((GameMethods.getProperty(GameMethods.$this(),&quot;hp&quot;)) - (1)))</myImageSelector>
+  </gameplay.Entity>
+  <gameplay.Entity>
+    <myID>22</myID>
+    <name>Goblin_swordsman</name>
+    <instanceName>Goblin_swordsman</instanceName>
+    <props>
+      <entry>
+        <string>attack_range</string>
+        <int>1</int>
+      </entry>
+      <entry>
+        <string>hp</string>
+        <int>5</int>
+      </entry>
+      <entry>
+        <string>move_range</string>
+        <int>1</int>
+      </entry>
+      <entry>
+        <string>dmg</string>
+        <int>2</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>2</x>
+      <y>0</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_sword_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_sword_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_sword_3.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_sword_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_sword_5.png</string>
+    </myImagePaths>
+    <myImageSelector>GameMethods.$return(((GameMethods.getProperty(GameMethods.$this(),&quot;hp&quot;)) - (1)))</myImageSelector>
+  </gameplay.Entity>
+  <gameplay.Entity>
+    <myID>111</myID>
+    <name>Troll_shaman</name>
+    <instanceName>Troll_shaman</instanceName>
+    <props>
+      <entry>
+        <string>healAmount</string>
+        <int>2</int>
+      </entry>
+      <entry>
+        <string>hp</string>
+        <int>2</int>
+      </entry>
+      <entry>
+        <string>max_hp</string>
+        <int>2</int>
+      </entry>
+      <entry>
+        <string>move_range</string>
+        <big-decimal>1.1</big-decimal>
+      </entry>
+      <entry>
+        <string>heal_range</string>
+        <big-decimal>3.1</big-decimal>
+      </entry>
+      <entry>
+        <string>dmg</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>8</x>
+      <y>9</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/troll_shaman_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/troll_shaman_2.png</string>
+    </myImagePaths>
+    <myImageSelector>GameMethods.$return(((GameMethods.getProperty(GameMethods.$this(),&quot;hp&quot;)) - (1)))</myImageSelector>
+  </gameplay.Entity>
+  <gameplay.Entity>
+    <myID>84</myID>
+    <name>Goblin_archer</name>
+    <instanceName>Goblin_archer</instanceName>
+    <props>
+      <entry>
+        <string>attack_range</string>
+        <big-decimal>5.1</big-decimal>
+      </entry>
+      <entry>
+        <string>hp</string>
+        <int>4</int>
+      </entry>
+      <entry>
+        <string>move_range</string>
+        <big-decimal>1.1</big-decimal>
+      </entry>
+      <entry>
+        <string>dmg</string>
+        <int>1</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>1</x>
+      <y>1</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_archer_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_archer_3.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_archer_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/goblin_archer_5.png</string>
+    </myImagePaths>
+    <myImageSelector>GameMethods.$return(((GameMethods.getProperty(GameMethods.$this(),&quot;hp&quot;)) - (1)))</myImageSelector>
+  </gameplay.Entity>
+  <gameplay.TilePrototype>
+    <myID>8</myID>
+    <name>grass</name>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.TilePrototype>
+  <gameplay.Tile>
+    <myID>7</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>4</x>
+      <y>3</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>76</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>4</x>
+      <y>6</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>54</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>0</x>
+      <y>4</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>101</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>5</x>
+      <y>9</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>51</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>3</x>
+      <y>4</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>58</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>9</x>
+      <y>7</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>8</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>3</x>
+      <y>3</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>40</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>4</x>
+      <y>0</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>41</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>3</x>
+      <y>0</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>80</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>2</x>
+      <y>6</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>3</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>8</x>
+      <y>3</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>93</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>2</x>
+      <y>8</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>85</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>0</x>
+      <y>6</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>30</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>3</x>
+      <y>1</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>61</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>7</x>
+      <y>7</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>45</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>9</x>
+      <y>4</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>6</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>5</x>
+      <y>3</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>25</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>8</x>
+      <y>1</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>78</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>3</x>
+      <y>7</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>56</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>1</x>
+      <y>5</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>102</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>6</x>
+      <y>9</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>74</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>5</x>
+      <y>7</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>12</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>0</x>
+      <y>3</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>63</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>8</x>
+      <y>5</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>82</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>1</x>
+      <y>7</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>31</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>2</x>
+      <y>1</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>27</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>6</x>
+      <y>1</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>62</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>6</x>
+      <y>7</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>26</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>7</x>
+      <y>1</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>48</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>6</x>
+      <y>4</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>50</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>4</x>
+      <y>4</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>75</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>4</x>
+      <y>7</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>96</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>0</x>
+      <y>9</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>69</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>6</x>
+      <y>5</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>52</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>2</x>
+      <y>4</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>68</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>7</x>
+      <y>5</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>79</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>2</x>
+      <y>7</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>98</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>2</x>
+      <y>9</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>87</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>8</x>
+      <y>8</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>55</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>0</x>
+      <y>5</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>105</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>9</x>
+      <y>9</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>72</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>5</x>
+      <y>6</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>4</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>7</x>
+      <y>3</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>18</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>4</x>
+      <y>2</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>10</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>1</x>
+      <y>3</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>60</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>8</x>
+      <y>7</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>20</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>2</x>
+      <y>2</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>16</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>6</x>
+      <y>2</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>95</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>0</x>
+      <y>8</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>29</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>4</x>
+      <y>1</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>104</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>8</x>
+      <y>9</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>103</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>7</x>
+      <y>9</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>53</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>1</x>
+      <y>4</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>70</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>5</x>
+      <y>5</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>99</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>3</x>
+      <y>9</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>42</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>2</x>
+      <y>0</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>83</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>0</x>
+      <y>7</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>13</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>9</x>
+      <y>2</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>46</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>8</x>
+      <y>4</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>92</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>3</x>
+      <y>8</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>71</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>6</x>
+      <y>6</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>36</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>8</x>
+      <y>0</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>9</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>2</x>
+      <y>3</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>19</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>3</x>
+      <y>2</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>32</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>1</x>
+      <y>1</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>81</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>1</x>
+      <y>6</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>14</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>8</x>
+      <y>2</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>89</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>6</x>
+      <y>8</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>33</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>1</x>
+      <y>0</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>39</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>5</x>
+      <y>0</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>65</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>9</x>
+      <y>6</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>38</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>6</x>
+      <y>0</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>1</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>0</x>
+      <y>0</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>24</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>9</x>
+      <y>1</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>23</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>0</x>
+      <y>2</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>15</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>7</x>
+      <y>2</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>91</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>4</x>
+      <y>8</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>47</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>7</x>
+      <y>4</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>88</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>7</x>
+      <y>8</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>64</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>9</x>
+      <y>5</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>37</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>7</x>
+      <y>0</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>97</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>1</x>
+      <y>9</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>2</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>9</x>
+      <y>3</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>73</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>3</x>
+      <y>5</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>21</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>1</x>
+      <y>2</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>77</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>3</x>
+      <y>6</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>90</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>5</x>
+      <y>8</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>100</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>4</x>
+      <y>9</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>67</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>7</x>
+      <y>6</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>49</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>5</x>
+      <y>4</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>34</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>0</x>
+      <y>1</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>94</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>1</x>
+      <y>8</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>5</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>6</x>
+      <y>3</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>59</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>4</x>
+      <y>5</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>28</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>5</x>
+      <y>1</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>35</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>9</x>
+      <y>0</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>66</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>8</x>
+      <y>6</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>86</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>9</x>
+      <y>8</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>17</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>5</x>
+      <y>2</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Tile>
+    <myID>57</myID>
+    <name>grass</name>
+    <instanceName>grass</instanceName>
+    <props>
+      <entry>
+        <string>dead</string>
+        <int>0</int>
+      </entry>
+    </props>
+    <myWidth>1</myWidth>
+    <myHeight>1</myHeight>
+    <myCoord>
+      <x>2</x>
+      <y>5</y>
+    </myCoord>
+    <myImagePaths>
+      <string>../../../../src/engine/goblins_and_trolls/grass_1.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_2.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_4.png</string>
+      <string>../../../../src/engine/goblins_and_trolls/grass_3.png</string>
+    </myImagePaths>
+    <myImageSelector>if(((GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;)) &lt; (4))) {
+GameMethods.$return(GameMethods.getProperty(GameMethods.$this(),&quot;dead&quot;))
+}
+else {
+GameMethods.$return(3)
+}
+</myImageSelector>
+  </gameplay.Tile>
+  <gameplay.Player>
+    <myName>B</myName>
+    <myStats/>
+    <myEntityIDs>
+      <int>110</int>
+      <int>111</int>
+      <int>112</int>
+      <int>113</int>
+      <int>114</int>
+      <int>115</int>
+      <int>116</int>
+      <int>117</int>
+      <int>118</int>
+      <int>119</int>
+      <int>120</int>
+    </myEntityIDs>
+  </gameplay.Player>
+  <gameplay.Player>
+    <myName>A</myName>
+    <myStats/>
+    <myEntityIDs>
+      <int>11</int>
+      <int>22</int>
+      <int>43</int>
+      <int>44</int>
+      <int>84</int>
+      <int>106</int>
+      <int>107</int>
+      <int>108</int>
+      <int>109</int>
+      <int>110</int>
+      <int>111</int>
+    </myEntityIDs>
+  </gameplay.Player>
+  <gameplay.Turn>
+    <myCurrentPhaseName>a</myCurrentPhaseName>
+    <playersOrder>
+      <string>B</string>
+      <string>A</string>
+    </playersOrder>
+  </gameplay.Turn>
+</game>

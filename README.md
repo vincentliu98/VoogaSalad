@@ -136,14 +136,14 @@ Hours Spent: ~800
   * src/authoring_backend/src/authoringUtils/exception/InvalidPointsException.java : This class handles invalid point exception in CRUD.
   * src/authoring_backend/src/authoringUtils/exception/TurnNotFoundException.java : This class handles the exception of a certain turn not found in CRUD.
 * Groovy
-  * src/authoring_backend/src/groovy/graph/blocks/core/ArgNumberMismatchException.java
-  * src/authoring_backend/src/groovy/graph/blocks/small_factory/ListParseException.java
-  * src/authoring_backend/src/groovy/graph/blocks/small_factory/MapParseException.java
-  * src/authoring_backend/src/groovy/graph/blocks/small_factory/NoSuchPropertyException.java
-  * src/authoring_backend/src/groovy/graph/blocks/small_factory/ReferenceParseException.java
-  * src/authoring_backend/src/groovy/graph/PortAlreadyFilledException.java
-  * src/authoring_backend/src/groovy/graph/PortNotConnectedException.java
-  * src/authoring_backend/src/phase/NamespaceException.java
+  * src/authoring_backend/src/groovy/graph/blocks/core/ArgNumberMismatchException.java : This class handles argument number mismatch exception.
+  * src/authoring_backend/src/groovy/graph/blocks/small_factory/ListParseException.java : This class handles list parse exception.
+  * src/authoring_backend/src/groovy/graph/blocks/small_factory/MapParseException.java : This class handles all kinds of map parse exception.
+  * src/authoring_backend/src/groovy/graph/blocks/small_factory/NoSuchPropertyException.java : This class handles no such property exception.
+  * src/authoring_backend/src/groovy/graph/blocks/small_factory/ReferenceParseException.java : This class handles reference parse exception.
+  * src/authoring_backend/src/groovy/graph/PortAlreadyFilledException.java : This class handles port already filled exception.
+  * src/authoring_backend/src/groovy/graph/PortNotConnectedException.java : This class handles port not connected exception.
+  * src/authoring_backend/src/phase/NamespaceException.java : This class handles name space exceptions.
 
 ### Controller
 
@@ -167,12 +167,6 @@ Hours Spent: ~800
 
 The user can to customize images for entity, tile and user avatars. The user need to prepare these images and set the appropriate image for respective image objects in building the game.
 
-## UI Layout of the project
-
-`TO BE ADDED`
-
-![UI View](doc/<name>.png)
-
 ## How to use the program
 
 **Authoring Environment:**
@@ -186,7 +180,7 @@ Run the GameLauncher.java to access the game launcher. Click any game's "Play" b
 ## Known Bugs
 
 * Redo and Undo are too difficult with our current framework and we did not manage to finish it before the deadline. However, basic framework (Memento Pattern) is set up in our project
-* `TO BE ADDED`
+* If the user try to delete the default player, the player will be deleted on the backend but not the front end. When user click on the front end button, it will give a game object class not found error.
 
 ## Design decision
 
@@ -197,6 +191,8 @@ Run the GameLauncher.java to access the game launcher. Click any game's "Play" b
 * User can connect to social media such as Twitter and share result of playing the game instantly.
 
 * User can customize background music for the game and also customize sound effect on actions in playing the game.
+
+* User has a social center where he or she can see all the games he or she has created.
 
 * `TO BE ADDED`
 

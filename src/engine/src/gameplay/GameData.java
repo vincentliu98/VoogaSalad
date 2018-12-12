@@ -13,6 +13,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.*;
 
 public class GameData {
@@ -47,9 +48,7 @@ public class GameData {
         GameData.GRID_HEIGHT = grid_dimension.getY();
 
         try {
-            var mediaPath = GameData.class.getClassLoader().getResource(PathUtility.extractLast(bgmPath)).getPath();
-            System.out.println(mediaPath);
-            media = new Media(new File(mediaPath).toURI().toString());
+            media = new Media(PathUtility.getResourceAsFile(bgmPath).toURI().toString());
             mediaPlayer = new MediaPlayer(media);
             mediaPlayer.setOnReady(() -> {
                 mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);

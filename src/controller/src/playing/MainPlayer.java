@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 import social.User;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.util.Optional;
 
@@ -22,10 +23,13 @@ public class MainPlayer {
     private User myUser;
     private File myFile;
     private String myReferencePath;
+    private String myName;
 
-    public MainPlayer(User user, String referencePath) {
+    public MainPlayer(User user, String referencePath, String gameName) {
+        myName = gameName;
         myUser = user;
         myReferencePath = referencePath;
+        System.out.println("Reference path is " + myReferencePath);
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setHeaderText("Start Game");
         ButtonType loadButton = new ButtonType("Continue");
@@ -60,12 +64,17 @@ public class MainPlayer {
     }
 
     private File getNewGameFile() {
-        return new File(getClass().getClassLoader().getResource(myReferencePath).getFile());
+        try{
+            return new File(myReferencePath);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void launchGame() {
-        String gameName = myReferencePath.split(".")[0];
-        myUser.tweet(String.format("Currently playing %s!", gameName));
+        if (myUser != null) myUser.tweet(String.format("Currently playing %s!", myName));
+        System.out.println("myFile is " + myFile);
         myInitializer = new Initializer(myFile);
         myStage = new Stage();
         myInitializer.setScreenSize(700, 500);

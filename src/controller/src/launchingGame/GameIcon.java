@@ -34,7 +34,8 @@ public class GameIcon extends Icon {
         myButton.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                new MainPlayer(myUser, myReferencePath);
+                System.out.println(String.format("%s, %s", myReferencePath, myName));
+                new MainPlayer(myUser, myReferencePath, myName);
             }
         });
     }
