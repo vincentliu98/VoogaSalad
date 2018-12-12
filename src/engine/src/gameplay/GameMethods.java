@@ -5,6 +5,7 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import java.lang.annotation.Repeatable;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
 
 import static gameplay.GameData.*;
 
@@ -141,7 +142,7 @@ public class GameMethods {
     }
 
     public static Tile getTileAt(double x, double y) {
-        return TILES.values().stream().filter(t -> t.getX() == x && t.getY() == y).findFirst().get();
+        return TILES.values().stream().filter(t -> t.getX() == x && t.getY() == y).findFirst().orElse(null);
     }
 
     public static Tile getTileUnder(Entity entity) {
@@ -289,5 +290,9 @@ public class GameMethods {
         }
 
         return false;
+    }
+
+    public static int randInt(int upperBound) {
+        return new Random().nextInt(upperBound);
     }
 }

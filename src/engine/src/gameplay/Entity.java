@@ -58,7 +58,7 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
     public void setupView() {
         loadImages(true);
         myImageView = new ImageView();
-        myImageView.setPreserveRatio(true);
+        myImageView.setPreserveRatio(false);
         myImageView.setOnMouseClicked(this);
 
         imgIndex = new SimpleIntegerProperty(-1);
@@ -73,8 +73,8 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
      * TODO: test whether "addListener" replaces the old one
      */
     public void adjustViewSize(double screenWidth, double screenHeight) {
-        myImageView.setY((screenHeight * yCoord.get()) / GameMethods.gridHeight());
         myImageView.setX((screenWidth * xCoord.get()) / GameMethods.gridWidth());
+        myImageView.setY((screenHeight * yCoord.get()) / GameMethods.gridHeight());
         myImageView.setFitWidth(screenWidth * myWidth / GameMethods.gridWidth());
         myImageView.setFitHeight(screenHeight * myHeight / GameMethods.gridHeight());
 
@@ -88,6 +88,7 @@ public class Entity extends PropertyHolder<Entity> implements GameObject, EventH
             myImageView.setY(screenHeight * newVal.doubleValue() / GameMethods.gridHeight());
         });
 
+        updateView();
     }
 
     private void loadImages(boolean useNaturalImageSize) {
