@@ -1,5 +1,5 @@
 package social;
 
 public enum EngineEvent {
-    CHANGE_USER
+    CHANGE_USER, LOGGED_OUT
 }
