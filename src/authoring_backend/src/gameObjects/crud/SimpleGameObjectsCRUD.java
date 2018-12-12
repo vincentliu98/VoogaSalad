@@ -169,6 +169,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
 
     private void checkDuplicate(String className)
             throws DuplicateGameObjectClassException {
+        System.out.println(gameObjectClassMapByName.keySet());
         if (gameObjectClassMapByName.containsKey(className)) {
             throw new DuplicateGameObjectClassException();
         }
@@ -778,6 +779,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
 
     @Override
     public void setBGMpath(String path) {
+        System.out.println(bgmPath);
         bgmPath = path;
     }
 

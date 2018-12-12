@@ -30,6 +30,7 @@ import utils.exception.UnremovableNodeException;
 import utils.imageManipulation.ImageManager;
 import utils.imageManipulation.JavaFxOperation;
 import utils.imageSelector.ImageSelectorController;
+import utils.path.PathUtility;
 
 import java.io.File;
 import java.nio.file.Paths;
@@ -101,7 +102,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
             FileChooser fileChooser = new FileChooser();
             File file = fileChooser.showOpenDialog(new Stage());
             if (file != null) {
-                imagePaths.add(ImageManager.getRelativePath(file));
+                imagePaths.add(PathUtility.getRelativePath(file));
             }
         });
         this.imageSelectorController = imageSelectorController;
@@ -224,7 +225,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     private void presentImages() {
         imagePanel.getChildren().clear();
         imagePaths.forEach(path -> {
-            ImageView preview = new ImageView(ImageManager.getAbsoluteURL(path));
+            ImageView preview = new ImageView(PathUtility.getAbsoluteURL(path));
             preview.setFitWidth(ICON_WIDTH);
             preview.setFitHeight(ICON_HEIGHT);
             imagePanel.getChildren().add(preview);
