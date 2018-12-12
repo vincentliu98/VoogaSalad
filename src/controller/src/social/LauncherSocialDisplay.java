@@ -24,7 +24,7 @@ public class LauncherSocialDisplay implements Sortable, Searchable {
         initTiles();
         initUsers();
         EventBus.getInstance().register(EngineEvent.CHANGE_USER, this::reassignUser);
-        EventBus.getInstance().register(EngineEvent.CHANGE_USER, this::resetUser);
+        EventBus.getInstance().register(EngineEvent.LOGGED_OUT, this::resetUser);
     }
 
     public static LauncherSocialDisplay getInstance(User user) {
@@ -43,9 +43,9 @@ public class LauncherSocialDisplay implements Sortable, Searchable {
     }
 
     private void initUsers() {
+        System.out.println("Creating a new UserParser");
         UserParser myParser = new UserParser(myUser);
         myUsers = myParser.getAllUsers();
-        System.out.println("Size of users is " + myUsers.size());
         myActiveUsers = new ArrayList<>();
         for (UserIcon myIcon : myUsers) {
             myPane.getChildren().add(myIcon.getView());
@@ -59,9 +59,7 @@ public class LauncherSocialDisplay implements Sortable, Searchable {
 
     @Override
     public void showAll() {
-        for (UserIcon icon : myActiveUsers) {
-            myPane.getChildren().remove(icon.getView());
-        }
+        clearIcons();
         myActiveUsers = new ArrayList<>();
         for (UserIcon icon : myUsers) {
             myActiveUsers.add(icon);
@@ -75,9 +73,7 @@ public class LauncherSocialDisplay implements Sortable, Searchable {
     @Override
     public void showFavorites() {
         if (myUser == null) return;
-        for (UserIcon icon : myActiveUsers) {
-            myPane.getChildren().remove(icon.getView());
-        }
+        clearIcons();
         myActiveUsers = new ArrayList<>();
         for (String name : myUser.getFollowing()) {
             for (UserIcon icon : myUsers) {
@@ -92,11 +88,15 @@ public class LauncherSocialDisplay implements Sortable, Searchable {
     @Override
     public void sortByAlphabet() {
         myActiveUsers.sort(new NameComparator());
-        for (UserIcon icon : myActiveUsers) {
-            myPane.getChildren().remove(icon.getView());
-        }
+        clearIcons();
         for (UserIcon icon : myActiveUsers) {
             myPane.getChildren().add(icon.getView());
+        }
+    }
+
+    private void clearIcons(){
+        for (UserIcon icon : myActiveUsers) {
+            myPane.getChildren().remove(icon.getView());
         }
     }
 
@@ -105,10 +105,16 @@ public class LauncherSocialDisplay implements Sortable, Searchable {
     }
 
     private void reassignUser(Object... args) {
+        System.out.println("Reassigned");
         myUser = (User) args[0];
+        clearIcons();
+        initUsers();
     }
 
     private void resetUser(Object... args) {
+        System.out.println("Set to null");
         myUser = null;
+        clearIcons();
+        initUsers();
     }
 }
