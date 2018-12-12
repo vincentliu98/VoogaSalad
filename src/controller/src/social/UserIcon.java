@@ -70,6 +70,7 @@ public class UserIcon extends Icon {
             }
             DatabaseHelper.uploadSerializedUserFile(u.getUsername(), u);
         } catch (Exception e){
+            e.printStackTrace();
             new ErrorMessage(new UserException(myErrors.getString("SerializationError"), myErrors.getString(
                     "SerializationErrorWarning")));
         }

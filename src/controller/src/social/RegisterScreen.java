@@ -90,7 +90,6 @@ public class RegisterScreen {
             try {
                 registerUser(usernameField.getText(), passwordField.getText());
             } catch (Exception ex){
-                ex.printStackTrace();
                 ExtendedException exception = (ExtendedException) ex;
                 new ErrorMessage(exception);
             }
@@ -115,7 +114,7 @@ public class RegisterScreen {
             }
             throw ex; // rethrowing the RegistrationException
         }
-       //resetDatabases();
+//       resetDatabases();
         myStage.close();
     }
 

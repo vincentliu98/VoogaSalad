@@ -31,6 +31,7 @@ public class UserParser {
         try{
             while (result.next()){
                 int id = result.getInt("id");
+                System.out.println("The id, in userparser, is " + id);
                 User u = DatabaseHelper.fetchUserFromDatabase(id);
                 users.add(u);
             }
@@ -44,6 +45,7 @@ public class UserParser {
         for (User u : users) {
             UserIcon userIcon;
             if (myUser == null) {
+                System.out.println("u is " + u);
                 userIcon = new UserIcon(u.getUsername(), u.getStatus(), "", "",
                         u.getImageReference(), "", u, "", "");
             } else {

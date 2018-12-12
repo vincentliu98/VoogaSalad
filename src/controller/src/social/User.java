@@ -1,6 +1,5 @@
 package social;
 
-import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import exceptions.ErrorMessage;
 import exceptions.UserException;
 import javafx.scene.image.Image;
@@ -26,9 +25,6 @@ public class User {
     private Map<String, String> myProgress;
     private String myImageReference;
     private String myStatus;
-
-    @XStreamOmitField
-    private ResourceBundle myErrors = ResourceBundle.getBundle("Errors");
 
     public User(int id, String username) {
         myID = id;
@@ -133,8 +129,7 @@ public class User {
         try{
             return myTwitter.getOAuthRequestToken("oob"); // directs to pin page
         } catch (Exception e){
-            new ErrorMessage(new UserException(myErrors.getString("TwitterConnection"), myErrors.getString(
-                    "TwitterConnectionWarning")));
+            new ErrorMessage(new UserException("Can not establish connection with Twitter.", "Check authorization consumer keys"));
             return null;
         }
     }
@@ -148,8 +143,7 @@ public class User {
             AccessToken accessToken = myTwitter.getOAuthAccessToken(requestToken, pin);
         } catch (Exception e){
             myTwitter = null;
-            new ErrorMessage(new UserException(myErrors.getString("InvalidTwitterPin"), myErrors.getString(
-                    "InvalidTwitterPinWarning")));
+            new ErrorMessage(new UserException("Invalid pin.", "No Twitter access granted."));
         }
     }
 
@@ -162,7 +156,7 @@ public class User {
             if (myTwitter == null) return;
             myTwitter.updateStatus(message);
         } catch (TwitterException e) {
-            e.printStackTrace();
+            new ErrorMessage(new UserException("Can not establish connection with Twitter.", "Check authorization consumer keys"));
         }
     }
 

@@ -60,7 +60,7 @@ public class ProfileView {
 
     private void reassignUser(Object... args) {
         myUser = (User) args[0];
-        if (myUser.getAvatar() != null) {
+        if (myUser != null && myUser.getAvatar() != null) {
             changeIcon(myUser.getAvatar());
         } else {
             setDefaultIcon();

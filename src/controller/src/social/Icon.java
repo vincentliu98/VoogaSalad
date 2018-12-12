@@ -113,6 +113,7 @@ public abstract class Icon {
             myBackground.setFitHeight(ICON_HEIGHT);
             myPane.getChildren().add(myBackground);
         } catch (FileNotFoundException e){
+            e.printStackTrace();
             new ErrorMessage(new ExtendedException(myErrors.getString("FileDoesNotExist"), myErrors.getString(
                     "FileDoesNotExistWarning")));
         }

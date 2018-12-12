@@ -83,6 +83,7 @@ public class StatusUpdate {
                 EventBus.getInstance().sendMessage(EngineEvent.UPDATED_STATUS, myUser);
                 myStage.close();
             } catch (Exception ex){
+                ex.printStackTrace();
                 new ErrorMessage(new UserException(myErrors.getString("SerializationError"), myErrors.getString(
                         "SerializationErrorWarning")));
             }

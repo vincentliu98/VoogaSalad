@@ -2,7 +2,6 @@ package social;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
-import exceptions.ErrorMessage;
 import exceptions.LoginException;
 import exceptions.RegistrationException;
 import exceptions.UserException;
@@ -71,19 +70,15 @@ public class DatabaseHelper {
         }
     }
 
-    public static int getIDByUsernameAndPassword(String username, String password) {
-        try {
-            ResultSet result = DATABASE_DOWNLOADER.queryServer(String.format("SELECT id FROM logins WHERE " +
-                    "username='%s' AND password='%s'", username, password));
-            if (!result.next()){
-                throw new LoginException(myErrors.getString("NonexistentAccount"), myErrors.getString(
-                        "NonexistentAccountWarning"));
-            }
-            result.last();
-            return result.getInt("id");
-        } catch (Exception e){
-            throw new LoginException(myErrors.getString("SQLError"), myErrors.getString("SQLErrorWarning"));
+    public static int getIDByUsernameAndPassword(String username, String password) throws SQLException {
+        ResultSet result = DATABASE_DOWNLOADER.queryServer(String.format("SELECT id FROM logins WHERE " +
+                "username='%s' AND password='%s'", username, password));
+        if (!result.next()){
+            throw new LoginException(myErrors.getString("NonexistentAccount"), myErrors.getString(
+                    "NonexistentAccountWarning"));
         }
+        result.last();
+        return result.getInt("id");
 
     }
 
@@ -115,6 +110,7 @@ public class DatabaseHelper {
     private static String getProfilePath(int id) throws SQLException {
         ResultSet result = DATABASE_DOWNLOADER.queryServer(String.format("SELECT profilePath FROM" +
                 " userReferences WHERE id='%d'", id));
+        if (!result.next()) throw new UserException("the account doesn't exist", "oh no"); // TODO: ERase
         result.last();
         return result.getString("profilePath");
     }
@@ -123,6 +119,7 @@ public class DatabaseHelper {
         ResultSet result = DATABASE_DOWNLOADER.queryServer(String.format("SELECT avatarPath FROM" +
                 " userReferences WHERE id='%d'", id));
         result.last();
+        System.out.println("getting avatar path " + result.getString("avatarPath"));
         return result.getString("avatarPath");
     }
 
@@ -143,14 +140,23 @@ public class DatabaseHelper {
     }
 
     private static User deserializeUser(String fileName) throws FileNotFoundException {
-        XStream serializer = new XStream(new DomDriver());
-        File file = new File("src/database/resources/" + fileName);
-        Scanner scanner = new Scanner(file, "UTF-8" );
-        String text = scanner.useDelimiter("\\A").next();
-        scanner.close();
-        text = text.trim().replaceFirst("^([\\W]+)<","<");
-        file.delete();
-        return (User) serializer.fromXML(text);
+        try {
+            XStream serializer = new XStream(new DomDriver());
+            System.out.println("deserializing-fiilename is " + fileName);
+            File file = new File("src/database/resources/" + fileName);
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            Scanner scanner = new Scanner(file, "UTF-8");
+            String text = scanner.useDelimiter("\\A").next();
+            scanner.close();
+            text = text.trim().replaceFirst("^([\\W]+)<", "<");
+            file.delete();
+            return (User) serializer.fromXML(text);
+        } catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public static int getIDByUsername(String username){
@@ -160,16 +166,19 @@ public class DatabaseHelper {
             result.last();
             return result.getInt("id");
         } catch (Exception e){
-            new ErrorMessage(new UserException(myErrors.getString("SQLError"), myErrors.getString("SQLErrorWarning")));
-            return -1;
+            throw new UserException(myErrors.getString("SQLError"), myErrors.getString("SQLErrorWarning"));
         }
     }
 
     public static User fetchUserFromDatabase(int id){
         try{
+            System.out.println("id is " + id);
             String remoteProfilePath = getProfilePath(id);
+            System.out.println("remoteProfilePath is " + remoteProfilePath);
             String remoteAvatarPath = getAvatarPath(id);
+            System.out.println("remoteAvatarPath is " + remoteAvatarPath);
             String profileFilename = downloadRemoteXML(remoteProfilePath); // filename of local XML
+            System.out.println("profileFilenameis is " + profileFilename);
             User u = deserializeUser(profileFilename);
             if (remoteAvatarPath != null){
                 String avatarFilename = downloadRemoteAvatar(remoteAvatarPath); // filename of local image
@@ -177,8 +186,8 @@ public class DatabaseHelper {
             }
             return u;
         } catch (Exception e){
-            new ErrorMessage(new UserException(myErrors.getString("SQLError"), myErrors.getString("SQLErrorWarning")));
-            return null;
+            throw new UserException(myErrors.getString("SQLError"), myErrors.getString
+                    ("SQLErrorWarning"));
         }
     }
 }

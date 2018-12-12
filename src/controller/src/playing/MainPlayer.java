@@ -17,10 +17,6 @@ import java.util.Optional;
 
 public class MainPlayer {
 
-
-    public static final int SCREEN_WIDTH = 1200;
-    public static final int SCREEN_HEIGHT = 700;
-
     private Initializer myInitializer;
     private Stage myStage;
     private User myUser;
@@ -42,27 +38,21 @@ public class MainPlayer {
                 String xmlString = myUser.getGameState(myReferencePath);
                 if (xmlString.equals("")) {
                     myFile = getNewGameFile();
-                    System.out.println("Did't get the sword file");
                 } else {
                     try {
                         myFile = new File(getClass().getClassLoader().getResource("GameProgress.xml").getFile());
                         FileWriter fileWriter = new FileWriter(myFile);
                         fileWriter.write(xmlString);
                         fileWriter.close();
-                        System.out.println("Got the sword file and reading it!");
-                    } catch (Exception e) {
-                    }
+                    } catch (Exception e) { }
                 }
-            } else {
+            } else { // myUser is null
                 myFile = getNewGameFile();
-                System.out.println("User is null");
             }
-            launchGame();
         } else if (result.get() == newGameButton) {
             myFile = getNewGameFile();
-            launchGame();
-            System.out.println("Clicked new one");
         }
+        launchGame();
     }
 
     public static void main(String[] args) {

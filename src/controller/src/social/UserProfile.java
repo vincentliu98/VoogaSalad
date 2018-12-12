@@ -105,6 +105,7 @@ public class UserProfile {
                     avatar.setImage(myUser.getAvatar().getImage());
                     EventBus.getInstance().sendMessage(EngineEvent.CHANGE_USER, myUser);
                 } catch (IOException ex){
+                    ex.printStackTrace();
                     new ErrorMessage(new UserException(myErrors.getString("IOError"), myErrors.getString(
                             "IOErrorWarning")));
                 }
@@ -150,6 +151,7 @@ public class UserProfile {
                     DatabaseHelper.uploadSerializedUserFile(myUser.getUsername(), myUser);
                     EventBus.getInstance().sendMessage(EngineEvent.INTEGRATED_TWITTER, myUser);
                 } catch (Exception ex){
+                    ex.printStackTrace();
                     new ErrorMessage(new UserException(myErrors.getString("IOError"), myErrors.getString(
                             "IOErrorWarning")));
                 }

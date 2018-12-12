@@ -13,6 +13,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 
@@ -109,7 +111,7 @@ public class LoginScreen {
         myPane.add(register, 0, 6);
     }
 
-    private void loginUser(String myUsername, String myPassword) {
+    private void loginUser(String myUsername, String myPassword) throws SQLException {
         try {
             checkForBlankFields(myUsername, myPassword);
             int id = DatabaseHelper.getIDByUsernameAndPassword(myUsername, myPassword);
@@ -118,7 +120,8 @@ public class LoginScreen {
             myStage.close();
         } catch (Exception ex){
             if (!ex.getClass().equals(LoginException.class)){
-                throw new ServerException(myErrors.getString("ServerError"), myErrors.getString("ServerErrorWarning"));
+                throw new ServerException(myErrors.getString("ServerError"), myErrors.getString
+                 ("ServerErrorWarning"));
             }
             throw ex;
         }

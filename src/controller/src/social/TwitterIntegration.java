@@ -76,6 +76,7 @@ public class TwitterIntegration {
                 Desktop.getDesktop().browse(new URI(requestToken.getAuthorizationURL()));
             }
         } catch (Exception ex){
+            ex.printStackTrace();
             new ErrorMessage(new UserException(myErrors.getString("InvalidURI"), myErrors.getString(
                     "InvalidURIWarning")));
         }
@@ -97,6 +98,7 @@ public class TwitterIntegration {
                 }
                 myStage.close();
             } catch (Exception ex){
+                ex.printStackTrace();
                 new ErrorMessage(new UserException(myErrors.getString("SerializationError"), myErrors.getString(
                         "SerializationErrorWarning")));
             }
