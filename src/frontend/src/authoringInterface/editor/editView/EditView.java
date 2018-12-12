@@ -108,7 +108,7 @@ public class EditView implements SubView<TabPane> {
         phaseNodeTab.setContent(phaseView.getView());
 
         winConditionTab = new Tab();
-        Label winConditionLabel = new Label("win condition");
+        Label winConditionLabel = new Label("Win Condition");
         labelOnTab(winConditionLabel, winConditionTab);
         var dialog = groovyPaneFactory.winCondition();
         dialog.closeWindow(); // we're only gonna use its view

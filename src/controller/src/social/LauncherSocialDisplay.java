@@ -8,7 +8,7 @@ import launchingGame.Sortable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LauncherSocialDisplay implements Sortable, Searchable, Subscriber {
+public class LauncherSocialDisplay implements Sortable, Searchable {
     public static final String CSS_PATH = "launcher-games-display";
     public static final int COLUMN_NUMBER = 4;
     public static final double HOR_SPACING = 29;
@@ -21,14 +21,10 @@ public class LauncherSocialDisplay implements Sortable, Searchable, Subscriber {
 
     public LauncherSocialDisplay(User user) {
         myUser = user;
-        if (myUser != null) {
-            System.out.println("socialdisplay user is initalizied to " + myUser.getUsername());
-        } else {
-            System.out.println("socialdisplay user is initalizied to null user");
-        }
         initTiles();
         initUsers();
-        EventBus.getInstance().register(EngineEvent.CHANGE_USER, this);
+        EventBus.getInstance().register(EngineEvent.CHANGE_USER, this::reassignUser);
+        EventBus.getInstance().register(EngineEvent.LOGGED_OUT, this::resetUser);
     }
 
     public static LauncherSocialDisplay getInstance(User user) {
@@ -47,9 +43,9 @@ public class LauncherSocialDisplay implements Sortable, Searchable, Subscriber {
     }
 
     private void initUsers() {
+        System.out.println("Creating a new UserParser");
         UserParser myParser = new UserParser(myUser);
         myUsers = myParser.getAllUsers();
-        System.out.println("Size of users is " + myUsers.size());
         myActiveUsers = new ArrayList<>();
         for (UserIcon myIcon : myUsers) {
             myPane.getChildren().add(myIcon.getView());
@@ -59,13 +55,34 @@ public class LauncherSocialDisplay implements Sortable, Searchable, Subscriber {
 
     @Override
     public void showByTag(String tag) {
+        if (myUser == null) return;
+        clearIcons();
+        myActiveUsers = new ArrayList<>();
+        if (tag.toLowerCase().equals("following") || tag.toLowerCase().equals("follow")){
+            for (String name : myUser.getFollowing()) {
+                for (UserIcon icon : myUsers) {
+                    if (icon.getName().equals(name)) {
+                        myActiveUsers.add(icon);
+                        myPane.getChildren().add(icon.getView());
+                    }
+                }
+            }
+        }
+        if (tag.toLowerCase().equals("followers") || tag.toLowerCase().equals("followed by") || tag.toLowerCase().equals("follower")){
+            for (String name : myUser.getFollowers()) {
+                for (UserIcon icon : myUsers) {
+                    if (icon.getName().equals(name)) {
+                        myActiveUsers.add(icon);
+                        myPane.getChildren().add(icon.getView());
+                    }
+                }
+            }
+        }
     }
 
     @Override
     public void showAll() {
-        for (UserIcon icon : myActiveUsers) {
-            myPane.getChildren().remove(icon.getView());
-        }
+        clearIcons();
         myActiveUsers = new ArrayList<>();
         for (UserIcon icon : myUsers) {
             myActiveUsers.add(icon);
@@ -79,9 +96,7 @@ public class LauncherSocialDisplay implements Sortable, Searchable, Subscriber {
     @Override
     public void showFavorites() {
         if (myUser == null) return;
-        for (UserIcon icon : myActiveUsers) {
-            myPane.getChildren().remove(icon.getView());
-        }
+        clearIcons();
         myActiveUsers = new ArrayList<>();
         for (String name : myUser.getFollowing()) {
             for (UserIcon icon : myUsers) {
@@ -96,11 +111,15 @@ public class LauncherSocialDisplay implements Sortable, Searchable, Subscriber {
     @Override
     public void sortByAlphabet() {
         myActiveUsers.sort(new NameComparator());
-        for (UserIcon icon : myActiveUsers) {
-            myPane.getChildren().remove(icon.getView());
-        }
+        clearIcons();
         for (UserIcon icon : myActiveUsers) {
             myPane.getChildren().add(icon.getView());
+        }
+    }
+
+    private void clearIcons(){
+        for (UserIcon icon : myActiveUsers) {
+            myPane.getChildren().remove(icon.getView());
         }
     }
 
@@ -108,11 +127,15 @@ public class LauncherSocialDisplay implements Sortable, Searchable, Subscriber {
         return myPane;
     }
 
-    @Override
-    public void update(EngineEvent engineEvent, Object... args) {
-        if (engineEvent.equals(EngineEvent.CHANGE_USER) && args[0].getClass().equals(User.class)) {
-            myUser = (User) args[0];
-            System.out.println("myUser has changed, in social display, to " + myUser.getUsername());
-        }
+    private void reassignUser(Object... args) {
+        myUser = (User) args[0];
+        clearIcons();
+        initUsers();
+    }
+
+    private void resetUser(Object... args) {
+        myUser = null;
+        clearIcons();
+        initUsers();
     }
 }

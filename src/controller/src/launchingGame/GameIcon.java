@@ -10,7 +10,8 @@ public class GameIcon extends Icon {
 
     public GameIcon(String gameName, String description, String reference, String color, String imagePath,
                     String tags, User user) {
-        super(gameName, description, reference, color, imagePath, tags, user, "Play", "/game-images/");
+        super(gameName, description, reference, color, imagePath, tags, user, "Play", "src/controller/resources/game" +
+                "-images/");
     }
 
     @Override
@@ -33,7 +34,8 @@ public class GameIcon extends Icon {
         myButton.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                new MainPlayer(myUser, myReferencePath);
+                System.out.println(String.format("%s, %s", myReferencePath, myName));
+                new MainPlayer(myUser, myReferencePath, myName);
             }
         });
     }

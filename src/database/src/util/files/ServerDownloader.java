@@ -42,17 +42,12 @@ public class ServerDownloader extends ServerConnector implements ServerQuery {
             Channel channel = mySession.openChannel(CONNECTION_PROTOCOL);
             channel.connect();
             ChannelSftp sftpChannel = (ChannelSftp) channel;
-            if (useDefaultPath) {
-                sftpChannel.get(HOST_PATH + filePath, fileDestination);
-            } else {
-                sftpChannel.get(filePath, fileDestination);
-            }
+            sftpChannel.get(filePath, fileDestination);
             sftpChannel.exit();
             mySession.disconnect();
-        } catch (JSchException e) {
-            System.out.println("Error");
-        } catch (SftpException e) {
-            System.out.println("Error");
+        } catch (JSchException | SftpException e) {
+            e.printStackTrace();
+            System.out.println("An error is happening here");
         }
     }
 
@@ -92,8 +87,18 @@ public class ServerDownloader extends ServerConnector implements ServerQuery {
             System.out.println("Error");
         } catch (SftpException e) {
             System.out.println("Error");
+            e.printStackTrace();
+
         }
     }
+
+//    public static void main(String args[]){
+//        ServerDownloader downloader = new ServerDownloader();
+//        downloader.connectServer("vcm", "vcm-7456.vm.duke.edu", 22,"afcas8amYf");
+//        downloader.downloadFile("/home/vcm/public_html/users/profiles/JonathanNakagawa.xml","/Users/Natalie" +
+//                "/CompSci308" +
+//                "/Projects/voogasalad_printstacktrace/src/database/resources");
+//    }
 
     private boolean validDowload(String name) {
         return !myBlackList.contains(name);
@@ -109,5 +114,4 @@ public class ServerDownloader extends ServerConnector implements ServerQuery {
             }
         }
     }
-
 }

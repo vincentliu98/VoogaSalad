@@ -2,10 +2,14 @@ package gameplay;
 
 import javafx.util.Pair;
 
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
+
+import java.lang.annotation.Repeatable;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import static gameplay.GameData.*;
 
@@ -95,6 +99,17 @@ public class GameMethods {
         moveEntity(entity, tile.getX(), tile.getY());
     }
 
+    public static Entity getEntityOver(Tile tile) {
+        for(var e : ENTITIES.values()) {
+            boolean verdictX =
+                (tile.getX() <= e.getX() && e.getX() < tile.getX() + tile.getWidth()) ||
+                    (e.getX() <= tile.getX() && tile.getX() < e.getX() + e.getWidth());
+            boolean verdictY =
+                (tile.getY() <= e.getY() && e.getY() < tile.getY() + tile.getHeight()) ||
+                    (e.getY() <= tile.getY() && tile.getY() < e.getY() + e.getHeight());
+            if(verdictX && verdictY) return e;
+        } return null;
+    }
     /**
      * Tile
      */
@@ -131,7 +146,7 @@ public class GameMethods {
     }
 
     public static Tile getTileAt(double x, double y) {
-        return TILES.values().stream().filter(t -> t.getX() == x && t.getY() == y).findFirst().get();
+        return TILES.values().stream().filter(t -> t.getX() == x && t.getY() == y).findFirst().orElse(null);
     }
 
     public static Tile getTileUnder(Entity entity) {
@@ -161,6 +176,8 @@ public class GameMethods {
         System.out.println("next play: " + TURN.nextPlayerName());
         return TURN.nextPlayerName();
     }
+
+    public static Player getPlayer(String playername) { return PLAYERS.get(playername); }
 
     public static String toNextPlayer() {
         return TURN.toNextPlayer();
@@ -218,6 +235,11 @@ public class GameMethods {
     public static boolean isNull(Object obj) { return obj == null; }
 
     public static boolean not(boolean bool) { return !bool; }
+
+    public static void updateViews() {
+        ENTITIES.values().forEach(Entity::updateView);
+        TILES.values().forEach(Tile::updateView);
+    }
 
     public static void DO_LOT_OF_THINGS() { }
 
@@ -324,4 +346,63 @@ public class GameMethods {
         return ENTITIES.keySet().size();
     }
 
+    public static Tile getEmptyTileBelow(Tile t) {
+        for (int i = gridHeight()-1; i >= 0; i--) {
+            var tile = getTileAt(t.getX(), i);
+            if(hasNoIntersectingEntities(tile)) return tile;
+        } return null;
+    }
+
+    public static boolean check4(String entityName) {
+        var entities = new Entity[gridHeight()][gridWidth()];
+        for (int i = 0 ; i < gridHeight() ; i ++) {
+            for(int j = 0 ; j < gridWidth() ; j ++) {
+                entities[i][j] = getEntityOver(getTileAt(j, i));
+            }
+        }
+
+        // horizontal check
+        for (int i = 0 ; i < gridHeight() ; i ++) {
+            int counter = 0;
+            for (int j = 0 ; j < gridWidth() ; j ++) {
+                counter = entities[i][j] != null && entities[i][j].getName().equals(entityName) ? counter + 1 : 0;
+                if(counter == 4) return true;
+            }
+        }
+        // vertical check
+        for (int j = 0 ; j < gridWidth() ; j ++) {
+            int counter = 0;
+            for (int i = 0 ; i < gridHeight() ; i ++) {
+                counter = entities[i][j] != null && entities[i][j].getName().equals(entityName) ? counter + 1 : 0;
+                if(counter == 4) return true;
+            }
+        }
+        // diagonal check1
+        for (int k = -gridHeight() ; k < gridWidth() ; k ++) {
+            int counter = 0;
+            for(int i = 0 ; i < gridWidth() ; i ++) {
+                if(0 <= i-k && i-k < gridHeight()) {
+                    counter = entities[i - k][i] != null && entities[i - k][i].getName().equals(entityName) ? counter + 1 : 0;
+                    if (counter == 4) return true;
+                }
+            }
+        }
+
+        // diagonal check2
+        for (int k = 0 ; k < gridWidth()+gridHeight()-1 ; k ++) {
+            int counter = 0;
+            for(int i = 0 ; i < gridWidth() ; i ++) {
+                if(0 <= k-i && k-i < gridHeight()) {
+                    counter = entities[k-i][i] != null && entities[k-i][i].getName().equals(entityName) ? counter + 1 : 0;
+                    if (counter == 4) return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public static int randInt(int upperBound) {
+        return new Random().nextInt(upperBound);
+    }
 }

@@ -10,7 +10,7 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
 
-public class TextOptions implements PropertyChangeListener, Subscriber {
+public class TextOptions implements PropertyChangeListener {
     public static final double SIDE_WIDTH = 50;
     public static final String MY_GAME_TEXT = "My Games";
     public static final String STORE_TEXT = "Store";
@@ -30,7 +30,9 @@ public class TextOptions implements PropertyChangeListener, Subscriber {
         initText();
         myPane = pane;
         myUser = null;
-        EventBus.getInstance().register(EngineEvent.CHANGE_USER, this);
+        EventBus.getInstance().register(EngineEvent.CHANGE_USER, this::reassignUser);
+        EventBus.getInstance().register(EngineEvent.LOGGED_OUT, this::resetUser);
+
     }
 
     public void toggleSelected(OptionHolder selcted) {
@@ -58,6 +60,7 @@ public class TextOptions implements PropertyChangeListener, Subscriber {
             LauncherGamesDisplay myGameDisplay = new LauncherGamesDisplay();
             myPane.setCenter(myGameDisplay.getView());
             myPane.setLeft(new LauncherSideBarView(SIDE_WIDTH, myGameDisplay).getView());
+            EventBus.getInstance().sendMessage(EngineEvent.SWITCH_SEARCHABLE, myGameDisplay);
         });
         myStore = new OptionHolder(STORE_TEXT);
         myStore.addListener(this);
@@ -67,6 +70,7 @@ public class TextOptions implements PropertyChangeListener, Subscriber {
             LauncherSocialDisplay mySocialDisplay = LauncherSocialDisplay.getInstance(myUser);
             myPane.setCenter(mySocialDisplay.getView());
             myPane.setLeft(new LauncherSideBarView(SIDE_WIDTH, mySocialDisplay).getView());
+            EventBus.getInstance().sendMessage(EngineEvent.SWITCH_SEARCHABLE, mySocialDisplay);
         });
 
         myOptions.add(myGames);
@@ -85,10 +89,11 @@ public class TextOptions implements PropertyChangeListener, Subscriber {
         return myHbox;
     }
 
-    @Override
-    public void update(EngineEvent engineEvent, Object... args) {
-        if (engineEvent.equals(EngineEvent.CHANGE_USER) && args[0].getClass().equals(User.class)) {
-            myUser = (User) args[0];
-        }
+    private void reassignUser(Object... args) {
+        myUser = (User) args[0];
+    }
+
+    private void resetUser(Object... args){
+        myUser = null;
     }
 }

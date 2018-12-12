@@ -231,6 +231,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
             imagePanel.getChildren().add(preview);
             preview.setOnMouseClicked(e -> {
                 if (!toRemove.remove(preview)) {
+                    System.out.println(path);
                     toRemove.add(preview);
                     toRemovePath.add(path);
                     preview.setOpacity(REMOVE_OPACITY);
@@ -265,7 +266,8 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         position.addRow(0, xLabel, colInput);
         position.addRow(1, yLabel, rowInput);
         position.setHgap(20);
-        layout.addRow(6, position);
+        layout.addRow(6, playerText, playerBox);
+        layout.addRow(7, position);
     }
 
     /**
@@ -291,11 +293,10 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
 
     private void setupLayout() {
         layout.addRow(0, size);
-        layout.addRow(1, playerText, playerBox);
-        layout.addRow(2, imageText, chooseImage);
-        layout.addRow(3, imageSelectorButton);
-        layout.addRow(4, imagePanel);
-        layout.addRow(5, propLabel, addProperties);
-        layout.addRow(6, listProp);
+        layout.addRow(1, imageText, chooseImage);
+        layout.addRow(2, imageSelectorButton);
+        layout.addRow(3, imagePanel);
+        layout.addRow(4, propLabel, addProperties);
+        layout.addRow(5, listProp);
     }
 }

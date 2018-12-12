@@ -7,6 +7,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
+import social.EngineEvent;
+import social.EventBus;
 
 public class SearchBar {
     public static final String PROMPT_MESSAGE = "Game Name";
@@ -32,6 +34,7 @@ public class SearchBar {
 
         myBox.getChildren().add(myCloseButton);
         myBox.getChildren().add(myTextField);
+        EventBus.getInstance().register(EngineEvent.SWITCH_SEARCHABLE, this::switchSearchable);
     }
 
     private void initBox() {
@@ -75,6 +78,11 @@ public class SearchBar {
             myTextField.clear();
             mySearchable.showAll();
         });
+    }
+
+    public void switchSearchable(Object ...args){
+        Searchable searchable = (Searchable) args[0];
+        mySearchable = searchable;
     }
 
     public HBox getView() {

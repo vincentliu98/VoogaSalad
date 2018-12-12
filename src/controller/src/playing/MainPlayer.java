@@ -12,24 +12,24 @@ import javafx.stage.Stage;
 import social.User;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.util.Optional;
 
 public class MainPlayer {
-
-
-    public static final int SCREEN_WIDTH = 1200;
-    public static final int SCREEN_HEIGHT = 700;
 
     private Initializer myInitializer;
     private Stage myStage;
     private User myUser;
     private File myFile;
     private String myReferencePath;
+    private String myName;
 
-    public MainPlayer(User user, String referencePath) {
+    public MainPlayer(User user, String referencePath, String gameName) {
+        myName = gameName;
         myUser = user;
         myReferencePath = referencePath;
+        System.out.println("Reference path is " + myReferencePath);
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setHeaderText("Start Game");
         ButtonType loadButton = new ButtonType("Continue");
@@ -42,27 +42,21 @@ public class MainPlayer {
                 String xmlString = myUser.getGameState(myReferencePath);
                 if (xmlString.equals("")) {
                     myFile = getNewGameFile();
-                    System.out.println("Did't get the sword file");
                 } else {
                     try {
                         myFile = new File(getClass().getClassLoader().getResource("GameProgress.xml").getFile());
                         FileWriter fileWriter = new FileWriter(myFile);
                         fileWriter.write(xmlString);
                         fileWriter.close();
-                        System.out.println("Got the sword file and reading it!");
-                    } catch (Exception e) {
-                    }
+                    } catch (Exception e) { }
                 }
-            } else {
+            } else { // myUser is null
                 myFile = getNewGameFile();
-                System.out.println("User is null");
             }
-            launchGame();
         } else if (result.get() == newGameButton) {
             myFile = getNewGameFile();
-            launchGame();
-            System.out.println("Clicked new one");
         }
+        launchGame();
     }
 
     public static void main(String[] args) {
@@ -70,15 +64,22 @@ public class MainPlayer {
     }
 
     private File getNewGameFile() {
-        return new File(getClass().getClassLoader().getResource(myReferencePath).getFile());
+        try{
+            return new File(myReferencePath);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void launchGame() {
+        if (myUser != null) myUser.tweet(String.format("Currently playing %s!", myName));
+        System.out.println("myFile is " + myFile);
         myInitializer = new Initializer(myFile);
         myStage = new Stage();
         myInitializer.setScreenSize(700, 500);
-        Scene newScene = new Scene(myInitializer.getRoot(), View.GAME_WIDTH, View.GAME_HEIGHT + 50);
-        Button saveButton = new Button("Save state");
+        Scene newScene = new Scene(myInitializer.getRoot(), View.GAME_WIDTH, View.GAME_HEIGHT);
+        /*Button saveButton = new Button("Save state");
         saveButton.setLayoutY(View.GAME_HEIGHT);
         saveButton.setMinHeight(50);
         saveButton.setMinWidth(View.GAME_WIDTH);
@@ -89,7 +90,7 @@ public class MainPlayer {
             } catch (Exception ex) {
             }
         });
-        myInitializer.getRoot().getChildren().add(saveButton);
+        myInitializer.getRoot().getChildren().add(saveButton);*/
         myStage.setScene(newScene);
         myStage.show();
     }

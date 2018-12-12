@@ -93,7 +93,6 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         MenuItem cellSize = new MenuItem("Resize Individual Cell");
         MenuItem setBGM = new MenuItem("BGM");
         MenuItem helpDoc = new MenuItem("Help");
-        MenuItem about = new MenuItem("About");
         MenuItem tileSetting = new MenuItem("Tile Setting");
 
         save.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
@@ -121,7 +120,6 @@ public class EditorMenuBarView implements SubView<MenuBar> {
             gameObjectManager.setBGMpath(path);
         });
         helpDoc.setOnAction(this::handleHelpDoc);
-        about.setOnAction(this::handleAbout);
         tileSetting.setOnAction(this::handleTileSetting);
 
         cellSize.setOnAction(this::handleCellSize);
@@ -129,7 +127,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         file.getItems().addAll(newFile, open, export, save, saveAs, close);
         run.getItems().addAll(runProject);
         settings.getItems().addAll(resizeGrid, cellSize, setBGM, tileSetting);
-        help.getItems().addAll(helpDoc, about);
+        help.getItems().addAll(helpDoc);
 
         menuBar.getMenus().addAll(file, settings, run, help);
     }
@@ -238,9 +236,6 @@ public class EditorMenuBarView implements SubView<MenuBar> {
 
 
     void handleHelpDoc(ActionEvent event) {
-    }
-
-    void handleAbout(ActionEvent event) {
     }
 
     @Override
