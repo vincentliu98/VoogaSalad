@@ -136,7 +136,7 @@ public class EditGridView implements SubView<ScrollPane> {
 
     public void generateTiles(TileInstance tileInstance) {
         int colNum = gridScrollView.getColumnCount();
-        var index = tileInstance.getCoord().getX()*colNum + tileInstance.getCoord().getY();
+        var index = tileInstance.getCoord().getY()*colNum + tileInstance.getCoord().getX();
         createInstanceAtGridCell(tileInstance, (Pane) gridScrollView.getChildren().get(index));
 }
 
