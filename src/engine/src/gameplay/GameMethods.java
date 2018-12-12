@@ -157,6 +157,8 @@ public class GameMethods {
         return TURN.nextPlayerName();
     }
 
+    public static Player getPlayer(String playername) { return PLAYERS.get(playername); }
+
     public static String toNextPlayer() {
         return TURN.toNextPlayer();
     }
@@ -211,6 +213,11 @@ public class GameMethods {
     public static boolean isNull(Object obj) { return obj == null; }
 
     public static boolean not(boolean bool) { return !bool; }
+
+    public static void updateViews() {
+        ENTITIES.values().forEach(Entity::updateView);
+        TILES.values().forEach(Tile::updateView);
+    }
 
     public static void DO_LOT_OF_THINGS() { }
 }

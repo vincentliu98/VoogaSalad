@@ -55,7 +55,10 @@ public class GameData {
                 mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
                 mediaPlayer.play();
             });
-        } catch(Exception e) { e.printStackTrace(); }
+        } catch(Exception e) {
+            media = null;
+            mediaPlayer = null;
+        }
 
         PLAYERS = players;
         ENTITIES = entities;
