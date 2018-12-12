@@ -217,3 +217,280 @@ Run the GameLauncher.java to access the game launcher. Click any game's "Play" b
 * **Jason Zhou :**  The project is challenging in its concept and design. I learn a lot about APIs, Lambda, and Reflection. I had a great time design and implementing the front end and also learn how to connect the front end and the back end, which is very valuable for me.
 
 * **Yunhao Qing :** Building Voogasalad is very time-consuming. I get much more used to using Git as a part of a team through doing this project. I am responsible for authoring engine backend coding and I am very satisfied with working on backend.I learn about how flexibility of codes is important as making changes on flexible codes is much easier and changing codes is what we do all the time.
+
+# Tutorial
+## Game Showcase
+1. Goblin vs troll game (Inchan)
+2. TicTacToe (Natalie)
+3. Connect4 (?)
+4. Reversi (Vincent)
+5.
+Mega-TicTacToe??
+
+## Basics
+
+To author a game, you must first define
+
+* Grid layout
+* Players
+* Entities
+* Tiles
+* BGM (optional)
+* Phase
+* Win Condition
+
+
+## The best way to learn is through examples!
+
+We're going to create a goblin vs troll game, with a simple goal of eliminating either the king goblin or the queen troll.
+
+
+### Step1. Define grid layout
+
+We define the grid size as 10x10.
+
+![](https://i.imgur.com/VTLhVGN.png)
+
+![](https://i.imgur.com/mGlKMIe.png)
+
+
+### Step2. Define players
+
+It's a simple game, and players don't really have special statistics. So we just create two empty players A and B. You don't really have to add images.
+
+![](https://i.imgur.com/asBG33S.png)
+
+
+### Step3. Define entities
+
+The sidebar should be pre-initialized with some basic entities/tiles. Let's delete them. You can edit/delte each item on each category by right-clicking them (if it doesn't immediately pop-up, keep trying).
+
+![](https://i.imgur.com/BvMsABg.png)
+
+Be sure to save, and also to make backup versions in case something goes wrong. It's on the menubar `File -> Save`.
+
+After deleting everything, let's create some entities. We'll need
+
+* Goblins: swordman, bowman, king
+* Trolls: swordman, shaman, queen
+
+First, we prepare some images for the entities.
+
+![](https://i.imgur.com/42b3h5K.png)
+
+*\#Notice how there are multiple images for each health point. These can be dynamically set through `image selector` which we'll see soon.*
+*\#Note that transparent pixels are transparent to mouse clicks as well*
+
+Now we're ready to make entities on our authoring environment. Right click `Entity` from sideview, and press `add entry`. Fill in the fields EXCEPT for players/image selector/properties, as they'll throw some weird exceptions if you try to set them at this stage.
+
+![](https://i.imgur.com/nrWzmEq.png)
+*The goblin king can't attack so it has range 0.*
+
+\# To remove an image from this window, click the image you want to remove and press `delete` key from the keyboard.
+
+We now right-click on the created entity from sideview and press edit to add properties and their default values.
+
+**As always, save and make backups as you go.**
+
+### *Image Selectors*
+
+But we want to display the image that corresponds to the goblins's health. To do so, click on `Image Selector` button.
+
+*\#Be sure to do this AFTER creating an entity, and on the editing window.*
+
+![](https://i.imgur.com/F9PSXCI.png)
+
+So this is the `GroovyPane` on which we need to construct some groovy code out of. In an `image selector`, we need to return an integer index between `0` and `# of images - 1`. Then, each goblin instance will select its image depending on the output. By default, the `image selector` is constructed to return 0.
+
+Also, since this is an `image selector`, we can use `$this` function from GameMethods category to refer to each instances that this image selector will take effect on.
+
+Our logic will look something like
+
+![](https://i.imgur.com/ZfNawTi.png)
+
+*\#Try to think of it as one of the LISP languages; It'll help. When you're stuck with implementing some logic, message Inchan for help...*
+
+Anyways, just exit out of the window when you're done, and press apply on the dialog.
+
+*\#Even if you cancel from the dialog, your changes on the GroovyPanes will still be there unlike other elements*
+
+We repeat this process for all six entity types.
+
+![](https://i.imgur.com/5qwfVBs.png)
+*Note that nothing stops you from adding any other properties*
+
+Now, we're ready to define tiles!
+
+![](https://i.imgur.com/UdAr4mm.png)
+
+### Step 4: Define tiles
+
+It's very similar to how you'd define entities; But be aware of the fact that if you don't define tiles on a grid cell, any clicks on that grid cell will be ignored by the game engine.
+
+Anyways, we only have one tile for this game.
+
+![](https://i.imgur.com/7ArEu82.png)
+*You can define properties/Image selector on tiles too*
+
+Since more than 3 enemies can die on a tile, we have to modify our image selector a bit.
+
+![](https://i.imgur.com/Fms7Vya.png)
+
+*\#Unlike Java, $return does NOT terminate the progression of the code; the last $return call will determine the final return value.*
+
+We place the tiles by dragging them onto the grid. **You can press SHIFT and drag around the grid to generate multiple tiles at once! But becareful since it'll place multiple tiles if you go through that grid multiple times.**
+
+![](https://i.imgur.com/My6blYE.png)
+
+Now, we place entities onto the grid as well. You can use the batch placement functionality on entities as well.
+
+![](https://i.imgur.com/DArD4D5.png)
+
+
+### Step 5: Define phase (added some more things to make things interesting)
+On this step, you'll define what clicks and keypresses mean to your game.
+
+We model "moves" made by players as FSMs. In this game, the "states" are,
+
+a: Beginning of the turn.
+b: Selected one of my entity.
+c: Attacked an entity.
+d: Healed an ally.
+e: Moved to an empty tile.
+f: Replicated goblin king.
+g: Placed the replicated goblin king.
+
+, and at c,d,e,g, the turn goes to the other player, starting at state a.
+
+The transitions are,
+
+a -> b: clicking current player's entity
+b -> a: pressing ESC
+b -> c: clicking an enemy entity within attackRange
+b -> d: (Only when selected = Troll Shaman) clicking an ally entity within healRange
+b -> e: clicking a empty tile within moveRange
+b -> f: (Only when selected = Goblin King) pressing SPACE
+f -> a: pressing ESC
+f -> g: pressing on a adjacent tile.
+
+So, we create this phase diagram.
+
+![](https://i.imgur.com/gY8RZ4a.png)
+
+And on each transition, we can specify whether this transition should be taken or not. For example, for a->b, there's two conditions.
+
+1. The clicked object is an entity.
+2. The clicked entity should be the currentPlayer's entity.
+
+on b->c, there are three conditions:
+1. The clicked object is an entity.
+2. The clicked entity should be other player's entity.
+3. The clicked entity should be within selected entity's attack range.
+
+To set these transition conditions, we double click on the edge, and "write" scripts on the groovyPane. These should return a boolean value.
+
+![](https://i.imgur.com/tvHZRhb.png)
+*GroovyPane implementing a->b*
+
+
+*\#The $clicked block represents the last entity/tile that was clicked.*
+
+The nodes also contain a script that gets executed when the game transitions to that node. For example, at state b, we must declare a variable `selected` as the clicked entity. Variables can be declared with `$` block on the literal section. **All variables are global!**
+
+![](https://i.imgur.com/UIoQIWI.png)
+*state b*
+
+![](https://i.imgur.com/LZnmfxN.png)
+*b->a: always true*
+
+![](https://i.imgur.com/r6tiOWM.png)
+*b->c: 3 conditions as described above*
+
+![](https://i.imgur.com/gGMbcy9.png)
+![](https://i.imgur.com/MEFJGL2.png)
+*state c: Notice how we have to call toNextPlayer() to pass the turn. To take the game back to state a, we call goto("a")*
+
+![](https://i.imgur.com/IgaaJbO.png)
+*b->d: clicking current player's entity within heal_range*
+
+![](https://i.imgur.com/85o4oO6.png)
+*state d: Making sure the hp doesn't go beyond max_hp.*
+
+![](https://i.imgur.com/Ic9Pmkx.png)
+*state b->e: clicking on empty tile within move_range*
+
+![](https://i.imgur.com/hPAoem8.png)
+*state e: Movement*
+
+![](https://i.imgur.com/uo0I0gF.png)
+*You can sneak in a $print block to debug things*
+
+To test what we have until now, we disconnect b->f, and hit Run.
+
+![](https://i.imgur.com/ODprJij.png)
+*Movement works! But why is shaman's hp 1 from the start?*
+![](https://i.imgur.com/y9t50kC.png)
+*Yeah the ordering was fucked; image selector outputs hp-1 but these images have hps 2 and 1.*
+
+![](https://i.imgur.com/BccUAkn.png)
+*Ok they can hit each other.*
+
+![](https://i.imgur.com/DLmB0xP.png)
+*tile.dead++, working smoothly*
+
+![](https://i.imgur.com/kfHzicM.png)
+*does the healing work?*
+
+![](https://i.imgur.com/1gjg8Hg.png)
+*Yeahhhh*
+
+Ok we now implement Goblin King's replication.
+
+![](https://i.imgur.com/g0V1ODv.png)
+*b->f: check if the selected entity has name Goblin_king*
+
+On f, we have nothing to do.
+
+![](https://i.imgur.com/nbxW1FN.png)
+*f->g: standard check*
+
+![](https://i.imgur.com/4SbIFFS.png)
+*state g: creating another instance of goblin king at the clicked tile*
+
+Now, let's go ahead and test it.
+
+![](https://i.imgur.com/c6Ydnwf.png)
+*Yeaaahhhh*
+
+
+
+### Step 7:
+To specify the ending condition, go to the `win condition` tab. This script gets executed after every nodes' execution script.
+
+This game ends when
+1. all goblin kings die
+2. the troll queen dies
+
+![](https://i.imgur.com/Y09F4nO.png)
+*Simple script to determine the winner*
+
+![](https://i.imgur.com/KfSmzi7.png)
+*Yeahhhhh*
+
+### Step 8: BGM (optional)
+
+You can set the background music for the game by clicking `Settings > BGM` on the menubar.
+
+### Random Notes:
+
+* Changing properties on the sideview will not (sometimes?) alter properties of things out on the grid.
+* The initial order of the players are... randomly intialized. So try to make a symmetric game.
+* Have AT LEAST one item on each ENTITY/TILE/PLAYER category before saving; If you don't have one, the whole category will disappear.
+
+
+# CHEAT to make your life easier
+You can pretty much define your own function blocks if you need them; Just add another method on `engine.gameplay.GameMethods`. The authoring environment will automatically generate the blocks. This is what I did to create <numberOfInstances> block on the winning condition.
+
+So, in a sense, you can literally write methods that represent `image selector`s, `guard`s, `execution`s, `winning conditions`s.
+
+![](https://i.imgur.com/NYMSglA.png)
