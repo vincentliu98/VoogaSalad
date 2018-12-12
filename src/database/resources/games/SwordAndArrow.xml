@@ -12,16 +12,14 @@
         <myExecution>$clicked.props.hp = $clicked.props.hp - selected.props.dmg
             if($clicked.props.hp &lt;= 0) { GameMethods.removeEntity($clicked) }
             GameMethods.toNextPlayer()
-            GameMethods.$goto(&apos;A&apos;)
-        </myExecution>
+            GameMethods.$goto(&apos;A&apos;)</myExecution>
     </gameplay.Node>
     <gameplay.Node>
         <myPhaseName>A</myPhaseName>
         <myName>c</myName>
         <myExecution>GameMethods.moveEntity(selected, $clicked)
             GameMethods.toNextPlayer()
-            GameMethods.$goto(&apos;A&apos;)
-        </myExecution>
+            GameMethods.$goto(&apos;A&apos;)</myExecution>
     </gameplay.Node>
     <gameplay.Node>
         <myPhaseName>A</myPhaseName>
@@ -42,27 +40,21 @@
         <myStartNodeName>b</myStartNodeName>
         <myEndNodeName>d</myEndNodeName>
         <myTrigger class="phase.api.GameEvent$MouseClick"/>
-        <myGuard>GameMethods.$return(GameMethods.isEntity($clicked) &amp;&amp;
-            !GameMethods.getCurrentPlayer().isMyEntity($clicked) &amp;&amp; GameMethods.distance($clicked, selected)
-            &lt;= selected.props.attackRange)
-        </myGuard>
+        <myGuard>GameMethods.$return(GameMethods.isEntity($clicked) &amp;&amp; !GameMethods.getCurrentPlayer().isMyEntity($clicked) &amp;&amp; GameMethods.distance($clicked, selected) &lt;= selected.props.attackRange)</myGuard>
     </gameplay.Edge>
     <gameplay.Edge>
         <myPhaseName>A</myPhaseName>
         <myStartNodeName>b</myStartNodeName>
         <myEndNodeName>c</myEndNodeName>
         <myTrigger class="phase.api.GameEvent$MouseClick"/>
-        <myGuard>GameMethods.$return(GameMethods.isTile($clicked) &amp;&amp; GameMethods.distance($clicked, selected)
-            &lt;= 1)
-        </myGuard>
+        <myGuard>GameMethods.$return(GameMethods.isTile($clicked) &amp;&amp; GameMethods.distance($clicked, selected) &lt;= 1)</myGuard>
     </gameplay.Edge>
     <gameplay.Edge>
         <myPhaseName>A</myPhaseName>
         <myStartNodeName>A</myStartNodeName>
         <myEndNodeName>b</myEndNodeName>
         <myTrigger class="phase.api.GameEvent$MouseClick"/>
-        <myGuard>if(((GameMethods.isEntity($clicked)) &amp;&amp; (GameMethods.getCurrentPlayer().isMyEntity($clicked))))
-            {
+        <myGuard>if(((GameMethods.isEntity($clicked)) &amp;&amp; (GameMethods.getCurrentPlayer().isMyEntity($clicked)))) {
             $return = true
 
             }
@@ -82,9 +74,7 @@
             <string>A</string>
         </myNodeNames>
     </gameplay.Phase>
-    <winCondition>if(GameMethods.hasNoEntities(GameMethods.getCurrentPlayerName())) {
-        GameMethods.endGame(GameMethods.getCurrentPlayerName() + &apos; LOST!&apos;)}
-    </winCondition>
+    <winCondition>if(GameMethods.hasNoEntities(GameMethods.getCurrentPlayerName())) {   GameMethods.endGame(GameMethods.getCurrentPlayerName() + &apos; LOST!&apos;)}</winCondition>
     <grid-width>5</grid-width>
     <grid-height>5</grid-height>
     <gameplay.EntityPrototype>
