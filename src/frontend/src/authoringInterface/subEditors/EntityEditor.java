@@ -160,6 +160,9 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                 throw e;
             }
         }
+        if (newName == null) {
+            newName = nameField.getText().trim();
+        }
         int width = outputPositiveInteger(widthInput);
         int height = outputPositiveInteger(heightInput);
         try {

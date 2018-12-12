@@ -145,6 +145,9 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
                 throw e;
             }
         }
+        if (newName == null) {
+            newName = nameField.getText().trim();
+        }
         try {
             ImageManager.removeClassImage(gameObjectClass);
         } catch (GameObjectClassNotFoundException ignored) {

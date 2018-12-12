@@ -209,6 +209,9 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
                 throw e;
             }
         }
+        if (newName == null) {
+            newName = nameField.getText().trim();
+        }
         int width = outputPositiveInteger(widthText);
         int height = outputPositiveInteger(heightText);
         try {
