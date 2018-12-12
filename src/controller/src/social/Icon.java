@@ -61,8 +61,8 @@ public abstract class Icon {
         initDescription();
         initButton();
         initButtonHandlers();
-        EventBus.getInstance().register(EngineEvent.CHANGE_USER, this::reassignUser);
-        EventBus.getInstance().register(EngineEvent.LOGGED_OUT, this::resetUser);
+//        EventBus.getInstance().register(EngineEvent.CHANGE_USER, this::reassignUser);
+//        EventBus.getInstance().register(EngineEvent.LOGGED_OUT, this::resetUser);
     }
 
     public Boolean checkTag(String tag) {
