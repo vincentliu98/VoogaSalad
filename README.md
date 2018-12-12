@@ -140,10 +140,10 @@ Hours Spent: ~800
   * src/authoring_backend/src/groovy/graph/blocks/small_factory/ListParseException.java : This class handles list parse exception.
   * src/authoring_backend/src/groovy/graph/blocks/small_factory/MapParseException.java : This class handles all kinds of map parse exception.
   * src/authoring_backend/src/groovy/graph/blocks/small_factory/NoSuchPropertyException.java : This class handles no such property exception.
-  * src/authoring_backend/src/groovy/graph/blocks/small_factory/ReferenceParseException.java
-  * src/authoring_backend/src/groovy/graph/PortAlreadyFilledException.java
-  * src/authoring_backend/src/groovy/graph/PortNotConnectedException.java
-  * src/authoring_backend/src/phase/NamespaceException.java
+  * src/authoring_backend/src/groovy/graph/blocks/small_factory/ReferenceParseException.java : This class handles reference parse exception.
+  * src/authoring_backend/src/groovy/graph/PortAlreadyFilledException.java : This class handles port already filled exception.
+  * src/authoring_backend/src/groovy/graph/PortNotConnectedException.java : This class handles port not connected exception.
+  * src/authoring_backend/src/phase/NamespaceException.java : This class handles name space exceptions.
 
 ### Controller
 
