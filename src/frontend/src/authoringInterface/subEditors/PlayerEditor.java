@@ -59,8 +59,7 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
             FileChooser fileChooser = new FileChooser();
             File file = fileChooser.showOpenDialog(new Stage());
             if (file != null) {
-                String imagefilePath = file.toURI().toString();
-                imagePath = imagefilePath;
+                imagePath = ImageManager.getRelativePath(file);
                 presentImages();
             }
         });
@@ -82,7 +81,7 @@ public class PlayerEditor extends AbstractGameObjectEditor<PlayerClass, PlayerIn
         if (imagePath == null) return;
         imagePanel.getChildren().clear();
         if (!imagePath.isEmpty()) {
-            ImageView preview = new ImageView(imagePath);
+            ImageView preview = new ImageView(ImageManager.getAbsoluteURL(imagePath));
             preview.setFitWidth(ICON_WIDTH);
             preview.setFitHeight(ICON_HEIGHT);
             imagePanel.getChildren().add(preview);

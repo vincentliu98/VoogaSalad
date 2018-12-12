@@ -87,14 +87,13 @@ public class TileEditor extends AbstractGameObjectEditor<TileClass, TileInstance
             FileChooser fileChooser = new FileChooser();
             File file = fileChooser.showOpenDialog(new Stage());
             if (file != null) {
-                String imagePath = file.toURI().toString();
-                imagePaths.add(imagePath);
+                imagePaths.add(ImageManager.getRelativePath(file));
             }
         });
         imagePaths.addListener((ListChangeListener<String>) change -> {
             imagePanel.getChildren().clear();
             imagePaths.forEach(path -> {
-                ImageView preview = new ImageView(path);
+                ImageView preview = new ImageView(ImageManager.getAbsoluteURL(path));
                 preview.setFitWidth(ICON_WIDTH);
                 preview.setFitHeight(ICON_HEIGHT);
                 imagePanel.getChildren().add(preview);
