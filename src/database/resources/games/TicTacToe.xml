@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<game>
+    <grid-width>3</grid-width>
+    <grid-height>3</grid-height>
+
+    <gameplay.Player>
+        <myID>0</myID>
+        <myStats/>
+        <myEntityIDs/>
+    </gameplay.Player>
+
+    <gameplay.Player>
+        <myID>1</myID>
+        <myStats/>
+        <myEntityIDs/>
+    </gameplay.Player>
+
+    <gameplay.Tile>
+        <myID>1</myID>
+        <name>Box</name>
+        <props/>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myCoord>
+            <x>0</x>
+            <y>0</y>
+        </myCoord>
+        <myImagePaths>
+            <string>square.png</string>
+        </myImagePaths>
+        <myImageSelector></myImageSelector>
+        <myImages/>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>2</myID>
+        <name>Box</name>
+        <props/>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myCoord>
+            <x>0</x>
+            <y>1</y>
+        </myCoord>
+        <myImagePaths>
+            <string>square.png</string>
+        </myImagePaths>
+        <myImageSelector></myImageSelector>
+        <myImages/>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>3</myID>
+        <name>Box</name>
+        <props/>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myCoord>
+            <x>0</x>
+            <y>2</y>
+        </myCoord>
+        <myImagePaths>
+            <string>square.png</string>
+        </myImagePaths>
+        <myImageSelector></myImageSelector>
+        <myImages/>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>4</myID>
+        <name>Box</name>
+        <props/>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myCoord>
+            <x>1</x>
+            <y>0</y>
+        </myCoord>
+        <myImagePaths>
+            <string>square.png</string>
+        </myImagePaths>
+        <myImageSelector></myImageSelector>
+        <myImages/>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>5</myID>
+        <name>Box</name>
+        <props/>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myCoord>
+            <x>1</x>
+            <y>1</y>
+        </myCoord>
+        <myImagePaths>
+            <string>square.png</string>
+        </myImagePaths>
+        <myImageSelector></myImageSelector>
+        <myImages/>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>6</myID>
+        <name>Box</name>
+        <props/>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myCoord>
+            <x>1</x>
+            <y>2</y>
+        </myCoord>
+        <myImagePaths>
+            <string>square.png</string>
+        </myImagePaths>
+        <myImageSelector></myImageSelector>
+        <myImages/>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>7</myID>
+        <name>Box</name>
+        <props/>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myCoord>
+            <x>2</x>
+            <y>0</y>
+        </myCoord>
+        <myImagePaths>
+            <string>square.png</string>
+        </myImagePaths>
+        <myImageSelector></myImageSelector>
+        <myImages/>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>8</myID>
+        <name>Box</name>
+        <props/>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myCoord>
+            <x>2</x>
+            <y>1</y>
+        </myCoord>
+        <myImagePaths>
+            <string>square.png</string>
+        </myImagePaths>
+        <myImageSelector></myImageSelector>
+        <myImages/>
+    </gameplay.Tile>
+    <gameplay.Tile>
+        <myID>9</myID>
+        <name>Box</name>
+        <props/>
+        <myWidth>1</myWidth>
+        <myHeight>1</myHeight>
+        <myCoord>
+            <x>2</x>
+            <y>2</y>
+        </myCoord>
+        <myImagePaths>
+            <string>square.png</string>
+        </myImagePaths>
+        <myImageSelector></myImageSelector>
+        <myImages/>
+    </gameplay.Tile>
+
+    <gameplay.EntityPrototype>
+        <name>X</name>
+        <props/>
+        <myImagePaths>
+            <string>x.png</string>
+        </myImagePaths>
+        <myImageSelector/>
+    </gameplay.EntityPrototype>
+
+    <gameplay.EntityPrototype>
+        <name>O</name>
+        <props/>
+        <myImagePaths>
+            <string>circle.png</string>
+        </myImagePaths>
+        <myImageSelector/>
+    </gameplay.EntityPrototype>
+
+    <gameplay.Phase>
+        <myID>1</myID>
+        <myStartNodeID>1</myStartNodeID>
+        <myCurrentNodeID>0</myCurrentNodeID>
+        <myNodeIDs>
+            <int>1</int>
+            <int>2</int>
+        </myNodeIDs>
+    </gameplay.Phase>
+
+    <gameplay.Node>
+        <myPhaseID>1</myPhaseID>
+        <myID>1</myID>
+        <myExecution/>
+    </gameplay.Node>
+
+    <gameplay.Node>
+        <myPhaseID>1</myPhaseID>
+        <myID>2</myID>
+        <myExecution>
+            turn = GameMethods.getCurrentPlayerID()
+            if(turn == 0) {
+            entityName = "X";
+            }
+            else {
+            entityName = "O";
+            }
+            GameMethods.createEntity(entityName, $clicked.getID(), turn);
+            GameMethods.updateViews();
+            entities = GameMethods.getPlayer(turn).getMyEntities();
+            def tileSet = [] as HashSet;
+            for (Integer i : entities){ tileSet.add(GameMethods.getEntity(i).getTileID()); }
+            if ((tileSet.contains(1) &amp;&amp; tileSet.contains(2) &amp;&amp; tileSet.contains(3)) ||
+            (tileSet.contains(4) &amp;&amp; tileSet.contains(5) &amp;&amp; tileSet.contains(6)) ||
+            (tileSet.contains(7) &amp;&amp; tileSet.contains(8) &amp;&amp; tileSet.contains(9)) ||
+            (tileSet.contains(1) &amp;&amp; tileSet.contains(4) &amp;&amp; tileSet.contains(7)) ||
+            (tileSet.contains(2) &amp;&amp; tileSet.contains(5) &amp;&amp; tileSet.contains(8)) ||
+            (tileSet.contains(3) &amp;&amp; tileSet.contains(6) &amp;&amp; tileSet.contains(9)) ||
+            (tileSet.contains(1) &amp;&amp; tileSet.contains(5) &amp;&amp; tileSet.contains(9)) ||
+            (tileSet.contains(3) &amp;&amp; tileSet.contains(5) &amp;&amp; tileSet.contains(7))) {
+            GameMethods.getTurn().endGame(turn);
+            return;
+            }
+            GameMethods.goTo(1);
+            GameMethods.toNextPlayer();
+        </myExecution>
+    </gameplay.Node>
+
+    <gameplay.Edge>
+        <myPhaseID>1</myPhaseID>
+        <myStartNodeID>1</myStartNodeID>
+        <myEndNodeID>2</myEndNodeID>
+        <myTrigger class="phase.api.GameEvent$MouseClick"/>
+        <myGuard>
+            if($clicked.getName() == 'Box' &amp;&amp; GameMethods.hasNoEntities($clicked)) { $return = true }
+            else { $return = false }
+        </myGuard>
+    </gameplay.Edge>
+
+    <gameplay.Turn>
+        <myCurrentPhaseID>1</myCurrentPhaseID>
+        <playersOrder>
+            <int>0</int>
+            <int>1</int>
+        </playersOrder>
+    </gameplay.Turn>
+</game>

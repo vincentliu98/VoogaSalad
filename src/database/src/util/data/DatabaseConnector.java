@@ -1,7 +1,8 @@
 package util.data;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
-import java.sql.*;
+
+import java.sql.ResultSet;
 
 //import java.sql.ResultSet;
 
@@ -15,10 +16,10 @@ public class DatabaseConnector {
     protected MysqlDataSource myDataSrc;
     protected ResultSet mySet;
 
-    public DatabaseConnector(){
+    public DatabaseConnector() {
     }
 
-    public void setConnection(String username, String databasename, String password, String servername, int port){
+    public void setConnection(String username, String databasename, String password, String servername, int port) {
         myDataSrc = new MysqlDataSource();
         myDataSrc.setUser(username);
         myDataSrc.setDatabaseName(databasename);
@@ -26,8 +27,6 @@ public class DatabaseConnector {
         myDataSrc.setServerName(servername);
         myDataSrc.setPort(port);
     }
-
-
 
 
 }

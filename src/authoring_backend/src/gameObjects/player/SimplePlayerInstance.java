@@ -1,7 +1,6 @@
 package gameObjects.player;
 
 import java.util.Map;
-import java.util.function.Supplier;
 
 /**
  * @author Yunhao Qing
@@ -18,7 +17,6 @@ public class SimplePlayerInstance implements PlayerInstance {
     private PlayerClass playerClass;
 
 
-
     public SimplePlayerInstance(String className,
                                 String imagePath,
                                 Map<String, String> properties,
@@ -32,25 +30,39 @@ public class SimplePlayerInstance implements PlayerInstance {
     }
 
     @Override
-    public int getInstanceId() { return instanceId; }
+    public int getInstanceId() {
+        return instanceId;
+    }
 
     @Override
-    public void setInstanceId(int newId) { instanceId = newId; }
+    public void setInstanceId(int newId) {
+        instanceId = newId;
+    }
 
     @Override
-    public String getClassName() { return className; }
+    public String getClassName() {
+        return className;
+    }
 
     @Override
-    public void setClassName(String name) { className = name; }
+    public void setClassName(String name) {
+        className = name;
+    }
 
     @Override
-    public String getInstanceName() { return instanceName; }
+    public String getInstanceName() {
+        return instanceName;
+    }
 
     @Override
-    public void setInstanceName(String newInstanceName) { instanceName = newInstanceName; }
+    public void setInstanceName(String newInstanceName) {
+        instanceName = newInstanceName;
+    }
 
     @Override
-    public Map<String, String> getPropertiesMap() { return propertiesMap; }
+    public Map<String, String> getPropertiesMap() {
+        return propertiesMap;
+    }
 
 
     @Override
@@ -73,12 +85,18 @@ public class SimplePlayerInstance implements PlayerInstance {
     }
 
     @Override
-    public String getImagePath() { return imagePath; }
+    public String getImagePath() {
+        return imagePath;
+    }
 
     @Override
-    public void setImagePath(String newImagePath) { imagePath = newImagePath; }
+    public void setImagePath(String newImagePath) {
+        imagePath = newImagePath;
+    }
 
     @Override
-    public PlayerClass getGameObjectClass() { return playerClass; }
+    public PlayerClass getGameObjectClass() {
+        return playerClass;
+    }
 
 }

@@ -15,6 +15,7 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 public class User {
+    private static final String IMAGES_FOLDER_PATH = "/profile-images/";
     private int myID;
     private String myUsername;
     private Set<String> myFavoriteGames;
@@ -27,9 +28,7 @@ public class User {
     @XStreamOmitField
     private ResourceBundle myErrors;
 
-    private static final String IMAGES_FOLDER_PATH = "/profile-images/";
-
-    public User(int id, String username){
+    public User(int id, String username) {
         myID = id;
         myUsername = username;
         myFavoriteGames = new HashSet<>();
@@ -38,7 +37,6 @@ public class User {
         myProgress = new HashMap<>();
         myImageReference = "person_logo.png";
         myStatus = "";
-        //myErrors = ResourceBundle.getBundle("resources/errors/Errors");
     }
 
     public ImageView getAvatar(){
@@ -47,60 +45,60 @@ public class User {
         return imageView;
     }
 
-    public void updateStatus(String message){
+    public void updateStatus(String message) {
         myStatus = message;
     }
 
-    public String getStatus(){
+    public String getStatus() {
         return myStatus;
     }
 
-    public String getImageReference(){
+    public String getImageReference() {
         return myImageReference;
     }
 
-    public void changeAvatar(String imageReference){
+    public void changeAvatar(String imageReference) {
         myImageReference = imageReference;
     }
 
-    public void addFavorite(String gameName){
+    public void addFavorite(String gameName) {
         myFavoriteGames.add(gameName);
     }
 
-    public void removeFavorite(String gameName){
+    public void removeFavorite(String gameName) {
         if (!myFavoriteGames.contains(gameName)) return;
         myFavoriteGames.remove(gameName);
     }
 
-    public void saveGameState(String gameName, String xmlString){
+    public void saveGameState(String gameName, String xmlString) {
         myProgress.put(gameName, xmlString);
     }
 
-    public String getGameState(String gameName){
+    public String getGameState(String gameName) {
         if (!myProgress.keySet().contains(gameName)) return "";
         return myProgress.get(gameName);
     }
 
-    public String getUsername(){
+    public String getUsername() {
         return myUsername;
     }
 
-    public void addFollower(String username){
+    public void addFollower(String username) {
         myFollowing.add(username);
         System.out.println("MyFollowing of " + myUsername + " is now " + myFollowing.toString());
     }
 
-    public void removeFollower(String username){
+    public void removeFollower(String username) {
         if (!myFollowing.contains(username)) return;
         myFollowing.remove(username);
         System.out.println("MyFollowing of " + myUsername + " is now " + myFollowing.toString());
     }
 
-    public Set<String> getFollowing(){
+    public Set<String> getFollowing() {
         return myFollowing;
     }
 
-    public Set<String> getFavorites(){
+    public Set<String> getFavorites() {
         return myFavoriteGames;
     }
 
@@ -139,17 +137,12 @@ public class User {
         }
     }
 
-    public void tweet(String message){
-        try{
+    public void tweet(String message) {
+        try {
             myTwitter.updateStatus(message);
-        } catch (TwitterException e){
+        } catch (TwitterException e) {
             e.printStackTrace();
         }
-    }
-
-    public static void main (String[] args){ // TODO: Delete (for testing only)
-        User testUser = new User(1, "vooga");
-        testUser.configureTwitter();
     }
 
 }

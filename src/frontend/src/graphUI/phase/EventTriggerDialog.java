@@ -20,19 +20,21 @@ public class EventTriggerDialog extends Dialog<GameEvent> {
     private GameEvent trigger;
     private ButtonType customOK;
     private ButtonType customCANCEL;
+
     public EventTriggerDialog() {
         super();
         customOK = new ButtonType("OK");
         customCANCEL = new ButtonType("CANCEL");
         setDialogPane(new EventTriggerDialogPane());
         setResultConverter(type -> {
-            if(type == customOK) return trigger;
+            if (type == customOK) return trigger;
             else return null;
         });
     }
 
     private class EventTriggerDialogPane extends DialogPane {
         private VBox root;
+
         EventTriggerDialogPane() {
             setPrefWidth(WIDTH);
             setPrefWidth(HEIGHT);
@@ -58,18 +60,18 @@ public class EventTriggerDialog extends Dialog<GameEvent> {
                 pressed.setText("");
             });
             getButtonTypes().addAll(
-                customOK,
-                customCANCEL
+                    customOK,
+                    customCANCEL
             );
 
             addEventFilter(KeyEvent.KEY_RELEASED, e -> {
-                if(e.getCode() == KeyCode.SPACE) {
+                if (e.getCode() == KeyCode.SPACE) {
                     trigger = GameEvent.keyPress(e.getCode());
                     pressed.setText(e.getCode().toString());
                 }
             });
             addEventFilter(KeyEvent.KEY_PRESSED, e -> {
-                if(e.getCode() == KeyCode.SPACE) {
+                if (e.getCode() == KeyCode.SPACE) {
                     trigger = GameEvent.keyPress(e.getCode());
                     pressed.setText(e.getCode().toString());
                 }

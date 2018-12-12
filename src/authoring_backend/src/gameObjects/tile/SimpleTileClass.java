@@ -8,6 +8,7 @@ import gameObjects.ThrowingBiConsumer;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
 import grids.Point;
+import groovy.api.BlockGraph;
 
 import java.util.*;
 import java.util.function.Function;
@@ -22,7 +23,7 @@ public class SimpleTileClass implements TileClass {
     private int width, height;
     private List<String> imagePathList;
     private Map<String, String> propertiesMap;
-    private String imageSelector;
+    private BlockGraph imageSelector;
 
     @XStreamOmitField
     private transient TileInstanceFactory myFactory;
@@ -39,7 +40,6 @@ public class SimpleTileClass implements TileClass {
         entityContainable = true;
         imagePathList = new ArrayList<>();
         propertiesMap = new HashMap<>();
-        imageSelector = "";
         width = DEFAULT_WIDTH;
         height = DEFAULT_HEIGHT;
     }
@@ -58,19 +58,18 @@ public class SimpleTileClass implements TileClass {
     }
 
     @Override
-    public int getClassId() { return classId; }
+    public int getClassId() {
+        return classId;
+    }
 
     @Override
-    public void setClassId(int newId) { classId = newId; }
+    public void setClassId(int newId) {
+        classId = newId;
+    }
 
     @Override
-    public String getClassName() { return className; }
-
-
-    @Override
-    public void changeClassName(String newClassName)
-            throws InvalidOperationException {
-        changeTileClassNameFunc.accept(className, newClassName);
+    public String getClassName() {
+        return className;
     }
 
     @Override
@@ -79,7 +78,15 @@ public class SimpleTileClass implements TileClass {
     }
 
     @Override
-    public Map<String, String> getPropertiesMap() { return propertiesMap; }
+    public void changeClassName(String newClassName)
+            throws InvalidOperationException {
+        changeTileClassNameFunc.accept(className, newClassName);
+    }
+
+    @Override
+    public Map<String, String> getPropertiesMap() {
+        return propertiesMap;
+    }
 
     @Override
     public boolean addProperty(String propertyName, String defaultValue) {
@@ -124,20 +131,19 @@ public class SimpleTileClass implements TileClass {
         try {
             imagePathList.remove(index);
             return true;
-        }
-        catch (IndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException e) {
             return false;
         }
     }
 
     @Override
-    public void setImageSelector(String blockCode) {
-        imageSelector = blockCode;
+    public BlockGraph getImageSelector() {
+        return imageSelector;
     }
 
     @Override
-    public String getImageSelectorCode() {
-        return imageSelector;
+    public void setImageSelector(BlockGraph graph) {
+        this.imageSelector = graph;
     }
 
 
@@ -149,17 +155,11 @@ public class SimpleTileClass implements TileClass {
     }
 
     @Override
-    public void setHeight(int height) { this.height = height; }
-
-    @Override
-    public void setWidth(int width) { this.width = width; }
-
-    @Override
     public void equipContext(
-        TileInstanceFactory tileInstanceFactory,
-        ThrowingBiConsumer<String, String, InvalidOperationException> changeTileClassNameFunc,
-        Function<String, Collection<GameObjectInstance>> getAllTileInstancesFunc,
-        Function<Integer, Boolean> deleteTileInstanceFunc
+            TileInstanceFactory tileInstanceFactory,
+            ThrowingBiConsumer<String, String, InvalidOperationException> changeTileClassNameFunc,
+            Function<String, Collection<GameObjectInstance>> getAllTileInstancesFunc,
+            Function<Integer, Boolean> deleteTileInstanceFunc
     ) {
         this.myFactory = tileInstanceFactory;
         this.changeTileClassNameFunc = changeTileClassNameFunc;
@@ -184,11 +184,24 @@ public class SimpleTileClass implements TileClass {
     }
 
     @Override
-    public int getWidth() { return width; }
+    public int getWidth() {
+        return width;
+    }
 
     @Override
-    public int getHeight() { return height; }
+    public void setWidth(int width) {
+        this.width = width;
+    }
 
+    @Override
+    public int getHeight() {
+        return height;
+    }
+
+    @Override
+    public void setHeight(int height) {
+        this.height = height;
+    }
 
     @Override
     public boolean isEntityContainable() {

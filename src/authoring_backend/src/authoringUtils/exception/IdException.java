@@ -1,5 +1,8 @@
 package authoringUtils.exception;
 
+/**
+ * @author Jason Zhou
+ */
 public class IdException extends Exception {
     public IdException(String message) {
         super(message);

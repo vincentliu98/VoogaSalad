@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Random;
 
 public class TileGenerator {
-    private TileClass[] tileClasses;
+    private ArrayList<TileClass> tileClasses;
     private ArrayList<Double> cdf;
     private GameObjectsCRUDInterface crudInterface;
     private GenerationMode mode;
@@ -24,25 +24,26 @@ public class TileGenerator {
     private int bottomLimit;
     private Random random;
 
-    public TileGenerator(Map<Double, TileClass> tileClasses, GameObjectsCRUDInterface crudInterface, GenerationMode mode)
+    public TileGenerator(Map<Double, TileClass> ProbToTileClassesMap, GameObjectsCRUDInterface crudInterface, GenerationMode mode)
             throws GameObjectClassNotFoundException, NumericalException {
         this.crudInterface = crudInterface;
         this.mode = mode;
         this.noOfClasses = 0;
+        this.tileClasses = new ArrayList<>();
+        this.cdf = new ArrayList<>();
         Double checkInput = 0.0;
-        if (tileClasses.isEmpty()) {
+        if (ProbToTileClassesMap.isEmpty()) {
             throw new GameObjectClassNotFoundException("Map is empty");
         }
-        for (Map.Entry<Double, TileClass> e : tileClasses.entrySet()) {
+        for (Map.Entry<Double, TileClass> e : ProbToTileClassesMap.entrySet()) {
             checkInput += e.getKey();
             cdf.add(checkInput);
+            tileClasses.add(crudInterface.getTileClass(e.getValue().getClassName()));
             noOfClasses += 1;
-            crudInterface.getTileClass(e.getValue().getClassName());
         }
         if (mode == GenerationMode.RANDOM && checkInput != 1) {
             throw new NumericalException("Probabilities do not sum to 1");
         }
-        this.tileClasses = (TileClass[]) tileClasses.values().toArray();
         rightLimit = 0;
         bottomLimit = 0;
         this.random = new Random();
@@ -51,6 +52,7 @@ public class TileGenerator {
 
     /**
      * topLeftCoord inclusive
+     *
      * @param topLeftCoord
      * @param numRows
      * @param numCols
@@ -63,7 +65,6 @@ public class TileGenerator {
         if (rightLimit > crudInterface.getNumCols() || bottomLimit > crudInterface.getNumRows()) {
             throw new InvalidOperationException("Area out of bounds");
         }
-
     }
 
     public void generateTiles() throws Exception {
@@ -72,8 +73,7 @@ public class TileGenerator {
         }
         if (mode == GenerationMode.REPEATING) {
             generateRepeatingTiles();
-        }
-        else if (mode == GenerationMode.RANDOM) {
+        } else if (mode == GenerationMode.RANDOM) {
             generateRandomTiles();
         }
     }
@@ -82,7 +82,7 @@ public class TileGenerator {
         int repeater = 0;
         for (int i = topLeftCoord.getY(); i < bottomLimit; i++) {
             for (int j = topLeftCoord.getX(); j < rightLimit; j++) {
-                crudInterface.createTileInstance(tileClasses[repeater % noOfClasses], new PointImpl(j, i));
+                crudInterface.createTileInstance(tileClasses.get(repeater % noOfClasses), new PointImpl(j, i));
             }
         }
     }
@@ -98,7 +98,7 @@ public class TileGenerator {
                         break;
                     }
                 }
-                crudInterface.createTileInstance(tileClasses[desired], new PointImpl(j, i));
+                crudInterface.createTileInstance(tileClasses.get(desired), new PointImpl(j, i));
             }
         }
     }

@@ -14,7 +14,7 @@ public class LauncherWindow {
     private LauncherSideBarView mySide;
     private LauncherGamesDisplay myGameDisplay;
 
-    public LauncherWindow(Stage stage){
+    public LauncherWindow(Stage stage) {
         myPane = new BorderPane();
         myStage = stage;
 

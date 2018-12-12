@@ -33,22 +33,30 @@ public class SimpleSoundInstance implements SoundInstance {
      * @return
      */
     @Override
-    public int getInstanceId() { return instanceId; }
+    public int getInstanceId() {
+        return instanceId;
+    }
 
     @Override
-    public void setInstanceId(int newId) { instanceId = newId; }
+    public void setInstanceId(int newId) {
+        instanceId = newId;
+    }
 
     /**
      * @return
      */
     @Override
-    public String getClassName() { return className; }
+    public String getClassName() {
+        return className;
+    }
 
     /**
      * @param name
      */
     @Override
-    public void setClassName(String name) { className = name; }
+    public void setClassName(String name) {
+        className = name;
+    }
 
     @Override
     public String getInstanceName() {
@@ -56,10 +64,14 @@ public class SimpleSoundInstance implements SoundInstance {
     }
 
     @Override
-    public void setInstanceName(String newInstanceName) { instanceName = newInstanceName; }
+    public void setInstanceName(String newInstanceName) {
+        instanceName = newInstanceName;
+    }
 
     @Override
-    public Map<String, String> getPropertiesMap() { return propertiesMap; }
+    public Map<String, String> getPropertiesMap() {
+        return propertiesMap;
+    }
 
 
     /**
@@ -96,7 +108,9 @@ public class SimpleSoundInstance implements SoundInstance {
     }
 
     @Override
-    public void setMediaFilePath(String newMediaFilePath) { mediaFilePath = newMediaFilePath; }
+    public void setMediaFilePath(String newMediaFilePath) {
+        mediaFilePath = newMediaFilePath;
+    }
 
     @Override
     public double getDuration() {
@@ -104,9 +118,13 @@ public class SimpleSoundInstance implements SoundInstance {
     }
 
     @Override
-    public void setDuration(double newDuration) { duration = newDuration; }
+    public void setDuration(double newDuration) {
+        duration = newDuration;
+    }
 
     @Override
-    public SoundClass getGameObjectClass() { return soundClass; }
+    public SoundClass getGameObjectClass() {
+        return soundClass;
+    }
 
 }

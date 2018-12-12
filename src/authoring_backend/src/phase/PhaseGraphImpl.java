@@ -27,15 +27,19 @@ public class PhaseGraphImpl extends SimpleGraph<Phase, Transition> implements Ph
     }
 
     @Override
-    public String name() { return name; }
+    public String name() {
+        return name;
+    }
 
     @Override
     public boolean setName(String another) {
         var res = registerName.apply(another);
-        if(res) name = another;
+        if (res) name = another;
         return res;
     }
 
     @Override
-    public Phase source() { return source; }
+    public Phase source() {
+        return source;
+    }
 }

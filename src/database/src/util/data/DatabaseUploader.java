@@ -6,7 +6,7 @@ import java.sql.Statement;
 
 public class DatabaseUploader extends DatabaseConnector implements DatabaseUpload {
 
-    public DatabaseUploader(String username, String databasename, String password, String servername, int port){
+    public DatabaseUploader(String username, String databasename, String password, String servername, int port) {
         super();
         this.setConnection(username, databasename, password, servername, port);
     }
@@ -18,7 +18,6 @@ public class DatabaseUploader extends DatabaseConnector implements DatabaseUploa
             Statement stmt = conn.createStatement();
             stmt.executeUpdate(command);
         }
-
         catch (SQLException ex) {
             ex.printStackTrace();
             System.out.println("Invalid SQl Command");

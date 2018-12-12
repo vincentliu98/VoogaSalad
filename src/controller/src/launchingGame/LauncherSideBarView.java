@@ -5,7 +5,7 @@ import javafx.scene.layout.VBox;
 public class LauncherSideBarView {
     private VBox myVBox;
 
-    public LauncherSideBarView(double width, Sortable sortable){
+    public LauncherSideBarView(double width, Sortable sortable) {
         myVBox = new VBox();
 
 

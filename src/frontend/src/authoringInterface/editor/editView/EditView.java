@@ -18,11 +18,12 @@ import javafx.scene.control.TabPane.TabDragPolicy;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import utils.imageSelector.ImageSelectorController;
 import utils.nodeInstance.NodeInstanceController;
 
 /**
  * EditView Class (TabPane > Pane)
- *      - holding scroll views
+ * - holding scroll views
  *
  * @author Amy Kim
  * @author jl729
@@ -35,13 +36,14 @@ public class EditView implements SubView<TabPane> {
     public static final int SCREEN_HEIGHT = 700;
 
     private final TabPane tabPane = new TabPane();
-    private AuthoringTools authTools;
     private final Editor editor = new Editor();
+    private AuthoringTools authTools;
     private GroovyPaneFactory groovyPaneFactory;
     private GameObjectsCRUDInterface objectManager;
     private int rowNumber;
     private int colNumber;
     private EditGridView gridView;
+    private ImageSelectorController imageSelectorController;
     private NodeInstanceController nodeInstanceController;
     private PhaseChooserPane phaseView;
     private Tab mainTab;
@@ -56,10 +58,18 @@ public class EditView implements SubView<TabPane> {
      *
      * @return A tabView Node to be displayed at the left side of the createPhaseGraph window.
      */
-    public EditView(AuthoringTools authTools, GroovyPaneFactory groovyPaneFactory, int row, int col, GameObjectsCRUDInterface manager, NodeInstanceController controller) {
+    public EditView(
+            AuthoringTools authTools,
+            GroovyPaneFactory groovyPaneFactory,
+            int row, int col,
+            GameObjectsCRUDInterface manager,
+            NodeInstanceController controller,
+            ImageSelectorController imageSelectorController
+    ) {
         this.authTools = authTools;
         this.groovyPaneFactory = groovyPaneFactory;
         nodeInstanceController = controller;
+        this.imageSelectorController = imageSelectorController;
         objectManager = manager;
         rowNumber = row;
         colNumber = col;
@@ -72,7 +82,11 @@ public class EditView implements SubView<TabPane> {
         return phaseView;
     }
 
-    private void initializeTab(){
+    public EditGridView getGridView() {
+        return gridView;
+    }
+
+    private void initializeTab() {
         mainTab = new Tab();
         Label mainLabel = new Label("Main");
         labelOnTab(mainLabel, mainTab);
@@ -115,7 +129,7 @@ public class EditView implements SubView<TabPane> {
             splitTab(mouseLoc, winConditionTab);
         });
     }
-    
+
     private void labelOnTab(Label label, Tab tab) {
         label.getStyleClass().add("tablabel");
         tab.setGraphic(label);
@@ -123,23 +137,23 @@ public class EditView implements SubView<TabPane> {
 
     private void splitTab(Point2D mouseLoc, Tab tab) {
         StackPane header = (StackPane) tabPane.lookup(".tab-header-area");
-        if(!header.getBoundsInLocal().contains(mouseLoc)){
+        if (!header.getBoundsInLocal().contains(mouseLoc)) {
             openModal(tab).show();
         }
     }
 
 
     private Stage openModal(Tab tab) {
-            tabPane.getTabs().remove(tab);
-            newTabPane = new TabPane();
-            newStage = new Stage();
-            newTabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
-            newTabPane.getTabs().add(tab);
-            Scene scene = new Scene(new BorderPane(newTabPane), SCREEN_WIDTH, SCREEN_HEIGHT);
-            scene.getStylesheets().add(STYLESHEET);
-            newStage.setScene(scene);
-            newStage.setOnCloseRequest(e -> detachOnTab(tab));
-            return newStage;
+        tabPane.getTabs().remove(tab);
+        newTabPane = new TabPane();
+        newStage = new Stage();
+        newTabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
+        newTabPane.getTabs().add(tab);
+        Scene scene = new Scene(new BorderPane(newTabPane), SCREEN_WIDTH, SCREEN_HEIGHT);
+        scene.getStylesheets().add(STYLESHEET);
+        newStage.setScene(scene);
+        newStage.setOnCloseRequest(e -> detachOnTab(tab));
+        return newStage;
     }
 
     private void detachOnTab(Tab tab) {

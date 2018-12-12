@@ -1,20 +1,19 @@
 
-
 .launcher-top-bar {
-    -fx-background-color: rgb(43,45,56);
+    -fx-background-color: rgb(43, 45, 56);
 }
 
 .launcher-side-bar {
-    -fx-background-color: rgb(21,24,29);
+    -fx-background-color: rgb(21, 24, 29);
 }
 
 .launcher-games-display {
-    -fx-background-color: rgb(31,34,40);
+    -fx-background-color: rgb(31, 34, 40);
     -fx-padding: 40 30 40 30;
 }
 
 .search-bar {
-    -fx-background-color: rgb(60,64,75);
+    -fx-background-color: rgb(60, 64, 75);
     -fx-text-fill: white;
 }
 
@@ -37,7 +36,7 @@
 .icon-background-image {
     -fx-background-radius: 30;
     -fx-border-radius: 30;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 10, 0, 0, 0);
 }
 
 .title-box {
@@ -57,11 +56,11 @@
 }
 
 .play-button-normal {
-    -fx-background-color: rgb(28,29,34);
+    -fx-background-color: rgb(28, 29, 34);
 }
 
 .play-button-hover {
-    -fx-background-color: rgb(104,210,180);
+    -fx-background-color: rgb(104, 210, 180);
 }
 
 .sort-button {

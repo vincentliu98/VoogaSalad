@@ -30,13 +30,13 @@ public class GameData {
     static GroovyShell shell;
 
     public static void setGameData(
-        Point grid_dimension,
-        Map<String, Player> players, Map<Integer, Entity> entities,
-        Map<String, EntityPrototype> entityPrototypes,
-        Map<Integer, Tile> tiles, Map<String, Phase> phases,
-        String winCondition, Map<String, Node> nodes,
-        Set<Edge> edges, Turn turn, Pane root, Initializer initializer
-    ){
+            Point grid_dimension,
+            Map<String, Player> players, Map<Integer, Entity> entities,
+            Map<String, EntityPrototype> entityPrototypes,
+            Map<Integer, Tile> tiles, Map<String, Phase> phases,
+            String winCondition, Map<String, Node> nodes,
+            Set<Edge> edges, Turn turn, Pane root, Initializer initializer
+    ) {
         GameData.GRID_WIDTH = grid_dimension.getX();
         GameData.GRID_HEIGHT = grid_dimension.getY();
 
@@ -58,25 +58,35 @@ public class GameData {
         shell = new GroovyShell(shared);
     }
 
-    public static GroovyShell shell() { return shell; }
+    public static GroovyShell shell() {
+        return shell;
+    }
 
-    public static Map<Integer, Entity> getEntities() { return ENTITIES; }
+    public static Map<Integer, Entity> getEntities() {
+        return ENTITIES;
+    }
 
-    public static Phase getPhase(String phaseName){
+    public static Phase getPhase(String phaseName) {
         return PHASES.get(phaseName);
     }
-    public static Node getNode(String nodeName){
+
+    public static Node getNode(String nodeName) {
         return NODES.get(nodeName);
     }
-    public static Map<Integer, Tile> getTiles() { return TILES; }
 
-    public static Player getPlayer(int playerID){
+    public static Map<Integer, Tile> getTiles() {
+        return TILES;
+    }
+
+    public static Player getPlayer(int playerID) {
         return PLAYERS.get(playerID);
     }
 
-    public static Pane getRoot() { return ROOT; }
+    public static Pane getRoot() {
+        return ROOT;
+    }
 
-    public static void addArgument(MouseEvent event, ClickTag tag){
+    public static void addArgument(MouseEvent event, ClickTag tag) {
         var target = (tag.getType().equals(Tile.class) ? TILES : ENTITIES).get(tag.getID());
         shell.setVariable("$clicked", target);
         notifyArgumentListeners(event);
@@ -93,36 +103,42 @@ public class GameData {
         TILES.values().forEach(Tile::updateView);
     }
 
-    public static Turn getTurn(){ return TURN; }
+    public static Turn getTurn() {
+        return TURN;
+    }
 
-    public static int getNextEntityID(){
+    public static int getNextEntityID() {
         return ENTITIES.size() + 1;
     }
 
-    public static void addArgumentListener(ArgumentListener argumentListener){
+    public static void addArgumentListener(ArgumentListener argumentListener) {
         myArgumentListeners.add(argumentListener);
     }
 
-    public static void clearArgumentListeners() { myArgumentListeners.clear(); }
+    public static void clearArgumentListeners() {
+        myArgumentListeners.clear();
+    }
 
     // I really liked your way of having everything pipelined and tried to keep it,
     // but the consequent execution() from the destination node
     // clears/reinitialize the ArgumentListeners. That leads to ConcurrentModificationException
     // So I had to explicitly separate the validity check and execution
-    private static void notifyArgumentListeners(Event event){
+    private static void notifyArgumentListeners(Event event) {
         var destination = ArgumentListener.DONT_PASS;
         // at most one of the listeners should pass
-        for (ArgumentListener argumentListener : myArgumentListeners){
+        for (ArgumentListener argumentListener : myArgumentListeners) {
             var dest = argumentListener.trigger(event);
-            if(!dest.equals(ArgumentListener.DONT_PASS)) destination = dest;
+            if (!dest.equals(ArgumentListener.DONT_PASS)) destination = dest;
         }
-        if(!destination.equals(ArgumentListener.DONT_PASS)) NODES.get(destination).execute();
+        if (!destination.equals(ArgumentListener.DONT_PASS)) NODES.get(destination).execute();
     }
 
-    public static Collection<Edge> getEdges() { return EDGES; }
+    public static Collection<Edge> getEdges() {
+        return EDGES;
+    }
 
     // TODO: Fix to include all pieces of info
-    public static String saveGameData(){
+    public static String saveGameData() {
         String xmlString = "";
         XStream serializer = new XStream(new DomDriver());
         xmlString = serializeData(serializer, xmlString, PLAYERS);
@@ -141,27 +157,27 @@ public class GameData {
         return xmlString;
     }
 
-    public static String serializeData(XStream serializer, String xmlString, Set<?> dataSet){
-        for (var entry : dataSet){
+    public static String serializeData(XStream serializer, String xmlString, Set<?> dataSet) {
+        for (var entry : dataSet) {
             xmlString = xmlString + serializer.toXML(entry) + "\n";
         }
         return xmlString;
     }
 
-    public static String serializeData(XStream serializer, String xmlString, Map<?, ?> dataMap){
-        for (Map.Entry<?, ?> entry : dataMap.entrySet()){
+    public static String serializeData(XStream serializer, String xmlString, Map<?, ?> dataMap) {
+        for (Map.Entry<?, ?> entry : dataMap.entrySet()) {
             xmlString = xmlString + serializer.toXML(entry.getValue()) + "\n";
         }
         return xmlString;
     }
 
-    public static void restartGame(){
+    public static void restartGame() {
         myInitializer.resetRoot();
         myInitializer.initGameData();
         myInitializer.setScreenSize(700, 500);
     }
 
-    public static String getName(){
+    public static String getName() {
         return myInitializer.getFileName();
     }
 

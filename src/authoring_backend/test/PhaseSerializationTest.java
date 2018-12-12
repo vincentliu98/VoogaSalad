@@ -4,7 +4,7 @@ import phase.api.GameEvent;
 
 public class PhaseSerializationTest {
     public static void main(String[] args) throws Throwable {
-        var authTools = new AuthoringTools(5,5);
+        var authTools = new AuthoringTools(5, 5);
         var phaseDB = authTools.phaseDB();
 
         var graph = phaseDB.createPhaseGraph("A").get(null);

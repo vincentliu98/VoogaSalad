@@ -7,10 +7,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 
 public class UserIcon extends Icon {
-    
-    private boolean isFollowing;
+
     public static final String UNFOLLOW_TEXT = "Following";
-    
+    private boolean isFollowing;
+
     public UserIcon(String gameName, String description, String reference, String color, String imagePath,
                     String tags, User user, String buttonText, String imgFolderPath) {
         super(gameName, description, reference, color, imagePath, tags, user, "Follow", "/profile-images/");
@@ -23,7 +23,7 @@ public class UserIcon extends Icon {
         myButton.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if (myUser.getUsername().equals(myName)){ // TODO: Turn into an error
+                if (myUser.getUsername().equals(myName)) { // TODO: Turn into an error
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setHeaderText("Cannot follow others without a profile.");
                     alert.setContentText("Log in or create a new profile.");
@@ -36,7 +36,7 @@ public class UserIcon extends Icon {
         });
     }
 
-    protected void initPane(){
+    protected void initPane() {
         myPane = new StackPane();
 
         myPane.setOnMouseEntered(event -> { // always want username
@@ -51,8 +51,8 @@ public class UserIcon extends Icon {
 
     }
 
-    private void changeButtonDisplay(){
-        if (isFollowing){
+    private void changeButtonDisplay() {
+        if (isFollowing) {
             myButton.getStyleClass().remove(BUTTON_CSS_HOVER);
             myButton.getStyleClass().add(BUTTON_CSS_NORMAL);
             myButton.setText(UNFOLLOW_TEXT);

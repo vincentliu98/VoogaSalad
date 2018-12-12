@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 public class EntityWindow {
     private GridPane myPane;
 
-    public EntityWindow(Stage primaryStage){
+    public EntityWindow(Stage primaryStage) {
         final Stage dialog = new Stage();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(primaryStage);

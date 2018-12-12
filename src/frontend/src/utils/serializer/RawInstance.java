@@ -1,6 +1,5 @@
 package utils.serializer;
 
-import grids.Point;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;

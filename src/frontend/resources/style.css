@@ -26,7 +26,7 @@
     -fx-text-fill: #80cbc4;
 }
 
-.tablabel{
+.tablabel {
     -fx-text-fill: #b4c3cb;
 }
 
@@ -46,13 +46,13 @@
     -fx-background-color: #fff;
 }
 
-.menu-bar{
+.menu-bar {
     -fx-background-color: #1d2529;
     -fx-selection-bar: #2b383f;
 }
 
 /*.menu-item{*/
-    /*-fx-background-color: #1d2529;*/
+/*-fx-background-color: #1d2529;*/
 /*}*/
 
 .menu-bar .label {
@@ -66,12 +66,13 @@
 .addBtn {
     -fx-text-fill: #b4c3cb;
 }
+
 .myTree .tree-cell {
     -fx-background-color: #212c31;
     -fx-text-fill: #b4c3cb;
 }
 
-.tree-cell > .tree-disclosure-node > .arrow{
+.tree-cell > .tree-disclosure-node > .arrow {
     -fx-background-color: #b4c3cb;
 }
 
@@ -84,11 +85,11 @@
     -fx-focus-color: transparent;
 }
 
-.viewEntered :hover{
+.viewEntered :hover {
     -fx-cursor: hand;
 }
 
-.viewEntered :focused{
+.viewEntered :focused {
     -fx-cursor: hand;
 }
 
@@ -123,6 +124,7 @@
 .phasePane {
     -fx-background-color: lightgray;
 }
+
 .mainPane {
     -fx-background-color: #868c87;
 }

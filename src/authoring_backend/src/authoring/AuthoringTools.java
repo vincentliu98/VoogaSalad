@@ -4,7 +4,6 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import conversion.authoring.SavedEntityDB;
-import conversion.authoring.SerializerCRUD;
 import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.crud.SimpleGameObjectsCRUD;
 import groovy.api.GroovyFactory;
@@ -23,7 +22,7 @@ public class AuthoringTools {
     private transient GroovyFactory factory;
 
     public AuthoringTools(int gridWidth, int gridHeight) {
-        entityDB = new SimpleGameObjectsCRUD(gridWidth, gridHeight, false);
+        entityDB = new SimpleGameObjectsCRUD(gridHeight, gridWidth, false);
 
         factory = new GroovyFactory(entityDB);
 
@@ -31,7 +30,7 @@ public class AuthoringTools {
     }
 
     /**
-     *  Initialize with a XML string
+     * Initialize with a XML string
      */
     public AuthoringTools(String xml) {
         var xstream = new XStream(new DomDriver());
@@ -44,13 +43,25 @@ public class AuthoringTools {
     }
 
     public void setGridDimension(int width, int height) {
-        entityDB.setDimension(width, height);
+        entityDB.setDimension(height, width);
     }
 
-    public GroovyFactory factory() { return factory; }
-    public GameObjectsCRUDInterface entityDB() { return entityDB; }
-    public PhaseDB phaseDB() { return phaseDB; }
-    public String toEngineXML() { return Serializers.forEngine().toXML(this); }
+    public GroovyFactory factory() {
+        return factory;
+    }
+
+    public GameObjectsCRUDInterface entityDB() {
+        return entityDB;
+    }
+
+    public PhaseDB phaseDB() {
+        return phaseDB;
+    }
+
+    public String toEngineXML() {
+        return Serializers.forEngine().toXML(this);
+    }
+
     public String toAuthoringXML() {
         var xstream = new XStream(new DomDriver());
         return xstream.toXML(new SavedAuthoringTools(entityDB.toXML(), phaseDB.toXML()));

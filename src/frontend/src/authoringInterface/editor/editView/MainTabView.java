@@ -7,12 +7,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 
 public class MainTabView implements SubView<StackPane> {
-    private final StackPane addPane;
     public static final int ICON_SIZE = 550;
+    private final StackPane addPane;
     private final Image LOGO_IMG =
             new Image(MainTabView.class.getClassLoader().getResourceAsStream("Groove_logo.png"));
-    private ImageView myIcon;
     protected Button startBtn;
+    private ImageView myIcon;
 
     public MainTabView() {
         addPane = new StackPane();

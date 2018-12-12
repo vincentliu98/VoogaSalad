@@ -1,21 +1,26 @@
 package gameObjects.crud;
 
 import authoringUtils.exception.*;
-import gameObjects.category.*;
-import gameObjects.entity.*;
-import gameObjects.gameObject.*;
-import gameObjects.player.*;
-import gameObjects.sound.*;
-import gameObjects.tile.*;
+import gameObjects.category.CategoryClass;
+import gameObjects.category.CategoryInstance;
+import gameObjects.entity.EntityClass;
+import gameObjects.entity.EntityInstance;
+import gameObjects.gameObject.GameObjectClass;
+import gameObjects.gameObject.GameObjectInstance;
+import gameObjects.gameObject.GameObjectType;
+import gameObjects.player.PlayerClass;
+import gameObjects.player.PlayerInstance;
+import gameObjects.tile.TileClass;
+import gameObjects.tile.TileInstance;
 import grids.Point;
 
 import java.util.Collection;
 import java.util.Set;
 
 /**
- *
  * This class encapsulates the Game Data for the GameObjects (Tiles and Entities). It provides methods to create, edit, and delete the Tile and Entity Classes.
  * It holds maps of GameObject Classes and GameObject Instances.
+ *
  * @author Jason Zhou
  * @author Haotian Wang
  * @author Yunhao Qing
@@ -28,6 +33,7 @@ public interface GameObjectsCRUDInterface {
 
     /**
      * This method creates a Tile Class and adds it to the map.
+     *
      * @param className the name of the Tile Class to be created
      * @return the Tile Class if there is no name collision and the method is successful
      * @throws DuplicateGameObjectClassException if a class with the same name exists
@@ -37,6 +43,7 @@ public interface GameObjectsCRUDInterface {
 
     /**
      * This method gets the Tile Class from the map.
+     *
      * @param className the name of the Tile Class to be retrieved
      * @return the Tile Class with the name
      * @throws GameObjectClassNotFoundException if there is no such Tile Class
@@ -45,7 +52,6 @@ public interface GameObjectsCRUDInterface {
             throws GameObjectClassNotFoundException;
 
     /**
-     *
      * @param className
      * @return
      */
@@ -54,7 +60,6 @@ public interface GameObjectsCRUDInterface {
 
 
     /**
-     *
      * @param tileClass
      * @return
      */
@@ -63,6 +68,7 @@ public interface GameObjectsCRUDInterface {
 
     /**
      * This method creates an Entity Class and adds it to the map.
+     *
      * @param className the name of the Entity Class to be created
      * @return the Entity Class if there is no name collision and the method is successful
      * @throws DuplicateGameObjectClassException if a class with the same name exists
@@ -72,6 +78,7 @@ public interface GameObjectsCRUDInterface {
 
     /**
      * This method gets the Entity Class from the map.
+     *
      * @param className the name of the Entity Class to be retrieved
      * @return the Entity Class with the name
      * @throws GameObjectClassNotFoundException if there is no such Entity Class
@@ -80,7 +87,6 @@ public interface GameObjectsCRUDInterface {
             throws GameObjectClassNotFoundException;
 
     /**
-     *
      * @param className
      * @return
      */
@@ -88,7 +94,6 @@ public interface GameObjectsCRUDInterface {
             throws GameObjectClassNotFoundException, GameObjectTypeException;
 
     /**
-     *
      * @param entityClass
      * @return
      */
@@ -98,6 +103,7 @@ public interface GameObjectsCRUDInterface {
 
     /**
      * This method creates an Category Class and adds it to the map.
+     *
      * @param className the name of the Class to be created
      * @return the Category Class if there is no name collision and the method is successful
      * @throws DuplicateGameObjectClassException if a class with the same name exists
@@ -107,6 +113,7 @@ public interface GameObjectsCRUDInterface {
 
     /**
      * This method gets the Class from the map.
+     *
      * @param className the name of the Class to be retrieved
      * @return the Category Class with the name
      * @throws GameObjectClassNotFoundException if there is no such Category Class
@@ -114,48 +121,46 @@ public interface GameObjectsCRUDInterface {
     CategoryClass getCategoryClass(String className) throws GameObjectClassNotFoundException;
 
     /**
-     *
      * @param className
      * @return
      */
     CategoryInstance createCategoryInstance(String className) throws GameObjectClassNotFoundException, GameObjectTypeException;
 
     /**
-     *
      * @param categoryClass
      * @return
      */
     CategoryInstance createCategoryInstance(CategoryClass categoryClass) throws GameObjectTypeException;
 
-    /**
-     * This method creates an Sound Class and adds it to the map.
-     * @param className the name of the Class to be created
-     * @return the Sound Class if there is no name collision and the method is successful
-     * @throws DuplicateGameObjectClassException if a class with the same name exists
-     */
-    SoundClass createSoundClass(String className) throws DuplicateGameObjectClassException;
+//    /**
+//     * This method creates an Sound Class and adds it to the map.
+//     * @param className the name of the Class to be created
+//     * @return the Sound Class if there is no name collision and the method is successful
+//     * @throws DuplicateGameObjectClassException if a class with the same name exists
+//     */
+//    SoundClass createSoundClass(String className) throws DuplicateGameObjectClassException;
+//
+//    /**
+//     * This method gets the Sound Class from the map.
+//     * @param className the name of the Class to be retrieved
+//     * @return the Sound Class with the name
+//     * @throws GameObjectClassNotFoundException if there is no such Sound Class
+//     */
+//    SoundClass getSoundClass(String className) throws GameObjectClassNotFoundException;
 
-    /**
-     * This method gets the Sound Class from the map.
-     * @param className the name of the Class to be retrieved
-     * @return the Sound Class with the name
-     * @throws GameObjectClassNotFoundException if there is no such Sound Class
-     */
-    SoundClass getSoundClass(String className) throws GameObjectClassNotFoundException;
-
-    /**
-     *
-     * @param className
-     * @return
-     */
-    SoundInstance createSoundInstance(String className) throws GameObjectClassNotFoundException, GameObjectTypeException;
-
-    /**
-     *
-     * @param soundClass
-     * @return
-     */
-    SoundInstance createSoundInstance(SoundClass soundClass) throws GameObjectTypeException;
+//    /**
+//     *
+//     * @param className
+//     * @return
+//     */
+//    SoundInstance createSoundInstance(String className) throws GameObjectClassNotFoundException, GameObjectTypeException;
+//
+//    /**
+//     *
+//     * @param soundClass
+//     * @return
+//     */
+//    SoundInstance createSoundInstance(SoundClass soundClass) throws GameObjectTypeException;
 
     PlayerClass createPlayerClass(String className)
             throws DuplicateGameObjectClassException;
@@ -169,7 +174,8 @@ public interface GameObjectsCRUDInterface {
     PlayerInstance createPlayerInstance(PlayerClass playerClass) throws GameObjectTypeException;
 
     /**
-     *  Sets the dimension of the entire grid
+     * Sets the dimension of the entire grid
+     *
      * @param width
      * @param height
      */
@@ -183,6 +189,7 @@ public interface GameObjectsCRUDInterface {
 
     /**
      * Returns the GameObject Class with the specified name
+     *
      * @param className
      * @return
      */
@@ -192,6 +199,7 @@ public interface GameObjectsCRUDInterface {
 
     /**
      * Returns the GameObject Instance with the specified name
+     *
      * @param instanceId
      * @return
      */
@@ -200,21 +208,18 @@ public interface GameObjectsCRUDInterface {
     Collection<GameObjectInstance> getAllInstances();
 
     /**
-     *
      * @param className
      * @return
      */
     Collection<GameObjectInstance> getAllInstances(String className);
 
     /**
-     *
      * @param gameObjectClass
      * @return
      */
     Collection<GameObjectInstance> getAllInstances(GameObjectClass gameObjectClass);
 
     /**
-     *
      * @param x
      * @param y
      * @return
@@ -223,14 +228,12 @@ public interface GameObjectsCRUDInterface {
 
 
     /**
-     *
      * @param point
      * @return
      */
     Collection<GameObjectInstance> getAllInstancesAtPoint(Point point);
 
     /**
-     *
      * @param oldClassName
      * @param newClassName
      * @return
@@ -249,7 +252,6 @@ public interface GameObjectsCRUDInterface {
     boolean deleteGameObjectClass(int classId);
 
     /**
-     *
      * @param gameObjectClass
      */
     boolean deleteGameObjectClass(GameObjectClass gameObjectClass);
@@ -268,7 +270,7 @@ public interface GameObjectsCRUDInterface {
      *
      * @param <E>
      * @param gameObjectType : The GameObjectType that determines the type of GameObjectClass that is to be created.
-     * @param name : The name of the GameObjectClass to be created.
+     * @param name           : The name of the GameObjectClass to be created.
      * @return A Subclass of GameObjectClass depending on the String name and the GameObjectType.
      * @throws DuplicateGameObjectClassException
      */
@@ -277,9 +279,9 @@ public interface GameObjectsCRUDInterface {
     /**
      * This method is a convenient method that creates concrete GameObjectInstances, depending on the type of GameObjectClass that is passed in or inferred from class name.
      *
-     * @param name: The String class name of the input GameObjectClass.
+     * @param name:    The String class name of the input GameObjectClass.
      * @param topleft: A Point representing the topleft of the GameObjectInstance deployed.
-     * @param <E>: A subclass of GameObjectInstance.
+     * @param <E>:     A subclass of GameObjectInstance.
      * @return A concrete GameObjectInstance inferred from input.
      * @throws GameObjectClassNotFoundException
      * @throws GameObjectTypeException
@@ -290,8 +292,8 @@ public interface GameObjectsCRUDInterface {
      * This method is a convenient method that creates concrete GameObjectInstances, depending on the type of GameObjectClass that is passed in or inferred from class name.
      *
      * @param gameObjectClass: The input GameObjectClass.
-     * @param topleft: A Point representing the topleft of the GameObjectInstance deployed.
-     * @param <E>: A subclass of GameObjectInstance.
+     * @param topleft:         A Point representing the topleft of the GameObjectInstance deployed.
+     * @param <E>:             A subclass of GameObjectInstance.
      * @return A concrete GameObjectInstance inferred from input.
      * @throws GameObjectTypeException
      */
@@ -305,16 +307,19 @@ public interface GameObjectsCRUDInterface {
     Iterable<EntityClass> getEntityClasses();
 
 
-
     Iterable<TileClass> getTileClasses();
+
     Iterable<CategoryClass> getCategoryClasses();
-    Iterable<SoundClass> getSoundClasses();
+
+    //    Iterable<SoundClass> getSoundClasses();
     Iterable<PlayerClass> getPlayerClasses();
 
     Iterable<EntityInstance> getEntityInstances();
+
     Iterable<TileInstance> getTileInstances();
+
     Iterable<CategoryInstance> getCategoryInstances();
-    Iterable<SoundInstance> getSoundInstances();
+//    Iterable<SoundInstance> getSoundInstances();
 
     @Deprecated
     Iterable<PlayerInstance> getPlayerInstances();

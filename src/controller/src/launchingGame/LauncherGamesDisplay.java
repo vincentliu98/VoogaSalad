@@ -25,13 +25,13 @@ public class LauncherGamesDisplay implements Searchable, Sortable, Subscriber {
     private List<GameIcon> myActiveGames;
     private User myUser;
 
-    public LauncherGamesDisplay(){
+    public LauncherGamesDisplay() {
         initTiles();
         initGames();
         EventBus.getInstance().register(EngineEvent.CHANGE_USER, this);
     }
 
-    private void initTiles(){
+    private void initTiles() {
         myPane = new TilePane();
         myPane.getStyleClass().add(CSS_PATH);
         myPane.setPrefColumns(COLUMN_NUMBER);
@@ -40,24 +40,24 @@ public class LauncherGamesDisplay implements Searchable, Sortable, Subscriber {
 
     }
 
-    private void initGames(){
+    private void initGames() {
         GameParser myParser = new GameParser(System.getProperty(CURRENT_FOLDER_KEY) + GAMES_PATH, myUser);
         myGames = myParser.getMyGames();
         myActiveGames = new ArrayList<>();
-        for(GameIcon myIcon: myGames){
+        for (GameIcon myIcon : myGames) {
             myPane.getChildren().add(myIcon.getView());
             myActiveGames.add(myIcon);
         }
     }
 
     @Override
-    public void showByTag(String tag){
-        for(GameIcon icon: myActiveGames){
+    public void showByTag(String tag) {
+        for (GameIcon icon : myActiveGames) {
             myPane.getChildren().remove(icon.getView());
         }
         myActiveGames = new ArrayList<>();
-        for(GameIcon icon: myGames){
-            if(icon.checkTag(tag)){
+        for (GameIcon icon : myGames) {
+            if (icon.checkTag(tag)) {
                 myActiveGames.add(icon);
                 myPane.getChildren().add(icon.getView());
             }
@@ -65,12 +65,12 @@ public class LauncherGamesDisplay implements Searchable, Sortable, Subscriber {
     }
 
     @Override
-    public void showAll(){
-        for(GameIcon icon: myActiveGames){
+    public void showAll() {
+        for (GameIcon icon : myActiveGames) {
             myPane.getChildren().remove(icon.getView());
         }
         myActiveGames = new ArrayList<>();
-        for(GameIcon icon: myGames){
+        for (GameIcon icon : myGames) {
             myActiveGames.add(icon);
             myPane.getChildren().add(icon.getView());
         }
@@ -79,13 +79,13 @@ public class LauncherGamesDisplay implements Searchable, Sortable, Subscriber {
     @Override
     public void showFavorites() {
         if (myUser == null) return;
-        for(GameIcon icon: myActiveGames){
+        for (GameIcon icon : myActiveGames) {
             myPane.getChildren().remove(icon.getView());
         }
         myActiveGames = new ArrayList<>();
-        for (String game : myUser.getFavorites()){
-            for(GameIcon icon: myGames){
-                if(icon.checkName(game)){
+        for (String game : myUser.getFavorites()) {
+            for (GameIcon icon : myGames) {
+                if (icon.checkName(game)) {
                     myActiveGames.add(icon);
                     myPane.getChildren().add(icon.getView());
                 }
@@ -93,12 +93,12 @@ public class LauncherGamesDisplay implements Searchable, Sortable, Subscriber {
         }
     }
 
-    public void sortByAlphabet(){
+    public void sortByAlphabet() {
         myActiveGames.sort(new NameComparator());
-        for(GameIcon icon: myActiveGames){
+        for (GameIcon icon : myActiveGames) {
             myPane.getChildren().remove(icon.getView());
         }
-        for(GameIcon icon: myActiveGames){
+        for (GameIcon icon : myActiveGames) {
             myPane.getChildren().add(icon.getView());
         }
     }
@@ -108,8 +108,8 @@ public class LauncherGamesDisplay implements Searchable, Sortable, Subscriber {
     }
 
     @Override
-    public void update(EngineEvent engineEvent, Object ... args) {
-        if (engineEvent.equals(EngineEvent.CHANGE_USER) && args[0].getClass().equals(User.class)){
+    public void update(EngineEvent engineEvent, Object... args) {
+        if (engineEvent.equals(EngineEvent.CHANGE_USER) && args[0].getClass().equals(User.class)) {
             myUser = (User) args[0];
         }
     }

@@ -12,7 +12,10 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Separator;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -29,7 +32,7 @@ import java.util.stream.Collectors;
 /**
  * A factory to product GroovyPane. The factory is used because many such GroovyPane is needed.
  * By calling `toView(BlockGraph model)`, the factory spits out a GroovyPane to be edited by the user.
- *
+ * <p>
  * It is only initialized once in the View class.
  *
  * @author Inchan Hwang
@@ -44,12 +47,6 @@ public class GroovyPaneFactory {
     private Stage primaryStage;
     private GroovyPane winCondition;
 
-    private enum DRAG_PURPOSE {
-        NOTHING,
-        CHANGE_POS,
-        CONNECT_LINE
-    }
-
     public GroovyPaneFactory(Stage primaryStage, GroovyFactory factory, BlockGraph winCondition) {
         this.primaryStage = primaryStage;
         this.nodeFactory = new GroovyNodeFactory(factory);
@@ -57,8 +54,23 @@ public class GroovyPaneFactory {
         this.winCondition = new GroovyPane(primaryStage, winCondition);
     }
 
-    public GroovyPane gen(BlockGraph model) { return new GroovyPane(primaryStage, model); }
-    public GroovyPane winCondition() { return winCondition; }
+    public GroovyPane gen(BlockGraph model) {
+        return new GroovyPane(primaryStage, model);
+    }
+
+    public GroovyPane gen(BlockGraph model, boolean openImmediately) {
+        return new GroovyPane(primaryStage, model, openImmediately);
+    }
+
+    public GroovyPane winCondition() {
+        return winCondition;
+    }
+
+    private enum DRAG_PURPOSE {
+        NOTHING,
+        CHANGE_POS,
+        CONNECT_LINE
+    }
 
     public class GroovyPane extends PopUpWindow implements SubView<GridPane> {
         private DRAG_PURPOSE draggingPurpose = DRAG_PURPOSE.NOTHING;
@@ -90,6 +102,10 @@ public class GroovyPaneFactory {
         private SimpleObjectProperty<GroovyNode> selectedNode;
 
         private GroovyPane(Stage primaryStage, BlockGraph graph) {
+            this(primaryStage, graph, true);
+        }
+
+        private GroovyPane(Stage primaryStage, BlockGraph graph, Boolean openImmediately) {
             super(primaryStage);
             myScene = new Scene(root, WIDTH, HEIGHT);
 
@@ -125,9 +141,9 @@ public class GroovyPaneFactory {
                 if (n != null) {
                     if (selectedEdge.get() != null) selectedEdge.set(null);
                     n.setBorder(
-                        new Border(
-                            new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, null, new BorderWidths(3))
-                        )
+                            new Border(
+                                    new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, null, new BorderWidths(3))
+                            )
                     );
                 }
             });
@@ -143,7 +159,7 @@ public class GroovyPaneFactory {
                 // if shrunk node is selected, it unshrinks it;
                 // if shrunk node is NOT selected, it tries to shrink whatever that's inside the selection box;
                 if (e.getCode() == KeyCode.ENTER) {
-                    if(selectedNode.get() != null && selectedNode.get() instanceof ShrunkGroovyNode) {
+                    if (selectedNode.get() != null && selectedNode.get() instanceof ShrunkGroovyNode) {
                         var shrunkNode = (ShrunkGroovyNode) selectedNode.get();
                         shrunkNode.unShrink();
                         group.getChildren().remove(shrunkNode);
@@ -152,9 +168,9 @@ public class GroovyPaneFactory {
                         updateLocations(shrunkNode);
                     } else {
                         var selected = nodes.stream()
-                                            .filter(n -> selection.contains(n.getCenterX(), n.getCenterY()))
-                                            .collect(Collectors.toSet());
-                        if(selected.size() > 1) {
+                                .filter(n -> selection.contains(n.getCenterX(), n.getCenterY()))
+                                .collect(Collectors.toSet());
+                        if (selected.size() > 1) {
                             var dialog = new TextInputDialog();
                             dialog.setHeaderText("Give a description to this group");
                             var shrunkBlock = nodeFactory.shrunkBlock(selected, dialog.showAndWait().get());
@@ -169,17 +185,18 @@ public class GroovyPaneFactory {
 
             initializeUI();
             buildFromGraph();
-            showWindow();
+
+            if (openImmediately) showWindow();
         }
 
         // private Map<Pair<GroovyNode, Ports>, Pair<GroovyNode, Line>> lines;
         private void buildFromGraph() {
-            for(var block : graph.keySet()) createNode(nodeFactory.toView(block));
-            for(var block : graph.keySet()) {
-                for(var edge : graph.get(block)) {
+            for (var block : graph.keySet()) createNode(nodeFactory.toView(block));
+            for (var block : graph.keySet()) {
+                for (var edge : graph.get(block)) {
                     var node1 = getNodeWithModel(edge.from());
                     var node2 = getNodeWithModel(edge.to());
-                    if(node1.isPresent() && node2.isPresent()) {
+                    if (node1.isPresent() && node2.isPresent()) {
                         graph.removeEdge(edge); // since connectNodes is going to connect it
                         connectNodes(node1.get(), edge.fromPort(), node2.get());
                     }
@@ -195,6 +212,7 @@ public class GroovyPaneFactory {
         public void showWindow() {
             dialog.setScene(myScene);
             dialog.show();
+            dialog.toFront();
         }
 
         /**
@@ -216,8 +234,8 @@ public class GroovyPaneFactory {
             root.add(itemBox, 0, 0);
             HBox.setHgrow(itemBox, Priority.ALWAYS);
             var graphBoxWrapper = new ScrollPane();
-            graphBoxWrapper.setVvalue(graphBoxWrapper.getVmax()/2);
-            graphBoxWrapper.setHvalue(graphBoxWrapper.getHmax()/2);
+            graphBoxWrapper.setVvalue(graphBoxWrapper.getVmax() / 2);
+            graphBoxWrapper.setHvalue(graphBoxWrapper.getHmax() / 2);
             graphBoxWrapper.setContent(graphBox);
             root.add(graphBoxWrapper, 1, 0);
             root.add(codePane, 2, 0);
@@ -237,7 +255,7 @@ public class GroovyPaneFactory {
             });
 
             graphBox.setOnMouseDragged(e -> {
-                if(draggingPurpose == DRAG_PURPOSE.NOTHING) {
+                if (draggingPurpose == DRAG_PURPOSE.NOTHING) {
                     if (e.getX() < selectionX) {
                         selection.setX(e.getX());
                         selection.setWidth(selectionX - e.getX());
@@ -255,8 +273,8 @@ public class GroovyPaneFactory {
             var vbox = new VBox();
 
             vbox.getChildren().addAll(
-                new Text("Press ENTER to merge selected blocks"),
-                new Separator()
+                    new Text("Press ENTER to merge selected blocks"),
+                    new Separator()
             );
 
             vbox.getChildren().addAll(IconLoader.loadControls(iconFactory::gen));
@@ -293,7 +311,7 @@ public class GroovyPaneFactory {
                 group.getChildren().remove(line);
                 lines.remove(selectedEdge.get());
                 graph.removeEdge(factory.createEdge(
-                    selectedEdge.get().getKey().model(), selectedEdge.get().getValue(), null
+                        selectedEdge.get().getKey().model(), selectedEdge.get().getValue(), null
                 ));
             }
             if (selectedNode.get() != null && selectedNode.get() instanceof ShrunkGroovyNode) {
@@ -358,9 +376,9 @@ public class GroovyPaneFactory {
 
         private boolean isInsideShrunkNode(GroovyNode node) {
             return nodes.stream()
-                        .filter(n -> n instanceof ShrunkGroovyNode)
-                        .flatMap(n -> ((ShrunkGroovyNode) n).nodes().stream())
-                        .anyMatch(n -> n == node);
+                    .filter(n -> n instanceof ShrunkGroovyNode)
+                    .flatMap(n -> ((ShrunkGroovyNode) n).nodes().stream())
+                    .anyMatch(n -> n == node);
         }
 
         private void createNode(GroovyNode node) {
@@ -413,11 +431,11 @@ public class GroovyPaneFactory {
                     }
                 }
                 group.getChildren().remove(tmpLine);
-            } else if(draggingPurpose == DRAG_PURPOSE.CHANGE_POS) {
+            } else if (draggingPurpose == DRAG_PURPOSE.CHANGE_POS) {
                 double offsetX = t.getSceneX() - orgSceneX;
                 double offsetY = t.getSceneY() - orgSceneY;
                 GroovyNode node = (GroovyNode) t.getSource();
-                node.model().setXY(node.model().x()+offsetX, node.model().y()+offsetY);
+                node.model().setXY(node.model().x() + offsetX, node.model().y() + offsetY);
             }
             draggingPurpose = DRAG_PURPOSE.NOTHING;
         }
@@ -435,7 +453,7 @@ public class GroovyPaneFactory {
                 node.setTranslateX(newTranslateX);
                 node.setTranslateY(newTranslateY);
 
-                if(node instanceof ShrunkGroovyNode) {
+                if (node instanceof ShrunkGroovyNode) {
                     ((ShrunkGroovyNode) node).nodes().forEach(n -> {
                         n.setTranslateX(newTranslateX);
                         n.setTranslateY(newTranslateY);
@@ -451,7 +469,7 @@ public class GroovyPaneFactory {
         }
 
         private void updateLocations(GroovyNode n) {
-            if(n instanceof ShrunkGroovyNode)
+            if (n instanceof ShrunkGroovyNode)
                 ((ShrunkGroovyNode) n).nodes().forEach(this::updateLocations);
 
             for (var p : lines.keySet()) {
@@ -483,7 +501,9 @@ public class GroovyPaneFactory {
         }
 
         @Override
-        public GridPane getView() { return root; }
+        public GridPane getView() {
+            return root;
+        }
     }
 }
 

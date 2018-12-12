@@ -1,20 +1,22 @@
 package authoringInterface.subEditors;
 
 import javafx.geometry.Insets;
-import javafx.scene.control.*;
-import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
 import javafx.util.Pair;
 
 /**
- *
  * Get prop's key and value
+ *
  * @author Amy
  */
 
 public class PropertyInputDialog extends Dialog<Pair<String, String>> {
     private TextField key, value;
+
     public PropertyInputDialog() {
         setTitle("Property of Entity");
         setHeaderText("This action will add new property of the entity.");
@@ -40,7 +42,7 @@ public class PropertyInputDialog extends Dialog<Pair<String, String>> {
         getDialogPane().setContent(grid);
 
         setResultConverter(type -> {
-            if(type == ButtonType.APPLY) {
+            if (type == ButtonType.APPLY) {
                 return new Pair<>(key.getText(), value.getText());
             } else return null;
         });

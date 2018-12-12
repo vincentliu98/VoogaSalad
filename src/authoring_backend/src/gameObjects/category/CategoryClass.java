@@ -7,19 +7,20 @@ import gameObjects.ThrowingBiConsumer;
 import gameObjects.gameObject.GameObjectClass;
 import gameObjects.gameObject.GameObjectInstance;
 import gameObjects.gameObject.GameObjectType;
-import javafx.beans.property.SimpleStringProperty;
 
 import java.util.Collection;
 import java.util.function.Function;
 
 /**
  * Category Class holds the headers in the View Editor and is a placeholder class for the headers.
+ *
  * @author Haotian Wang
  */
 public interface CategoryClass extends GameObjectClass {
 
     /**
      * The method should not be used.
+     *
      * @return the category instance that is created
      * @throws GameObjectTypeException
      * @throws InvalidIdException
@@ -28,12 +29,12 @@ public interface CategoryClass extends GameObjectClass {
 
     /**
      * The method returns the path of the image stored in the Category Class.
+     *
      * @return the image path
      */
     String getImagePath();
 
     /**
-     *
      * @param newImagePath the path of the image to be stored
      */
     void setImagePath(String newImagePath);
@@ -47,9 +48,9 @@ public interface CategoryClass extends GameObjectClass {
     }
 
     void equipContext(
-        CategoryInstanceFactory categoryInstanceFactory,
-        ThrowingBiConsumer<String, String, InvalidOperationException> changeCategoryClassNameFunc,
-        Function<String, Collection<GameObjectInstance>> getAllCategoryInstancesFunc,
-        Function<Integer, Boolean> deleteCategoryInstanceFunc
+            CategoryInstanceFactory categoryInstanceFactory,
+            ThrowingBiConsumer<String, String, InvalidOperationException> changeCategoryClassNameFunc,
+            Function<String, Collection<GameObjectInstance>> getAllCategoryInstancesFunc,
+            Function<Integer, Boolean> deleteCategoryInstanceFunc
     );
 }

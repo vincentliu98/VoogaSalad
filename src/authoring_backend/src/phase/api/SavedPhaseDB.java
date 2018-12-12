@@ -12,10 +12,10 @@ public class SavedPhaseDB {
     private BlockGraph winningCondition;
 
     public SavedPhaseDB(
-        Set<String> namespace,
-        ArrayList<PhaseGraph> phaseGraphs,
-        String startingPhase,
-        BlockGraph winningCondition
+            Set<String> namespace,
+            ArrayList<PhaseGraph> phaseGraphs,
+            String startingPhase,
+            BlockGraph winningCondition
     ) {
         this.namespace = namespace;
         this.phaseGraphs = phaseGraphs;
@@ -23,9 +23,20 @@ public class SavedPhaseDB {
         this.winningCondition = winningCondition;
     }
 
-    public Set<String> namespace() { return namespace; }
-    public ArrayList<PhaseGraph> phaseGraphs() { return phaseGraphs; }
-    public String startingPhase() { return startingPhase; }
-    public BlockGraph winningCondition() { return winningCondition; }
+    public Set<String> namespace() {
+        return namespace;
+    }
+
+    public ArrayList<PhaseGraph> phaseGraphs() {
+        return phaseGraphs;
+    }
+
+    public String startingPhase() {
+        return startingPhase;
+    }
+
+    public BlockGraph winningCondition() {
+        return winningCondition;
+    }
 }
 

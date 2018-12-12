@@ -68,6 +68,24 @@ import java.util.Map;
  * Register the node to Object map.
  * @param node: The node that is to be altered.
  * @param map: The node to user object map.
+ * <p>
+ * This method brings up an editor that contains the data of an existing object that is already created.
+ * @param userObject
+ * <p>
+ * Return the object after edits in this ObjectEditor.
+ * @return A specific user object.
+ * <p>
+ * Register the editor with an existing TreeItem in order to update or edit existing entries.
+ * @param treeItem: An existing TreeItem.
+ * @param map: The map from String name to Entity.
+ * <p>
+ * Register the object map.
+ * @param treeItem: An existing TreeItem.
+ * @param map: The map from String name to Entity.
+ * <p>
+ * Register the node to Object map.
+ * @param node: The node that is to be altered.
+ * @param map: The node to user object map.
  *//*
 
 public interface ObjectEditor<T extends EditTreeItem> {

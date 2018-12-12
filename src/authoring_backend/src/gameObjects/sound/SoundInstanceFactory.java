@@ -8,7 +8,6 @@ import gameObjects.gameObject.GameObjectType;
 
 import java.util.HashMap;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 public class SoundInstanceFactory {
     private Consumer<GameObjectInstance> requestInstanceIdFunc;

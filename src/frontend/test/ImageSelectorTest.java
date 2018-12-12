@@ -47,15 +47,15 @@ public class ImageSelectorTest extends Application {
 
     private void initializeTestView() {
         testPane = new Pane();
-        imgs = new Image[] {new Image(this.getClass().getClassLoader().getResourceAsStream("assign.png")),
-                            new Image(this.getClass().getClassLoader().getResourceAsStream("each.png")) };
+        imgs = new Image[]{new Image(this.getClass().getClassLoader().getResourceAsStream("assign.png")),
+                new Image(this.getClass().getClassLoader().getResourceAsStream("each.png"))};
         view = new ImageView(imgs[0]);
         view.setX(100);
         view.setY(100);
         testPane.getChildren().add(view);
 
         imgIndex.addListener((e, oldVal, newVal) ->
-            view.setImage(imgs[newVal.intValue()])
+                view.setImage(imgs[newVal.intValue()])
         ); // have imgIndex listen to changes to imgIndex
     }
 

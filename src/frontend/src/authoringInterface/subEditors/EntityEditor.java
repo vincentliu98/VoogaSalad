@@ -10,6 +10,7 @@ import gameObjects.crud.GameObjectsCRUDInterface;
 import gameObjects.entity.EntityClass;
 import gameObjects.entity.EntityInstance;
 import gameObjects.player.PlayerClass;
+import graphUI.groovy.GroovyPaneFactory.GroovyPane;
 import grids.PointImpl;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -22,14 +23,15 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import utils.ErrorWindow;
 import utils.exception.GridIndexOutOfBoundsException;
 import utils.exception.PreviewUnavailableException;
 import utils.exception.UnremovableNodeException;
 import utils.imageManipulation.ImageManager;
 import utils.imageManipulation.JavaFxOperation;
+import utils.imageSelector.ImageSelectorController;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -61,8 +63,11 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
     private TextField colInput;
     private Label playerText;
     private ComboBox<PlayerClass> playerBox;
+    private ImageSelectorController imageSelectorController;
+    private Button imageSelectorButton;
+    private GroovyPane imageSelectorPane;
 
-    EntityEditor(GameObjectsCRUDInterface manager) {
+    EntityEditor(GameObjectsCRUDInterface manager, ImageSelectorController imageSelectorController) {
         super(manager);
         toRemove = new HashSet<>();
         toRemovePath = new HashSet<>();
@@ -99,6 +104,9 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
                 imagePaths.add(imagePath);
             }
         });
+        this.imageSelectorController = imageSelectorController;
+        imageSelectorButton = new Button("Image Selector");
+
         setupLayout();
         rootPane.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.DELETE || e.getCode() == KeyCode.BACK_SPACE) {
@@ -142,21 +150,21 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
      */
     @Override
     protected void confirmEditTreeItem() throws IllegalGameObjectNamingException, IllegalGeometryException, InvalidOperationException, PreviewUnavailableException {
-        gameObjectClass.setClassName(getValidClassName());
         int width = outputPositiveInteger(widthInput);
         int height = outputPositiveInteger(heightInput);
         try {
             ImageManager.removeClassImage(gameObjectClass);
-        } catch (GameObjectClassNotFoundException ignored) {}
+        } catch (GameObjectClassNotFoundException ignored) {
+        }
         gameObjectClass.getImagePathList().clear();
         gameObjectClass.getImagePathList().addAll(imagePaths);
         gameObjectClass.getPropertiesMap().clear();
         gameObjectClass.setWidth(width);
         gameObjectClass.setHeight(height);
-        gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName(), nameField.getText());
+        gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName(), getValidClassName());
         ImageView icon2 = new ImageView(ImageManager.getPreview(gameObjectClass));
         JavaFxOperation.setWidthAndHeight(icon2, ICON_WIDTH, ICON_HEIGHT);
-        treeItem.setValue(nameField.getText());
+        treeItem.setValue(getValidClassName());
         treeItem.setGraphic(icon2);
         writeClassProperties();
     }
@@ -177,14 +185,15 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         int height = outputPositiveInteger(heightInput);
         try {
             ImageManager.removeInstanceImage(gameObjectInstance);
-        } catch (GameObjectInstanceNotFoundException ignored) {}
+        } catch (GameObjectInstanceNotFoundException ignored) {
+        }
         gameObjectInstance.getImagePathList().clear();
         gameObjectInstance.getImagePathList().addAll(imagePaths);
         gameObjectInstance.getPropertiesMap().clear();
         gameObjectInstance.setWidth(width);
         gameObjectInstance.setHeight(height);
         var chosenPlayer = playerBox.getValue();
-        if(chosenPlayer != null) chosenPlayer.addGameObjectInstances(gameObjectInstance);
+        if (chosenPlayer != null) chosenPlayer.addGameObjectInstances(gameObjectInstance);
         ((ImageView) nodeEdited).setImage(ImageManager.getPreview(gameObjectInstance));
         Tooltip.install(nodeEdited, new Tooltip(String.format("Width: %s\nHeight: %s\nSingle Click to toggle Deletion\nDouble Click or Right Click to edit\nInstance ID: %s\nClass Name: %s", width, height, gameObjectInstance.getInstanceId(), gameObjectInstance.getClassName())));
         int row = Integer.parseInt(rowInput.getText());
@@ -231,7 +240,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         widthInput.setText(String.valueOf(gameObjectInstance.getWidth()));
         heightInput.setText(String.valueOf(gameObjectInstance.getHeight()));
         gameObjectManager.getPlayerClasses().forEach(p -> {
-            if(p.isOwnedByPlayer(gameObjectInstance)) {
+            if (p.isOwnedByPlayer(gameObjectInstance)) {
                 playerBox.getSelectionModel().select(p);
             }
         });
@@ -256,14 +265,24 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         imagePaths.addAll(gameObjectClass.getImagePathList());
         widthInput.setText(String.valueOf(gameObjectClass.getWidth()));
         heightInput.setText(String.valueOf(gameObjectClass.getHeight()));
+
+        if (imageSelectorController != null)
+            imageSelectorPane = imageSelectorController.groovyPaneOf(gameObjectClass);
+
+        imageSelectorButton.setOnAction(e -> {
+            if (imageSelectorPane == null) {
+                ErrorWindow.display("Warning!", "You can only specify imageSelector on classes, not instances");
+            } else imageSelectorPane.showWindow();
+        });
     }
 
     private void setupLayout() {
         layout.addRow(0, size);
         layout.addRow(1, playerText, playerBox);
         layout.addRow(2, imageText, chooseImage);
-        layout.addRow(3, imagePanel);
-        layout.addRow(4, propLabel, addProperties);
-        layout.addRow(5, listProp);
+        layout.addRow(3, imageSelectorButton);
+        layout.addRow(4, imagePanel);
+        layout.addRow(5, propLabel, addProperties);
+        layout.addRow(6, listProp);
     }
 }

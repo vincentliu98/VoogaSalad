@@ -41,320 +41,320 @@
      
      -->
 
-<game name="SwordAndArrow"> 
-  <tiles>
-    <tile name="grass">
-      <width> 1 </width>  <!-- Will anybody want to modify this value...? -->
-      <height> 1 </height>
-      <properties>
-	<$imageIndex> 0 </$imageIndex> <!-- THIS SHOULDN'T ACTUALLY BE HERE (it's like a hidden property value) but we must be able to access/modify it like property values -->
-      </properties>
-      <images>
-	<ref> /images/grass_day.jpg </ref>
-	<ref> /images/grass_night.jpg </ref>
-      </images>
-      <!-- This image selector sets $res to a certain index upon execution;
-	   The chosen index is then retreived and used by javaFX to select an 
-	   image to use for the instance.
-	    
-	   On every valid move, we run something like 
-	  
-	   var instances = groovy.get($instances);
-	   for(var className: instances.keySet()) {
-	      var selector = classByName(className).img_selector
-	      for(var instances: map.get(key)) {
-		groovy.set("$this", "getInstance("+className+", "+instances.id+")");
-		groovy.run(selector);
-	      }
-	   }
-      -->
+<game name="SwordAndArrow">
+    <tiles>
+        <tile name="grass">
+            <width> 1 </width>  <!-- Will anybody want to modify this value...? -->
+            <height> 1 </height>
+            <properties>
+                <$imageIndex> 0 </$imageIndex> <!-- THIS SHOULDN'T ACTUALLY BE HERE (it's like a hidden property value) but we must be able to access/modify it like property values -->
+        </properties>
+        <images>
+            <ref> /images/grass_day.jpg </ref>
+            <ref> /images/grass_night.jpg </ref>
+        </images>
+        <!-- This image selector sets $res to a certain index upon execution;
+         The chosen index is then retreived and used by javaFX to select an
+         image to use for the instance.
 
-      <image_selector>
-	<groovy> 
-	  <!-- Since $global is initialized from the beginning, 
-	  it is visible by the time this script is run-->
-	  if($global.isDay) {
-	    $this.$imageIndex = 0
-	  } else {
-	    $this.$imageIndex = 1
-	  }
-	</groovy>
-      </image_selector>
+         On every valid move, we run something like
+
+         var instances = groovy.get($instances);
+         for(var className: instances.keySet()) {
+            var selector = classByName(className).img_selector
+            for(var instances: map.get(key)) {
+          groovy.set("$this", "getInstance("+className+", "+instances.id+")");
+          groovy.run(selector);
+            }
+         }
+        -->
+
+        <image_selector>
+            <groovy>
+                <!-- Since $global is initialized from the beginning,
+                it is visible by the time this script is run-->
+                if($global.isDay) {
+                $this.$imageIndex = 0
+                } else {
+                $this.$imageIndex = 1
+                }
+            </groovy>
+        </image_selector>
     </tile>
 
     <tile name="castle">
-      <width> 2 </width> 
-      <height> 2 </height>
+        <width> 2 </width>
+        <height> 2 </height>
 
-      <properties>
-	<$imageIndex> 0 </$imageIndex>
-	<owner> 0 </owner> <!-- If there's a value, that's the default value for this property -->
-      </properties>
+        <properties>
+            <$imageIndex> 0 </$imageIndex>
+        <owner> 0 </owner> <!-- If there's a value, that's the default value for this property -->
+    </properties>
 
-      <images>
-	<ref> /images/castle_none.jpg </ref>
-	<ref> /images/castle_red.jpg </ref>
-	<ref> /images/castle_blue.jpg </ref>
-      </images>
-      <image_selector>
-	<groovy>
-	  <!-- Our engine will update the view of every single instances on every move; 
-	  right before excecuting this script, initialize $this to the 
-	  property map of the instance we're updating. -->
-	  if($this.owner == 0) {
-	    $this.$imageIndex = 0
-	  } else if($this.owner == 1) {
-	    $this.$imageIndex = 1
-	  } else {
-	    $this.$imageIndex = 2
-	  }
-	</groovy>
-      </image_selector>
-    </tile>
-  </tiles>
-  
-  <entities>
-    <swordsman>
-      <properties>
-	<$imageIndex> 0 </$imageIndex>
-	<attackRange> 1 </attackRange>
-	<hp> 10 </hp>
-	<attackPower> 5 </attackPower>
-	<owner></owner>
-      </properties>
-      <images>
-	<ref> /images/swordman.jpg </ref>
-      </images>
-      <image_selector>
-	<!-- if it is empty, no code will run anyways, leaving image index to 0. -->
-      </image_selector>
-    </swordsman>
-    <bowman>
-      <properties>
-	<$imageIndex> 0 </$imageIndex>
-	<attackRange> 5 </attackRange>
-	<hp> 5 </hp>
-	<attackPower> 1 </attackPower>
-	<owner></owner>
-      </properties>
-      <images>
-	<ref> /images/bowman.jpg </ref>
-      </images>
-      <image_selector>
-	<!-- if it is empty, no code will run anyways, leaving image index to 0. -->
-      </image_selector>
-    </bowman>
-  </entities>
+    <images>
+        <ref> /images/castle_none.jpg </ref>
+        <ref> /images/castle_red.jpg </ref>
+        <ref> /images/castle_blue.jpg </ref>
+    </images>
+    <image_selector>
+        <groovy>
+            <!-- Our engine will update the view of every single instances on every move;
+            right before excecuting this script, initialize $this to the
+            property map of the instance we're updating. -->
+            if($this.owner == 0) {
+            $this.$imageIndex = 0
+            } else if($this.owner == 1) {
+            $this.$imageIndex = 1
+            } else {
+            $this.$imageIndex = 2
+            }
+        </groovy>
+    </image_selector>
+</tile>
+        </tiles>
 
-  <instances>
-    <!-- this is the initial or current state of the game -->
-    <tiles>
-	<instance>
-	  <className>grass</className>
-	  <instanceId> 0 </instanceId>
-	  <row>0</row> <!-- Let's do square grids; Each "tile" can span multiple grids -->
-	  <column>0</column>
-	  <width>1</width>
-	  <height>1</height>
-	  <properties> </properties>
-	</instance>
-      
-	<instance>
-	  <className>grass</className>
-	  <instanceId> 1 </instanceId>
-	  <row>0</row> 
-	  <column>1</column>
-	  <width>1</width>
-	  <height>1</height>
-	  <properties> </properties>
-	</instance>
+<entities>
+<swordsman>
+    <properties>
+        <$imageIndex> 0 </$imageIndex>
+    <attackRange> 1 </attackRange>
+    <hp> 10 </hp>
+    <attackPower> 5 </attackPower>
+    <owner></owner>
+</properties>
+<images>
+    <ref> /images/swordman.jpg </ref>
+</images>
+<image_selector>
+    <!-- if it is empty, no code will run anyways, leaving image index to 0. -->
+</image_selector>
+</swordsman>
+<bowman>
+<properties>
+    <$imageIndex> 0 </$imageIndex>
+<attackRange> 5 </attackRange>
+<hp> 5 </hp>
+<attackPower> 1 </attackPower>
+<owner></owner>
+</properties>
+<images>
+<ref> /images/bowman.jpg </ref>
+</images>
+<image_selector>
+<!-- if it is empty, no code will run anyways, leaving image index to 0. -->
+</image_selector>
+        </bowman>
+        </entities>
 
-	<!-- Few bunch of them ... -->
-      </grass>
+<instances>
+<!-- this is the initial or current state of the game -->
+<tiles>
+    <instance>
+        <className>grass</className>
+        <instanceId> 0 </instanceId>
+        <row>0</row> <!-- Let's do square grids; Each "tile" can span multiple grids -->
+        <column>0</column>
+        <width>1</width>
+        <height>1</height>
+        <properties> </properties>
+    </instance>
 
-	<instance id=0>
-	  <className>castle</className>
-	  <instanceId> 0 </instanceId>
-	  <row>0</row> 
-	  <column>5</column>
-	  <width>2</width>
-	  <height>2</height>
-	  <properties> 
-	    <owner> 0 </owner>
-	  </properties>
-	</instance>
+    <instance>
+        <className>grass</className>
+        <instanceId> 1 </instanceId>
+        <row>0</row>
+        <column>1</column>
+        <width>1</width>
+        <height>1</height>
+        <properties> </properties>
+    </instance>
 
-	<instance id=1>
-	  <className>castle</className>
-	  <instanceId> 1 </instanceId>
-	  <row>5</row> 
-	  <column>5</column>
-	  <width>2</width>
-	  <height>2</height>
-	  <properties> 
-	    <owner> 1 </owner>
-	  </properties>
-	</instance>
+    <!-- Few bunch of them ... -->
+</grass>
 
-    </tiles>
-      
-    <entities>
-	<instance>
-	  <className> swordsman </className>
-	  <InstanceId> 0 </InstanceId>
-	  <properties>
-	    <attackRange> 1 </attackRange>
-	    <hp> 10 </hp>
-	    <attackPower> 5 </attackPower>
-	    <owner> 0 </owner> <!-- as in who controls this unit -->
-	  </properties>
-	  <container>
-	    <className> castle </className>
-	    <instanceId> 1 <instanceId>
-	  </container>
-	</instance>
+<instance id=0>
+<className>castle</className>
+<instanceId> 0 </instanceId>
+<row>0</row>
+<column>5</column>
+<width>2</width>
+<height>2</height>
+<properties>
+    <owner> 0 </owner>
+</properties>
+</instance>
 
-	<instance>
-	  <className> swordsman </className>
-	  <InstanceId> 1 </InstanceId>
-	  <properties>
-	    <attackRange> 1 </attackRange>
-	    <hp> 10 </hp>
-	    <attackPower> 5 </attackPower>
-	    <owner> 1 </owner> <!-- as in who controls this unit -->
-	  </properties>
-	  <container>
-	    <className> grass </className>
-	    <instanceId> 2 <instanceId>
-	  </container>
-	</instance>
+<instance id=1>
+<className>castle</className>
+<instanceId> 1 </instanceId>
+<row>5</row>
+<column>5</column>
+<width>2</width>
+<height>2</height>
+<properties>
+<owner> 1 </owner>
+</properties>
+        </instance>
 
-	<instance>
-	  <className> bowman </className>
-	  <InstanceId> 0 </InstanceId>
-	  <properties>
-	    <attackRange> 10 </attackRange>
-	    <hp> 5 </hp>
-	    <attackPower> 1 </attackPower>
-	    <owner> 0 </owner> <!-- as in who controls this unit -->
-	  </properties>
-	  <container>
-	    <className> castle </className>
-	    <instanceId> 0 <instanceId>
-	  </container>
-	</instance>
+        </tiles>
 
-	<instance>
-	  <className> bowman </className>
-	  <InstanceId> 1 </InstanceId>
-	  <properties>
-	    <attackRange> 10 </attackRange>
-	    <hp> 5 </hp>
-	    <attackPower> 1 </attackPower>
-	    <owner> 1 </owner> <!-- as in who controls this unit -->
-	  </properties>
-	  <container>
-	    <className> grass </className>
-	    <instanceId> 1 <instanceId>
-	  </container>
-	</instance>
+<entities>
+<instance>
+    <className> swordsman </className>
+    <InstanceId> 0 </InstanceId>
+    <properties>
+        <attackRange> 1 </attackRange>
+        <hp> 10 </hp>
+        <attackPower> 5 </attackPower>
+        <owner> 0 </owner> <!-- as in who controls this unit -->
+    </properties>
+    <container>
+        <className> castle </className>
+        <instanceId> 1 <instanceId>
+    </container>
+</instance>
 
-    </entities>
-  </instances>
+<instance>
+    <className> swordsman </className>
+    <InstanceId> 1 </InstanceId>
+    <properties>
+        <attackRange> 1 </attackRange>
+        <hp> 10 </hp>
+        <attackPower> 5 </attackPower>
+        <owner> 1 </owner> <!-- as in who controls this unit -->
+    </properties>
+    <container>
+        <className> grass </className>
+        <instanceId> 2 <instanceId>
+    </container>
+</instance>
 
-  <global>
-    <turn> 0 <\turn>
-    <isDay> true </isDay>
-  </global>
+<instance>
+    <className> bowman </className>
+    <InstanceId> 0 </InstanceId>
+    <properties>
+        <attackRange> 10 </attackRange>
+        <hp> 5 </hp>
+        <attackPower> 1 </attackPower>
+        <owner> 0 </owner> <!-- as in who controls this unit -->
+    </properties>
+    <container>
+        <className> castle </className>
+        <instanceId> 0 <instanceId>
+    </container>
+</instance>
 
-  <fsms>  <!-- Draw the diagram! -->
-    <fsm name="A">
-      <nodes source="1">
-	<node id=1></node>
-	<node id=2></node>
-	<node id=3></node>
-      </nodes>
-      <edges>
-	<edge>
-	  <from> 1 </from>
-	  <to> 2 </to>
-	  <trigger> MouseClick </trigger>
-	  <guard>
-	    <groovy>
-	      $guardRes = 
-		$gameObjects.$classes.containsKey($clicked.$className) &&  <!-- if it's an entitiy -->"
-	        ($clicked.owner == $global.turn)			  <!-- owned by $global.turn -->
-	    </groovy>
-	  </guard>
-	  <exec>
-	    <groovy>
-	      selected = $clicked
-	    </groovy>
-	  </exec>
-	</edge>
-	  
-	<edge>
-	  <from> 2 </from>
-	  <to> 3 </to>
-	  <trigger> MouseClick </trigger>
-	  <guard>
-	    <groovy>
-	      $guardRes = 
-		$gameObjects.$classes.containsKey($clicked.$className) &&  <!-- if it's an entitiy -->"
-	        ($clicked.owner != $global.turn) &&			  <!-- NOT owned by $global.turn -->
-		(selected.attackRange <= $dist($clicked.container, selected.container));
-		<!-- within range ($dist will be something we should initialize as utility function -->
+<instance>
+    <className> bowman </className>
+    <InstanceId> 1 </InstanceId>
+    <properties>
+        <attackRange> 10 </attackRange>
+        <hp> 5 </hp>
+        <attackPower> 1 </attackPower>
+        <owner> 1 </owner> <!-- as in who controls this unit -->
+    </properties>
+    <container>
+        <className> grass </className>
+        <instanceId> 1 <instanceId>
+    </container>
+</instance>
 
-	    </groovy>
-	  </guard>
-	  <exec>
-	    <groovy>
-	      $clicked.hp = $clicked.hp - selected.attackPower
-	      if($clicked.hp <= 0) $gameObjects.$instances.remove($clicked)
-	      $global.turn = 1 - $global.turn  <!-- toggle turn once done -->
-	      $goto("A") <!-- $start is like GOTO  -->
-	    </groovy>
-	  </exec>
-	</edge>
+</entities>
+        </instances>
 
-	<edge>
-	  <from> 2 </from>
-	  <to> 3 </to>
-	  <trigger> MouseClick </trigger>
-	  <guard>
-	    <groovy>
-	      $guardRes = 
-		$tiles.$classes.containsKey($clicked.$className) &&  <!-- if it's an tile -->"
-	        $isEmpty($clicked) &&			  <!-- that's empty ($isEmpty is some utility function we can define upon instantiation -->
-		($dist($clicked, selected.container) == 1);  <!-- if it's in distance 1 --> 
-	    </groovy>
-	  </guard>
-	  <exec>
-	    <groovy>
-	      $move(selected, $clicked) <!-- $move, we can also define on instantiation -->
-	      $global.turn = 1 - $global.turn // toggle turn once done
-	      $goto("A") <!-- $start is like GOTO -->
-	    </groovy>
-	  </exec>
-	</edge>
+<global>
+<turn> 0 <\turn>
+<isDay> true </isDay>
+</global>
 
-	<edge>
-	  <from> 2 </from>
-	  <to> 1 </to>
-	  <trigger> KeyPress.ESC </trigger>
-	  <guard>
-	    $guardRes = true <!-- can cancel nomatter what -->
-	  </guard>
-	  <exec>
-	    <!-- Nothing to do here -->
-	  </exec>
-      </edges>
-    </fsm>
-  </fsms>
+<fsms>  <!-- Draw the diagram! -->
+<fsm name="A">
+    <nodes source="1">
+        <node id=1></node>
+    <node id=2></node>
+<node id=3></node>
+        </nodes>
+<edges>
+<edge>
+    <from> 1 </from>
+    <to> 2 </to>
+    <trigger> MouseClick </trigger>
+    <guard>
+        <groovy>
+            $guardRes =
+            $gameObjects.$classes.containsKey($clicked.$className) &&  <!-- if it's an entitiy -->"
+            ($clicked.owner == $global.turn)			  <!-- owned by $global.turn -->
+        </groovy>
+    </guard>
+    <exec>
+        <groovy>
+            selected = $clicked
+        </groovy>
+    </exec>
+</edge>
 
-  <endCondition>
-    <groovy>
-      <!-- some check to check the end condition...? -->
-    </groovy>
-  </endCondition>
-</game>
+<edge>
+    <from> 2 </from>
+    <to> 3 </to>
+    <trigger> MouseClick </trigger>
+    <guard>
+        <groovy>
+            $guardRes =
+            $gameObjects.$classes.containsKey($clicked.$className) &&  <!-- if it's an entitiy -->"
+            ($clicked.owner != $global.turn) &&			  <!-- NOT owned by $global.turn -->
+            (selected.attackRange <= $dist($clicked.container, selected.container));
+            <!-- within range ($dist will be something we should initialize as utility function -->
+
+        </groovy>
+    </guard>
+    <exec>
+        <groovy>
+            $clicked.hp = $clicked.hp - selected.attackPower
+            if($clicked.hp <= 0) $gameObjects.$instances.remove($clicked)
+            $global.turn = 1 - $global.turn  <!-- toggle turn once done -->
+            $goto("A") <!-- $start is like GOTO  -->
+        </groovy>
+    </exec>
+</edge>
+
+<edge>
+    <from> 2 </from>
+    <to> 3 </to>
+    <trigger> MouseClick </trigger>
+    <guard>
+        <groovy>
+            $guardRes =
+            $tiles.$classes.containsKey($clicked.$className) &&  <!-- if it's an tile -->"
+            $isEmpty($clicked) &&			  <!-- that's empty ($isEmpty is some utility function we can define upon instantiation -->
+            ($dist($clicked, selected.container) == 1);  <!-- if it's in distance 1 -->
+        </groovy>
+    </guard>
+    <exec>
+        <groovy>
+            $move(selected, $clicked) <!-- $move, we can also define on instantiation -->
+            $global.turn = 1 - $global.turn // toggle turn once done
+            $goto("A") <!-- $start is like GOTO -->
+        </groovy>
+    </exec>
+</edge>
+
+<edge>
+<from> 2 </from>
+<to> 1 </to>
+<trigger> KeyPress.ESC </trigger>
+<guard>
+    $guardRes = true <!-- can cancel nomatter what -->
+</guard>
+<exec>
+    <!-- Nothing to do here -->
+</exec>
+</edges>
+        </fsm>
+        </fsms>
+
+<endCondition>
+<groovy>
+    <!-- some check to check the end condition...? -->
+</groovy>
+</endCondition>
+        </game>

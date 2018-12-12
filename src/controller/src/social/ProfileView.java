@@ -14,18 +14,18 @@ public class ProfileView implements Subscriber {
     private HBox myBox;
     private Button myButton;
 
-    public ProfileView(){
+    public ProfileView() {
         myBox = new HBox();
         myBox.setAlignment(Pos.CENTER_LEFT);
         initButton();
         EventBus.getInstance().register(EngineEvent.CHANGE_USER, this);
     }
 
-    public HBox getView(){
+    public HBox getView() {
         return myBox;
     }
 
-    private void initButton(){
+    private void initButton() {
         myButton = new Button();
         myButton.getStyleClass().add("profile-button");
 
@@ -40,7 +40,7 @@ public class ProfileView implements Subscriber {
         myBox.getChildren().add(myButton);
     }
 
-    private void changeIcon(ImageView imageView){
+    private void changeIcon(ImageView imageView) {
         imageView.setFitWidth(ICON_WIDTH);
         imageView.setFitHeight(ICON_HEIGHT);
         myButton.setGraphic(imageView);
@@ -48,7 +48,7 @@ public class ProfileView implements Subscriber {
 
     @Override
     public void update(EngineEvent engineEvent, Object... args) {
-        if (engineEvent.equals(EngineEvent.CHANGE_USER) && args[0].getClass().equals(User.class)){
+        if (engineEvent.equals(EngineEvent.CHANGE_USER) && args[0].getClass().equals(User.class)) {
             User user = (User) args[0];
             changeIcon(user.getAvatar());
         }

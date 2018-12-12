@@ -92,15 +92,20 @@ public class GameMenuBarView implements SubView<MenuBar> {
         }
     }
 
-    private void handleSave(ActionEvent event) {}
+    private void handleSave(ActionEvent event) {
+    }
 
-    private void handleSaveAs(ActionEvent event) {}
+    private void handleSaveAs(ActionEvent event) {
+    }
 
-    private void handleClose(ActionEvent event) {}
+    private void handleClose(ActionEvent event) {
+    }
 
-    private void handleHelp(ActionEvent event) {}
+    private void handleHelp(ActionEvent event) {
+    }
 
-    private void handleAbout(ActionEvent event) {}
+    private void handleAbout(ActionEvent event) {
+    }
 
     /**
      * This method returns the responsible JavaFx Node responsible to be added or deleted from other graphical elements.

@@ -13,7 +13,7 @@ public class SingleNodeFade {
     /**
      * This method returns a FadeTransition that represents fading in animation for a specific Node, that lasts a predefined amount of time.
      *
-     * @param node: A JavaFx Node where the fading occurs.
+     * @param node:               A JavaFx Node where the fading occurs.
      * @param timeInMilliSeconds: A double, time in milliseconds for the Node to fully fade in.
      * @return A FadeTransition object representing the animation.
      */
@@ -30,7 +30,7 @@ public class SingleNodeFade {
     /**
      * This method returns a FadeOutTransition that represents fading out animation for a specific Node, that lasts a predefined amount of time.
      *
-     * @param node: A JavaFx Node where the fading occurs.
+     * @param node:               A JavaFx Node where the fading occurs.
      * @param timeInMilliSeconds: A double, time in milliseconds for the Node to fully disappear.
      * @return A FadeTransition object representing the fading out animation.
      */
@@ -47,7 +47,7 @@ public class SingleNodeFade {
     /**
      * This method returns a FadeTransition that represents fading in and out animation for a specific Node, that lasts a predefined amount of time.
      *
-     * @param node: A JavaFx Node where the fading occurs.
+     * @param node:               A JavaFx Node where the fading occurs.
      * @param timeInMilliSeconds: A double, time in milliseconds for the Node to fully enter and disappear.
      * @return A FadeTransition object representing the fading in and out animation.
      */
