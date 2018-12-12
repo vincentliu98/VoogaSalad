@@ -28,15 +28,11 @@ public class ProfileView implements Subscriber {
     private void initButton() {
         myButton = new Button();
         myButton.getStyleClass().add("profile-button");
-
-        Image image = new Image(getClass().getResourceAsStream(PERSON_PATH));
-        changeIcon(new ImageView(image));
-
+        setDefaultIcon();
         myButton.setOnAction(event -> {
             LoginScreen myLogin = new LoginScreen();
             myLogin.launchLogin().show();
         });
-
         myBox.getChildren().add(myButton);
     }
 
@@ -46,11 +42,20 @@ public class ProfileView implements Subscriber {
         myButton.setGraphic(imageView);
     }
 
+    private void setDefaultIcon(){
+        Image image = new Image(getClass().getResourceAsStream(PERSON_PATH));
+        changeIcon(new ImageView(image));
+    }
+
     @Override
     public void update(EngineEvent engineEvent, Object... args) {
         if (engineEvent.equals(EngineEvent.CHANGE_USER) && args[0].getClass().equals(User.class)) {
             User user = (User) args[0];
-            if (user.getAvatar() != null) changeIcon(user.getAvatar());
+            if (user.getAvatar() != null) {
+                changeIcon(user.getAvatar());
+            } else {
+                setDefaultIcon();
+            }
         }
     }
 }
