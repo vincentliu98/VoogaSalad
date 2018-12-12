@@ -213,4 +213,55 @@ public class GameMethods {
     public static boolean not(boolean bool) { return !bool; }
 
     public static void DO_LOT_OF_THINGS() { }
+
+
+    public static void checkNeighbor(GameObject a, String currentPlayer){
+        var x = (int) Math.round(a.getX());
+        var y = (int) Math.round(a.getY());
+        var myId = a.getID();
+        System.out.println("ID: " + myId + "current x: " + x + " current y: " + y);
+        if (a.getName().equals("r_black")){
+            var otherEntities = ENTITIES.values();
+            otherEntities.remove(a);
+            otherEntities.forEach(e -> {
+                var xx = (int) Math.round(e.getX());
+                var yy = (int) Math.round(e.getY());
+                var id = e.getID();
+                if (x == xx && y != yy){
+                    System.out.println("ID: " + id + "current xx: " + xx + " current yy: " + yy);
+                    var minY = Math.min(y , yy);
+                    var maxY = Math.max(y, yy);
+                    boolean flanked = true;
+                    for (int i = minY+1; i < maxY; i++) {
+                        if (hasNoEntityAt(x, i)) flanked = false;
+                    }
+                    if (flanked){
+                        for (int j = minY+1; j < maxY; j++) {
+                            createEntity("r_black", x, j, currentPlayer);
+                        }
+                    }
+                }
+                else if (y == yy && x != xx){
+                    System.out.println("ID: " + id + "current xx: " + xx + " current yy: " + yy);
+                    var minX = Math.min(x , xx);
+                    var maxX = Math.max(x, xx);
+                    boolean flanked = true;
+                    for (int i = minX+1; i < maxX; i++) {
+                        if (hasNoEntityAt(i, y)) flanked = false;
+                    }
+                    if (flanked){
+                        for (int j = minX+1; j < maxX; j++) {
+                            createEntity("r_white", j, y, currentPlayer);
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    public static int roundDouble(double i){
+        return (int) Math.round(i);
+    }
+
+
 }
