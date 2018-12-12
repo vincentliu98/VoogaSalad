@@ -18,11 +18,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Transform;
 import utils.exception.PreviewUnavailableException;
+import utils.path.PathUtility;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This ImageManager will provide an Image that is a "preview" of a GameObjectClass. This Image is a JavaFx Image regardless of whether the actual thing being presented is a String.
@@ -38,6 +36,7 @@ public class ImageManager {
     private static final double Y_OFFSET = 10;
     private static Map<GameObjectClass, Image> classImageMap;
     private static Map<GameObjectInstance, Image> instanceImageMap;
+
 
     static {
         classImageMap = new HashMap<>();
@@ -74,7 +73,7 @@ public class ImageManager {
                 // TODO
                 break;
             case PLAYER:
-                String paths3 = ((PlayerClass) gameObjectClass).getImagePath();
+                String paths3 = PathUtility.getAbsoluteURL(((PlayerClass) gameObjectClass).getImagePath());
                 ret = getPlayerImage(paths3, gameObjectClass.getClassName());
                 break;
         }
@@ -93,10 +92,10 @@ public class ImageManager {
         if (imagePaths == null || imagePaths.isEmpty()) {
             return composeImageFromString(textToDisplay);
         } else if (imagePaths.size() == 1) {
-            return new Image(imagePaths.get(0));
+            return new Image(PathUtility.getAbsoluteURL(imagePaths.get(0)));
         } else {
             List<Image> images = new ArrayList<>();
-            imagePaths.forEach(uri -> images.add(new Image(uri)));
+            imagePaths.forEach(uri -> images.add(new Image(PathUtility.getAbsoluteURL(uri))));
             return stackImageFromMultipleImages(images);
         }
     }
@@ -184,7 +183,7 @@ public class ImageManager {
                 // TODO
                 break;
             case PLAYER:
-                String paths3 = ((PlayerClass) gameObjectInstance).getImagePath();
+                String paths3 = PathUtility.getAbsoluteURL(((PlayerClass) gameObjectInstance).getImagePath());
                 ret = getPlayerImage(paths3, gameObjectInstance.getClassName());
                 break;
         }

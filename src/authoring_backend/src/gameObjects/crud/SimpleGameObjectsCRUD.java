@@ -779,6 +779,7 @@ public class SimpleGameObjectsCRUD implements GameObjectsCRUDInterface {
 
     @Override
     public void setBGMpath(String path) {
+        System.out.println(bgmPath);
         bgmPath = path;
     }
 

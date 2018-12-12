@@ -12,6 +12,7 @@ import org.xml.sax.InputSource;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,7 +39,8 @@ public class Tile extends PropertyHolder<Tile> implements GameObject, EventHandl
      * Fills out the transient parts
      */
     public void setupView() {
-        loadImages();
+        loadImages(true);
+        
         myImageView = new ImageView();
         myImageView.setPreserveRatio(true);
         myImageView.setOnMouseClicked(this);
@@ -55,13 +57,16 @@ public class Tile extends PropertyHolder<Tile> implements GameObject, EventHandl
         myImageView.setFitWidth((screenWidth * myWidth) / GameMethods.gridWidth());
         myImageView.setFitHeight((screenHeight * myHeight) / GameMethods.gridHeight());
 
-        loadImages();
+        loadImages(false);
     }
 
-    private void loadImages() {
+    private void loadImages(boolean useNaturalImageSize) {
         myImages = new ArrayList<>();
         for (var path : myImagePaths) {
-            var img = new Image(path);
+            Image img;
+            InputStream is = getClass().getClassLoader().getResourceAsStream(PathUtility.extractLast(path));
+            if(useNaturalImageSize) img = new Image(is);
+            else img = new Image(is, myImageView.getFitWidth(), myImageView.getFitHeight(), false, true);
             myImages.add(img);
         }
     }

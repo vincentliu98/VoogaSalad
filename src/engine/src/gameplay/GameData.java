@@ -47,7 +47,9 @@ public class GameData {
         GameData.GRID_HEIGHT = grid_dimension.getY();
 
         try {
-            media = new Media(new File(bgmPath).toURI().toString());
+            var mediaPath = GameData.class.getClassLoader().getResource(PathUtility.extractLast(bgmPath)).getPath();
+            System.out.println(mediaPath);
+            media = new Media(new File(mediaPath).toURI().toString());
             mediaPlayer = new MediaPlayer(media);
             mediaPlayer.setOnReady(() -> {
                 mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
@@ -185,6 +187,7 @@ public class GameData {
     }
 
     public static void restartGame() {
+        if(mediaPlayer!= null) mediaPlayer.dispose();
         myInitializer.resetRoot();
         myInitializer.initGameData();
         myInitializer.setScreenSize(700, 500);
