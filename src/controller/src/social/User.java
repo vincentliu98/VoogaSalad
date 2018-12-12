@@ -11,11 +11,12 @@ import twitter4j.auth.RequestToken;
 import twitter4j.conf.ConfigurationBuilder;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.*;
 
 public class User {
-    private static final String IMAGES_FOLDER_PATH = "/profile-images/";
+    private static final String IMAGES_FOLDER_PATH = "src/controller/resources/profile-images/";
     private int myID;
     private String myUsername;
     private Set<String> myFavoriteGames;
@@ -62,7 +63,13 @@ public class User {
     public void changeAvatar(String imageReference) {
         myImageReference = imageReference;
         myAvatar = new ImageView();
-        myAvatar.setImage(new Image(getClass().getResourceAsStream(IMAGES_FOLDER_PATH + myImageReference)));
+        try {
+            Image image = new Image(new FileInputStream(IMAGES_FOLDER_PATH + myImageReference));
+            myAvatar.setImage(image);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     public void addFavorite(String gameName) {
