@@ -180,7 +180,7 @@ Run the GameLauncher.java to access the game launcher. Click any game's "Play" b
 ## Known Bugs
 
 * Redo and Undo are too difficult with our current framework and we did not manage to finish it before the deadline. However, basic framework (Memento Pattern) is set up in our project
-* `TO BE ADDED`
+* If the user try to delete the default player, the player will be deleted on the backend but not the front end. When user click on the front end button, it will give a game object class not found error.
 
 ## Design decision
 
