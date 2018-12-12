@@ -192,6 +192,8 @@ Run the GameLauncher.java to access the game launcher. Click any game's "Play" b
 
 * User can customize background music for the game and also customize sound effect on actions in playing the game.
 
+* User has a social center where he or she can see all the games he or she has created.
+
 * `TO BE ADDED`
 
 ## Impression
