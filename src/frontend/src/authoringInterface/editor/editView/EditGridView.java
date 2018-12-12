@@ -499,6 +499,7 @@ public class EditGridView implements SubView<ScrollPane> {
      */
     public Pair<Double, Double> getCellSize() {
         StackPane cell = (StackPane) getCellAt(0, 0);
+        assert cell != null;
         return new Pair<>(cell.getPrefWidth(), cell.getPrefHeight());
     }
 }

@@ -108,7 +108,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
         saveAs.setOnAction(this::handleSaveAs);
         close.setOnAction(e -> new CloseFileView(closeWindow));
         runProject.setOnAction(this::handleRunProject);
-        resizeGrid.setOnAction(e -> new ResizeGridView().showAndWait().ifPresent(dimension ->
+        resizeGrid.setOnAction(e -> new ResizeGridView(editView.getGridView().getGridDimension()).showAndWait().ifPresent(dimension ->
                 updateGridDimension.accept(dimension.getKey(), dimension.getValue())
         ));
         setBGM.setOnAction(e -> soundView.show());
@@ -149,7 +149,7 @@ public class EditorMenuBarView implements SubView<MenuBar> {
     }
 
     private void handleCellSize(ActionEvent event) {
-        new ChangeCellSizeView().showAndWait().ifPresent(doubleDoublePair -> {
+        new ChangeCellSizeView(editView.getGridView().getCellSize()).showAndWait().ifPresent(doubleDoublePair -> {
             editView.getGridView().changeCellSize(doubleDoublePair.getKey(), doubleDoublePair.getValue());
         });
     }

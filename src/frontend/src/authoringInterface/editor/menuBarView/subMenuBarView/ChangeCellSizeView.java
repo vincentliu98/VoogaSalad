@@ -18,12 +18,14 @@ import static java.lang.Integer.parseInt;
 public class ChangeCellSizeView {
     private Dialog<Pair<Double, Double>> dialog;
 
-    public ChangeCellSizeView() {
+    public ChangeCellSizeView(Pair<Double, Double> cellSize) {
         GridPane grid = setUpGridPane();
         TextField width = new TextField();
+        width.setText(cellSize.getKey().toString());
         width.setPromptText("Cell Width");
         TextField height = new TextField();
         height.setPromptText("Cell Height");
+        height.setText(cellSize.getValue().toString());
         addElements(grid, width, height);
         setUpGrid(grid, width, height);
         setUpGridPane();
