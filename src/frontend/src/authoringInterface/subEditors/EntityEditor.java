@@ -100,6 +100,7 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
             FileChooser fileChooser = new FileChooser();
             File file = fileChooser.showOpenDialog(new Stage());
             if (file != null) {
+                System.out.println(file.getPath());
                 String imagePath = file.toURI().toString();
                 imagePaths.add(imagePath);
             }
@@ -151,6 +152,14 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
      */
     @Override
     protected void confirmEditTreeItem() throws IllegalGameObjectNamingException, IllegalGeometryException, InvalidOperationException, PreviewUnavailableException, DuplicateGameObjectClassException {
+        String newName = null;
+        try {
+            newName = getValidClassName();
+        } catch (DuplicateGameObjectClassException e) {
+            if (!nameField.getText().trim().equals(gameObjectClass.getClassName())) {
+                throw e;
+            }
+        }
         int width = outputPositiveInteger(widthInput);
         int height = outputPositiveInteger(heightInput);
         try {
@@ -162,10 +171,10 @@ public class EntityEditor extends AbstractGameObjectEditor<EntityClass, EntityIn
         gameObjectClass.getPropertiesMap().clear();
         gameObjectClass.setWidth(width);
         gameObjectClass.setHeight(height);
-        gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName(), getValidClassName());
+        gameObjectManager.changeGameObjectClassName(gameObjectClass.getClassName(), newName);
         ImageView icon2 = new ImageView(ImageManager.getPreview(gameObjectClass));
         JavaFxOperation.setWidthAndHeight(icon2, ICON_WIDTH, ICON_HEIGHT);
-        treeItem.setValue(getValidClassName());
+        treeItem.setValue(newName);
         treeItem.setGraphic(icon2);
         writeClassProperties();
     }
