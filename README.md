@@ -19,7 +19,7 @@ Start Date: 10/30/2018
 
 Finish Date: 12/9/2018
 
-Hours Spent: ~800
+Hours Spent: ~900
 
 ## Primary Roles
 
